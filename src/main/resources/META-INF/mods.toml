@@ -40,7 +40,7 @@ displayName="Survival Overhaul" #mandatory
 # logoFile="examplemod.png" #optional
 
 # A text field displayed in the mod UI
-# credits="None so far." #optional
+credits="Charles445, Glitchfiend" #optional
 
 # A text field displayed in the mod UI
 authors="Icey" #optional
