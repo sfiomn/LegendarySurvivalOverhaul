@@ -4,13 +4,13 @@ package icey.survivaloverhaul.api.temperature;
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/api/temperature/TemperatureEnum.java
 public enum TemperatureEnum
 {
-	HYPOTHERMIA(0, 15), // You start dying.
-	FREEZING(16, 30), // You will start to recieve slowness.
-	COLD(31, 40),
-	NORMAL(41, 60),
-	HOT(61,70), // The player will begin to sweat. This grows in intensity as the player gets hotter.
-	OVERHEAT(71, 85), // You will start to randomly get the thirst effect
-	HYPERTHERMIA(86,100); // You start dying.
+	HYPOTHERMIA(0, 10), // You start dying.
+	FREEZING(11, 20), // You will start to recieve slowness.
+	COLD(21, 30),
+	NORMAL(31, 40),
+	HOT(41,50), // The player will begin to sweat. This grows in intensity as the player gets hotter.
+	OVERHEAT(51, 60), // You will start to randomly get the thirst effect
+	HYPERTHERMIA(61,70); // You start dying.
 	
 	private int lowerBound;
 	private int upperBound;
