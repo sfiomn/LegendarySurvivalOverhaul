@@ -58,9 +58,6 @@ public abstract class ModifierBase implements ITemperatureModifier
 		// Code ripped and modified from 
 		// https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/temperature/ModifierBase.java
 		
-		// placeholder value until we actually have configs
-		boolean modConfigUndergroundEffect = true;
-		
 		//Y 64 - 256 is always unchanged temperature
 		if (pos.getY() > 64)
 		{
@@ -69,7 +66,7 @@ public abstract class ModifierBase implements ITemperatureModifier
 		
 		// If we're in a dimension that has a ceiling,
 		// then just return the default value.
-		if(!modConfigUndergroundEffect || world.getDimensionType().getHasCeiling())
+		if(!true|| world.getDimensionType().getHasCeiling())
 		{
 			return temperature;
 		}
@@ -83,11 +80,9 @@ public abstract class ModifierBase implements ITemperatureModifier
 			return temperature;
 		}
 		
-		// Another placeholder value for when we actually 
-		// implement configs
 		int cutoff = 48;
 		
-		if (cutoff == 64)
+		if (pos.getY() <= cutoff || cutoff == 64)
 		{
 			return 0.0f;
 		}

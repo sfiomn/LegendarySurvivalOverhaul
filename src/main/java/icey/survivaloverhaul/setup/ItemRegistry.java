@@ -3,6 +3,7 @@ package icey.survivaloverhaul.setup;
 import java.lang.reflect.Field;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraftforge.fml.RegistryObject;
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.common.items.*;

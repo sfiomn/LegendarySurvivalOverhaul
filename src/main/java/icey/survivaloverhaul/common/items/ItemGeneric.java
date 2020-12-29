@@ -19,6 +19,13 @@ public class ItemGeneric extends Item
 		this.setRegistryName(Main.MOD_ID, name);
 	}
 	
+	public ItemGeneric(String name, ItemGroup group)
+	{
+		super(new Item.Properties().group(group));
+		
+		this.setRegistryName(Main.MOD_ID, name);
+	}
+	
 	public ItemGeneric(String name, ItemGroup group, int stacksize)
 	{
 		super(new Item.Properties().group(group).maxStackSize(MathHelper.clamp(stacksize, 1, 64)));

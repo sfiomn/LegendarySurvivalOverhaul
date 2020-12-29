@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.common.capability;
+package icey.survivaloverhaul.common.capability.temperature;
 
 import java.util.HashMap;
 import java.util.Map;

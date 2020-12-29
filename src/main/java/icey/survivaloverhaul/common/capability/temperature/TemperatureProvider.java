@@ -1,7 +1,6 @@
 package icey.survivaloverhaul.common.capability.temperature;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.common.capability.Temperature;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

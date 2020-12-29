@@ -3,25 +3,20 @@ package icey.survivaloverhaul;
 import net.minecraft.block.Block;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 
-import icey.survivaloverhaul.common.capability.Temperature;
+import icey.survivaloverhaul.common.capability.temperature.Temperature;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
+import icey.survivaloverhaul.config.*;
 
 import java.util.stream.Collectors;
 
@@ -32,6 +27,10 @@ public class Main
 {
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final String MOD_ID = "survivaloverhaul";
+	
+	// public static ClientConfig CLIENT_CONFIG;
+	// public static CommonConfig CONFIG;
+	// public static ServerConfig SERVER_CONFIG;
 	
 	/** Serene Seasons and Better Weather both add their own seasons system,
 	 *  so we'll probably want to integrate those with the temperature/climbing

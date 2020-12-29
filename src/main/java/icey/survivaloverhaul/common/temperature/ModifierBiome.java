@@ -1,5 +1,6 @@
 package icey.survivaloverhaul.common.temperature;
 
+import icey.survivaloverhaul.Main;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
@@ -9,7 +10,7 @@ public class ModifierBiome extends ModifierBase
 
 	public ModifierBiome()
 	{
-		super("Biome");
+		super(Main.MOD_ID + ":biome");
 	}
 	
 	@Override
@@ -17,6 +18,7 @@ public class ModifierBiome extends ModifierBase
 	{
 		Vector3i[] posOffsets = 
 			{
+					new Vector3i(0, 0, 0),
 					new Vector3i(10, 0, 0),
 					new Vector3i(-10, 0, 0),
 					new Vector3i(0, 0, 10),
@@ -27,14 +29,14 @@ public class ModifierBiome extends ModifierBase
 					new Vector3i(-7, 0, -7)
 			};
 		
-		float biomeAverage = getTempForBiome(world.getBiome(pos));
+		float biomeAverage = 0f;
 		
 		for (Vector3i entry : posOffsets)
 		{
 			biomeAverage += getTempForBiome(world.getBiome(pos.add(entry)));
 		}
 		
-		biomeAverage /= 9.0f;
+		biomeAverage /= (float)(posOffsets.length);
 		
 		return applyUndergroundEffect(normalizeToPosNeg(biomeAverage) * 1.0f, world, pos);
 	}
