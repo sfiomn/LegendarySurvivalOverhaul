@@ -77,7 +77,7 @@ public class JsonPropertyTemperature
 			}
 			else
 			{
-				if(!prop.value.equals(properties.get(prop)))
+				if(!prop.value.equals(properties.get(prop.property)))
 				{
 					return false;
 				}
