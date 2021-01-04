@@ -9,6 +9,4 @@ public interface ITemperatureModifier
 	public float getPlayerInfluence(PlayerEntity player);
 	
 	public float getWorldInfluence(World world, BlockPos pos);
-	
-	public String getName();
 }

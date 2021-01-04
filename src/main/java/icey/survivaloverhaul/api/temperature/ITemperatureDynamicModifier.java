@@ -32,11 +32,4 @@ public interface ITemperatureDynamicModifier
 	 * @return temperature influence on the world
 	 */
 	public float applyDynamicWorldInfluence(World world, BlockPos pos, float currentTemperature);
-	
-	/**
-	 * The name of your modifier. Must be unique!<br>
-	 * To make it easier, you can add your mod ID to this.
-	 * @return modifier name
-	 */
-	public String getName();
 }

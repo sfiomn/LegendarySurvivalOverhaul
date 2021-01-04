@@ -1,11 +1,12 @@
 package icey.survivaloverhaul.api;
 
+import icey.survivaloverhaul.Main;
 import net.minecraft.util.DamageSource;
 
 public class DamageSources
 {
-	public static final DamageSource DEHYDRATION = new DamageSource("so_dehydration").setDamageBypassesArmor().setDamageIsAbsolute();
-	public static final DamageSource ELECTROCUTION = new DamageSource("so_electrocution").setDamageBypassesArmor().setDamageIsAbsolute();
-	public static final DamageSource HYPOTHERMIA = new DamageSource("so_hypothermia").setDamageBypassesArmor();
-	public static final DamageSource HYPERTHERMIA = new DamageSource("so_hyperthermia").setDamageBypassesArmor();
+	public static final DamageSource DEHYDRATION = new DamageSource(Main.MOD_ID + ".dehydration").setDamageBypassesArmor().setDamageIsAbsolute();
+	public static final DamageSource ELECTROCUTION = new DamageSource(Main.MOD_ID + ".electrocution").setDamageBypassesArmor().setDamageIsAbsolute();
+	public static final DamageSource HYPOTHERMIA = new DamageSource(Main.MOD_ID + ".hypothermia").setDamageBypassesArmor();
+	public static final DamageSource HYPERTHERMIA = new DamageSource(Main.MOD_ID + ".hyperthermia").setDamageBypassesArmor();
 }

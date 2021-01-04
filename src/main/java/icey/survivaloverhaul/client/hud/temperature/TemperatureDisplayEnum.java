@@ -2,7 +2,6 @@ package icey.survivaloverhaul.client.hud.temperature;
 
 public enum TemperatureDisplayEnum
 {
-	METER("meter"),
 	SYMBOL("symbol"),
 	NONE("none");
 	

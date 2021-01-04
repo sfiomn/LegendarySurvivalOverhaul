@@ -27,7 +27,7 @@ public class ModItemModelProvider extends ItemModelProvider
 		
 		// builder(itemGenerated, "example_item");
 		builder(itemGenerated, "canteen", "canteen_empty");
-		builder(itemGenerated, "heartfruit_seed", "heart_fruit_seed");
+		builder(itemGenerated, "netherite_canteen", "netherite_canteen_empty");
 	}
 	
 	@SuppressWarnings("unused")

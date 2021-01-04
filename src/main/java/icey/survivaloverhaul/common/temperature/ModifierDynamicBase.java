@@ -1,20 +1,19 @@
 package icey.survivaloverhaul.common.temperature;
 
 import icey.survivaloverhaul.api.temperature.ITemperatureDynamicModifier;
-import icey.survivaloverhaul.api.temperature.TemperatureEnum;
+import icey.survivaloverhaul.api.temperature.TemperatureStateEnum;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public class ModifierDynamicBase implements ITemperatureDynamicModifier
+public class ModifierDynamicBase extends ForgeRegistryEntry<ModifierDynamicBase> implements ITemperatureDynamicModifier
 {
-	private final String name;
 	protected final float defaultTemperature;
 	
-	public ModifierDynamicBase(String name)
+	public ModifierDynamicBase()
 	{
-		this.name = name;
-		this.defaultTemperature = (TemperatureEnum.NORMAL.getUpperBound() + TemperatureEnum.COLD.getUpperBound()) / 2;
+		this.defaultTemperature = (TemperatureStateEnum.NORMAL.getUpperBound() + TemperatureStateEnum.COLD.getUpperBound()) / 2;
 	}
 	
 	@Override
@@ -27,12 +26,6 @@ public class ModifierDynamicBase implements ITemperatureDynamicModifier
 	public float applyDynamicWorldInfluence(World world, BlockPos pos, float currentTemperature)
 	{
 		return currentTemperature;
-	}
-
-	@Override
-	public String getName()
-	{
-		return name;
 	}
 
 }

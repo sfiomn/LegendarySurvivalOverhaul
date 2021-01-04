@@ -1,6 +1,7 @@
 package icey.survivaloverhaul.common.temperature;
 
 import icey.survivaloverhaul.Main;
+import icey.survivaloverhaul.config.Config;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
@@ -10,7 +11,8 @@ public class ModifierBiome extends ModifierBase
 
 	public ModifierBiome()
 	{
-		super(Main.MOD_ID + ":biome");
+		super();
+		this.setRegistryName(Main.MOD_ID, "biome");
 	}
 	
 	@Override
@@ -38,6 +40,6 @@ public class ModifierBiome extends ModifierBase
 		
 		biomeAverage /= (float)(posOffsets.length);
 		
-		return applyUndergroundEffect(normalizeToPosNeg(biomeAverage) * 1.0f, world, pos);
+		return applyUndergroundEffect(normalizeToPosNeg(biomeAverage) * ((float) Config.BakedConfigValues.biomeTemperatureMultiplier), world, pos);
 	}
 }

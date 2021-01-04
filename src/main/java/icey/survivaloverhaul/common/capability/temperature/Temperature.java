@@ -8,14 +8,18 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
+import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ITemperatureCapability;
 import icey.survivaloverhaul.api.temperature.TemporaryModifier;
+import icey.survivaloverhaul.config.Config;
+import icey.survivaloverhaul.setup.EffectRegistry;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
-import icey.survivaloverhaul.api.temperature.TemperatureEnum;
+import icey.survivaloverhaul.api.temperature.TemperatureStateEnum;
 
 // Code adapted from 
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/capability/TemperatureCapability.java
@@ -43,7 +47,7 @@ public class Temperature implements ITemperatureCapability
 	
 	public void init()
 	{
-		this.temperature = TemperatureEnum.NORMAL.getMiddle();
+		this.temperature = TemperatureStateEnum.NORMAL.getMiddle();
 		this.tickTimer = 0;
 		
 		this.temporaryModifiers = new HashMap<String, TemporaryModifier>();
@@ -155,36 +159,71 @@ public class Temperature implements ITemperatureCapability
 				}
 			}
 			
-			TemperatureEnum tempEnum = getTemperatureEnum();
-			if(tempEnum == TemperatureEnum.HYPERTHERMIA)
+			TemperatureStateEnum tempEnum = getTemperatureEnum();
+			if(tempEnum == TemperatureStateEnum.HYPERTHERMIA)
 			{
-				if(TemperatureEnum.HYPERTHERMIA.getMiddle() < getTemperatureLevel())
+				if(TemperatureStateEnum.HYPERTHERMIA.getLowerBound() < getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.HEAT_RESISTANCE))
 				{
-					// This is where we'd apply the hyperthermia effect, but since that hasn't been implemented yet,
-					// we'll print to the log that we're supposed to be freezing now.
+					// Apply hyperthermia
+					if (player.isPotionActive(EffectRegistry.HYPERTHERMIA))
+					{
+						player.removePotionEffect(EffectRegistry.HYPERTHERMIA);
+					}
 					
+					player.addPotionEffect(new EffectInstance(EffectRegistry.HYPERTHERMIA));
 				}
 			}
-			else if (tempEnum == TemperatureEnum.HYPOTHERMIA)
+			else if (tempEnum == TemperatureStateEnum.HYPOTHERMIA)
 			{
 
-				if(TemperatureEnum.HYPOTHERMIA.getMiddle() < getTemperatureLevel())
+				if(TemperatureStateEnum.HYPOTHERMIA.getUpperBound() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.COLD_RESISTANCE))
 				{
-					// This is where we'd apply the hypothermia effect, but since that hasn't been implemented yet,
-					// we'll print to the log that we're supposed to be overheating now.
+					// Apply hypothermia
+					if (player.isPotionActive(EffectRegistry.HYPOTHERMIA))
+					{
+						player.removePotionEffect(EffectRegistry.HYPOTHERMIA);
+					}
+					
+					player.addPotionEffect(new EffectInstance(EffectRegistry.HYPOTHERMIA));
 				}
 			}
 		}
+		
+		Map<String, TemporaryModifier> tweaks = new HashMap<String, TemporaryModifier>();
+		
+		int modifierSize = temporaryModifiers.size();
+		
+		for(Map.Entry<String, TemporaryModifier> entry : temporaryModifiers.entrySet())
+		{
+			TemporaryModifier tm = entry.getValue();
+			
+			if (tm.duration > 0)
+			{
+				tweaks.put(entry.getKey(), new TemporaryModifier(tm.temperature, tm.duration -1));
+			}
+		}
+		
+		temporaryModifiers.clear();
+		temporaryModifiers.putAll(tweaks);
+		tweaks.clear();
+		
+		if (oldModifierSize != temporaryModifiers.size())
+		{
+			this.manualDirty = true;
+		}
+		
+		oldModifierSize = temporaryModifiers.size();
+		
 	}
 	
 	private int getTemperatureTickLimit()
 	{
-		int tickMax = 200;
-		int tickMin = 25;
+		int tickMax = Config.BakedConfigValues.maxTickRate;
+		int tickMin = Config.BakedConfigValues.minTickRate;
 		
 		int tickrange = tickMax - tickMin;
 		
-		int tempRange = TemperatureEnum.HYPERTHERMIA.getUpperBound() - TemperatureEnum.HYPOTHERMIA.getLowerBound();
+		int tempRange = TemperatureStateEnum.HYPERTHERMIA.getUpperBound() - TemperatureStateEnum.HYPOTHERMIA.getLowerBound();
 		
 		int currentrange = Math.abs(getTemperatureLevel() - targetTemp);
 		
@@ -211,7 +250,7 @@ public class Temperature implements ITemperatureCapability
 	}
 
 	@Override
-	public TemperatureEnum getTemperatureEnum()
+	public TemperatureStateEnum getTemperatureEnum()
 	{
 		return TemperatureUtil.getTemperatureEnum(getTemperatureLevel());
 	}
@@ -255,8 +294,12 @@ public class Temperature implements ITemperatureCapability
 			int modDuration = ((CompoundNBT) modifiers.get(entry)).getInt("duration");
 			
 			TemporaryModifier newMod = new TemporaryModifier(modTemp, modDuration);
+			this.temporaryModifiers.put(entry, newMod);
 		}
 	}
 	
-	
+	public static Temperature getTempCapability(PlayerEntity player)
+	{
+		return player.getCapability(Main.TEMPERATURE_CAP).orElse(new Temperature());
+	}
 }

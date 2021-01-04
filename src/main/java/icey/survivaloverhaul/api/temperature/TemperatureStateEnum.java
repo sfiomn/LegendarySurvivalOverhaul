@@ -2,7 +2,7 @@ package icey.survivaloverhaul.api.temperature;
 
 // Stolen shamelessly from Charles445's SimpleDifficulty mod
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/api/temperature/TemperatureEnum.java
-public enum TemperatureEnum
+public enum TemperatureStateEnum
 {
 	HYPOTHERMIA(0, 10), // You start dying.
 	FREEZING(11, 20), // You will start to recieve slowness.
@@ -15,7 +15,7 @@ public enum TemperatureEnum
 	private int lowerBound;
 	private int upperBound;
 	
-	private TemperatureEnum(int lowerBound, int upperBound)
+	private TemperatureStateEnum(int lowerBound, int upperBound)
 	{
 		this.lowerBound = lowerBound;
 		this.upperBound = upperBound;

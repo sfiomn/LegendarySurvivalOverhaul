@@ -2,8 +2,8 @@ package icey.survivaloverhaul.client.hud.stamina;
 
 public enum StaminaDisplayEnum
 {
-	ABOVE_HOTBAR("above_hotbar"),
-	WHEEL("wheel"),
+	ABOVE_ARMOR("above_armor"),
+	BAR("bar"),
 	NONE("none");
 	
 	private String displayType;

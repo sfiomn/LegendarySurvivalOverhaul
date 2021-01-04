@@ -1,36 +1,36 @@
 package icey.survivaloverhaul;
 
-import net.minecraft.block.Block;
-
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.RegistryBuilder;
 
 import org.apache.logging.log4j.*;
 
+import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.common.capability.temperature.Temperature;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
+import icey.survivaloverhaul.common.temperature.ModifierBase;
+import icey.survivaloverhaul.common.temperature.ModifierDynamicBase;
 import icey.survivaloverhaul.config.*;
+import icey.survivaloverhaul.network.NetworkHandler;
+import icey.survivaloverhaul.util.internal.TemperatureUtilInternal;
 
-import java.util.stream.Collectors;
-
-@SuppressWarnings("unused")
 @Mod(Main.MOD_ID)
 @Mod.EventBusSubscriber(modid = Main.MOD_ID)
 public class Main
 {
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final String MOD_ID = "survivaloverhaul";
-	
-	// public static ClientConfig CLIENT_CONFIG;
-	// public static CommonConfig CONFIG;
-	// public static ServerConfig SERVER_CONFIG;
 	
 	/** Serene Seasons and Better Weather both add their own seasons system,
 	 *  so we'll probably want to integrate those with the temperature/climbing
@@ -56,16 +56,18 @@ public class Main
 	 */
 	public static boolean paraglidersLoaded;
 	
+	public static ForgeRegistry<ModifierBase> MODIFIERS;
+	public static ForgeRegistry<ModifierDynamicBase> DYNAMIC_MODIFIERS;
+	
 	public Main()
 	{
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupComplete);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModConfigEvent);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::buildRegistries);
 		
 		MinecraftForge.EVENT_BUS.register(this);
+		
+		Config.register();
 	}
 	
 	@CapabilityInject(Temperature.class)
@@ -74,44 +76,34 @@ public class Main
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		CapabilityManager.INSTANCE.register(Temperature.class, new TemperatureStorage(), Temperature::new);
+		TemperatureUtil.internal = new TemperatureUtilInternal();
+		NetworkHandler.register();
 	}
 	
-	private void setupClient(final FMLCommonSetupEvent event)
+	private void onModConfigEvent(final ModConfig.ModConfigEvent event)
 	{
+		final ModConfig config = event.getConfig();
 		
-	}
-	
-	private void setupComplete(final FMLCommonSetupEvent event)
-	{
-		
-	}
-	
-	private void doClientStuff(final FMLClientSetupEvent event) {
-		// do something that can only be done on the client
-	}
-	
-	private void enqueueIMC(final InterModEnqueueEvent event)
-	{
-		
-	}
-	
-	private void processIMC(final InterModProcessEvent event)
-	{
-		LOGGER.info("Got IMC {}", event.getIMCStream().
-				map(m->m.getMessageSupplier().get()).
-				collect(Collectors.toList()));
-	}
-	
-	@SubscribeEvent
-	public void onServerStarting(FMLServerStartingEvent event) {
-		// do something when the server starts
-	}
-	
-	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-	public static class RegistryEvents {
-		@SubscribeEvent
-		public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
-			// register new blocks here
+		if (config.getSpec() == Config.CLIENT_SPEC)
+		{
+			Config.BakedConfigValues.bakeClient();
 		}
+		else if (config.getSpec() == Config.COMMON_SPEC)
+		{
+			Config.BakedConfigValues.bakeCommon();
+		}
+	}
+	
+	private void buildRegistries(final RegistryEvent.NewRegistry event)
+	{
+		RegistryBuilder<ModifierBase> modifierBuilder = new RegistryBuilder<ModifierBase>();
+		modifierBuilder.setName(new ResourceLocation(Main.MOD_ID, "modifiers"));
+		modifierBuilder.setType(ModifierBase.class);
+		MODIFIERS = (ForgeRegistry<ModifierBase>) modifierBuilder.create();
+		
+		RegistryBuilder<ModifierDynamicBase> dynamicModifierBuilder = new RegistryBuilder<ModifierDynamicBase>();
+		dynamicModifierBuilder.setName(new ResourceLocation(Main.MOD_ID, "dynamic_modifiers"));
+		dynamicModifierBuilder.setType(ModifierDynamicBase.class);
+		DYNAMIC_MODIFIERS = (ForgeRegistry<ModifierDynamicBase>) dynamicModifierBuilder.create();
 	}
 }

@@ -1,5 +1,6 @@
 package icey.survivaloverhaul.common.temperature;
 
+import icey.survivaloverhaul.Main;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -7,7 +8,8 @@ public class ModifierDefault extends ModifierBase
 {
 	public ModifierDefault()
 	{
-		super("Default");
+		super();
+		this.setRegistryName(Main.MOD_ID, "default");
 	}
 	
 	@Override

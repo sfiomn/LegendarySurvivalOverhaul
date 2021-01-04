@@ -1,14 +1,15 @@
 package icey.survivaloverhaul.common.temperature;
 
 import icey.survivaloverhaul.api.temperature.ITemperatureModifier;
-import icey.survivaloverhaul.api.temperature.TemperatureEnum;
+import icey.survivaloverhaul.api.temperature.TemperatureStateEnum;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public abstract class ModifierBase implements ITemperatureModifier
+public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> implements ITemperatureModifier
 {
 	
 	
@@ -33,15 +34,14 @@ public abstract class ModifierBase implements ITemperatureModifier
 	 * Armor
 	 * Sprinting
 	 * Temporary
+	 * Windchill?
 	 */
 	
-	private final String name;
 	protected final float defaultTemperature;
 	
-	protected ModifierBase(String name)
+	public ModifierBase()
 	{
-		this.name = name;
-		this.defaultTemperature = (TemperatureEnum.NORMAL.getUpperBound() + TemperatureEnum.COLD.getUpperBound()) / 2;
+		this.defaultTemperature = (TemperatureStateEnum.NORMAL.getUpperBound() + TemperatureStateEnum.COLD.getUpperBound()) / 2;
 	}
 	
 	@Override
@@ -49,9 +49,6 @@ public abstract class ModifierBase implements ITemperatureModifier
 	
 	@Override
 	public float getWorldInfluence(World world, BlockPos pos) { return 0.0f; }
-	
-	@Override
-	public String getName() { return name; }
 	
 	protected float applyUndergroundEffect(float temperature, World world, BlockPos pos)
 	{

@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.config.json;
+package icey.survivaloverhaul.api.config.json;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,25 +7,30 @@ import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.Property;
-import net.minecraft.state.StateContainer;
+
+/**
+ * Code taken and adapted from Charles445's SimpleDifficulty mod
+ * @see <a href="https://github.com/Charles445/SimpleDifficulty/tree/master/src/main/java/com/charles445/simpledifficulty/api/config/json">Github Link</a>
+ * @author Charles445
+ * @author Icey
+ */
 
 public class JsonPropertyTemperature
 {
 	@SerializedName("properties")
-	public Map<String, String> properties;
+	public Map<String,String> properties;
 	
 	@SerializedName("temperature")
 	public float temperature;
 	
-	public JsonPropertyTemperature(float temperature, JsonPropertyValue...props)
+	public JsonPropertyTemperature(float temperature, JsonPropertyValue... props)
 	{
 		this.temperature = temperature;
 		this.properties = new HashMap<String, String>();
 		
-		for(JsonPropertyValue prop : props)
+		for (JsonPropertyValue prop : props)
 		{
 			properties.put(prop.property, prop.value);
 		}
@@ -38,21 +43,21 @@ public class JsonPropertyTemperature
 		{
 			jpvList.add(new JsonPropertyValue(entry.getKey(), entry.getValue()));
 		}
-		// Cast to an array to avoid a ClassCastException
+		
 		return jpvList.toArray(new JsonPropertyValue[0]);
 	}
 	
-	public boolean matchesState(StateContainer<Block, BlockState> stateContainer)
+	public boolean matchesState(BlockState blockState)
 	{
-		for(Property<?> prop : stateContainer.getProperties())
+		for(Property<?> property : blockState.getProperties())
 		{
-			String propName = prop.getName();
+			String name = property.getName();
 			
-			if(properties.containsKey(propName))
+			if(properties.containsKey(name))
 			{
-				String stateValue = stateContainer.getProperty(propName).toString();
+				String stateValue = blockState.get(property).toString();
 				
-				if(!properties.get(propName).equals(stateValue))
+				if(!properties.get(name).equals(stateValue))
 				{
 					return false;
 				}
@@ -62,7 +67,7 @@ public class JsonPropertyTemperature
 		return true;
 	}
 	
-	public boolean matchesDescribedPRoperties(JsonPropertyValue... props)
+	public boolean matchesDescribedProperties(JsonPropertyValue... props)
 	{
 		if(props.length != properties.keySet().size())
 		{

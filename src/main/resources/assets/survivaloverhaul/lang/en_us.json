@@ -1,3 +1,12 @@
 {
-	"item.survivaloverhaul.canteen": "Empty Canteen"
+	"item.survivaloverhaul.canteen": "Canteen",
+	"item.survivaloverhaul.netherite_canteen": "Netherite Canteen",
+	
+	"effect.survivaloverhaul.hyperthermia": "Heat Stroke",
+	"effect.survivaloverhaul.hypothermia": "Frostbite",
+	"effect.survivaloverhaul.heat_resist": "Heat Resistance",
+	"effect.survivaloverhaul.cold_resist": "Cold Resistance",
+	
+	"death.attack.survivaloverhaul.hypothermia": "%1$s turned into a popsicle",
+	"death.attack.survivaloverhaul.hyperthermia": "%1$s couldn't take the heat"
 }

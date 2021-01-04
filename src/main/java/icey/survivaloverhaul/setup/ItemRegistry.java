@@ -23,7 +23,8 @@ import net.minecraftforge.fml.common.Mod;
 public class ItemRegistry
 {
 	// public static final Item EXAMPLE_ITEM = new ItemGeneric("example_item");
-	public static final Item CANTEEN = new ItemCanteen();
+	public static final Item CANTEEN = new ItemCanteen(false, new Item.Properties());
+	public static final Item NETHERITE_CANTEEN = new ItemCanteen(true, new Item.Properties().isImmuneToFire());
 	
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) 
