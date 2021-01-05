@@ -41,23 +41,25 @@ public class CapabilityUpdateAndSync
 	
 	private static void sendTemperatureUpdate(PlayerEntity player)
 	{
-		if (player instanceof ServerPlayerEntity && !player.world.isRemote)
-		{
+		if (player instanceof ServerPlayerEntity)
+		{			
 			UpdateTemperaturesPacket packet = new UpdateTemperaturesPacket(Main.TEMPERATURE_CAP.getStorage().writeNBT(Main.TEMPERATURE_CAP, Temperature.getTempCapability(player), null));
+			
+			// Main.LOGGER.info("Syncing NBT Data: " + Temperature.getTempCapability(player).getTemporaryModifiers().keySet());
 			
 			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
 		}
 	}
 	
 	@SubscribeEvent
-	public static void syncCapabilitiesWithClient(PlayerLoggedInEvent event)
+	public static void syncCapabilitiesOnLogin(PlayerLoggedInEvent event)
 	{
 		PlayerEntity player = event.getPlayer();
 		sendTemperatureUpdate(player);
 	}
 	
 	@SubscribeEvent
-	public static void syncCapabilitiesWithClient(PlayerChangedDimensionEvent event)
+	public static void syncCapabilitiesOnDimensionChange(PlayerChangedDimensionEvent event)
 	{
 		PlayerEntity player = event.getPlayer();
 		sendTemperatureUpdate(player);

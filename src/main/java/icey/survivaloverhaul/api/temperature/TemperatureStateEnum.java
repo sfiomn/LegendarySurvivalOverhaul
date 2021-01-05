@@ -40,4 +40,26 @@ public enum TemperatureStateEnum
 	{
 		return this.upperBound;
 	}
+	
+	public static int getIcon(TemperatureStateEnum state)
+	{
+		switch (state)
+		{
+		case HYPOTHERMIA:
+			return 5;
+		case FREEZING:
+			return 12;
+		case COLD:
+			return 10;
+		case HOT:
+			return 9;
+		case OVERHEAT:
+			return 11;
+		case HYPERTHERMIA:
+			return 4;
+		case NORMAL:
+		default:
+			return 3;
+		}
+	}
 }

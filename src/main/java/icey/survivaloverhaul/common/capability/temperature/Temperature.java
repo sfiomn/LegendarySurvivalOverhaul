@@ -162,29 +162,21 @@ public class Temperature implements ITemperatureCapability
 			TemperatureStateEnum tempEnum = getTemperatureEnum();
 			if(tempEnum == TemperatureStateEnum.HYPERTHERMIA)
 			{
-				if(TemperatureStateEnum.HYPERTHERMIA.getLowerBound() < getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.HEAT_RESISTANCE))
+				if(TemperatureStateEnum.HYPERTHERMIA.getMiddle() < getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.HEAT_RESISTANCE))
 				{
 					// Apply hyperthermia
-					if (player.isPotionActive(EffectRegistry.HYPERTHERMIA))
-					{
-						player.removePotionEffect(EffectRegistry.HYPERTHERMIA);
-					}
-					
-					player.addPotionEffect(new EffectInstance(EffectRegistry.HYPERTHERMIA));
+					player.removePotionEffect(EffectRegistry.HYPERTHERMIA);
+					player.addPotionEffect(new EffectInstance(EffectRegistry.HYPERTHERMIA, 300, 0, false, true));
 				}
 			}
 			else if (tempEnum == TemperatureStateEnum.HYPOTHERMIA)
 			{
 
-				if(TemperatureStateEnum.HYPOTHERMIA.getUpperBound() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.COLD_RESISTANCE))
+				if(TemperatureStateEnum.HYPOTHERMIA.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.COLD_RESISTANCE))
 				{
 					// Apply hypothermia
-					if (player.isPotionActive(EffectRegistry.HYPOTHERMIA))
-					{
-						player.removePotionEffect(EffectRegistry.HYPOTHERMIA);
-					}
-					
-					player.addPotionEffect(new EffectInstance(EffectRegistry.HYPOTHERMIA));
+					player.removePotionEffect(EffectRegistry.HYPOTHERMIA);
+					player.addPotionEffect(new EffectInstance(EffectRegistry.HYPOTHERMIA, 300, 0, false, true));
 				}
 			}
 		}

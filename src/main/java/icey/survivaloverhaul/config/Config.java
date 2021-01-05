@@ -74,9 +74,9 @@ public class Config
 
 		public final ForgeConfigSpec.ConfigValue<Integer> minTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> maxTickRate;
-		public final ForgeConfigSpec.ConfigValue<Integer> maxPacketTimer;
+		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
 		
-		public final ForgeConfigSpec.ConfigValue<Boolean> seasonEffects;
+		public final ForgeConfigSpec.ConfigValue<Boolean> seasonTemperatureEffects;
 		
 		// Thirst
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureAffectsThirst;
@@ -115,19 +115,24 @@ public class Config
 			builder.pop();
 			
 			builder.push("advanced");
+			
+			builder.push("tickrate");
 			maxTickRate = builder
 					.comment("Maximum amount of time between temperature ticks.")
 					.define("Maximum Temperature Tickrate", 200);
 			minTickRate = builder
 					.comment("Minimum amount of time between temperature ticks.")
 					.define("Minimum Temperature Tickrate", 50);
-			maxPacketTimer = builder
-					.comment("How often player temperature and thirst are regularly synced, in ticks")
+			builder.pop();
+			
+			builder.comment("How often player temperature and thirst are regularly synced between the client and server, in ticks");
+			builder.comment("Lower values will increase accuracy at the cost of performance");
+			routinePacketSync = builder
 					.define("Routine Packet Sync", 30);
 			builder.pop();
 			
 			builder.push("compat");
-			seasonEffects = builder
+			seasonTemperatureEffects = builder
 					.comment("If Serene Seasons or Better Weather is installed, then seasons will have an effect on the player's temperature.")
 					.define("Seasons affect Temperature", true);
 			builder.pop();
@@ -227,7 +232,7 @@ public class Config
 		public static int maxTickRate;
 		public static int routinePacketSync;
 		
-		public static boolean seasonEffects;
+		public static boolean seasonTemperatureEffects;
 		
 		public static boolean temperatureAffectsThirst;
 		public static int maxCanteenDrinks;
@@ -259,9 +264,9 @@ public class Config
 
 				minTickRate = COMMON.minTickRate.get();
 				maxTickRate = COMMON.maxTickRate.get();
-				routinePacketSync = COMMON.maxPacketTimer.get();
+				routinePacketSync = COMMON.routinePacketSync.get();
 
-				seasonEffects = COMMON.seasonEffects.get();
+				seasonTemperatureEffects = COMMON.seasonTemperatureEffects.get();
 
 				temperatureAffectsThirst = COMMON.temperatureAffectsThirst.get();
 				maxCanteenDrinks = COMMON.maxCanteenDrinks.get();
@@ -269,7 +274,7 @@ public class Config
 			}
 			catch (Exception e)
 			{
-				Main.LOGGER.warn("An exception was caused trying to load the common config for Survival Overhaul.");
+				Main.LOGGER.warn("An exception was caused trying to load the common config for Survival Overhaul");
 				e.printStackTrace();
 			}
 		}
