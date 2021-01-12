@@ -13,7 +13,7 @@ public interface ITemperatureUtil
 	
 	public int clampTemperature(int temperature);
 	
-	public TemperatureStateEnum getTemperatureEnum(int temp);
+	public TemperatureEnum getTemperatureEnum(int temp);
 	
 	public void setArmorTemperatureTag(final ItemStack stack, float temperature);
 	

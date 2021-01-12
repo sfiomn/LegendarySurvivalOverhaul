@@ -1,7 +1,7 @@
 package icey.survivaloverhaul.common.capability;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.common.capability.temperature.Temperature;
+import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.network.packets.UpdateTemperaturesPacket;
 import icey.survivaloverhaul.network.NetworkHandler;
@@ -28,7 +28,7 @@ public class CapabilityUpdateAndSync
 		
 		if (Config.BakedConfigValues.temperatureEnabled)
 		{
-			Temperature tempCap = Temperature.getTempCapability(player);
+			TemperatureCapability tempCap = TemperatureCapability.getTempCapability(player);
 			tempCap.tickUpdate(player, world, event.phase);
 			
 			if(event.phase == Phase.START && (tempCap.isDirty() || tempCap.getPacketTimer() % Config.BakedConfigValues.routinePacketSync == 0))
@@ -43,7 +43,7 @@ public class CapabilityUpdateAndSync
 	{
 		if (player instanceof ServerPlayerEntity)
 		{			
-			UpdateTemperaturesPacket packet = new UpdateTemperaturesPacket(Main.TEMPERATURE_CAP.getStorage().writeNBT(Main.TEMPERATURE_CAP, Temperature.getTempCapability(player), null));
+			UpdateTemperaturesPacket packet = new UpdateTemperaturesPacket(Main.TEMPERATURE_CAP.getStorage().writeNBT(Main.TEMPERATURE_CAP, TemperatureCapability.getTempCapability(player), null));
 			
 			// Main.LOGGER.info("Syncing NBT Data: " + Temperature.getTempCapability(player).getTemporaryModifiers().keySet());
 			

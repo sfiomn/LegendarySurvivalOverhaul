@@ -69,9 +69,24 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousTemperature;
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureSecondaryEffects;
 		
+		public final ForgeConfigSpec.ConfigValue<Double> maxCoilInfluenceDistance;
+		public final ForgeConfigSpec.ConfigValue<Double> coilFullPowerDistance;
+		public final ForgeConfigSpec.ConfigValue<Integer> coilInfluence;
+		
+		public final ForgeConfigSpec.ConfigValue<Boolean> snowArmorSetBonusEnabled;
+		public final ForgeConfigSpec.ConfigValue<Boolean> desertArmorSetBonusEnabled;
+		
 		public final ForgeConfigSpec.ConfigValue<Boolean> biomeEffectsEnabled;
 		public final ForgeConfigSpec.ConfigValue<Double> biomeTemperatureMultiplier;
-
+		
+		public final ForgeConfigSpec.ConfigValue<Double> timeMultiplier;
+		public final ForgeConfigSpec.ConfigValue<Double> biomeTimeMultiplier;
+		public final ForgeConfigSpec.ConfigValue<Integer> timeShadeModifier;
+		
+		public final ForgeConfigSpec.ConfigValue<Double> altitudeModifier;
+		
+		public final ForgeConfigSpec.ConfigValue<Double> sprintModifier;
+		
 		public final ForgeConfigSpec.ConfigValue<Integer> minTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> maxTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
@@ -85,71 +100,114 @@ public class Config
 		
 		Common(ForgeConfigSpec.Builder builder)
 		{
-			builder.comment("Options related to enabling/disabling specific features").push("core");
+			builder.comment(" Options related to enabling/disabling specific features").push("core");
 			thirstEnabled = builder
-					.comment("Whether or not the thirst system is enabled.")
+					.comment(" Whether or not the thirst system is enabled.")
 					.define("Thirst Enabled", true);
 			temperatureEnabled = builder
-					.comment("Whether or not the temperature system is enabled.")
+					.comment(" Whether or not the temperature system is enabled.")
 					.define("Temperature Enabled", true);
 			staminaEnabled = builder
-					.comment("Whether or not the stamina system is enabled.")
+					.comment(" Whether or not the stamina system is enabled.")
 					.define("Stamina Enabled", true);
 			builder.pop();
 			
-			builder.comment("Options related to the temperature system").push("temperature");
+			builder.comment(" Options related to the temperature system").push("temperature");
 			dangerousTemperature = builder
-					.comment("If enabled, players will directly take damage from the effects of temperature.")
+					.comment(" If enabled, players will directly take damage from the effects of temperature.")
 					.define("Dangerous Temperature Effects", true);
 			temperatureSecondaryEffects = builder
-					.comment("If enabled, players will also recieve other effects from their current temperature state.")
+					.comment(" If enabled, players will also recieve other effects from their current temperature state.")
 					.define("Secondary Temperature Effects", true);
 			
+			builder.push("items");
+			builder.push("coils");
+			maxCoilInfluenceDistance = builder
+					.comment("Maximum distance where powered coils will have an effect on a player's temperature.")
+					.define("Max Coil Influence Distance", 32.0d);
+			coilFullPowerDistance = builder
+					.comment("Maximum distance where powered coils will have their maximum effect applied to a player.")
+					.define("Coil Full Power Distance", 16.0d);
+			coilInfluence = builder
+					.comment("Influence that a coil has on a player's temperature at the nearest distance.")
+					.define("Coil Temperature Influence", 10);
+			builder.pop();
+			builder.push("armors");
+			snowArmorSetBonusEnabled = builder
+					.comment("Whether or not a full set of Snow Armor will protect the player from Frostbite while on the surface of the overworld.")
+					.define("Snow Armor Set Bonus Enabled", true);
+			desertArmorSetBonusEnabled = builder
+					.comment("Whether or not a full set of Desert Armor will protect the player from Heat Stroke while on the surface of the overworld.")
+					.define("Desert Armor Set Bonus Enabled", true);
+			
+			builder.pop();
+			builder.pop();
+			
+			sprintModifier = builder
+					.comment("How much of an effect sprinting has on a player's temperature.")
+					.define("Player Sprint Modifier", 1.5d);
+			
+			builder.push("environment");
+			altitudeModifier = builder
+					.comment(" How much the effects of the player's altitude on temperature are multiplied.")
+					.define("Altitude Modifier", 3.0d);
 			builder.push("biomes");
 			biomeTemperatureMultiplier = builder
 					.comment("How much a biome's temperature effects are multiplied.")
-					.define("Biome Temperature Multiplier", 1.0d);
+					.defineInRange("Biome Temperature Multiplier", 10.0d, 0.0d, 1000.0d);
 			biomeEffectsEnabled = builder
 					.comment("Whether or not biomes will have an effect on a player's temperature.")
 					.define("Biomes affect Temperature", true);
+			builder.pop();
+			
+			builder.push("time");
+			builder.push("multipliers");
+			timeMultiplier = builder
+					.comment(" How strongly the effects of time on temperature are multiplied.")
+					.defineInRange("Time Multiplier", 1.0d, 0.0d, 100.0d);
+			biomeTimeMultiplier = builder
+					.comment(" How strongly different biomes affect temperature, based on time.")
+					.defineInRange("Biome Time Multiplier", 1.25d, 1.0d, 100.0d);
+			builder.pop();
+			timeShadeModifier = builder
+					.comment(new String[] {" Staying in the shade will reduce a player's temperature by this amount.", " Only effective in hot biomes!"} )
+					.define("Time Shade Modifier", -3);
+			builder.pop();
 			builder.pop();
 			
 			builder.push("advanced");
 			
 			builder.push("tickrate");
 			maxTickRate = builder
-					.comment("Maximum amount of time between temperature ticks.")
-					.define("Maximum Temperature Tickrate", 200);
+					.comment(" Maximum amount of time between temperature ticks.")
+					.defineInRange("Maximum Temperature Tickrate", 200, 20, Integer.MAX_VALUE);
 			minTickRate = builder
-					.comment("Minimum amount of time between temperature ticks.")
-					.define("Minimum Temperature Tickrate", 50);
+					.comment(" Minimum amount of time between temperature ticks.")
+					.defineInRange("Minimum Temperature Tickrate", 20, 20, Integer.MAX_VALUE);
 			builder.pop();
 			
-			builder.comment("How often player temperature and thirst are regularly synced between the client and server, in ticks");
-			builder.comment("Lower values will increase accuracy at the cost of performance");
 			routinePacketSync = builder
+					.comment(new String[] {" How often player temperature and thirst are regularly synced between the client and server, in ticks."," Lower values will increase accuracy at the cost of performance"})
 					.define("Routine Packet Sync", 30);
 			builder.pop();
 			
 			builder.push("compat");
 			seasonTemperatureEffects = builder
-					.comment("If Serene Seasons or Better Weather is installed, then seasons will have an effect on the player's temperature.")
+					.comment(new String[] {" If Serene Seasons or Better Weather is installed,", " then seasons will have an effect on the player's temperature."})
 					.define("Seasons affect Temperature", true);
 			builder.pop();
 			builder.pop();
 
-			builder.comment("Options related to the thirst system").push("thirst");
+			builder.comment(" Options related to the thirst system").push("thirst");
 			temperatureAffectsThirst = builder
-					.comment("Whether or not temperature affects thirst. Only relevant if temperature is also enabled.")
+					.comment(new String [] {" Whether or not temperature affects thirst.", " Only relevant if temperature is also enabled."})
 					.define("Temperature Affects Thirst", true);
 			
-			builder.comment("Maximum amount of drinks in the canteen.");
-			builder.comment("Default is 3.");
+			builder.comment(new String[] {" Maximum amount of drinks in the canteen.", " Default is 3."});
 			maxCanteenDrinks = builder
 					.define("Maximum Canteen Drinks", 3);
 			
-			builder.comment("Maximum amount of drinks in the netherite canteen.");
-			builder.comment("Default is 3.");
+			builder.comment(new String[] {" Maximum amount of drinks in the netherite canteen.", " Default is 3."} );
 			maxNetheriteCanteenDrinks = builder
 					.define("Maximum Netherite Canteen Drinks", 3);
 			
@@ -228,6 +286,15 @@ public class Config
 		public static boolean biomeEffectsEnabled;
 		public static double biomeTemperatureMultiplier;
 		
+		public static double altitudeModifier;
+		
+		public static double maxCoilInfluenceDistance;
+		public static double coilFullPowerDistance;
+		public static int coilInfluence;
+
+		public static boolean snowArmorSetBonusEnabled;
+		public static boolean desertArmorSetBonusEnabled;
+		
 		public static int minTickRate;
 		public static int maxTickRate;
 		public static int routinePacketSync;
@@ -237,6 +304,12 @@ public class Config
 		public static boolean temperatureAffectsThirst;
 		public static int maxCanteenDrinks;
 		public static int maxNetheriteCanteenDrinks;
+		
+		public static double timeMultiplier;
+		public static double biomeTimeMultiplier;
+		public static int timeShadeModifier;
+		
+		public static double sprintModifier;
 		
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
@@ -258,16 +331,31 @@ public class Config
 				
 				dangerousTemperature = COMMON.dangerousTemperature.get();
 				temperatureSecondaryEffects = COMMON.temperatureSecondaryEffects.get();
+				
+				altitudeModifier = COMMON.altitudeModifier.get();
+				
+				maxCoilInfluenceDistance = COMMON.maxCoilInfluenceDistance.get();
+				coilFullPowerDistance = COMMON.coilFullPowerDistance.get();
+				coilInfluence = COMMON.coilInfluence.get();
 
+				snowArmorSetBonusEnabled = COMMON.snowArmorSetBonusEnabled.get();
+				desertArmorSetBonusEnabled = COMMON.desertArmorSetBonusEnabled.get();
+
+				
 				biomeEffectsEnabled = COMMON.biomeEffectsEnabled.get();
 				biomeTemperatureMultiplier = COMMON.biomeTemperatureMultiplier.get();
-
+				timeMultiplier = COMMON.timeMultiplier.get();
+				biomeTimeMultiplier = COMMON.biomeTimeMultiplier.get();
+				timeShadeModifier = COMMON.timeShadeModifier.get();
+				
+				sprintModifier = COMMON.sprintModifier.get();
+				
 				minTickRate = COMMON.minTickRate.get();
 				maxTickRate = COMMON.maxTickRate.get();
 				routinePacketSync = COMMON.routinePacketSync.get();
-
+				
 				seasonTemperatureEffects = COMMON.seasonTemperatureEffects.get();
-
+				
 				temperatureAffectsThirst = COMMON.temperatureAffectsThirst.get();
 				maxCanteenDrinks = COMMON.maxCanteenDrinks.get();
 				maxNetheriteCanteenDrinks = COMMON.maxNetheriteCanteenDrinks.get();

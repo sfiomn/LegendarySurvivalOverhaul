@@ -12,7 +12,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.function.Supplier;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.common.capability.temperature.Temperature;
+import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 
 public class UpdateTemperaturesPacket
 {
@@ -54,7 +54,7 @@ public class UpdateTemperaturesPacket
 			{
 				ClientPlayerEntity player = Minecraft.getInstance().player;
 				
-				Temperature temperature = player.getCapability(Main.TEMPERATURE_CAP).orElse(new Temperature());
+				TemperatureCapability temperature = player.getCapability(Main.TEMPERATURE_CAP).orElse(new TemperatureCapability());
 				
 				temperature.load(compound);
 			}

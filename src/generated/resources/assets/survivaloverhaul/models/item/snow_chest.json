@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "survivaloverhaul:item/snow_tunic"
+  }
+}

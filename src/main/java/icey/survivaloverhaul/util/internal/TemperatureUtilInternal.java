@@ -2,18 +2,21 @@ package icey.survivaloverhaul.util.internal;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.*;
-import icey.survivaloverhaul.common.temperature.ModifierBase;
-import icey.survivaloverhaul.common.temperature.ModifierDynamicBase;
+import icey.survivaloverhaul.common.tempmods.DynamicModifierBase;
+import icey.survivaloverhaul.common.tempmods.ModifierBase;
 import icey.survivaloverhaul.util.WorldUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class TemperatureUtilInternal implements ITemperatureUtil
 {
-
+	private final String TEMPERATURE_TAG = "ArmorTemp";
+	
 	@Override
 	public int getPlayerTargetTemperature(PlayerEntity player)
 	{
@@ -21,19 +24,19 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 		World world = player.getEntityWorld();
 		BlockPos pos = WorldUtil.getSidedBlockPos(world, player);
 		
-		for(ModifierBase modifier : Main.MODIFIERS.getValues())
+		for(ModifierBase modifier : GameRegistry.findRegistry(ModifierBase.class).getValues())
 		{
 			sum += modifier.getWorldInfluence(world, pos);
 			sum += modifier.getPlayerInfluence(player);
 		}
 		
-		for (ModifierDynamicBase dynamicModifier : Main.DYNAMIC_MODIFIERS.getValues())
+		for (DynamicModifierBase dynamicModifier : GameRegistry.findRegistry(DynamicModifierBase.class).getValues())
 		{
 			sum += dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);
 			sum += dynamicModifier.applyDynamicPlayerInfluence(player, sum);
 		}
 		
-		return (int) sum;
+		return Math.round(sum);
 	}
 
 	@Override
@@ -41,11 +44,11 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	{
 		float sum = 0.0f;
 		
-		for(ModifierBase modifier : Main.MODIFIERS.getValues())
+		for(ModifierBase modifier : GameRegistry.findRegistry(ModifierBase.class).getValues())
 		{
 			sum += modifier.getWorldInfluence(world, pos);
 		}
-		for (ModifierDynamicBase dynamicModifier : Main.DYNAMIC_MODIFIERS.getValues())
+		for (DynamicModifierBase dynamicModifier : GameRegistry.findRegistry(DynamicModifierBase.class).getValues())
 		{
 			sum += dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);
 		}
@@ -56,13 +59,13 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	@Override
 	public int clampTemperature(int temperature)
 	{
-		return MathHelper.clamp(temperature, TemperatureStateEnum.HYPOTHERMIA.getLowerBound(), TemperatureStateEnum.HYPERTHERMIA.getUpperBound());
+		return MathHelper.clamp(temperature, TemperatureEnum.FROSTBITE.getLowerBound(), TemperatureEnum.HEAT_STROKE.getUpperBound());
 	}
 
 	@Override
-	public TemperatureStateEnum getTemperatureEnum(int temp)
+	public TemperatureEnum getTemperatureEnum(int temp)
 	{
-		for(TemperatureStateEnum tempEnum : TemperatureStateEnum.values())
+		for(TemperatureEnum tempEnum : TemperatureEnum.values())
 		{
 			if(tempEnum.matches(temp))
 			{
@@ -73,33 +76,55 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 		// Temperature invaled, assume extremes
 		if(temp < 0)
 		{
-			return TemperatureStateEnum.HYPOTHERMIA;
+			return TemperatureEnum.FROSTBITE;
 		}
 		else
 		{
-			return TemperatureStateEnum.HYPERTHERMIA;
+			return TemperatureEnum.HEAT_STROKE;
 		}
 	}
 
 	@Override
 	public void setArmorTemperatureTag(ItemStack stack, float temperature)
 	{
-		// TODO Auto-generated method stub
+		if (!stack.hasTag())
+		{
+			stack.setTag(new CompoundNBT());
+		}
 		
+		final CompoundNBT compound = stack.getTag();
+		
+		compound.putFloat(TEMPERATURE_TAG, temperature);
 	}
 
 	@Override
 	public float getArmorTemperatureTag(ItemStack stack)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		if (stack.hasTag())
+		{
+			final CompoundNBT compound = stack.getTag();
+			
+			if (compound.contains(TEMPERATURE_TAG))
+			{
+				float tempTag = compound.getFloat(TEMPERATURE_TAG);
+				
+				return tempTag;
+			}
+		}
+		return 0.0f;
 	}
 
 	@Override
 	public void removeArmorTemperatureTag(ItemStack stack)
 	{
-		// TODO Auto-generated method stub
-		
+		if(stack.hasTag())
+		{
+			final CompoundNBT compound = stack.getTag();
+			if (compound.contains(TEMPERATURE_TAG))
+			{
+				compound.remove(TEMPERATURE_TAG);
+			}
+		}
 	}
 
 }

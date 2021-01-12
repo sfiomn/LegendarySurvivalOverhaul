@@ -2,7 +2,8 @@ package icey.survivaloverhaul.api.stamina;
 
 public enum PlayerStateEnum
 {
-	;
+	NONE(ClimbingAction.NONE, 0),
+	SPRINTING(ClimbingAction.NONE, 10, true);
 	
 	public final ClimbingAction climbingAction;
 	public final int staminaRate;

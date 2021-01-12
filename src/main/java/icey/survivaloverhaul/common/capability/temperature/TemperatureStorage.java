@@ -7,16 +7,16 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 
-public class TemperatureStorage implements IStorage<Temperature>
+public class TemperatureStorage implements IStorage<TemperatureCapability>
 {
 	@Override
-	public INBT writeNBT(Capability<Temperature> capability, Temperature instance, Direction side)
+	public INBT writeNBT(Capability<TemperatureCapability> capability, TemperatureCapability instance, Direction side)
 	{
 		return instance.save();
 	}
 	
 	@Override
-	public void readNBT(Capability<Temperature> capability, Temperature instance, Direction side, INBT nbt)
+	public void readNBT(Capability<TemperatureCapability> capability, TemperatureCapability instance, Direction side, INBT nbt)
 	{
 		if (nbt instanceof CompoundNBT)
 		{

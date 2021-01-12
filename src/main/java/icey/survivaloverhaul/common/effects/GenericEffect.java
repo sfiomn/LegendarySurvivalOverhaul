@@ -19,4 +19,10 @@ public class GenericEffect extends Effect
 	{
 		
 	}
+	
+	@Override
+	public boolean isReady(int duration, int amplifier) 
+	{
+		return false;
+	}
 }

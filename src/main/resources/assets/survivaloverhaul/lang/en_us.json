@@ -1,9 +1,38 @@
 {
 	"item.survivaloverhaul.canteen": "Canteen",
 	"item.survivaloverhaul.netherite_canteen": "Netherite Canteen",
+	"item.survivaloverhaul.snow_head": "Snow Hat",
+	"item.survivaloverhaul.snow_chest": "Snow Tunic",
+	"item.survivaloverhaul.snow_legs": "Snow Pants",
+	"item.survivaloverhaul.snow_feet": "Snow Boots",
+	"item.survivaloverhaul.infernal_fern_leaf": "Infernal Fern Leaf",
+	"item.survivaloverhaul.stone_fern_leaf": "Stone Fern Leaf",
 	
-	"effect.survivaloverhaul.hyperthermia": "Heat Stroke",
-	"effect.survivaloverhaul.hypothermia": "Frostbite",
+	"block.survivaloverhaul.heating_coil":"Heating Coil",
+	"block.survivaloverhaul.cooling_coil":"Cooling Coil",
+	
+	"item.minecraft.potion.effect.heat_resistance":"Potion of Heat Resistance",
+	"item.minecraft.potion.effect.cold_resistance":"Potion of Cold Resistance",
+	"item.minecraft.potion.effect.heat_resistance_long":"Potion of Heat Resistance",
+	"item.minecraft.potion.effect.cold_resistance_long":"Potion of Cold Resistance",
+	
+	"item.minecraft.splash_potion.effect.heat_resistance":"Splash Potion of Heat Resistance",
+	"item.minecraft.splash_potion.effect.cold_resistance":"Splash Potion of Cold Resistance",
+	"item.minecraft.splash_potion.effect.heat_resistance_long":"Splash Potion of Heat Resistance",
+	"item.minecraft.splash_potion.effect.cold_resistance_long":"Splash Potion of Cold Resistance",
+	
+	"item.minecraft.lingering_potion.effect.heat_resistance":"Lingering Potion of Heat Resistance",
+	"item.minecraft.lingering_potion.effect.cold_resistance":"Lingering Potion of Cold Resistance",
+	"item.minecraft.lingering_potion.effect.heat_resistance_long":"Lingering Potion of Heat Resistance",
+	"item.minecraft.lingering_potion.effect.cold_resistance_long":"Lingering Potion of Cold Resistance",
+	
+	"item.minecraft.tipped_arrow.effect.heat_resistance":"Arrow of Heat Resistance",
+	"item.minecraft.tipped_arrow.effect.cold_resistance":"Arrow of Cold Resistance",
+	"item.minecraft.tipped_arrow.effect.heat_resistance_long":"Arrow of Heat Resistance",
+	"item.minecraft.tipped_arrow.effect.cold_resistance_long":"Arrow of Cold Resistance",
+	
+	"effect.survivaloverhaul.heat_stroke": "Heat Stroke",
+	"effect.survivaloverhaul.frostbite": "Frostbite",
 	"effect.survivaloverhaul.heat_resist": "Heat Resistance",
 	"effect.survivaloverhaul.cold_resist": "Cold Resistance",
 	

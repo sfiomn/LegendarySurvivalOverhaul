@@ -18,7 +18,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 @SuppressWarnings("unused")
 public class TemperatureProvider implements ICapabilitySerializable<INBT>
 {
-	private LazyOptional<Temperature> instance = LazyOptional.of(Main.TEMPERATURE_CAP::getDefaultInstance);
+	private LazyOptional<TemperatureCapability> instance = LazyOptional.of(Main.TEMPERATURE_CAP::getDefaultInstance);
 	
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side)

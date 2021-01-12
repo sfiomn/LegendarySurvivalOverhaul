@@ -8,17 +8,13 @@ import icey.survivaloverhaul.Main;
 
 public class ItemCanteen extends Item
 {
-	public ItemCanteen(boolean isNetherite, Item.Properties properties)
+	public ItemCanteen(boolean isNetherite)
 	{
-		super(properties.maxStackSize(1).group(ItemGroup.TOOLS).maxDamage(99).setNoRepair());
-		if (isNetherite)
-		{
-			this.setRegistryName(Main.MOD_ID, "netherite_canteen");
-		}
-		else
-		{
-			this.setRegistryName(Main.MOD_ID, "canteen");
-		}
+		super(isNetherite ? 
+				new Item.Properties().maxStackSize(1).group(ItemGroup.TOOLS).maxDamage(99).setNoRepair().isImmuneToFire() : 
+				new Item.Properties().maxStackSize(1).group(ItemGroup.TOOLS).maxDamage(99).setNoRepair());
+
+		this.setRegistryName(Main.MOD_ID, isNetherite ? "netherite_canteen" : "canteen");
 	}
 	
 	

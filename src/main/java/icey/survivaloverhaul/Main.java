@@ -1,5 +1,7 @@
 package icey.survivaloverhaul;
 
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.*;
@@ -17,12 +19,13 @@ import net.minecraftforge.registries.RegistryBuilder;
 import org.apache.logging.log4j.*;
 
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
-import icey.survivaloverhaul.common.capability.temperature.Temperature;
+import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
-import icey.survivaloverhaul.common.temperature.ModifierBase;
-import icey.survivaloverhaul.common.temperature.ModifierDynamicBase;
+import icey.survivaloverhaul.common.tempmods.DynamicModifierBase;
+import icey.survivaloverhaul.common.tempmods.ModifierBase;
 import icey.survivaloverhaul.config.*;
 import icey.survivaloverhaul.network.NetworkHandler;
+import icey.survivaloverhaul.setup.BlockRegistry;
 import icey.survivaloverhaul.util.internal.TemperatureUtilInternal;
 
 @Mod(Main.MOD_ID)
@@ -57,27 +60,38 @@ public class Main
 	public static boolean paraglidersLoaded;
 	
 	public static ForgeRegistry<ModifierBase> MODIFIERS;
-	public static ForgeRegistry<ModifierDynamicBase> DYNAMIC_MODIFIERS;
+	public static ForgeRegistry<DynamicModifierBase> DYNAMIC_MODIFIERS;
 	
 	public Main()
 	{
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModConfigEvent);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::buildRegistries);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 		
 		MinecraftForge.EVENT_BUS.register(this);
 		
 		Config.register();
+		
+		Config.BakedConfigValues.bakeClient();
+		Config.BakedConfigValues.bakeCommon();
+		
+		TemperatureUtil.internal = new TemperatureUtilInternal();
 	}
 	
-	@CapabilityInject(Temperature.class)
-	public static final Capability<Temperature> TEMPERATURE_CAP = null;
+	@CapabilityInject(TemperatureCapability.class)
+	public static final Capability<TemperatureCapability> TEMPERATURE_CAP = null;
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
-		CapabilityManager.INSTANCE.register(Temperature.class, new TemperatureStorage(), Temperature::new);
-		TemperatureUtil.internal = new TemperatureUtilInternal();
+		CapabilityManager.INSTANCE.register(TemperatureCapability.class, new TemperatureStorage(), TemperatureCapability::new);
 		NetworkHandler.register();
+	}
+	
+	private void clientSetup(final FMLClientSetupEvent event)
+	{
+		RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.COOLING_COIL.getBlock(), RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.HEATING_COIL.getBlock(), RenderType.getTranslucent());
 	}
 	
 	private void onModConfigEvent(final ModConfig.ModConfigEvent event)
@@ -101,9 +115,9 @@ public class Main
 		modifierBuilder.setType(ModifierBase.class);
 		MODIFIERS = (ForgeRegistry<ModifierBase>) modifierBuilder.create();
 		
-		RegistryBuilder<ModifierDynamicBase> dynamicModifierBuilder = new RegistryBuilder<ModifierDynamicBase>();
+		RegistryBuilder<DynamicModifierBase> dynamicModifierBuilder = new RegistryBuilder<DynamicModifierBase>();
 		dynamicModifierBuilder.setName(new ResourceLocation(Main.MOD_ID, "dynamic_modifiers"));
-		dynamicModifierBuilder.setType(ModifierDynamicBase.class);
-		DYNAMIC_MODIFIERS = (ForgeRegistry<ModifierDynamicBase>) dynamicModifierBuilder.create();
+		dynamicModifierBuilder.setType(DynamicModifierBase.class);
+		DYNAMIC_MODIFIERS = (ForgeRegistry<DynamicModifierBase>) dynamicModifierBuilder.create();
 	}
 }

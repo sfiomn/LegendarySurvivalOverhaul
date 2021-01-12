@@ -49,7 +49,7 @@ public class TemperatureUtil
 	 * @param temperature
 	 * @return TemperatureEnum for the temperature
 	 */
-	public static TemperatureStateEnum getTemperatureEnum(int temp)
+	public static TemperatureEnum getTemperatureEnum(int temp)
 	{
 		return internal.getTemperatureEnum(temp);
 	}

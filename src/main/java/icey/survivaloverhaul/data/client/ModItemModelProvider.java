@@ -22,15 +22,21 @@ public class ModItemModelProvider extends ItemModelProvider
 	@Override
 	protected void registerModels()
 	{
-		@SuppressWarnings("unused")
 		ModelFile itemGenerated = getExistingFile(mcLoc("item/generated"));
 		
 		// builder(itemGenerated, "example_item");
 		builder(itemGenerated, "canteen", "canteen_empty");
 		builder(itemGenerated, "netherite_canteen", "netherite_canteen_empty");
+		
+		builder(itemGenerated, "infernal_fern_leaf");
+		builder(itemGenerated, "stone_fern_leaf");
+		
+		builder(itemGenerated, "snow_head", "snow_hat");
+		builder(itemGenerated, "snow_chest", "snow_tunic");
+		builder(itemGenerated, "snow_legs", "snow_pants");
+		builder(itemGenerated, "snow_feet", "snow_boots");
 	}
 	
-	@SuppressWarnings("unused")
 	private ItemModelBuilder builder(ModelFile itemGenerated, String name)
 	{
 		return getBuilder(name).parent(itemGenerated).texture("layer0", "item/" + name);

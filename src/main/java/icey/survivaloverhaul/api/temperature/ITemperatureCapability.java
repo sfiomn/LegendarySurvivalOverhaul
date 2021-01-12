@@ -10,7 +10,7 @@ public interface ITemperatureCapability
 {
 	public int getTemperatureLevel();
 	public int getTemperatureTickTimer();
-	public TemperatureStateEnum getTemperatureEnum();
+	public TemperatureEnum getTemperatureEnum();
 	public ImmutableMap<String, TemporaryModifier> getTemporaryModifiers();
 	
 	public void setTemperatureLevel(int temperature);

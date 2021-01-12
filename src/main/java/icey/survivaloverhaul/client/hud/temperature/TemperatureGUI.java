@@ -7,7 +7,7 @@ import java.util.Random;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.api.temperature.TemperatureStateEnum;
+import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.config.Config;
 import net.minecraft.client.MainWindow;
@@ -33,7 +33,7 @@ public class TemperatureGUI
 	
 	private final Random rand = new Random();
 	
-	public static final ResourceLocation ICONS = new ResourceLocation(Main.MOD_ID + ":textures/gui/overlay.png");
+	public static final ResourceLocation ICONS = new ResourceLocation(Main.MOD_ID, "textures/gui/overlay.png");
 	
 	private static final int texturepos_X = 0;
 	private static final int texturepos_Y = 48;
@@ -59,7 +59,7 @@ public class TemperatureGUI
 	{
 		GlStateManager.enableBlend();
 		
-		TemperatureStateEnum tempEnum = TemperatureUtil.getTemperatureEnum(temperature);
+		TemperatureEnum tempEnum = TemperatureUtil.getTemperatureEnum(temperature);
 		int bgXOffset = textureWidth * tempEnum.ordinal();
 
 		GlStateManager.disableBlend();
@@ -70,7 +70,7 @@ public class TemperatureGUI
 	{
 		if(event.phase == TickEvent.Phase.END)
 		{
-			if(instance.mc.isGamePaused())
+			if(!instance.mc.isGamePaused())
 			{
 				instance.updateCounter++;
 			}

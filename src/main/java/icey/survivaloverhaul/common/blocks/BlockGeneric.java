@@ -12,7 +12,7 @@ import net.minecraft.item.ItemGroup;
 public class BlockGeneric extends Block
 {
 	public ItemGroup group;
-	public boolean associatedItem;
+	public boolean hasAssociatedItem;
 	
 	public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound)
 	{
@@ -25,7 +25,7 @@ public class BlockGeneric extends Block
 			);
 		
 		group = ItemGroup.BUILDING_BLOCKS;
-		this.associatedItem = true;
+		this.hasAssociatedItem = true;
 		
 		this.setRegistryName(Main.MOD_ID, name);
 	}
@@ -41,7 +41,7 @@ public class BlockGeneric extends Block
 			);
 		
 		this.group = group;
-		this.associatedItem = true;
+		this.hasAssociatedItem = true;
 		
 		this.setRegistryName(Main.MOD_ID, name);
 	}
@@ -57,7 +57,7 @@ public class BlockGeneric extends Block
 			);
 		
 		this.group = null;
-		this.associatedItem = associatedItem;
+		this.hasAssociatedItem = associatedItem;
 		
 		this.setRegistryName(Main.MOD_ID, name);
 	}

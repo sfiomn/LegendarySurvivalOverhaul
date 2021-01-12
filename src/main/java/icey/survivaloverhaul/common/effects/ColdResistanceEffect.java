@@ -7,7 +7,7 @@ public class ColdResistanceEffect extends GenericEffect
 
 	public ColdResistanceEffect()
 	{
-		super(1166574, "cold_resistance", EffectType.BENEFICIAL);
+		super(1166574, "cold_resist", EffectType.BENEFICIAL);
 		// TODO Auto-generated constructor stub
 	}
 

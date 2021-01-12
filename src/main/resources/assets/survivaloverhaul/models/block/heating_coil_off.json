@@ -1,0 +1,9 @@
+{
+	"parent": "survivaloverhaul:block/temperature_coil",
+	"textures": {
+		"side": "survivaloverhaul:block/coil_stand_side",
+		"top": "survivaloverhaul:block/coil_stand_top",
+		"coil": "survivaloverhaul:block/heating_coil_off",
+		"particle": "survivaloverhaul:block/heating_coil_off"
+	}
+}

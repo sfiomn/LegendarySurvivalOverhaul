@@ -37,7 +37,7 @@ displayName="Survival Overhaul" #mandatory
 # displayURL="http://example.com/" #optional
 
 # A file name (in the root of the mod JAR) containing a logo for display
-# logoFile="examplemod.png" #optional
+# logoFile="assets/logo.png" #optional
 
 # A text field displayed in the mod UI
 credits="Charles445, Glitchfiend" #optional
