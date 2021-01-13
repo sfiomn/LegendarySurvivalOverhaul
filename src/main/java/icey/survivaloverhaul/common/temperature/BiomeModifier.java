@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.common.tempmods;
+package icey.survivaloverhaul.common.temperature;
 
 import java.util.ArrayList;
 import java.util.List;

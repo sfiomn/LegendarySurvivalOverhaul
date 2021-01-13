@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.common.tempmods;
+package icey.survivaloverhaul.common.temperature;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.TemporaryModifier;

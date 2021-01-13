@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.common.tempmods;
+package icey.survivaloverhaul.common.temperature;
 
 import icey.survivaloverhaul.api.temperature.ITemperatureDynamicModifier;
 import icey.survivaloverhaul.api.temperature.TemperatureEnum;

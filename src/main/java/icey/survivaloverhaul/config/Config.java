@@ -41,22 +41,24 @@ public class Config
 	{
 		Path configPath = FMLPaths.CONFIGDIR.get();
 		Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "survivaloverhaul");
+		Path modConfigJsons = Paths.get(modConfigPath.toString(), "json");
 		
 		try
 		{
 			Files.createDirectory(modConfigPath);
+			Files.createDirectory(modConfigJsons);
 		}
 		catch (FileAlreadyExistsException e) {}
 		catch (IOException e)
 		{
-			Main.LOGGER.error("Failed to create Survival Overhaul config directory");
+			Main.LOGGER.error("Failed to create Survival Overhaul config directories");
 			e.printStackTrace();
 		}
 		
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_SPEC, "survivaloverhaul/survivaloverhaul-client.toml");
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_SPEC, "survivaloverhaul/survivaloverhaul-common.toml");
 		
-		TemperatureConfig.init(modConfigPath.toFile());
+		TemperatureConfig.init(modConfigJsons.toFile());
 	}
 	
 	public static class Common
@@ -91,6 +93,9 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> maxTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
 		
+		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceHorizontalDist;
+		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceVerticalDist;
+		
 		public final ForgeConfigSpec.ConfigValue<Boolean> seasonTemperatureEffects;
 		
 		// Thirst
@@ -123,21 +128,21 @@ public class Config
 			builder.push("items");
 			builder.push("coils");
 			maxCoilInfluenceDistance = builder
-					.comment("Maximum distance where powered coils will have an effect on a player's temperature.")
+					.comment(" Maximum distance where powered coils will have an effect on a player's temperature.")
 					.define("Max Coil Influence Distance", 32.0d);
 			coilFullPowerDistance = builder
-					.comment("Maximum distance where powered coils will have their maximum effect applied to a player.")
+					.comment(" Maximum distance where powered coils will have their maximum effect applied to a player.")
 					.define("Coil Full Power Distance", 16.0d);
 			coilInfluence = builder
-					.comment("Influence that a coil has on a player's temperature at the nearest distance.")
+					.comment(" Influence that a coil has on a player's temperature at the nearest distance.")
 					.define("Coil Temperature Influence", 10);
 			builder.pop();
 			builder.push("armors");
 			snowArmorSetBonusEnabled = builder
-					.comment("Whether or not a full set of Snow Armor will protect the player from Frostbite while on the surface of the overworld.")
+					.comment(" Whether or not a full set of Snow Armor will protect the player from Frostbite while on the surface of the overworld.")
 					.define("Snow Armor Set Bonus Enabled", true);
 			desertArmorSetBonusEnabled = builder
-					.comment("Whether or not a full set of Desert Armor will protect the player from Heat Stroke while on the surface of the overworld.")
+					.comment(" Whether or not a full set of Desert Armor will protect the player from Heat Stroke while on the surface of the overworld.")
 					.define("Desert Armor Set Bonus Enabled", true);
 			
 			builder.pop();
@@ -153,10 +158,10 @@ public class Config
 					.define("Altitude Modifier", 3.0d);
 			builder.push("biomes");
 			biomeTemperatureMultiplier = builder
-					.comment("How much a biome's temperature effects are multiplied.")
-					.defineInRange("Biome Temperature Multiplier", 10.0d, 0.0d, 1000.0d);
+					.comment(" How much a biome's temperature effects are multiplied.")
+					.defineInRange("Biome Temperature Multiplier", 15.0d, 0.0d, 1000.0d);
 			biomeEffectsEnabled = builder
-					.comment("Whether or not biomes will have an effect on a player's temperature.")
+					.comment(" Whether or not biomes will have an effect on a player's temperature.")
 					.define("Biomes affect Temperature", true);
 			builder.pop();
 			
@@ -164,10 +169,10 @@ public class Config
 			builder.push("multipliers");
 			timeMultiplier = builder
 					.comment(" How strongly the effects of time on temperature are multiplied.")
-					.defineInRange("Time Multiplier", 1.0d, 0.0d, 100.0d);
+					.defineInRange("Time Multiplier", 2.0d, 0.0d, 100.0d);
 			biomeTimeMultiplier = builder
 					.comment(" How strongly different biomes affect temperature, based on time.")
-					.defineInRange("Biome Time Multiplier", 1.25d, 1.0d, 100.0d);
+					.defineInRange("Biome Time Multiplier", 1.75d, 1.0d, 100.0d);
 			builder.pop();
 			timeShadeModifier = builder
 					.comment(new String[] {" Staying in the shade will reduce a player's temperature by this amount.", " Only effective in hot biomes!"} )
@@ -176,7 +181,12 @@ public class Config
 			builder.pop();
 			
 			builder.push("advanced");
-			
+			tempInfluenceHorizontalDist = builder
+					.comment(" Maximum horizontal distance where heat sources will have an effect on temperature.")
+					.defineInRange("Temperature Influence Horizontal Distance", 3, 1, 10);
+			tempInfluenceVerticalDist = builder
+					.comment(" Maximum distance where heat sources will have an effect on temperature.")
+					.defineInRange("Temperature Influence Vertical Distance", 2, 1, 10);
 			builder.push("tickrate");
 			maxTickRate = builder
 					.comment(" Maximum amount of time between temperature ticks.")
@@ -309,6 +319,9 @@ public class Config
 		public static double biomeTimeMultiplier;
 		public static int timeShadeModifier;
 		
+		public static int tempInfluenceHorizontalDist;
+		public static int tempInfluenceVerticalDist;
+		
 		public static double sprintModifier;
 		
 		public static TemperatureDisplayEnum temperatureDisplayMode;
@@ -350,6 +363,8 @@ public class Config
 				
 				sprintModifier = COMMON.sprintModifier.get();
 				
+				tempInfluenceHorizontalDist = COMMON.tempInfluenceHorizontalDist.get();
+				tempInfluenceVerticalDist = COMMON.tempInfluenceVerticalDist.get();
 				minTickRate = COMMON.minTickRate.get();
 				maxTickRate = COMMON.maxTickRate.get();
 				routinePacketSync = COMMON.routinePacketSync.get();

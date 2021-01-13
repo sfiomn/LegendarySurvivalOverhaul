@@ -3,7 +3,7 @@ package icey.survivaloverhaul.setup;
 import java.lang.reflect.Field;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.common.tempmods.*;
+import icey.survivaloverhaul.common.temperature.*;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,6 +17,8 @@ public class TemperatureModifierRegistry
 	public static final ModifierBase ALTITUDE = new AltitudeModifier();
 	public static final ModifierBase TEMPORARY = new PlayerTemporaryModifier();
 	public static final ModifierBase SPRINT = new SprintModifier();
+	public static final ModifierBase BLOCKS = new BlockModifier();
+	public static final ModifierBase ARMOR = new ArmorModifier();
 	
 	@SubscribeEvent
 	public static void registerModifiers(RegistryEvent.Register<ModifierBase> event)
