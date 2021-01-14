@@ -2,10 +2,15 @@ package icey.survivaloverhaul.common.blocks;
 
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import icey.survivaloverhaul.Main;
+import icey.survivaloverhaul.common.blocks.tileentity.CoilTileEntity;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.material.Material;
 import net.minecraft.fluid.FluidState;
@@ -16,6 +21,7 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -25,7 +31,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
 
-public class BlockTemperatureCoil extends Block implements IWaterLoggable
+public class BlockTemperatureCoil extends ContainerBlock implements IWaterLoggable
 {
 	public static final DirectionProperty DIRECTION = BlockStateProperties.FACING;
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -54,7 +60,7 @@ public class BlockTemperatureCoil extends Block implements IWaterLoggable
 		this.coilType = coilType;
 		
 		this.setDefaultState(this.stateContainer.getBaseState()
-				.with(DIRECTION, Direction.UP)
+				.with(DIRECTION, Direction.DOWN)
 				.with(LIT, Boolean.valueOf(false))
 				.with(WATERLOGGED, Boolean.valueOf(false)));
 		this.setRegistryName(Main.MOD_ID, this.coilType.getName() + "_coil");
@@ -64,15 +70,16 @@ public class BlockTemperatureCoil extends Block implements IWaterLoggable
 	{
 		if (!worldIn.isRemote)
 		{
-			boolean powered = state.get(LIT);
+			boolean powered = worldIn.isBlockPowered(pos);
+			boolean enabled = state.get(LIT);
 			
-			if (powered != worldIn.isBlockPowered(pos))
+			if (enabled && !powered)
 			{
 				worldIn.getPendingBlockTicks().scheduleTick(pos, this, 4);
 			}
-			else
+			else if (!enabled && powered)
 			{
-				worldIn.setBlockState(pos, state.func_235896_a_(LIT), 2);
+				turnOn(worldIn, pos, state);
 			}
 		}
 	}
@@ -81,13 +88,23 @@ public class BlockTemperatureCoil extends Block implements IWaterLoggable
 	{
 		if (state.get(LIT) && !worldIn.isBlockPowered(pos))
 		{
-			worldIn.setBlockState(pos, state.func_235896_a_(LIT), 2);
+			turnOff(worldIn, pos, state);
 		}
+	}
+	
+	private void turnOff(final World world, final BlockPos pos, final BlockState state)
+	{
+		world.setBlockState(pos, state.with(LIT, false));
+	}
+	
+	private void turnOn(final World world, final BlockPos pos, final BlockState state)
+	{
+		world.setBlockState(pos, state.with(LIT, true));
 	}
 	
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return this.getDefaultState().with(DIRECTION, context.getFace().getOpposite());
+		return this.getDefaultState().with(DIRECTION, context.getFace().getOpposite()).with(LIT, context.getWorld().isBlockPowered(context.getPos()));
 	}
 	
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
@@ -130,5 +147,17 @@ public class BlockTemperatureCoil extends Block implements IWaterLoggable
 		{
 			return temperature;
 		}
+	}
+	
+	public BlockRenderType getRenderType(BlockState state)
+	{
+		return BlockRenderType.MODEL;
+	}
+
+	@Nullable
+	@Override
+	public TileEntity createNewTileEntity(IBlockReader worldIn)
+	{
+		return new CoilTileEntity();
 	}
 }
