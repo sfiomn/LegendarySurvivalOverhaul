@@ -31,6 +31,8 @@ public class ModItemModelProvider extends ItemModelProvider
 		builder(itemGenerated, "infernal_fern_leaf");
 		builder(itemGenerated, "stone_fern_leaf");
 		
+		builder(itemGenerated, "mercury_paste");
+		
 		builder(itemGenerated, "snow_head", "snow_hat");
 		builder(itemGenerated, "snow_chest", "snow_tunic");
 		builder(itemGenerated, "snow_legs", "snow_pants");

@@ -23,6 +23,8 @@ public class ItemRegistry
 	public static final Item CANTEEN = new ItemCanteen(false);
 	public static final Item NETHERITE_CANTEEN = new ItemCanteen(true);
 	
+	public static final Item MERCURY_PASTE = new ItemGeneric("mercury_paste", ItemGroup.MISC);
+	
 	public static final Item STONE_FERN_LEAF = new ItemGeneric("stone_fern_leaf", ItemGroup.BREWING);
 	public static final Item INFERNAL_FERN_LEAF = new ItemGeneric("infernal_fern_leaf", ItemGroup.BREWING);
 	

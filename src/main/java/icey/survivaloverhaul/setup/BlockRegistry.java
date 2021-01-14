@@ -31,6 +31,7 @@ public class BlockRegistry
 	
 	public static final class ModBlocks
 	{
+		public static final Block CINNABAR_ORE = new BlockGeneric(Material.ROCK, "cinnabar_ore", "pickaxe", 2, 3, 3, SoundType.STONE);
 		public static final Block HEATING_COIL = new BlockTemperatureCoil(BlockTemperatureCoil.CoilType.HEATING);
 		public static final Block COOLING_COIL = new BlockTemperatureCoil(BlockTemperatureCoil.CoilType.COOLING);
 	}
@@ -114,12 +115,7 @@ public class BlockRegistry
 					
 					if (obj instanceof BlockGeneric)
 					{
-						BlockGeneric genBlock = (BlockGeneric) obj; 
-						
-						if (!genBlock.hasAssociatedItem)
-						{
-							continue;
-						}
+						BlockGeneric genBlock = (BlockGeneric) obj;
 						
 						props = new Item.Properties().group(genBlock.group);
 					}
@@ -145,12 +141,7 @@ public class BlockRegistry
 						
 						if (block instanceof BlockGeneric)
 						{
-							BlockGeneric genBlock = (BlockGeneric) block; 
-							
-							if (!genBlock.hasAssociatedItem)
-							{
-								continue;
-							}
+							BlockGeneric genBlock = (BlockGeneric) block;
 							
 							props = new Item.Properties().group(genBlock.group);
 						}

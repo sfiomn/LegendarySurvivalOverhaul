@@ -93,7 +93,13 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> impl
 	{
 		// Get the biome's temperature, clamp it between 0 and 1.35,
 		// and then normalize it to a value between 0 and 1.
-		return MathHelper.clamp(biome.getTemperature(), 0.0f, 1.35f)/ 1.35f;
+		
+		return clampedTemperature(biome.getTemperature());
+	}
+	
+	protected float clampedTemperature(float temp)
+	{
+		return MathHelper.clamp(temp, 0.0f, 1.35f)/ 1.35f;
 	}
 	
 	protected float normalizeToPosNeg(float value)

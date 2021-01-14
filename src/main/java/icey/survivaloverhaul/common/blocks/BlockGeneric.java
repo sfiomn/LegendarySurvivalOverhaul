@@ -12,22 +12,15 @@ import net.minecraft.item.ItemGroup;
 public class BlockGeneric extends Block
 {
 	public ItemGroup group;
-	public boolean hasAssociatedItem;
 	
 	public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound)
 	{
-		super(
-			Block.Properties
-				.create(materialIn)
-				.sound(sound)
-				.hardnessAndResistance(hardness, resistance)
-				.harvestTool(ToolType.get(toolUsed))
-			);
-		
-		group = ItemGroup.BUILDING_BLOCKS;
-		this.hasAssociatedItem = true;
-		
-		this.setRegistryName(Main.MOD_ID, name);
+		this(materialIn, name, toolUsed, toolStrength, hardness, resistance, sound, ItemGroup.BUILDING_BLOCKS);
+	}
+	
+	public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean associatedItem)
+	{
+		this(materialIn, name, toolUsed, toolStrength, hardness, resistance, sound, associatedItem ? ItemGroup.BUILDING_BLOCKS : null);
 	}
 	
 	public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, ItemGroup group)
@@ -41,23 +34,6 @@ public class BlockGeneric extends Block
 			);
 		
 		this.group = group;
-		this.hasAssociatedItem = true;
-		
-		this.setRegistryName(Main.MOD_ID, name);
-	}
-	
-	public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean associatedItem)
-	{
-		super(
-			Block.Properties
-				.create(materialIn)
-				.sound(sound)
-				.hardnessAndResistance(hardness, resistance)
-				.harvestTool(ToolType.get(toolUsed))
-			);
-		
-		this.group = null;
-		this.hasAssociatedItem = associatedItem;
 		
 		this.setRegistryName(Main.MOD_ID, name);
 	}

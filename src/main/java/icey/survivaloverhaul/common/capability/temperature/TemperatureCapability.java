@@ -160,7 +160,7 @@ public class TemperatureCapability implements ITemperatureCapability
 			
 			if(tempEnum == TemperatureEnum.HEAT_STROKE)
 			{
-				if(TemperatureEnum.HEAT_STROKE.getMiddle() - 3 < getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.ModEffects.HEAT_RESISTANCE))
+				if(TemperatureEnum.HEAT_STROKE.getMiddle() < getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.ModEffects.HEAT_RESISTANCE))
 				{
 					// Apply hyperthermia
 					player.removePotionEffect(EffectRegistry.ModEffects.HEAT_STROKE);
@@ -170,7 +170,7 @@ public class TemperatureCapability implements ITemperatureCapability
 			else if (tempEnum == TemperatureEnum.FROSTBITE)
 			{
 
-				if(TemperatureEnum.FROSTBITE.getMiddle() + 2 >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.ModEffects.COLD_RESISTANCE))
+				if(TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.ModEffects.COLD_RESISTANCE))
 				{
 					// Apply hypothermia
 					player.removePotionEffect(EffectRegistry.ModEffects.FROSTBITE);

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "survivaloverhaul:item/warped_fungus_paste"
+    "layer0": "survivaloverhaul:item/mercury_paste"
   }
 }

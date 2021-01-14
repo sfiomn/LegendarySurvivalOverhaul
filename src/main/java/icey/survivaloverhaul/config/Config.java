@@ -105,7 +105,10 @@ public class Config
 		
 		Common(ForgeConfigSpec.Builder builder)
 		{
-			builder.comment(" Options related to enabling/disabling specific features").push("core");
+			builder.comment(new String [] {
+					" Options related to enabling/disabling specific features",
+					" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc."
+			}).push("core");
 			thirstEnabled = builder
 					.comment(" Whether or not the thirst system is enabled.")
 					.define("Thirst Enabled", true);
@@ -149,7 +152,7 @@ public class Config
 			builder.pop();
 			
 			sprintModifier = builder
-					.comment("How much of an effect sprinting has on a player's temperature.")
+					.comment(" How much of an effect sprinting has on a player's temperature.")
 					.define("Player Sprint Modifier", 1.5d);
 			
 			builder.push("environment");
@@ -159,7 +162,7 @@ public class Config
 			builder.push("biomes");
 			biomeTemperatureMultiplier = builder
 					.comment(" How much a biome's temperature effects are multiplied.")
-					.defineInRange("Biome Temperature Multiplier", 15.0d, 0.0d, 1000.0d);
+					.defineInRange("Biome Temperature Multiplier", 10.0d, 0.0d, Double.MAX_VALUE);
 			biomeEffectsEnabled = builder
 					.comment(" Whether or not biomes will have an effect on a player's temperature.")
 					.define("Biomes affect Temperature", true);
@@ -169,10 +172,10 @@ public class Config
 			builder.push("multipliers");
 			timeMultiplier = builder
 					.comment(" How strongly the effects of time on temperature are multiplied.")
-					.defineInRange("Time Multiplier", 2.0d, 0.0d, 100.0d);
+					.defineInRange("Time Multiplier", 2.0d, 0.0d, Double.MAX_VALUE);
 			biomeTimeMultiplier = builder
 					.comment(" How strongly different biomes affect temperature, based on time.")
-					.defineInRange("Biome Time Multiplier", 1.75d, 1.0d, 100.0d);
+					.defineInRange("Biome Time Multiplier", 1.75d, 1.0d, Double.MAX_VALUE);
 			builder.pop();
 			timeShadeModifier = builder
 					.comment(new String[] {" Staying in the shade will reduce a player's temperature by this amount.", " Only effective in hot biomes!"} )
@@ -213,12 +216,12 @@ public class Config
 					.comment(new String [] {" Whether or not temperature affects thirst.", " Only relevant if temperature is also enabled."})
 					.define("Temperature Affects Thirst", true);
 			
-			builder.comment(new String[] {" Maximum amount of drinks in the canteen.", " Default is 3."});
 			maxCanteenDrinks = builder
+					.comment(new String[] {" Maximum amount of drinks in the canteen.", " Default is 3."})
 					.define("Maximum Canteen Drinks", 3);
 			
-			builder.comment(new String[] {" Maximum amount of drinks in the netherite canteen.", " Default is 3."} );
 			maxNetheriteCanteenDrinks = builder
+					.comment(new String[] {" Maximum amount of drinks in the netherite canteen.", " Default is 3."} )
 					.define("Maximum Netherite Canteen Drinks", 3);
 			
 			builder.pop();
