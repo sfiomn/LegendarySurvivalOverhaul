@@ -4,11 +4,11 @@ package icey.survivaloverhaul.api.temperature;
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/api/temperature/TemperatureEnum.java
 public enum TemperatureEnum
 {
-	FROSTBITE(0, 8), // You start dying.
-	COLD(9, 16),
-	NORMAL(17, 24),
-	HOT(25,32), // The player will begin to sweat. This grows in intensity as the player gets hotter.
-	HEAT_STROKE(33,40); // You start dying.
+	FROSTBITE(0, 6), // You start dying.
+	COLD(7, 12),
+	NORMAL(13, 18),
+	HOT(19,24), // The player will begin to sweat. This grows in intensity as the player gets hotter.
+	HEAT_STROKE(25,30); // You start dying.
 	
 	private int lowerBound;
 	private int upperBound;

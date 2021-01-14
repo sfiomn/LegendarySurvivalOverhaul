@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import icey.survivaloverhaul.Main;
+import icey.survivaloverhaul.api.config.json.JsonBiomeIdentity;
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
 import icey.survivaloverhaul.api.config.json.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.JsonPropertyValue;
@@ -27,7 +28,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class TemperatureConfig
 {
-	public static final JsonItemIdentity DEFAULT_IDENTITY = new JsonItemIdentity(null);
+	public static final JsonItemIdentity DEFAULT_ITEM_IDENTITY = new JsonItemIdentity(null);
 	
 	public static void init(File configDir)
 	{
@@ -67,6 +68,12 @@ public class TemperatureConfig
 		JsonConfig.registerArmorTemperature("minecraft:leather_chestplate", 1.0f);
 		JsonConfig.registerArmorTemperature("minecraft:leather_helmet", 0.5f);
 		
+		JsonConfig.registerBiomeOverride("minecraft:crimson_forest", 0.75f, false);
+		JsonConfig.registerBiomeOverride("minecraft:warped_forest", 0.75f, false);
+		JsonConfig.registerBiomeOverride("minecraft:nether_wastes", 1.0f, false);
+		JsonConfig.registerBiomeOverride("minecraft:soul_sand_valley", 1.0f, false);
+		JsonConfig.registerBiomeOverride("minecraft:basalt_deltas", 1.15f, false);
+		
 		processAllJson(configDir);
 	}
 	
@@ -75,6 +82,7 @@ public class TemperatureConfig
 		JsonConfig.armorTemperatures.clear();
 		JsonConfig.blockTemperatures.clear();
 		JsonConfig.fluidTemperatures.clear();
+		JsonConfig.biomeOverrides.clear();
 	}
 	
 	public static void processAllJson(File jsonDir)
@@ -90,7 +98,7 @@ public class TemperatureConfig
 					if (jtm.identity != null)
 							jtm.identity.tryPopulateCompound();
 					
-					JsonConfig.registerArmorTemperature(entry.getKey(), jtm.temperature, jtm.identity == null ? DEFAULT_IDENTITY : jtm.identity);
+					JsonConfig.registerArmorTemperature(entry.getKey(), jtm.temperature, jtm.identity == null ? DEFAULT_ITEM_IDENTITY : jtm.identity);
 				}
 			}
 		}
@@ -129,6 +137,25 @@ public class TemperatureConfig
 			try
 			{
 				manuallyWriteToJson(JsonFileName.LIQUID, JsonConfig.fluidTemperatures, jsonDir);
+			}
+			catch (Exception e)
+			{
+				Main.LOGGER.error("Error writing merged JSON file", e);
+			}
+		}
+		
+		Map<String, JsonBiomeIdentity> jsonBiomeIdentities = processJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir, true);
+		
+		if (jsonBiomeIdentities != null)
+		{
+			for (Map.Entry<String, JsonBiomeIdentity> entry : jsonBiomeIdentities.entrySet())
+			{
+				JsonConfig.registerBiomeOverride(entry.getKey(), entry.getValue().temperature, entry.getValue().isDry);
+			}
+			
+			try
+			{
+				manuallyWriteToJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir);
 			}
 			catch (Exception e)
 			{

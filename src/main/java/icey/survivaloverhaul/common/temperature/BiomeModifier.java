@@ -5,6 +5,7 @@ import java.util.List;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.config.Config;
+import icey.survivaloverhaul.config.json.JsonConfig;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
@@ -45,9 +46,18 @@ public class BiomeModifier extends ModifierBase
 			float humidity = biome.getDownfall();
 			float addedTemperature = getTempForBiome(biome);
 			
-			if (humidity < 0.2f && worldTime > 12000 && addedTemperature > 0.85f)
+			String biomeName = biome.getRegistryName().toString();
+			
+			if (JsonConfig.biomeOverrides.containsKey(biomeName))
 			{
-				biomeAverage -= (addedTemperature / 6f);
+				humidity = JsonConfig.biomeOverrides.get(biomeName).isDry ? 0.1f : 0.5f;
+				addedTemperature = clampedTemperature(JsonConfig.biomeOverrides.get(biomeName).temperature);
+			}
+			
+			if (humidity < 0.2f && worldTime > 12000 && addedTemperature > 0.85f && !world.getDimensionType().getHasCeiling())
+			{
+				// Deserts are cold at night since heat isn't kept by moisture in the air
+				biomeAverage += (addedTemperature / 5f);
 			}
 			else
 			{

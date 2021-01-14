@@ -4,7 +4,8 @@ public enum JsonFileName
 {
 	ARMOR("armorTemperatures.json"),
 	BLOCK("blockTemperatures.json"),
-	LIQUID("liquidTemperatures.json");
+	LIQUID("liquidTemperatures.json"),
+	BIOME("biomeOverrides.json");
 	
 	private String fileName;
 	

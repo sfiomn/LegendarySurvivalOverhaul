@@ -98,7 +98,8 @@ public class BlockModifier extends ModifierBase
 					
 					List<JsonPropertyTemperature> tempInfoList = JsonConfig.blockTemperatures.get(block.getRegistryName().toString());
 					
-					// jsons seem to work fine without getActualState, so i guess we're using that
+					// jsons seem to work fine without getActualState
+					// i guess matchesState gets the actual state now. 
 					
 					if (tempInfoList != null)
 					{
