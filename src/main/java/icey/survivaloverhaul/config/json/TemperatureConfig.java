@@ -51,6 +51,12 @@ public class TemperatureConfig
 		JsonConfig.registerBlockTemperature("minecraft:blast_furnace", 0.0f, new JsonPropertyValue("lit", "false"));
 		JsonConfig.registerBlockTemperature("minecraft:smoker", 0.0f, new JsonPropertyValue("false", "true"));
 		
+		JsonConfig.registerBlockTemperature("survivaloverhaul:cooling_coil", -10.0f, new JsonPropertyValue("powered", "true"));
+		JsonConfig.registerBlockTemperature("survivaloverhaul:heating_coil", 10.0f, new JsonPropertyValue("powered", "true"));
+		
+		JsonConfig.registerBlockTemperature("survivaloverhaul:cooling_coil", 0.0f, new JsonPropertyValue("powered", "false"));
+		JsonConfig.registerBlockTemperature("survivaloverhaul:heating_coil", 0.0f, new JsonPropertyValue("powered", "false"));
+		
 		JsonConfig.registerBlockTemperature("minecraft:magma_block", 7.5f);
 		
 		JsonConfig.registerBlockTemperature("minecraft:jack_o_lantern", 3.0f);

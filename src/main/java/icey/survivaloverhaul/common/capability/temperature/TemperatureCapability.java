@@ -317,4 +317,9 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		return player.getCapability(Main.TEMPERATURE_CAP).orElse(new TemperatureCapability());
 	}
+	
+	public boolean isTempRising()
+	{
+		return this.getTemperatureLevel() < this.targetTemp;
+	}
 }

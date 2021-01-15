@@ -162,7 +162,7 @@ public class Config
 			builder.push("biomes");
 			biomeTemperatureMultiplier = builder
 					.comment(" How much a biome's temperature effects are multiplied.")
-					.defineInRange("Biome Temperature Multiplier", 10.0d, 0.0d, Double.MAX_VALUE);
+					.defineInRange("Biome Temperature Multiplier", 10.0d, 0.0d, Double.POSITIVE_INFINITY);
 			biomeEffectsEnabled = builder
 					.comment(" Whether or not biomes will have an effect on a player's temperature.")
 					.define("Biomes affect Temperature", true);
@@ -172,10 +172,10 @@ public class Config
 			builder.push("multipliers");
 			timeMultiplier = builder
 					.comment(" How strongly the effects of time on temperature are multiplied.")
-					.defineInRange("Time Multiplier", 2.0d, 0.0d, Double.MAX_VALUE);
+					.defineInRange("Time Multiplier", 2.0d, 0.0d, Double.POSITIVE_INFINITY);
 			biomeTimeMultiplier = builder
 					.comment(" How strongly different biomes affect temperature, based on time.")
-					.defineInRange("Biome Time Multiplier", 1.75d, 1.0d, Double.MAX_VALUE);
+					.defineInRange("Biome Time Multiplier", 1.75d, 1.0d, Double.POSITIVE_INFINITY);
 			builder.pop();
 			timeShadeModifier = builder
 					.comment(new String[] {" Staying in the shade will reduce a player's temperature by this amount.", " Only effective in hot biomes!"} )

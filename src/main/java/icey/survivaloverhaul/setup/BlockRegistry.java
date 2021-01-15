@@ -38,8 +38,7 @@ public class BlockRegistry
 	
 	public static final class ModTileEntities
 	{
-		@SuppressWarnings("unchecked")
-		public static final TileEntityType<CoilTileEntity> TEMP_COIL = registerTileEntity(TileEntityType.Builder.create(CoilTileEntity::new, ModBlocks.HEATING_COIL, ModBlocks.COOLING_COIL), "temp_coil");
+		// public static final TileEntityType<?> TEMP_COIL = registerTileEntity(TileEntityType.Builder.create(CoilTileEntity::new, ModBlocks.HEATING_COIL, ModBlocks.COOLING_COIL), "temperature_coil");
 	}
 	
 	@SubscribeEvent

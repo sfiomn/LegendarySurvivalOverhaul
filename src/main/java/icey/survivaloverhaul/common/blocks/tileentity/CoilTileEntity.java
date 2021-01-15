@@ -6,16 +6,16 @@ import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.setup.BlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 
 public class CoilTileEntity extends TileEntity implements ITemperatureTileEntity
 {
-	
 	public CoilTileEntity()
 	{
-		super(BlockRegistry.ModTileEntities.TEMP_COIL);
+		super(null); // BlockRegistry.ModTileEntities.TEMP_COIL
 	}
 	
 	@Override
@@ -26,7 +26,7 @@ public class CoilTileEntity extends TileEntity implements ITemperatureTileEntity
 		
 		if(block instanceof BlockTemperatureCoil)
 		{
-			if (world.getBlockState(pos).get(BlockTemperatureCoil.LIT))
+			if (world.getBlockState(pos).get(BlockTemperatureCoil.POWERED))
 			{
 				float activeTemp = ((BlockTemperatureCoil) block).coilType.getTemperatureMultiplier();
 				

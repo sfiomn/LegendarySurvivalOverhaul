@@ -31,10 +31,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
 
-public class BlockTemperatureCoil extends ContainerBlock implements IWaterLoggable
+public class BlockTemperatureCoil extends Block implements IWaterLoggable
 {
 	public static final DirectionProperty DIRECTION = BlockStateProperties.FACING;
-	public static final BooleanProperty LIT = BlockStateProperties.LIT;
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
 	private static final VoxelShape[] SHAPES = new VoxelShape[]
@@ -61,7 +61,7 @@ public class BlockTemperatureCoil extends ContainerBlock implements IWaterLoggab
 		
 		this.setDefaultState(this.stateContainer.getBaseState()
 				.with(DIRECTION, Direction.DOWN)
-				.with(LIT, Boolean.valueOf(false))
+				.with(POWERED, Boolean.valueOf(false))
 				.with(WATERLOGGED, Boolean.valueOf(false)));
 		this.setRegistryName(Main.MOD_ID, this.coilType.getName() + "_coil");
 	}
@@ -71,7 +71,7 @@ public class BlockTemperatureCoil extends ContainerBlock implements IWaterLoggab
 		if (!worldIn.isRemote)
 		{
 			boolean powered = worldIn.isBlockPowered(pos);
-			boolean enabled = state.get(LIT);
+			boolean enabled = state.get(POWERED);
 			
 			if (enabled && !powered)
 			{
@@ -86,7 +86,7 @@ public class BlockTemperatureCoil extends ContainerBlock implements IWaterLoggab
 	
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand)
 	{
-		if (state.get(LIT) && !worldIn.isBlockPowered(pos))
+		if (state.get(POWERED) && !worldIn.isBlockPowered(pos))
 		{
 			turnOff(worldIn, pos, state);
 		}
@@ -94,22 +94,22 @@ public class BlockTemperatureCoil extends ContainerBlock implements IWaterLoggab
 	
 	private void turnOff(final World world, final BlockPos pos, final BlockState state)
 	{
-		world.setBlockState(pos, state.with(LIT, false));
+		world.setBlockState(pos, state.with(POWERED, false));
 	}
 	
 	private void turnOn(final World world, final BlockPos pos, final BlockState state)
 	{
-		world.setBlockState(pos, state.with(LIT, true));
+		world.setBlockState(pos, state.with(POWERED, true));
 	}
 	
 	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
-		return this.getDefaultState().with(DIRECTION, context.getFace().getOpposite()).with(LIT, context.getWorld().isBlockPowered(context.getPos()));
+		return this.getDefaultState().with(DIRECTION, context.getFace().getOpposite()).with(POWERED, context.getWorld().isBlockPowered(context.getPos()));
 	}
 	
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
 	{
-		builder.add(DIRECTION, LIT, WATERLOGGED);
+		builder.add(DIRECTION, POWERED, WATERLOGGED);
 	}
 	
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
@@ -148,16 +148,18 @@ public class BlockTemperatureCoil extends ContainerBlock implements IWaterLoggab
 			return temperature;
 		}
 	}
-	
+
+	/*
 	public BlockRenderType getRenderType(BlockState state)
 	{
 		return BlockRenderType.MODEL;
 	}
-
+	
 	@Nullable
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader worldIn)
 	{
 		return new CoilTileEntity();
 	}
+	*/
 }
