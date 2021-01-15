@@ -38,8 +38,8 @@ public class TemperatureGUI
 	
 	public static final ResourceLocation ICONS = new ResourceLocation(Main.MOD_ID, "textures/gui/overlay.png");
 	
-	private static final int texturepos_X = 0;
-	private static final int texturepos_Y = 48;
+	private static final int texturePosX = 0;
+	private static final int texturePosY = 48;
 	
 	private static final int textureWidth = 16;
 	private static final int textureHeight = 16;
@@ -85,8 +85,8 @@ public class TemperatureGUI
 			
 			IconPair icon = IconPair.NORMAL;
 
-			RenderUtil.drawTexturedModelRect(x, y, texturepos_X * icon.getIconHolder(), texturepos_Y, textureWidth, textureHeight);
-			RenderUtil.drawTexturedModelRect(x, y, texturepos_X * icon.getIconIndex(), texturepos_Y, textureWidth, textureHeight);
+			RenderUtil.drawTexturedModelRect(x, y, texturePosX * icon.getIconHolder(), texturepos_Y, textureWidth, textureHeight);
+			RenderUtil.drawTexturedModelRect(x, y, texturePosX * icon.getIconIndex(), texturepos_Y, textureWidth, textureHeight);
 			
 			break;
 		default:
