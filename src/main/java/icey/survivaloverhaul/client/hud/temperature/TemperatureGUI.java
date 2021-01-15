@@ -60,7 +60,7 @@ public class TemperatureGUI
 			int scaledWidth = mc.getMainWindow().getScaledWidth();
 			int scaledHeight = mc.getMainWindow().getScaledHeight();
 			
-			mc.getTextureManager().bindTexture(ICONS);
+			bind(ICONS);
 			TemperatureCapability cap = TemperatureCapability.getTempCapability(mc.player);
 			
 			renderTemperatureGui(cap, scaledWidth, scaledHeight);
@@ -84,9 +84,9 @@ public class TemperatureGUI
 			int y = height - 54;
 			
 			IconPair icon = IconPair.NORMAL;
-
-			RenderUtil.drawTexturedModelRect(x, y, texturePosX * icon.getIconHolder(), texturepos_Y, textureWidth, textureHeight);
-			RenderUtil.drawTexturedModelRect(x, y, texturePosX * icon.getIconIndex(), texturepos_Y, textureWidth, textureHeight);
+			
+			RenderUtil.drawTexturedModelRect(x, y, textureWidth * icon.getIconIndex(), texturePosY, textureWidth, textureHeight);
+			RenderUtil.drawTexturedModelRect(x, y, textureWidth * icon.getIconHolder(), texturePosY, textureWidth, textureHeight);
 			
 			break;
 		default:
@@ -96,7 +96,7 @@ public class TemperatureGUI
 		RenderSystem.disableBlend();
 	}
 	
-	private void bind(ResourceLocation resource)
+	private static void bind(ResourceLocation resource)
 	{
 		mc.getTextureManager().bindTexture(resource);
 	}
