@@ -51,12 +51,19 @@ public class TemperatureGUI
 	private static boolean shakeSide = false;
 	
 	@SubscribeEvent
-	public static void renderHud(RenderGameOverlayEvent.Post event)
+	public static void renderHud(RenderGameOverlayEvent event)
 	{
-		if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE 
-				&& Config.BakedConfigValues.temperatureEnabled)
+		if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE
+				&& Config.BakedConfigValues.temperatureEnabled 
+				&& mc.playerController.gameIsSurvivalOrAdventure())
 		{
+			int scaledWidth = mc.getMainWindow().getScaledWidth();
+			int scaledHeight = mc.getMainWindow().getScaledHeight();
 			
+			mc.getTextureManager().bindTexture(ICONS);
+			TemperatureCapability cap = TemperatureCapability.getTempCapability(mc.player);
+			
+			renderTemperatureGui(cap, scaledWidth, scaledHeight);
 		}
 	}
 	
@@ -66,8 +73,64 @@ public class TemperatureGUI
 		
 	}
 	
+	public static void renderTemperatureGui(TemperatureCapability cap, int width, int height)
+	{
+		RenderSystem.enableBlend();
+		
+		switch (Config.BakedConfigValues.temperatureDisplayMode)
+		{
+		case SYMBOL:
+			int x = width / 2 - 8;
+			int y = height - 54;
+			
+			IconPair icon = IconPair.NORMAL;
+
+			RenderUtil.drawTexturedModelRect(x, y, texturepos_X * icon.getIconHolder(), texturepos_Y, textureWidth, textureHeight);
+			RenderUtil.drawTexturedModelRect(x, y, texturepos_X * icon.getIconIndex(), texturepos_Y, textureWidth, textureHeight);
+			
+			break;
+		default:
+			break;
+		}
+		
+		RenderSystem.disableBlend();
+	}
+	
 	private void bind(ResourceLocation resource)
 	{
 		mc.getTextureManager().bindTexture(resource);
+	}
+	
+	private enum IconPair
+	{
+		NORMAL(0, 3),
+		FIRE(1, 4),
+		SNOWFLAKE(2, 5),
+		NORMAL_FLASH(0, 6),
+		FIRE_FLASH(1, 7),
+		SNOWFLAKE_FLASH(2, 8),
+		ABOVE_NORMAL(0, 11),
+		BELOW_NORMAL(0, 12),
+		ABOVE_NORMAL_FLASH(0, 9),
+		BELOW_NORMAL_FLASH(0, 10);
+		
+		private int iconIndex;
+		private int iconHolder;
+		
+		private IconPair(int iconIndex, int iconHolder)
+		{
+			this.iconIndex = iconIndex;
+			this.iconHolder = iconHolder;
+		}
+		
+		public int getIconIndex()
+		{
+			return this.iconIndex;
+		}
+		
+		public int getIconHolder()
+		{
+			return this.iconHolder;
+		}
 	}
 }
