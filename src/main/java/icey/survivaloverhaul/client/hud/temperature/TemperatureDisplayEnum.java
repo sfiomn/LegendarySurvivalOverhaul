@@ -16,4 +16,17 @@ public enum TemperatureDisplayEnum
 	{
 		return displayType;
 	}
+	
+	public static TemperatureDisplayEnum getDisplayFromString(String str)
+	{
+		for(TemperatureDisplayEnum tde : TemperatureDisplayEnum.values())
+		{
+			if (tde.displayType.equalsIgnoreCase(str))
+			{
+				return tde;
+			}
+		}
+		
+		return NONE;
+	}
 }

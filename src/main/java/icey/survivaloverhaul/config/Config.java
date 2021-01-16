@@ -188,7 +188,7 @@ public class Config
 					.comment(" Maximum horizontal distance where heat sources will have an effect on temperature.")
 					.defineInRange("Temperature Influence Horizontal Distance", 3, 1, 10);
 			tempInfluenceVerticalDist = builder
-					.comment(" Maximum distance where heat sources will have an effect on temperature.")
+					.comment(" Maximum vertical distance where heat sources will have an effect on temperature.")
 					.defineInRange("Temperature Influence Vertical Distance", 2, 1, 10);
 			builder.push("tickrate");
 			maxTickRate = builder
@@ -230,11 +230,11 @@ public class Config
 	
 	public static class Client
 	{
-		public final ForgeConfigSpec.ConfigValue<TemperatureDisplayEnum> temperatureDisplayMode;
+		public final ForgeConfigSpec.ConfigValue<String> temperatureDisplayMode;
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetY;
 		
-		public final ForgeConfigSpec.ConfigValue<StaminaDisplayEnum> staminaDisplayMode;
+		public final ForgeConfigSpec.ConfigValue<String> staminaDisplayMode;
 		public final ForgeConfigSpec.ConfigValue<Integer> staminaDisplayOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> staminaDisplayOffsetY;
 		
@@ -248,7 +248,7 @@ public class Config
 			builder.push("temperature");
 			temperatureDisplayMode = builder
 					.comment("How temperature is displayed. Accepted values are \"SYMBOL,\" and \"NONE.\"")
-					.define("Temperature Display Mode", TemperatureDisplayEnum.SYMBOL);
+					.define("Temperature Display Mode", "SYMBOL");
 			temperatureDisplayOffsetX = builder
 					.comment("The X and Y offset of the temperature indicator. Set to 0 for no offset.")
 					.define("Temperature Display X Offset", 0);
@@ -259,7 +259,7 @@ public class Config
 			builder.push("stamina");
 			staminaDisplayMode = builder
 					.comment("How stamina is displayed. Accepted values are \"ABOVE_ARMOR,\" \"BAR,\" and \"NONE.\"")
-					.define("Stamina Display Mode", StaminaDisplayEnum.ABOVE_ARMOR);
+					.define("Stamina Display Mode", "ABOVE_ARMOR");
 			staminaDisplayOffsetX = builder
 					.comment("The X and Y offset of the stamina meter. Set to 0 for no offset.")
 					.define("Stamina Display X Offset", 0);
@@ -389,11 +389,11 @@ public class Config
 		{
 			try
 			{
-				temperatureDisplayMode = CLIENT.temperatureDisplayMode.get();
+				temperatureDisplayMode = TemperatureDisplayEnum.getDisplayFromString(CLIENT.temperatureDisplayMode.get());
 				temperatureDisplayOffsetX = CLIENT.temperatureDisplayOffsetX.get();
 				temperatureDisplayOffsetY = CLIENT.temperatureDisplayOffsetY.get();
-				
-				staminaDisplayMode = CLIENT.staminaDisplayMode.get();
+
+				staminaDisplayMode = StaminaDisplayEnum.getDisplayFromString(CLIENT.staminaDisplayMode.get());
 				staminaDisplayOffsetX = CLIENT.staminaDisplayOffsetX.get();
 				staminaDisplayOffsetY = CLIENT.staminaDisplayOffsetY.get();
 				

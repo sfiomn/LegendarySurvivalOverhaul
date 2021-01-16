@@ -1,5 +1,7 @@
 package icey.survivaloverhaul.client.hud.stamina;
 
+import icey.survivaloverhaul.client.hud.temperature.TemperatureDisplayEnum;
+
 public enum StaminaDisplayEnum
 {
 	ABOVE_ARMOR("above_armor"),
@@ -16,5 +18,18 @@ public enum StaminaDisplayEnum
 	public String getDisplayType()
 	{
 		return displayType;
+	}
+	
+	public static StaminaDisplayEnum getDisplayFromString(String str)
+	{
+		for(StaminaDisplayEnum sde : StaminaDisplayEnum.values())
+		{
+			if (sde.displayType.equalsIgnoreCase(str))
+			{
+				return sde;
+			}
+		}
+		
+		return NONE;
 	}
 }

@@ -79,7 +79,14 @@ public class TemperatureGUI
 	{
 		RenderSystem.enableBlend();
 		
+		switch (Config.BakedConfigValues.temperatureDisplayMode)
+		{
+		case SYMBOL:
 			drawAsSymbol(matrix, cap, width, height);
+			break;
+		default:
+			break;
+		}
 		
 		
 		RenderSystem.disableBlend();
