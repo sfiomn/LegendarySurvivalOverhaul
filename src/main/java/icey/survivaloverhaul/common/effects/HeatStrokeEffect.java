@@ -13,7 +13,7 @@ public class HeatStrokeEffect extends GenericEffect
 
 	public HeatStrokeEffect()
 	{
-		super(9164281, "heat_stroke", EffectType.HARMFUL);
+		super(16756041, "heat_stroke", EffectType.HARMFUL);
 	}
 	
 	@Override

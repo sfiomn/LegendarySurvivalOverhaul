@@ -1,7 +1,5 @@
 package icey.survivaloverhaul.api.config.json;
 
-import javax.annotation.Nullable;
-
 import com.google.gson.annotations.SerializedName;
 
 public class JsonBiomeIdentity
