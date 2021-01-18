@@ -11,7 +11,6 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
-import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,10 +21,8 @@ import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperatureIdentity;
-import icey.survivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import icey.survivaloverhaul.config.JsonFileName;
 import icey.survivaloverhaul.config.JsonTypeToken;
-import net.minecraft.util.ResourceLocation;
 
 public class JsonConfigRegistration
 {

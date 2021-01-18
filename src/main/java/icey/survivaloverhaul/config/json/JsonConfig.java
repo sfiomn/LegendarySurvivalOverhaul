@@ -1,7 +1,6 @@
 package icey.survivaloverhaul.config.json;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +12,6 @@ import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperatureIdentity;
-import icey.survivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 
 public class JsonConfig
 {

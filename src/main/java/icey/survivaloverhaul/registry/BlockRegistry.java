@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.common.blocks.*;
-import icey.survivaloverhaul.common.blocks.tileentity.*;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
