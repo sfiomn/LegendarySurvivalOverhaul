@@ -38,7 +38,9 @@
 	"effect.survivaloverhaul.frostbite": "Frostbite",
 	"effect.survivaloverhaul.heat_resist": "Heat Resistance",
 	"effect.survivaloverhaul.cold_resist": "Cold Resistance",
+	"effect.survivaloverhaul.thirst": "Thirst",
 	
-	"death.attack.survivaloverhaul.hypothermia": "%1$s turned into a popsicle",
-	"death.attack.survivaloverhaul.hyperthermia": "%1$s couldn't take the heat"
+	"death.attack.survivaloverhaul.hypothermia": "%1$s froze to death",
+	"death.attack.survivaloverhaul.hyperthermia": "%1$s couldn't take the heat",
+	"death.attack.survivaloverhaul.dehydration": "%1$s died of dehydration"
 }

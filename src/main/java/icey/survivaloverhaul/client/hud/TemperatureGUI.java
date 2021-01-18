@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.client.hud.temperature;
+package icey.survivaloverhaul.client.hud;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +19,7 @@ import icey.survivaloverhaul.util.RenderUtil;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
@@ -72,6 +73,8 @@ public class TemperatureGUI
 			TemperatureCapability cap = TemperatureCapability.getTempCapability(mc.player);
 			
 			renderTemperatureGui(event.getMatrixStack(), cap, scaledWidth, scaledHeight);
+			
+			bind(AbstractGui.GUI_ICONS_LOCATION);
 		}
 	}
 	
@@ -154,7 +157,7 @@ public class TemperatureGUI
 			
 			break;
 		default:
-			icon = IconPair.NORMAL;
+			icon = IconPair.UNKNOWN;
 			break;
 		}
 		
@@ -248,7 +251,8 @@ public class TemperatureGUI
 		FIRE_FLASH(1, 7),
 		SNOWFLAKE_FLASH(2, 8),
 		ABOVE_NORMAL_FLASH(0, 9),
-		BELOW_NORMAL_FLASH(0, 10);
+		BELOW_NORMAL_FLASH(0, 10),
+		UNKNOWN(0, 13);
 		
 		private int iconIndex;
 		private int iconHolder;

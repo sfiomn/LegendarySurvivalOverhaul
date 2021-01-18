@@ -1,6 +1,4 @@
-package icey.survivaloverhaul.client.hud.stamina;
-
-import icey.survivaloverhaul.client.hud.temperature.TemperatureDisplayEnum;
+package icey.survivaloverhaul.client.hud;
 
 public enum StaminaDisplayEnum
 {

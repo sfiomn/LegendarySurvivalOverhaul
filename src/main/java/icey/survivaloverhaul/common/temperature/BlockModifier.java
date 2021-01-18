@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.api.config.json.JsonPropertyTemperature;
-import icey.survivaloverhaul.api.config.json.JsonTemperature;
+import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
+import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
 import icey.survivaloverhaul.api.temperature.ITemperatureTileEntity;
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.config.json.JsonConfig;

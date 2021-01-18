@@ -1,8 +1,8 @@
 package icey.survivaloverhaul.common.effects;
 
 import icey.survivaloverhaul.api.DamageSources;
-import icey.survivaloverhaul.common.DamageUtil;
-import icey.survivaloverhaul.setup.EffectRegistry;
+import icey.survivaloverhaul.registry.EffectRegistry;
+import icey.survivaloverhaul.util.DamageUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectType;

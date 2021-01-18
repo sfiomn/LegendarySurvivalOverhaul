@@ -7,9 +7,7 @@ import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -17,14 +15,13 @@ import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ITemperatureCapability;
 import icey.survivaloverhaul.api.temperature.TemporaryModifier;
 import icey.survivaloverhaul.config.Config;
-import icey.survivaloverhaul.setup.EffectRegistry;
+import icey.survivaloverhaul.registry.EffectRegistry;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 
 // Code adapted from 
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/capability/TemperatureCapability.java
 
-@SuppressWarnings("unused")
 public class TemperatureCapability implements ITemperatureCapability
 {
 	private int temperature;
@@ -35,7 +32,6 @@ public class TemperatureCapability implements ITemperatureCapability
 	private int oldTemperature;
 	private int updateTimer; //Update immediately first time around
 	private int targetTemp;
-	private int debugTimer;
 	private boolean manualDirty;
 	private int oldModifierSize;
 	private int packetTimer;
@@ -54,7 +50,6 @@ public class TemperatureCapability implements ITemperatureCapability
 		
 		this.oldTemperature = 0;
 		this.targetTemp = 0;
-		this.debugTimer = 0;
 		this.manualDirty = false;
 		this.oldModifierSize = 0;
 		this.packetTimer = 0;
@@ -180,8 +175,6 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 		
 		Map<String, TemporaryModifier> tweaks = new HashMap<String, TemporaryModifier>();
-		
-		int modifierSize = temporaryModifiers.size();
 		
 		for(Map.Entry<String, TemporaryModifier> entry : temporaryModifiers.entrySet())
 		{

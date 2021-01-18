@@ -1,4 +1,6 @@
-package icey.survivaloverhaul.api.config.json;
+package icey.survivaloverhaul.api.config.json.temperature;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Code taken and adapted from Charles445's SimpleDifficulty mod
@@ -7,14 +9,13 @@ package icey.survivaloverhaul.api.config.json;
  * @author Icey
  */
 
-public class JsonPropertyValue
+public class JsonTemperature
 {
-	public String property;
-	public String value;
+	@SerializedName("temperature")
+	public float temperature;
 	
-	public JsonPropertyValue(String property, String value)
+	public JsonTemperature(float temperature)
 	{
-		this.property = property;
-		this.value = value;
+		this.temperature = temperature;
 	}
 }

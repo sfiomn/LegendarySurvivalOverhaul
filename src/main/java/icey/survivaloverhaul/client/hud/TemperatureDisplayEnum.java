@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.client.hud.temperature;
+package icey.survivaloverhaul.client.hud;
 
 public enum TemperatureDisplayEnum
 {

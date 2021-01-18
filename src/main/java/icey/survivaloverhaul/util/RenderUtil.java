@@ -9,6 +9,8 @@ import net.minecraft.util.math.vector.Matrix4f;
 
 public class RenderUtil
 {
+	// Basically a more sensibly-named version of Minecraft's included blit function
+	
 	public static void drawTexturedModelRect(Matrix4f matrix, float x, float y, int texX, int texY, int width, int height)
 	{
 		float f = 0.00390625f;

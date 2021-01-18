@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.api.config.json;
+package icey.survivaloverhaul.api.config.json.temperature;
 
 import java.util.ArrayList;
 import java.util.HashMap;

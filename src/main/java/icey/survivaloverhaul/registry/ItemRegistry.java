@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.setup;
+package icey.survivaloverhaul.registry;
 
 import java.lang.reflect.Field;
 
@@ -19,9 +19,6 @@ public class ItemRegistry
 {
 	// public static final Item EXAMPLE_ITEM = new ItemGeneric("example_item");
 	public static final ArmorMaterialBase CLOTH_ARMOR_MATERIAL = new ArmorMaterialBase("snow", 5.75f, new int[] { 1, 1, 2, 1}, 17, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0, 0.0f, null);
-	
-	public static final Item CANTEEN = new ItemCanteen(false);
-	public static final Item NETHERITE_CANTEEN = new ItemCanteen(true);
 	
 	public static final Item MERCURY_PASTE = new ItemGeneric("mercury_paste", ItemGroup.MISC);
 	

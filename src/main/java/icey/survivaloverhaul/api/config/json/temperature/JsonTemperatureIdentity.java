@@ -1,5 +1,6 @@
-package icey.survivaloverhaul.api.config.json;
+package icey.survivaloverhaul.api.config.json.temperature;
 
+import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 

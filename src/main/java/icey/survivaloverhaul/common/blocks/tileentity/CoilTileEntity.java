@@ -3,7 +3,7 @@ package icey.survivaloverhaul.common.blocks.tileentity;
 import icey.survivaloverhaul.api.temperature.ITemperatureTileEntity;
 import icey.survivaloverhaul.common.blocks.BlockTemperatureCoil;
 import icey.survivaloverhaul.config.Config;
-import icey.survivaloverhaul.setup.BlockRegistry;
+import icey.survivaloverhaul.registry.BlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;

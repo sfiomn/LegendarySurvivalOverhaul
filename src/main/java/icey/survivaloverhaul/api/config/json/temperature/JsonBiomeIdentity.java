@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.api.config.json;
+package icey.survivaloverhaul.api.config.json.temperature;
 
 import com.google.gson.annotations.SerializedName;
 

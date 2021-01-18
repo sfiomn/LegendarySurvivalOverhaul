@@ -1,16 +1,20 @@
-package icey.survivaloverhaul.setup;
+package icey.survivaloverhaul.registry;
 
 import java.lang.reflect.Field;
+import java.util.function.Supplier;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.common.blocks.*;
 import icey.survivaloverhaul.common.blocks.tileentity.*;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.WallOrFloorItem;
@@ -108,7 +112,7 @@ public class BlockRegistry
 			for (Field f : BlockRegistry.ModBlocks.class.getDeclaredFields())
 			{
 				Object obj = f.get(null);
-				if (obj instanceof Block && !(obj instanceof WallTorchBlock))
+				if (obj instanceof Block && !(obj instanceof WallTorchBlock) && !(obj instanceof FlowingFluidBlock))
 				{
 					Item.Properties props;
 					

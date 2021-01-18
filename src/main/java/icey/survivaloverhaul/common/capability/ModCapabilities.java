@@ -9,6 +9,7 @@ import icey.survivaloverhaul.network.packets.UpdateTemperaturesPacket;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -41,7 +42,7 @@ public class ModCapabilities
 		PlayerEntity player = event.player;
 		World world = player.world;
 		
-		if (Config.BakedConfigValues.temperatureEnabled)
+		if (Config.BakedConfigValues.temperatureEnabled && shouldSkipTick(player))
 		{
 			TemperatureCapability tempCap = TemperatureCapability.getTempCapability(player);
 			tempCap.tickUpdate(player, world, event.phase);
@@ -70,13 +71,20 @@ public class ModCapabilities
 	public static void syncCapabilitiesOnDimensionChange(PlayerChangedDimensionEvent event)
 	{
 		PlayerEntity player = event.getPlayer();
-		sendTemperatureUpdate(player);
+		if (Config.BakedConfigValues.temperatureEnabled)
+				sendTemperatureUpdate(player);
 	}
 
 	@SubscribeEvent
 	public static void syncCapabilitiesOnLogin(PlayerLoggedInEvent event)
 	{
 		PlayerEntity player = event.getPlayer();
-		sendTemperatureUpdate(player);
+		if (Config.BakedConfigValues.temperatureEnabled)
+			sendTemperatureUpdate(player);
+	}
+	
+	protected static boolean shouldSkipTick(PlayerEntity player)
+	{
+		return player.isCreative() || player.isSpectator();
 	}
 }

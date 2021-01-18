@@ -7,12 +7,13 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import icey.survivaloverhaul.api.config.json.JsonBiomeIdentity;
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
-import icey.survivaloverhaul.api.config.json.JsonPropertyTemperature;
-import icey.survivaloverhaul.api.config.json.JsonPropertyValue;
-import icey.survivaloverhaul.api.config.json.JsonTemperature;
-import icey.survivaloverhaul.api.config.json.JsonTemperatureIdentity;
+import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
+import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
+import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
+import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
+import icey.survivaloverhaul.api.config.json.temperature.JsonTemperatureIdentity;
+import icey.survivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 
 public class JsonConfig
 {
@@ -20,8 +21,6 @@ public class JsonConfig
 	public static Map<String, List<JsonPropertyTemperature>> blockTemperatures = Maps.newHashMap();
 	public static Map<String, JsonTemperature> fluidTemperatures = Maps.newHashMap();
 	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
-	
-	// TODO: Implement a way to override the temperatures of biomes
 	
 	public static boolean registerBlockTemperature(String registryName, float temperature, JsonPropertyValue... properties)
 	{

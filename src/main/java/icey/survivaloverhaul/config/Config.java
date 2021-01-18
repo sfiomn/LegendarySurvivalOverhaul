@@ -14,9 +14,9 @@ import java.nio.file.Paths;
 import org.apache.commons.lang3.tuple.Pair;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.client.hud.stamina.StaminaDisplayEnum;
-import icey.survivaloverhaul.client.hud.temperature.TemperatureDisplayEnum;
-import icey.survivaloverhaul.config.json.TemperatureConfig;
+import icey.survivaloverhaul.client.hud.StaminaDisplayEnum;
+import icey.survivaloverhaul.client.hud.TemperatureDisplayEnum;
+import icey.survivaloverhaul.config.json.JsonConfigRegistration;
 
 public class Config
 {
@@ -58,7 +58,7 @@ public class Config
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_SPEC, "survivaloverhaul/survivaloverhaul-client.toml");
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_SPEC, "survivaloverhaul/survivaloverhaul-common.toml");
 		
-		TemperatureConfig.init(modConfigJsons.toFile());
+		JsonConfigRegistration.init(modConfigJsons.toFile());
 	}
 	
 	public static class Common
@@ -103,6 +103,20 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> maxCanteenDrinks;
 		public final ForgeConfigSpec.ConfigValue<Integer> maxNetheriteCanteenDrinks;
 		
+		public final ForgeConfigSpec.ConfigValue<Boolean> canDrinkFromRain;
+		
+		public final ForgeConfigSpec.ConfigValue<Double> thirstExhaustionLimit;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstEffectStrength;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstAttackExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstBlockBreakExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstSprintJumpExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstJumpExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstBaseMovementExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstSwimExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstFastSwimExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstSprintExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstWalkingExhaustion;
+		
 		Common(ForgeConfigSpec.Builder builder)
 		{
 			builder.comment(new String [] {
@@ -118,6 +132,12 @@ public class Config
 			staminaEnabled = builder
 					.comment(" Whether or not the stamina system is enabled.")
 					.define("Stamina Enabled", true);
+			
+			builder.push("advanced");
+			routinePacketSync = builder
+					.comment(new String[] {" How often player temperature and thirst are regularly synced between the client and server, in ticks."," Lower values will increase accuracy at the cost of performance"})
+					.define("Routine Packet Sync", 30);
+			builder.pop();
 			builder.pop();
 			
 			builder.comment(" Options related to the temperature system").push("temperature");
@@ -129,7 +149,7 @@ public class Config
 					.define("Secondary Temperature Effects", true);
 			
 			builder.push("items");
-			builder.push("coils");
+			builder.push("coils").comment("Currently non-functional. Use the JSON configs to modify the temperature modifiers.");
 			maxCoilInfluenceDistance = builder
 					.comment(" Maximum distance where powered coils will have an effect on a player's temperature.")
 					.define("Max Coil Influence Distance", 32.0d);
@@ -198,10 +218,6 @@ public class Config
 					.comment(" Minimum amount of time between temperature ticks.")
 					.defineInRange("Minimum Temperature Tickrate", 20, 20, Integer.MAX_VALUE);
 			builder.pop();
-			
-			routinePacketSync = builder
-					.comment(new String[] {" How often player temperature and thirst are regularly synced between the client and server, in ticks."," Lower values will increase accuracy at the cost of performance"})
-					.define("Routine Packet Sync", 30);
 			builder.pop();
 			
 			builder.push("compat");
@@ -223,6 +239,48 @@ public class Config
 			maxNetheriteCanteenDrinks = builder
 					.comment(new String[] {" Maximum amount of drinks in the netherite canteen.", " Default is 3."} )
 					.define("Maximum Netherite Canteen Drinks", 3);
+			
+			builder.push("water-sources");
+			canDrinkFromRain = builder
+					.comment("Whether or not the player can drink while it is raining.")
+					.define("Player can drink from rain", true);
+			builder.pop();
+			
+			builder.push("exhaustion");
+			thirstExhaustionLimit = builder
+					.comment(" How exhausted the player has to be before they lose thirst.")
+					.defineInRange("Thirst Exhaustion Limit", 4.0d, 1.0d, 8.0d);
+			thirstEffectStrength = builder
+					.comment(" Strength of the thirst effect")
+					.defineInRange("Thirst Effect Strength", 0.025d, 0.0d, 1.0d);
+			thirstAttackExhaustion = builder
+					.comment(" How exhausting attacking is")
+					.defineInRange("Thirst Attacking Exhaustion", 0.3d, 0.0d, 1.0d);
+			thirstBlockBreakExhaustion = builder
+					.comment(" How exhausting breaking blocks is.")
+					.defineInRange("Thirst Block Breaking Exhaustion", 0.025d, 0.0d, 1.0d);
+			thirstSprintJumpExhaustion = builder
+					.comment(" How exhausting jumping while sprinting is.")
+					.defineInRange("Thirst Sprint Jumping Exhaustion", 0.8d, 0.0d, 1.0d);
+			thirstJumpExhaustion = builder
+					.comment(" How exhausting jumping is.")
+					.defineInRange("Thirst Jumping Exhaustion", 0.2d, 0.0d, 1.0d);
+			thirstBaseMovementExhaustion = builder
+					.comment(" How exhausting any kind of movement is.")
+					.defineInRange("Thirst Movement Exhaustion", 0.01d, 0.0d, 1.0d);
+			thirstSwimExhaustion = builder
+					.comment(" How exhausting swimming is.")
+					.defineInRange("Thirst Swimming Exhaustion", 0.015d, 0.0d, 1.0d);
+			thirstFastSwimExhaustion = builder
+					.comment(" How exhausting fast swimming is.")
+					.defineInRange("Thirst Fast Swimming Exhaustion", 0.035d, 0.0d, 1.0d);
+			thirstSprintExhaustion = builder
+					.comment(" How exhausting sprinting is.")
+					.defineInRange("Thirst Sprint Exhaustion", 0.1d, 0.0d, 1.0d);
+			thirstWalkingExhaustion = builder
+					.comment(" How exhausting walking is.")
+					.defineInRange("Thirst Walking Exhaustion", 0.01d, 0.0d, 1.0d);
+			builder.pop();
 			
 			builder.pop();
 		}
@@ -327,6 +385,20 @@ public class Config
 		
 		public static double sprintModifier;
 		
+		public static boolean canDrinkFromRain;
+		
+		public static double thirstExhaustionLimit;
+		public static double thirstEffectStrength;
+		public static double thirstAttackExhaustion;
+		public static double thirstBlockBreakExhaustion;
+		public static double thirstSprintJumpExhaustion;
+		public static double thirstJumpExhaustion;
+		public static double thirstBaseMovementExhaustion;
+		public static double thirstSwimExhaustion;
+		public static double thirstFastSwimExhaustion;
+		public static double thirstSprintExhaustion;
+		public static double thirstWalkingExhaustion;
+		
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
@@ -377,6 +449,20 @@ public class Config
 				temperatureAffectsThirst = COMMON.temperatureAffectsThirst.get();
 				maxCanteenDrinks = COMMON.maxCanteenDrinks.get();
 				maxNetheriteCanteenDrinks = COMMON.maxNetheriteCanteenDrinks.get();
+				
+				canDrinkFromRain = COMMON.canDrinkFromRain.get();
+				
+				thirstExhaustionLimit = COMMON.thirstExhaustionLimit.get();
+				thirstEffectStrength = COMMON.thirstEffectStrength.get();
+				thirstAttackExhaustion = COMMON.thirstAttackExhaustion.get();
+				thirstBlockBreakExhaustion = COMMON.thirstBlockBreakExhaustion.get();
+				thirstSprintJumpExhaustion = COMMON.thirstSprintJumpExhaustion.get();
+				thirstJumpExhaustion = COMMON.thirstJumpExhaustion.get();
+				thirstBaseMovementExhaustion = COMMON.thirstBaseMovementExhaustion.get();
+				thirstSwimExhaustion = COMMON.thirstSwimExhaustion.get();
+				thirstFastSwimExhaustion = COMMON.thirstFastSwimExhaustion.get();
+				thirstSprintExhaustion = COMMON.thirstSprintExhaustion.get();
+				thirstWalkingExhaustion = COMMON.thirstWalkingExhaustion.get();
 			}
 			catch (Exception e)
 			{

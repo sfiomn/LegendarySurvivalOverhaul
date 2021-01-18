@@ -16,21 +16,29 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.api.config.json.JsonBiomeIdentity;
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
-import icey.survivaloverhaul.api.config.json.JsonPropertyTemperature;
-import icey.survivaloverhaul.api.config.json.JsonPropertyValue;
-import icey.survivaloverhaul.api.config.json.JsonTemperature;
-import icey.survivaloverhaul.api.config.json.JsonTemperatureIdentity;
+import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
+import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
+import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
+import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
+import icey.survivaloverhaul.api.config.json.temperature.JsonTemperatureIdentity;
+import icey.survivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import icey.survivaloverhaul.config.JsonFileName;
 import icey.survivaloverhaul.config.JsonTypeToken;
 import net.minecraft.util.ResourceLocation;
 
-public class TemperatureConfig
+public class JsonConfigRegistration
 {
 	public static final JsonItemIdentity DEFAULT_ITEM_IDENTITY = new JsonItemIdentity(null);
 	
 	public static void init(File configDir)
+	{
+		registerTemperatures();
+		
+		processAllJson(configDir);
+	}
+	
+	public static void registerTemperatures()
 	{
 		JsonConfig.registerBlockTemperature("minecraft:campfire", 7.5f, new JsonPropertyValue("lit", "true"));
 		JsonConfig.registerBlockTemperature("minecraft:soul_campfire", 5.0f, new JsonPropertyValue("lit", "true"));
@@ -79,8 +87,6 @@ public class TemperatureConfig
 		JsonConfig.registerBiomeOverride("minecraft:nether_wastes", 1.0f, false);
 		JsonConfig.registerBiomeOverride("minecraft:soul_sand_valley", 1.0f, false);
 		JsonConfig.registerBiomeOverride("minecraft:basalt_deltas", 1.15f, false);
-		
-		processAllJson(configDir);
 	}
 	
 	public static void clearContainers()

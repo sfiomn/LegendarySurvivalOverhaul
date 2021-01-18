@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.setup;
+package icey.survivaloverhaul.registry;
 
 import java.lang.reflect.Field;
 
@@ -29,6 +29,8 @@ public class EffectRegistry
 		public static final Effect HEAT_STROKE = new HeatStrokeEffect();
 		public static final Effect COLD_RESISTANCE = new ColdResistanceEffect();
 		public static final Effect HEAT_RESISTANCE = new HeatResistanceEffect();
+		
+		public static final Effect THIRST = new ThirstEffect();
 	}
 	
 	@SubscribeEvent

@@ -6,14 +6,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryBuilder;
 
 import org.apache.logging.log4j.*;
@@ -25,7 +22,7 @@ import icey.survivaloverhaul.common.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.common.temperature.ModifierBase;
 import icey.survivaloverhaul.config.*;
 import icey.survivaloverhaul.network.NetworkHandler;
-import icey.survivaloverhaul.setup.BlockRegistry;
+import icey.survivaloverhaul.registry.BlockRegistry;
 import icey.survivaloverhaul.util.internal.TemperatureUtilInternal;
 
 @Mod(Main.MOD_ID)
@@ -108,6 +105,7 @@ public class Main
 		}
 	}
 	
+	// Create registries for modifiers and dynamic modifiers
 	private void buildRegistries(final RegistryEvent.NewRegistry event)
 	{
 		RegistryBuilder<ModifierBase> modifierBuilder = new RegistryBuilder<ModifierBase>();

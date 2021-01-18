@@ -1,4 +1,6 @@
-package icey.survivaloverhaul.api.config.json;
+package icey.survivaloverhaul.api.config.json.temperature;
+
+import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
 
 /**
  * Code taken and adapted from Charles445's SimpleDifficulty mod
