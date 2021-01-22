@@ -42,7 +42,7 @@ public class ModCapabilities
 		PlayerEntity player = event.player;
 		World world = player.world;
 		
-		if (Config.BakedConfigValues.temperatureEnabled && shouldSkipTick(player))
+		if (Config.BakedConfigValues.temperatureEnabled && !shouldSkipTick(player))
 		{
 			TemperatureCapability tempCap = TemperatureCapability.getTempCapability(player);
 			tempCap.tickUpdate(player, world, event.phase);
