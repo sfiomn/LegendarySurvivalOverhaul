@@ -11,7 +11,7 @@ public class DamageUtil
 	
 	public static boolean isModDangerous(World world)
 	{
-		// can the mod thirst or thermal damage?
+		// can the mod do thermal damage?
 		
 		if(world.getDifficulty() != Difficulty.PEACEFUL)
 		{
@@ -23,7 +23,7 @@ public class DamageUtil
 	
 	public static boolean healthAboveDifficulty(World world, PlayerEntity player)
 	{
-		// does the world's current difficulty allow for environmental damage?
+		// does the world's current difficulty and player's current health allow for environmental damage?
 		
 		Difficulty difficulty = world.getDifficulty();
 		if(difficulty == Difficulty.HARD ||

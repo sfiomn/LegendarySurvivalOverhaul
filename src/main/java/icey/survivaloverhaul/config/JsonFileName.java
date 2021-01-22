@@ -5,8 +5,7 @@ public enum JsonFileName
 	ARMOR("armorTemperatures.json"),
 	BLOCK("blockTemperatures.json"),
 	LIQUID("liquidTemperatures.json"),
-	BIOME("biomeOverrides.json"),
-	CONSUMABLE_THIRST("consumableThirst.json");
+	BIOME("biomeOverrides.json");
 	
 	private String fileName;
 	

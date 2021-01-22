@@ -91,17 +91,20 @@ public class Config
 		
 		Common(ForgeConfigSpec.Builder builder)
 		{
-			builder.comment(new String [] {
-					" Options related to enabling/disabling specific features",
-					" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc."
-			}).push("core");
+			builder
+					.comment(new String [] {
+							" Options related to enabling/disabling specific features",
+						" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc."
+					}).push("core");
 			temperatureEnabled = builder
 					.comment(" Whether or not the temperature system is enabled.")
 					.define("Temperature Enabled", true);
 			
 			builder.push("advanced");
 			routinePacketSync = builder
-					.comment(new String[] {" How often player temperature and thirst are regularly synced between the client and server, in ticks."," Lower values will increase accuracy at the cost of performance"})
+					.comment(new String[] {
+							" How often player temperature is regularly synced between the client and server, in ticks.",
+							" Lower values will increase accuracy at the cost of performance"})
 					.define("Routine Packet Sync", 30);
 			builder.pop();
 			builder.pop();
