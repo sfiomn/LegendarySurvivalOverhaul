@@ -51,7 +51,7 @@ Making survival harder. Highly configurable so you can play the way you want.
 '''
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.examplemod]] #optional
+[[dependencies.survivaloverhaul]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
@@ -64,11 +64,16 @@ Making survival harder. Highly configurable so you can play the way you want.
     side="BOTH"
 
 # Here's another dependency
-[[dependencies.examplemod]]
+[[dependencies.survivaloverhaul]]
     modId="minecraft"
     mandatory=true
-
-# This version range declares a minimum of the current minecraft version up to but not including the next major version
-    versionRange="[1.16.3,1.17)"
+	versionRange="[1.16.3,1.17)"
     ordering="NONE"
+    side="BOTH"
+    
+[[dependencies.survivaloverhaul]]
+    modId="sereneseasons"
+    mandatory=false
+    versionRange="[4.0.0.80,)"
+    ordering="BEFORE"
     side="BOTH"

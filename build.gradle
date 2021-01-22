@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = "https://www.cursemaven.com"}
         jcenter()
         mavenCentral()
     }
@@ -13,8 +14,8 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.0.6-alpha'
-group = 'com.icey.survivaloverhaul' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = '0.0.7-alpha'
+group = 'icey.survivaloverhaul' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'survivaloverhaul'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -95,6 +96,10 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.0.1'
+    
+    compile 'curse.maven:serene-seasons-291874:3154199'
+    compileOnly fg.deobf('curse.maven:serene-seasons-291874:3154200')
+    runtimeOnly fg.deobf('curse.maven:serene-seasons-291874:3154200')
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -122,7 +127,7 @@ jar {
         attributes([
             "Specification-Title": "survivaloverhaul",
             "Specification-Vendor": "Icey",
-            "Specification-Version": "0.0.5", // yeah
+            "Specification-Version": "0.0.7", // yeah
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"Icey",
