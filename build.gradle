@@ -44,7 +44,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                survivaloverhaul {
                     source sourceSets.main
                 }
             }
@@ -60,7 +60,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                survivaloverhaul {
                     source sourceSets.main
                 }
             }
@@ -79,7 +79,7 @@ minecraft {
             args '--mod', 'survivaloverhaul', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                survivaloverhaul {
                     source sourceSets.main
                 }
             }
@@ -103,8 +103,8 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.0.1'
     
-    runtimeOnly fg.deobf('serene-seasons:SereneSeasons-1.16.4:4.0.0.86:universal') // Serene Seasons
-    compileOnly fg.deobf('serene-seasons:SereneSeasons-1.16.4:4.0.0.86:api') // Serene Seasons API
+    // runtimeOnly fg.deobf('serene-seasons:SereneSeasons-1.16.4:4.0.0.86:universal') // Serene Seasons
+    // compileOnly fg.deobf('serene-seasons:SereneSeasons-1.16.4:4.0.0.86:api') // Serene Seasons API
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
