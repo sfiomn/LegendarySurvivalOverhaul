@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
@@ -74,6 +75,11 @@ public class Main
 		Config.BakedConfigValues.bakeCommon();
 		
 		TemperatureUtil.internal = new TemperatureUtilInternal();
+		
+		sereneSeasonsLoaded = ModList.get().isLoaded("sereneseasons");
+		
+		if (sereneSeasonsLoaded)
+				LOGGER.debug("Serene Seasons is loaded, enabling compatability");
 	}
 	
 	@CapabilityInject(TemperatureCapability.class)

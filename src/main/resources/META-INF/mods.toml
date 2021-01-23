@@ -75,5 +75,5 @@ Making survival harder. Highly configurable so you can play the way you want.
     modId="sereneseasons"
     mandatory=false
     versionRange="[1.16.4-4.0.0.0,)"
-    ordering="AFTER"
+    ordering="BEFORE"
     side="BOTH"

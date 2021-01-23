@@ -6,12 +6,19 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.datafix.fixes.ItemStackDataFlattening;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.items.ItemStackHandler;
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ITemperatureCapability;
 import icey.survivaloverhaul.api.temperature.TemporaryModifier;
@@ -152,7 +159,8 @@ public class TemperatureCapability implements ITemperatureCapability
 			
 			TemperatureEnum tempEnum = getTemperatureEnum();
 			
-			Main.LOGGER.info(tempEnum + ", " + getTemperatureLevel() + " -> " + destinationTemp);
+			if (player.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() == Items.DEBUG_STICK)
+					Main.LOGGER.info(tempEnum + ", " + getTemperatureLevel() + " -> " + destinationTemp);
 			
 			if(tempEnum == TemperatureEnum.HEAT_STROKE)
 			{

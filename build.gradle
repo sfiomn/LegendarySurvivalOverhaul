@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.0.7-alpha'
+version = '0.1.0-beta'
 group = 'icey.survivaloverhaul' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'survivaloverhaul'
 
@@ -43,8 +43,10 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
             
-            // Makes it so that serene seasons can work in a
+            // Makes it so that mods that use mixins can work in a
             // dev environment instead of crashing on startup
+            // Note that this REQUIRES the dependencies' mixin mappings to be
+            // updated to the latest mappings
             property 'mixin.env.disableRefMap', 'true'
 
             mods {
@@ -109,20 +111,6 @@ dependencies {
     
     runtimeOnly fg.deobf('serene-seasons:SereneSeasons-1.16.4:4.0.0.86:universal') // Serene Seasons
     compileOnly fg.deobf('serene-seasons:SereneSeasons-1.16.4:4.0.0.86:api') // Serene Seasons API
-
-    // You may put jars on which you depend on in ./libs or you may define them like so..
-    // compile "some.group:artifact:version:classifier"
-    // compile "some.group:artifact:version"
-
-    // Real examples
-    // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // These dependencies get remapped to your current MCP mappings
-    // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

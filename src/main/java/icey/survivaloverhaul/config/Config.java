@@ -88,13 +88,32 @@ public class Config
 		
 		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceHorizontalDist;
 		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceVerticalDist;
+
+		public final ForgeConfigSpec.ConfigValue<Double> rainTemperatureModifier;
+		public final ForgeConfigSpec.ConfigValue<Double> snowTemperatureModifier;
 		
 		public final ForgeConfigSpec.ConfigValue<Boolean> seasonTemperatureEffects;
 		
+		public final ForgeConfigSpec.ConfigValue<Integer> earlySpringModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> midSpringModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> lateSpringModifier;
+		
+		public final ForgeConfigSpec.ConfigValue<Integer> earlySummerModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> midSummerModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> lateSummerModifier;
+		
+		public final ForgeConfigSpec.ConfigValue<Integer> earlyAutumnModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> midAutumnModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> lateAutumnModifier;
+		
+		public final ForgeConfigSpec.ConfigValue<Integer> earlyWinterModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> midWinterModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> lateWinterModifier;
+		
+		
 		Common(ForgeConfigSpec.Builder builder)
 		{
-			builder
-					.comment(new String [] {
+			builder.comment(new String [] {
 							" Options related to enabling/disabling specific features",
 						" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc."
 					}).push("core");
@@ -139,6 +158,15 @@ public class Config
 					.define("Biomes affect Temperature", true);
 			builder.pop();
 			
+			builder.push("weather");
+			rainTemperatureModifier = builder
+					.comment(" How much of an effect rain has on temperature.")
+					.define("Rain Temperature Modifier", -2.0d);
+			snowTemperatureModifier = builder
+					.comment(" How much of an effect snow has on temperature.")
+					.define("Snow Temperature Modifier", -6.0d);
+			builder.pop();
+			
 			builder.push("time");
 			builder.push("multipliers");
 			timeMultiplier = builder
@@ -172,9 +200,39 @@ public class Config
 			builder.pop();
 			
 			builder.push("compat");
+			
+			builder.push("seasons");
 			seasonTemperatureEffects = builder
-					.comment(new String[] {" If Serene Seasons or Better Weather is installed,", " then seasons will have an effect on the player's temperature.", " Currently non-functional, but I promise I'll get it working ASAP."})
+					.comment(new String[] {" If Serene Seasons is installed,", " then seasons will have an effect on the player's temperature."})
 					.define("Seasons affect Temperature", true);
+			
+			builder.comment("Temperature modifiers per season in temperate biomes.").push("temperate");
+			builder.push("spring");
+			earlySpringModifier = builder.define("Early Spring Modifier", -3);
+			midSpringModifier = builder.define("Mid Spring Modifier", 0);
+			lateSpringModifier = builder.define("Late Spring Modifier", 3);
+			builder.pop();
+			
+			builder.push("summer");
+			earlySummerModifier = builder.define("Early Summer Modifier", 5);
+			midSummerModifier = builder.define("Mid Summer Modifier", 8);
+			lateSummerModifier = builder.define("Late Summer Modifier", 5);
+			builder.pop();
+			
+			builder.push("autumn");
+			earlyAutumnModifier = builder.define("Early Autumn Modifier", 3);
+			midAutumnModifier = builder.define("Mid Autumn Modifier", 0);
+			lateAutumnModifier = builder.define("Late Autumn Modifier", -3);
+			builder.pop();
+			
+			builder.push("winter");
+			earlyWinterModifier = builder.define("Early Winter Modifier", -7);
+			midWinterModifier = builder.define("Mid Winter Modifier", -12);
+			lateWinterModifier = builder.define("Late Winter Modifier", -7);
+			builder.pop();
+			builder.pop();
+			
+			builder.pop();
 			builder.pop();
 			builder.pop();
 
@@ -254,6 +312,9 @@ public class Config
 		public static boolean biomeEffectsEnabled;
 		public static double biomeTemperatureMultiplier;
 		
+		public static double rainTemperatureModifier;
+		public static double snowTemperatureModifier;
+		
 		public static double altitudeModifier;
 		
 		public static int minTickRate;
@@ -271,6 +332,22 @@ public class Config
 		
 		public static double sprintModifier;
 		public static double onFireModifier;
+		
+		public static int earlySpringModifier;
+		public static int midSpringModifier;
+		public static int lateSpringModifier;
+
+		public static int earlySummerModifier;
+		public static int midSummerModifier;
+		public static int lateSummerModifier;
+
+		public static int earlyAutumnModifier;
+		public static int midAutumnModifier;
+		public static int lateAutumnModifier;
+
+		public static int earlyWinterModifier;
+		public static int midWinterModifier;
+		public static int lateWinterModifier;
 		
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
@@ -295,6 +372,9 @@ public class Config
 				
 				altitudeModifier = COMMON.altitudeModifier.get();
 				
+				rainTemperatureModifier = COMMON.rainTemperatureModifier.get();
+				snowTemperatureModifier = COMMON.snowTemperatureModifier.get();
+				
 				biomeEffectsEnabled = COMMON.biomeEffectsEnabled.get();
 				biomeTemperatureMultiplier = COMMON.biomeTemperatureMultiplier.get();
 				timeMultiplier = COMMON.timeMultiplier.get();
@@ -312,6 +392,22 @@ public class Config
 				onFireModifier = COMMON.onFireModifier.get();
 				
 				seasonTemperatureEffects = COMMON.seasonTemperatureEffects.get();
+				
+				earlySpringModifier = COMMON.earlySpringModifier.get();
+				midSpringModifier = COMMON.midSpringModifier.get();
+				lateSpringModifier = COMMON.lateSpringModifier.get();
+
+				earlySummerModifier = COMMON.earlySummerModifier.get();
+				midSummerModifier = COMMON.midSummerModifier.get();
+				lateSummerModifier = COMMON.lateSummerModifier.get();
+
+				earlyAutumnModifier = COMMON.earlyAutumnModifier.get();
+				midAutumnModifier = COMMON.midAutumnModifier.get();
+				lateAutumnModifier = COMMON.lateAutumnModifier.get();
+
+				earlyWinterModifier = COMMON.earlyWinterModifier.get();
+				midWinterModifier = COMMON.midWinterModifier.get();
+				lateWinterModifier = COMMON.lateWinterModifier.get();
 			}
 			catch (Exception e)
 			{
