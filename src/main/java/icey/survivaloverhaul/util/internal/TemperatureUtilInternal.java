@@ -73,7 +73,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 			}
 		}
 		
-		// Temperature invaled, assume extremes
+		// Temperature invalid, assume extremes
 		if(temp < 0)
 		{
 			return TemperatureEnum.FROSTBITE;

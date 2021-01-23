@@ -51,7 +51,6 @@ public class BiomeModifier extends ModifierBase
 			if (JsonConfig.biomeOverrides.containsKey(biomeName))
 			{
 				humidity = JsonConfig.biomeOverrides.get(biomeName).isDry ? 0.1f : 0.5f;
-				addedTemperature = clampTemperature(JsonConfig.biomeOverrides.get(biomeName).temperature);
 			}
 			
 			if (humidity < 0.2f && worldTime > 12000 && addedTemperature > 0.85f && !world.getDimensionType().getHasCeiling())

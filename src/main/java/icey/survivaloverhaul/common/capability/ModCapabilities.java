@@ -61,14 +61,12 @@ public class ModCapabilities
 		{			
 			UpdateTemperaturesPacket packet = new UpdateTemperaturesPacket(Main.TEMPERATURE_CAP.getStorage().writeNBT(Main.TEMPERATURE_CAP, TemperatureCapability.getTempCapability(player), null));
 			
-			// Main.LOGGER.info("Syncing NBT Data: " + Temperature.getTempCapability(player).getTemporaryModifiers().keySet());
-			
 			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
 		}
 	}
 
 	@SubscribeEvent
-	public static void syncCapabilitiesOnDimensionChange(PlayerChangedDimensionEvent event)
+	public static void syncCapsOnDimensionChange(PlayerChangedDimensionEvent event)
 	{
 		PlayerEntity player = event.getPlayer();
 		if (Config.BakedConfigValues.temperatureEnabled)
@@ -76,7 +74,7 @@ public class ModCapabilities
 	}
 
 	@SubscribeEvent
-	public static void syncCapabilitiesOnLogin(PlayerLoggedInEvent event)
+	public static void syncCapsOnLogin(PlayerLoggedInEvent event)
 	{
 		PlayerEntity player = event.getPlayer();
 		if (Config.BakedConfigValues.temperatureEnabled)

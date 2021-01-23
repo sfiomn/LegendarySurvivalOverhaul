@@ -80,6 +80,8 @@ public class Config
 		
 		public final ForgeConfigSpec.ConfigValue<Double> sprintModifier;
 		
+		public final ForgeConfigSpec.ConfigValue<Double> onFireModifier;
+		
 		public final ForgeConfigSpec.ConfigValue<Integer> minTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> maxTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
@@ -116,7 +118,10 @@ public class Config
 			temperatureSecondaryEffects = builder
 					.comment(/*" If enabled, players will also recieve other effects from their current temperature state.*/ " Currently non-functional.")
 					.define("Secondary Temperature Effects", true);
-			
+
+			onFireModifier = builder
+					.comment(" How much of an effect being on fire has on a player's temperature.")
+					.define("Player On Fire Modifier", 12.5d);
 			sprintModifier = builder
 					.comment(" How much of an effect sprinting has on a player's temperature.")
 					.define("Player Sprint Modifier", 1.5d);
@@ -257,10 +262,6 @@ public class Config
 		
 		public static boolean seasonTemperatureEffects;
 		
-		public static boolean temperatureAffectsThirst;
-		public static int maxCanteenDrinks;
-		public static int maxNetheriteCanteenDrinks;
-		
 		public static double timeMultiplier;
 		public static double biomeTimeMultiplier;
 		public static int timeShadeModifier;
@@ -269,6 +270,7 @@ public class Config
 		public static int tempInfluenceVerticalDist;
 		
 		public static double sprintModifier;
+		public static double onFireModifier;
 		
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
@@ -306,6 +308,8 @@ public class Config
 				minTickRate = COMMON.minTickRate.get();
 				maxTickRate = COMMON.maxTickRate.get();
 				routinePacketSync = COMMON.routinePacketSync.get();
+				
+				onFireModifier = COMMON.onFireModifier.get();
 				
 				seasonTemperatureEffects = COMMON.seasonTemperatureEffects.get();
 			}

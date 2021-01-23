@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -155,7 +156,7 @@ public class TemperatureCapability implements ITemperatureCapability
 			
 			if(tempEnum == TemperatureEnum.HEAT_STROKE)
 			{
-				if(TemperatureEnum.HEAT_STROKE.getMiddle() < getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.ModEffects.HEAT_RESISTANCE))
+				if(TemperatureEnum.HEAT_STROKE.getMiddle() < getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !playerIsImmuneToHeat(player))
 				{
 					// Apply hyperthermia
 					player.removePotionEffect(EffectRegistry.ModEffects.HEAT_STROKE);
@@ -196,6 +197,11 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 		
 		oldModifierSize = temporaryModifiers.size();
+	}
+	
+	private boolean playerIsImmuneToHeat(PlayerEntity player)
+	{
+		return player.isPotionActive(EffectRegistry.ModEffects.HEAT_RESISTANCE) || player.isPotionActive(Effects.FIRE_RESISTANCE);
 	}
 	
 	private void tickTemperature(int currentTemp, int destination)

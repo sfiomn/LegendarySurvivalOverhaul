@@ -19,6 +19,7 @@ public class TemperatureModifierRegistry
 	public static final ModifierBase SPRINT = new SprintModifier();
 	public static final ModifierBase BLOCKS = new BlockModifier();
 	public static final ModifierBase ARMOR = new ArmorModifier();
+	public static final ModifierBase ON_FIRE = new OnFireModifier();
 	
 	@SubscribeEvent
 	public static void registerModifiers(RegistryEvent.Register<ModifierBase> event)
