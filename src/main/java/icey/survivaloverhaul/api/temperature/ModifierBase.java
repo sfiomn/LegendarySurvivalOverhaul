@@ -1,8 +1,6 @@
-package icey.survivaloverhaul.common.temperature;
+package icey.survivaloverhaul.api.temperature;
 
 import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
-import icey.survivaloverhaul.api.temperature.ITemperatureModifier;
-import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.config.json.JsonConfig;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;

@@ -1,7 +1,5 @@
-package icey.survivaloverhaul.common.temperature;
+package icey.survivaloverhaul.api.temperature;
 
-import icey.survivaloverhaul.api.temperature.ITemperatureDynamicModifier;
-import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

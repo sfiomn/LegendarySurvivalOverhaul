@@ -2,8 +2,6 @@ package icey.survivaloverhaul.util.internal;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.*;
-import icey.survivaloverhaul.common.temperature.DynamicModifierBase;
-import icey.survivaloverhaul.common.temperature.ModifierBase;
 import icey.survivaloverhaul.util.WorldUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

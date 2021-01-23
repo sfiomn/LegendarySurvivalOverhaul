@@ -15,11 +15,11 @@ import net.minecraftforge.registries.RegistryBuilder;
 
 import org.apache.logging.log4j.*;
 
+import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
+import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
-import icey.survivaloverhaul.common.temperature.DynamicModifierBase;
-import icey.survivaloverhaul.common.temperature.ModifierBase;
 import icey.survivaloverhaul.config.*;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.registry.BlockRegistry;

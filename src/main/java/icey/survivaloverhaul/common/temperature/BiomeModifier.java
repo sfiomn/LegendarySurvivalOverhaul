@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import icey.survivaloverhaul.Main;
+import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.config.json.JsonConfig;
 import net.minecraft.util.math.BlockPos;

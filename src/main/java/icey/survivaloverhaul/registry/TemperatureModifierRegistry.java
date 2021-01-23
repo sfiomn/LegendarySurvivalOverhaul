@@ -3,6 +3,7 @@ package icey.survivaloverhaul.registry;
 import java.lang.reflect.Field;
 
 import icey.survivaloverhaul.Main;
+import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.common.temperature.*;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

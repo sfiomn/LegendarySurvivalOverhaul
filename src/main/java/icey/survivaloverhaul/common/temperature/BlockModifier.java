@@ -9,6 +9,7 @@ import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
 import icey.survivaloverhaul.api.temperature.ITemperatureTileEntity;
+import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.config.json.JsonConfig;
 import icey.survivaloverhaul.util.WorldUtil;
