@@ -1,6 +1,5 @@
 package icey.survivaloverhaul.common.capability.temperature;
 
-import icey.survivaloverhaul.Main;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;

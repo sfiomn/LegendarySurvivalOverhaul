@@ -20,6 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -43,6 +44,8 @@ import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
+import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability;
+import icey.survivaloverhaul.common.capability.heartmods.HeartModifierStorage;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
 import icey.survivaloverhaul.config.*;
@@ -50,6 +53,7 @@ import icey.survivaloverhaul.config.json.JsonConfig;
 import icey.survivaloverhaul.config.json.JsonConfigRegistration;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.registry.BlockRegistry;
+import icey.survivaloverhaul.registry.FeatureRegistry;
 import icey.survivaloverhaul.registry.ItemRegistry;
 import icey.survivaloverhaul.util.WorldUtil;
 import icey.survivaloverhaul.util.internal.TemperatureUtilInternal;
@@ -98,6 +102,7 @@ public class Main
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModConfigEvent);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::buildRegistries);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+		// FMLJavaModLoadingContext.get().getModEventBus().addListener(this::biomeModification);
 		
 		MinecraftForge.EVENT_BUS.register(this);
 		
@@ -116,11 +121,22 @@ public class Main
 	
 	@CapabilityInject(TemperatureCapability.class)
 	public static final Capability<TemperatureCapability> TEMPERATURE_CAP = null;
+	@CapabilityInject(HeartModifierCapability.class)
+	public static final Capability<HeartModifierCapability> HEART_MOD_CAP = null;
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		CapabilityManager.INSTANCE.register(TemperatureCapability.class, new TemperatureStorage(), TemperatureCapability::new);
+		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
+		
 		NetworkHandler.register();
+		// FeatureRegistry.commonSetup(event);
+	}
+	
+	@SuppressWarnings("unused")
+	private void biomeModification(final BiomeLoadingEvent event)
+	{
+		// FeatureRegistry.biomeModification(event);
 	}
 	
 	private void clientSetup(final FMLClientSetupEvent event)

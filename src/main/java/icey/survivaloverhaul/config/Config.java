@@ -59,9 +59,11 @@ public class Config
 	
 	public static class Common
 	{
-		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureEnabled;
+		
 		
 		// Temperature
+		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureEnabled;
+		
 		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousTemperature;
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureSecondaryEffects;
 		
@@ -106,16 +108,29 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> midWinterModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> lateWinterModifier;
 		
+		// Heart Fruits
+		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsEnabled;
+		
+		public final ForgeConfigSpec.ConfigValue<Integer> heartsLostOnDeath;
+		public final ForgeConfigSpec.ConfigValue<Integer> maxAdditionalHearts;
+		
+		public final ForgeConfigSpec.ConfigValue<Integer> additionalHeartsPerFruit;
+		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsGiveRegen;
+		
 		
 		Common(ForgeConfigSpec.Builder builder)
 		{
 			builder.comment(new String [] {
 							" Options related to enabling/disabling specific features",
-						" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc."
+						" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc.",
+						" To reload your JSONs, type /reload into chat with cheats enabled; The same way you reload datapacks, crafttweaker scripts, etc."
 					}).push("core");
 			temperatureEnabled = builder
 					.comment(" Whether or not the temperature system is enabled.")
 					.define("Temperature Enabled", true);
+			heartFruitsEnabled = builder
+					.comment(" Whether or not heart fruits are functional and generate in-world.")
+					.define("Heart Fruits Enabled", true);
 			
 			builder.push("advanced");
 			routinePacketSync = builder
@@ -231,8 +246,29 @@ public class Config
 			builder.pop();
 			builder.pop();
 			builder.pop();
-
 			
+			builder.comment(" Options relating to heart fruits").push("heart-fruits");
+			
+			maxAdditionalHearts = builder
+					.comment("Maximum number of additional hearts that can be given by Heart Fruits.")
+					.defineInRange("Maximum Additional Hearts", 20, 1, Integer.MAX_VALUE);
+			heartsLostOnDeath = builder
+					.comment(new String[] {
+							" The number of additional hearts lost on death.",
+							" Set to -1 to lose all additional hearts on death.",
+							" Set to 0 to make additional hearts permanent."
+					})
+					.defineInRange("Hearts Lost On Death", -1, -1, Integer.MAX_VALUE);
+			
+			builder.push("effects");
+			additionalHeartsPerFruit = builder
+					.comment("Amount of hearts gained from eating a Heart Fruit.")
+					.defineInRange("Additional Hearts Per Heart Fruit", 1, 1, Integer.MAX_VALUE);
+			heartFruitsGiveRegen = builder
+					.comment("Whether or not Heart Fruits give a strong regeneration effect.")
+					.define("Heart Fruits Give Regen", true);
+			builder.pop();
+			builder.pop();
 		}
 	}
 	
@@ -345,6 +381,12 @@ public class Config
 		public static int midWinterModifier;
 		public static int lateWinterModifier;
 		
+		public static boolean heartFruitsEnabled;
+		public static int heartsLostOnDeath;
+		public static int maxAdditionalHearts;
+		public static int additionalHeartsPerFruit;
+		public static boolean heartFruitsGiveRegen;
+		
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
@@ -404,6 +446,12 @@ public class Config
 				earlyWinterModifier = COMMON.earlyWinterModifier.get();
 				midWinterModifier = COMMON.midWinterModifier.get();
 				lateWinterModifier = COMMON.lateWinterModifier.get();
+				
+				heartFruitsEnabled = COMMON.heartFruitsEnabled.get();
+				heartsLostOnDeath = COMMON.heartsLostOnDeath.get();
+				maxAdditionalHearts = COMMON.maxAdditionalHearts.get();
+				additionalHeartsPerFruit = COMMON.additionalHeartsPerFruit.get();
+				heartFruitsGiveRegen = COMMON.heartFruitsGiveRegen.get();
 			}
 			catch (Exception e)
 			{

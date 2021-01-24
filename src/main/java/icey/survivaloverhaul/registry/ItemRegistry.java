@@ -31,6 +31,8 @@ public class ItemRegistry
 	public static final ArmorItem CLOTH_LEGS = new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.LEGS);
 	public static final ArmorItem CLOTH_BOOTS = new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.FEET);
 	
+	public static final Item HEART_FRUIT = new ItemHeartFruit();
+	
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) 
 	{

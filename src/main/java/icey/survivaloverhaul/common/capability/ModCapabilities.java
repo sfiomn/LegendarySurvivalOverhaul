@@ -1,6 +1,8 @@
 package icey.survivaloverhaul.common.capability;
 
 import icey.survivaloverhaul.Main;
+import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability;
+import icey.survivaloverhaul.common.capability.heartmods.HeartModifierProvider;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureProvider;
 import icey.survivaloverhaul.config.Config;
@@ -26,6 +28,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 public class ModCapabilities
 {
 	public static final ResourceLocation TEMPERATURE_RES = new ResourceLocation(Main.MOD_ID, "temperature");
+	public static final ResourceLocation HEART_MOD_RES = new ResourceLocation(Main.MOD_ID, "heart_modifier");
 	
 	@SubscribeEvent
 	public static void attachCapability(AttachCapabilitiesEvent<Entity> event)
@@ -33,6 +36,7 @@ public class ModCapabilities
 		if (event.getObject() instanceof PlayerEntity)
 		{
 			event.addCapability(TEMPERATURE_RES, new TemperatureProvider());
+			event.addCapability(HEART_MOD_RES, new HeartModifierProvider());
 		}
 	}
 
@@ -53,6 +57,18 @@ public class ModCapabilities
 				sendTemperatureUpdate(player);
 			}
 		}
+		
+		if (Config.BakedConfigValues.heartFruitsEnabled)
+		{
+			HeartModifierCapability heartCap = HeartModifierCapability.getHeartModCapability(player);
+			heartCap.tickUpdate(player, world, event.phase);
+			
+			if(event.phase == Phase.START && (heartCap.isDirty() || heartCap.getPacketTimer() % Config.BakedConfigValues.routinePacketSync == 0))
+			{
+				heartCap.setClean();
+				sendHeartsUpdate(player);
+			}
+		}
 	}
 
 	private static void sendTemperatureUpdate(PlayerEntity player)
@@ -65,12 +81,24 @@ public class ModCapabilities
 		}
 	}
 
+	private static void sendHeartsUpdate(PlayerEntity player)
+	{
+		if (player instanceof ServerPlayerEntity)
+		{			
+			UpdateTemperaturesPacket packet = new UpdateTemperaturesPacket(Main.HEART_MOD_CAP.getStorage().writeNBT(Main.HEART_MOD_CAP, HeartModifierCapability.getHeartModCapability(player), null));
+			
+			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
+		}
+	}
+
 	@SubscribeEvent
 	public static void syncCapsOnDimensionChange(PlayerChangedDimensionEvent event)
 	{
 		PlayerEntity player = event.getPlayer();
 		if (Config.BakedConfigValues.temperatureEnabled)
 				sendTemperatureUpdate(player);
+		if (Config.BakedConfigValues.heartFruitsEnabled)
+				sendHeartsUpdate(player);
 	}
 
 	@SubscribeEvent
@@ -78,7 +106,9 @@ public class ModCapabilities
 	{
 		PlayerEntity player = event.getPlayer();
 		if (Config.BakedConfigValues.temperatureEnabled)
-			sendTemperatureUpdate(player);
+				sendTemperatureUpdate(player);
+		if (Config.BakedConfigValues.heartFruitsEnabled)
+				sendHeartsUpdate(player);
 	}
 	
 	protected static boolean shouldSkipTick(PlayerEntity player)
