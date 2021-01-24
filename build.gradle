@@ -101,6 +101,16 @@ repositories {
         name = 'CurseForge'
         url = 'https://minecraft.curseforge.com/api/maven/'
     }
+	maven {
+		// location of the maven that hosts JEI files
+		name = "Progwml6 maven"
+		url = "https://dvs1.progwml6.com/files/maven/"
+	}
+	maven {
+		// location of a maven mirror for JEI files, as a fallback
+		name = "ModMaven"
+		url = "https://modmaven.k-4u.nl"
+	}
 }
 
 dependencies {
@@ -111,7 +121,10 @@ dependencies {
     
     runtimeOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:universal') // Serene Seasons
     compileOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:api') // Serene Seasons API
-
+	
+    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
+    
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
