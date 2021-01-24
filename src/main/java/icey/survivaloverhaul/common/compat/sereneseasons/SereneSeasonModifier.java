@@ -10,9 +10,9 @@ import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 
-public class SeasonModifier extends ModifierBase
+public class SereneSeasonModifier extends ModifierBase
 {
-	public SeasonModifier()
+	public SereneSeasonModifier()
 	{
 		super();
 		this.setRegistryName(Main.MOD_ID,"compat/serene_seasons");
@@ -31,7 +31,7 @@ public class SeasonModifier extends ModifierBase
 		}
 		catch (Exception e)
 		{
-			Main.LOGGER.error("An error has occured with Serene Seasons compatability, disabling compat", e);
+			Main.LOGGER.error("An error has occured with Serene Seasons compatability, disabling modifier", e);
 			Main.sereneSeasonsLoaded = false;
 			
 			return 0.0f;

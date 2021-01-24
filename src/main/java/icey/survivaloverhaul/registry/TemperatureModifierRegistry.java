@@ -6,6 +6,7 @@ import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.common.temperature.*;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -23,7 +24,7 @@ public class TemperatureModifierRegistry
 	public static final ModifierBase ON_FIRE = new OnFireModifier();
 	public static final ModifierBase WEATHER = new WeatherModifier();
 	
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void registerModifiers(RegistryEvent.Register<ModifierBase> event)
 	{
 		try
