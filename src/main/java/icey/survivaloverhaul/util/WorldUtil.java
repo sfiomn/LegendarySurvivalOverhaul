@@ -1,5 +1,6 @@
 package icey.survivaloverhaul.util;
 
+import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,5 +41,10 @@ public class WorldUtil
 		{
 			return ((ServerWorld) world).getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4);
 		}
+	}
+	
+	public static int calculateClientWorldEntityTemperature(World world, Entity entity)
+	{
+		return TemperatureUtil.clampTemperature(TemperatureUtil.getWorldTemperature(world, WorldUtil.getSidedBlockPos(world, entity)));
 	}
 }

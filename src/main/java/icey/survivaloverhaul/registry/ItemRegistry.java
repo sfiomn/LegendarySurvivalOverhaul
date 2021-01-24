@@ -21,6 +21,7 @@ public class ItemRegistry
 	public static final ArmorMaterialBase CLOTH_ARMOR_MATERIAL = new ArmorMaterialBase("snow", 5.75f, new int[] { 1, 1, 2, 1}, 17, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0, 0.0f, null);
 	
 	public static final Item MERCURY_PASTE = new ItemGeneric("mercury_paste", ItemGroup.MISC);
+	public static final Item THERMOMETER = new ItemGeneric("thermometer", ItemGroup.TOOLS);
 	
 	public static final Item STONE_FERN_LEAF = new ItemGeneric("stone_fern_leaf", ItemGroup.BREWING);
 	public static final Item INFERNAL_FERN_LEAF = new ItemGeneric("infernal_fern_leaf", ItemGroup.BREWING);

@@ -37,6 +37,20 @@ public class ModItemModelProvider extends ItemModelProvider
 		builder(itemGenerated, "snow_chest", "snow_tunic");
 		builder(itemGenerated, "snow_legs", "snow_pants");
 		builder(itemGenerated, "snow_feet", "snow_boots");
+		/*
+		for (int i = 0; i < 30; i++)
+		{
+			String str = "";
+			if (i < 10)
+			{
+				str += "0";
+			}
+			
+			str += i;
+			
+			builder(itemGenerated, "thermometer/thermometer_" + str);
+		}
+		*/
 	}
 	
 	private ItemModelBuilder builder(ModelFile itemGenerated, String name)

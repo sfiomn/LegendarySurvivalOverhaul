@@ -2,28 +2,56 @@ package icey.survivaloverhaul;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.resources.ReloadListener;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.item.ItemStack;
+import net.minecraft.profiler.IProfiler;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.apache.logging.log4j.*;
 
 import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
+import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
 import icey.survivaloverhaul.config.*;
+import icey.survivaloverhaul.config.json.JsonConfig;
+import icey.survivaloverhaul.config.json.JsonConfigRegistration;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.registry.BlockRegistry;
+import icey.survivaloverhaul.registry.ItemRegistry;
+import icey.survivaloverhaul.util.WorldUtil;
 import icey.survivaloverhaul.util.internal.TemperatureUtilInternal;
 
 @Mod(Main.MOD_ID)
@@ -56,6 +84,10 @@ public class Main
 	 * stamina mechanics with my own.
 	 */
 	public static boolean paraglidersLoaded;
+	
+	public static Path configPath = FMLPaths.CONFIGDIR.get();
+	public static Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "survivaloverhaul");
+	public static Path modConfigJsons = Paths.get(modConfigPath.toString(), "json");
 	
 	public static ForgeRegistry<ModifierBase> MODIFIERS;
 	public static ForgeRegistry<DynamicModifierBase> DYNAMIC_MODIFIERS;
@@ -95,6 +127,61 @@ public class Main
 	{
 		RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.COOLING_COIL.getBlock(), RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.HEATING_COIL.getBlock(), RenderType.getTranslucent());
+		
+		ItemModelsProperties.registerProperty(ItemRegistry.THERMOMETER, new ResourceLocation("temperature"), new IItemPropertyGetter()
+				{
+					@Override
+					@OnlyIn(Dist.CLIENT)
+					public float call(ItemStack stack, ClientWorld clientWorld, LivingEntity entity)
+					{
+						World world = clientWorld;
+						Entity holder = (Entity) (entity != null ? entity : stack.getItemFrame());
+						
+						if (world == null && holder != null)
+						{
+							world = holder.world;
+						}
+						
+						if (world == null)
+						{
+							return 0.5f;
+						}
+						else
+						{
+							double d;
+							
+							int temperature = WorldUtil.calculateClientWorldEntityTemperature(world, holder);
+							d = (double)((float)temperature / (float)TemperatureEnum.HEAT_STROKE.getUpperBound());
+							
+							return MathHelper.positiveModulo((float)d, 1.0f);
+						}
+					}
+				});
+	}
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+	public void reloadListener(AddReloadListenerEvent event)
+	{
+		event.addListener(new ReloadListener<Void>() 
+				{
+            		@Nonnull
+            		@ParametersAreNonnullByDefault
+					@Override
+					protected Void prepare(IResourceManager manager, IProfiler profiler)
+					{
+						JsonConfigRegistration.clearContainers();
+						return null;
+					}
+            		
+            		@ParametersAreNonnullByDefault
+					@Override
+					protected void apply(Void objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn)
+					{
+						Config.BakedConfigValues.bakeCommon();
+						JsonConfigRegistration.init(modConfigJsons.toFile());
+					}
+			
+				});
 	}
 	
 	private void onModConfigEvent(final ModConfig.ModConfigEvent event)
@@ -104,10 +191,6 @@ public class Main
 		if (config.getSpec() == Config.CLIENT_SPEC)
 		{
 			Config.BakedConfigValues.bakeClient();
-		}
-		else if (config.getSpec() == Config.COMMON_SPEC)
-		{
-			Config.BakedConfigValues.bakeCommon();
 		}
 	}
 	

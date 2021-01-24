@@ -39,14 +39,10 @@ public class Config
 	
 	public static void register()
 	{
-		Path configPath = FMLPaths.CONFIGDIR.get();
-		Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "survivaloverhaul");
-		Path modConfigJsons = Paths.get(modConfigPath.toString(), "json");
-		
 		try
 		{
-			Files.createDirectory(modConfigPath);
-			Files.createDirectory(modConfigJsons);
+			Files.createDirectory(Main.modConfigPath);
+			Files.createDirectory(Main.modConfigJsons);
 		}
 		catch (FileAlreadyExistsException e) {}
 		catch (IOException e)
@@ -58,7 +54,7 @@ public class Config
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_SPEC, "survivaloverhaul/survivaloverhaul-client.toml");
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_SPEC, "survivaloverhaul/survivaloverhaul-common.toml");
 		
-		JsonConfigRegistration.init(modConfigJsons.toFile());
+		JsonConfigRegistration.init(Main.modConfigJsons.toFile());
 	}
 	
 	public static class Common
