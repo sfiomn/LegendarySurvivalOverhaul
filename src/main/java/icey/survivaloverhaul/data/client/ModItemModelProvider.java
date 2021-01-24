@@ -25,8 +25,8 @@ public class ModItemModelProvider extends ItemModelProvider
 		ModelFile itemGenerated = getExistingFile(mcLoc("item/generated"));
 		
 		// builder(itemGenerated, "example_item");
-		builder(itemGenerated, "canteen", "canteen_empty");
-		builder(itemGenerated, "netherite_canteen", "netherite_canteen_empty");
+		//builder(itemGenerated, "canteen", "canteen_empty");
+		//builder(itemGenerated, "netherite_canteen", "netherite_canteen_empty");
 		
 		builder(itemGenerated, "infernal_fern_leaf");
 		builder(itemGenerated, "stone_fern_leaf");
