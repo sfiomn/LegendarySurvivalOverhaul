@@ -12,6 +12,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -57,17 +58,32 @@ public class ModCapabilities
 				sendTemperatureUpdate(player);
 			}
 		}
+	}
+
+	@SubscribeEvent
+	public static void heartDeathHandler(PlayerEvent.Clone event)
+	{
+		PlayerEntity orig = event.getOriginal();
+		PlayerEntity player = event.getPlayer();
 		
-		if (Config.BakedConfigValues.heartFruitsEnabled)
+		HeartModifierCapability origCap = HeartModifierCapability.getHeartModCapability(orig);
+		HeartModifierCapability newCap = HeartModifierCapability.getHeartModCapability(player);
+		
+		if (event.isWasDeath())
 		{
-			HeartModifierCapability heartCap = HeartModifierCapability.getHeartModCapability(player);
-			heartCap.tickUpdate(player, world, event.phase);
-			
-			if(event.phase == Phase.START && (heartCap.isDirty() || heartCap.getPacketTimer() % Config.BakedConfigValues.routinePacketSync == 0))
+			if (Config.BakedConfigValues.heartsLostOnDeath != -1)
 			{
-				heartCap.setClean();
-				sendHeartsUpdate(player);
+				int oldHearts = origCap.getAdditionalHearts();
+				
+				newCap.setMaxHealth(oldHearts - Config.BakedConfigValues.heartsLostOnDeath);
+				
+				newCap.updateMaxHealth(player.getEntityWorld(), player);
 			}
+		}
+		else
+		{
+			newCap.load(origCap.save());
+			newCap.updateMaxHealth(player.getEntityWorld(), player);
 		}
 	}
 

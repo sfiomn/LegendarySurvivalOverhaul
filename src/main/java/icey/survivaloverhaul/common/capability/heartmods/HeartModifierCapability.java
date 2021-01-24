@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.heartmod.IHeartModifierCapability;
-import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.config.Config;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -14,7 +13,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 
 public class HeartModifierCapability implements IHeartModifierCapability
@@ -40,42 +38,35 @@ public class HeartModifierCapability implements IHeartModifierCapability
 		manualDirty = false;
 		packetTimer = 0;
 	}
-
-	@Override
-	public void tickUpdate(PlayerEntity player, World world, Phase phase)
+	
+	public void updateMaxHealth(World world, PlayerEntity player)
 	{
-		packetTimer++;
-		
 		ModifiableAttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
-		
-		AttributeModifier mod = health.getModifier(HEART_MODIFIER_ATTRIBUTE);
-		
-		if (mod != null)
-		{
-			if (mod.getAmount() == extraHearts * 2) return;
-			
-			health.removeModifier(mod);
-		}
-		
-		health.applyPersistentModifier(new AttributeModifier(HEART_MODIFIER_ATTRIBUTE, Main.MOD_ID + ":extra_hearts", extraHearts * 2, AttributeModifier.Operation.ADDITION));
+
+        AttributeModifier modifier = health.getModifier(HEART_MODIFIER_ATTRIBUTE);
+        if (modifier != null) {
+            if (modifier.getAmount() == extraHearts) return;
+
+            health.removeModifier(modifier);
+        }
+        
+        health.applyPersistentModifier(new AttributeModifier(HEART_MODIFIER_ATTRIBUTE, Main.MOD_ID + ":extra_hearts", extraHearts * 2, AttributeModifier.Operation.ADDITION));
+	}
+	
+	public void setMaxHealth(int extraHearts)
+	{
+		this.extraHearts = MathHelper.clamp(extraHearts, 0, Config.BakedConfigValues.maxAdditionalHearts);
+	}
+	
+	public void addMaxHealth(int extraHearts)
+	{
+		this.setMaxHealth(this.extraHearts + extraHearts);
 	}
 	
 	@Override
 	public int getAdditionalHearts()
 	{
 		return extraHearts;
-	}
-
-	@Override
-	public void setHearts(int hearts)
-	{
-		this.extraHearts = MathHelper.clamp(hearts, 0, Config.BakedConfigValues.maxAdditionalHearts);
-	}
-
-	@Override
-	public void addHearts(int hearts)
-	{
-		this.setHearts(this.getAdditionalHearts() + hearts);
 	}
 
 	@Override
@@ -105,12 +96,17 @@ public class HeartModifierCapability implements IHeartModifierCapability
 		return compound;
 	}
 	
+	/*
+	 * Note that this does not update the player's maximum health attribute.
+	 * It is expected that any member calling this function will immediately call
+	 * this.updateMaxHealth afterwards.
+	 */
 	public void load(CompoundNBT compound)
 	{
 		this.init();
 
 		if (compound.contains("extraHearts"))
-				this.setHearts(compound.getInt("extraHearts"));
+				this.setMaxHealth(compound.getInt("extraHearts"));
 	}
 	
 	public static HeartModifierCapability getHeartModCapability(PlayerEntity player)

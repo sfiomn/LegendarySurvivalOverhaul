@@ -7,17 +7,6 @@ import net.minecraftforge.event.TickEvent;
 public interface IHeartModifierCapability
 {
 	public int getAdditionalHearts();
-	public void setHearts(int hearts);
-	public void addHearts(int hearts);
-	
-	/**
-	 * (Don't use this!) <br>
-	 * Runs a tick update for the player's heart modifier capability
-	 * @param player
-	 * @param world
-	 * @param phase
-	 */
-	public void tickUpdate(PlayerEntity player, World world, TickEvent.Phase phase);
 	
 	/**
 	 * (Don't use this!) <br>
