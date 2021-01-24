@@ -164,12 +164,20 @@ public class Main
 						}
 						else
 						{
-							double d;
+							try
+							{
+								double d;
+								
+								int temperature = WorldUtil.calculateClientWorldEntityTemperature(world, holder);
+								d = (double)((float)temperature / (float)TemperatureEnum.HEAT_STROKE.getUpperBound());
+								
+								return MathHelper.positiveModulo((float)d, 1.0f);
+							}
+							catch (NullPointerException e)
+							{
+								return 0.5f;
+							}
 							
-							int temperature = WorldUtil.calculateClientWorldEntityTemperature(world, holder);
-							d = (double)((float)temperature / (float)TemperatureEnum.HEAT_STROKE.getUpperBound());
-							
-							return MathHelper.positiveModulo((float)d, 1.0f);
 						}
 					}
 				});

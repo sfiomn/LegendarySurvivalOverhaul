@@ -33,6 +33,7 @@
         { "predicate": { "temperature": 0.8666666 }, "model": "survivaloverhaul:item/thermometer_26" },
         { "predicate": { "temperature": 0.9000000 }, "model": "survivaloverhaul:item/thermometer_27" },
         { "predicate": { "temperature": 0.9333333 }, "model": "survivaloverhaul:item/thermometer_28" },
-        { "predicate": { "temperature": 0.9666666 }, "model": "survivaloverhaul:item/thermometer_29" }
+        { "predicate": { "temperature": 0.9666666 }, "model": "survivaloverhaul:item/thermometer_29" },
+        { "predicate": { "temperature": 1.0000000 }, "model": "survivaloverhaul:item/thermometer_29" }
     ]
 }
