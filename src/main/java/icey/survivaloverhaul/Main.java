@@ -101,7 +101,6 @@ public class Main
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModConfigEvent);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::buildRegistries);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 		// FMLJavaModLoadingContext.get().getModEventBus().addListener(this::biomeModification);
 		
 		MinecraftForge.EVENT_BUS.register(this);
@@ -139,7 +138,9 @@ public class Main
 		// FeatureRegistry.biomeModification(event);
 	}
 	
-	private void clientSetup(final FMLClientSetupEvent event)
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public static void clientSetup(FMLClientSetupEvent event)
 	{
 		RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.COOLING_COIL.getBlock(), RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.HEATING_COIL.getBlock(), RenderType.getTranslucent());

@@ -47,6 +47,9 @@ public class ModCapabilities
 		PlayerEntity player = event.player;
 		World world = player.world;
 		
+		if (world.isRemote)
+			return;
+		
 		if (Config.BakedConfigValues.temperatureEnabled && !shouldSkipTick(player))
 		{
 			TemperatureCapability tempCap = TemperatureCapability.getTempCapability(player);
