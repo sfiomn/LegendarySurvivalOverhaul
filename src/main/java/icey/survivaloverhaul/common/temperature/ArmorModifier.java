@@ -46,11 +46,11 @@ public class ArmorModifier extends ModifierBase
 	
 	private float processStackJson(ItemStack stack)
 	{
-		List<JsonArmorIdentity> armorList = JsonConfig.armorTemperatures.get(stack.getItem().getRegistryName().toString());
+		List<JsonTemperatureIdentity> armorList = JsonConfig.armorTemperatures.get(stack.getItem().getRegistryName().toString());
 		
 		if (armorList != null)
 		{
-			for (JsonArmorIdentity jtm : armorList)
+			for (JsonTemperatureIdentity jtm : armorList)
 			{
 				if (jtm == null)
 						continue;

@@ -31,6 +31,7 @@ public class TemperatureModifierRegistry
 	
 	public static class DynamicModifierList
 	{
+		// This is broken, don't use it
 		// public static final DynamicModifierBase ARMOR_INSULATION = new ArmorInsulationModifier();
 	}
 	

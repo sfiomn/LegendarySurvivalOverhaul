@@ -16,7 +16,7 @@ import icey.survivaloverhaul.api.config.json.temperature.JsonTemperatureIdentity
 
 public class JsonConfig
 {
-	public static Map<String, List<JsonArmorIdentity>> armorTemperatures = Maps.newHashMap();
+	public static Map<String, List<JsonTemperatureIdentity>> armorTemperatures = Maps.newHashMap();
 	public static Map<String, List<JsonPropertyTemperature>> blockTemperatures = Maps.newHashMap();
 	public static Map<String, JsonTemperature> fluidTemperatures = Maps.newHashMap();
 	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
@@ -69,34 +69,25 @@ public class JsonConfig
 			return true;
 		}
 	}
+
 	
 	public static void registerArmorTemperature(String registryName, float temperature)
 	{
-		registerArmorTemperature(registryName, temperature, 1.0f, new JsonItemIdentity(null));
-	}
-	
-	public static void registerArmorTemperature(String registryName, float temperature, float insulation)
-	{
-		registerArmorTemperature(registryName, temperature, insulation, new JsonItemIdentity(null));
+		registerArmorTemperature(registryName, temperature, new JsonItemIdentity(null));
 	}
 	
 	public static void registerArmorTemperature(String registryName, float temperature, JsonItemIdentity identity)
 	{
-		registerArmorTemperature(registryName, temperature, 1.0f, identity);
-	}
-	
-	public static void registerArmorTemperature(String registryName, float temperature, float insulation, JsonItemIdentity identity)
-	{
 		if(!armorTemperatures.containsKey(registryName))
-				armorTemperatures.put(registryName, new ArrayList<JsonArmorIdentity>());
+				armorTemperatures.put(registryName, new ArrayList<JsonTemperatureIdentity>());
 		
-		final List<JsonArmorIdentity> currentList = armorTemperatures.get(registryName);
+		final List<JsonTemperatureIdentity> currentList = armorTemperatures.get(registryName);
 		
-		JsonArmorIdentity result = new JsonArmorIdentity(temperature, identity, insulation);
+		JsonTemperatureIdentity result = new JsonArmorIdentity(temperature, identity);
 		
 		for (int i = 0; i < currentList.size(); i++)
 		{
-			JsonArmorIdentity jtm = currentList.get(i);
+			JsonTemperatureIdentity jtm = currentList.get(i);
 			
 			if (jtm.matches(identity))
 			{

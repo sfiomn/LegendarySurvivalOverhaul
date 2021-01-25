@@ -10,6 +10,7 @@ import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
+import icey.survivaloverhaul.api.config.json.temperature.JsonTemperatureIdentity;
 
 public class JsonTypeToken
 {
@@ -17,7 +18,7 @@ public class JsonTypeToken
 	{
 		switch(jcfn)
 		{
-			case ARMOR:				return new TypeToken<Map<String, List<JsonArmorIdentity>>>(){}.getType();
+			case ARMOR:				return new TypeToken<Map<String, List<JsonTemperatureIdentity>>>(){}.getType();
 			case BLOCK:				return new TypeToken<Map<String, List<JsonPropertyTemperature>>>(){}.getType();
 			case LIQUID: 			return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
 			case BIOME: 			return new TypeToken<Map<String, JsonBiomeIdentity>>(){}.getType();
