@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.common.effects.*;
+import icey.survivaloverhaul.util.ProperBrewingRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;

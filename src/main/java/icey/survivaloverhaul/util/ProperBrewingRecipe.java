@@ -1,4 +1,4 @@
-package icey.survivaloverhaul.registry;
+package icey.survivaloverhaul.util;
 
 import javax.annotation.Nonnull;
 
