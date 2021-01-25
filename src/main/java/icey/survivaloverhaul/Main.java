@@ -171,7 +171,7 @@ public class Main
 								int temperature = WorldUtil.calculateClientWorldEntityTemperature(world, holder);
 								d = (double)((float)temperature / (float)TemperatureEnum.HEAT_STROKE.getUpperBound());
 								
-								return MathHelper.positiveModulo((float)d, 1.0f);
+								return MathHelper.positiveModulo((float)d, 1.0333333f);
 							}
 							catch (NullPointerException e)
 							{

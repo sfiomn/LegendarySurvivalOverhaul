@@ -16,11 +16,13 @@ import com.google.gson.GsonBuilder;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
+import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperatureIdentity;
+import icey.survivaloverhaul.common.compat.CompatController;
 import icey.survivaloverhaul.config.JsonFileName;
 import icey.survivaloverhaul.config.JsonTypeToken;
 
@@ -30,12 +32,14 @@ public class JsonConfigRegistration
 	
 	public static void init(File configDir)
 	{
-		registerTemperatures();
+		registerTemperatures(configDir);
+		
+		CompatController.initCompat(configDir);
 		
 		processAllJson(configDir);
 	}
 	
-	public static void registerTemperatures()
+	public static void registerTemperatures(File configDir)
 	{
 		JsonConfig.registerBlockTemperature("minecraft:campfire", 7.5f, new JsonPropertyValue("lit", "true"));
 		JsonConfig.registerBlockTemperature("minecraft:soul_campfire", 5.0f, new JsonPropertyValue("lit", "true"));
@@ -44,6 +48,9 @@ public class JsonConfigRegistration
 		
 		JsonConfig.registerBlockTemperature("minecraft:torch", 1.5f);
 		JsonConfig.registerBlockTemperature("minecraft:soul_torch", 0.75f);
+		
+		JsonConfig.registerBlockTemperature("minecraft:wall_torch", 1.5f);
+		JsonConfig.registerBlockTemperature("minecraft:soul_wall_torch", 0.75f);
 		
 		JsonConfig.registerBlockTemperature("minecraft:fire", 5.0f);
 		JsonConfig.registerBlockTemperature("minecraft:soul_fire", 2.5f);
@@ -74,10 +81,15 @@ public class JsonConfigRegistration
 		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_chest", 3.0f);
 		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_head", 1.5f);
 		
-		JsonConfig.registerArmorTemperature("minecraft:leather_boots", 0.25f);
-		JsonConfig.registerArmorTemperature("minecraft:leather_leggings", 0.75f);
-		JsonConfig.registerArmorTemperature("minecraft:leather_chestplate", 1.0f);
-		JsonConfig.registerArmorTemperature("minecraft:leather_helmet", 0.5f);
+		JsonConfig.registerArmorTemperature("minecraft:leather_boots", 0.25f, 0.8f);
+		JsonConfig.registerArmorTemperature("minecraft:leather_leggings", 0.75f, 0.8f);
+		JsonConfig.registerArmorTemperature("minecraft:leather_chestplate", 1.0f, 0.8f);
+		JsonConfig.registerArmorTemperature("minecraft:leather_helmet", 0.5f, 0.8f);
+		
+		JsonConfig.registerArmorTemperature("minecraft:iron_boots", 0.0f, 1.2f);
+		JsonConfig.registerArmorTemperature("minecraft:iron_leggings", 0.0f, 1.2f);
+		JsonConfig.registerArmorTemperature("minecraft:iron_chestplate", 0.0f, 1.2f);
+		JsonConfig.registerArmorTemperature("minecraft:iron_helmet", 0.0f, 1.2f);
 		
 		JsonConfig.registerBiomeOverride("minecraft:crimson_forest", 0.75f, false);
 		JsonConfig.registerBiomeOverride("minecraft:warped_forest", 0.75f, false);
@@ -96,11 +108,11 @@ public class JsonConfigRegistration
 	
 	public static void processAllJson(File jsonDir)
 	{
-		Map<String, List<JsonTemperatureIdentity>> jsonArmorTemperatures = processJson(JsonFileName.ARMOR, JsonConfig.armorTemperatures, jsonDir, true);
+		Map<String, List<JsonArmorIdentity>> jsonArmorTemperatures = processJson(JsonFileName.ARMOR, JsonConfig.armorTemperatures, jsonDir, true);
 		
 		if (jsonArmorTemperatures != null)
 		{
-			for (Map.Entry<String, List<JsonTemperatureIdentity>> entry : jsonArmorTemperatures.entrySet())
+			for (Map.Entry<String, List<JsonArmorIdentity>> entry : jsonArmorTemperatures.entrySet())
 			{
 				for (JsonTemperatureIdentity jtm : entry.getValue())
 				{

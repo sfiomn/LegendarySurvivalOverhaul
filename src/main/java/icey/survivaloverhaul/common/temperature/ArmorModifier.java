@@ -3,6 +3,7 @@ package icey.survivaloverhaul.common.temperature;
 import java.util.List;
 
 import icey.survivaloverhaul.Main;
+import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperatureIdentity;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
@@ -45,11 +46,11 @@ public class ArmorModifier extends ModifierBase
 	
 	private float processStackJson(ItemStack stack)
 	{
-		List<JsonTemperatureIdentity> armorList = JsonConfig.armorTemperatures.get(stack.getItem().getRegistryName().toString());
+		List<JsonArmorIdentity> armorList = JsonConfig.armorTemperatures.get(stack.getItem().getRegistryName().toString());
 		
 		if (armorList != null)
 		{
-			for (JsonTemperatureIdentity jtm : armorList)
+			for (JsonArmorIdentity jtm : armorList)
 			{
 				if (jtm == null)
 						continue;

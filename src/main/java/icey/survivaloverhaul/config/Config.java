@@ -163,7 +163,7 @@ public class Config
 			builder.push("biomes");
 			biomeTemperatureMultiplier = builder
 					.comment(" How much a biome's temperature effects are multiplied.")
-					.defineInRange("Biome Temperature Multiplier", 10.0d, 0.0d, Double.POSITIVE_INFINITY);
+					.defineInRange("Biome Temperature Multiplier", 16.0d, 0.0d, Double.POSITIVE_INFINITY);
 			biomeEffectsEnabled = builder
 					.comment(" Whether or not biomes will have an effect on a player's temperature.")
 					.define("Biomes affect Temperature", true);
@@ -251,7 +251,7 @@ public class Config
 			
 			maxAdditionalHearts = builder
 					.comment("Maximum number of additional hearts that can be given by Heart Fruits.")
-					.defineInRange("Maximum Additional Hearts", 20, 1, Integer.MAX_VALUE);
+					.defineInRange("Maximum Additional Hearts", 10, 1, Integer.MAX_VALUE);
 			heartsLostOnDeath = builder
 					.comment(new String[] {
 							" The number of additional hearts lost on death.",

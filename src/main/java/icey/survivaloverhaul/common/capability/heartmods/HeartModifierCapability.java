@@ -45,8 +45,6 @@ public class HeartModifierCapability implements IHeartModifierCapability
 
         AttributeModifier modifier = health.getModifier(HEART_MODIFIER_ATTRIBUTE);
         if (modifier != null) {
-            if (modifier.getAmount() == extraHearts) return;
-
             health.removeModifier(modifier);
         }
         

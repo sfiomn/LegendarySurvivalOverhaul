@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.2.0-beta'
+version = '0.2.3-beta'
 group = 'icey.survivaloverhaul' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'survivaloverhaul'
 
@@ -121,9 +121,10 @@ dependencies {
     
     runtimeOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:universal') // Serene Seasons
     compileOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:api') // Serene Seasons API
+    // compile fg.deobf('better-weather:betterweather:1.2.4') // Better Weather
 	
-    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
+    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65:api")
     
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
@@ -137,7 +138,7 @@ jar {
         attributes([
             "Specification-Title": "survivaloverhaul",
             "Specification-Vendor": "Icey",
-            "Specification-Version": "0.2.0", // yeah
+            "Specification-Version": "0.2.2", // yeah
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"Icey",
