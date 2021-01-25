@@ -1,5 +1,7 @@
 package icey.survivaloverhaul;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.resources.ReloadListener;
@@ -23,8 +25,10 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.thread.SidedThreadGroups;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -102,6 +106,8 @@ public class Main
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModConfigEvent);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::buildRegistries);
 		// FMLJavaModLoadingContext.get().getModEventBus().addListener(this::biomeModification);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+		
 		
 		MinecraftForge.EVENT_BUS.register(this);
 		
@@ -138,50 +144,62 @@ public class Main
 		// FeatureRegistry.biomeModification(event);
 	}
 	
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public static void clientSetup(FMLClientSetupEvent event)
+	private void clientSetup(final FMLClientSetupEvent event)
 	{
-		RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.COOLING_COIL.getBlock(), RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.HEATING_COIL.getBlock(), RenderType.getTranslucent());
-		
-		ItemModelsProperties.registerProperty(ItemRegistry.THERMOMETER, new ResourceLocation("temperature"), new IItemPropertyGetter()
-				{
-					@Override
-					@OnlyIn(Dist.CLIENT)
-					public float call(ItemStack stack, ClientWorld clientWorld, LivingEntity entity)
-					{
-						World world = clientWorld;
-						Entity holder = (Entity) (entity != null ? entity : stack.getItemFrame());
-						
-						if (world == null && holder != null)
+		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> modelSetup());
+	}
+	
+	private static DistExecutor.SafeRunnable modelSetup()
+	{
+		return new DistExecutor.SafeRunnable()
+		{
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void run()
+			{
+				RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.COOLING_COIL.getBlock(), RenderType.getTranslucent());
+				RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.HEATING_COIL.getBlock(), RenderType.getTranslucent());
+				
+				ItemModelsProperties.registerProperty(ItemRegistry.THERMOMETER, new ResourceLocation("temperature"), new IItemPropertyGetter()
 						{
-							world = holder.world;
-						}
-						
-						if (world == null)
-						{
-							return 0.5f;
-						}
-						else
-						{
-							try
+							@OnlyIn(Dist.CLIENT)
+							@Override
+							public float call(ItemStack stack, ClientWorld clientWorld, LivingEntity entity)
 							{
-								double d;
+								World world = clientWorld;
+								Entity holder = (Entity) (entity != null ? entity : stack.getItemFrame());
 								
-								int temperature = WorldUtil.calculateClientWorldEntityTemperature(world, holder);
-								d = (double)((float)temperature / (float)TemperatureEnum.HEAT_STROKE.getUpperBound());
+								if (world == null && holder != null)
+								{
+									world = holder.world;
+								}
 								
-								return MathHelper.positiveModulo((float)d, 1.0333333f);
+								if (world == null)
+								{
+									return 0.5f;
+								}
+								else
+								{
+									try
+									{
+										double d;
+										
+										int temperature = WorldUtil.calculateClientWorldEntityTemperature(world, holder);
+										d = (double)((float)temperature / (float)TemperatureEnum.HEAT_STROKE.getUpperBound());
+										
+										return MathHelper.positiveModulo((float)d, 1.0333333f);
+									}
+									catch (NullPointerException e)
+									{
+										return 0.5f;
+									}
+									
+								}
 							}
-							catch (NullPointerException e)
-							{
-								return 0.5f;
-							}
-							
-						}
-					}
-				});
+						});
+			}
+		};
 	}
 
     @SubscribeEvent(priority = EventPriority.LOW)
