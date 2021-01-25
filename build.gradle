@@ -64,8 +64,6 @@ minecraft {
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
-            
-            property 'mixin.env.disableRefMap', 'true'
 
             mods {
                 survivaloverhaul {
@@ -140,7 +138,7 @@ jar {
         attributes([
             "Specification-Title": "survivaloverhaul",
             "Specification-Vendor": "Icey",
-            "Specification-Version": "0.2.2", // yeah
+            "Specification-Version": "0.2.3", // yeah
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"Icey",

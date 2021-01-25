@@ -6,7 +6,6 @@ import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.common.temperature.*;
-import icey.survivaloverhaul.common.temperature.dynamic.*;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
