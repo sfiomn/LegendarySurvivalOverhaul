@@ -26,12 +26,12 @@ public class TemperatureModifierRegistry
 		public static final ModifierBase ARMOR = new ArmorModifier();
 		public static final ModifierBase ON_FIRE = new OnFireModifier();
 		public static final ModifierBase WEATHER = new WeatherModifier();
+		public static final ModifierBase PLAYER_HUDDLING = new PlayerHuddlingModifier();
 	}
 	
 	public static class DynamicModifierList
 	{
-		// This is broken, don't use it
-		// public static final DynamicModifierBase ARMOR_INSULATION = new ArmorInsulationModifier();
+		
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

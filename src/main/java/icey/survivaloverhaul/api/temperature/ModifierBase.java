@@ -13,8 +13,6 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> implements ITemperatureModifier
 {
-	
-	
 	/**
 	 * Unique World Modifiers
 	 * 
@@ -30,6 +28,7 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> impl
 	 * 
 	 * Blocks
 	 * Tile Entities
+	 * Player Huddling?
 	 * --
 	 * Unique Player Modifiers
 	 * 

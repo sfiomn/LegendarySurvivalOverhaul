@@ -75,9 +75,7 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> timeShadeModifier;
 		
 		public final ForgeConfigSpec.ConfigValue<Double> altitudeModifier;
-		
 		public final ForgeConfigSpec.ConfigValue<Double> sprintModifier;
-		
 		public final ForgeConfigSpec.ConfigValue<Double> onFireModifier;
 		
 		public final ForgeConfigSpec.ConfigValue<Integer> minTickRate;
@@ -89,6 +87,9 @@ public class Config
 
 		public final ForgeConfigSpec.ConfigValue<Double> rainTemperatureModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> snowTemperatureModifier;
+
+		public final ForgeConfigSpec.ConfigValue<Double> playerHuddlingModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> playerHuddlingRadius;
 		
 		public final ForgeConfigSpec.ConfigValue<Boolean> seasonTemperatureEffects;
 		
@@ -156,6 +157,15 @@ public class Config
 					.comment(" How much of an effect sprinting has on a player's temperature.")
 					.define("Player Sprint Modifier", 1.5d);
 			
+			builder.push("huddling");
+			playerHuddlingModifier = builder
+					.comment(new String[] { " How much nearby players increase the ambient temperature by.", " Note that this value stacks!" })
+					.define("Player Huddling Modifier", 0.333d);
+			playerHuddlingRadius = builder
+					.comment(" The radius, in blocks, around which players will add to each other's temperature.")
+					.defineInRange("Player Huddling Radius", 1, 0, 10);
+			builder.pop();
+			
 			builder.push("environment");
 			altitudeModifier = builder
 					.comment(" How much the effects of the player's altitude on temperature are multiplied.")
@@ -195,10 +205,10 @@ public class Config
 			
 			builder.push("advanced");
 			tempInfluenceHorizontalDist = builder
-					.comment(" Maximum horizontal distance where heat sources will have an effect on temperature.")
+					.comment(" Maximum horizontal distance, in blocks, where heat sources will have an effect on temperature.")
 					.defineInRange("Temperature Influence Horizontal Distance", 3, 1, 10);
 			tempInfluenceVerticalDist = builder
-					.comment(" Maximum vertical distance where heat sources will have an effect on temperature.")
+					.comment(" Maximum vertical distance, in blocks, where heat sources will have an effect on temperature.")
 					.defineInRange("Temperature Influence Vertical Distance", 2, 1, 10);
 			builder.push("tickrate");
 			maxTickRate = builder
@@ -214,7 +224,7 @@ public class Config
 			
 			builder.push("seasons");
 			seasonTemperatureEffects = builder
-					.comment(new String[] {" If Serene Seasons is installed,", " then seasons will have an effect on the player's temperature."})
+					.comment(new String[] {" If Serene Seasons is installed, then seasons", " will have an effect on the player's temperature."})
 					.define("Seasons affect Temperature", true);
 			
 			builder.comment("Temperature modifiers per season in temperate biomes.").push("temperate");
@@ -255,7 +265,7 @@ public class Config
 			heartsLostOnDeath = builder
 					.comment(new String[] {
 							" The number of additional hearts lost on death.",
-							" Set to -1 to lose all additional hearts on death.",
+							" Set to -1 to force loss of  all additional hearts on death.",
 							" Set to 0 to make additional hearts permanent."
 					})
 					.defineInRange("Hearts Lost On Death", -1, -1, Integer.MAX_VALUE);
@@ -365,6 +375,9 @@ public class Config
 		public static double sprintModifier;
 		public static double onFireModifier;
 		
+		public static double playerHuddlingModifier;
+		public static int playerHuddlingRadius;
+		
 		public static int earlySpringModifier;
 		public static int midSpringModifier;
 		public static int lateSpringModifier;
@@ -387,6 +400,7 @@ public class Config
 		public static int additionalHeartsPerFruit;
 		public static boolean heartFruitsGiveRegen;
 		
+		// Client Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
@@ -419,8 +433,6 @@ public class Config
 				biomeTimeMultiplier = COMMON.biomeTimeMultiplier.get();
 				timeShadeModifier = COMMON.timeShadeModifier.get();
 				
-				sprintModifier = COMMON.sprintModifier.get();
-				
 				tempInfluenceHorizontalDist = COMMON.tempInfluenceHorizontalDist.get();
 				tempInfluenceVerticalDist = COMMON.tempInfluenceVerticalDist.get();
 				minTickRate = COMMON.minTickRate.get();
@@ -428,6 +440,10 @@ public class Config
 				routinePacketSync = COMMON.routinePacketSync.get();
 				
 				onFireModifier = COMMON.onFireModifier.get();
+				sprintModifier = COMMON.sprintModifier.get();
+				
+				playerHuddlingModifier = COMMON.playerHuddlingModifier.get();
+				playerHuddlingRadius = COMMON.playerHuddlingRadius.get();
 				
 				seasonTemperatureEffects = COMMON.seasonTemperatureEffects.get();
 				
