@@ -50,12 +50,12 @@ public class ModCapabilities
 		if (world.isRemote)
 			return;
 		
-		if (Config.BakedConfigValues.temperatureEnabled && !shouldSkipTick(player))
+		if (Config.Baked.temperatureEnabled && !shouldSkipTick(player))
 		{
 			TemperatureCapability tempCap = TemperatureCapability.getTempCapability(player);
 			tempCap.tickUpdate(player, world, event.phase);
 			
-			if(event.phase == Phase.START && (tempCap.isDirty() || tempCap.getPacketTimer() % Config.BakedConfigValues.routinePacketSync == 0))
+			if(event.phase == Phase.START && (tempCap.isDirty() || tempCap.getPacketTimer() % Config.Baked.routinePacketSync == 0))
 			{
 				tempCap.setClean();
 				sendTemperatureUpdate(player);
@@ -74,11 +74,11 @@ public class ModCapabilities
 		
 		if (event.isWasDeath())
 		{
-			if (Config.BakedConfigValues.heartsLostOnDeath != -1)
+			if (Config.Baked.heartsLostOnDeath != -1)
 			{
 				int oldHearts = origCap.getAdditionalHearts();
 				
-				newCap.setMaxHealth(oldHearts - Config.BakedConfigValues.heartsLostOnDeath);
+				newCap.setMaxHealth(oldHearts - Config.Baked.heartsLostOnDeath);
 				
 				newCap.updateMaxHealth(player.getEntityWorld(), player);
 			}
@@ -114,9 +114,9 @@ public class ModCapabilities
 	public static void syncCapsOnDimensionChange(PlayerChangedDimensionEvent event)
 	{
 		PlayerEntity player = event.getPlayer();
-		if (Config.BakedConfigValues.temperatureEnabled)
+		if (Config.Baked.temperatureEnabled)
 				sendTemperatureUpdate(player);
-		if (Config.BakedConfigValues.heartFruitsEnabled)
+		if (Config.Baked.heartFruitsEnabled)
 				sendHeartsUpdate(player);
 	}
 
@@ -124,9 +124,9 @@ public class ModCapabilities
 	public static void syncCapsOnLogin(PlayerLoggedInEvent event)
 	{
 		PlayerEntity player = event.getPlayer();
-		if (Config.BakedConfigValues.temperatureEnabled)
+		if (Config.Baked.temperatureEnabled)
 				sendTemperatureUpdate(player);
-		if (Config.BakedConfigValues.heartFruitsEnabled)
+		if (Config.Baked.heartFruitsEnabled)
 				sendHeartsUpdate(player);
 	}
 	

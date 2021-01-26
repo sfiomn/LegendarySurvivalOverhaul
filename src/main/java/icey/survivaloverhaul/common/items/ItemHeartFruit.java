@@ -32,17 +32,17 @@ public class ItemHeartFruit extends Item
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World world, LivingEntity entity)
 	{
-		if (entity instanceof PlayerEntity && Config.BakedConfigValues.heartFruitsEnabled)
+		if (entity instanceof PlayerEntity && Config.Baked.heartFruitsEnabled)
 		{
 			PlayerEntity player = (PlayerEntity) entity;
 			HeartModifierCapability cap = HeartModifierCapability.getHeartModCapability(player);
 			
 			if (!world.isRemote)
 			{
-				cap.addMaxHealth(Config.BakedConfigValues.additionalHeartsPerFruit);
+				cap.addMaxHealth(Config.Baked.additionalHeartsPerFruit);
 				cap.updateMaxHealth(world, player);
 				
-				if (Config.BakedConfigValues.heartFruitsGiveRegen)
+				if (Config.Baked.heartFruitsGiveRegen)
 				{
 					player.addPotionEffect(new EffectInstance(Effects.REGENERATION, 200, 2));
 				}

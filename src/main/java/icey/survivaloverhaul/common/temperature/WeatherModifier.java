@@ -26,11 +26,11 @@ public class WeatherModifier extends ModifierBase
 			
 			if (biome.getPrecipitation() == RainType.SNOW)
 			{
-				return (float) Config.BakedConfigValues.snowTemperatureModifier;
+				return (float) Config.Baked.snowTemperatureModifier;
 			}
 			else if (biome.getPrecipitation() == RainType.RAIN)
 			{
-				return (float) Config.BakedConfigValues.rainTemperatureModifier;
+				return (float) Config.Baked.rainTemperatureModifier;
 			}
 		}
 		

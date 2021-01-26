@@ -45,29 +45,29 @@ public class SereneSeasonModifier extends ModifierBase
 		switch(seasonState.getSubSeason())
 		{
 		case EARLY_SPRING:
-			return Config.BakedConfigValues.earlySpringModifier;
+			return Config.Baked.earlySpringModifier;
 		case MID_SPRING:
-			return Config.BakedConfigValues.midSpringModifier;
+			return Config.Baked.midSpringModifier;
 		case LATE_SPRING:
-			return Config.BakedConfigValues.lateSpringModifier;
+			return Config.Baked.lateSpringModifier;
 		case EARLY_SUMMER:
-			return Config.BakedConfigValues.earlySummerModifier;
+			return Config.Baked.earlySummerModifier;
 		case MID_SUMMER:
-			return Config.BakedConfigValues.midSummerModifier;
+			return Config.Baked.midSummerModifier;
 		case LATE_SUMMER:
-			return Config.BakedConfigValues.lateSummerModifier;
+			return Config.Baked.lateSummerModifier;
 		case EARLY_AUTUMN:
-			return Config.BakedConfigValues.earlyAutumnModifier;
+			return Config.Baked.earlyAutumnModifier;
 		case MID_AUTUMN:
-			return Config.BakedConfigValues.midAutumnModifier;
+			return Config.Baked.midAutumnModifier;
 		case LATE_AUTUMN:
-			return Config.BakedConfigValues.lateAutumnModifier;
+			return Config.Baked.lateAutumnModifier;
 		case EARLY_WINTER:
-			return Config.BakedConfigValues.earlyWinterModifier;
+			return Config.Baked.earlyWinterModifier;
 		case MID_WINTER:
-			return Config.BakedConfigValues.midWinterModifier;
+			return Config.Baked.midWinterModifier;
 		case LATE_WINTER:
-			return Config.BakedConfigValues.lateWinterModifier;
+			return Config.Baked.lateWinterModifier;
 		default:
 			return 0.0f;
 		}

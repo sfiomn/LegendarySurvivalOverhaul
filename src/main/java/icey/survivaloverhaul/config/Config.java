@@ -334,7 +334,7 @@ public class Config
 		}
 	}
 	
-	public static class BakedConfigValues
+	public static class Baked
 	{
 		public static boolean temperatureEnabled;
 		

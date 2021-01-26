@@ -84,8 +84,8 @@ public class BlockModifier extends ModifierBase
 	{
 		// We don't use a MutableBoundingBox since it's easier to conceptualize
 		
-		int horizontalDist = Config.BakedConfigValues.tempInfluenceHorizontalDist;
-		int verticalDist = Config.BakedConfigValues.tempInfluenceVerticalDist;
+		int horizontalDist = Config.Baked.tempInfluenceHorizontalDist;
+		int verticalDist = Config.Baked.tempInfluenceVerticalDist;
 		
 		for (int x = -horizontalDist; x <= horizontalDist; x++)
 		{
@@ -128,8 +128,8 @@ public class BlockModifier extends ModifierBase
 	
 	private void doFluidRoutine(World world, BlockPos pos)
 	{
-		int horizontalDist = Config.BakedConfigValues.tempInfluenceHorizontalDist;
-		int verticalDist = Config.BakedConfigValues.tempInfluenceVerticalDist;
+		int horizontalDist = Config.Baked.tempInfluenceHorizontalDist;
+		int verticalDist = Config.Baked.tempInfluenceVerticalDist;
 
 		for (int x = -horizontalDist; x <= horizontalDist; x++)
 		{

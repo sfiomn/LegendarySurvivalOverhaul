@@ -20,7 +20,7 @@ public class OnFireModifier extends ModifierBase
 	{
 		if (player.getFireTimer() > 0)
 		{
-			return (float) Config.BakedConfigValues.onFireModifier;
+			return (float) Config.Baked.onFireModifier;
 		}
 		
 		return 0.0f;

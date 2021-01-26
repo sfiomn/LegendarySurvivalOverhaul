@@ -26,19 +26,19 @@ public class TimeModifier extends ModifierBase
 		
 		long time = world.getWorldInfo().getDayTime();
 		
-		float timeTemperature = (Math.abs(((time % 12000.0f) - 6000.0f) / 6000.0f) - 1.0f) * (float) Config.BakedConfigValues.timeMultiplier;
+		float timeTemperature = (Math.abs(((time % 12000.0f) - 6000.0f) / 6000.0f) - 1.0f) * (float) Config.Baked.timeMultiplier;
 		
 		if (time < 12000)
 		{
 			timeTemperature *= -1.0f;
 		}
 		
-		float biomeMultiplier = 1.0f + (Math.abs(normalizeToPosNeg(getTempForBiome(world.getBiome(pos)))) * ((float)Config.BakedConfigValues.biomeTimeMultiplier - 1.0f));
+		float biomeMultiplier = 1.0f + (Math.abs(normalizeToPosNeg(getTempForBiome(world.getBiome(pos)))) * ((float)Config.Baked.biomeTimeMultiplier - 1.0f));
 		timeTemperature *= biomeMultiplier;
 		
-		if(timeTemperature > 0 && Config.BakedConfigValues.timeShadeModifier != 0 && !world.canSeeSky(pos.up()))
+		if(timeTemperature > 0 && Config.Baked.timeShadeModifier != 0 && !world.canSeeSky(pos.up()))
 		{
-			timeTemperature = Math.max(0, timeTemperature + Config.BakedConfigValues.timeShadeModifier);
+			timeTemperature = Math.max(0, timeTemperature + Config.Baked.timeShadeModifier);
 		}
 		
 		return applyUndergroundEffect(timeTemperature, world, pos);

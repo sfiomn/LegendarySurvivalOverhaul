@@ -18,7 +18,7 @@ public class SprintModifier extends ModifierBase
 	{
 		if (player.isSprinting())
 		{
-			return (float) Config.BakedConfigValues.sprintModifier;
+			return (float) Config.Baked.sprintModifier;
 		}
 		else 
 		{

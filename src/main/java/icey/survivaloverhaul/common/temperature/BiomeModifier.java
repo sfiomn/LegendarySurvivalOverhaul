@@ -67,6 +67,6 @@ public class BiomeModifier extends ModifierBase
 		
 		biomeAverage /= (float)(posOffsets.length);
 		
-		return applyUndergroundEffect(normalizeToPosNeg(biomeAverage) * ((float) Config.BakedConfigValues.biomeTemperatureMultiplier), world, pos);
+		return applyUndergroundEffect(normalizeToPosNeg(biomeAverage) * ((float) Config.Baked.biomeTemperatureMultiplier), world, pos);
 	}
 }

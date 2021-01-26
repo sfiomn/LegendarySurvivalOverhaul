@@ -61,7 +61,7 @@ public class TemperatureGUI
 	public static void renderHud(RenderGameOverlayEvent event)
 	{
 		if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE
-				&& Config.BakedConfigValues.temperatureEnabled 
+				&& Config.Baked.temperatureEnabled 
 				&& mc.playerController.gameIsSurvivalOrAdventure())
 		{
 			int scaledWidth = mc.getMainWindow().getScaledWidth();
@@ -82,7 +82,7 @@ public class TemperatureGUI
 	{
 		RenderSystem.enableBlend();
 		
-		switch (Config.BakedConfigValues.temperatureDisplayMode)
+		switch (Config.Baked.temperatureDisplayMode)
 		{
 		case SYMBOL:
 			drawAsSymbol(matrix, cap, width, height);
@@ -183,8 +183,8 @@ public class TemperatureGUI
 			}
 		}
 		
-		xOffset += Config.BakedConfigValues.temperatureDisplayOffsetX;
-		yOffset += Config.BakedConfigValues.temperatureDisplayOffsetY;
+		xOffset += Config.Baked.temperatureDisplayOffsetX;
+		yOffset += Config.Baked.temperatureDisplayOffsetY;
 		
 		if (frameCounter >= 22)
 		{

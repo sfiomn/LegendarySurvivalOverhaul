@@ -53,7 +53,7 @@ public class HeartModifierCapability implements IHeartModifierCapability
 	
 	public void setMaxHealth(int extraHearts)
 	{
-		this.extraHearts = MathHelper.clamp(extraHearts, 0, Config.BakedConfigValues.maxAdditionalHearts);
+		this.extraHearts = MathHelper.clamp(extraHearts, 0, Config.Baked.maxAdditionalHearts);
 	}
 	
 	public void addMaxHealth(int extraHearts)

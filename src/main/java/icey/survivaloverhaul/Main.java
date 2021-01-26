@@ -113,8 +113,8 @@ public class Main
 		
 		Config.register();
 		
-		Config.BakedConfigValues.bakeClient();
-		Config.BakedConfigValues.bakeCommon();
+		Config.Baked.bakeClient();
+		Config.Baked.bakeCommon();
 		
 		TemperatureUtil.internal = new TemperatureUtilInternal();
 		
@@ -220,7 +220,7 @@ public class Main
 					@Override
 					protected void apply(Void objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn)
 					{
-						Config.BakedConfigValues.bakeCommon();
+						Config.Baked.bakeCommon();
 						JsonConfigRegistration.init(modConfigJsons.toFile());
 					}
 			
@@ -233,7 +233,7 @@ public class Main
 		
 		if (config.getSpec() == Config.CLIENT_SPEC)
 		{
-			Config.BakedConfigValues.bakeClient();
+			Config.Baked.bakeClient();
 		}
 	}
 	

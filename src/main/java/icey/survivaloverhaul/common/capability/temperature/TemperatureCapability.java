@@ -230,8 +230,8 @@ public class TemperatureCapability implements ITemperatureCapability
 	
 	private int getTemperatureTickLimit()
 	{
-		int tickMax = Config.BakedConfigValues.maxTickRate;
-		int tickMin = Config.BakedConfigValues.minTickRate;
+		int tickMax = Config.Baked.maxTickRate;
+		int tickMin = Config.Baked.minTickRate;
 		
 		int tickrange = tickMax - tickMin;
 		
