@@ -44,5 +44,11 @@
 	
 	"death.attack.survivaloverhaul.hypothermia": "%1$s froze to death",
 	"death.attack.survivaloverhaul.hyperthermia": "%1$s couldn't take the heat",
-	"death.attack.survivaloverhaul.dehydration": "%1$s died of dehydration"
+	"death.attack.survivaloverhaul.dehydration": "%1$s died of dehydration",
+	
+	"advancements.adventure.have_a_heart.title": "Have a Heart",
+	"advancements.adventure.have_a_heart.description": "Find a Heart Fruit in a treasure chest",
+	
+	"advancements.adventure.eat_your_heart_out.title": "Eat Your Heart Out",
+	"advancements.adventure.eat_your_heart_out.description": "Acquire a full row of additional hearts from eating heart fruits"
 }
