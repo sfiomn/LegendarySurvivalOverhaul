@@ -1,7 +1,5 @@
 package icey.survivaloverhaul;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.resources.ReloadListener;
@@ -16,6 +14,7 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,7 +27,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.thread.SidedThreadGroups;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -53,11 +51,9 @@ import icey.survivaloverhaul.common.capability.heartmods.HeartModifierStorage;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
 import icey.survivaloverhaul.config.*;
-import icey.survivaloverhaul.config.json.JsonConfig;
 import icey.survivaloverhaul.config.json.JsonConfigRegistration;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.registry.BlockRegistry;
-import icey.survivaloverhaul.registry.FeatureRegistry;
 import icey.survivaloverhaul.registry.ItemRegistry;
 import icey.survivaloverhaul.util.WorldUtil;
 import icey.survivaloverhaul.util.internal.TemperatureUtilInternal;
