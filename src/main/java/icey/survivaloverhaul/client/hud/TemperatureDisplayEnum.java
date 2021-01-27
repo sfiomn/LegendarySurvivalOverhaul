@@ -22,9 +22,7 @@ public enum TemperatureDisplayEnum
 		for(TemperatureDisplayEnum tde : TemperatureDisplayEnum.values())
 		{
 			if (tde.displayType.equalsIgnoreCase(str))
-			{
 				return tde;
-			}
 		}
 		
 		return NONE;

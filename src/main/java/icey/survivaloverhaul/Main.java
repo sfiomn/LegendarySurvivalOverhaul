@@ -3,6 +3,7 @@ package icey.survivaloverhaul;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.resources.ReloadListener;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -26,9 +27,11 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistry;
@@ -41,6 +44,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.apache.logging.log4j.*;
+import org.lwjgl.glfw.GLFW;
 
 import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
@@ -48,6 +52,8 @@ import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierStorage;
+import icey.survivaloverhaul.common.capability.stamina.StaminaCapability;
+import icey.survivaloverhaul.common.capability.stamina.StaminaStorage;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
 import icey.survivaloverhaul.config.*;
@@ -96,13 +102,15 @@ public class Main
 	public static ForgeRegistry<ModifierBase> MODIFIERS;
 	public static ForgeRegistry<DynamicModifierBase> DYNAMIC_MODIFIERS;
 	
+	public static final KeyBinding KEY_CLIMB = new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory");
+	
 	public Main()
 	{
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModConfigEvent);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::buildRegistries);
 		// FMLJavaModLoadingContext.get().getModEventBus().addListener(this::biomeModification);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientEvents);
 		
 		
 		MinecraftForge.EVENT_BUS.register(this);
@@ -124,11 +132,14 @@ public class Main
 	public static final Capability<TemperatureCapability> TEMPERATURE_CAP = null;
 	@CapabilityInject(HeartModifierCapability.class)
 	public static final Capability<HeartModifierCapability> HEART_MOD_CAP = null;
+	@CapabilityInject(StaminaCapability.class)
+	public static final Capability<StaminaCapability> STAMINA_CAP = null;
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		CapabilityManager.INSTANCE.register(TemperatureCapability.class, new TemperatureStorage(), TemperatureCapability::new);
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
+		CapabilityManager.INSTANCE.register(StaminaCapability.class, new StaminaStorage(), StaminaCapability::new);
 		
 		NetworkHandler.register();
 		// FeatureRegistry.commonSetup(event);
@@ -140,12 +151,24 @@ public class Main
 		// FeatureRegistry.biomeModification(event);
 	}
 	
-	private void clientSetup(final FMLClientSetupEvent event)
+	private void clientEvents(final FMLClientSetupEvent event)
 	{
-		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> modelSetup());
+		event.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientModelSetup()));
+		event.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientKeyBindsSetup()));
+		
+		
 	}
 	
-	private static DistExecutor.SafeRunnable modelSetup()
+	@SubscribeEvent
+	public static void serverStarted(FMLServerStartedEvent event)
+	{
+		if (Config.COMMON.forceDisableFlightKick.get())
+		{
+			event.getServer().setAllowFlight(true);
+		}
+	}
+	
+	private static DistExecutor.SafeRunnable clientModelSetup()
 	{
 		return new DistExecutor.SafeRunnable()
 		{
@@ -197,7 +220,21 @@ public class Main
 			}
 		};
 	}
+	
+	private static DistExecutor.SafeRunnable clientKeyBindsSetup()
+	{
+		return new DistExecutor.SafeRunnable()
+		{
+			private static final long serialVersionUID = 1L;
 
+			@Override
+			public void run()
+			{
+				ClientRegistry.registerKeyBinding(KEY_CLIMB);
+			}
+		};
+	}
+	
     @SubscribeEvent(priority = EventPriority.LOW)
 	public void reloadListener(AddReloadListenerEvent event)
 	{
@@ -227,6 +264,7 @@ public class Main
 	{
 		final ModConfig config = event.getConfig();
 		
+		// Since client config is not shared, we want it to update instantly whenever it's saved
 		if (config.getSpec() == Config.CLIENT_SPEC)
 		{
 			Config.Baked.bakeClient();

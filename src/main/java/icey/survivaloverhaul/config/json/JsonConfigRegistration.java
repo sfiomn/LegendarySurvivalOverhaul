@@ -16,7 +16,6 @@ import com.google.gson.GsonBuilder;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
-import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;

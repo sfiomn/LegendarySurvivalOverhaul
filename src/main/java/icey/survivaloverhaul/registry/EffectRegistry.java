@@ -31,6 +31,8 @@ public class EffectRegistry
 		public static final Effect COLD_RESISTANCE = new ColdResistanceEffect();
 		public static final Effect HEAT_RESISTANCE = new HeatResistanceEffect();
 		
+		public static final Effect EXHAUSTION = new ExhaustionEffect();
+		
 		public static final Effect THIRST = new ThirstEffect();
 	}
 	

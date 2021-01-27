@@ -7,7 +7,6 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
-import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
@@ -83,7 +82,7 @@ public class JsonConfig
 		
 		final List<JsonTemperatureIdentity> currentList = armorTemperatures.get(registryName);
 		
-		JsonTemperatureIdentity result = new JsonArmorIdentity(temperature, identity);
+		JsonTemperatureIdentity result = new JsonTemperatureIdentity(temperature, identity);
 		
 		for (int i = 0; i < currentList.size(); i++)
 		{

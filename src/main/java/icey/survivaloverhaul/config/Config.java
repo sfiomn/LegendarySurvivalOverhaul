@@ -59,7 +59,12 @@ public class Config
 	
 	public static class Common
 	{
+		// Core/Advanced
 		
+		public final ForgeConfigSpec.ConfigValue<Boolean> forceDisableFlightKick;
+		public final ForgeConfigSpec.ConfigValue<Integer> minTickRate;
+		public final ForgeConfigSpec.ConfigValue<Integer> maxTickRate;
+		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
 		
 		// Temperature
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureEnabled;
@@ -77,10 +82,6 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Double> altitudeModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> sprintModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> onFireModifier;
-		
-		public final ForgeConfigSpec.ConfigValue<Integer> minTickRate;
-		public final ForgeConfigSpec.ConfigValue<Integer> maxTickRate;
-		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
 		
 		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceHorizontalDist;
 		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceVerticalDist;
@@ -118,11 +119,14 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> additionalHeartsPerFruit;
 		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsGiveRegen;
 		
+		// Stamina
+		public final ForgeConfigSpec.ConfigValue<Boolean> staminaEnabled;
+		
 		
 		Common(ForgeConfigSpec.Builder builder)
 		{
 			builder.comment(new String [] {
-							" Options related to enabling/disabling specific features",
+						" Options related to enabling/disabling specific features",
 						" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc.",
 						" To reload your JSONs, type /reload into chat with cheats enabled; The same way you reload datapacks, crafttweaker scripts, etc."
 					}).push("core");
@@ -132,6 +136,9 @@ public class Config
 			heartFruitsEnabled = builder
 					.comment(" Whether or not heart fruits are functional and generate in-world.")
 					.define("Heart Fruits Enabled", true);
+			staminaEnabled = builder
+					.comment(" Whether or not the stamina system is enabled.")
+					.define("Stamina Enabled", true);
 			
 			builder.push("advanced");
 			routinePacketSync = builder
@@ -139,6 +146,14 @@ public class Config
 							" How often player temperature is regularly synced between the client and server, in ticks.",
 							" Lower values will increase accuracy at the cost of performance"})
 					.define("Routine Packet Sync", 30);
+			forceDisableFlightKick = builder
+					.comment(new String[] 
+							{
+									" If true, Survival Overhaul will forcefully enable the \"allow-flight\" parameter in server.properties.",
+									" Useful if you keep getting kicked for flying when you're just trying to climb up a wall.",
+									" Disable only if you know what you're doing. Requires a server restart to take effect."
+							})
+					.define("Force Allow Flight", true);
 			builder.pop();
 			builder.pop();
 			
@@ -288,14 +303,12 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetY;
 		
-		/*
 		public final ForgeConfigSpec.ConfigValue<String> staminaDisplayMode;
 		public final ForgeConfigSpec.ConfigValue<Integer> staminaDisplayOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> staminaDisplayOffsetY;
 		
 		
 		public final ForgeConfigSpec.ConfigValue<Boolean> climbingKeyIsToggle;
-		*/
 		Client(ForgeConfigSpec.Builder builder)
 		{
 			
@@ -311,7 +324,7 @@ public class Config
 			temperatureDisplayOffsetY = builder
 					.define("Temperature Display Y Offset", 0);
 			builder.pop();
-			/*
+
 			builder.push("stamina");
 			staminaDisplayMode = builder
 					.comment("How stamina is displayed. Accepted values are \"ABOVE_ARMOR,\" \"BAR,\" and \"NONE.\"")
@@ -322,15 +335,12 @@ public class Config
 			staminaDisplayOffsetY = builder
 					.define("Stamina Display Y Offset", 0);
 			builder.pop();
-			*/
 			builder.pop();
-			/*
 			builder.comment("Options relating to accessibility").push("accessibility");
 			climbingKeyIsToggle = builder
 					.comment("If true, then you can press your climbing key once to activate it, rather than having to hold it down.")
 					.define("Climbing key is toggle", false);
 			builder.pop();
-			*/
 		}
 	}
 	
@@ -400,18 +410,18 @@ public class Config
 		public static int additionalHeartsPerFruit;
 		public static boolean heartFruitsGiveRegen;
 		
+		public static boolean staminaEnabled;
+		
 		// Client Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
 		
-		/*
 		public static StaminaDisplayEnum staminaDisplayMode;
 		public static int staminaDisplayOffsetX;
 		public static int staminaDisplayOffsetY;
 
 		public static boolean climbingKeyIsToggle;
-		*/
 		
 		public static void bakeCommon()
 		{
@@ -468,6 +478,8 @@ public class Config
 				maxAdditionalHearts = COMMON.maxAdditionalHearts.get();
 				additionalHeartsPerFruit = COMMON.additionalHeartsPerFruit.get();
 				heartFruitsGiveRegen = COMMON.heartFruitsGiveRegen.get();
+				
+				staminaEnabled = COMMON.staminaEnabled.get();
 			}
 			catch (Exception e)
 			{
@@ -484,13 +496,11 @@ public class Config
 				temperatureDisplayOffsetX = CLIENT.temperatureDisplayOffsetX.get();
 				temperatureDisplayOffsetY = CLIENT.temperatureDisplayOffsetY.get();
 				
-				/*
 				staminaDisplayMode = StaminaDisplayEnum.getDisplayFromString(CLIENT.staminaDisplayMode.get());
 				staminaDisplayOffsetX = CLIENT.staminaDisplayOffsetX.get();
 				staminaDisplayOffsetY = CLIENT.staminaDisplayOffsetY.get();
 				
 				climbingKeyIsToggle = CLIENT.climbingKeyIsToggle.get();
-				*/
 			}
 			catch (Exception e)
 			{

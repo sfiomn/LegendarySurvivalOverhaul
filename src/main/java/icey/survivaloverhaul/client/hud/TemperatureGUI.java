@@ -1,7 +1,5 @@
 package icey.survivaloverhaul.client.hud;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -12,26 +10,19 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.TemperatureEnum;
-import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.util.RenderUtil;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@SuppressWarnings("unused")
 @EventBusSubscriber(modid = Main.MOD_ID, bus = EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class TemperatureGUI
 {
@@ -43,7 +34,6 @@ public class TemperatureGUI
 	
 	public static final ResourceLocation ICONS = new ResourceLocation(Main.MOD_ID, "textures/gui/overlay.png");
 	
-	private static final int texturePosX = 0;
 	private static final int texturePosY = 48;
 	
 	private static final int textureWidth = 16;

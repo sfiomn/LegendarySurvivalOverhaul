@@ -11,6 +11,10 @@ import net.minecraft.world.biome.BiomeRegistry;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+/**
+ * 
+ * @author Icey
+ */
 public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> implements ITemperatureModifier
 {
 	/**
@@ -38,6 +42,9 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> impl
 	 * Windchill?
 	 */
 	
+	/**
+	 * Default temperature of the world. 
+	 */
 	protected final float defaultTemperature;
 	
 	public ModifierBase()
@@ -45,9 +52,17 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> impl
 		this.defaultTemperature = (TemperatureEnum.NORMAL.getUpperBound() + TemperatureEnum.COLD.getUpperBound()) / 2;
 	}
 	
+	/**
+	 * Returns temperature from factors based directly on the player, such as what items they
+	 * are holding, if they are sprinting, on fire, or what temporary modifiers they have. 
+	 */
 	@Override
 	public float getPlayerInfluence(PlayerEntity player) { return 0.0f; }
 	
+	/*
+	 * Returns temperature based on environmental factors, such as the biome at the given position,
+	 * proximity to hot/cold blocks, altitude, time, weather, etc.
+	 */
 	@Override
 	public float getWorldInfluence(World world, BlockPos pos) { return 0.0f; }
 	
@@ -64,7 +79,7 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> impl
 		
 		// If we're in a dimension that has a ceiling,
 		// then just return the default value.
-		if(!true|| world.getDimensionType().getHasCeiling())
+		if(world.getDimensionType().getHasCeiling())
 		{
 			return temperature;
 		}
@@ -90,8 +105,8 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> impl
 	
 	protected float getTempForBiome(Biome biome)
 	{
-		// Get the biome's temperature, clamp it between 0 and 1.35,
-		// and then normalize it to a value between 0 and 1.
+		// Get the biome's temperature, clamp it between 0 and 1.5,
+		// and then normalize it.
 		
 		String name = biome.getRegistryName().toString();
 		

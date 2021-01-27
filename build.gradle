@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.2.4-beta'
+version = '0.3.0-beta'
 group = 'icey.survivaloverhaul' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'survivaloverhaul'
 
@@ -111,13 +111,16 @@ repositories {
 		name = "ModMaven"
 		url = "https://modmaven.k-4u.nl"
 	}
+	maven {
+        url = "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.5-36.0.4'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.0.7'
     
     runtimeOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:universal') // Serene Seasons
     compileOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:api') // Serene Seasons API
@@ -125,6 +128,8 @@ dependencies {
 	
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65:api")
+    
+    compile fg.deobf('curse.maven:obfuscate-289380:3169370') // Obfuscate
     
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
@@ -138,7 +143,7 @@ jar {
         attributes([
             "Specification-Title": "survivaloverhaul",
             "Specification-Vendor": "Icey",
-            "Specification-Version": "0.2.4", // yeah
+            "Specification-Version": "0.3.0", // yeah
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"Icey",

@@ -21,17 +21,6 @@ public final class CompatController
 			initRealisticTorches();
 		if (mods.isLoaded("byg"))
 			initBYG();
-		
-		/*
-		 * This bloats the size of the config file considerably
-		 * from ~2 KB all the way up to 49 KB
-		 * Plus it probably wouldn't be fun dealing with a ton of candles in a small area
-		 * 
-		if (mods.isLoaded("quark"))
-				initQuarkCandles();
-		if (mods.isLoaded("buzzier_bees"))
-				initBuzzierBeesCandles();
-		*/
 	}
 	
 	private static void initCreate()
