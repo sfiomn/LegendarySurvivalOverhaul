@@ -1,0 +1,48 @@
+{
+	"item.survivaloverhaul.canteen": "Фляга",
+	"item.survivaloverhaul.netherite_canteen": "Незеритовая фляга",
+	"item.survivaloverhaul.snow_head": "Зимняя Шапка",
+	"item.survivaloverhaul.snow_chest": "Зимняя Туника",
+	"item.survivaloverhaul.snow_legs": "Зимние штаны",
+	"item.survivaloverhaul.snow_feet": "Зимние Ботинки",
+	"item.survivaloverhaul.infernal_fern_leaf": "Адский Лист Папоротника",
+	"item.survivaloverhaul.stone_fern_leaf": "Каменный Лист Папоротника",
+	"item.survivaloverhaul.thermometer": "Термометр",
+	"item.survivaloverhaul.heart_fruit": "Сердечный фрукт",
+	
+	"block.survivaloverhaul.cinnabar_ore": "Киноварная руда",
+	"item.survivaloverhaul.mercury_paste": "Mercury Paste",
+	
+	"block.survivaloverhaul.heating_coil": "Нагревательная спираль",
+	"block.survivaloverhaul.cooling_coil": "Охлаждающая спираль",
+	
+	"item.minecraft.potion.effect.heat_resistance": "Зелье термостойкости",
+	"item.minecraft.potion.effect.cold_resistance": "Зелье холодостойкости",
+	"item.minecraft.potion.effect.heat_resistance_long": "Зелье термостойкости",
+	"item.minecraft.potion.effect.cold_resistance_long": "Зелье холодостойкости",
+	
+	"item.minecraft.splash_potion.effect.heat_resistance": "Взрывное зелье термостойкости",
+	"item.minecraft.splash_potion.effect.cold_resistance": "Взрывное зелье холодостойкости",
+	"item.minecraft.splash_potion.effect.heat_resistance_long": "Взрывное зелье термостойкости",
+	"item.minecraft.splash_potion.effect.cold_resistance_long": "Взрывное зелье холодостойкости",
+	
+	"item.minecraft.lingering_potion.effect.heat_resistance": "Оседающее зелье термостойоксти",
+	"item.minecraft.lingering_potion.effect.cold_resistance": "Оседающее зелье холодостойкости",
+	"item.minecraft.lingering_potion.effect.heat_resistance_long": "Оседающее зелье термостойоксти",
+	"item.minecraft.lingering_potion.effect.cold_resistance_long": "Оседающее зелье холодостойкости",
+	
+	"item.minecraft.tipped_arrow.effect.heat_resistance": "Стрелка термостойкости",
+	"item.minecraft.tipped_arrow.effect.cold_resistance": "Стрела холодостойкости",
+	"item.minecraft.tipped_arrow.effect.heat_resistance_long": "Стрелка термостойкости",
+	"item.minecraft.tipped_arrow.effect.cold_resistance_long": "Стрела холодостойкости",
+	
+	"effect.survivaloverhaul.heat_stroke": "Тепловой удар",
+	"effect.survivaloverhaul.frostbite": "Обморожение",
+	"effect.survivaloverhaul.heat_resist": "Теплостойкость",
+	"effect.survivaloverhaul.cold_resist": "Холодостойкость",
+	"effect.survivaloverhaul.thirst": "Жажда",
+	
+	"death.attack.survivaloverhaul.hypothermia": "%1$s замёрз насмерть",
+	"death.attack.survivaloverhaul.hyperthermia": "%1$s не перенёс жары",
+	"death.attack.survivaloverhaul.dehydration": "%1$s умер от обезвоживания"
+}
