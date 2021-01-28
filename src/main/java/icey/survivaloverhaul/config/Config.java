@@ -142,9 +142,11 @@ public class Config
 			
 			builder.push("advanced");
 			routinePacketSync = builder
-					.comment(new String[] {
-							" How often player temperature is regularly synced between the client and server, in ticks.",
-							" Lower values will increase accuracy at the cost of performance"})
+					.comment(new String[] 
+							{
+									" How often player temperature is regularly synced between the client and server, in ticks.",
+									" Lower values will increase accuracy at the cost of performance"
+							})
 					.define("Routine Packet Sync", 30);
 			forceDisableFlightKick = builder
 					.comment(new String[] 
@@ -275,22 +277,22 @@ public class Config
 			builder.comment(" Options relating to heart fruits").push("heart-fruits");
 			
 			maxAdditionalHearts = builder
-					.comment("Maximum number of additional hearts that can be given by Heart Fruits.")
+					.comment(" Maximum number of additional hearts that can be given by Heart Fruits.")
 					.defineInRange("Maximum Additional Hearts", 10, 1, Integer.MAX_VALUE);
 			heartsLostOnDeath = builder
 					.comment(new String[] {
 							" The number of additional hearts lost on death.",
-							" Set to -1 to force loss of  all additional hearts on death.",
+							" Set to -1 to force loss of all additional hearts on death.",
 							" Set to 0 to make additional hearts permanent."
 					})
 					.defineInRange("Hearts Lost On Death", -1, -1, Integer.MAX_VALUE);
 			
 			builder.push("effects");
 			additionalHeartsPerFruit = builder
-					.comment("Amount of hearts gained from eating a Heart Fruit.")
+					.comment(" Amount of hearts gained from eating a Heart Fruit.")
 					.defineInRange("Additional Hearts Per Heart Fruit", 1, 1, Integer.MAX_VALUE);
 			heartFruitsGiveRegen = builder
-					.comment("Whether or not Heart Fruits give a strong regeneration effect.")
+					.comment(" Whether or not Heart Fruits give a strong regeneration effect.")
 					.define("Heart Fruits Give Regen", true);
 			builder.pop();
 			builder.pop();
