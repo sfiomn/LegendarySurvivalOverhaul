@@ -77,11 +77,4 @@ Making survival harder. Highly configurable so you can play the way you want.
     versionRange="[1.16.4-4.0.0.0,)"
     ordering="BEFORE"
     side="BOTH"
-    
-[[dependencies.survivaloverhaul]]
-    modId="obfuscate"
-    mandatory=true
-    versionRange="[0.6.0,)"
-    ordering="BEFORE"
-    side="BOTH"
 

@@ -25,6 +25,7 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -95,6 +96,7 @@ public class Main
 	 * stamina mechanics with my own.
 	 */
 	public static boolean paraglidersLoaded;
+	public static boolean curiosLoaded;
 	
 	public static Path configPath = FMLPaths.CONFIGDIR.get();
 	public static Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "survivaloverhaul");
@@ -113,6 +115,11 @@ public class Main
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::buildRegistries);
 		// FMLJavaModLoadingContext.get().getModEventBus().addListener(this::biomeModification);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientEvents);
+		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		bus.addListener(this::setup);
+		bus.addListener(this::onModConfigEvent);
+		bus.addListener(this::buildRegistries);
+		bus.addListener(this::clientEvents);
 		
 		
 		MinecraftForge.EVENT_BUS.register(this);
@@ -217,10 +224,13 @@ public class Main
 									
 								}
 							}
-						});
+						}
+				);
 			}
 		};
 	}
+	
+	public static KeyBinding KEY_CLIMB;
 	
 	private static DistExecutor.SafeRunnable clientKeyBindsSetup()
 	{
@@ -232,6 +242,7 @@ public class Main
 			public void run()
 			{
 				ClientRegistry.registerKeyBinding(new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory"));
+				KEY_CLIMB = new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory");
 			}
 		};
 	}

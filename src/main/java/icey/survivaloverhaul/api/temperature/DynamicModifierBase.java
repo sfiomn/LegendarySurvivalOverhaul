@@ -17,13 +17,13 @@ public class DynamicModifierBase extends ForgeRegistryEntry<DynamicModifierBase>
 	@Override
 	public float applyDynamicPlayerInfluence(PlayerEntity player, float currentTemperature)
 	{
-		return currentTemperature;
+		return 0.0f;
 	}
 
 	@Override
 	public float applyDynamicWorldInfluence(World world, BlockPos pos, float currentTemperature)
 	{
-		return currentTemperature;
+		return 0.0f;
 	}
 
 }

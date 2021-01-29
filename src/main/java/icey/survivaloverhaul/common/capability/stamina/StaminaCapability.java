@@ -30,6 +30,7 @@ public class StaminaCapability
 	private int packetTimer;
 	private PlayerState prevState;
 	private boolean prevIsClimbing;
+	private boolean climbingKeyHeld;
 	
 	private boolean movementNeedsSync;
 	private boolean positionNeedsSync;
@@ -68,6 +69,7 @@ public class StaminaCapability
 		}
 		
 		updateStamina(player, world);
+		updatePlayerState(player, world);
 	}
 	
 	public void clientTickUpdate(PlayerEntity player, World world, Phase phase)
@@ -78,12 +80,15 @@ public class StaminaCapability
 		}
 		
 		updateStamina(player, world);
+		updatePlayerState(player, world);
 		
 		if(!player.abilities.isCreativeMode && isDepleted())
 		{
 			player.setSprinting(false);
 			player.setSwimming(false);
 		}
+		
+		
 	}
 	
 	protected void updateStamina(PlayerEntity player, World world)
@@ -94,7 +99,12 @@ public class StaminaCapability
 			
 			if (!isDepleted && state.isClimbing())
 			{
-				addStamina(-state.action.change);
+				replenishTimer++;
+				if (replenishTimer >= REPLENISH_TIMER_LIMIT)
+				{
+					addStamina(-state.action.change);
+					replenishTimer = 0;
+				}
 			}
 				
 		}
@@ -108,6 +118,7 @@ public class StaminaCapability
 				if (replenishTimer >= REPLENISH_TIMER_LIMIT)
 				{
 					addStamina(state.action.change);
+					replenishTimer = 0;
 				}
 			}
 		}
@@ -125,6 +136,9 @@ public class StaminaCapability
 			BlockPos pos = player.getPosition();
 			BlockPos posUp = pos.up();
 			Direction facing = player.getHorizontalFacing();
+			
+			BlockPos lowerClimbingBlock = pos.add(facing.getDirectionVec());
+			BlockPos upperClimbingBlock = posUp.add(facing.getDirectionVec());
 		}
 		
 		if (player.isSprinting()) 

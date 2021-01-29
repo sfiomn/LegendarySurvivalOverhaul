@@ -4,44 +4,44 @@ import java.util.List;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
-import icey.survivaloverhaul.api.config.json.temperature.JsonTemperatureIdentity;
+import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
+import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
+import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.config.json.JsonConfig;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 
-public class ArmorModifier extends ModifierBase
+public class ArmorInsulationModifier extends ModifierBase
 {
-	public ArmorModifier()
+	public ArmorInsulationModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "armor");
+		this.setRegistryName(Main.MOD_ID, "armor_insulation");
 	}
 	
 	@Override
 	public float getPlayerInfluence(PlayerEntity player)
 	{
-		float value = 0.0f;
-		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.HEAD));
-		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.CHEST));
-		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.LEGS));
-		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.FEET));
-		return value;
+		int worldTemperature = TemperatureUtil.getWorldTemperature(player.world, player.getPosition());
+		int diff = TemperatureEnum.NORMAL.getMiddle() - worldTemperature;
+		
+		diff *= checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.HEAD));
+		diff *= checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.CHEST));
+		diff *= checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.LEGS));
+		diff *= checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.FEET));
+		
+		return -diff;
 	}
 	
 	private float checkArmorSlot(ItemStack stack)
 	{
 		if (stack.isEmpty())
-				return 0.0f;
+				return 1.0f;
 		
-		float sum = 0.0f;
-		
-		sum += processStackJson(stack);
-		sum += TemperatureUtil.getArmorTemperatureTag(stack);
-		
-		return sum;
+		return (float) Math.sqrt(Math.sqrt(processStackJson(stack)));
 	}
 	
 	private float processStackJson(ItemStack stack)
@@ -57,7 +57,7 @@ public class ArmorModifier extends ModifierBase
 				
 				if (jtm.matches(stack))
 				{
-					return jtm.temperature;
+					return jtm.insulation;
 				}
 			}
 		}

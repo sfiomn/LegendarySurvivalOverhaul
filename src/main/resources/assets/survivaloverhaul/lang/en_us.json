@@ -1,10 +1,17 @@
 {
 	"item.survivaloverhaul.canteen": "Canteen",
 	"item.survivaloverhaul.netherite_canteen": "Netherite Canteen",
+	
 	"item.survivaloverhaul.snow_head": "Snow Hat",
 	"item.survivaloverhaul.snow_chest": "Snow Tunic",
 	"item.survivaloverhaul.snow_legs": "Snow Pants",
 	"item.survivaloverhaul.snow_feet": "Snow Boots",
+	
+	"item.survivaloverhaul.desert_head": "Desert Cap",
+	"item.survivaloverhaul.desert_chest": "Desert Shirt",
+	"item.survivaloverhaul.desert_legs": "Desert Tunic",
+	"item.survivaloverhaul.desert_feet": "Desert Sandals",
+	
 	"item.survivaloverhaul.infernal_fern_leaf": "Infernal Fern Leaf",
 	"item.survivaloverhaul.stone_fern_leaf": "Stone Fern Leaf",
 	"item.survivaloverhaul.thermometer": "Thermometer",
@@ -57,5 +64,9 @@
 	"advancements.adventure.eat_your_heart_out.title": "Eat Your Heart Out",
 	"advancements.adventure.eat_your_heart_out.description": "Acquire a full row of additional hearts from eating heart fruits",
 	
-	"key.survivaloverhaul.climb": "Climb"
+	"key.survivaloverhaul.climb": "Climb",
+	
+	"survivaloverhaul.armorTooltip.heating": "Heating",
+	"survivaloverhaul.armorTooltip.cooling": "Cooling",
+	"survivaloverhaul.armorTooltip.insulation": "Insulation"
 }

@@ -24,11 +24,11 @@ public class WeatherModifier extends ModifierBase
 		{
 			Biome biome = world.getBiome(pos);
 			
-			if (biome.getPrecipitation() == RainType.SNOW)
+			if (biome.getTemperature(pos) < 0.15f)
 			{
 				return (float) Config.Baked.snowTemperatureModifier;
 			}
-			else if (biome.getPrecipitation() == RainType.RAIN)
+			else if (biome.getTemperature(pos) >= 0.15f)
 			{
 				return (float) Config.Baked.rainTemperatureModifier;
 			}

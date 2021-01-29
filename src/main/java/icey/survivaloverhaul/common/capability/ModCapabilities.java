@@ -43,7 +43,7 @@ public class ModCapabilities
 		{
 			event.addCapability(TEMPERATURE_RES, new TemperatureProvider());
 			event.addCapability(HEART_MOD_RES, new HeartModifierProvider());
-			event.addCapability(STAMINA_RES, new StaminaProvider());
+			// event.addCapability(STAMINA_RES, new StaminaProvider());
 		}
 	}
 
@@ -56,13 +56,13 @@ public class ModCapabilities
 		if (world.isRemote)
 		{
 			// Client Side
-			
+			/*
 			if (Config.Baked.staminaEnabled && !shouldSkipTick(player))
 			{
 				StaminaCapability staminaCap = StaminaCapability.getStaminaCapability(player);
 				staminaCap.clientTickUpdate(player, world, event.phase);
 			}
-			
+			*/
 			return;
 		}
 		else
@@ -80,7 +80,7 @@ public class ModCapabilities
 					sendTemperatureUpdate(player);
 				}
 			}
-			
+			/*
 			if (Config.Baked.staminaEnabled && !shouldSkipTick(player))
 			{
 				StaminaCapability staminaCap = StaminaCapability.getStaminaCapability(player);
@@ -91,6 +91,7 @@ public class ModCapabilities
 					sendStaminaUpdate(player);
 				}
 			}
+			*/
 		}
 	}
 
@@ -124,7 +125,7 @@ public class ModCapabilities
 				newCap.load(oldCap.save());
 				sendTemperatureUpdate(player);
 			}
-			
+			/*
 			if (Config.Baked.staminaEnabled)
 			{
 				StaminaCapability oldCap = StaminaCapability.getStaminaCapability(orig);
@@ -132,6 +133,7 @@ public class ModCapabilities
 				newCap.load(oldCap.save());
 				sendStaminaUpdate(player);
 			}
+			*/
 			
 			if (Config.Baked.heartFruitsEnabled)
 			{
@@ -182,8 +184,10 @@ public class ModCapabilities
 			sendTemperatureUpdate(player);
 		if (Config.Baked.heartFruitsEnabled)
 			sendHeartsUpdate(player);
+		/*
 		if (Config.Baked.staminaEnabled)
 			sendStaminaUpdate(player);
+		*/
 	}
 
 	@SubscribeEvent
@@ -194,8 +198,10 @@ public class ModCapabilities
 			sendTemperatureUpdate(player);
 		if (Config.Baked.heartFruitsEnabled)
 			sendHeartsUpdate(player);
+		/*
 		if (Config.Baked.staminaEnabled)
 			sendStaminaUpdate(player);
+		*/
 	}
 	
 	protected static boolean shouldSkipTick(PlayerEntity player)

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import icey.survivaloverhaul.Main;
+import icey.survivaloverhaul.config.Config;
 import net.minecraft.loot.LootEntry;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.TableLootEntry;
@@ -33,7 +34,7 @@ public class LootTableInjectors
 		{
 			String location = name.substring(name.indexOf(prefix) + prefix.length());
 			
-			if (HEART_FRUIT_LOOT_TABLES.contains(location))
+			if (Config.Baked.heartFruitsEnabled && HEART_FRUIT_LOOT_TABLES.contains(location))
 			{
 				event.getTable().addPool(getInjectPool("heart_fruits"));
 			}

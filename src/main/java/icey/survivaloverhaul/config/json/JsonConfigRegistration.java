@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
+import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
@@ -32,8 +33,6 @@ public class JsonConfigRegistration
 	public static void init(File configDir)
 	{
 		registerTemperatures(configDir);
-		
-		CompatController.initCompat(configDir);
 		
 		processAllJson(configDir);
 	}
@@ -80,16 +79,28 @@ public class JsonConfigRegistration
 		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_chest", 3.0f);
 		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_head", 1.5f);
 		
-		JsonConfig.registerArmorTemperature("minecraft:leather_boots", 0.25f);
-		JsonConfig.registerArmorTemperature("minecraft:leather_leggings", 0.75f);
-		JsonConfig.registerArmorTemperature("minecraft:leather_chestplate", 1.0f);
-		JsonConfig.registerArmorTemperature("minecraft:leather_helmet", 0.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_feet", -0.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_legs", -2.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_chest", -3.0f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_head", -1.5f);
+		
+		JsonConfig.registerArmorTemperature("minecraft:leather_boots", 0.25f, 0.9f);
+		JsonConfig.registerArmorTemperature("minecraft:leather_leggings", 0.75f, 0.9f);
+		JsonConfig.registerArmorTemperature("minecraft:leather_chestplate", 1.0f, 0.9f);
+		JsonConfig.registerArmorTemperature("minecraft:leather_helmet", 0.5f, 0.9f);
+		
+		JsonConfig.registerArmorTemperature("minecraft:iron_boots", 0f, 1.2f);
+		JsonConfig.registerArmorTemperature("minecraft:iron_leggings", 0f, 1.2f);
+		JsonConfig.registerArmorTemperature("minecraft:iron_chestplate", 0f, 1.2f);
+		JsonConfig.registerArmorTemperature("minecraft:iron_helmet", 0f, 1.2f);
 		
 		JsonConfig.registerBiomeOverride("minecraft:crimson_forest", 0.75f, false);
 		JsonConfig.registerBiomeOverride("minecraft:warped_forest", 0.75f, false);
 		JsonConfig.registerBiomeOverride("minecraft:nether_wastes", 1.0f, false);
 		JsonConfig.registerBiomeOverride("minecraft:soul_sand_valley", 1.0f, false);
 		JsonConfig.registerBiomeOverride("minecraft:basalt_deltas", 1.15f, false);
+		
+		CompatController.initCompat(configDir);
 	}
 	
 	public static void clearContainers()
@@ -102,18 +113,18 @@ public class JsonConfigRegistration
 	
 	public static void processAllJson(File jsonDir)
 	{
-		Map<String, List<JsonTemperatureIdentity>> jsonArmorTemperatures = processJson(JsonFileName.ARMOR, JsonConfig.armorTemperatures, jsonDir, true);
+		Map<String, List<JsonArmorIdentity>> jsonArmorTemperatures = processJson(JsonFileName.ARMOR, JsonConfig.armorTemperatures, jsonDir, true);
 		
 		if (jsonArmorTemperatures != null)
 		{
-			for (Map.Entry<String, List<JsonTemperatureIdentity>> entry : jsonArmorTemperatures.entrySet())
+			for (Map.Entry<String, List<JsonArmorIdentity>> entry : jsonArmorTemperatures.entrySet())
 			{
-				for (JsonTemperatureIdentity jtm : entry.getValue())
+				for (JsonArmorIdentity jtm : entry.getValue())
 				{
 					if (jtm.identity != null)
 							jtm.identity.tryPopulateCompound();
 					
-					JsonConfig.registerArmorTemperature(entry.getKey(), jtm.temperature, jtm.identity == null ? DEFAULT_ITEM_IDENTITY : jtm.identity);
+					JsonConfig.registerArmorTemperature(entry.getKey(), jtm.temperature, jtm.insulation, jtm.identity == null ? DEFAULT_ITEM_IDENTITY : jtm.identity);
 				}
 			}
 		}

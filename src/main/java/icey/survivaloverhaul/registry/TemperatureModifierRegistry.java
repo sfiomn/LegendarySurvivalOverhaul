@@ -27,6 +27,8 @@ public class TemperatureModifierRegistry
 		public static final ModifierBase ON_FIRE = new OnFireModifier();
 		public static final ModifierBase WEATHER = new WeatherModifier();
 		public static final ModifierBase PLAYER_HUDDLING = new PlayerHuddlingModifier();
+		// This is currently broken, I'll try implementing it later
+		// public static final ModifierBase ARMOR_INSULATION = new ArmorInsulationModifier();
 	}
 	
 	public static class DynamicModifierList

@@ -38,6 +38,11 @@ public class ModItemModelProvider extends ItemModelProvider
 		builder(itemGenerated, "snow_legs", "snow_pants");
 		builder(itemGenerated, "snow_feet", "snow_boots");
 		
+		builder(itemGenerated, "desert_head", "desert_hat");
+		builder(itemGenerated, "desert_chest", "desert_shirt");
+		builder(itemGenerated, "desert_legs", "desert_tunic");
+		builder(itemGenerated, "desert_feet", "desert_sandals");
+		
 		builder(itemGenerated, "heart_fruit", "heart_fruit");
 		/*
 		for (int i = 0; i < 30; i++)

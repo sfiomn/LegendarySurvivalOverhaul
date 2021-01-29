@@ -61,7 +61,7 @@ public class Config
 	{
 		// Core/Advanced
 		
-		public final ForgeConfigSpec.ConfigValue<Boolean> forceDisableFlightKick;
+		// public final ForgeConfigSpec.ConfigValue<Boolean> forceDisableFlightKick;
 		public final ForgeConfigSpec.ConfigValue<Integer> minTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> maxTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
@@ -78,7 +78,8 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Double> timeMultiplier;
 		public final ForgeConfigSpec.ConfigValue<Double> biomeTimeMultiplier;
 		public final ForgeConfigSpec.ConfigValue<Integer> timeShadeModifier;
-		
+
+		public final ForgeConfigSpec.ConfigValue<Double> wetMultiplier;
 		public final ForgeConfigSpec.ConfigValue<Double> altitudeModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> sprintModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> onFireModifier;
@@ -120,7 +121,7 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsGiveRegen;
 		
 		// Stamina
-		public final ForgeConfigSpec.ConfigValue<Boolean> staminaEnabled;
+		// public final ForgeConfigSpec.ConfigValue<Boolean> staminaEnabled;
 		
 		
 		Common(ForgeConfigSpec.Builder builder)
@@ -136,10 +137,11 @@ public class Config
 			heartFruitsEnabled = builder
 					.comment(" Whether or not heart fruits are functional and generate in-world.")
 					.define("Heart Fruits Enabled", true);
+			/*
 			staminaEnabled = builder
 					.comment(" Whether or not the stamina system is enabled.")
 					.define("Stamina Enabled", true);
-			
+			*/
 			builder.push("advanced");
 			routinePacketSync = builder
 					.comment(new String[] 
@@ -148,6 +150,7 @@ public class Config
 									" Lower values will increase accuracy at the cost of performance"
 							})
 					.define("Routine Packet Sync", 30);
+			/*
 			forceDisableFlightKick = builder
 					.comment(new String[] 
 							{
@@ -156,6 +159,7 @@ public class Config
 									" Disable only if you know what you're doing. Requires a server restart to take effect."
 							})
 					.define("Force Allow Flight", true);
+					*/
 			builder.pop();
 			builder.pop();
 			
@@ -173,11 +177,14 @@ public class Config
 			sprintModifier = builder
 					.comment(" How much of an effect sprinting has on a player's temperature.")
 					.define("Player Sprint Modifier", 1.5d);
+			wetMultiplier = builder
+					.comment("How much being wet influences the player's temperature.")
+					.define("Wetness Modifier", -7.0d);
 			
 			builder.push("huddling");
 			playerHuddlingModifier = builder
 					.comment(new String[] { " How much nearby players increase the ambient temperature by.", " Note that this value stacks!" })
-					.define("Player Huddling Modifier", 0.333d);
+					.define("Player Huddling Modifier", 0.5d);
 			playerHuddlingRadius = builder
 					.comment(" The radius, in blocks, around which players will add to each other's temperature.")
 					.defineInRange("Player Huddling Radius", 1, 0, 10);
@@ -304,13 +311,13 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<String> temperatureDisplayMode;
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetY;
-		
+		/*
 		public final ForgeConfigSpec.ConfigValue<String> staminaDisplayMode;
 		public final ForgeConfigSpec.ConfigValue<Integer> staminaDisplayOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> staminaDisplayOffsetY;
 		
-		
 		public final ForgeConfigSpec.ConfigValue<Boolean> climbingKeyIsToggle;
+		*/
 		Client(ForgeConfigSpec.Builder builder)
 		{
 			
@@ -326,7 +333,7 @@ public class Config
 			temperatureDisplayOffsetY = builder
 					.define("Temperature Display Y Offset", 0);
 			builder.pop();
-
+			/*
 			builder.push("stamina");
 			staminaDisplayMode = builder
 					.comment("How stamina is displayed. Accepted values are \"ABOVE_ARMOR,\" \"BAR,\" and \"NONE.\"")
@@ -343,6 +350,7 @@ public class Config
 					.comment("If true, then you can press your climbing key once to activate it, rather than having to hold it down.")
 					.define("Climbing key is toggle", false);
 			builder.pop();
+			*/
 		}
 	}
 	
@@ -390,6 +398,8 @@ public class Config
 		public static double playerHuddlingModifier;
 		public static int playerHuddlingRadius;
 		
+		public static double wetMultiplier;
+		
 		public static int earlySpringModifier;
 		public static int midSpringModifier;
 		public static int lateSpringModifier;
@@ -418,13 +428,13 @@ public class Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
-		
+		/*
 		public static StaminaDisplayEnum staminaDisplayMode;
 		public static int staminaDisplayOffsetX;
 		public static int staminaDisplayOffsetY;
 
 		public static boolean climbingKeyIsToggle;
-		
+		*/
 		public static void bakeCommon()
 		{
 			try
@@ -453,6 +463,7 @@ public class Config
 				
 				onFireModifier = COMMON.onFireModifier.get();
 				sprintModifier = COMMON.sprintModifier.get();
+				wetMultiplier = COMMON.wetMultiplier.get();
 				
 				playerHuddlingModifier = COMMON.playerHuddlingModifier.get();
 				playerHuddlingRadius = COMMON.playerHuddlingRadius.get();
@@ -481,7 +492,7 @@ public class Config
 				additionalHeartsPerFruit = COMMON.additionalHeartsPerFruit.get();
 				heartFruitsGiveRegen = COMMON.heartFruitsGiveRegen.get();
 				
-				staminaEnabled = COMMON.staminaEnabled.get();
+				// staminaEnabled = COMMON.staminaEnabled.get();
 			}
 			catch (Exception e)
 			{
@@ -497,12 +508,13 @@ public class Config
 				temperatureDisplayMode = TemperatureDisplayEnum.getDisplayFromString(CLIENT.temperatureDisplayMode.get());
 				temperatureDisplayOffsetX = CLIENT.temperatureDisplayOffsetX.get();
 				temperatureDisplayOffsetY = CLIENT.temperatureDisplayOffsetY.get();
-				
+				/*
 				staminaDisplayMode = StaminaDisplayEnum.getDisplayFromString(CLIENT.staminaDisplayMode.get());
 				staminaDisplayOffsetX = CLIENT.staminaDisplayOffsetX.get();
 				staminaDisplayOffsetY = CLIENT.staminaDisplayOffsetY.get();
 				
 				climbingKeyIsToggle = CLIENT.climbingKeyIsToggle.get();
+				*/
 			}
 			catch (Exception e)
 			{

@@ -19,6 +19,7 @@ public class ItemRegistry
 {
 	// public static final Item EXAMPLE_ITEM = new ItemGeneric("example_item");
 	public static final ArmorMaterialBase CLOTH_ARMOR_MATERIAL = new ArmorMaterialBase("snow", 5.75f, new int[] { 1, 1, 2, 1}, 17, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0, 0.0f, null);
+	public static final ArmorMaterialBase DESERT_ARMOR_MATERIAL = new ArmorMaterialBase("desert", 5.75f, new int[] { 1, 1, 2, 1}, 19, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0, 0.0f, null);
 	
 	public static final Item MERCURY_PASTE = new ItemGeneric("mercury_paste", ItemGroup.MISC);
 	public static final Item THERMOMETER = new ItemGeneric("thermometer", ItemGroup.TOOLS);
@@ -30,6 +31,11 @@ public class ItemRegistry
 	public static final ArmorItem CLOTH_CHEST = new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.CHEST);
 	public static final ArmorItem CLOTH_LEGS = new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.LEGS);
 	public static final ArmorItem CLOTH_BOOTS = new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.FEET);
+	
+	public static final ArmorItem DESERT_HELMET = new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.HEAD);
+	public static final ArmorItem DESERT_CHEST = new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.CHEST);
+	public static final ArmorItem DESERT_LEGS = new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.LEGS);
+	public static final ArmorItem DESERT_BOOTS = new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.FEET);
 	
 	public static final Item HEART_FRUIT = new ItemHeartFruit();
 	
