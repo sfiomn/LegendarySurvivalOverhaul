@@ -110,11 +110,6 @@ public class Main
 	
 	public Main()
 	{
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModConfigEvent);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::buildRegistries);
-		// FMLJavaModLoadingContext.get().getModEventBus().addListener(this::biomeModification);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientEvents);
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		bus.addListener(this::setup);
 		bus.addListener(this::onModConfigEvent);
@@ -170,10 +165,7 @@ public class Main
 	@SubscribeEvent
 	public static void serverStarted(FMLServerStartedEvent event)
 	{
-		if (Config.COMMON.forceDisableFlightKick.get())
-		{
-			event.getServer().setAllowFlight(true);
-		}
+		
 	}
 	
 	private static DistExecutor.SafeRunnable clientModelSetup()
