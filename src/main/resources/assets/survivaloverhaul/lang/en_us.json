@@ -42,6 +42,10 @@
 	"effect.survivaloverhaul.cold_resist": "Cold Resistance",
 	"effect.survivaloverhaul.thirst": "Thirst",
 	
+	"enchantment.survivaloverhaul.adaptive_barrier": "Adaptive Thermal Barrier",
+	"enchantment.survivaloverhaul.thermal_barrier": "Thermal Barrier",
+	"enchantment.survivaloverhaul.cold_barrier": "Cold Barrier",
+	
 	"death.attack.survivaloverhaul.hypothermia": "%1$s froze to death",
 	"death.attack.survivaloverhaul.hyperthermia": "%1$s couldn't take the heat",
 	"death.attack.survivaloverhaul.dehydration": "%1$s died of dehydration",

@@ -1,5 +1,6 @@
 package icey.survivaloverhaul;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.resources.ReloadListener;
@@ -102,7 +103,8 @@ public class Main
 	public static ForgeRegistry<ModifierBase> MODIFIERS;
 	public static ForgeRegistry<DynamicModifierBase> DYNAMIC_MODIFIERS;
 	
-	public static final KeyBinding KEY_CLIMB = new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory");
+	//@OnlyIn(Dist.CLIENT)//broke on server, no longer using const :(
+	//public static final KeyBinding KEY_CLIMB = new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory");
 	
 	public Main()
 	{
@@ -126,6 +128,7 @@ public class Main
 		
 		if (sereneSeasonsLoaded)
 				LOGGER.debug("Serene Seasons is loaded, enabling compatability");
+		//System.out.println("Hello from " + MOD_ID);
 	}
 	
 	@CapabilityInject(TemperatureCapability.class)
@@ -142,7 +145,7 @@ public class Main
 		CapabilityManager.INSTANCE.register(StaminaCapability.class, new StaminaStorage(), StaminaCapability::new);
 		
 		NetworkHandler.register();
-		// FeatureRegistry.commonSetup(event);
+		//FeatureRegistry.commonSetup(event);
 	}
 	
 	@SuppressWarnings("unused")
@@ -155,8 +158,6 @@ public class Main
 	{
 		event.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientModelSetup()));
 		event.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientKeyBindsSetup()));
-		
-		
 	}
 	
 	@SubscribeEvent
@@ -230,7 +231,7 @@ public class Main
 			@Override
 			public void run()
 			{
-				ClientRegistry.registerKeyBinding(KEY_CLIMB);
+				ClientRegistry.registerKeyBinding(new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory"));
 			}
 		};
 	}
