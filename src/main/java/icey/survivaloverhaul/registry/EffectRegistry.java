@@ -2,7 +2,6 @@ package icey.survivaloverhaul.registry;
 
 import java.lang.reflect.Field;
 
-import javax.annotation.Nonnull;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.common.effects.*;
@@ -15,7 +14,6 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
-import net.minecraftforge.common.brewing.BrewingRecipe;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

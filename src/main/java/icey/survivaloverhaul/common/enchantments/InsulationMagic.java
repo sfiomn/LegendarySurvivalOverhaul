@@ -8,13 +8,12 @@ import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.potion.EffectInstance;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Main.MOD_ID)
-public class InsulationMagic extends GenaricMagic
+@Mod.EventBusSubscriber(modid = Main.MOD_ID)
+public class InsulationMagic extends GenericMagic
 {	
 	private static EquipmentSlotType[] slots = new EquipmentSlotType[] {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
 	private MagicType MT;
@@ -32,6 +31,8 @@ public class InsulationMagic extends GenaricMagic
 	public static void Effect(LivingUpdateEvent event) 
 	{
 		LivingEntity entity = event.getEntityLiving();
+		if (entity.getEntityWorld().isRemote)
+			return;
 		int ab = EnchantmentHelper.getMaxEnchantmentLevel(EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER, entity),
 			h = EnchantmentHelper.getMaxEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, entity),
 			c = EnchantmentHelper.getMaxEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, entity);

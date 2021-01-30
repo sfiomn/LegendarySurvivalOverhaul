@@ -21,7 +21,6 @@ import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
-import icey.survivaloverhaul.api.config.json.temperature.JsonTemperatureIdentity;
 import icey.survivaloverhaul.common.compat.CompatController;
 import icey.survivaloverhaul.config.JsonFileName;
 import icey.survivaloverhaul.config.JsonTypeToken;

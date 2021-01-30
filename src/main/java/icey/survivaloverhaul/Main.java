@@ -1,6 +1,5 @@
 package icey.survivaloverhaul;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.resources.ReloadListener;
@@ -54,8 +53,6 @@ import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierStorage;
-import icey.survivaloverhaul.common.capability.stamina.StaminaCapability;
-import icey.survivaloverhaul.common.capability.stamina.StaminaStorage;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
 import icey.survivaloverhaul.config.*;
@@ -137,14 +134,11 @@ public class Main
 	public static final Capability<TemperatureCapability> TEMPERATURE_CAP = null;
 	@CapabilityInject(HeartModifierCapability.class)
 	public static final Capability<HeartModifierCapability> HEART_MOD_CAP = null;
-	@CapabilityInject(StaminaCapability.class)
-	public static final Capability<StaminaCapability> STAMINA_CAP = null;
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		CapabilityManager.INSTANCE.register(TemperatureCapability.class, new TemperatureStorage(), TemperatureCapability::new);
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
-		CapabilityManager.INSTANCE.register(StaminaCapability.class, new StaminaStorage(), StaminaCapability::new);
 		
 		NetworkHandler.register();
 		//FeatureRegistry.commonSetup(event);

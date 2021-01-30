@@ -3,14 +3,11 @@ package icey.survivaloverhaul.common.capability;
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierProvider;
-import icey.survivaloverhaul.common.capability.stamina.StaminaCapability;
-import icey.survivaloverhaul.common.capability.stamina.StaminaProvider;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureProvider;
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.network.packets.UpdateHeartsPacket;
-import icey.survivaloverhaul.network.packets.UpdateStaminaPacket;
 import icey.survivaloverhaul.network.packets.UpdateTemperaturesPacket;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -165,7 +162,7 @@ public class ModCapabilities
 			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
 		}
 	}
-
+	/*
 	private static void sendStaminaUpdate(PlayerEntity player)
 	{
 		if (!player.world.isRemote())
@@ -175,6 +172,7 @@ public class ModCapabilities
 			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
 		}
 	}
+	*/
 
 	@SubscribeEvent
 	public static void syncCapsOnDimensionChange(PlayerChangedDimensionEvent event)

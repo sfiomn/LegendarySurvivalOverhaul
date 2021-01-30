@@ -4,14 +4,11 @@ import java.util.List;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
-import icey.survivaloverhaul.api.config.json.temperature.JsonTemperatureIdentity;
 import icey.survivaloverhaul.config.json.JsonConfig;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -86,6 +83,7 @@ public class TooltipHandler
 						.mergeStyle(color)
 						.appendString(Math.abs(insulationPercent) + " ")
 						.append(insulationTranslation);
+				tooltip.add(text);
 			}
 		}
 	}

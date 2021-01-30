@@ -1,7 +1,6 @@
 package icey.survivaloverhaul.common.items;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.common.items.armor.ArmorMaterialBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
@@ -9,7 +8,6 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundEvents;
 
 public class ItemDesertArmor extends ArmorItem
 {

@@ -3,18 +3,14 @@ package icey.survivaloverhaul.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.client.hud.StaminaDisplayEnum;
 import icey.survivaloverhaul.client.hud.TemperatureDisplayEnum;
 import icey.survivaloverhaul.config.json.JsonConfigRegistration;
 

@@ -4,20 +4,23 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 
-public class GenaricMagic extends Enchantment 
+public class GenericMagic extends Enchantment 
 {
 	public static class EnchantOptions
 	{
 		private int min = 1, max = 1, minability = 1, minmultiplier = 10, maxability = 5;
 		private boolean book = true;
+		
 		public EnchantOptions(int max) 
 		{
 			this(1, max, 1, 10, 5, true);
 		}
+		
 		public EnchantOptions(int min, int max, int maxability, boolean book) 
 		{
 			this(min, max, 1, 10, maxability, book);
 		}
+		
 		/**
 		 * Gives a neat way of setting options.
 		 * @param minimal level
@@ -27,6 +30,7 @@ public class GenaricMagic extends Enchantment
 		 * @param max enchant ability
 		 * @param can enchant books
 		 */
+		
 		public EnchantOptions(int min, int max, int minability, int minmultiplier, int maxability, boolean book) 
 		{
 			this.min = min;
@@ -38,7 +42,8 @@ public class GenaricMagic extends Enchantment
 		}
 	}
 	EnchantOptions EO;
-	protected GenaricMagic(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots, EnchantOptions EO) {
+	protected GenericMagic(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots, EnchantOptions EO) 
+	{
 		super(rarityIn, typeIn, slots);
 		this.EO = EO;
 	}
@@ -47,7 +52,8 @@ public class GenaricMagic extends Enchantment
 	* Returns the minimum level that the enchantment can have.
 	*/
 	@Override
-	public int getMinLevel() {
+	public int getMinLevel() 
+	{
 	   return EO.min;
 	}
 
@@ -55,7 +61,8 @@ public class GenaricMagic extends Enchantment
 	 * Returns the maximum level that the enchantment can have.
 	 */
 	@Override
-	public int getMaxLevel() {
+	public int getMaxLevel() 
+	{
 	   return EO.max;
 	}
 	
@@ -63,15 +70,19 @@ public class GenaricMagic extends Enchantment
 	* Returns the minimal value of enchantability needed on the enchantment level passed.
 	*/
 	@Override
-	public int getMinEnchantability(int enchantmentLevel) {
+	public int getMinEnchantability(int enchantmentLevel) 
+	{
 		return EO.minability + enchantmentLevel * EO.minmultiplier;
 	}
 
-	public int getMaxEnchantability(int enchantmentLevel) {
+	public int getMaxEnchantability(int enchantmentLevel)
+	{
 		return this.getMinEnchantability(enchantmentLevel) + EO.maxability;
 	}
+	
 	@Override
-	public boolean isAllowedOnBooks() {
+	public boolean isAllowedOnBooks() 
+	{
 	   return EO.book;
 	}
 }

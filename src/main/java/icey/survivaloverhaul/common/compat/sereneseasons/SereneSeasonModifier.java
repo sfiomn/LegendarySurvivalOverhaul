@@ -4,10 +4,8 @@ import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.config.Config;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import sereneseasons.api.season.ISeasonState;
-import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 
 public class SereneSeasonModifier extends ModifierBase
