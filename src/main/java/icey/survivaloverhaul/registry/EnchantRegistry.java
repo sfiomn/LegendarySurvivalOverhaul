@@ -15,7 +15,8 @@ public class EnchantRegistry
 {
 	public static final class ModEnchants
 	{
-		public static final InsulationMagic ADAPTIVE_BARRIER = new InsulationMagic("adaptive_barrier", MagicType.Both);
+		// Doesn't work at the moment
+		// public static final InsulationMagic ADAPTIVE_BARRIER = new InsulationMagic("adaptive_barrier", MagicType.Both);
 		public static final InsulationMagic THERMAL_BARRIER = new InsulationMagic("thermal_barrier", MagicType.Heat);
 		public static final InsulationMagic COLD_BARRIER = new InsulationMagic("cold_barrier", MagicType.Cool);
 	}

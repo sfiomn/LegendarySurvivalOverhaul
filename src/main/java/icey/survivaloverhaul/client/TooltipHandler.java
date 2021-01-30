@@ -72,7 +72,7 @@ public class TooltipHandler
 				tooltip.add(text);
 			}
 			
-			
+			/*
 			if (insulation != 1.0f)
 			{
 				ITextComponent insulationTranslation = new TranslationTextComponent("survivaloverhaul.armorTooltip.insulation");
@@ -83,8 +83,9 @@ public class TooltipHandler
 						.mergeStyle(color)
 						.appendString(Math.abs(insulationPercent) + "% ")
 						.append(insulationTranslation);
-				// tooltip.add(text);
+				tooltip.add(text);
 			}
+			*/
 		}
 	}
 }

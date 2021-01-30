@@ -107,12 +107,16 @@ public class Main
 	
 	public Main()
 	{
-		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-		bus.addListener(this::setup);
-		bus.addListener(this::onModConfigEvent);
-		bus.addListener(this::buildRegistries);
-		bus.addListener(this::clientEvents);
+		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 		
+		modBus.addListener(this::setup);
+		modBus.addListener(this::onModConfigEvent);
+		modBus.addListener(this::buildRegistries);
+		modBus.addListener(this::clientEvents);
+		
+		forgeBus.addListener(this::serverStarted);
+		forgeBus.addListener(this::reloadListener);
 		
 		MinecraftForge.EVENT_BUS.register(this);
 		
@@ -127,7 +131,6 @@ public class Main
 		
 		if (sereneSeasonsLoaded)
 				LOGGER.debug("Serene Seasons is loaded, enabling compatability");
-		//System.out.println("Hello from " + MOD_ID);
 	}
 	
 	@CapabilityInject(TemperatureCapability.class)
@@ -141,7 +144,6 @@ public class Main
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
 		
 		NetworkHandler.register();
-		//FeatureRegistry.commonSetup(event);
 	}
 	
 	@SuppressWarnings("unused")
@@ -156,8 +158,7 @@ public class Main
 		event.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientKeyBindsSetup()));
 	}
 	
-	@SubscribeEvent
-	public static void serverStarted(FMLServerStartedEvent event)
+	private void serverStarted(final FMLServerStartedEvent event)
 	{
 		
 	}
@@ -175,11 +176,11 @@ public class Main
 				RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.HEATING_COIL.getBlock(), RenderType.getCutout());
 				
 				ItemModelsProperties.registerProperty(ItemRegistry.THERMOMETER, new ResourceLocation("temperature"), new IItemPropertyGetter()
+					{
+						@OnlyIn(Dist.CLIENT)
+						@Override
+						public float call(ItemStack stack, ClientWorld clientWorld, LivingEntity entity)
 						{
-							@OnlyIn(Dist.CLIENT)
-							@Override
-							public float call(ItemStack stack, ClientWorld clientWorld, LivingEntity entity)
-							{
 								World world = clientWorld;
 								Entity holder = (Entity) (entity != null ? entity : stack.getItemFrame());
 								
@@ -216,7 +217,7 @@ public class Main
 		};
 	}
 	
-	public static KeyBinding KEY_CLIMB;
+	// public static KeyBinding KEY_CLIMB;
 	
 	private static DistExecutor.SafeRunnable clientKeyBindsSetup()
 	{
@@ -227,14 +228,13 @@ public class Main
 			@Override
 			public void run()
 			{
-				ClientRegistry.registerKeyBinding(new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory"));
-				KEY_CLIMB = new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory");
+				// ClientRegistry.registerKeyBinding(new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory"));
+				// KEY_CLIMB = new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory");
 			}
 		};
 	}
 	
-    @SubscribeEvent(priority = EventPriority.LOW)
-	public void reloadListener(AddReloadListenerEvent event)
+	private void reloadListener(final AddReloadListenerEvent event)
 	{
 		event.addListener(new ReloadListener<Void>() 
 				{

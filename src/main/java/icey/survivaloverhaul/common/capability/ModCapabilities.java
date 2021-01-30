@@ -31,7 +31,7 @@ public class ModCapabilities
 {
 	public static final ResourceLocation TEMPERATURE_RES = new ResourceLocation(Main.MOD_ID, "temperature");
 	public static final ResourceLocation HEART_MOD_RES = new ResourceLocation(Main.MOD_ID, "heart_modifier");
-	public static final ResourceLocation STAMINA_RES = new ResourceLocation(Main.MOD_ID, "stamina");
+	// public static final ResourceLocation STAMINA_RES = new ResourceLocation(Main.MOD_ID, "stamina");
 	
 	@SubscribeEvent
 	public static void attachCapability(AttachCapabilitiesEvent<Entity> event)
