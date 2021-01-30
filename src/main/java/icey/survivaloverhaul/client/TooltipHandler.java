@@ -79,11 +79,11 @@ public class TooltipHandler
 				int insulationPercent = (int) ((insulation - 1.0f) * 100);
 				TextFormatting color = insulationPercent < 0 ? TextFormatting.BLUE : TextFormatting.RED;
 				
-				ITextComponent text = new StringTextComponent(insulationPercent < 0 ? "-" : "+")
+				ITextComponent text = new StringTextComponent(insulationPercent < 0 ? "+" : "-")
 						.mergeStyle(color)
-						.appendString(Math.abs(insulationPercent) + " ")
+						.appendString(Math.abs(insulationPercent) + "% ")
 						.append(insulationTranslation);
-				tooltip.add(text);
+				// tooltip.add(text);
 			}
 		}
 	}

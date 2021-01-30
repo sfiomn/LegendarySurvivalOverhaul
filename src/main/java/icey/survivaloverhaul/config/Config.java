@@ -79,6 +79,7 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Double> altitudeModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> sprintModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> onFireModifier;
+		public final ForgeConfigSpec.ConfigValue<Double> enchantmentMultiplier;
 		
 		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceHorizontalDist;
 		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceVerticalDist;
@@ -164,7 +165,7 @@ public class Config
 					.comment(/*" If enabled, players will directly take damage from the effects of temperature.*/ " Currently non-functional.")
 					.define("Dangerous Temperature Effects", true);
 			temperatureSecondaryEffects = builder
-					.comment(/*" If enabled, players will also recieve other effects from their current temperature state.*/ " Currently non-functional.")
+					.comment(/*" If enabled, players will also receive other effects from their current temperature state.*/ " Currently non-functional.")
 					.define("Secondary Temperature Effects", true);
 
 			onFireModifier = builder
@@ -174,8 +175,11 @@ public class Config
 					.comment(" How much of an effect sprinting has on a player's temperature.")
 					.define("Player Sprint Modifier", 1.5d);
 			wetMultiplier = builder
-					.comment("How much being wet influences the player's temperature.")
+					.comment(" How much being wet influences the player's temperature.")
 					.define("Wetness Modifier", -7.0d);
+			enchantmentMultiplier = builder
+					.comment(" Increases/decreases the effect that cooling/heating enchantments have on a player's temperature.")
+					.define("Enchantment Modifier", 0.25d);
 			
 			builder.push("huddling");
 			playerHuddlingModifier = builder
@@ -390,6 +394,7 @@ public class Config
 		
 		public static double sprintModifier;
 		public static double onFireModifier;
+		public static double enchantmentMultiplier;
 		
 		public static double playerHuddlingModifier;
 		public static int playerHuddlingRadius;
@@ -460,6 +465,7 @@ public class Config
 				onFireModifier = COMMON.onFireModifier.get();
 				sprintModifier = COMMON.sprintModifier.get();
 				wetMultiplier = COMMON.wetMultiplier.get();
+				enchantmentMultiplier = COMMON.enchantmentMultiplier.get();
 				
 				playerHuddlingModifier = COMMON.playerHuddlingModifier.get();
 				playerHuddlingRadius = COMMON.playerHuddlingRadius.get();

@@ -50,8 +50,11 @@
 	"effect.survivaloverhaul.thirst": "Thirst",
 	
 	"enchantment.survivaloverhaul.adaptive_barrier": "Adaptive Thermal Barrier",
+	"enchantment.survivaloverhaul.adaptive_barrier.desc": "Provides an adaptive heating/cooling effect when applied to armor.",
 	"enchantment.survivaloverhaul.thermal_barrier": "Thermal Barrier",
-	"enchantment.survivaloverhaul.cold_barrier": "Cold Barrier",
+	"enchantment.survivaloverhaul.thermal_barrier.desc": "Provides a constant cooling effect when applied to armor.",
+	"enchantment.survivaloverhaul.cold_barrier": "Cooling Barrier",
+	"enchantment.survivaloverhaul.cold_barrier.desc": "Provides a constant heating effect when applied to armor.",
 	
 	"death.attack.survivaloverhaul.hypothermia": "%1$s froze to death",
 	"death.attack.survivaloverhaul.hyperthermia": "%1$s couldn't take the heat",

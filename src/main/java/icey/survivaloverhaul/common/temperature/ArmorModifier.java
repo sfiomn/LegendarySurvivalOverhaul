@@ -6,7 +6,10 @@ import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
+import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.config.json.JsonConfig;
+import icey.survivaloverhaul.registry.EnchantRegistry;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -36,6 +39,14 @@ public class ArmorModifier extends ModifierBase
 				return 0.0f;
 		
 		float sum = 0.0f;
+		
+		int coolingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, stack);
+		int heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, stack);
+		
+		if (coolingLevel > 0)
+			sum -= coolingLevel * Config.Baked.enchantmentMultiplier;
+		else if (heatingLevel > 0)
+			sum += heatingLevel * Config.Baked.enchantmentMultiplier;
 		
 		sum += processStackJson(stack);
 		sum += TemperatureUtil.getArmorTemperatureTag(stack);

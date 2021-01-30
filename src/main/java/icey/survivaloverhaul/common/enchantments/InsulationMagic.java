@@ -33,6 +33,7 @@ public class InsulationMagic extends GenericMagic
 		LivingEntity entity = event.getEntityLiving();
 		if (entity.getEntityWorld().isRemote)
 			return;
+		/*
 		int ab = EnchantmentHelper.getMaxEnchantmentLevel(EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER, entity),
 			h = EnchantmentHelper.getMaxEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, entity),
 			c = EnchantmentHelper.getMaxEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, entity);
@@ -54,6 +55,7 @@ public class InsulationMagic extends GenericMagic
 			skip = 0;
 		else
 			skip++;
+		*/
 	}
 	//not used atm
 	public enum MagicType
