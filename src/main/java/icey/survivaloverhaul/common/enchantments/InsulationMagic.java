@@ -2,7 +2,6 @@ package icey.survivaloverhaul.common.enchantments;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.config.Config;
-import icey.survivaloverhaul.registry.EnchantRegistry;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -19,6 +18,11 @@ public class InsulationMagic extends GenericMagic
 		super(Rarity.RARE, EnchantmentType.WEARABLE, slots, new EnchantOptions(5));
 		this.setRegistryName(Main.MOD_ID, name);
 		this.MT = MT;
+	}
+	
+	public MagicType getMagicType()
+	{
+		return this.MT;
 	}
 	
 	public boolean isTreasureEnchantment()
@@ -72,23 +76,11 @@ public class InsulationMagic extends GenericMagic
 	
 	protected boolean canApplyTogether(Enchantment ench) 
 	{
-		if (this.MT == MagicType.Both)
+		if (ench instanceof InsulationMagic)
 		{
-			if (ench.getRegistryName() == EnchantRegistry.ModEnchants.COLD_BARRIER.getRegistryName() || ench.getRegistryName() == EnchantRegistry.ModEnchants.THERMAL_BARRIER.getRegistryName())
-			{
-				return false;
-			}
-		}
-		else if (this.MT == MagicType.Cool)
-		{
-			if (ench.getRegistryName() == EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER.getRegistryName() || ench.getRegistryName() == EnchantRegistry.ModEnchants.THERMAL_BARRIER.getRegistryName())
-			{
-				return false;
-			}
-		}
-		else if (this.MT == MagicType.Heat)
-		{
-			if (ench.getRegistryName() == EnchantRegistry.ModEnchants.COLD_BARRIER.getRegistryName() || ench.getRegistryName() == EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER.getRegistryName())
+			InsulationMagic magic = (InsulationMagic) ench;
+			
+			if (this.getMagicType() != magic.getMagicType())
 			{
 				return false;
 			}
