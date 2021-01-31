@@ -8,7 +8,6 @@ import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.common.enchantments.InsulationMagic;
-import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.config.json.JsonConfig;
 import icey.survivaloverhaul.registry.EnchantRegistry;
 import net.minecraft.enchantment.EnchantmentHelper;
