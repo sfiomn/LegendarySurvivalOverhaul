@@ -3,7 +3,6 @@ package icey.survivaloverhaul.common.enchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.util.DamageSource;
 
 public class GenericMagic extends Enchantment 
 {

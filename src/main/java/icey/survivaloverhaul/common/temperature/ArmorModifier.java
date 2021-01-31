@@ -49,18 +49,18 @@ public class ArmorModifier extends ModifierBase
 		{
 			if (temp <= TemperatureEnum.FROSTBITE.getUpperBound()) 
 			{
-				sum += InsulationMagic.CalcLevelEffect(adaptiveLevel);
+				sum += InsulationMagic.calcLevelEffect(adaptiveLevel);
 			}
 			else if (temp >= TemperatureEnum.HEAT_STROKE.getLowerBound())
 			{
-				sum -= InsulationMagic.CalcLevelEffect(adaptiveLevel);
+				sum -= InsulationMagic.calcLevelEffect(adaptiveLevel);
 			}
 		}
 		else
 			if (coolingLevel > 0 && temp <= TemperatureEnum.FROSTBITE.getUpperBound())
-			sum -= InsulationMagic.CalcLevelEffect(coolingLevel);
+			sum -= InsulationMagic.calcLevelEffect(coolingLevel);
 		else if (heatingLevel > 0 && temp >= TemperatureEnum.HEAT_STROKE.getLowerBound())
-			sum += InsulationMagic.CalcLevelEffect(heatingLevel);
+			sum += InsulationMagic.calcLevelEffect(heatingLevel);
 		sum += processStackJson(stack);
 		sum += TemperatureUtil.getArmorTemperatureTag(stack);
 		return sum;
