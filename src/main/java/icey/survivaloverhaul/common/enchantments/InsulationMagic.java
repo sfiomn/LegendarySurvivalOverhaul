@@ -5,6 +5,8 @@ import icey.survivaloverhaul.config.Config;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ItemStack;
 
 public class InsulationMagic extends GenericMagic
 {	
@@ -25,6 +27,7 @@ public class InsulationMagic extends GenericMagic
 		return this.MT;
 	}
 	
+	@Override
 	public boolean isTreasureEnchantment()
 	{
 		if (this.MT == MagicType.Both)
@@ -74,6 +77,7 @@ public class InsulationMagic extends GenericMagic
 		return sum;
 	}
 	
+	@Override
 	protected boolean canApplyTogether(Enchantment ench) 
 	{
 		if (ench instanceof InsulationMagic)
