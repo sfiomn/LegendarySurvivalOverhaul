@@ -15,7 +15,7 @@ public class InsulationMagic extends GenericMagic
 	 */
 	public InsulationMagic(String name, MagicType MT) 
 	{
-		super(Rarity.RARE, EnchantmentType.WEARABLE, slots, new EnchantOptions(5));
+		super(Rarity.RARE, EnchantmentType.ARMOR, slots, new EnchantOptions(5));
 		this.setRegistryName(Main.MOD_ID, name);
 		this.MT = MT;
 	}
@@ -56,19 +56,19 @@ public class InsulationMagic extends GenericMagic
 		switch (lvl) 
 		{
 			case 1:
-				sum = (float) (Config.Baked.enchantmentMultiplier * 5);
+				sum = (float) (Config.Baked.enchantmentMultiplier * 3);
 				break;
 			case 2:
-				sum = (float) (Config.Baked.enchantmentMultiplier * 6);
+				sum = (float) (Config.Baked.enchantmentMultiplier * 4);
 				break;
 			case 3:
-				sum = (float) (Config.Baked.enchantmentMultiplier * 7);
+				sum = (float) (Config.Baked.enchantmentMultiplier * 5);
 				break;
 			case 4:
-				sum = (float) (Config.Baked.enchantmentMultiplier * 10);
+				sum = (float) (Config.Baked.enchantmentMultiplier * 7);
 				break;
 			case 5:
-				sum = (float) (Config.Baked.enchantmentMultiplier * 15);
+				sum = (float) (Config.Baked.enchantmentMultiplier * 10);
 				break;
 		}
 		return sum;
