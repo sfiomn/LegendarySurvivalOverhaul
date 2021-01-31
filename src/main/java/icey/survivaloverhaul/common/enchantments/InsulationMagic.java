@@ -1,19 +1,12 @@
 package icey.survivaloverhaul.common.enchantments;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.registry.EffectRegistry;
-import icey.survivaloverhaul.registry.EnchantRegistry;
-import net.minecraft.enchantment.EnchantmentHelper;
+import icey.survivaloverhaul.api.DamageSources;
+import icey.survivaloverhaul.config.Config;
 import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.potion.EffectInstance;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-//value = dist.client is fine
-//@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Main.MOD_ID)
+import net.minecraft.util.DamageSource;
+
 public class InsulationMagic extends GenericMagic
 {	
 	private static EquipmentSlotType[] slots = new EquipmentSlotType[] {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
@@ -27,34 +20,7 @@ public class InsulationMagic extends GenericMagic
 		this.setRegistryName(Main.MOD_ID, name);
 		this.MT = MT;
 	}
-	private static int skip = 0;
-	//@SubscribeEvent
-//	public static void Effect(LivingUpdateEvent event) 
-//	{
-//		LivingEntity entity = event.getEntityLiving();
-//		if (skip == 0) 
-//		{
-//			int ab = EnchantmentHelper.getMaxEnchantmentLevel(EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER, entity),
-//			h = EnchantmentHelper.getMaxEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, entity),
-//			c = EnchantmentHelper.getMaxEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, entity);
-//			//apply effects or modifiers
-//			if (ab > 0) 
-//			{
-//				entity.addPotionEffect(new EffectInstance(EffectRegistry.ModEffects.COLD_RESISTANCE, 500, 0, true, false));
-//				entity.addPotionEffect(new EffectInstance(EffectRegistry.ModEffects.HEAT_RESISTANCE, 500, 0, true, false));
-//			}
-//			else if (h > 0)
-//				entity.addPotionEffect(new EffectInstance(EffectRegistry.ModEffects.HEAT_RESISTANCE, 500, 0, true, false));
-//			else if (c > 0)
-//				entity.addPotionEffect(new EffectInstance(EffectRegistry.ModEffects.COLD_RESISTANCE, 500, 0, true, false));
-//			skip++;// re-apply effects after a few seconds
-//		}
-//		else if(skip == 100)
-//			skip = 0;
-//		else
-//			skip++;
-//	}
-	//not used atm
+	
 	public enum MagicType
 	{
 		Both(1),
@@ -70,5 +36,49 @@ public class InsulationMagic extends GenericMagic
 		{
 			Type = i;
 		}
+	}
+	
+	public static float CalcLevelEffect(int lvl) 
+	{
+		float sum = 0;
+		switch (lvl) 
+		{
+			case 1:
+				sum = (float) (Config.Baked.enchantmentMultiplier * 5);
+				break;
+			case 2:
+				sum = (float) (Config.Baked.enchantmentMultiplier * 6);
+				break;
+			case 3:
+				sum = (float) (Config.Baked.enchantmentMultiplier * 7);
+				break;
+			case 4:
+				sum = (float) (Config.Baked.enchantmentMultiplier * 10);
+				break;
+			case 5:
+				sum = (float) (Config.Baked.enchantmentMultiplier * 15);
+				break;
+		}
+		return sum;
+	}
+	@Override
+	public int calcModifierDamage(int level, DamageSource source) 
+	{
+		int modifier;
+		switch(level) 
+		{
+		case 4:
+			modifier = 1;
+			break;
+		case 5:
+			modifier = 2;
+			break;
+		default:
+			modifier = 0;
+		}
+		
+		if (source == DamageSources.HYPOTHERMIA || source == DamageSources.HYPERTHERMIA) 
+			return modifier;
+		return 0;
 	}
 }

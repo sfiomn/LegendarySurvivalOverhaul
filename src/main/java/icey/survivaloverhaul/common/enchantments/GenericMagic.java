@@ -3,6 +3,7 @@ package icey.survivaloverhaul.common.enchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.util.DamageSource;
 
 public class GenericMagic extends Enchantment 
 {
@@ -74,7 +75,7 @@ public class GenericMagic extends Enchantment
 	{
 		return EO.minability + enchantmentLevel * EO.minmultiplier;
 	}
-
+	@Override
 	public int getMaxEnchantability(int enchantmentLevel)
 	{
 		return this.getMinEnchantability(enchantmentLevel) + EO.maxability;

@@ -7,6 +7,7 @@ import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
+import icey.survivaloverhaul.common.enchantments.InsulationMagic;
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.config.json.JsonConfig;
 import icey.survivaloverhaul.registry.EnchantRegistry;
@@ -27,13 +28,12 @@ public class ArmorModifier extends ModifierBase
 	public float getPlayerInfluence(PlayerEntity player)
 	{
 		float value = 0.0f;
-		// ideally want to get players temperature / don't know if this classified as frequently if it is will use world.getTemp 
+		// ideally want to get players temperature / don't know if this classified as frequently if it is will use world.getTemp - birb
 		int temp = TemperatureUtil.getWorldTemperature(player.world, player.getPosition());
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.HEAD), temp);
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.CHEST), temp);
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.LEGS), temp);
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.FEET), temp);
-		System.out.println("Value:"+ value +" Temp: "+ temp);
 		return value;
 	}
 	
@@ -48,21 +48,22 @@ public class ArmorModifier extends ModifierBase
 		int heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, stack);
 		if (adaptiveLevel > 0) 
 		{
-			//lower limit <-> upper limit
-			if (temp <= TemperatureEnum.FROSTBITE.getUpperBound())
-				sum -= adaptiveLevel * Config.Baked.enchantmentMultiplier;
+			if (temp <= TemperatureEnum.FROSTBITE.getUpperBound()) 
+			{
+				sum += InsulationMagic.CalcLevelEffect(adaptiveLevel);
+			}
 			else if (temp >= TemperatureEnum.HEAT_STROKE.getLowerBound())
-				sum += adaptiveLevel * Config.Baked.enchantmentMultiplier;
+			{
+				sum -= InsulationMagic.CalcLevelEffect(adaptiveLevel);
+			}
 		}
 		else
 			if (coolingLevel > 0)
-			sum -= coolingLevel * Config.Baked.enchantmentMultiplier;
+			sum += InsulationMagic.CalcLevelEffect(coolingLevel);
 		else if (heatingLevel > 0)
-			sum += heatingLevel * Config.Baked.enchantmentMultiplier;
-		System.out.println("Before "+ sum);
+			sum -= InsulationMagic.CalcLevelEffect(heatingLevel);
 		sum += processStackJson(stack);
 		sum += TemperatureUtil.getArmorTemperatureTag(stack);
-		System.out.println("After "+ sum);
 		return sum;
 	}
 	
