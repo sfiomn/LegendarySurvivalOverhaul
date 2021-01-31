@@ -1,11 +1,11 @@
 package icey.survivaloverhaul.common.enchantments;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.api.DamageSources;
 import icey.survivaloverhaul.config.Config;
+import icey.survivaloverhaul.registry.EnchantRegistry;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.util.DamageSource;
 
 public class InsulationMagic extends GenericMagic
 {	
@@ -19,6 +19,14 @@ public class InsulationMagic extends GenericMagic
 		super(Rarity.RARE, EnchantmentType.WEARABLE, slots, new EnchantOptions(5));
 		this.setRegistryName(Main.MOD_ID, name);
 		this.MT = MT;
+	}
+	
+	public boolean isTreasureEnchantment()
+	{
+		if (this.MT == MagicType.Both)
+			return true;
+		else
+			return false;
 	}
 	
 	public enum MagicType
@@ -38,7 +46,7 @@ public class InsulationMagic extends GenericMagic
 		}
 	}
 	
-	public static float CalcLevelEffect(int lvl) 
+	public static float calcLevelEffect(int lvl) 
 	{
 		float sum = 0;
 		switch (lvl) 
@@ -61,24 +69,31 @@ public class InsulationMagic extends GenericMagic
 		}
 		return sum;
 	}
-	@Override
-	public int calcModifierDamage(int level, DamageSource source) 
+	
+	protected boolean canApplyTogether(Enchantment ench) 
 	{
-		int modifier;
-		switch(level) 
+		if (this.MT == MagicType.Both)
 		{
-		case 4:
-			modifier = 1;
-			break;
-		case 5:
-			modifier = 2;
-			break;
-		default:
-			modifier = 0;
+			if (ench.getRegistryName() == EnchantRegistry.ModEnchants.COLD_BARRIER.getRegistryName() || ench.getRegistryName() == EnchantRegistry.ModEnchants.THERMAL_BARRIER.getRegistryName())
+			{
+				return false;
+			}
+		}
+		else if (this.MT == MagicType.Cool)
+		{
+			if (ench.getRegistryName() == EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER.getRegistryName() || ench.getRegistryName() == EnchantRegistry.ModEnchants.THERMAL_BARRIER.getRegistryName())
+			{
+				return false;
+			}
+		}
+		else if (this.MT == MagicType.Heat)
+		{
+			if (ench.getRegistryName() == EnchantRegistry.ModEnchants.COLD_BARRIER.getRegistryName() || ench.getRegistryName() == EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER.getRegistryName())
+			{
+				return false;
+			}
 		}
 		
-		if (source == DamageSources.HYPOTHERMIA || source == DamageSources.HYPERTHERMIA) 
-			return modifier;
-		return 0;
+		return true;
 	}
 }
