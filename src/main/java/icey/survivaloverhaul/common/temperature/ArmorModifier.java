@@ -28,6 +28,7 @@ public class ArmorModifier extends ModifierBase
 	{
 		float value = 0.0f;
 		// ideally want to get players temperature / don't know if this classified as frequently if it is will use world.getTemp - birb
+		
 		int temp = TemperatureUtil.getWorldTemperature(player.world, player.getPosition());
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.HEAD), temp);
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.CHEST), temp);
@@ -42,25 +43,25 @@ public class ArmorModifier extends ModifierBase
 				return 0.0f;
 		
 		float sum = 0.0f;
-		int adaptiveLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER, stack);
-		int coolingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, stack);
-		int heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, stack);
+		int adaptiveLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER, stack),
+			coolingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, stack),
+			heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, stack);
 		if (adaptiveLevel > 0) 
 		{
 			if (temp <= TemperatureEnum.FROSTBITE.getUpperBound()) 
 			{
-				sum += InsulationMagic.CalcLevelEffect(adaptiveLevel);
+				sum += InsulationMagic.calcLevelEffect(adaptiveLevel);
 			}
 			else if (temp >= TemperatureEnum.HEAT_STROKE.getLowerBound())
 			{
-				sum -= InsulationMagic.CalcLevelEffect(adaptiveLevel);
+				sum -= InsulationMagic.calcLevelEffect(adaptiveLevel);
 			}
 		}
 		else
 			if (coolingLevel > 0 && temp <= TemperatureEnum.FROSTBITE.getUpperBound())
-			sum -= InsulationMagic.CalcLevelEffect(coolingLevel);
+			sum -= InsulationMagic.calcLevelEffect(coolingLevel);
 		else if (heatingLevel > 0 && temp >= TemperatureEnum.HEAT_STROKE.getLowerBound())
-			sum += InsulationMagic.CalcLevelEffect(heatingLevel);
+			sum += InsulationMagic.calcLevelEffect(heatingLevel);
 		sum += processStackJson(stack);
 		sum += TemperatureUtil.getArmorTemperatureTag(stack);
 		return sum;

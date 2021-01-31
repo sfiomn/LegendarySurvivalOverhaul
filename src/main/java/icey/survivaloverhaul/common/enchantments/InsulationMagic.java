@@ -8,7 +8,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 
 public class InsulationMagic extends GenericMagic
 {	
-	private static EquipmentSlotType[] slots = new EquipmentSlotType[] {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
+	private final static EquipmentSlotType[] slots = new EquipmentSlotType[] {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
 	private MagicType MT;
 	/**
 	 * @param name of enchant
@@ -49,7 +49,7 @@ public class InsulationMagic extends GenericMagic
 			Type = i;
 		}
 	}
-	
+	//base modifiers for levels
 	public static float calcLevelEffect(int lvl) 
 	{
 		float sum = 0;
