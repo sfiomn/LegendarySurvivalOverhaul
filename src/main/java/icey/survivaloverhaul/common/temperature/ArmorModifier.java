@@ -27,8 +27,8 @@ public class ArmorModifier extends ModifierBase
 	public float getPlayerInfluence(PlayerEntity player)
 	{
 		float value = 0.0f;
+		// ideally want to get players temperature / don't know if this classified as frequently if it is will use world.getTemp 
 		int temp = TemperatureUtil.getWorldTemperature(player.world, player.getPosition());
-		//float temp = player.world.getBiome(player.getPosition()).getTemperature();
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.HEAD), temp);
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.CHEST), temp);
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.LEGS), temp);
@@ -48,11 +48,10 @@ public class ArmorModifier extends ModifierBase
 		int heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, stack);
 		if (adaptiveLevel > 0) 
 		{
-			//dont know the max temperature
 			//lower limit <-> upper limit
-			if (temp >= TemperatureEnum.FROSTBITE.getUpperBound())
+			if (temp <= TemperatureEnum.FROSTBITE.getUpperBound())
 				sum -= adaptiveLevel * Config.Baked.enchantmentMultiplier;
-			else if (temp >= 0.20)
+			else if (temp >= TemperatureEnum.HEAT_STROKE.getLowerBound())
 				sum += adaptiveLevel * Config.Baked.enchantmentMultiplier;
 		}
 		else
