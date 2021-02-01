@@ -120,20 +120,20 @@ repositories {
 }
 
 dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.5-36.0.13'
-    
-    runtimeOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:universal') // Serene Seasons
-    compileOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:api') // Serene Seasons API
-    // compile fg.deobf('better-weather:betterweather:1.2.4') // Better Weather
+	// Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
+	// that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
+	// The userdev artifact is a special name and will get all sorts of transformations applied to it.
+	minecraft 'net.minecraftforge:forge:1.16.5-36.0.13'
 	
-	// runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
+	runtimeOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:universal') // Serene Seasons
+	compileOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:api') // Serene Seasons API
+	// compile fg.deobf('better-weather:betterweather:1.2.4') // Better Weather
+	
+	runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
 	// compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65:api")
 	
-	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5") // Curios
-    // compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5:api") // Curios API
+	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5") // Curios
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5:api") // Curios API
 	
 	// compile fg.deobf('curse.maven:obfuscate-289380:3169370') // Obfuscate
 	

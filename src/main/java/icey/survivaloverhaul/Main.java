@@ -122,10 +122,21 @@ public class Main
 		
 		TemperatureUtil.internal = new TemperatureUtilInternal();
 		
+		modCompat();
+	}
+	
+	public void modCompat()
+	{
 		sereneSeasonsLoaded = ModList.get().isLoaded("sereneseasons");
+		curiosLoaded = ModList.get().isLoaded("curios");
+		surviveLoaded = ModList.get().isLoaded("survive");
 		
 		if (sereneSeasonsLoaded)
 			LOGGER.debug("Serene Seasons is loaded, enabling compatability");
+		if (curiosLoaded)
+			LOGGER.debug("Curios is loaded, enabling compatability");
+		if (surviveLoaded)
+			LOGGER.debug("Survive is loaded, I hope you know what you're doing");
 	}
 	
 	@CapabilityInject(TemperatureCapability.class)
