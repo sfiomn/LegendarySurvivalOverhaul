@@ -30,23 +30,35 @@ public class ArmorModifier extends ModifierBase
 		// ideally want to get players temperature / don't know if this classified as frequently if it is will use world.getTemp - birb
 		
 		int temp = TemperatureUtil.getWorldTemperature(player.world, player.getPosition());
-		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.HEAD), temp);
-		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.CHEST), temp);
-		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.LEGS), temp);
-		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.FEET), temp);
+		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.HEAD));
+		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.CHEST));
+		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.LEGS));
+		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.FEET));
 		return value;
 	}
 	
-	private float checkArmorSlot(ItemStack stack, int temp)
+	private float checkArmorSlot(ItemStack stack)
 	{
 		if (stack.isEmpty())
 				return 0.0f;
 		
 		float sum = 0.0f;
-		int adaptiveLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER, stack),
-			coolingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, stack),
+		int coolingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, stack),
 			heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, stack);
-		if (adaptiveLevel > 0) 
+		
+		if (coolingLevel > 0 )
+			sum -= InsulationMagic.calcLevelEffect(coolingLevel);
+		else if (heatingLevel > 0)
+			sum += InsulationMagic.calcLevelEffect(heatingLevel);
+		sum += processStackJson(stack);
+		sum += TemperatureUtil.getArmorTemperatureTag(stack);
+		return sum;
+	}
+	
+	/*
+	 * 
+	int adaptiveLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER, stack);
+	if (adaptiveLevel > 0) 
 		{
 			if (temp <= TemperatureEnum.FROSTBITE.getUpperBound()) 
 			{
@@ -57,15 +69,8 @@ public class ArmorModifier extends ModifierBase
 				sum -= InsulationMagic.calcLevelEffect(adaptiveLevel);
 			}
 		}
-		else
-			if (coolingLevel > 0 && temp <= TemperatureEnum.FROSTBITE.getUpperBound())
-			sum -= InsulationMagic.calcLevelEffect(coolingLevel);
-		else if (heatingLevel > 0 && temp >= TemperatureEnum.HEAT_STROKE.getLowerBound())
-			sum += InsulationMagic.calcLevelEffect(heatingLevel);
-		sum += processStackJson(stack);
-		sum += TemperatureUtil.getArmorTemperatureTag(stack);
-		return sum;
-	}
+	 * 
+	 */
 	
 	private float processStackJson(ItemStack stack)
 	{
