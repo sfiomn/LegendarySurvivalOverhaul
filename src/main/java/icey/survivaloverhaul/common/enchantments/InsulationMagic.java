@@ -59,19 +59,19 @@ public class InsulationMagic extends GenericMagic
 		switch (lvl) 
 		{
 			case 1:
-				sum = (float) (Config.Baked.enchantmentMultiplier * 3);
+				sum = (float) (Config.Baked.enchantmentMultiplier * 2);
 				break;
 			case 2:
-				sum = (float) (Config.Baked.enchantmentMultiplier * 4);
+				sum = (float) (Config.Baked.enchantmentMultiplier * 3);
 				break;
 			case 3:
-				sum = (float) (Config.Baked.enchantmentMultiplier * 5);
+				sum = (float) (Config.Baked.enchantmentMultiplier * 4);
 				break;
 			case 4:
-				sum = (float) (Config.Baked.enchantmentMultiplier * 7);
+				sum = (float) (Config.Baked.enchantmentMultiplier * 6);
 				break;
 			case 5:
-				sum = (float) (Config.Baked.enchantmentMultiplier * 10);
+				sum = (float) (Config.Baked.enchantmentMultiplier * 9);
 				break;
 		}
 		return sum;
