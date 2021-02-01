@@ -135,6 +135,7 @@ dependencies {
 	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5") // Curios
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5:api") // Curios API
 	
+	runtimeOnly fg.deobf("curse.maven:artifacts-312353:3164601")
 	// compile fg.deobf('curse.maven:obfuscate-289380:3169370') // Obfuscate
 	
 	// For more info...
