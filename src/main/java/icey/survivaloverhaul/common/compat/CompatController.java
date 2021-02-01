@@ -2,6 +2,8 @@ package icey.survivaloverhaul.common.compat;
 
 import java.io.File;
 
+import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
+import icey.survivaloverhaul.api.config.json.TemporaryModifierGroup;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
 import icey.survivaloverhaul.config.json.JsonConfig;
 import net.minecraftforge.fml.ModList;
@@ -34,6 +36,14 @@ public final class CompatController
 	{
 		JsonConfig.registerBlockTemperature("farmersdelight:stove", 7.5f, new JsonPropertyValue("lit", "true"));
 		JsonConfig.registerBlockTemperature("farmersdelight:stove", 0.0f, new JsonPropertyValue("lit", "false"));
+		
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:beef_stew", 1.5f, 2400, new JsonItemIdentity(null));
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:chicken_soup", 1.5f, 2400, new JsonItemIdentity(null));
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:vegetable_soup", 1.5f, 2400, new JsonItemIdentity(null));
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:fish_stew", 1.5f, 2400, new JsonItemIdentity(null));
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:pumpkin_soup", 1.5f, 2400, new JsonItemIdentity(null));
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:baked_cod_stew", 1.5f, 2400, new JsonItemIdentity(null));
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.DRINK.group(), "farmersdelight:hot_cocoa", 3.5f, 3600, new JsonItemIdentity(null));
 	}
 	
 	private static void initRealisticTorches()

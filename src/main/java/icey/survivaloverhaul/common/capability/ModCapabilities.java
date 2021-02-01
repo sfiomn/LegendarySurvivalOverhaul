@@ -1,11 +1,15 @@
 package icey.survivaloverhaul.common.capability;
 
+import java.util.List;
+
 import icey.survivaloverhaul.Main;
+import icey.survivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierProvider;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureProvider;
 import icey.survivaloverhaul.config.Config;
+import icey.survivaloverhaul.config.json.JsonConfig;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.network.packets.UpdateHeartsPacket;
 import icey.survivaloverhaul.network.packets.UpdateTemperaturesPacket;
@@ -19,8 +23,10 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -89,6 +95,33 @@ public class ModCapabilities
 				}
 			}
 			*/
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onLivingEntityUseItemFinish(LivingEntityUseItemEvent event)
+	{
+		if (event.getEntityLiving() instanceof PlayerEntity && !event.getEntityLiving().world.isRemote)
+		{
+			PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+			
+			ItemStack stack = event.getItem();
+			
+			List<JsonConsumableTemperature> consumableList = JsonConfig.consumableTemperature.get(stack.getItem().getRegistryName().toString());
+			
+			if (consumableList != null)
+			{
+				for (JsonConsumableTemperature jct : consumableList)
+				{
+					if (jct == null)
+						continue;
+					
+					if (jct.matches(stack))
+					{
+						TemperatureCapability.getTempCapability(player).setTemporaryModifier(jct.group, jct.temperature, jct.duration);
+					}
+				}
+			}
 		}
 	}
 

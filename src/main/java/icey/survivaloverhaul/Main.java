@@ -3,7 +3,6 @@ package icey.survivaloverhaul;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.resources.ReloadListener;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -23,12 +22,9 @@ import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
@@ -45,7 +41,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.apache.logging.log4j.*;
-import org.lwjgl.glfw.GLFW;
 
 import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
@@ -75,8 +70,8 @@ public class Main
 	 *  system, i.e. making it so that winter is colder, summer is hotter,
 	 *  and perhaps you're more prone to slipping while climbing in the winter.
 	 */ 
-	public static boolean betterWeatherLoaded;
-	public static boolean sereneSeasonsLoaded;
+	public static boolean betterWeatherLoaded = false;
+	public static boolean sereneSeasonsLoaded = false;
 	
 	/**
 	 * Since my mod and Survive both do very similar things, it might be
@@ -86,14 +81,14 @@ public class Main
 	 * Also it should only show this type of warning once so that we don't
 	 * annoy the player if they decide to go through with it.
 	 */
-	public static boolean surviveLoaded; 
+	public static boolean surviveLoaded = false; 
 	
 	/**
 	 * With Paragliders loaded, this mod will override the Paraglider's
 	 * stamina mechanics with my own.
 	 */
-	public static boolean paraglidersLoaded;
-	public static boolean curiosLoaded;
+	public static boolean paraglidersLoaded = false;
+	public static boolean curiosLoaded = false;
 	
 	public static Path configPath = FMLPaths.CONFIGDIR.get();
 	public static Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "survivaloverhaul");
@@ -130,7 +125,7 @@ public class Main
 		sereneSeasonsLoaded = ModList.get().isLoaded("sereneseasons");
 		
 		if (sereneSeasonsLoaded)
-				LOGGER.debug("Serene Seasons is loaded, enabling compatability");
+			LOGGER.debug("Serene Seasons is loaded, enabling compatability");
 	}
 	
 	@CapabilityInject(TemperatureCapability.class)
@@ -255,7 +250,8 @@ public class Main
 						JsonConfigRegistration.init(modConfigJsons.toFile());
 					}
 			
-				});
+				}
+		);
 	}
 	
 	private void onModConfigEvent(final ModConfig.ModConfigEvent event)
@@ -264,9 +260,7 @@ public class Main
 		
 		// Since client config is not shared, we want it to update instantly whenever it's saved
 		if (config.getSpec() == Config.CLIENT_SPEC)
-		{
 			Config.Baked.bakeClient();
-		}
 	}
 	
 	// Create registries for modifiers and dynamic modifiers

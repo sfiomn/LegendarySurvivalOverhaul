@@ -16,8 +16,10 @@ import com.google.gson.GsonBuilder;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
+import icey.survivaloverhaul.api.config.json.TemporaryModifierGroup;
 import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
+import icey.survivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
@@ -93,6 +95,9 @@ public class JsonConfigRegistration
 		JsonConfig.registerArmorTemperature("minecraft:iron_chestplate", 0f, 1.2f);
 		JsonConfig.registerArmorTemperature("minecraft:iron_helmet", 0f, 1.2f);
 		
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "minecraft:mushroom_stew", 1.0f, 1200, DEFAULT_ITEM_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "minecraft:rabbit_stew", 1.0f, 1200, DEFAULT_ITEM_IDENTITY);
+		
 		JsonConfig.registerBiomeOverride("minecraft:crimson_forest", 0.75f, false);
 		JsonConfig.registerBiomeOverride("minecraft:warped_forest", 0.75f, false);
 		JsonConfig.registerBiomeOverride("minecraft:nether_wastes", 1.0f, false);
@@ -108,6 +113,7 @@ public class JsonConfigRegistration
 		JsonConfig.blockTemperatures.clear();
 		JsonConfig.fluidTemperatures.clear();
 		JsonConfig.biomeOverrides.clear();
+		JsonConfig.consumableTemperature.clear();
 	}
 	
 	public static void processAllJson(File jsonDir)
@@ -181,6 +187,30 @@ public class JsonConfigRegistration
 			try
 			{
 				manuallyWriteToJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir);
+			}
+			catch (Exception e)
+			{
+				Main.LOGGER.error("Error writing merged JSON file", e);
+			}
+		}
+		
+		Map<String, List<JsonConsumableTemperature>> jsonConsumableTemperatures = processJson(JsonFileName.CONSUMABLE, JsonConfig.consumableTemperature, jsonDir, true);
+		if (jsonConsumableTemperatures != null)
+		{
+			for (Map.Entry<String, List<JsonConsumableTemperature>> entry : jsonConsumableTemperatures.entrySet())
+			{
+				for (JsonConsumableTemperature jct : entry.getValue())
+				{
+					if (jct.identity != null)
+						jct.identity.tryPopulateCompound();
+					
+					JsonConfig.registerConsumableTemperature(jct.group, entry.getKey(), jct.temperature, jct.duration, jct.identity);
+				}
+			}
+			
+			try
+			{
+				manuallyWriteToJson(JsonFileName.CONSUMABLE, JsonConfig.consumableTemperature, jsonDir);
 			}
 			catch (Exception e)
 			{

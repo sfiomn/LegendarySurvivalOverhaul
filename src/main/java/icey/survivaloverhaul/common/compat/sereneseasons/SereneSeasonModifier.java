@@ -21,14 +21,20 @@ public class SereneSeasonModifier extends ModifierBase
 	public float getWorldInfluence(World world, BlockPos pos)
 	{
 		if (!Main.sereneSeasonsLoaded)
-				return 0.0f;
+			return 0.0f;
+		if (!Config.Baked.seasonTemperatureEffects)
+			return 0.0f;
 		
 		try
 		{
-			return applyUndergroundEffect(getUncaughtWorldInfluence(world, pos), world, pos);
+			// In theory, this should only ever run if Serene Seasons is installed
+			// However, just to be safe, we throw this in a try/catch to make sure
+			// something weird hasn't happened with the API
+			return getUncaughtWorldInfluence(world, pos);
 		}
 		catch (Exception e)
 		{
+			// If an error somehow occurs, disable compatibility 
 			Main.LOGGER.error("An error has occured with Serene Seasons compatability, disabling modifier", e);
 			Main.sereneSeasonsLoaded = false;
 			
@@ -40,34 +46,37 @@ public class SereneSeasonModifier extends ModifierBase
 	{
 		ISeasonState seasonState = SeasonHelper.getSeasonState(world);
 		
+		float value = 0.0f;
 		switch(seasonState.getSubSeason())
 		{
 		case EARLY_SPRING:
-			return Config.Baked.earlySpringModifier;
+			value = Config.Baked.earlySpringModifier;
 		case MID_SPRING:
-			return Config.Baked.midSpringModifier;
+			value = Config.Baked.midSpringModifier;
 		case LATE_SPRING:
-			return Config.Baked.lateSpringModifier;
+			value = Config.Baked.lateSpringModifier;
 		case EARLY_SUMMER:
-			return Config.Baked.earlySummerModifier;
+			value = Config.Baked.earlySummerModifier;
 		case MID_SUMMER:
-			return Config.Baked.midSummerModifier;
+			value = Config.Baked.midSummerModifier;
 		case LATE_SUMMER:
-			return Config.Baked.lateSummerModifier;
+			value = Config.Baked.lateSummerModifier;
 		case EARLY_AUTUMN:
-			return Config.Baked.earlyAutumnModifier;
+			value = Config.Baked.earlyAutumnModifier;
 		case MID_AUTUMN:
-			return Config.Baked.midAutumnModifier;
+			value = Config.Baked.midAutumnModifier;
 		case LATE_AUTUMN:
-			return Config.Baked.lateAutumnModifier;
+			value = Config.Baked.lateAutumnModifier;
 		case EARLY_WINTER:
-			return Config.Baked.earlyWinterModifier;
+			value = Config.Baked.earlyWinterModifier;
 		case MID_WINTER:
-			return Config.Baked.midWinterModifier;
+			value =  Config.Baked.midWinterModifier;
 		case LATE_WINTER:
-			return Config.Baked.lateWinterModifier;
+			value = Config.Baked.lateWinterModifier;
 		default:
-			return 0.0f;
+			value = 0.0f;
 		}
+		
+		return applyUndergroundEffect(value, world, pos);
 	}
 }
