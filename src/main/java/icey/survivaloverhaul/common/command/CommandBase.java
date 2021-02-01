@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 
 //cmd execute template
-public class CMD
+public class CommandBase
 {
 	CommandSource source;
 	LiteralArgumentBuilder<CommandSource> builder;
