@@ -1,7 +1,6 @@
 package icey.survivaloverhaul.common.enchantments;
 
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.config.Config;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
