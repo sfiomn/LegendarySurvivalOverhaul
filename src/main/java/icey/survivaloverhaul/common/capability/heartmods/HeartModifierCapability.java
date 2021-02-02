@@ -13,8 +13,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import net.minecraftforge.event.TickEvent.Phase;
-
 public class HeartModifierCapability implements IHeartModifierCapability
 {
 	public static final UUID HEART_MODIFIER_ATTRIBUTE = UUID.fromString("b158dbba-c193-4301-9dfd-82c4347b2cf4");

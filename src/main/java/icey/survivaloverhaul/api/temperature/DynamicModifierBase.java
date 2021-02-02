@@ -25,5 +25,10 @@ public class DynamicModifierBase extends ForgeRegistryEntry<DynamicModifierBase>
 	{
 		return 0.0f;
 	}
-
+	
+	@Override
+	public String toString()
+	{
+		return this.getRegistryName().toString();
+	}
 }

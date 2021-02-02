@@ -1,6 +1,6 @@
 {
 	"type": "minecraft:crafting_shaped",
-	"group": "snow_Armor",
+	"group": "desert_armor",
 	"pattern":
 	[
 		"###",

@@ -127,4 +127,10 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> impl
 	{
 		return (value * 2.0f) - 1.0f;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.getRegistryName().toString();
+	}
 }
