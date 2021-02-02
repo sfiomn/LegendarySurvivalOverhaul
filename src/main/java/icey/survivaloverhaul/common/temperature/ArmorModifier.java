@@ -26,13 +26,12 @@ public class ArmorModifier extends ModifierBase
 	public float getPlayerInfluence(PlayerEntity player)
 	{
 		float value = 0.0f;
-		// ideally want to get players temperature / don't know if this classified as frequently if it is will use world.getTemp - birb
 		
-		int temp = TemperatureUtil.getWorldTemperature(player.world, player.getPosition());
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.HEAD));
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.CHEST));
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.LEGS));
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.FEET));
+		
 		return value;
 	}
 	
