@@ -17,6 +17,8 @@ import top.theillusivec4.curios.api.type.util.ICuriosHelper;
 
 public class CuriosModifier extends ModifierBase
 {
+	private ICuriosHelper helper;
+	
 	public CuriosModifier()
 	{
 		super();
@@ -44,7 +46,11 @@ public class CuriosModifier extends ModifierBase
 	
 	public float getUncaughtPlayerInfluence(PlayerEntity player)
 	{
-		ICuriosHelper helper = CuriosApi.getCuriosHelper();
+		if (helper == null)
+		{
+			helper = CuriosApi.getCuriosHelper();
+			return 0.0f;
+		}
 		
 		LazyOptional<IItemHandlerModifiable> lazyOptional = helper.getEquippedCurios(player);
 		
@@ -56,7 +62,7 @@ public class CuriosModifier extends ModifierBase
 			
 			for (int i = 0; i < itemHandler.getSlots(); i++)
 			{
-				final ItemStack stack = itemHandler.getStackInSlot(i);
+				ItemStack stack = itemHandler.getStackInSlot(i);
 				
 				if (!stack.isEmpty())
 				{
