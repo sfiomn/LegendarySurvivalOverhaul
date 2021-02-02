@@ -104,7 +104,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerBiomeOverride("minecraft:soul_sand_valley", 1.0f, false);
 		JsonConfig.registerBiomeOverride("minecraft:basalt_deltas", 1.15f, false);
 		
-		CompatController.initCompat(configDir);
+		CompatController.initCompat();
 	}
 	
 	public static void clearContainers()

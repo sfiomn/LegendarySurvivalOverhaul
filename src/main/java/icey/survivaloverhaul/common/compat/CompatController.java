@@ -1,17 +1,20 @@
 package icey.survivaloverhaul.common.compat;
 
-import java.io.File;
-
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
 import icey.survivaloverhaul.api.config.json.TemporaryModifierGroup;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
 import icey.survivaloverhaul.config.json.JsonConfig;
 import net.minecraftforge.fml.ModList;
 
+/**
+ * This class is specifically for implementing default configuration values
+ * for mods that don't require us to set up new modifiers; i.e. simply setting
+ * relevant values for armor/block temperatures, consumable temperatures, etc.
+ * @author Icey
+ */
 public final class CompatController
 {
-	
-	public static void initCompat(File configDir)
+	public static void initCompat()
 	{
 		ModList mods = ModList.get();
 		
