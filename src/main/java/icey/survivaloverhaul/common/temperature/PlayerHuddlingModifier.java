@@ -1,7 +1,6 @@
 package icey.survivaloverhaul.common.temperature;
 
 import java.util.List;
-import java.util.UUID;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ModifierBase;

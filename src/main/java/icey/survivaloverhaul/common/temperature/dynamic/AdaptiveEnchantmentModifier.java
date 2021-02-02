@@ -1,14 +1,9 @@
 package icey.survivaloverhaul.common.temperature.dynamic;
 
-import java.util.List;
-
 import icey.survivaloverhaul.Main;
-import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureEnum;
-import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.common.enchantments.InsulationMagic;
-import icey.survivaloverhaul.config.json.JsonConfig;
 import icey.survivaloverhaul.registry.EnchantRegistry;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;

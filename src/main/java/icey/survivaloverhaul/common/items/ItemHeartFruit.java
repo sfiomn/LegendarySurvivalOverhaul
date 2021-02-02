@@ -5,7 +5,6 @@ import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.network.packets.UpdateHeartsPacket;
-import icey.survivaloverhaul.network.packets.UpdateTemperaturesPacket;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
