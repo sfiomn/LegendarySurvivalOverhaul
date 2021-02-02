@@ -119,10 +119,10 @@ public class JsonConfigRegistration
 	public static void processAllJson(File jsonDir)
 	{
 		Map<String, List<JsonArmorIdentity>> jsonArmorTemperatures = processJson(JsonFileName.ARMOR, JsonConfig.armorTemperatures, jsonDir, true);
-		Main.LOGGER.debug("Loaded " + jsonArmorTemperatures.size() + " armor temperature values");
 		
 		if (jsonArmorTemperatures != null)
 		{
+			Main.LOGGER.debug("Loaded " + jsonArmorTemperatures.size() + " armor temperature values from JSON");
 			for (Map.Entry<String, List<JsonArmorIdentity>> entry : jsonArmorTemperatures.entrySet())
 			{
 				for (JsonArmorIdentity jtm : entry.getValue())
@@ -136,10 +136,10 @@ public class JsonConfigRegistration
 		}
 		
 		Map<String, List<JsonPropertyTemperature>> jsonBlockTemperatures = processJson(JsonFileName.BLOCK, JsonConfig.blockTemperatures, jsonDir, true);
-		Main.LOGGER.debug("Loaded " + jsonBlockTemperatures.size() + " block temperature values");
 		
 		if (jsonBlockTemperatures != null)
 		{
+			Main.LOGGER.debug("Loaded " + jsonBlockTemperatures.size() + " block temperature values from JSON");
 			for (Map.Entry<String, List<JsonPropertyTemperature>> entry : jsonBlockTemperatures.entrySet())
 			{
 				for (JsonPropertyTemperature propTemp : entry.getValue())
@@ -159,10 +159,10 @@ public class JsonConfigRegistration
 		}
 		
 		Map<String, JsonTemperature> jsonFluidTemperatures = processJson(JsonFileName.LIQUID, JsonConfig.fluidTemperatures, jsonDir, true);
-		Main.LOGGER.debug("Loaded " + jsonFluidTemperatures.size() + " fluid temperature values");
 		
 		if (jsonFluidTemperatures != null)
 		{
+			Main.LOGGER.debug("Loaded " + jsonFluidTemperatures.size() + " fluid temperature values from JSON");
 			for (Map.Entry<String, JsonTemperature> entry : jsonFluidTemperatures.entrySet())
 			{
 				JsonConfig.registerFluidTemperature(entry.getKey(), entry.getValue().temperature);
@@ -179,10 +179,10 @@ public class JsonConfigRegistration
 		}
 		
 		Map<String, JsonBiomeIdentity> jsonBiomeIdentities = processJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir, true);
-		Main.LOGGER.debug("Loaded " + jsonBiomeIdentities.size() + " biome temperature overrides");
 		
 		if (jsonBiomeIdentities != null)
 		{
+			Main.LOGGER.debug("Loaded " + jsonBiomeIdentities.size() + " biome temperature overrides from JSON");
 			for (Map.Entry<String, JsonBiomeIdentity> entry : jsonBiomeIdentities.entrySet())
 			{
 				JsonConfig.registerBiomeOverride(entry.getKey(), entry.getValue().temperature, entry.getValue().isDry);
@@ -199,10 +199,10 @@ public class JsonConfigRegistration
 		}
 		
 		Map<String, List<JsonConsumableTemperature>> jsonConsumableTemperatures = processJson(JsonFileName.CONSUMABLE, JsonConfig.consumableTemperature, jsonDir, true);
-		Main.LOGGER.debug("Loaded " + jsonConsumableTemperatures.size() + " consumable temperature values");
 		
 		if (jsonConsumableTemperatures != null)
 		{
+			Main.LOGGER.debug("Loaded " + jsonConsumableTemperatures.size() + " consumable temperature values from JSON");
 			for (Map.Entry<String, List<JsonConsumableTemperature>> entry : jsonConsumableTemperatures.entrySet())
 			{
 				for (JsonConsumableTemperature jct : entry.getValue())
@@ -293,6 +293,8 @@ public class JsonConfigRegistration
 		File jsonFile = new File(jsonDir, jsonFileName);
 		if (jsonFile.exists())
 		{
+			Main.LOGGER.debug(jsonFile.getName() + " already exists!");
+			
 			if (forceWrite)
 				Main.LOGGER.debug("Overriding...");
 			else
