@@ -119,6 +119,7 @@ public class JsonConfigRegistration
 	public static void processAllJson(File jsonDir)
 	{
 		Map<String, List<JsonArmorIdentity>> jsonArmorTemperatures = processJson(JsonFileName.ARMOR, JsonConfig.armorTemperatures, jsonDir, true);
+		Main.LOGGER.debug("Loaded " + jsonArmorTemperatures.size() + " armor temperature values");
 		
 		if (jsonArmorTemperatures != null)
 		{
@@ -135,6 +136,7 @@ public class JsonConfigRegistration
 		}
 		
 		Map<String, List<JsonPropertyTemperature>> jsonBlockTemperatures = processJson(JsonFileName.BLOCK, JsonConfig.blockTemperatures, jsonDir, true);
+		Main.LOGGER.debug("Loaded " + jsonBlockTemperatures.size() + " block temperature values");
 		
 		if (jsonBlockTemperatures != null)
 		{
@@ -157,6 +159,7 @@ public class JsonConfigRegistration
 		}
 		
 		Map<String, JsonTemperature> jsonFluidTemperatures = processJson(JsonFileName.LIQUID, JsonConfig.fluidTemperatures, jsonDir, true);
+		Main.LOGGER.debug("Loaded " + jsonFluidTemperatures.size() + " fluid temperature values");
 		
 		if (jsonFluidTemperatures != null)
 		{
@@ -176,6 +179,7 @@ public class JsonConfigRegistration
 		}
 		
 		Map<String, JsonBiomeIdentity> jsonBiomeIdentities = processJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir, true);
+		Main.LOGGER.debug("Loaded " + jsonBiomeIdentities.size() + " biome temperature overrides");
 		
 		if (jsonBiomeIdentities != null)
 		{
@@ -195,6 +199,8 @@ public class JsonConfigRegistration
 		}
 		
 		Map<String, List<JsonConsumableTemperature>> jsonConsumableTemperatures = processJson(JsonFileName.CONSUMABLE, JsonConfig.consumableTemperature, jsonDir, true);
+		Main.LOGGER.debug("Loaded " + jsonConsumableTemperatures.size() + " consumable temperature values");
+		
 		if (jsonConsumableTemperatures != null)
 		{
 			for (Map.Entry<String, List<JsonConsumableTemperature>> entry : jsonConsumableTemperatures.entrySet())
