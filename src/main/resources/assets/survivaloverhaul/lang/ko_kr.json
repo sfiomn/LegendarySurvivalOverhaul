@@ -1,10 +1,17 @@
 {
 	"item.survivaloverhaul.canteen": "물통",
 	"item.survivaloverhaul.netherite_canteen": "네더라이트 물통",
+	
 	"item.survivaloverhaul.snow_head": "눈 모자",
 	"item.survivaloverhaul.snow_chest": "눈 튜닉",
 	"item.survivaloverhaul.snow_legs": "눈 바지",
 	"item.survivaloverhaul.snow_feet": "눈 장화",
+	
+	"item.survivaloverhaul.desert_head": "사막 모자",
+	"item.survivaloverhaul.desert_chest": "사막 셔츠",
+	"item.survivaloverhaul.desert_legs": "사막 튜닉",
+	"item.survivaloverhaul.desert_feet": "사막 샌들",
+	
 	"item.survivaloverhaul.infernal_fern_leaf": "지옥 고사리 잎",
 	"item.survivaloverhaul.stone_fern_leaf": "돌 고사리 잎",
 	"item.survivaloverhaul.thermometer": "온도계",
@@ -42,6 +49,13 @@
 	"effect.survivaloverhaul.cold_resist": "추위 저항",
 	"effect.survivaloverhaul.thirst": "갈증",
 	
+	"enchantment.survivaloverhaul.adaptive_barrier": "적응성 단열막",
+	"enchantment.survivaloverhaul.adaptive_barrier.desc": "갑옷에 적용 시 상황에 따라 가열/냉각 효과를 제공합니다.",
+	"enchantment.survivaloverhaul.thermal_barrier": "온기 차단막",
+	"enchantment.survivaloverhaul.thermal_barrier.desc": "갑옷에 적용 시 지속적인 냉각 효과를 제공합니다.",
+	"enchantment.survivaloverhaul.cold_barrier": "냉기 차단막",
+	"enchantment.survivaloverhaul.cold_barrier.desc": "갑옷에 적용 시 지속적인 가열 효과를 제공합니다.",
+	
 	"death.attack.survivaloverhaul.hypothermia": "%1$s이(가) 얼어 죽었습니다",
 	"death.attack.survivaloverhaul.hyperthermia": "%1$s은(는) 더위를 피할 수 없었습니다",
 	"death.attack.survivaloverhaul.dehydration": "%1$s이(가) 탈수로 인해 죽었습니다",
@@ -51,7 +65,11 @@
 	"advancements.adventure.have_a_heart.description": "보물 상자에서 하트 과일을 찾으세요",
 	
 	"advancements.adventure.eat_your_heart_out.title": "하트를 먹어치우면",
-	"advancements.adventure.eat_your_heart_out.description": "하트 과일을 먹어 체력 1줄을 더 얻으세요",
+	"advancements.adventure.eat_your_heart_out.description": "하트 과일을 먹어 체력을 1줄 더 채우세요",
 	
 	"key.survivaloverhaul.climb": "오르기"
+	
+	"survivaloverhaul.armorTooltip.heating": "가열",
+	"survivaloverhaul.armorTooltip.cooling": "냉각",
+	"survivaloverhaul.armorTooltip.insulation": "절연 처리"
 }
