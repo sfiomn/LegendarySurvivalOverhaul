@@ -8,9 +8,9 @@ import net.minecraft.world.World;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.SeasonHelper;
 
-public class SereneSeasonModifier extends ModifierBase
+public class SereneSeasonsModifier extends ModifierBase
 {
-	public SereneSeasonModifier()
+	public SereneSeasonsModifier()
 	{
 		super();
 		this.setRegistryName(Main.MOD_ID,"compat/serene_seasons");
@@ -28,8 +28,8 @@ public class SereneSeasonModifier extends ModifierBase
 		try
 		{
 			// In theory, this should only ever run if Serene Seasons is installed
-			// However, just to be safe, we throw this in a try/catch to make sure
-			// something weird hasn't happened with the API
+			// However, just to be safe, we put this inside of a try/catch to make
+			// sure something weird hasn't happened with the API
 			return getUncaughtWorldInfluence(world, pos);
 		}
 		catch (Exception e)
