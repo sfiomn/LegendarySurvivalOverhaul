@@ -179,7 +179,7 @@ public class Config
 					.define("Wetness Modifier", -7.0d);
 			enchantmentMultiplier = builder
 					.comment(" Increases/decreases the effect that cooling/heating enchantments have on a player's temperature.")
-					.define("Enchantment Modifier", 0.25d);
+					.define("Enchantment Modifier", 1.0d);
 			
 			builder.push("huddling");
 			playerHuddlingModifier = builder

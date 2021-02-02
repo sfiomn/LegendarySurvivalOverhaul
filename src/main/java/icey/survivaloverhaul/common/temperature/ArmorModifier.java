@@ -6,7 +6,7 @@ import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
-import icey.survivaloverhaul.common.enchantments.InsulationMagic;
+import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.config.json.JsonConfig;
 import icey.survivaloverhaul.registry.EnchantRegistry;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -41,34 +41,17 @@ public class ArmorModifier extends ModifierBase
 				return 0.0f;
 		
 		float sum = 0.0f;
-		int coolingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, stack),
-			heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, stack);
+		int coolingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, stack);
+		int heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, stack);
 		
 		if (coolingLevel > 0 )
-			sum -= InsulationMagic.calcLevelEffect(coolingLevel);
-		else if (heatingLevel > 0)
-			sum += InsulationMagic.calcLevelEffect(heatingLevel);
+			sum -= coolingLevel * Config.Baked.enchantmentMultiplier;
+		if (heatingLevel > 0)
+			sum += heatingLevel * Config.Baked.enchantmentMultiplier;
 		sum += processStackJson(stack);
 		sum += TemperatureUtil.getArmorTemperatureTag(stack);
 		return sum;
 	}
-	
-	/*
-	 * 
-	int adaptiveLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER, stack);
-	if (adaptiveLevel > 0) 
-		{
-			if (temp <= TemperatureEnum.FROSTBITE.getUpperBound()) 
-			{
-				sum += InsulationMagic.calcLevelEffect(adaptiveLevel);
-			}
-			else if (temp >= TemperatureEnum.HEAT_STROKE.getLowerBound())
-			{
-				sum -= InsulationMagic.calcLevelEffect(adaptiveLevel);
-			}
-		}
-	 * 
-	 */
 	
 	private float processStackJson(ItemStack stack)
 	{

@@ -21,7 +21,7 @@ public class EnchantRegistry
 	}
 	
 	@SubscribeEvent
-	public static void registerBlocks(RegistryEvent.Register<Enchantment> event) {
+	public static void registerEnchants(RegistryEvent.Register<Enchantment> event) {
 		try 
 		{
 			for (Field f : EnchantRegistry.ModEnchants.class.getDeclaredFields()) 
@@ -39,7 +39,9 @@ public class EnchantRegistry
 					}
 				}
 			}
-		} catch (IllegalAccessException e) {
+		} 
+		catch (IllegalAccessException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}

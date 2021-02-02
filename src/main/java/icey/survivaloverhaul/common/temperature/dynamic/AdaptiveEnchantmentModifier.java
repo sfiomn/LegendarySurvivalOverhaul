@@ -2,8 +2,7 @@ package icey.survivaloverhaul.common.temperature.dynamic;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
-import icey.survivaloverhaul.api.temperature.TemperatureEnum;
-import icey.survivaloverhaul.common.enchantments.InsulationMagic;
+import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.registry.EnchantRegistry;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,7 +30,7 @@ public class AdaptiveEnchantmentModifier extends DynamicModifierBase
 		return value;
 	}
 	
-	private float checkArmorSlot(ItemStack stack, float temp)
+	private float checkArmorSlot(ItemStack stack, float currentTemperature)
 	{
 		if (stack.isEmpty())
 				return 0.0f;
@@ -39,15 +38,17 @@ public class AdaptiveEnchantmentModifier extends DynamicModifierBase
 		float sum = 0.0f;
 		
 		int adaptiveLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER, stack);
+		
+		int diff = (int) (currentTemperature - defaultTemperature);
 		if (adaptiveLevel > 0) 
 		{
-			if (temp <= TemperatureEnum.FROSTBITE.getUpperBound()) 
+			if (currentTemperature > defaultTemperature) 
 			{
-				sum += InsulationMagic.calcLevelEffect(adaptiveLevel);
+				sum -= Math.min(adaptiveLevel * Config.Baked.enchantmentMultiplier, Math.abs(diff));
 			}
-			else if (temp >= TemperatureEnum.HEAT_STROKE.getLowerBound())
+			else if (currentTemperature < defaultTemperature)
 			{
-				sum -= InsulationMagic.calcLevelEffect(adaptiveLevel);
+				sum += Math.min(adaptiveLevel * Config.Baked.enchantmentMultiplier, Math.abs(diff));
 			}
 		}
 		
