@@ -9,26 +9,26 @@ import net.minecraft.inventory.EquipmentSlotType;
 public class InsulationMagic extends GenericMagic
 {	
 	private final static EquipmentSlotType[] slots = new EquipmentSlotType[] {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
-	private MagicType MT;
+	private MagicType magicType;
 	/**
 	 * @param name of enchant
 	 */
-	public InsulationMagic(String name, MagicType MT) 
+	public InsulationMagic(String name, MagicType magicType) 
 	{
 		super(Rarity.RARE, EnchantmentType.ARMOR, slots, new EnchantOptions(3));
 		this.setRegistryName(Main.MOD_ID, name);
-		this.MT = MT;
+		this.magicType = magicType;
 	}
 	
 	public MagicType getMagicType()
 	{
-		return this.MT;
+		return this.magicType;
 	}
 	
 	@Override
 	public boolean isTreasureEnchantment()
 	{
-		if (this.MT == MagicType.Both)
+		if (this.magicType == MagicType.Both)
 			return true;
 		else
 			return false;
