@@ -275,11 +275,23 @@ public class JsonConfigRegistration
 	
 	private static <T> void manuallyWriteToJson(JsonFileName jfn, final T container, File jsonDir) throws Exception
 	{
+		manuallyWriteToJson(jfn, container, jsonDir, false);
+	}
+	
+	private static <T> void manuallyWriteToJson(JsonFileName jfn, final T container, File jsonDir, boolean forceWrite) throws Exception
+	{
 		String jsonFileName = jfn.get();
 		Type type = JsonTypeToken.get(jfn);
 		
 		Gson gson = buildNewGson();
 		File jsonFile = new File(jsonDir, jsonFileName);
+		if (jsonFile.exists())
+		{
+			if (forceWrite)
+				Main.LOGGER.debug("Overriding...");
+			else
+				return;
+		}
 		FileUtils.write(jsonFile, gson.toJson(container, type), (String) null);
 	}
 	
