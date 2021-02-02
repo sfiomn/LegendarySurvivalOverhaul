@@ -28,6 +28,8 @@ public final class CompatController
 			initBYG();
 		if (mods.isLoaded("artifacts"))
 			initArtifacts();
+		if (mods.isLoaded("endergetic"))
+			initEndergeticExpansion();
 	}
 	
 	private static void initCreate()
@@ -78,5 +80,14 @@ public final class CompatController
 		JsonConfig.registerArmorTemperature("artifacts:villager_hat", -2.5f);
 		JsonConfig.registerArmorTemperature("artifacts:lucky_scarf", 2.5f);
 		JsonConfig.registerArmorTemperature("artifacts:scarf_of_invisibility", 2.5f);
+	}
+	
+	private static void initEndergeticExpansion() 
+	{
+		JsonConfig.registerBlockTemperature("endergetic:ender_fire", -5.0f);
+		JsonConfig.registerBlockTemperature("endergetic:ender_campfire", -7.5f);
+		JsonConfig.registerBlockTemperature("endergetic:ender_torch", -1.5f);
+		JsonConfig.registerBlockTemperature("endergetic:ender_wall_torch", -1.5f);
+		
 	}
 }
