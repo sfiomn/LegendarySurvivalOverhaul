@@ -23,6 +23,8 @@ public final class CompatController
 			initRealisticTorches();
 		if (mods.isLoaded("byg"))
 			initBYG();
+		if (mods.isLoaded("artifacts"))
+			initArtifacts();
 	}
 	
 	private static void initCreate()
@@ -66,5 +68,12 @@ public final class CompatController
 		JsonConfig.registerBlockTemperature("byg:cryptic_fire", 5.0f);
 		JsonConfig.registerBlockTemperature("byg:cryptic_campfire", 7.5f, new JsonPropertyValue("lit", "true"));
 		JsonConfig.registerBlockTemperature("byg:cryptic_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
+	}
+	
+	private static void initArtifacts()
+	{
+		JsonConfig.registerArmorTemperature("artifacts:villager_hat", -2.5f);
+		JsonConfig.registerArmorTemperature("artifacts:lucky_scarf", 2.5f);
+		JsonConfig.registerArmorTemperature("artifacts:scarf_of_invisibility", 2.5f);
 	}
 }
