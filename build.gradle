@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.3.1-beta-dev'
+version = '1.16.4-0.3.1-beta-dev'
 group = 'icey.survivaloverhaul' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'survivaloverhaul'
 
@@ -132,10 +132,10 @@ dependencies {
 	runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
 	// compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65:api")
 	
-	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5") // Curios
+	// runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5") // Curios
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5:api") // Curios API
 	
-	runtimeOnly fg.deobf("curse.maven:artifacts-312353:3164601")
+	// runtimeOnly fg.deobf("curse.maven:artifacts-312353:3164601")
 	// compile fg.deobf('curse.maven:obfuscate-289380:3169370') // Obfuscate
 	
 	// For more info...
