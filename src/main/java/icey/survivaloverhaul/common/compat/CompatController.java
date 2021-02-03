@@ -32,6 +32,8 @@ public final class CompatController
 			initEndergeticExpansion();
 		if (mods.isLoaded("infernalexp"))
 			initInfernalExpansion();
+		if (mods.isLoaded("biomesoplenty"))
+			initBiomesOPlenty();
 	}
 	
 	private static void initCreate()
@@ -98,5 +100,16 @@ public final class CompatController
 		JsonConfig.registerBlockTemperature("infernalexp:campfire_glow", 7.5f);
 		JsonConfig.registerBlockTemperature("infernalexp:torch_glow", 1.5f);
 		JsonConfig.registerBlockTemperature("infernalexp:torch_glow_wall", 1.5f);
+	}
+	
+	private static void initBiomesOPlenty()
+	{
+		JsonConfig.registerBiomeOverride("biomesoplenty:volcano", 1.5f, false, true);
+		JsonConfig.registerBiomeOverride("biomesoplenty:volcanic_plains", 1.5f, false, true);
+		
+		JsonConfig.registerBiomeOverride("biomesoplenty:crystalline_chasm", 0.8f, false, false);
+		JsonConfig.registerBiomeOverride("biomesoplenty:undergrowth", 0.75f, false, false);
+		JsonConfig.registerBiomeOverride("biomesoplenty:visceral_heap", 0.9f, false, false);
+		JsonConfig.registerBiomeOverride("biomesoplenty:withered_abyss", 1.5f, false, true);
 	}
 }
