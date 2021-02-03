@@ -66,15 +66,6 @@ public final class CompatController
 		JsonConfig.registerBlockTemperature("realistictorches:torch_wall", 0.0f, new JsonPropertyValue("litstate", "0"));
 	}
 	
-	private static void initInfernalExpansion()
-	{
-
-		JsonConfig.registerBlockTemperature("infernalexp:fire_glow", 5.0f);
-		JsonConfig.registerBlockTemperature("infernalexp:campfire_glow", 7.5f);
-		JsonConfig.registerBlockTemperature("infernalexp:torch_glow", 1.5f);
-		JsonConfig.registerBlockTemperature("infernalexp:torch_glow_wall", 1.5f);
-	}
-	
 	private static void initBYG()
 	{
 		JsonConfig.registerBlockTemperature("byg:boric_fire", 5.0f);
@@ -99,6 +90,14 @@ public final class CompatController
 		JsonConfig.registerBlockTemperature("endergetic:ender_campfire", -7.5f);
 		JsonConfig.registerBlockTemperature("endergetic:ender_torch", -1.5f);
 		JsonConfig.registerBlockTemperature("endergetic:ender_wall_torch", -1.5f);
-		
+	}
+	
+	private static void initInfernalExpansion()
+	{
+
+		JsonConfig.registerBlockTemperature("infernalexp:fire_glow", 5.0f);
+		JsonConfig.registerBlockTemperature("infernalexp:campfire_glow", 7.5f);
+		JsonConfig.registerBlockTemperature("infernalexp:torch_glow", 1.5f);
+		JsonConfig.registerBlockTemperature("infernalexp:torch_glow_wall", 1.5f);
 	}
 }
