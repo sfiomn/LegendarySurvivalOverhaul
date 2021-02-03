@@ -18,7 +18,7 @@ public class TemperatureCommand extends CommandBase
 	
 	public TemperatureCommand()
 	{
-		this.builder = Commands.literal("temperature").executes(src -> new TemperatureCommand().execute(src.getSource()));
+		super(Commands.literal("temperature").executes(src -> new TemperatureCommand().execute(src.getSource())));
 	}
 
 	@Override

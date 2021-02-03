@@ -3,9 +3,11 @@ package icey.survivaloverhaul.registry;
 import java.lang.reflect.Field;
 
 import icey.survivaloverhaul.Main;
+import icey.survivaloverhaul.common.enchantments.GenericMagic.EnchantOptions;
 import icey.survivaloverhaul.common.enchantments.InsulationMagic;
 import icey.survivaloverhaul.common.enchantments.InsulationMagic.MagicType;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantment.Rarity;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -15,9 +17,9 @@ public class EnchantRegistry
 {
 	public static final class ModEnchants
 	{
-		public static final InsulationMagic ADAPTIVE_BARRIER = new InsulationMagic("adaptive_barrier", MagicType.Both);
-		public static final InsulationMagic THERMAL_BARRIER = new InsulationMagic("thermal_barrier", MagicType.Heat);
-		public static final InsulationMagic COLD_BARRIER = new InsulationMagic("cold_barrier", MagicType.Cool);
+		public static final InsulationMagic ADAPTIVE_BARRIER = new InsulationMagic("adaptive_barrier", MagicType.Both, Rarity.VERY_RARE, new EnchantOptions(4));
+		public static final InsulationMagic THERMAL_BARRIER = new InsulationMagic("thermal_barrier", MagicType.Heat, Rarity.RARE, new EnchantOptions(3));
+		public static final InsulationMagic COLD_BARRIER = new InsulationMagic("cold_barrier", MagicType.Cool, Rarity.RARE, new EnchantOptions(3));
 	}
 	
 	@SubscribeEvent

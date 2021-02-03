@@ -12,9 +12,9 @@ public class InsulationMagic extends GenericMagic
 	/**
 	 * @param name of enchant
 	 */
-	public InsulationMagic(String name, MagicType magicType) 
+	public InsulationMagic(String name, MagicType magicType, Rarity rarity, EnchantOptions Options) 
 	{
-		super(Rarity.RARE, EnchantmentType.ARMOR, slots, new EnchantOptions(3));
+		super(rarity, EnchantmentType.ARMOR, slots, Options);
 		this.setRegistryName(Main.MOD_ID, name);
 		this.magicType = magicType;
 	}

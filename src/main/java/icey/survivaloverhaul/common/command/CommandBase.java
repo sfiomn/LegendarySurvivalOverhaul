@@ -9,8 +9,14 @@ import net.minecraft.command.CommandSource;
 //cmd execute template
 public class CommandBase
 {
+	// may not be used in most cases but still might be useful in this scope
 	CommandSource source;
 	LiteralArgumentBuilder<CommandSource> builder;
+	
+	public CommandBase(LiteralArgumentBuilder<CommandSource> builder) 
+	{
+		this.builder = builder;
+	}
 		
 	public LiteralArgumentBuilder<CommandSource> getBuilder() { return builder;}
 		
