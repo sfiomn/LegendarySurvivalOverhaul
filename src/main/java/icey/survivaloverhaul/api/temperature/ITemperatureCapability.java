@@ -20,6 +20,14 @@ public interface ITemperatureCapability
 	public void addTemperatureLevel(int temperature);
 	public void addTemperatureTickTimer(int ticktimer);
 	
+	public int getWetness();
+	public void setWetness(int wetness);
+	public void addWetness(int wetness);
+	
+	public int getFireTimer();
+	public void setFireTimer(int fireTimer);
+	public void addFireTimer(int fireTimer);
+	
 	public void clearTemporaryModifiers();
 	
 	/**

@@ -8,7 +8,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
-import icey.survivaloverhaul.registry.TemperatureModifierRegistry;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
