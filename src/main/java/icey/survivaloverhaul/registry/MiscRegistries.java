@@ -13,4 +13,15 @@ public class MiscRegistries
 		
 		public static final SoundEvent PLAYER_SIZZLE_LOOP = new SoundEvent(new ResourceLocation(Main.MOD_ID, "player.overheat.loop"));
 	}
+	
+	public static final class EntityTypeTags
+	{
+		public static final ResourceLocation FREEZING_IMMUNE = new ResourceLocation(Main.MOD_ID, "freezing_immune");
+		public static final ResourceLocation FREEZING_WEAK = new ResourceLocation(Main.MOD_ID, "freezing_weak");
+	}
+	
+	public static final class BlockTypeTags
+	{
+		public static final ResourceLocation FREE_CLIMBABLE = new ResourceLocation(Main.MOD_ID, "free_climbable");
+	}
 }

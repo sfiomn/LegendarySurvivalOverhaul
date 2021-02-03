@@ -12,4 +12,6 @@ public class DamageSources
 	public static final DamageSource HYPOTHERMIA = new DamageSource(Main.MOD_ID + ".hypothermia").setDamageBypassesArmor();
 	public static final DamageSource HYPERTHERMIA = new DamageSource(Main.MOD_ID + ".hyperthermia").setDamageBypassesArmor();
 	public static final DamageSource FALLING_AND_GRABBING_CLIFF = new DamageSource(Main.MOD_ID + ".breaking_arms").setDamageBypassesArmor();
+	
+	public static final DamageSource ATTACKED_WHILE_FROZEN = new DamageSource(Main.MOD_ID + ".frozen_shattering");
 }
