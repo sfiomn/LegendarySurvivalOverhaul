@@ -36,7 +36,6 @@ public class ModCapabilities
 {
 	public static final ResourceLocation TEMPERATURE_RES = new ResourceLocation(Main.MOD_ID, "temperature");
 	public static final ResourceLocation HEART_MOD_RES = new ResourceLocation(Main.MOD_ID, "heart_modifier");
-	// public static final ResourceLocation STAMINA_RES = new ResourceLocation(Main.MOD_ID, "stamina");
 	
 	@SubscribeEvent
 	public static void attachCapability(AttachCapabilitiesEvent<Entity> event)
@@ -45,7 +44,6 @@ public class ModCapabilities
 		{
 			event.addCapability(TEMPERATURE_RES, new TemperatureProvider());
 			event.addCapability(HEART_MOD_RES, new HeartModifierProvider());
-			// event.addCapability(STAMINA_RES, new StaminaProvider());
 		}
 	}
 
@@ -58,13 +56,6 @@ public class ModCapabilities
 		if (world.isRemote)
 		{
 			// Client Side
-			/*
-			if (Config.Baked.staminaEnabled && !shouldSkipTick(player))
-			{
-				StaminaCapability staminaCap = StaminaCapability.getStaminaCapability(player);
-				staminaCap.clientTickUpdate(player, world, event.phase);
-			}
-			*/
 			return;
 		}
 		else
@@ -82,18 +73,6 @@ public class ModCapabilities
 					sendTemperatureUpdate(player);
 				}
 			}
-			/*
-			if (Config.Baked.staminaEnabled && !shouldSkipTick(player))
-			{
-				StaminaCapability staminaCap = StaminaCapability.getStaminaCapability(player);
-				staminaCap.tickUpdate(player, world, event.phase);
-				
-				if (event.phase == Phase.START && (staminaCap.getPacketTimer() % Config.Baked.routinePacketSync == 0))
-				{
-					sendStaminaUpdate(player);
-				}
-			}
-			*/
 		}
 	}
 	
@@ -132,7 +111,7 @@ public class ModCapabilities
 		
 		if (event.isWasDeath())
 		{
-			if (Config.Baked.heartFruitsEnabled && Config.Baked.heartsLostOnDeath != -1)
+			if (Config.Baked.heartFruitsEnabled && Config.Baked.heartsLostOnDeath >= 0)
 			{
 				HeartModifierCapability oldCap = HeartModifierCapability.getHeartModCapability(orig);
 				HeartModifierCapability newCap = HeartModifierCapability.getHeartModCapability(player);
@@ -154,15 +133,6 @@ public class ModCapabilities
 				newCap.load(oldCap.save());
 				sendTemperatureUpdate(player);
 			}
-			/*
-			if (Config.Baked.staminaEnabled)
-			{
-				StaminaCapability oldCap = StaminaCapability.getStaminaCapability(orig);
-				StaminaCapability newCap = StaminaCapability.getStaminaCapability(player);
-				newCap.load(oldCap.save());
-				sendStaminaUpdate(player);
-			}
-			*/
 			
 			if (Config.Baked.heartFruitsEnabled)
 			{
@@ -194,17 +164,6 @@ public class ModCapabilities
 			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
 		}
 	}
-	/*
-	private static void sendStaminaUpdate(PlayerEntity player)
-	{
-		if (!player.world.isRemote())
-		{			
-			UpdateStaminaPacket packet = new UpdateStaminaPacket(Main.STAMINA_CAP.getStorage().writeNBT(Main.STAMINA_CAP, StaminaCapability.getStaminaCapability(player), null));
-			
-			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
-		}
-	}
-	*/
 
 	@SubscribeEvent
 	public static void syncCapsOnDimensionChange(PlayerChangedDimensionEvent event)
@@ -214,10 +173,6 @@ public class ModCapabilities
 			sendTemperatureUpdate(player);
 		if (Config.Baked.heartFruitsEnabled)
 			sendHeartsUpdate(player);
-		/*
-		if (Config.Baked.staminaEnabled)
-			sendStaminaUpdate(player);
-		*/
 	}
 
 	@SubscribeEvent
@@ -228,10 +183,6 @@ public class ModCapabilities
 			sendTemperatureUpdate(player);
 		if (Config.Baked.heartFruitsEnabled)
 			sendHeartsUpdate(player);
-		/*
-		if (Config.Baked.staminaEnabled)
-			sendStaminaUpdate(player);
-		*/
 	}
 	
 	protected static boolean shouldSkipTick(PlayerEntity player)

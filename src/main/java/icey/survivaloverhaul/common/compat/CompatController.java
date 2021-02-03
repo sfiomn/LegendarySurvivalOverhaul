@@ -94,7 +94,6 @@ public final class CompatController
 	
 	private static void initInfernalExpansion()
 	{
-
 		JsonConfig.registerBlockTemperature("infernalexp:fire_glow", 5.0f);
 		JsonConfig.registerBlockTemperature("infernalexp:campfire_glow", 7.5f);
 		JsonConfig.registerBlockTemperature("infernalexp:torch_glow", 1.5f);
