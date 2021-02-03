@@ -138,9 +138,19 @@ public class JsonConfig
 		fluidTemperatures.put(registryName, new JsonTemperature(temperature));
 	}
 	
+	public static void registerBiomeOverride(String registryName, float temperature)
+	{
+		registerBiomeOverride(registryName, temperature, false, false);
+	}
+	
 	public static void registerBiomeOverride(String registryName, float temperature, boolean isDry)
 	{
+		registerBiomeOverride(registryName, temperature, isDry, false);
+	}
+	
+	public static void registerBiomeOverride(String registryName, float temperature, boolean isDry, boolean scorched)
+	{
 		if(!biomeOverrides.containsKey(registryName))
-				biomeOverrides.put(registryName, new JsonBiomeIdentity(temperature, isDry));
+				biomeOverrides.put(registryName, new JsonBiomeIdentity(temperature, isDry, scorched));
 	}
 }
