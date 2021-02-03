@@ -5,6 +5,8 @@ import java.lang.reflect.Field;
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
+import icey.survivaloverhaul.common.compat.curios.CuriosModifier;
+import icey.survivaloverhaul.common.compat.sereneseasons.SereneSeasonsModifier;
 import icey.survivaloverhaul.common.temperature.*;
 import icey.survivaloverhaul.common.temperature.dynamic.*;
 import net.minecraftforge.event.RegistryEvent;
@@ -30,6 +32,10 @@ public class TemperatureModifierRegistry
 		public static final ModifierBase PLAYER_HUDDLING = new PlayerHuddlingModifier();
 		// This is currently broken, I'll try implementing it later
 		// public static final ModifierBase ARMOR_INSULATION = new ArmorInsulationModifier();
+		
+		// Compatibility Modifiers
+		public static final ModifierBase SERENE_SEASONS = new SereneSeasonsModifier();
+		public static final ModifierBase CURIOS = new CuriosModifier();
 	}
 	
 	public static class DynamicModifierList
