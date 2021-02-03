@@ -71,5 +71,9 @@
 	
 	"survivaloverhaul.armorTooltip.heating": "Heating",
 	"survivaloverhaul.armorTooltip.cooling": "Cooling",
-	"survivaloverhaul.armorTooltip.insulation": "Insulation"
+	"survivaloverhaul.armorTooltip.insulation": "Insulation",
+	
+	"entity.generic.freeze.enter.subtitles": "Something freezes",
+	"entity.generic.freeze.exit.subtitles": "Something shatters",
+	"player.overheat.loop": "Player sizzles"
 }

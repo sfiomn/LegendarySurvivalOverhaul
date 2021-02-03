@@ -1,0 +1,10 @@
+{
+	"replace": false,
+	"values": [
+		"minecraft:stray",
+		"minecraft:vex",
+		"minecraft:phantom",
+		"minecraft:ender_dragon",
+		"minecraft:wither"
+	]
+}
