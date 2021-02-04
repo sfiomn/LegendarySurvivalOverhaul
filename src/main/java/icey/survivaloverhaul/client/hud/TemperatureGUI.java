@@ -73,7 +73,7 @@ public class TemperatureGUI
 		switch (Config.Baked.temperatureDisplayMode)
 		{
 		case SYMBOL:
-			drawAsSymbol(matrix, cap, width, height);
+			drawTemperatureAsSymbol(matrix, cap, width, height);
 			break;
 		default:
 			break;
@@ -83,7 +83,7 @@ public class TemperatureGUI
 		RenderSystem.disableBlend();
 	}
 	
-	public static void drawAsSymbol(MatrixStack matrix, TemperatureCapability cap, int width, int height)
+	public static void drawTemperatureAsSymbol(MatrixStack matrix, TemperatureCapability cap, int width, int height)
 	{
 		int x = width / 2 - 8;
 		int y = height - 54;
