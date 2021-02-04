@@ -73,8 +73,8 @@ public class CuriosModifier extends ModifierBase
 			
 			return sum;
 		}
-		
-		return 0.0f;
+		else
+			return 0.0f;
 	}
 	
 	private float processStackJson(ItemStack stack)
