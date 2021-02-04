@@ -31,7 +31,6 @@ public class EffectRegistry
 		
 		public static final Effect EXHAUSTION = new ExhaustionEffect();
 		
-		public static final Effect THIRST = new ThirstEffect();
 		public static final Effect FROZEN = new FrozenEffect();
 	}
 	
