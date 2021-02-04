@@ -46,6 +46,8 @@ import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
+import icey.survivaloverhaul.common.capability.frozen.FrozenCapability;
+import icey.survivaloverhaul.common.capability.frozen.FrozenStorage;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierStorage;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
@@ -143,11 +145,14 @@ public class Main
 	public static final Capability<TemperatureCapability> TEMPERATURE_CAP = null;
 	@CapabilityInject(HeartModifierCapability.class)
 	public static final Capability<HeartModifierCapability> HEART_MOD_CAP = null;
+	@CapabilityInject(FrozenCapability.class)
+	public static final Capability<FrozenCapability> FROZEN_CAP = null;
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		CapabilityManager.INSTANCE.register(TemperatureCapability.class, new TemperatureStorage(), TemperatureCapability::new);
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
+		CapabilityManager.INSTANCE.register(FrozenCapability.class, new FrozenStorage(), FrozenCapability::new);
 		
 		NetworkHandler.register();
 	}

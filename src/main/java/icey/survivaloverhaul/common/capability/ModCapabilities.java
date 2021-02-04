@@ -4,6 +4,7 @@ import java.util.List;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
+import icey.survivaloverhaul.common.capability.frozen.FrozenProvider;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierProvider;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
@@ -23,6 +24,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -36,14 +38,20 @@ public class ModCapabilities
 {
 	public static final ResourceLocation TEMPERATURE_RES = new ResourceLocation(Main.MOD_ID, "temperature");
 	public static final ResourceLocation HEART_MOD_RES = new ResourceLocation(Main.MOD_ID, "heart_modifier");
+	public static final ResourceLocation FROZEN_RES = new ResourceLocation(Main.MOD_ID, "frozen");
 	
 	@SubscribeEvent
 	public static void attachCapability(AttachCapabilitiesEvent<Entity> event)
 	{
-		if (event.getObject() instanceof PlayerEntity)
+		if (event.getObject() instanceof LivingEntity)
 		{
-			event.addCapability(TEMPERATURE_RES, new TemperatureProvider());
-			event.addCapability(HEART_MOD_RES, new HeartModifierProvider());
+			event.addCapability(FROZEN_RES, new FrozenProvider());
+			
+			if (event.getObject() instanceof PlayerEntity)
+			{
+				event.addCapability(TEMPERATURE_RES, new TemperatureProvider());
+				event.addCapability(HEART_MOD_RES, new HeartModifierProvider());
+			}
 		}
 	}
 
