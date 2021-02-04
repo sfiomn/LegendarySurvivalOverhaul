@@ -6,6 +6,8 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.WaterFluid;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -168,7 +170,7 @@ public class TemperatureCapability implements ITemperatureCapability
 	}
 	
 	@Override
-	public void tickUpdate(PlayerEntity player, World world, Phase phase)
+	public void tickTemperature(PlayerEntity player, World world, Phase phase)
 	{
 		if(phase == TickEvent.Phase.START)
 		{
@@ -185,6 +187,9 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 		
 		addTemperatureTickTimer(1);
+		
+		tickWetness(player, world);
+		tickFireTimer(player, world);
 		
 		if (getTemperatureTickTimer() >= getTemperatureTickLimit())
 		{
@@ -213,7 +218,6 @@ public class TemperatureCapability implements ITemperatureCapability
 			}
 			else if (tempEnum == TemperatureEnum.FROSTBITE)
 			{
-
 				if(TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.ModEffects.COLD_RESISTANCE))
 				{
 					// Apply hypothermia
@@ -245,6 +249,31 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 		
 		oldModifierSize = temporaryModifiers.size();
+	}
+	
+	private void tickWetness(PlayerEntity player, World world)
+	{
+		Fluid fluidIn = world.getFluidState(player.getPosition()).getFluid();
+		Fluid fluidUp = world.getFluidState(player.getPosition().up()).getFluid();
+		
+		if (world.isRainingAt(player.getPosition()))
+			addWetness(1);
+		else if (fluidIn instanceof WaterFluid || fluidUp instanceof WaterFluid)
+			addWetness(5);
+		else
+			addWetness(-2);
+		
+		if (player.getFireTimer() > 0 && this.getWetness() > 0)
+		{
+			addWetness(-8);
+			player.forceFireTicks(player.getFireTimer() - 10);
+		}
+		
+	}
+	
+	private void tickFireTimer(PlayerEntity player, World world)
+	{
+		
 	}
 	
 	private boolean playerIsImmuneToHeat(PlayerEntity player)

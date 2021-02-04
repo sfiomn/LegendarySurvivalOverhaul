@@ -37,7 +37,7 @@ public interface ITemperatureCapability
 	 * @param world
 	 * @param phase
 	 */
-	public void tickUpdate(PlayerEntity player, World world, TickEvent.Phase phase);
+	public void tickTemperature(PlayerEntity player, World world, TickEvent.Phase phase);
 	
 	/**
 	 * (Don't use this!) <br>

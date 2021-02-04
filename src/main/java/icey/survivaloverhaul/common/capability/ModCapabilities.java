@@ -65,7 +65,7 @@ public class ModCapabilities
 			if (Config.Baked.temperatureEnabled && !shouldSkipTick(player))
 			{
 				TemperatureCapability tempCap = TemperatureCapability.getTempCapability(player);
-				tempCap.tickUpdate(player, world, event.phase);
+				tempCap.tickTemperature(player, world, event.phase);
 				
 				if(event.phase == Phase.START && (tempCap.isDirty() || tempCap.getPacketTimer() % Config.Baked.routinePacketSync == 0))
 				{
