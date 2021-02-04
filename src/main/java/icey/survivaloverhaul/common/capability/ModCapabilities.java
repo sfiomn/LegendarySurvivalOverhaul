@@ -4,7 +4,6 @@ import java.util.List;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
-import icey.survivaloverhaul.common.capability.frozen.FrozenProvider;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability;
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierProvider;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
@@ -38,14 +37,14 @@ public class ModCapabilities
 {
 	public static final ResourceLocation TEMPERATURE_RES = new ResourceLocation(Main.MOD_ID, "temperature");
 	public static final ResourceLocation HEART_MOD_RES = new ResourceLocation(Main.MOD_ID, "heart_modifier");
-	public static final ResourceLocation FROZEN_RES = new ResourceLocation(Main.MOD_ID, "frozen");
+	// public static final ResourceLocation FROZEN_RES = new ResourceLocation(Main.MOD_ID, "frozen");
 	
 	@SubscribeEvent
 	public static void attachCapability(AttachCapabilitiesEvent<Entity> event)
 	{
 		if (event.getObject() instanceof LivingEntity)
 		{
-			event.addCapability(FROZEN_RES, new FrozenProvider());
+			// event.addCapability(FROZEN_RES, new FrozenProvider());
 			
 			if (event.getObject() instanceof PlayerEntity)
 			{
