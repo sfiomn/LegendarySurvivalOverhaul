@@ -20,14 +20,6 @@ public interface ITemperatureCapability
 	public void addTemperatureLevel(int temperature);
 	public void addTemperatureTickTimer(int ticktimer);
 	
-	public int getWetness();
-	public void setWetness(int wetness);
-	public void addWetness(int wetness);
-	
-	public int getFireTimer();
-	public void setFireTimer(int fireTimer);
-	public void addFireTimer(int fireTimer);
-	
 	public void clearTemporaryModifiers();
 	
 	/**
@@ -37,7 +29,7 @@ public interface ITemperatureCapability
 	 * @param world
 	 * @param phase
 	 */
-	public void tickTemperature(PlayerEntity player, World world, TickEvent.Phase phase);
+	public void tickUpdate(PlayerEntity player, World world, TickEvent.Phase phase);
 	
 	/**
 	 * (Don't use this!) <br>

@@ -32,10 +32,10 @@ public class TemperatureGUI
 	
 	public static final ResourceLocation ICONS = new ResourceLocation(Main.MOD_ID, "textures/gui/overlay.png");
 	
-	private static final int texturePosY = 48;
+	private static final int temperatureTexturePosY = 48;
 	
-	private static final int textureWidth = 16;
-	private static final int textureHeight = 16;
+	private static final int temperatureTextureWidth = 16;
+	private static final int temperatureTextureHeight = 16;
 
 	private static int oldTemperature = -1;
 	private static int frameCounter = -1;
@@ -48,7 +48,7 @@ public class TemperatureGUI
 	@SubscribeEvent
 	public static void renderHud(RenderGameOverlayEvent event)
 	{
-		if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE
+		if (event.getType() == RenderGameOverlayEvent.ElementType.ALL
 				&& Config.Baked.temperatureEnabled 
 				&& mc.playerController.gameIsSurvivalOrAdventure())
 		{
@@ -60,13 +60,13 @@ public class TemperatureGUI
 			bind(ICONS);
 			TemperatureCapability cap = TemperatureCapability.getTempCapability(mc.player);
 			
-			renderTemperatureGui(event.getMatrixStack(), cap, scaledWidth, scaledHeight);
+			renderGUI(event.getMatrixStack(), cap, scaledWidth, scaledHeight);
 			
 			bind(AbstractGui.GUI_ICONS_LOCATION);
 		}
 	}
 	
-	public static void renderTemperatureGui(MatrixStack matrix, TemperatureCapability cap, int width, int height)
+	public static void renderGUI(MatrixStack matrix, TemperatureCapability cap, int width, int height)
 	{
 		RenderSystem.enableBlend();
 		
@@ -78,7 +78,6 @@ public class TemperatureGUI
 		default:
 			break;
 		}
-		
 		
 		RenderSystem.disableBlend();
 	}
@@ -181,8 +180,8 @@ public class TemperatureGUI
 		
 		Matrix4f m4f = matrix.getLast().getMatrix();
 		
-		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, textureWidth * icon.getIconIndex(), texturePosY, textureWidth, textureHeight);
-		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, textureWidth * icon.getIconHolder(), texturePosY, textureWidth, textureHeight);
+		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, temperatureTextureWidth * icon.getIconIndex(), temperatureTexturePosY, temperatureTextureWidth, temperatureTextureHeight);
+		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, temperatureTextureWidth * icon.getIconHolder(), temperatureTexturePosY, temperatureTextureWidth, temperatureTextureHeight);
 		
 		if (oldTemperature == -1)
 		{
@@ -196,10 +195,10 @@ public class TemperatureGUI
 			startAnimation = true;
 		}
 		
-		int ovrXOffset = textureWidth * ((frameCounter / 2) - 1);
-		int ovrYOffset = texturePosY + (textureHeight * (risingTemperature ? 1 : 2));
+		int ovrXOffset = temperatureTextureWidth * ((frameCounter / 2) - 1);
+		int ovrYOffset = temperatureTexturePosY + (temperatureTextureHeight * (risingTemperature ? 1 : 2));
 
-		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, ovrXOffset, ovrYOffset, textureWidth, textureHeight);
+		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, ovrXOffset, ovrYOffset, temperatureTextureWidth, temperatureTextureHeight);
 	}
 	
 	@SubscribeEvent

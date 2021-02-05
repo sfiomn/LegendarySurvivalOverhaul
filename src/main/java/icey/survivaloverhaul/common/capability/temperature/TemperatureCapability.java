@@ -6,14 +6,11 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.WaterFluid;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -37,9 +34,6 @@ public class TemperatureCapability implements ITemperatureCapability
 	private int tickTimer;
 	private Map<String, TemporaryModifier> temporaryModifiers;
 	
-	private int wetness;
-	private int fireTimer;
-	
 	//Unsaved data
 	private int oldTemperature;
 	private int updateTimer; //Update immediately first time around
@@ -57,8 +51,6 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		this.temperature = TemperatureEnum.NORMAL.getMiddle();
 		this.tickTimer = 0;
-		this.wetness = 0;
-		this.fireTimer = 0;
 		
 		this.temporaryModifiers = new HashMap<String, TemporaryModifier>();
 		
@@ -128,49 +120,13 @@ public class TemperatureCapability implements ITemperatureCapability
 	}
 
 	@Override
-	public int getWetness()
-	{
-		return this.wetness;
-	}
-
-	@Override
-	public void setWetness(int wetness)
-	{
-		this.wetness = MathHelper.clamp(wetness, 0, WETNESS_LIMIT);
-	}
-
-	@Override
-	public void addWetness(int wetness)
-	{
-		this.setWetness(this.wetness + wetness);
-	}
-
-	@Override
-	public int getFireTimer()
-	{
-		return this.fireTimer;
-	}
-
-	@Override
-	public void setFireTimer(int fireTimer)
-	{
-		this.fireTimer = MathHelper.clamp(fireTimer, 0, FIRE_TIMER_LIMIT);
-	}
-
-	@Override
-	public void addFireTimer(int fireTimer)
-	{
-		this.setFireTimer(this.fireTimer + fireTimer);
-	}
-
-	@Override
 	public void clearTemporaryModifiers()
 	{
 		this.temporaryModifiers.clear();
 	}
 	
 	@Override
-	public void tickTemperature(PlayerEntity player, World world, Phase phase)
+	public void tickUpdate(PlayerEntity player, World world, Phase phase)
 	{
 		if(phase == TickEvent.Phase.START)
 		{
@@ -187,9 +143,6 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 		
 		addTemperatureTickTimer(1);
-		
-		tickWetness(player, world);
-		tickFireTimer(player, world);
 		
 		if (getTemperatureTickTimer() >= getTemperatureTickLimit())
 		{
@@ -227,6 +180,12 @@ public class TemperatureCapability implements ITemperatureCapability
 			}
 		}
 		
+		updateTemporaryModifiers();
+		
+	}
+	
+	private void updateTemporaryModifiers()
+	{
 		Map<String, TemporaryModifier> tweaks = new HashMap<String, TemporaryModifier>();
 		
 		for(Map.Entry<String, TemporaryModifier> entry : temporaryModifiers.entrySet())
@@ -249,31 +208,6 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 		
 		oldModifierSize = temporaryModifiers.size();
-	}
-	
-	private void tickWetness(PlayerEntity player, World world)
-	{
-		Fluid fluidIn = world.getFluidState(player.getPosition()).getFluid();
-		Fluid fluidUp = world.getFluidState(player.getPosition().up()).getFluid();
-		
-		if (world.isRainingAt(player.getPosition()))
-			addWetness(1);
-		else if (fluidIn instanceof WaterFluid || fluidUp instanceof WaterFluid)
-			addWetness(5);
-		else
-			addWetness(-2);
-		
-		if (player.getFireTimer() > 0 && this.getWetness() > 0)
-		{
-			addWetness(-8);
-			player.forceFireTicks(player.getFireTimer() - 10);
-		}
-		
-	}
-	
-	private void tickFireTimer(PlayerEntity player, World world)
-	{
-		
 	}
 	
 	private boolean playerIsImmuneToHeat(PlayerEntity player)
@@ -325,7 +259,7 @@ public class TemperatureCapability implements ITemperatureCapability
 	@Override
 	public void setClean()
 	{
-		this.oldTemperature = temperature;
+		this.oldTemperature = this.temperature;
 		this.manualDirty = false;
 	}
 
@@ -347,8 +281,6 @@ public class TemperatureCapability implements ITemperatureCapability
 		
 		compound.putInt("temperature", this.temperature);
 		compound.putInt("ticktimer", this.tickTimer);
-		compound.putInt("wetness", this.wetness);
-		compound.putInt("fireTimer", this.fireTimer);
 		
 		CompoundNBT modifiers = new CompoundNBT();
 		
@@ -374,10 +306,6 @@ public class TemperatureCapability implements ITemperatureCapability
 			this.setTemperatureLevel(compound.getInt("temperature"));
 		if (compound.contains("tickTimer"))
 			this.setTemperatureTickTimer(compound.getInt("tickTimer"));
-		if (compound.contains("wetness"))
-			this.setFireTimer(compound.getInt("wetness"));
-		if (compound.contains("fireTimer"))
-			this.setFireTimer(compound.getInt("fireTimer"));
 		
 		
 		if(compound.contains("temporaryModifiers"))
