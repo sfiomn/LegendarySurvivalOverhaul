@@ -8,6 +8,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
+import icey.survivaloverhaul.util.CapabilityUtil;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,7 +32,7 @@ public class TemperatureCommand extends CommandBase
 			if (source.getEntity() instanceof PlayerEntity)
 			{
 				float targetTemperature = TemperatureUtil.getPlayerTargetTemperature(source.asPlayer());
-				TemperatureCapability cap = TemperatureCapability.getTempCapability(source.asPlayer());
+				TemperatureCapability cap = CapabilityUtil.getTempCapability(source.asPlayer());
 				int playerTemp = cap.getTemperatureLevel();
 			
 				String reply = "Temp: "+  playerTemp +"\nTarget Temp: " + targetTemperature;

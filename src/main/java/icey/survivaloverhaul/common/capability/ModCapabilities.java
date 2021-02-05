@@ -13,6 +13,7 @@ import icey.survivaloverhaul.config.json.JsonConfig;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.network.packets.UpdateHeartsPacket;
 import icey.survivaloverhaul.network.packets.UpdateTemperaturesPacket;
+import icey.survivaloverhaul.util.CapabilityUtil;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
@@ -71,7 +72,7 @@ public class ModCapabilities
 			
 			if (Config.Baked.temperatureEnabled && !shouldSkipTick(player))
 			{
-				TemperatureCapability tempCap = TemperatureCapability.getTempCapability(player);
+				TemperatureCapability tempCap = CapabilityUtil.getTempCapability(player);
 				
 				tempCap.tickUpdate(player, world, event.phase);
 				
@@ -104,7 +105,7 @@ public class ModCapabilities
 					
 					if (jct.matches(stack))
 					{
-						TemperatureCapability.getTempCapability(player).setTemporaryModifier(jct.group, jct.temperature, jct.duration);
+						CapabilityUtil.getTempCapability(player).setTemporaryModifier(jct.group, jct.temperature, jct.duration);
 					}
 				}
 			}
@@ -121,8 +122,8 @@ public class ModCapabilities
 		{
 			if (Config.Baked.heartFruitsEnabled && Config.Baked.heartsLostOnDeath >= 0)
 			{
-				HeartModifierCapability oldCap = HeartModifierCapability.getHeartModCapability(orig);
-				HeartModifierCapability newCap = HeartModifierCapability.getHeartModCapability(player);
+				HeartModifierCapability oldCap = CapabilityUtil.getHeartModCapability(orig);
+				HeartModifierCapability newCap = CapabilityUtil.getHeartModCapability(player);
 				
 				int oldHearts = oldCap.getAdditionalHearts();
 				
@@ -136,16 +137,16 @@ public class ModCapabilities
 		{
 			if (Config.Baked.temperatureEnabled)
 			{
-				TemperatureCapability oldCap = TemperatureCapability.getTempCapability(orig);
-				TemperatureCapability newCap = TemperatureCapability.getTempCapability(player);
+				TemperatureCapability oldCap = CapabilityUtil.getTempCapability(orig);
+				TemperatureCapability newCap = CapabilityUtil.getTempCapability(player);
 				newCap.readNBT(oldCap.writeNBT());
 				sendTemperatureUpdate(player);
 			}
 			
 			if (Config.Baked.heartFruitsEnabled)
 			{
-				HeartModifierCapability oldCap = HeartModifierCapability.getHeartModCapability(orig);
-				HeartModifierCapability newCap = HeartModifierCapability.getHeartModCapability(player);
+				HeartModifierCapability oldCap = CapabilityUtil.getHeartModCapability(orig);
+				HeartModifierCapability newCap = CapabilityUtil.getHeartModCapability(player);
 				newCap.readNBT(oldCap.writeNBT());
 				newCap.updateMaxHealth(player.getEntityWorld(), player);
 				sendHeartsUpdate(player);
@@ -157,7 +158,7 @@ public class ModCapabilities
 	{
 		if (!player.world.isRemote())
 		{			
-			UpdateTemperaturesPacket packet = new UpdateTemperaturesPacket(Main.TEMPERATURE_CAP.getStorage().writeNBT(Main.TEMPERATURE_CAP, TemperatureCapability.getTempCapability(player), null));
+			UpdateTemperaturesPacket packet = new UpdateTemperaturesPacket(Main.TEMPERATURE_CAP.getStorage().writeNBT(Main.TEMPERATURE_CAP, CapabilityUtil.getTempCapability(player), null));
 			
 			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
 		}
@@ -167,7 +168,7 @@ public class ModCapabilities
 	{
 		if (!player.world.isRemote())
 		{			
-			UpdateHeartsPacket packet = new UpdateHeartsPacket(Main.HEART_MOD_CAP.getStorage().writeNBT(Main.HEART_MOD_CAP, HeartModifierCapability.getHeartModCapability(player), null));
+			UpdateHeartsPacket packet = new UpdateHeartsPacket(Main.HEART_MOD_CAP.getStorage().writeNBT(Main.HEART_MOD_CAP, CapabilityUtil.getHeartModCapability(player), null));
 			
 			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
 		}

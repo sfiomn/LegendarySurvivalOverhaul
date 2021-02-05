@@ -104,9 +104,4 @@ public class HeartModifierCapability implements IHeartModifierCapability
 		if (compound.contains("extraHearts"))
 				this.setMaxHealth(compound.getInt("extraHearts"));
 	}
-	
-	public static HeartModifierCapability getHeartModCapability(PlayerEntity player)
-	{
-		return player.getCapability(Main.HEART_MOD_CAP).orElse(new HeartModifierCapability());
-	}
 }

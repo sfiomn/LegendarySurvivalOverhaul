@@ -5,6 +5,7 @@ import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.network.packets.UpdateHeartsPacket;
+import icey.survivaloverhaul.util.CapabilityUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -34,7 +35,7 @@ public class ItemHeartFruit extends Item
 		if (entity instanceof PlayerEntity && Config.Baked.heartFruitsEnabled)
 		{
 			PlayerEntity player = (PlayerEntity) entity;
-			HeartModifierCapability cap = HeartModifierCapability.getHeartModCapability(player);
+			HeartModifierCapability cap = CapabilityUtil.getHeartModCapability(player);
 			
 			if (!world.isRemote)
 			{

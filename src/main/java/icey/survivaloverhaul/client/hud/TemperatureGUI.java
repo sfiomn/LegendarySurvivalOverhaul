@@ -10,6 +10,7 @@ import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.config.Config;
+import icey.survivaloverhaul.util.CapabilityUtil;
 import icey.survivaloverhaul.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -58,7 +59,7 @@ public class TemperatureGUI
 			rand.setSeed((long) (updateCounter * 445));
 			
 			bind(ICONS);
-			TemperatureCapability cap = TemperatureCapability.getTempCapability(mc.player);
+			TemperatureCapability cap = CapabilityUtil.getTempCapability(mc.player);
 			
 			renderGUI(event.getMatrixStack(), cap, scaledWidth, scaledHeight);
 			

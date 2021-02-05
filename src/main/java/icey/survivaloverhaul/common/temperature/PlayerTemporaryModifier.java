@@ -3,7 +3,7 @@ package icey.survivaloverhaul.common.temperature;
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemporaryModifier;
-import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
+import icey.survivaloverhaul.util.CapabilityUtil;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class PlayerTemporaryModifier extends ModifierBase
@@ -20,7 +20,7 @@ public class PlayerTemporaryModifier extends ModifierBase
 	{
 		float sum = 0.0f;
 		
-		for(TemporaryModifier tm : TemperatureCapability.getTempCapability(player).getTemporaryModifiers().values())
+		for(TemporaryModifier tm : CapabilityUtil.getTempCapability(player).getTemporaryModifiers().values())
 		{
 			sum += tm.temperature;
 		}

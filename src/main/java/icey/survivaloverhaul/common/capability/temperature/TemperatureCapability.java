@@ -323,9 +323,4 @@ public class TemperatureCapability implements ITemperatureCapability
 			}
 		}
 	}
-	
-	public static TemperatureCapability getTempCapability(PlayerEntity player)
-	{
-		return player.getCapability(Main.TEMPERATURE_CAP).orElse(new TemperatureCapability());
-	}
 }
