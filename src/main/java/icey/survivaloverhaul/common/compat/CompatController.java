@@ -34,6 +34,8 @@ public final class CompatController
 			initInfernalExpansion();
 		if (mods.isLoaded("biomesoplenty"))
 			initBiomesOPlenty();
+		if (mods.isLoaded("betterendforge"))
+			initBetterEndForge();
 	}
 	
 	private static void initCreate()
@@ -111,5 +113,11 @@ public final class CompatController
 		JsonConfig.registerBiomeOverride("biomesoplenty:undergrowth", 0.75f, false, false);
 		JsonConfig.registerBiomeOverride("biomesoplenty:visceral_heap", 0.9f, false, false);
 		JsonConfig.registerBiomeOverride("biomesoplenty:withered_abyss", 1.5f, false, true);
+	}
+	
+	private static void initBetterEndForge()
+	{
+		JsonConfig.registerBiomeOverride("betterendforge:sulphur_springs", 1.1f);
+		JsonConfig.registerBiomeOverride("betterendforge:ice_starfield", 0.1f);
 	}
 }
