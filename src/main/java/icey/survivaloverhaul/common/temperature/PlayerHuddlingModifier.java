@@ -33,7 +33,7 @@ public class PlayerHuddlingModifier extends ModifierBase
 		
 		AxisAlignedBB bounds = new AxisAlignedBB(pos.add(-huddleRadius, -huddleRadius, -huddleRadius), pos.add(huddleRadius, huddleRadius, huddleRadius));
 		
-		List<Entity> entities = world.getEntitiesInAABBexcluding(null, bounds, null);
+		List<Entity> entities = world.getEntitiesInAABBexcluding(player, bounds, null);
 		
 		int playerCount = 0;
 		
@@ -41,9 +41,6 @@ public class PlayerHuddlingModifier extends ModifierBase
 		{
 			if (entity instanceof PlayerEntity)
 			{
-				if (entity.getUniqueID().compareTo(player.getUniqueID()) == 0)
-					continue;
-				
 				playerCount++;
 			}
 		}
