@@ -83,7 +83,7 @@ public class HeartModifierCapability implements IHeartModifierCapability
 		return packetTimer;
 	}
 	
-	public CompoundNBT save() 
+	public CompoundNBT writeNBT() 
 	{
 		CompoundNBT compound = new CompoundNBT();
 		
@@ -97,7 +97,7 @@ public class HeartModifierCapability implements IHeartModifierCapability
 	 * It is expected that any member calling this function will immediately call
 	 * this.updateMaxHealth afterwards.
 	 */
-	public void load(CompoundNBT compound)
+	public void readNBT(CompoundNBT compound)
 	{
 		this.init();
 

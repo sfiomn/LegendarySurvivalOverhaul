@@ -11,7 +11,7 @@ public class HeartModifierStorage implements IStorage<HeartModifierCapability>
 	@Override
 	public INBT writeNBT(Capability<HeartModifierCapability> capability, HeartModifierCapability instance, Direction side)
 	{
-		return instance.save();
+		return instance.writeNBT();
 	}
 	
 	@Override
@@ -19,7 +19,7 @@ public class HeartModifierStorage implements IStorage<HeartModifierCapability>
 	{
 		if (nbt instanceof CompoundNBT)
 		{
-			instance.load((CompoundNBT) nbt);
+			instance.readNBT((CompoundNBT) nbt);
 		}
 	}
 

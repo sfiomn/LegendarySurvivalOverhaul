@@ -56,7 +56,7 @@ public class UpdateTemperaturesPacket
 				
 				TemperatureCapability temperature = player.getCapability(Main.TEMPERATURE_CAP).orElse(new TemperatureCapability());
 				
-				temperature.load(compound);
+				temperature.readNBT(compound);
 			}
 		};
 	}

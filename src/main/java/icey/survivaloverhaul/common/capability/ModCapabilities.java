@@ -138,7 +138,7 @@ public class ModCapabilities
 			{
 				TemperatureCapability oldCap = TemperatureCapability.getTempCapability(orig);
 				TemperatureCapability newCap = TemperatureCapability.getTempCapability(player);
-				newCap.load(oldCap.save());
+				newCap.readNBT(oldCap.writeNBT());
 				sendTemperatureUpdate(player);
 			}
 			
@@ -146,7 +146,7 @@ public class ModCapabilities
 			{
 				HeartModifierCapability oldCap = HeartModifierCapability.getHeartModCapability(orig);
 				HeartModifierCapability newCap = HeartModifierCapability.getHeartModCapability(player);
-				newCap.load(oldCap.save());
+				newCap.readNBT(oldCap.writeNBT());
 				newCap.updateMaxHealth(player.getEntityWorld(), player);
 				sendHeartsUpdate(player);
 			}

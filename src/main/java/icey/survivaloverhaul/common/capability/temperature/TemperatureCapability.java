@@ -275,7 +275,7 @@ public class TemperatureCapability implements ITemperatureCapability
 		return TemperatureUtil.getTemperatureEnum(getTemperatureLevel());
 	}
 	
-	public CompoundNBT save() 
+	public CompoundNBT writeNBT() 
 	{
 		CompoundNBT compound = new CompoundNBT();
 		
@@ -299,7 +299,7 @@ public class TemperatureCapability implements ITemperatureCapability
 		return compound;
 	}
 	
-	public void load(CompoundNBT compound)
+	public void readNBT(CompoundNBT compound)
 	{
 		this.init();
 		if (compound.contains("temperature"))
