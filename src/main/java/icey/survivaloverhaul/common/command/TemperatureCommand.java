@@ -18,7 +18,9 @@ public class TemperatureCommand extends CommandBase
 	
 	public TemperatureCommand()
 	{
-		super(Commands.literal("temperature").executes(src -> new TemperatureCommand().execute(src.getSource())));
+		super(Commands.literal("temperature").requires((p_198521_0_) -> {
+	         return p_198521_0_.hasPermissionLevel(2);
+	      }).executes(src -> new TemperatureCommand().execute(src.getSource())));
 	}
 
 	@Override
