@@ -54,7 +54,10 @@ import icey.survivaloverhaul.config.*;
 import icey.survivaloverhaul.config.json.JsonConfigRegistration;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.registry.BlockRegistry;
+import icey.survivaloverhaul.registry.EffectRegistry;
+import icey.survivaloverhaul.registry.EnchantRegistry;
 import icey.survivaloverhaul.registry.ItemRegistry;
+import icey.survivaloverhaul.registry.TemperatureModifierRegistry;
 import icey.survivaloverhaul.util.WorldUtil;
 import icey.survivaloverhaul.util.internal.TemperatureUtilInternal;
 
@@ -90,6 +93,11 @@ public class Main
 	public static boolean paraglidersLoaded = false;
 	public static boolean curiosLoaded = false;
 	
+	/**
+	 * The original. The one and only. Hope.
+	 */
+	public static boolean toughAsNailsLoaded = false;
+	
 	public static Path configPath = FMLPaths.CONFIGDIR.get();
 	public static Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "survivaloverhaul");
 	public static Path modConfigJsons = Paths.get(modConfigPath.toString(), "json");
@@ -109,6 +117,14 @@ public class Main
 		modBus.addListener(this::onModConfigEvent);
 		modBus.addListener(this::buildRegistries);
 		modBus.addListener(this::clientEvents);
+		
+		ItemRegistry.ITEMS.register(modBus);
+		EffectRegistry.EFFECTS.register(modBus);
+		EffectRegistry.POTIONS.register(modBus);
+		EnchantRegistry.ENCHANTS.register(modBus);
+		BlockRegistry.BLOCKS.register(modBus);
+		TemperatureModifierRegistry.MODIFIERS.register(modBus);
+		TemperatureModifierRegistry.DYNAMIC_MODIFIERS.register(modBus);
 		
 		forgeBus.addListener(this::serverStarted);
 		forgeBus.addListener(this::reloadListener);
@@ -150,6 +166,11 @@ public class Main
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
 		
 		NetworkHandler.register();
+		
+		event.enqueueWork(() -> 
+		{
+			EffectRegistry.registerPotionRecipes();
+		});
 	}
 	
 	@SuppressWarnings("unused")
@@ -160,8 +181,14 @@ public class Main
 	
 	private void clientEvents(final FMLClientSetupEvent event)
 	{
-		event.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientModelSetup()));
-		event.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientKeyBindsSetup()));
+		RenderTypeLookup.setRenderLayer(BlockRegistry.COOLING_COIL.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(BlockRegistry.HEATING_COIL.get(), RenderType.getCutout());
+		
+		event.enqueueWork(() -> 
+		{
+			DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientModelSetup());
+			DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> clientKeyBindsSetup());
+		});
 	}
 	
 	private void serverStarted(final FMLServerStartedEvent event)
@@ -178,10 +205,7 @@ public class Main
 			@Override
 			public void run()
 			{
-				RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.COOLING_COIL.getBlock(), RenderType.getCutout());
-				RenderTypeLookup.setRenderLayer(BlockRegistry.ModBlocks.HEATING_COIL.getBlock(), RenderType.getCutout());
-				
-				ItemModelsProperties.registerProperty(ItemRegistry.THERMOMETER, new ResourceLocation("temperature"), new IItemPropertyGetter()
+				ItemModelsProperties.registerProperty(ItemRegistry.THERMOMETER.get(), new ResourceLocation("temperature"), new IItemPropertyGetter()
 					{
 						@OnlyIn(Dist.CLIENT)
 						@Override

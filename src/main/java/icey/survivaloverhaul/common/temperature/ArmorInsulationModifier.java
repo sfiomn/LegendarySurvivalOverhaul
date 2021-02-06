@@ -2,7 +2,6 @@ package icey.survivaloverhaul.common.temperature;
 
 import java.util.List;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureEnum;
@@ -17,7 +16,6 @@ public class ArmorInsulationModifier extends ModifierBase
 	public ArmorInsulationModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "armor_insulation");
 	}
 	
 	@Override

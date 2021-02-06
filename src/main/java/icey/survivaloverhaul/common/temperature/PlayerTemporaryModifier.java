@@ -1,6 +1,5 @@
 package icey.survivaloverhaul.common.temperature;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemporaryModifier;
 import icey.survivaloverhaul.util.CapabilityUtil;
@@ -12,7 +11,6 @@ public class PlayerTemporaryModifier extends ModifierBase
 	{
 		super();
 
-		this.setRegistryName(Main.MOD_ID, "temporary");
 	}
 	
 	@Override

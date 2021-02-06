@@ -1,6 +1,5 @@
 package icey.survivaloverhaul.common.enchantments;
 
-import icey.survivaloverhaul.Main;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -12,10 +11,9 @@ public class InsulationMagic extends GenericMagic
 	/**
 	 * @param name of enchant
 	 */
-	public InsulationMagic(String name, MagicType magicType, Rarity rarity, EnchantOptions Options) 
+	public InsulationMagic(MagicType magicType, Rarity rarity, EnchantOptions Options) 
 	{
 		super(rarity, EnchantmentType.ARMOR, slots, Options);
-		this.setRegistryName(Main.MOD_ID, name);
 		this.magicType = magicType;
 	}
 	

@@ -1,131 +1,39 @@
 package icey.survivaloverhaul.registry;
 
-import java.lang.reflect.Field;
-
-
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.common.effects.*;
-import icey.survivaloverhaul.util.ProperBrewingRecipe;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.PotionBrewing;
 import net.minecraft.potion.Potions;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EffectRegistry
 {
-	public static final class ModEffects
-	{
-		public static final Effect FROSTBITE = new FrostbiteEffect();
-		public static final Effect HEAT_STROKE = new HeatStrokeEffect();
-		public static final Effect COLD_RESISTANCE = new ColdResistanceEffect();
-		public static final Effect HEAT_RESISTANCE = new HeatResistanceEffect();
-		
-		public static final Effect EXHAUSTION = new ExhaustionEffect();
-		
-		public static final Effect FROZEN = new FrozenEffect();
-	}
+	public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Main.MOD_ID);
+	public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTION_TYPES, Main.MOD_ID);
 	
-	@SubscribeEvent
-	public static void registerEffects(RegistryEvent.Register<Effect> event)
-	{
-		try
-		{
-			for (Field f : EffectRegistry.ModEffects.class.getDeclaredFields()) 
-			{
-				Object obj = f.get(null);
-				if (obj instanceof Effect) 
-				{
-					event.getRegistry().register((Effect) obj);
-				} 
-				else if (obj instanceof Effect[]) 
-				{
-					for (Effect effect : (Effect[]) obj) 
-					{
-						event.getRegistry().register(effect);
-					}
-				}
-			}
-		} 
-		catch (IllegalAccessException e) 
-		{
-			throw new RuntimeException(e);
-		}
-	}
+	public static final RegistryObject<Effect> FROSTBITE = EFFECTS.register("frostbite", FrostbiteEffect::new);
+	public static final RegistryObject<Effect> HEAT_STROKE = EFFECTS.register("heat_stroke", HeatStrokeEffect::new);
+	public static final RegistryObject<Effect> COLD_RESISTANCE = EFFECTS.register("cold_resist", ColdResistanceEffect::new);
+	public static final RegistryObject<Effect> HEAT_RESISTANCE = EFFECTS.register("heat_resist", HeatResistanceEffect::new);
 	
-	public static final class ModPotions
-	{
-		public static final Potion HEAT_RESISTANCE_POTION = new Potion(new EffectInstance(ModEffects.HEAT_RESISTANCE, 3600, 0)).setRegistryName(Main.MOD_ID, "heat_resistance");
-		public static final Potion HEAT_RESISTANCE_POTION_LONG = new Potion(new EffectInstance(ModEffects.HEAT_RESISTANCE, 9600, 0)).setRegistryName(Main.MOD_ID, "heat_resistance_long");
-		public static final Potion COLD_RESISTANCE_POTION = new Potion(new EffectInstance(ModEffects.COLD_RESISTANCE, 3600, 0)).setRegistryName(Main.MOD_ID, "cold_resistance");
-		public static final Potion COLD_RESISTANCE_POTION_LONG = new Potion(new EffectInstance(ModEffects.COLD_RESISTANCE, 9600, 0)).setRegistryName(Main.MOD_ID, "cold_resistance_long");
-	}
-	
-	@SubscribeEvent
-	public static void registerPotions(RegistryEvent.Register<Potion> event)
-	{
-		try
-		{
-			for (Field f : EffectRegistry.ModPotions.class.getDeclaredFields()) 
-			{
-				Object obj = f.get(null);
-				if (obj instanceof Potion) {
-					if(((Potion) obj).getRegistryName() != null)
-					{
-						event.getRegistry().register((Potion) obj);
-					}
-				}
-				else if (obj instanceof Potion[]) 
-				{
-					for (Potion potion : (Potion[]) obj) 
-					{
-						if(potion.getRegistryName() != null)
-						{
-							event.getRegistry().register(potion);
-						}
-					}
-				}
-			}
-		} 
-		catch (IllegalAccessException e) 
-		{
-			throw new RuntimeException(e);
-		}
-		
-		registerPotionRecipes();
-	}
-	
-	public static ItemStack createPotion(Potion potion)
-	{
-		return PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), potion);
-	}
+	public static final RegistryObject<Effect> EXHAUSTION = EFFECTS.register("exhaustion", () -> new ExhaustionEffect());
+
+	public static final RegistryObject<Potion> HEAT_RESISTANCE_POTION = POTIONS.register("heat_resistance", () -> new Potion("heat_resistance", new EffectInstance(HEAT_RESISTANCE.get(), 3600, 0)));
+	public static final RegistryObject<Potion> HEAT_RESISTANCE_POTION_LONG = POTIONS.register("heat_resistance_long", () -> new Potion("heat_resistance_long", new EffectInstance(HEAT_RESISTANCE.get(), 9600, 0)));
+	public static final RegistryObject<Potion> COLD_RESISTANCE_POTION = POTIONS.register("cold_resistance", () -> new Potion("cold_resistance", new EffectInstance(COLD_RESISTANCE.get(), 3600, 0)));
+	public static final RegistryObject<Potion> COLD_RESISTANCE_POTION_LONG = POTIONS.register("cold_resistance_long", () -> new Potion("cold_resistance_long", new EffectInstance(COLD_RESISTANCE.get(), 9600, 0)));
 	
 	public static void registerPotionRecipes()
 	{
-		BrewingRecipeRegistry.addRecipe(
-				new ProperBrewingRecipe(
-						Ingredient.fromStacks(createPotion(Potions.AWKWARD)),
-						Ingredient.fromItems(ItemRegistry.STONE_FERN_LEAF), 
-						createPotion(ModPotions.HEAT_RESISTANCE_POTION)));
-		BrewingRecipeRegistry.addRecipe(
-				new ProperBrewingRecipe(
-						Ingredient.fromStacks(createPotion(ModPotions.HEAT_RESISTANCE_POTION)),
-						Ingredient.fromItems(Items.REDSTONE), 
-						createPotion(ModPotions.HEAT_RESISTANCE_POTION_LONG)));
-
-		BrewingRecipeRegistry.addRecipe(
-				new ProperBrewingRecipe(
-						Ingredient.fromStacks(createPotion(ModPotions.COLD_RESISTANCE_POTION)),
-						Ingredient.fromItems(Items.REDSTONE), 
-						createPotion(ModPotions.COLD_RESISTANCE_POTION_LONG)));
+		PotionBrewing.addMix(Potions.AWKWARD, ItemRegistry.STONE_FERN_LEAF.get(), HEAT_RESISTANCE_POTION.get());
+		PotionBrewing.addMix(HEAT_RESISTANCE_POTION.get(), Items.REDSTONE, HEAT_RESISTANCE_POTION_LONG.get());
+		PotionBrewing.addMix(COLD_RESISTANCE_POTION.get(), Items.REDSTONE, COLD_RESISTANCE_POTION_LONG.get());
 	}
 	
 	

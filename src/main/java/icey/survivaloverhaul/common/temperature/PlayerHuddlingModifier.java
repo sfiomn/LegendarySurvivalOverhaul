@@ -2,7 +2,6 @@ package icey.survivaloverhaul.common.temperature;
 
 import java.util.List;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.config.Config;
 import net.minecraft.entity.Entity;
@@ -16,7 +15,6 @@ public class PlayerHuddlingModifier extends ModifierBase
 	public PlayerHuddlingModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "player_huddling");
 	}
 	
 

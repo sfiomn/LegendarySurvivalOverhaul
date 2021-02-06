@@ -57,7 +57,6 @@ public class BlockTemperatureCoil extends Block implements IWaterLoggable
 				.with(DIRECTION, Direction.DOWN)
 				.with(POWERED, Boolean.valueOf(false))
 				.with(WATERLOGGED, Boolean.valueOf(false)));
-		this.setRegistryName(Main.MOD_ID, this.coilType.getName() + "_coil");
 	}
 	
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)

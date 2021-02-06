@@ -2,7 +2,6 @@ package icey.survivaloverhaul.common.temperature;
 
 import java.util.List;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
@@ -19,7 +18,6 @@ public class ArmorModifier extends ModifierBase
 	public ArmorModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "armor");
 	}
 	
 	@Override
@@ -41,8 +39,8 @@ public class ArmorModifier extends ModifierBase
 				return 0.0f;
 		
 		float sum = 0.0f;
-		int coolingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, stack);
-		int heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, stack);
+		int coolingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.COLD_BARRIER.get(), stack);
+		int heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.THERMAL_BARRIER.get(), stack);
 		
 		if (coolingLevel > 0 )
 			sum -= coolingLevel * Config.Baked.enchantmentMultiplier;

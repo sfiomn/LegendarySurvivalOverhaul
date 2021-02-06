@@ -26,7 +26,6 @@ public class ItemHeartFruit extends Item
 	public ItemHeartFruit()
 	{
 		super(new Item.Properties().group(ItemGroup.FOOD).rarity(Rarity.RARE).food(FOOD_STATS));
-		this.setRegistryName(Main.MOD_ID, "heart_fruit");
 	}
 	
 	@Override

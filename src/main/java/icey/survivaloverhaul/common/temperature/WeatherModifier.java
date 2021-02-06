@@ -1,6 +1,5 @@
 package icey.survivaloverhaul.common.temperature;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.config.Config;
 import net.minecraft.util.math.BlockPos;
@@ -12,7 +11,6 @@ public class WeatherModifier extends ModifierBase
 	public WeatherModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "weather");
 	}
 	
 	// TODO: Try and get this also working with serene seasons

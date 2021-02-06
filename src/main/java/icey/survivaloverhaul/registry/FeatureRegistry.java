@@ -19,7 +19,7 @@ public class FeatureRegistry
 	{
 		event.enqueueWork(() -> {
 			CINNABAR_ORE_CF = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-					BlockRegistry.ModBlocks.CINNABAR_ORE.getDefaultState(), 6)).range(48).square().func_242731_b(10);
+					BlockRegistry.CINNABAR_ORE.get().getDefaultState(), 6)).range(48).square().func_242731_b(10);
 		        
 		     Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(Main.MOD_ID, "cinnabar_ore"), CINNABAR_ORE_CF);
 		   }

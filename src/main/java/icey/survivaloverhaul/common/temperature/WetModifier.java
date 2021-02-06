@@ -2,7 +2,6 @@ package icey.survivaloverhaul.common.temperature;
 
 import java.util.Map;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.config.Config;
@@ -18,7 +17,6 @@ public class WetModifier extends ModifierBase
 	public WetModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "wet");
 	}
 	
 	@Override

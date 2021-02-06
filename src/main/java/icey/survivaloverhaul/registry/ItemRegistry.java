@@ -1,65 +1,45 @@
 package icey.survivaloverhaul.registry;
 
-import java.lang.reflect.Field;
-
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.common.items.*;
 import icey.survivaloverhaul.common.items.armor.ArmorMaterialBase;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.util.SoundEvents;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ItemRegistry
 {
-	// public static final Item EXAMPLE_ITEM = new ItemGeneric("example_item");
+	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MOD_ID);
+	
 	public static final ArmorMaterialBase CLOTH_ARMOR_MATERIAL = new ArmorMaterialBase("snow", 5.75f, new int[] { 1, 1, 2, 1}, 17, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0, 0.0f, null);
 	public static final ArmorMaterialBase DESERT_ARMOR_MATERIAL = new ArmorMaterialBase("desert", 5.75f, new int[] { 1, 1, 2, 1}, 19, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0, 0.0f, null);
 	
-	public static final Item MERCURY_PASTE = new ItemGeneric("mercury_paste", ItemGroup.MISC);
-	public static final Item THERMOMETER = new ItemGeneric("thermometer", ItemGroup.TOOLS);
+	public static final RegistryObject<Item> MERCURY_PASTE = ITEMS.register("mercury_paste", () -> new Item(new Item.Properties().group(ItemGroup.MATERIALS)));
+	public static final RegistryObject<Item> THERMOMETER = ITEMS.register("thermometer", () -> new Item(new Item.Properties().group(ItemGroup.TOOLS)));
 	
-	public static final Item STONE_FERN_LEAF = new ItemGeneric("stone_fern_leaf", ItemGroup.BREWING);
-	public static final Item INFERNAL_FERN_LEAF = new ItemGeneric("infernal_fern_leaf", ItemGroup.BREWING);
+	public static final RegistryObject<Item> STONE_FERN_LEAF = ITEMS.register("stone_fern_leaf", () -> new Item(new Item.Properties().group(ItemGroup.BREWING)));
+	public static final RegistryObject<Item> INFERNAL_FERN_LEAF = ITEMS.register("infernal_fern_leaf", () -> new Item(new Item.Properties().group(ItemGroup.BREWING)));
+
+	public static final RegistryObject<Item> CLOTH_HELMET = ITEMS.register("snow_helmet", () -> new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.HEAD));
+	public static final RegistryObject<Item> CLOTH_CHEST = ITEMS.register("snow_chestplate", () -> new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.CHEST));
+	public static final RegistryObject<Item> CLOTH_LEGGINGS = ITEMS.register("snow_leggings", () -> new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.LEGS));
+	public static final RegistryObject<Item> CLOTH_BOOTS = ITEMS.register("snow_boots", () -> new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.FEET));
+
+	public static final RegistryObject<Item> DESERT_HELMET = ITEMS.register("desert_helmet", () -> new ItemSnowArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.HEAD));
+	public static final RegistryObject<Item> DESERT_CHEST = ITEMS.register("desert_chestplate", () -> new ItemSnowArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.CHEST));
+	public static final RegistryObject<Item> DESERT_LEGGINGS = ITEMS.register("desert_leggings", () -> new ItemSnowArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.LEGS));
+	public static final RegistryObject<Item> DESERT_BOOTS = ITEMS.register("desert_boots", () -> new ItemSnowArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.FEET));
 	
-	public static final ArmorItem CLOTH_HELMET = new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.HEAD);
-	public static final ArmorItem CLOTH_CHEST = new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.CHEST);
-	public static final ArmorItem CLOTH_LEGS = new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.LEGS);
-	public static final ArmorItem CLOTH_BOOTS = new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.FEET);
+	public static final RegistryObject<Item> HEART_FRUIT = ITEMS.register("heart_fruit", () -> new ItemHeartFruit());
 	
-	public static final ArmorItem DESERT_HELMET = new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.HEAD);
-	public static final ArmorItem DESERT_CHEST = new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.CHEST);
-	public static final ArmorItem DESERT_LEGS = new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.LEGS);
-	public static final ArmorItem DESERT_BOOTS = new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.FEET);
+	// Block Items
+	public static final RegistryObject<Item> CINNABAR_ORE_ITEM = ITEMS.register("cinnabar_ore", () -> new BlockItem(BlockRegistry.CINNABAR_ORE.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 	
-	public static final Item HEART_FRUIT = new ItemHeartFruit();
-	
-	@SubscribeEvent
-	public static void registerItems(RegistryEvent.Register<Item> event) 
-	{
-		// Code taken from https://github.com/Alex-the-666/Ice_and_Fire/tree/1.16.3
-		try {
-			for (Field f : ItemRegistry.class.getDeclaredFields()) {
-				Object obj = f.get(null);
-				if (obj instanceof Item) {
-					if(((Item) obj).getRegistryName() != null){
-						event.getRegistry().register((Item) obj);
-					}
-				} else if (obj instanceof Item[]) {
-					for (Item item : (Item[]) obj) {
-						if(item.getRegistryName() != null){
-							event.getRegistry().register(item);
-						}
-					}
-				}
-			}
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	public static final RegistryObject<Item> COOLING_COIL_ITEM = ITEMS.register("cooling_coil", () -> new BlockItem(BlockRegistry.COOLING_COIL.get(), new Item.Properties().group(ItemGroup.REDSTONE)));
+	public static final RegistryObject<Item> HEATING_COIL_ITEM = ITEMS.register("heating_coil", () -> new BlockItem(BlockRegistry.HEATING_COIL.get(), new Item.Properties().group(ItemGroup.REDSTONE)));
 }

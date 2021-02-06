@@ -13,17 +13,17 @@ public class BlockGeneric extends Block
 {
 	public ItemGroup group;
 	
-	public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound)
+	public BlockGeneric(Material materialIn, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound)
 	{
-		this(materialIn, name, toolUsed, toolStrength, hardness, resistance, sound, ItemGroup.BUILDING_BLOCKS);
+		this(materialIn, toolUsed, toolStrength, hardness, resistance, sound, ItemGroup.BUILDING_BLOCKS);
 	}
 	
-	public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean associatedItem)
+	public BlockGeneric(Material materialIn, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean associatedItem)
 	{
-		this(materialIn, name, toolUsed, toolStrength, hardness, resistance, sound, associatedItem ? ItemGroup.BUILDING_BLOCKS : null);
+		this(materialIn, toolUsed, toolStrength, hardness, resistance, sound, associatedItem ? ItemGroup.BUILDING_BLOCKS : null);
 	}
 	
-	public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, ItemGroup group)
+	public BlockGeneric(Material materialIn, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, ItemGroup group)
 	{
 		super(
 			Block.Properties
@@ -34,7 +34,5 @@ public class BlockGeneric extends Block
 			);
 		
 		this.group = group;
-		
-		this.setRegistryName(Main.MOD_ID, name);
 	}
 }

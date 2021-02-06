@@ -1,11 +1,8 @@
 package icey.survivaloverhaul.common.temperature;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
 import icey.survivaloverhaul.api.temperature.ITemperatureTileEntity;
@@ -19,24 +16,19 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-@SuppressWarnings( "unused" )
 public class BlockModifier extends ModifierBase
 {
 	private float coldestValue = 0.0f;
 	private float hottestValue = 0.0f;
-	private float coldestResultValue = 0.0f;
-	private float hottestResultValue = 0.0f;
 	private float hotTotal = 0.0f;
 	private float coldTotal = 0.0f;
 
 	public BlockModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "blocks");
 	}
 	
 	@Override
@@ -44,9 +36,6 @@ public class BlockModifier extends ModifierBase
 	{
 		coldestValue = 0.0f;
 		hottestValue = 0.0f;
-		
-		coldestResultValue = 0.0f;
-		hottestResultValue = 0.0f;
 		
 		hotTotal = 0.0f;
 		coldTotal = 0.0f;
@@ -236,19 +225,5 @@ public class BlockModifier extends ModifierBase
 		{
 			return (float)Math.log10(-1.0f * f + 10.0f);
 		}
-	}
-	
-	private float easyLogPowTwo(float f)
-	{
-		float ff = easyLog(f);
-		return ff * ff;
-	}
-	
-	private float easyLogPowEight(float f)
-	{
-		float ff = easyLog(f);
-		ff = ff * ff; //2
-		ff = ff * ff; //4
-		return ff * ff; //8
 	}
 }

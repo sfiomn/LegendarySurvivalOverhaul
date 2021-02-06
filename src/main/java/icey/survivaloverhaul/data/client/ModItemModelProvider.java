@@ -33,15 +33,15 @@ public class ModItemModelProvider extends ItemModelProvider
 		
 		builder(itemGenerated, "mercury_paste");
 		
-		builder(itemGenerated, "snow_head", "snow_hat");
-		builder(itemGenerated, "snow_chest", "snow_tunic");
-		builder(itemGenerated, "snow_legs", "snow_pants");
-		builder(itemGenerated, "snow_feet", "snow_boots");
+		builder(itemGenerated, "snow_helmet", "snow_hat");
+		builder(itemGenerated, "snow_chestplate", "snow_tunic");
+		builder(itemGenerated, "snow_leggings", "snow_pants");
+		builder(itemGenerated, "snow_boots", "snow_boots");
 		
-		builder(itemGenerated, "desert_head", "desert_hat");
-		builder(itemGenerated, "desert_chest", "desert_shirt");
-		builder(itemGenerated, "desert_legs", "desert_tunic");
-		builder(itemGenerated, "desert_feet", "desert_sandals");
+		builder(itemGenerated, "desert_helmet", "desert_hat");
+		builder(itemGenerated, "desert_chestplate", "desert_shirt");
+		builder(itemGenerated, "desert_leggings", "desert_tunic");
+		builder(itemGenerated, "desert_boots", "desert_sandals");
 		
 		builder(itemGenerated, "heart_fruit", "heart_fruit");
 		/*

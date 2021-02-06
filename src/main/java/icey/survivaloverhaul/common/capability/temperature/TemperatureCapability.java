@@ -165,17 +165,17 @@ public class TemperatureCapability implements ITemperatureCapability
 				if(TemperatureEnum.HEAT_STROKE.getMiddle() < getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !playerIsImmuneToHeat(player))
 				{
 					// Apply hyperthermia
-					player.removePotionEffect(EffectRegistry.ModEffects.HEAT_STROKE);
-					player.addPotionEffect(new EffectInstance(EffectRegistry.ModEffects.HEAT_STROKE, 300, 0, false, true));
+					player.removePotionEffect(EffectRegistry.HEAT_STROKE.get());
+					player.addPotionEffect(new EffectInstance(EffectRegistry.HEAT_STROKE.get(), 300, 0, false, true));
 				}
 			}
 			else if (tempEnum == TemperatureEnum.FROSTBITE)
 			{
-				if(TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.ModEffects.COLD_RESISTANCE))
+				if(TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.COLD_RESISTANCE.get()))
 				{
 					// Apply hypothermia
-					player.removePotionEffect(EffectRegistry.ModEffects.FROSTBITE);
-					player.addPotionEffect(new EffectInstance(EffectRegistry.ModEffects.FROSTBITE, 300, 0, false, true));
+					player.removePotionEffect(EffectRegistry.FROSTBITE.get());
+					player.addPotionEffect(new EffectInstance(EffectRegistry.FROSTBITE.get(), 300, 0, false, true));
 				}
 			}
 		}
@@ -212,7 +212,7 @@ public class TemperatureCapability implements ITemperatureCapability
 	
 	private boolean playerIsImmuneToHeat(PlayerEntity player)
 	{
-		return player.isPotionActive(EffectRegistry.ModEffects.HEAT_RESISTANCE) || player.isPotionActive(Effects.FIRE_RESISTANCE);
+		return player.isPotionActive(EffectRegistry.HEAT_RESISTANCE.get()) || player.isPotionActive(Effects.FIRE_RESISTANCE);
 	}
 	
 	private void tickTemperature(int currentTemp, int destination)

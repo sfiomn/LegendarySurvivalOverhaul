@@ -14,8 +14,6 @@ public class ItemSnowArmor extends ArmorItem
 	public ItemSnowArmor(IArmorMaterial material, EquipmentSlotType slot)
 	{
 		super(material, slot, new Item.Properties().group(ItemGroup.COMBAT));
-		
-		this.setRegistryName(Main.MOD_ID, "snow_" + slot.getName());
 	}
 	
 	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type)

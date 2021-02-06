@@ -13,7 +13,6 @@ public class SereneSeasonsModifier extends ModifierBase
 	public SereneSeasonsModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID,"compat/serene_seasons");
 	}
 	
 

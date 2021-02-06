@@ -22,7 +22,6 @@ public class CuriosModifier extends ModifierBase
 	public CuriosModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "compat/curios");
 	}
 	
 	@Override

@@ -1,6 +1,5 @@
 package icey.survivaloverhaul.common.temperature.dynamic;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.registry.EnchantRegistry;
@@ -14,7 +13,6 @@ public class AdaptiveEnchantmentModifier extends DynamicModifierBase
 	public AdaptiveEnchantmentModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "adaptive_enchantment");
 	}
 	
 	@Override
@@ -37,7 +35,7 @@ public class AdaptiveEnchantmentModifier extends DynamicModifierBase
 		
 		float sum = 0.0f;
 		
-		int adaptiveLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.ADAPTIVE_BARRIER, stack);
+		int adaptiveLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ADAPTIVE_BARRIER.get(), stack);
 		
 		if (adaptiveLevel > 0) 
 		{

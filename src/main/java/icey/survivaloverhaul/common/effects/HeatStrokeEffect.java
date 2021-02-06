@@ -13,13 +13,13 @@ public class HeatStrokeEffect extends GenericEffect
 
 	public HeatStrokeEffect()
 	{
-		super(16756041, "heat_stroke", EffectType.HARMFUL);
+		super(16756041, EffectType.HARMFUL);
 	}
 	
 	@Override
 	public void performEffect(LivingEntity entity, int amplifier)
 	{
-		if(entity instanceof PlayerEntity && !entity.isPotionActive(EffectRegistry.ModEffects.HEAT_RESISTANCE))
+		if(entity instanceof PlayerEntity && !entity.isPotionActive(EffectRegistry.HEAT_RESISTANCE.get()))
 		{
 			World world = entity.getEntityWorld();
 			PlayerEntity player = (PlayerEntity) entity;

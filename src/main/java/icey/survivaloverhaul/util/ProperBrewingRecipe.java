@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.brewing.BrewingRecipe;
 
+@Deprecated
 @SuppressWarnings("unused")
 public class ProperBrewingRecipe extends BrewingRecipe
 {

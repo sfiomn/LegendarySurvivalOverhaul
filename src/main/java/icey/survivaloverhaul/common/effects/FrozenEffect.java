@@ -6,7 +6,7 @@ public class FrozenEffect extends GenericEffect
 {
 	public FrozenEffect()
 	{
-		super(15725055, "frozen", EffectType.HARMFUL);
+		super(15725055, EffectType.HARMFUL);
 	}
 	
 	@Override
