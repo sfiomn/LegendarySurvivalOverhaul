@@ -10,23 +10,14 @@ public class JsonBiomeIdentity
 	@SerializedName("isDry")
 	public boolean isDry;
 	
-	@SerializedName("scorched")
-	public boolean scorched;
-	
 	public JsonBiomeIdentity(float temperature)
 	{
-		this(temperature, false, false);
+		this(temperature, false);
 	}
 	
 	public JsonBiomeIdentity(float temperature, boolean isDry)
 	{
-		this(temperature, isDry, false);
-	}
-	
-	public JsonBiomeIdentity(float temperature, boolean isDry, boolean scorched)
-	{
 		this.temperature = temperature;
 		this.isDry = isDry;
-		this.scorched = scorched;
 	}
 }

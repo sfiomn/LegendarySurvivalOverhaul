@@ -106,13 +106,10 @@ public final class CompatController
 	
 	private static void initBiomesOPlenty()
 	{
-		JsonConfig.registerBiomeOverride("biomesoplenty:volcano", 1.5f, false, true);
-		JsonConfig.registerBiomeOverride("biomesoplenty:volcanic_plains", 1.5f, false, true);
-		
-		JsonConfig.registerBiomeOverride("biomesoplenty:crystalline_chasm", 0.8f, false, false);
-		JsonConfig.registerBiomeOverride("biomesoplenty:undergrowth", 0.75f, false, false);
-		JsonConfig.registerBiomeOverride("biomesoplenty:visceral_heap", 0.9f, false, false);
-		JsonConfig.registerBiomeOverride("biomesoplenty:withered_abyss", 1.5f, false, true);
+		JsonConfig.registerBiomeOverride("biomesoplenty:crystalline_chasm", 0.8f, false);
+		JsonConfig.registerBiomeOverride("biomesoplenty:undergrowth", 0.75f, false);
+		JsonConfig.registerBiomeOverride("biomesoplenty:visceral_heap", 0.9f, false);
+		JsonConfig.registerBiomeOverride("biomesoplenty:withered_abyss", 1.5f, false);
 	}
 	
 	private static void initBetterEndForge()

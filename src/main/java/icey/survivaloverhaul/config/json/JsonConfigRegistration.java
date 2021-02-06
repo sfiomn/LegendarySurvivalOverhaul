@@ -102,7 +102,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerBiomeOverride("minecraft:warped_forest", 0.75f, false);
 		JsonConfig.registerBiomeOverride("minecraft:nether_wastes", 1.0f, false);
 		JsonConfig.registerBiomeOverride("minecraft:soul_sand_valley", 1.0f, false);
-		JsonConfig.registerBiomeOverride("minecraft:basalt_deltas", 1.45f, false, true);
+		JsonConfig.registerBiomeOverride("minecraft:basalt_deltas", 1.45f, false);
 		
 		CompatController.initCompat();
 	}
@@ -185,7 +185,7 @@ public class JsonConfigRegistration
 			Main.LOGGER.debug("Loaded " + jsonBiomeIdentities.size() + " biome temperature overrides from JSON");
 			for (Map.Entry<String, JsonBiomeIdentity> entry : jsonBiomeIdentities.entrySet())
 			{
-				JsonConfig.registerBiomeOverride(entry.getKey(), entry.getValue().temperature, entry.getValue().isDry, entry.getValue().scorched);
+				JsonConfig.registerBiomeOverride(entry.getKey(), entry.getValue().temperature, entry.getValue().isDry);
 			}
 			
 			try
