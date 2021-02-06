@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.16.4-0.3.1-beta-dev'
+version = '1.16.4-0.3.1b-dev'
 group = 'icey.survivaloverhaul' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'survivaloverhaul'
 
@@ -27,6 +27,7 @@ minecraft {
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
     mappings channel: 'snapshot', version: '20201028-1.16.3'
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -125,15 +126,21 @@ dependencies {
 	// The userdev artifact is a special name and will get all sorts of transformations applied to it.
 	minecraft 'net.minecraftforge:forge:1.16.5-36.0.14'
 	
-	runtimeOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:universal') // Serene Seasons
+	// External libraries.
+	// These are REQUIRED for the mod to compile correctly and should not be removed.
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5:api") // Curios API
 	compileOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:api') // Serene Seasons API
+	
+	// compileOnly fg.deobf('tough-as-nails:ToughAsNails-1.16.5:4.0.1.10:api') // Tough As Nails
+	
 	// compile fg.deobf('better-weather:betterweather:1.2.4') // Better Weather
 	
-	runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
 	// compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65:api")
 	
 	// runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5") // Curios
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5:api") // Curios API
+	runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
+	runtimeOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:universal') // Serene Seasons
+	// runtimeOnly fg.deobf('tough-as-nails:ToughAsNails-1.16.5:4.0.1.10:universal') // Tough As Nails
 	
 	// runtimeOnly fg.deobf("curse.maven:artifacts-312353:3164601")
 	// compile fg.deobf('curse.maven:obfuscate-289380:3169370') // Obfuscate
@@ -150,7 +157,7 @@ jar {
 	   attributes([
 		  "Specification-Title": "survivaloverhaul",
 		  "Specification-Vendor": "Icey",
-		  "Specification-Version": "0.3.0", // yeah
+		  "Specification-Version": "0.3.2", // yeah
 		  "Implementation-Title": project.name,
 		  "Implementation-Version": "${version}",
 		  "Implementation-Vendor" :"Icey",
