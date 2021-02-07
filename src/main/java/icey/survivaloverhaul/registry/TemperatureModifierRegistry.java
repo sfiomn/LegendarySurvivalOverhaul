@@ -15,6 +15,7 @@ public class TemperatureModifierRegistry
 	public static final DeferredRegister<ModifierBase> MODIFIERS = DeferredRegister.create(ModifierBase.class, Main.MOD_ID);
 	public static final DeferredRegister<DynamicModifierBase> DYNAMIC_MODIFIERS = DeferredRegister.create(DynamicModifierBase.class, Main.MOD_ID);
 	
+	// Base Modifiers
 	public static final RegistryObject<ModifierBase> DEFAULT = MODIFIERS.register("default", DefaultModifier::new);
 	public static final RegistryObject<ModifierBase> BIOME = MODIFIERS.register("biome", BiomeModifier::new);
 	public static final RegistryObject<ModifierBase> TIME = MODIFIERS.register("time", TimeModifier::new);
@@ -28,6 +29,7 @@ public class TemperatureModifierRegistry
 	public static final RegistryObject<ModifierBase> PLAYER_HUDDLING = MODIFIERS.register("player_huddling", PlayerHuddlingModifier::new);
 	public static final RegistryObject<ModifierBase> WETNESS = MODIFIERS.register("wetness", WetModifier::new);
 	
+	// Mod Compat
 	public static final RegistryObject<ModifierBase> SERENE_SEASONS = MODIFIERS.register("compat/serene_seasons", SereneSeasonsModifier::new);
 	public static final RegistryObject<ModifierBase> CURIOS = MODIFIERS.register("compat/curios", CuriosModifier::new);
 	

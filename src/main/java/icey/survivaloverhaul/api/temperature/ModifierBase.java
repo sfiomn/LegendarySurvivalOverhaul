@@ -10,7 +10,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 /**
- * 
+ * Abstract class representing temperature modifiers.
  * @author Icey
  */
 public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> implements ITemperatureModifier
