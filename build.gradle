@@ -124,16 +124,14 @@ dependencies {
 	// Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
 	// that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
 	// The userdev artifact is a special name and will get all sorts of transformations applied to it.
-	minecraft 'net.minecraftforge:forge:1.16.5-36.0.14'
+	minecraft 'net.minecraftforge:forge:1.16.5-36.0.15'
 	
 	// External libraries.
 	// These are REQUIRED for the mod to compile correctly and should not be removed.
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5:api") // Curios API
 	compileOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:api') // Serene Seasons API
 	
-	// compileOnly fg.deobf('tough-as-nails:ToughAsNails-1.16.5:4.0.1.10:api') // Tough As Nails
-	
-	// compile fg.deobf('better-weather:betterweather:1.2.4') // Better Weather
+	// compileOnly fg.deobf('tough-as-nails:ToughAsNails-1.16.5:4.0.1.10:api') // Tough As Nails API
 	
 	// compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65:api")
 	
