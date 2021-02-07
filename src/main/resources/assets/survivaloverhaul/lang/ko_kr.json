@@ -2,15 +2,15 @@
 	"item.survivaloverhaul.canteen": "물통",
 	"item.survivaloverhaul.netherite_canteen": "네더라이트 물통",
 	
-	"item.survivaloverhaul.snow_head": "눈 모자",
-	"item.survivaloverhaul.snow_chest": "눈 튜닉",
-	"item.survivaloverhaul.snow_legs": "눈 바지",
-	"item.survivaloverhaul.snow_feet": "눈 장화",
+	"item.survivaloverhaul.snow_helmet": "눈 모자",
+	"item.survivaloverhaul.snow_chestplate": "눈 튜닉",
+	"item.survivaloverhaul.snow_leggings": "눈 바지",
+	"item.survivaloverhaul.snow_boots": "눈 장화",
 	
-	"item.survivaloverhaul.desert_head": "사막 모자",
-	"item.survivaloverhaul.desert_chest": "사막 셔츠",
-	"item.survivaloverhaul.desert_legs": "사막 튜닉",
-	"item.survivaloverhaul.desert_feet": "사막 샌들",
+	"item.survivaloverhaul.desert_helmet": "사막 모자",
+	"item.survivaloverhaul.desert_chestplate": "사막 셔츠",
+	"item.survivaloverhaul.desert_leggings": "사막 튜닉",
+	"item.survivaloverhaul.desert_boots": "사막 샌들",
 	
 	"item.survivaloverhaul.infernal_fern_leaf": "지옥 고사리 잎",
 	"item.survivaloverhaul.stone_fern_leaf": "돌 고사리 잎",
@@ -67,7 +67,7 @@
 	"advancements.adventure.eat_your_heart_out.title": "하트를 먹어치우면",
 	"advancements.adventure.eat_your_heart_out.description": "하트 과일을 먹어 체력을 1줄 더 채우세요",
 	
-	"key.survivaloverhaul.climb": "오르기"
+	"key.survivaloverhaul.climb": "오르기",
 	
 	"survivaloverhaul.armorTooltip.heating": "가열",
 	"survivaloverhaul.armorTooltip.cooling": "냉각",
