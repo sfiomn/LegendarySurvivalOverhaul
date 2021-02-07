@@ -35,9 +35,11 @@ public class TemperatureCommand extends CommandBase
 				TemperatureCapability cap = CapabilityUtil.getTempCapability(source.asPlayer());
 				int playerTemp = cap.getTemperatureLevel();
 			
-				String reply = "Temp: "+  playerTemp +"\nTarget Temp: " + targetTemperature;
-			
-				source.asPlayer().sendMessage(new StringTextComponent((reply)), UUID.randomUUID());
+				String reply1 = "Temp: "+  playerTemp;
+				String reply2 = "Target Temp: " + targetTemperature;
+				
+				source.asPlayer().sendMessage(new StringTextComponent((reply1)), UUID.randomUUID());
+				source.asPlayer().sendMessage(new StringTextComponent((reply2)), UUID.randomUUID());
 			}
 		}
 		catch(Exception e) 
