@@ -4,6 +4,7 @@
 	[
 		"#forge:dirt",
 		"#minecraft:climbable",
+		"#forge:sandstone",
 		"#forge:stone",
 		"#forge:cobblestone",
 		"#minecraft:nylium",
