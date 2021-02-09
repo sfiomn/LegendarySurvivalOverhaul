@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.16.4-0.3.1b-dev'
+version = '${minecraft_version}-${release_version}-dev'
 group = 'icey.survivaloverhaul' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'survivaloverhaul'
 
@@ -135,6 +135,7 @@ dependencies {
 	
 	// compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65:api")
 	
+	// Runtime mods. These are primarily for testing and can be removed as necessary.
 	// runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.5") // Curios
 	runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.65")
 	runtimeOnly fg.deobf('serene-seasons:SereneSeasons-1.16.5:4.0.1.89:universal') // Serene Seasons
@@ -155,7 +156,7 @@ jar {
 	   attributes([
 		  "Specification-Title": "survivaloverhaul",
 		  "Specification-Vendor": "Icey",
-		  "Specification-Version": "0.3.2", // yeah
+		  "Specification-Version": "${release_version}", // yeah
 		  "Implementation-Title": project.name,
 		  "Implementation-Version": "${version}",
 		  "Implementation-Vendor" :"Icey",
