@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '${minecraft_version}-${release_version}-dev'
+version = minecraft_version + '-' + release_version + '-dev'
 group = 'icey.survivaloverhaul' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'survivaloverhaul'
 
@@ -156,7 +156,7 @@ jar {
 	   attributes([
 		  "Specification-Title": "survivaloverhaul",
 		  "Specification-Vendor": "Icey",
-		  "Specification-Version": "${release_version}", // yeah
+		  "Specification-Version": release_version, // yeah
 		  "Implementation-Title": project.name,
 		  "Implementation-Version": "${version}",
 		  "Implementation-Vendor" :"Icey",
