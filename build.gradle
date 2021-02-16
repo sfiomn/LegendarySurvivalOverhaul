@@ -124,7 +124,7 @@ dependencies {
 	// Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
 	// that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
 	// The userdev artifact is a special name and will get all sorts of transformations applied to it.
-	minecraft 'net.minecraftforge:forge:1.16.5-36.0.26'
+	minecraft 'net.minecraftforge:forge:1.16.5-36.0.42'
 	
 	// External libraries.
 	// These are REQUIRED for the mod to compile correctly and should not be removed.
