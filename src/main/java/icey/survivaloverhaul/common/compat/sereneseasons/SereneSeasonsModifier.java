@@ -14,14 +14,11 @@ public class SereneSeasonsModifier extends ModifierBase
 	{
 		super();
 	}
-	
 
 	@Override
 	public float getWorldInfluence(World world, BlockPos pos)
 	{
 		if (!Main.sereneSeasonsLoaded)
-			return 0.0f;
-		if (!Config.Baked.seasonTemperatureEffects)
 			return 0.0f;
 		
 		try
@@ -50,31 +47,43 @@ public class SereneSeasonsModifier extends ModifierBase
 		{
 		case EARLY_SPRING:
 			value = Config.Baked.earlySpringModifier;
+			break;
 		case MID_SPRING:
 			value = Config.Baked.midSpringModifier;
+			break;
 		case LATE_SPRING:
 			value = Config.Baked.lateSpringModifier;
+			break;
 		case EARLY_SUMMER:
 			value = Config.Baked.earlySummerModifier;
+			break;
 		case MID_SUMMER:
 			value = Config.Baked.midSummerModifier;
+			break;
 		case LATE_SUMMER:
 			value = Config.Baked.lateSummerModifier;
+			break;
 		case EARLY_AUTUMN:
 			value = Config.Baked.earlyAutumnModifier;
+			break;
 		case MID_AUTUMN:
 			value = Config.Baked.midAutumnModifier;
+			break;
 		case LATE_AUTUMN:
 			value = Config.Baked.lateAutumnModifier;
+			break;
 		case EARLY_WINTER:
 			value = Config.Baked.earlyWinterModifier;
+			break;
 		case MID_WINTER:
 			value =  Config.Baked.midWinterModifier;
+			break;
 		case LATE_WINTER:
 			value = Config.Baked.lateWinterModifier;
-		default:
-			value = 0.0f;
+			break;
 		}
+
+		Main.LOGGER.debug(seasonState.getSubSeason().toString() + ": " + value);
 		
 		return applyUndergroundEffect(value, world, pos);
 	}
