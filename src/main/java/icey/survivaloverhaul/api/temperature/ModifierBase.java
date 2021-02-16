@@ -13,7 +13,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
  * Abstract class representing temperature modifiers.
  * @author Icey
  */
-public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> implements ITemperatureModifier
+public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 {
 	/**
 	 * Unique World Modifiers
@@ -54,14 +54,12 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> impl
 	 * Returns temperature from factors based directly on the player, such as what items they
 	 * are holding, if they are sprinting, on fire, or what temporary modifiers they have. 
 	 */
-	@Override
 	public float getPlayerInfluence(PlayerEntity player) { return 0.0f; }
 	
 	/*
 	 * Returns temperature based on environmental factors, such as the biome at the given position,
 	 * proximity to hot/cold blocks, altitude, time, weather, etc.
 	 */
-	@Override
 	public float getWorldInfluence(World world, BlockPos pos) { return 0.0f; }
 	
 	protected float applyUndergroundEffect(float temperature, World world, BlockPos pos)
