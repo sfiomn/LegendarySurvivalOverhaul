@@ -43,7 +43,7 @@ public class ItemHeartFruit extends Item
 				
 				if (Config.Baked.heartFruitsGiveRegen)
 				{
-					player.addPotionEffect(new EffectInstance(Effects.REGENERATION, 200, 2));
+					player.addPotionEffect(new EffectInstance(Effects.REGENERATION, 200, 1));
 				}
 			}
 			
