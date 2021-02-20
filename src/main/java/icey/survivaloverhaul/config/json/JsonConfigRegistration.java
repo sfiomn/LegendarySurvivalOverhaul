@@ -75,15 +75,15 @@ public class JsonConfigRegistration
 		JsonConfig.registerFluidTemperature("minecraft:lava", 10.0f);
 		JsonConfig.registerFluidTemperature("minecraft:flowing_lava", 10.0f);
 		
-		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_feet", 0.5f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_legs", 2.5f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_chest", 3.0f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_head", 1.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_boots", 0.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_leggings", 2.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_chestplate", 3.0f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_helmet", 1.5f);
 		
-		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_feet", -0.5f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_legs", -2.5f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_chest", -3.0f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_head", -1.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_boots", -0.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_leggings", -2.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_chestplate", -3.0f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_helmet", -1.5f);
 		
 		JsonConfig.registerArmorTemperature("minecraft:leather_boots", 0.25f, 0.9f);
 		JsonConfig.registerArmorTemperature("minecraft:leather_leggings", 0.75f, 0.9f);
