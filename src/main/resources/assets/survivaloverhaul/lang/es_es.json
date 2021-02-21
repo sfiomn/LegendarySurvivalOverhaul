@@ -1,0 +1,75 @@
+{
+	"item.survivaloverhaul.canteen": "Cantimplora",
+	"item.survivaloverhaul.netherite_canteen": "Cantimplora de Netherita",
+	
+	"item.survivaloverhaul.snow_head": "Sombrero de nieve",
+	"item.survivaloverhaul.snow_chest": "Túnica de nieve",
+	"item.survivaloverhaul.snow_legs": "Pantalones de nieve",
+	"item.survivaloverhaul.snow_feet": "Botas de nieve",
+	
+	"item.survivaloverhaul.desert_head": "Sombrero del desierto",
+	"item.survivaloverhaul.desert_chest": "Camisa del desierto",
+	"item.survivaloverhaul.desert_legs": "Túnica del desierto",
+	"item.survivaloverhaul.desert_feet": "Sandalias del desierto",
+	
+	"item.survivaloverhaul.infernal_fern_leaf": "Hoja de helecho infernal",
+	"item.survivalohaul.stone_fern_leaf": "Hoja de helecho de piedra",
+	"item.survivaloverhaul.thermometer": "Termómetro",
+	"item.survivaloverhaul.heart_fruit": "Fruta del corazón",
+	
+	"item.survivaloverhaul.cinnabar_ore": "Mineral de cinabrio",
+	"item.survivaloverhaul.mercury_paste": "Pasta de mercurio",
+	
+	"block.survivaloverhaul.heating_coil": "Bobina de calentamiento",
+	"block.survivaloverhaul.cooling_coil": "Bobina de enfriamiento",
+	
+	"item.minecraft.potion.effect.heat_resistance": "Poción de resistencia al calor",
+	"item.minecraft.potion.effect.cold_resistance": "Poción de resistencia al frío",
+	"item.minecraft.potion.effect.heat_resistance_long": "Poción de resistencia al calor",
+	"item.minecraft.potion.effect.cold_resistance_long": "Poción de resistencia al frío",
+	
+	"item.minecraft.splash_potion.effect.heat_resistance": "Poción de salpicadura de resistencia al calor",
+	"item.minecraft.splash_potion.effect.cold_resistance": "Poción de salpicadura de resistencia al frío",
+	"item.minecraft.splash_potion.effect.heat_resistance_long": "Poción de salpicadura de resistencia al calor",
+	"item.minecraft.splash_potion.effect.cold_resistance_long": "Poción de salpicadura de resistencia al frío",
+	
+	"item.minecraft.lingering_potion.effect.heat_resistance": "Poción persistente de resistencia al calor",
+	"item.minecraft.lingering_potion.effect.cold_resistance": "Poción persistente de resistencia al frío",
+	"item.minecraft.lingering_potion.effect.heat_resistance_long": "Poción persistente de resistencia al calor",
+	"item.minecraft.lingering_potion.effect.cold_resistance_long": "Poción persistente de resistencia al frío",
+	
+	"item.minecraft.tipped_arrow.effect.heat_resistance": "Flecha de resistencia al calor",
+	"item.minecraft.tipped_arrow.effect.cold_resistance": "Flecha de resistencia al frío",
+	"item.minecraft.tipped_arrow.effect.heat_resistance_long": "Flecha de resistencia al calor",
+	"item.minecraft.tipped_arrow.effect.cold_resistance_long": "Flecha de resistencia al frío",
+	
+	"effect.survivaloverhaul.heat_stroke": "Golpe de calor",
+	"effect.survivaloverhaul.frostbite": "Congelación",
+	"effect.survivaloverhaul.heat_resist": "Resistencia al calor",
+	"effect.survivaloverhaul.cold_resist": "Resistencia al frío",
+	"effect.survivaloverhaul.thirst": "Sed",
+	
+	"enchantment.survivaloverhaul.adaptive_barrier": "Barrera térmica adaptativa",
+	"enchantment.survivaloverhaul.adaptive_barrier.desc": "Proporciona un efecto de calentamiento/enfriamiento adaptativo cuando se aplica a la armadura",
+	"enchantment.survivaloverhaul.thermal_barrier": "Barrera térmica",
+	"enchantment.survivaloverhaul.thermal_barrier.desc": "Proporciona un efecto de enfriamiento constante cuando se aplica a la armadura",
+	"enchantment.survivaloverhaul.cold_barrier": "Barrera de enfriamiento",
+	"enchantment.survivaloverhaul.cold_barrier.desc": "Proporciona un efecto de calentamiento constante cuando se aplica a la armadura",
+	
+	"death.attack.survivaloverhaul.hypothermia": "%1$s se congeló hasta morir",
+	"death.attack.survivaloverhaul.hyperthermia": "%1$s no pudo soportar el calor",
+	"death.attack.survivaloverhaul.dehydration": "%1$s murió de deshidratación",
+	"death.attack.survivaloverhaul.breaking_arms": "%1$s se cayó de un lugar alto y se rompió los brazos",
+	
+	"advancements.adventure.have_a_heart.títle": "Tener un corazón",
+	"advancements.adventure.have_a_heart.description": "Encuentra una fruta de corazón en un cofre del tesoro",
+	
+	"advancements.adventure.eat_your_heart_out.title": "Cómete el corazón",
+	"advancements.adventure.eat_your_heart_out.description": "Adquiere una fila completa de corazones adicionales al comer frutas de corazón",
+	
+	"key.survivaloverhaul.climb": "Escalar",
+	
+	"survivaloverhaul.armorTooltip.heating": "Calentamiento",
+	"survivaloverhaul.armorTooltip.cooling": "Refrigeración",
+	"survivaloverhaul.armorTooltip.insulation": "Aislamiento",
+}
