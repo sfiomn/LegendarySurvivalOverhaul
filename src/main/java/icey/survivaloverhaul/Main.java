@@ -22,6 +22,7 @@ import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -50,6 +51,7 @@ import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierStorage;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
+import icey.survivaloverhaul.common.world.OreGeneration;
 import icey.survivaloverhaul.config.*;
 import icey.survivaloverhaul.config.json.JsonConfigRegistration;
 import icey.survivaloverhaul.network.NetworkHandler;
@@ -126,6 +128,7 @@ public class Main
 		TemperatureModifierRegistry.MODIFIERS.register(modBus);
 		TemperatureModifierRegistry.DYNAMIC_MODIFIERS.register(modBus);
 		
+		
 		forgeBus.addListener(this::serverStarted);
 		forgeBus.addListener(this::reloadListener);
 		
@@ -166,6 +169,7 @@ public class Main
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
 		
 		NetworkHandler.register();
+		OreGeneration.register();
 		
 		event.enqueueWork(() -> 
 		{
