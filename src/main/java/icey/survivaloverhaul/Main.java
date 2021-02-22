@@ -123,7 +123,6 @@ public class Main
 		TemperatureModifierRegistry.MODIFIERS.register(modBus);
 		TemperatureModifierRegistry.DYNAMIC_MODIFIERS.register(modBus);
 		
-		
 		forgeBus.addListener(this::serverStarted);
 		forgeBus.addListener(this::reloadListener);
 		
@@ -166,7 +165,7 @@ public class Main
 		CapabilityManager.INSTANCE.register(WetnessCapability.class, (new WetnessCapability()).new Storage(), WetnessCapability::new);
 		
 		NetworkHandler.register();
-		OreGeneration.register();
+		// OreGeneration.register();
 		
 		event.enqueueWork(() -> 
 		{

@@ -65,7 +65,7 @@ public class WetnessCapability
 	
 	/**
 	 * This probably isn't too terribly performance friendly but it's something at least<br>
-	 * 
+	 * <br>
 	 * TODO: optimization!!
 	 */
 	public void tickUpdate(PlayerEntity player, World world, Phase phase)
