@@ -13,11 +13,11 @@
 	"item.survivaloverhaul.desert_feet": "Sandalias del desierto",
 	
 	"item.survivaloverhaul.infernal_fern_leaf": "Hoja de helecho infernal",
-	"item.survivalohaul.stone_fern_leaf": "Hoja de helecho de piedra",
+	"item.survivaloverhaul.stone_fern_leaf": "Hoja de helecho de piedra",
 	"item.survivaloverhaul.thermometer": "Termómetro",
 	"item.survivaloverhaul.heart_fruit": "Fruta del corazón",
 	
-	"item.survivaloverhaul.cinnabar_ore": "Mineral de cinabrio",
+	"block.survivaloverhaul.cinnabar_ore": "Mineral de cinabrio",
 	"item.survivaloverhaul.mercury_paste": "Pasta de mercurio",
 	
 	"block.survivaloverhaul.heating_coil": "Bobina de calentamiento",
@@ -71,5 +71,5 @@
 	
 	"survivaloverhaul.armorTooltip.heating": "Calentamiento",
 	"survivaloverhaul.armorTooltip.cooling": "Refrigeración",
-	"survivaloverhaul.armorTooltip.insulation": "Aislamiento",
+	"survivaloverhaul.armorTooltip.insulation": "Aislamiento"
 }
