@@ -20,6 +20,8 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.FORGE)
 public class TooltipHandler
 {
+	
+	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public static void onTooltip(ItemTooltipEvent event)
 	{

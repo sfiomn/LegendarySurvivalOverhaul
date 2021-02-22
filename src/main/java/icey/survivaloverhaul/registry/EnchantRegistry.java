@@ -1,47 +1,24 @@
 package icey.survivaloverhaul.registry;
 
-import java.lang.reflect.Field;
-
 import icey.survivaloverhaul.Main;
+import icey.survivaloverhaul.common.enchantments.GenericMagic.EnchantOptions;
 import icey.survivaloverhaul.common.enchantments.InsulationMagic;
 import icey.survivaloverhaul.common.enchantments.InsulationMagic.MagicType;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.enchantment.Enchantment.Rarity;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EnchantRegistry 
 {
-	public static final class ModEnchants
-	{
-		// Doesn't work at the moment
-		// public static final InsulationMagic ADAPTIVE_BARRIER = new InsulationMagic("adaptive_barrier", MagicType.Both);
-		public static final InsulationMagic THERMAL_BARRIER = new InsulationMagic("thermal_barrier", MagicType.Heat);
-		public static final InsulationMagic COLD_BARRIER = new InsulationMagic("cold_barrier", MagicType.Cool);
-	}
+	public static final DeferredRegister<Enchantment> ENCHANTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, Main.MOD_ID);
+
+	public static final RegistryObject<Enchantment> ADAPTIVE_BARRIER = ENCHANTS.register("adaptive_barrier", () -> new InsulationMagic(MagicType.Both, Rarity.VERY_RARE, new EnchantOptions(4)));
+	public static final RegistryObject<Enchantment> THERMAL_BARRIER = ENCHANTS.register("thermal_barrier", () -> new InsulationMagic(MagicType.Heat, Rarity.RARE, new EnchantOptions(3)));
+	public static final RegistryObject<Enchantment> COLD_BARRIER = ENCHANTS.register("cold_barrier", () -> new InsulationMagic(MagicType.Cool, Rarity.RARE, new EnchantOptions(3)));
 	
-	@SubscribeEvent
-	public static void registerBlocks(RegistryEvent.Register<Enchantment> event) {
-		try 
-		{
-			for (Field f : EnchantRegistry.ModEnchants.class.getDeclaredFields()) 
-			{
-				Object obj = f.get(null);
-				if (obj instanceof Enchantment) 
-				{
-					event.getRegistry().register((Enchantment) obj);
-				} 
-				else if (obj instanceof Enchantment[]) 
-				{
-					for (Enchantment Magic : (Enchantment[]) obj) 
-					{
-						event.getRegistry().register(Magic);
-					}
-				}
-			}
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	
 }

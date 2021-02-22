@@ -13,7 +13,7 @@ public class ExhaustionEffect extends GenericEffect
 	
 	public ExhaustionEffect()
 	{
-		super(5926017, "exhaustion", EffectType.HARMFUL);
+		super(5926017, EffectType.HARMFUL);
 		this
 			.addAttributesModifier(Attributes.MOVEMENT_SPEED, SLOWNESS_ATTRIBUTE_UUID.toString(), -0.30, AttributeModifier.Operation.MULTIPLY_TOTAL);
 	}

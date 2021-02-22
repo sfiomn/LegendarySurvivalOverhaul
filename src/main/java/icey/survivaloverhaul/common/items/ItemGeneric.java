@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.math.MathHelper;
 
+@Deprecated
 public class ItemGeneric extends Item
 {
 	public ItemGeneric(String name)

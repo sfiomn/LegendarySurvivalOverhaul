@@ -12,6 +12,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.client.hud.TemperatureDisplayEnum;
+import icey.survivaloverhaul.common.capability.wetness.WetnessMode;
 import icey.survivaloverhaul.config.json.JsonConfigRegistration;
 
 public class Config
@@ -75,11 +76,13 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Double> biomeTimeMultiplier;
 		public final ForgeConfigSpec.ConfigValue<Integer> timeShadeModifier;
 
-		public final ForgeConfigSpec.ConfigValue<Double> wetMultiplier;
 		public final ForgeConfigSpec.ConfigValue<Double> altitudeModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> sprintModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> onFireModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> enchantmentMultiplier;
+		
+		public final ForgeConfigSpec.ConfigValue<String> wetnessMode;
+		public final ForgeConfigSpec.ConfigValue<Double> wetMultiplier;
 		
 		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceHorizontalDist;
 		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceVerticalDist;
@@ -146,7 +149,7 @@ public class Config
 									" How often player temperature is regularly synced between the client and server, in ticks.",
 									" Lower values will increase accuracy at the cost of performance"
 							})
-					.define("Routine Packet Sync", 30);
+					.defineInRange("Routine Packet Sync", 30, 1, Integer.MAX_VALUE);
 			/*
 			forceDisableFlightKick = builder
 					.comment(new String[] 
@@ -174,12 +177,25 @@ public class Config
 			sprintModifier = builder
 					.comment(" How much of an effect sprinting has on a player's temperature.")
 					.define("Player Sprint Modifier", 1.5d);
+			enchantmentMultiplier = builder
+					.comment(" Increases/decreases the effect that cooling/heating enchantments have on a player's temperature.")
+					.define("Enchantment Modifier", 1.0d);
+			
+			builder.push("wetness");
+			wetnessMode = builder
+					.comment(new String[] {
+							" How a player's \"wetness\" is determined. Accepted values are as follows:",
+							"   DISABLE - Disable wetness and any effects on temperature it might have.",
+							"   SIMPLE - Wetness is only based on whether you're in water/rain or not. Slightly better in terms of performance.",
+							"   DYNAMIC - Wetness can change dynamically based on various conditions, and does not instantly go away when moving out of water.",
+							" Any other value will default to DISABLE."
+					})
+					.define("Wetness Mode", "DYNAMIC");
+			
 			wetMultiplier = builder
 					.comment(" How much being wet influences the player's temperature.")
 					.define("Wetness Modifier", -7.0d);
-			enchantmentMultiplier = builder
-					.comment(" Increases/decreases the effect that cooling/heating enchantments have on a player's temperature.")
-					.define("Enchantment Modifier", 0.25d);
+			builder.pop();
 			
 			builder.push("huddling");
 			playerHuddlingModifier = builder
@@ -282,7 +298,6 @@ public class Config
 			builder.pop();
 			
 			builder.comment(" Options relating to heart fruits").push("heart-fruits");
-			
 			maxAdditionalHearts = builder
 					.comment(" Maximum number of additional hearts that can be given by Heart Fruits.")
 					.defineInRange("Maximum Additional Hearts", 10, 1, Integer.MAX_VALUE);
@@ -311,6 +326,9 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<String> temperatureDisplayMode;
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetY;
+		
+		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetX;
+		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetY;
 		/*
 		public final ForgeConfigSpec.ConfigValue<String> staminaDisplayMode;
 		public final ForgeConfigSpec.ConfigValue<Integer> staminaDisplayOffsetX;
@@ -321,17 +339,33 @@ public class Config
 		Client(ForgeConfigSpec.Builder builder)
 		{
 			
-			builder.comment("Options related to the heads up display").push("hud");
+			builder.comment(new String[] {" Options related to the heads up display.",
+					" These options will automatically update upon being saved."
+					}).push("hud");
 			
 			builder.push("temperature");
 			temperatureDisplayMode = builder
-					.comment("How temperature is displayed. Accepted values are \"SYMBOL,\" and \"NONE.\"")
+					.comment(new String[]
+							{
+									" How temperature is displayed. Accepted values are as follows:",
+									"    SYMBOL - Display the player's current temperature as a symbol above the hotbar.",
+									"    NONE - Disable the temperature indicator."
+							})
 					.define("Temperature Display Mode", "SYMBOL");
 			temperatureDisplayOffsetX = builder
-					.comment("The X and Y offset of the temperature indicator. Set to 0 for no offset.")
+					.comment(" The X and Y offset of the temperature indicator. Set both to 0 for no offset.")
 					.define("Temperature Display X Offset", 0);
 			temperatureDisplayOffsetY = builder
 					.define("Temperature Display Y Offset", 0);
+			builder.push("wetness");
+			
+			builder.comment(" The X and Y offset of the wetness indicator. Set both to 0 for no offset.").push("offset");
+			wetnessIndicatorOffsetX = builder
+					.define("Wetness Indicator X Offset", 0);
+			wetnessIndicatorOffsetY = builder
+					.define("Wetness Indicator Y Offset", 0);
+			builder.pop();
+			builder.pop();
 			builder.pop();
 			/*
 			builder.push("stamina");
@@ -399,6 +433,7 @@ public class Config
 		public static double playerHuddlingModifier;
 		public static int playerHuddlingRadius;
 		
+		public static WetnessMode wetnessMode;
 		public static double wetMultiplier;
 		
 		public static int earlySpringModifier;
@@ -429,6 +464,9 @@ public class Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
+		
+		public static int wetnessIndicatorOffsetX;
+		public static int wetnessIndicatorOffsetY;
 		/*
 		public static StaminaDisplayEnum staminaDisplayMode;
 		public static int staminaDisplayOffsetX;
@@ -464,8 +502,10 @@ public class Config
 				
 				onFireModifier = COMMON.onFireModifier.get();
 				sprintModifier = COMMON.sprintModifier.get();
-				wetMultiplier = COMMON.wetMultiplier.get();
 				enchantmentMultiplier = COMMON.enchantmentMultiplier.get();
+				
+				wetnessMode = WetnessMode.getDisplayFromString(COMMON.wetnessMode.get());
+				wetMultiplier = COMMON.wetMultiplier.get();
 				
 				playerHuddlingModifier = COMMON.playerHuddlingModifier.get();
 				playerHuddlingRadius = COMMON.playerHuddlingRadius.get();
@@ -510,6 +550,9 @@ public class Config
 				temperatureDisplayMode = TemperatureDisplayEnum.getDisplayFromString(CLIENT.temperatureDisplayMode.get());
 				temperatureDisplayOffsetX = CLIENT.temperatureDisplayOffsetX.get();
 				temperatureDisplayOffsetY = CLIENT.temperatureDisplayOffsetY.get();
+				
+				wetnessIndicatorOffsetX = CLIENT.wetnessIndicatorOffsetX.get();
+				wetnessIndicatorOffsetY = CLIENT.wetnessIndicatorOffsetY.get();
 				/*
 				staminaDisplayMode = StaminaDisplayEnum.getDisplayFromString(CLIENT.staminaDisplayMode.get());
 				staminaDisplayOffsetX = CLIENT.staminaDisplayOffsetX.get();

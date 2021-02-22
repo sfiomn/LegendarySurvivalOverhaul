@@ -2,15 +2,15 @@
 	"item.survivaloverhaul.canteen": "Canteen",
 	"item.survivaloverhaul.netherite_canteen": "Netherite Canteen",
 	
-	"item.survivaloverhaul.snow_head": "Snow Hat",
-	"item.survivaloverhaul.snow_chest": "Snow Tunic",
-	"item.survivaloverhaul.snow_legs": "Snow Pants",
-	"item.survivaloverhaul.snow_feet": "Snow Boots",
+	"item.survivaloverhaul.snow_helmet": "Snow Hat",
+	"item.survivaloverhaul.snow_chestplate": "Snow Tunic",
+	"item.survivaloverhaul.snow_leggings": "Snow Pants",
+	"item.survivaloverhaul.snow_boots": "Snow Boots",
 	
-	"item.survivaloverhaul.desert_head": "Desert Cap",
-	"item.survivaloverhaul.desert_chest": "Desert Shirt",
-	"item.survivaloverhaul.desert_legs": "Desert Tunic",
-	"item.survivaloverhaul.desert_feet": "Desert Sandals",
+	"item.survivaloverhaul.desert_helmet": "Desert Cap",
+	"item.survivaloverhaul.desert_chestplate": "Desert Shirt",
+	"item.survivaloverhaul.desert_leggings": "Desert Tunic",
+	"item.survivaloverhaul.desert_boots": "Desert Sandals",
 	
 	"item.survivaloverhaul.infernal_fern_leaf": "Infernal Fern Leaf",
 	"item.survivaloverhaul.stone_fern_leaf": "Stone Fern Leaf",
@@ -71,5 +71,9 @@
 	
 	"survivaloverhaul.armorTooltip.heating": "Heating",
 	"survivaloverhaul.armorTooltip.cooling": "Cooling",
-	"survivaloverhaul.armorTooltip.insulation": "Insulation"
+	"survivaloverhaul.armorTooltip.insulation": "Insulation",
+	
+	"entity.generic.freeze.enter.subtitles": "Something freezes",
+	"entity.generic.freeze.exit.subtitles": "Something shatters",
+	"player.overheat.loop": "Player sizzles"
 }

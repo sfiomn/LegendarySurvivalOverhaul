@@ -56,7 +56,7 @@ public class UpdateHeartsPacket
 				
 				HeartModifierCapability hearts = player.getCapability(Main.HEART_MOD_CAP).orElse(new HeartModifierCapability());
 				
-				hearts.load(compound);
+				hearts.readNBT(compound);
 				hearts.updateMaxHealth(player.getEntityWorld(), player);
 			}
 		};

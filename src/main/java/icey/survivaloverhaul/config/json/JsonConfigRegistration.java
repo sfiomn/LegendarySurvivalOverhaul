@@ -16,8 +16,10 @@ import com.google.gson.GsonBuilder;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
+import icey.survivaloverhaul.api.config.json.TemporaryModifierGroup;
 import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
+import icey.survivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
@@ -73,15 +75,15 @@ public class JsonConfigRegistration
 		JsonConfig.registerFluidTemperature("minecraft:lava", 10.0f);
 		JsonConfig.registerFluidTemperature("minecraft:flowing_lava", 10.0f);
 		
-		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_feet", 0.5f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_legs", 2.5f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_chest", 3.0f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_head", 1.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_boots", 0.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_leggings", 2.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_chestplate", 3.0f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:snow_helmet", 1.5f);
 		
-		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_feet", -0.5f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_legs", -2.5f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_chest", -3.0f);
-		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_head", -1.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_boots", -0.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_leggings", -2.5f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_chestplate", -3.0f);
+		JsonConfig.registerArmorTemperature("survivaloverhaul:desert_helmet", -1.5f);
 		
 		JsonConfig.registerArmorTemperature("minecraft:leather_boots", 0.25f, 0.9f);
 		JsonConfig.registerArmorTemperature("minecraft:leather_leggings", 0.75f, 0.9f);
@@ -93,13 +95,16 @@ public class JsonConfigRegistration
 		JsonConfig.registerArmorTemperature("minecraft:iron_chestplate", 0f, 1.2f);
 		JsonConfig.registerArmorTemperature("minecraft:iron_helmet", 0f, 1.2f);
 		
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "minecraft:mushroom_stew", 1.0f, 1200, DEFAULT_ITEM_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "minecraft:rabbit_stew", 1.0f, 1200, DEFAULT_ITEM_IDENTITY);
+		
 		JsonConfig.registerBiomeOverride("minecraft:crimson_forest", 0.75f, false);
 		JsonConfig.registerBiomeOverride("minecraft:warped_forest", 0.75f, false);
 		JsonConfig.registerBiomeOverride("minecraft:nether_wastes", 1.0f, false);
 		JsonConfig.registerBiomeOverride("minecraft:soul_sand_valley", 1.0f, false);
-		JsonConfig.registerBiomeOverride("minecraft:basalt_deltas", 1.15f, false);
+		JsonConfig.registerBiomeOverride("minecraft:basalt_deltas", 1.45f, false);
 		
-		CompatController.initCompat(configDir);
+		CompatController.initCompat();
 	}
 	
 	public static void clearContainers()
@@ -108,6 +113,7 @@ public class JsonConfigRegistration
 		JsonConfig.blockTemperatures.clear();
 		JsonConfig.fluidTemperatures.clear();
 		JsonConfig.biomeOverrides.clear();
+		JsonConfig.consumableTemperature.clear();
 	}
 	
 	public static void processAllJson(File jsonDir)
@@ -116,6 +122,7 @@ public class JsonConfigRegistration
 		
 		if (jsonArmorTemperatures != null)
 		{
+			Main.LOGGER.debug("Loaded " + jsonArmorTemperatures.size() + " armor temperature values from JSON");
 			for (Map.Entry<String, List<JsonArmorIdentity>> entry : jsonArmorTemperatures.entrySet())
 			{
 				for (JsonArmorIdentity jtm : entry.getValue())
@@ -132,6 +139,7 @@ public class JsonConfigRegistration
 		
 		if (jsonBlockTemperatures != null)
 		{
+			Main.LOGGER.debug("Loaded " + jsonBlockTemperatures.size() + " block temperature values from JSON");
 			for (Map.Entry<String, List<JsonPropertyTemperature>> entry : jsonBlockTemperatures.entrySet())
 			{
 				for (JsonPropertyTemperature propTemp : entry.getValue())
@@ -154,6 +162,7 @@ public class JsonConfigRegistration
 		
 		if (jsonFluidTemperatures != null)
 		{
+			Main.LOGGER.debug("Loaded " + jsonFluidTemperatures.size() + " fluid temperature values from JSON");
 			for (Map.Entry<String, JsonTemperature> entry : jsonFluidTemperatures.entrySet())
 			{
 				JsonConfig.registerFluidTemperature(entry.getKey(), entry.getValue().temperature);
@@ -173,6 +182,7 @@ public class JsonConfigRegistration
 		
 		if (jsonBiomeIdentities != null)
 		{
+			Main.LOGGER.debug("Loaded " + jsonBiomeIdentities.size() + " biome temperature overrides from JSON");
 			for (Map.Entry<String, JsonBiomeIdentity> entry : jsonBiomeIdentities.entrySet())
 			{
 				JsonConfig.registerBiomeOverride(entry.getKey(), entry.getValue().temperature, entry.getValue().isDry);
@@ -181,6 +191,32 @@ public class JsonConfigRegistration
 			try
 			{
 				manuallyWriteToJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir);
+			}
+			catch (Exception e)
+			{
+				Main.LOGGER.error("Error writing merged JSON file", e);
+			}
+		}
+		
+		Map<String, List<JsonConsumableTemperature>> jsonConsumableTemperatures = processJson(JsonFileName.CONSUMABLE, JsonConfig.consumableTemperature, jsonDir, true);
+		
+		if (jsonConsumableTemperatures != null)
+		{
+			Main.LOGGER.debug("Loaded " + jsonConsumableTemperatures.size() + " consumable temperature values from JSON");
+			for (Map.Entry<String, List<JsonConsumableTemperature>> entry : jsonConsumableTemperatures.entrySet())
+			{
+				for (JsonConsumableTemperature jct : entry.getValue())
+				{
+					if (jct.identity != null)
+						jct.identity.tryPopulateCompound();
+					
+					JsonConfig.registerConsumableTemperature(jct.group, entry.getKey(), jct.temperature, jct.duration, jct.identity);
+				}
+			}
+			
+			try
+			{
+				manuallyWriteToJson(JsonFileName.CONSUMABLE, JsonConfig.consumableTemperature, jsonDir);
 			}
 			catch (Exception e)
 			{
@@ -245,11 +281,25 @@ public class JsonConfigRegistration
 	
 	private static <T> void manuallyWriteToJson(JsonFileName jfn, final T container, File jsonDir) throws Exception
 	{
+		manuallyWriteToJson(jfn, container, jsonDir, false);
+	}
+	
+	private static <T> void manuallyWriteToJson(JsonFileName jfn, final T container, File jsonDir, boolean forceWrite) throws Exception
+	{
 		String jsonFileName = jfn.get();
 		Type type = JsonTypeToken.get(jfn);
 		
 		Gson gson = buildNewGson();
 		File jsonFile = new File(jsonDir, jsonFileName);
+		if (jsonFile.exists())
+		{
+			Main.LOGGER.debug(jsonFile.getName() + " already exists!");
+			
+			if (forceWrite)
+				Main.LOGGER.debug("Overriding...");
+			else
+				return;
+		}
 		FileUtils.write(jsonFile, gson.toJson(container, type), (String) null);
 	}
 	

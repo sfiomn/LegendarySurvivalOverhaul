@@ -1,9 +1,5 @@
 package icey.survivaloverhaul.common.temperature;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.config.json.JsonConfig;
@@ -18,7 +14,6 @@ public class BiomeModifier extends ModifierBase
 	public BiomeModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "biome");
 	}
 	
 	@Override

@@ -7,18 +7,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeRegistry;
-import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 /**
- * 
+ * Abstract class representing temperature modifiers.
  * @author Icey
  */
-public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> implements ITemperatureModifier
+public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 {
 	/**
-	 * Unique World Modifiers
+	 * Global World Modifiers
 	 * 
 	 * Altitude
 	 * Biome
@@ -55,15 +53,17 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> impl
 	/**
 	 * Returns temperature from factors based directly on the player, such as what items they
 	 * are holding, if they are sprinting, on fire, or what temporary modifiers they have. 
+	 * 
+	 * Although it is also possible to get data from the world by calling player$getWorld and 
+	 * player$getPosition, it's not recommended as this will not affect thermometer temperatures
+	 * or other items/blocks that depend on world influences
 	 */
-	@Override
 	public float getPlayerInfluence(PlayerEntity player) { return 0.0f; }
 	
 	/*
 	 * Returns temperature based on environmental factors, such as the biome at the given position,
 	 * proximity to hot/cold blocks, altitude, time, weather, etc.
 	 */
-	@Override
 	public float getWorldInfluence(World world, BlockPos pos) { return 0.0f; }
 	
 	protected float applyUndergroundEffect(float temperature, World world, BlockPos pos)
@@ -128,5 +128,11 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase> impl
 	protected float normalizeToPosNeg(float value)
 	{
 		return (value * 2.0f) - 1.0f;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return this.getRegistryName().toString();
 	}
 }

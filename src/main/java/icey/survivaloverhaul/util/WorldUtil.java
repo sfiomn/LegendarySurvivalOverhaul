@@ -8,8 +8,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-public class WorldUtil
+public final class WorldUtil
 {
+	private WorldUtil() {}
+	
 	public static BlockPos getSidedBlockPos(World world, Entity entity)
 	{
 		if(!world.isRemote)
@@ -45,6 +47,6 @@ public class WorldUtil
 	
 	public static int calculateClientWorldEntityTemperature(World world, Entity entity)
 	{
-		return TemperatureUtil.clampTemperature(TemperatureUtil.getWorldTemperature(world, WorldUtil.getSidedBlockPos(world, entity)));
+		return TemperatureUtil.clampTemperature(TemperatureUtil.getWorldTemperature(world, getSidedBlockPos(world, entity)));
 	}
 }

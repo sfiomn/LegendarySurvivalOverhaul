@@ -1,9 +1,7 @@
 package icey.survivaloverhaul.common.temperature;
 
 import java.util.List;
-import java.util.UUID;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.config.Config;
 import net.minecraft.entity.Entity;
@@ -17,7 +15,6 @@ public class PlayerHuddlingModifier extends ModifierBase
 	public PlayerHuddlingModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "player_huddling");
 	}
 	
 
@@ -34,7 +31,7 @@ public class PlayerHuddlingModifier extends ModifierBase
 		
 		AxisAlignedBB bounds = new AxisAlignedBB(pos.add(-huddleRadius, -huddleRadius, -huddleRadius), pos.add(huddleRadius, huddleRadius, huddleRadius));
 		
-		List<Entity> entities = world.getEntitiesInAABBexcluding(null, bounds, null);
+		List<Entity> entities = world.getEntitiesInAABBexcluding(player, bounds, null);
 		
 		int playerCount = 0;
 		
@@ -42,9 +39,6 @@ public class PlayerHuddlingModifier extends ModifierBase
 		{
 			if (entity instanceof PlayerEntity)
 			{
-				if (entity.getUniqueID().compareTo(player.getUniqueID()) == 0)
-					continue;
-				
 				playerCount++;
 			}
 		}

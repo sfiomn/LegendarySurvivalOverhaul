@@ -7,7 +7,7 @@ public class HeatResistanceEffect extends GenericEffect
 
 	public HeatResistanceEffect()
 	{
-		super(16714764, "heat_resist", EffectType.BENEFICIAL);
+		super(16714764,  EffectType.BENEFICIAL);
 		// TODO Auto-generated constructor stub
 	}
 

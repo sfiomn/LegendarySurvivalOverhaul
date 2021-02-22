@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
+import icey.survivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
 
@@ -21,6 +22,7 @@ public class JsonTypeToken
 			case BLOCK:				return new TypeToken<Map<String, List<JsonPropertyTemperature>>>(){}.getType();
 			case LIQUID: 			return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
 			case BIOME: 			return new TypeToken<Map<String, JsonBiomeIdentity>>(){}.getType();
+			case CONSUMABLE: 		return new TypeToken<Map<String, List<JsonConsumableTemperature>>>(){}.getType();
 			default: 		return null;
 		}
 	}

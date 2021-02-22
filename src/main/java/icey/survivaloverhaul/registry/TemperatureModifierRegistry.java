@@ -1,92 +1,37 @@
 package icey.survivaloverhaul.registry;
 
-import java.lang.reflect.Field;
-
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.DynamicModifierBase;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
+import icey.survivaloverhaul.common.compat.curios.CuriosModifier;
+import icey.survivaloverhaul.common.compat.sereneseasons.SereneSeasonsModifier;
 import icey.survivaloverhaul.common.temperature.*;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import icey.survivaloverhaul.common.temperature.dynamic.*;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
 
-@Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TemperatureModifierRegistry
 {
-	public static class ModifierList
-	{
-		public static final ModifierBase DEFAULT = new DefaultModifier();
-		public static final ModifierBase BIOME = new BiomeModifier();
-		public static final ModifierBase TIME = new TimeModifier();
-		public static final ModifierBase ALTITUDE = new AltitudeModifier();
-		public static final ModifierBase TEMPORARY = new PlayerTemporaryModifier();
-		public static final ModifierBase SPRINT = new SprintModifier();
-		public static final ModifierBase BLOCKS = new BlockModifier();
-		public static final ModifierBase ARMOR = new ArmorModifier();
-		public static final ModifierBase ON_FIRE = new OnFireModifier();
-		public static final ModifierBase WEATHER = new WeatherModifier();
-		public static final ModifierBase PLAYER_HUDDLING = new PlayerHuddlingModifier();
-		// This is currently broken, I'll try implementing it later
-		// public static final ModifierBase ARMOR_INSULATION = new ArmorInsulationModifier();
-	}
+	public static final DeferredRegister<ModifierBase> MODIFIERS = DeferredRegister.create(ModifierBase.class, Main.MOD_ID);
+	public static final DeferredRegister<DynamicModifierBase> DYNAMIC_MODIFIERS = DeferredRegister.create(DynamicModifierBase.class, Main.MOD_ID);
 	
-	public static class DynamicModifierList
-	{
-		
-	}
+	// Base Modifiers
+	public static final RegistryObject<ModifierBase> DEFAULT = MODIFIERS.register("default", DefaultModifier::new);
+	public static final RegistryObject<ModifierBase> BIOME = MODIFIERS.register("biome", BiomeModifier::new);
+	public static final RegistryObject<ModifierBase> TIME = MODIFIERS.register("time", TimeModifier::new);
+	public static final RegistryObject<ModifierBase> ALTITUDE = MODIFIERS.register("altitude", AltitudeModifier::new);
+	public static final RegistryObject<ModifierBase> TEMPORARY = MODIFIERS.register("temporary", PlayerTemporaryModifier::new);
+	public static final RegistryObject<ModifierBase> SPRINT = MODIFIERS.register("sprint", SprintModifier::new);
+	public static final RegistryObject<ModifierBase> BLOCKS = MODIFIERS.register("blocks", BlockModifier::new);
+	public static final RegistryObject<ModifierBase> ARMOR = MODIFIERS.register("armor", ArmorModifier::new);
+	public static final RegistryObject<ModifierBase> ON_FIRE = MODIFIERS.register("on_fire", OnFireModifier::new);
+	public static final RegistryObject<ModifierBase> WEATHER = MODIFIERS.register("weather", WeatherModifier::new);
+	public static final RegistryObject<ModifierBase> PLAYER_HUDDLING = MODIFIERS.register("player_huddling", PlayerHuddlingModifier::new);
+	public static final RegistryObject<ModifierBase> WETNESS = MODIFIERS.register("wetness", WetModifier::new);
 	
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public static void registerModifiers(RegistryEvent.Register<ModifierBase> event)
-	{
-		try
-		{
-			for (Field f : ModifierList.class.getDeclaredFields()) 
-			{
-				Object obj = f.get(null);
-				if (obj instanceof ModifierBase) 
-				{
-					event.getRegistry().register((ModifierBase) obj);
-				} 
-				else if (obj instanceof ModifierBase[]) 
-				{
-					for (ModifierBase modifier : (ModifierBase[]) obj) 
-					{
-						event.getRegistry().register(modifier);
-					}
-				}
-			}
-		}
-		catch (IllegalAccessException e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
+	// Mod Compat
+	public static final RegistryObject<ModifierBase> SERENE_SEASONS = MODIFIERS.register("compat/serene_seasons", SereneSeasonsModifier::new);
+	public static final RegistryObject<ModifierBase> CURIOS = MODIFIERS.register("compat/curios", CuriosModifier::new);
 	
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public static void registerDynamicModifiers(RegistryEvent.Register<DynamicModifierBase> event)
-	{
-		try
-		{
-			for (Field f : DynamicModifierList.class.getDeclaredFields()) 
-			{
-				Object obj = f.get(null);
-				if (obj instanceof DynamicModifierBase) 
-				{
-					event.getRegistry().register((DynamicModifierBase) obj);
-				} 
-				else if (obj instanceof DynamicModifierBase[]) 
-				{
-					for (DynamicModifierBase modifier : (DynamicModifierBase[]) obj) 
-					{
-						event.getRegistry().register(modifier);
-					}
-				}
-			}
-		}
-		catch (IllegalAccessException e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
+	public static final RegistryObject<DynamicModifierBase> ADAPTIVE_ENCHANT = DYNAMIC_MODIFIERS.register("adaptive_enchant", AdaptiveEnchantmentModifier::new);
 }

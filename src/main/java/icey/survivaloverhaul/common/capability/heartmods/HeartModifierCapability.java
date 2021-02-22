@@ -13,8 +13,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import net.minecraftforge.event.TickEvent.Phase;
-
 public class HeartModifierCapability implements IHeartModifierCapability
 {
 	public static final UUID HEART_MODIFIER_ATTRIBUTE = UUID.fromString("b158dbba-c193-4301-9dfd-82c4347b2cf4");
@@ -85,7 +83,7 @@ public class HeartModifierCapability implements IHeartModifierCapability
 		return packetTimer;
 	}
 	
-	public CompoundNBT save() 
+	public CompoundNBT writeNBT() 
 	{
 		CompoundNBT compound = new CompoundNBT();
 		
@@ -97,18 +95,13 @@ public class HeartModifierCapability implements IHeartModifierCapability
 	/*
 	 * Note that this does not update the player's maximum health attribute.
 	 * It is expected that any member calling this function will immediately call
-	 * this.updateMaxHealth afterwards.
+	 * HeartModifierCapability$updateMaxHealth afterwards.
 	 */
-	public void load(CompoundNBT compound)
+	public void readNBT(CompoundNBT compound)
 	{
 		this.init();
 
 		if (compound.contains("extraHearts"))
 				this.setMaxHealth(compound.getInt("extraHearts"));
-	}
-	
-	public static HeartModifierCapability getHeartModCapability(PlayerEntity player)
-	{
-		return player.getCapability(Main.HEART_MOD_CAP).orElse(new HeartModifierCapability());
 	}
 }

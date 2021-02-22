@@ -1,6 +1,5 @@
 package icey.survivaloverhaul.common.temperature;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.config.Config;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,7 +10,6 @@ public class OnFireModifier extends ModifierBase
 	public OnFireModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "on_fire");
 	}
 	
 

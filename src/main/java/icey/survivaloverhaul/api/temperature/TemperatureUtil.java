@@ -12,7 +12,6 @@ public class TemperatureUtil
 	/**
 	 * Calculates the target temperature of a player. <br>
 	 * This is the target temperature, not the player's actual temperature! <br>
-	 * TODO: Implement capabilities properly! <br>
 	 * Calling this infrequently is recommended for the best performance. <br>
 	 * @param player
 	 * @return Player's target temperature

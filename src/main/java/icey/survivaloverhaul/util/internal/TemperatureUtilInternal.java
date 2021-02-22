@@ -1,6 +1,5 @@
 package icey.survivaloverhaul.util.internal;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.*;
 import icey.survivaloverhaul.util.WorldUtil;
 import net.minecraft.entity.player.PlayerEntity;

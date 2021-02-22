@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
+import icey.survivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import icey.survivaloverhaul.api.config.json.temperature.JsonPropertyValue;
 import icey.survivaloverhaul.api.config.json.temperature.JsonTemperature;
@@ -20,6 +21,7 @@ public class JsonConfig
 	public static Map<String, List<JsonPropertyTemperature>> blockTemperatures = Maps.newHashMap();
 	public static Map<String, JsonTemperature> fluidTemperatures = Maps.newHashMap();
 	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
+	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = Maps.newHashMap();
 	
 	public static boolean registerBlockTemperature(String registryName, float temperature, JsonPropertyValue... properties)
 	{
@@ -109,9 +111,36 @@ public class JsonConfig
 		currentList.add(result);
 	}
 	
+	public static void registerConsumableTemperature(String group, String registryName, float temperature, int duration, JsonItemIdentity identity)
+	{
+		if (!consumableTemperature.containsKey(registryName))
+			consumableTemperature.put(registryName, new ArrayList<JsonConsumableTemperature>());
+		
+		final List<JsonConsumableTemperature> currentList = consumableTemperature.get(registryName);
+		
+		JsonConsumableTemperature result = new JsonConsumableTemperature(group, temperature, duration, identity);
+		
+		for (int i = 0; i < currentList.size(); i++)
+		{
+			JsonConsumableTemperature jct = currentList.get(i);
+			if (jct.matches(identity))
+			{
+				currentList.set(i, result);
+				return;
+			}
+		}
+		
+		currentList.add(result);
+	}
+	
 	public static void registerFluidTemperature(String registryName, float temperature)
 	{
 		fluidTemperatures.put(registryName, new JsonTemperature(temperature));
+	}
+	
+	public static void registerBiomeOverride(String registryName, float temperature)
+	{
+		registerBiomeOverride(registryName, temperature, false);
 	}
 	
 	public static void registerBiomeOverride(String registryName, float temperature, boolean isDry)

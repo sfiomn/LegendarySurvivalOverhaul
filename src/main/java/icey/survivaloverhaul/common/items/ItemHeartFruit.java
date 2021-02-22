@@ -5,7 +5,7 @@ import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.network.packets.UpdateHeartsPacket;
-import icey.survivaloverhaul.network.packets.UpdateTemperaturesPacket;
+import icey.survivaloverhaul.util.CapabilityUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -26,7 +26,6 @@ public class ItemHeartFruit extends Item
 	public ItemHeartFruit()
 	{
 		super(new Item.Properties().group(ItemGroup.FOOD).rarity(Rarity.RARE).food(FOOD_STATS));
-		this.setRegistryName(Main.MOD_ID, "heart_fruit");
 	}
 	
 	@Override
@@ -35,7 +34,7 @@ public class ItemHeartFruit extends Item
 		if (entity instanceof PlayerEntity && Config.Baked.heartFruitsEnabled)
 		{
 			PlayerEntity player = (PlayerEntity) entity;
-			HeartModifierCapability cap = HeartModifierCapability.getHeartModCapability(player);
+			HeartModifierCapability cap = CapabilityUtil.getHeartModCapability(player);
 			
 			if (!world.isRemote)
 			{
@@ -44,7 +43,7 @@ public class ItemHeartFruit extends Item
 				
 				if (Config.Baked.heartFruitsGiveRegen)
 				{
-					player.addPotionEffect(new EffectInstance(Effects.REGENERATION, 200, 2));
+					player.addPotionEffect(new EffectInstance(Effects.REGENERATION, 200, 1));
 				}
 			}
 			

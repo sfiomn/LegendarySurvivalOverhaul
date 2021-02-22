@@ -1,6 +1,8 @@
 package icey.survivaloverhaul.api.config.json.temperature;
 
 import icey.survivaloverhaul.api.config.json.JsonItemIdentity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * Code taken and adapted from Charles445's SimpleDifficulty mod
@@ -28,5 +30,20 @@ public class JsonConsumableTemperature
 		this.duration = duration;
 		this.group = group.toLowerCase();
 		this.identity = identity;
+	}
+	
+	public boolean matches(ItemStack stack)
+	{
+		return identity.matches(stack);
+	}
+	
+	public boolean matches(JsonItemIdentity sentIdentity)
+	{
+		return identity.matches(sentIdentity);
+	}
+	
+	public boolean matches(CompoundNBT compound)
+	{
+		return identity.matches(compound);
 	}
 }

@@ -121,7 +121,7 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		this.temporaryModifiers.clear();
 	}
-
+	
 	@Override
 	public void tickUpdate(PlayerEntity player, World world, Phase phase)
 	{
@@ -162,22 +162,27 @@ public class TemperatureCapability implements ITemperatureCapability
 				if(TemperatureEnum.HEAT_STROKE.getMiddle() < getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !playerIsImmuneToHeat(player))
 				{
 					// Apply hyperthermia
-					player.removePotionEffect(EffectRegistry.ModEffects.HEAT_STROKE);
-					player.addPotionEffect(new EffectInstance(EffectRegistry.ModEffects.HEAT_STROKE, 300, 0, false, true));
+					player.removePotionEffect(EffectRegistry.HEAT_STROKE.get());
+					player.addPotionEffect(new EffectInstance(EffectRegistry.HEAT_STROKE.get(), 300, 0, false, true));
 				}
 			}
 			else if (tempEnum == TemperatureEnum.FROSTBITE)
 			{
-
-				if(TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.ModEffects.COLD_RESISTANCE))
+				if(TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !player.isPotionActive(EffectRegistry.COLD_RESISTANCE.get()))
 				{
 					// Apply hypothermia
-					player.removePotionEffect(EffectRegistry.ModEffects.FROSTBITE);
-					player.addPotionEffect(new EffectInstance(EffectRegistry.ModEffects.FROSTBITE, 300, 0, false, true));
+					player.removePotionEffect(EffectRegistry.FROSTBITE.get());
+					player.addPotionEffect(new EffectInstance(EffectRegistry.FROSTBITE.get(), 300, 0, false, true));
 				}
 			}
 		}
 		
+		updateTemporaryModifiers();
+		
+	}
+	
+	private void updateTemporaryModifiers()
+	{
 		Map<String, TemporaryModifier> tweaks = new HashMap<String, TemporaryModifier>();
 		
 		for(Map.Entry<String, TemporaryModifier> entry : temporaryModifiers.entrySet())
@@ -204,7 +209,7 @@ public class TemperatureCapability implements ITemperatureCapability
 	
 	private boolean playerIsImmuneToHeat(PlayerEntity player)
 	{
-		return player.isPotionActive(EffectRegistry.ModEffects.HEAT_RESISTANCE) || player.isPotionActive(Effects.FIRE_RESISTANCE);
+		return player.isPotionActive(EffectRegistry.HEAT_RESISTANCE.get()) || player.isPotionActive(Effects.FIRE_RESISTANCE);
 	}
 	
 	private void tickTemperature(int currentTemp, int destination)
@@ -251,7 +256,7 @@ public class TemperatureCapability implements ITemperatureCapability
 	@Override
 	public void setClean()
 	{
-		this.oldTemperature = temperature;
+		this.oldTemperature = this.temperature;
 		this.manualDirty = false;
 	}
 
@@ -267,7 +272,7 @@ public class TemperatureCapability implements ITemperatureCapability
 		return TemperatureUtil.getTemperatureEnum(getTemperatureLevel());
 	}
 	
-	public CompoundNBT save() 
+	public CompoundNBT writeNBT() 
 	{
 		CompoundNBT compound = new CompoundNBT();
 		
@@ -291,13 +296,14 @@ public class TemperatureCapability implements ITemperatureCapability
 		return compound;
 	}
 	
-	public void load(CompoundNBT compound)
+	public void readNBT(CompoundNBT compound)
 	{
 		this.init();
 		if (compound.contains("temperature"))
-				this.setTemperatureLevel(compound.getInt("temperature"));
+			this.setTemperatureLevel(compound.getInt("temperature"));
 		if (compound.contains("tickTimer"))
-				this.setTemperatureTickTimer(compound.getInt("tickTimer"));
+			this.setTemperatureTickTimer(compound.getInt("tickTimer"));
+		
 		
 		if(compound.contains("temporaryModifiers"))
 		{
@@ -313,15 +319,5 @@ public class TemperatureCapability implements ITemperatureCapability
 				this.setTemporaryModifier(entry, modTemp, modDuration);
 			}
 		}
-	}
-	
-	public static TemperatureCapability getTempCapability(PlayerEntity player)
-	{
-		return player.getCapability(Main.TEMPERATURE_CAP).orElse(new TemperatureCapability());
-	}
-	
-	public boolean isTempRising()
-	{
-		return this.getTemperatureLevel() < this.targetTemp;
 	}
 }

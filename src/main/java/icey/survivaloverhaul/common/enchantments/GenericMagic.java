@@ -74,7 +74,7 @@ public class GenericMagic extends Enchantment
 	{
 		return EO.minability + enchantmentLevel * EO.minmultiplier;
 	}
-
+	@Override
 	public int getMaxEnchantability(int enchantmentLevel)
 	{
 		return this.getMinEnchantability(enchantmentLevel) + EO.maxability;

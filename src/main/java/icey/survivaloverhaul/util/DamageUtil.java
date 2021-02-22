@@ -4,10 +4,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.Difficulty;
 
-public class DamageUtil
+public final class DamageUtil
 {
 	// Utility class for dealing with damaging players based on their
 	// difficulty/mod settings
+	
+	private DamageUtil() {}
 	
 	public static boolean isModDangerous(World world)
 	{

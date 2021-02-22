@@ -2,7 +2,6 @@ package icey.survivaloverhaul.common.temperature;
 
 import java.util.List;
 
-import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import icey.survivaloverhaul.api.temperature.ModifierBase;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
@@ -19,17 +18,18 @@ public class ArmorModifier extends ModifierBase
 	public ArmorModifier()
 	{
 		super();
-		this.setRegistryName(Main.MOD_ID, "armor");
 	}
 	
 	@Override
 	public float getPlayerInfluence(PlayerEntity player)
 	{
 		float value = 0.0f;
+		
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.HEAD));
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.CHEST));
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.LEGS));
 		value += checkArmorSlot(player.getItemStackFromSlot(EquipmentSlotType.FEET));
+		
 		return value;
 	}
 	
@@ -39,18 +39,15 @@ public class ArmorModifier extends ModifierBase
 				return 0.0f;
 		
 		float sum = 0.0f;
+		int coolingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.COLD_BARRIER.get(), stack);
+		int heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.THERMAL_BARRIER.get(), stack);
 		
-		int coolingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.COLD_BARRIER, stack);
-		int heatingLevel = EnchantmentHelper.getEnchantmentLevel(EnchantRegistry.ModEnchants.THERMAL_BARRIER, stack);
-		
-		if (coolingLevel > 0)
+		if (coolingLevel > 0 )
 			sum -= coolingLevel * Config.Baked.enchantmentMultiplier;
-		else if (heatingLevel > 0)
+		if (heatingLevel > 0)
 			sum += heatingLevel * Config.Baked.enchantmentMultiplier;
-		
 		sum += processStackJson(stack);
 		sum += TemperatureUtil.getArmorTemperatureTag(stack);
-		
 		return sum;
 	}
 	

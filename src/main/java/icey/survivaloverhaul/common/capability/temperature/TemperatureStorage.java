@@ -11,7 +11,7 @@ public class TemperatureStorage implements IStorage<TemperatureCapability>
 	@Override
 	public INBT writeNBT(Capability<TemperatureCapability> capability, TemperatureCapability instance, Direction side)
 	{
-		return instance.save();
+		return instance.writeNBT();
 	}
 	
 	@Override
@@ -19,7 +19,7 @@ public class TemperatureStorage implements IStorage<TemperatureCapability>
 	{
 		if (nbt instanceof CompoundNBT)
 		{
-			instance.load((CompoundNBT) nbt);
+			instance.readNBT((CompoundNBT) nbt);
 		}
 	}
 }
