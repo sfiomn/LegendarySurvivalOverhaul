@@ -27,9 +27,6 @@ import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 
 public class TemperatureCapability implements ITemperatureCapability
 {
-	public static final int FIRE_TIMER_LIMIT = 600;
-	public static final int WETNESS_LIMIT = 400;
-	
 	private int temperature;
 	private int tickTimer;
 	private Map<String, TemporaryModifier> temporaryModifiers;

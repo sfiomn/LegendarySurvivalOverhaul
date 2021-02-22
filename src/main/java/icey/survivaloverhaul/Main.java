@@ -22,7 +22,6 @@ import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -52,6 +51,7 @@ import icey.survivaloverhaul.common.capability.heartmods.HeartModifierStorage;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
 import icey.survivaloverhaul.common.world.OreGeneration;
+import icey.survivaloverhaul.common.capability.wetness.WetnessCapability;
 import icey.survivaloverhaul.config.*;
 import icey.survivaloverhaul.config.json.JsonConfigRegistration;
 import icey.survivaloverhaul.network.NetworkHandler;
@@ -86,13 +86,8 @@ public class Main
 	 * Also it should only show this type of warning once so that we don't
 	 * annoy the player if they decide to go through with it.
 	 */
-	public static boolean surviveLoaded = false; 
+	public static boolean surviveLoaded = false;
 	
-	/**
-	 * With Paragliders loaded, this mod will override the Paraglider's
-	 * stamina mechanics with my own.
-	 */
-	public static boolean paraglidersLoaded = false;
 	public static boolean curiosLoaded = false;
 	
 	/**
@@ -140,11 +135,10 @@ public class Main
 		Config.Baked.bakeCommon();
 		
 		TemperatureUtil.internal = new TemperatureUtilInternal();
-		
 		modCompat();
 	}
 	
-	public void modCompat()
+	private void modCompat()
 	{
 		sereneSeasonsLoaded = ModList.get().isLoaded("sereneseasons");
 		curiosLoaded = ModList.get().isLoaded("curios");
@@ -162,11 +156,14 @@ public class Main
 	public static final Capability<TemperatureCapability> TEMPERATURE_CAP = null;
 	@CapabilityInject(HeartModifierCapability.class)
 	public static final Capability<HeartModifierCapability> HEART_MOD_CAP = null;
+	@CapabilityInject(WetnessCapability.class)
+	public static final Capability<WetnessCapability> WETNESS_CAP = null;
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		CapabilityManager.INSTANCE.register(TemperatureCapability.class, new TemperatureStorage(), TemperatureCapability::new);
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
+		CapabilityManager.INSTANCE.register(WetnessCapability.class, (new WetnessCapability()).new Storage(), WetnessCapability::new);
 		
 		NetworkHandler.register();
 		OreGeneration.register();
@@ -215,37 +212,37 @@ public class Main
 						@Override
 						public float call(ItemStack stack, ClientWorld clientWorld, LivingEntity entity)
 						{
-								World world = clientWorld;
-								Entity holder = (Entity) (entity != null ? entity : stack.getItemFrame());
-								
-								if (world == null && holder != null)
+							World world = clientWorld;
+							Entity holder = (Entity) (entity != null ? entity : stack.getItemFrame());
+							
+							if (world == null && holder != null)
+							{
+								world = holder.world;
+							}
+							
+							if (world == null)
+							{
+								return 0.5f;
+							}
+							else
+							{
+								try
 								{
-									world = holder.world;
+									double d;
+									
+									int temperature = WorldUtil.calculateClientWorldEntityTemperature(world, holder);
+									d = (double)((float)temperature / (float)TemperatureEnum.HEAT_STROKE.getUpperBound());
+									
+									return MathHelper.positiveModulo((float)d, 1.0333333f);
 								}
-								
-								if (world == null)
+								catch (NullPointerException e)
 								{
 									return 0.5f;
 								}
-								else
-								{
-									try
-									{
-										double d;
-										
-										int temperature = WorldUtil.calculateClientWorldEntityTemperature(world, holder);
-										d = (double)((float)temperature / (float)TemperatureEnum.HEAT_STROKE.getUpperBound());
-										
-										return MathHelper.positiveModulo((float)d, 1.0333333f);
-									}
-									catch (NullPointerException e)
-									{
-										return 0.5f;
-									}
-									
-								}
+								
 							}
 						}
+					}
 				);
 			}
 		};

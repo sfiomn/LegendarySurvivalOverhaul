@@ -9,12 +9,17 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.TemperatureEnum;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
+import icey.survivaloverhaul.common.capability.wetness.WetnessCapability;
+import icey.survivaloverhaul.common.capability.wetness.WetnessMode;
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.util.CapabilityUtil;
+import icey.survivaloverhaul.util.MathUtil;
 import icey.survivaloverhaul.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -37,19 +42,26 @@ public class TemperatureGUI
 	
 	private static final int temperatureTextureWidth = 16;
 	private static final int temperatureTextureHeight = 16;
+	
+	private static final int wetnessTexturePosY = 96;
+	
+	private static final int wetnessTextureWidth = 9;
+	private static final int wetnessTextureHeight = 9;
 
 	private static int oldTemperature = -1;
 	private static int frameCounter = -1;
 	private static boolean risingTemperature = false;
 	private static boolean startAnimation = false;
 	
-	public static boolean shakeSide = false;
+	private static int lastWetnessSymbol = 0;
+	private static int flashCounter = -1;
 	
+	public static boolean shakeSide = false;
 	
 	@SubscribeEvent
 	public static void renderHud(RenderGameOverlayEvent event)
 	{
-		if (event.getType() == RenderGameOverlayEvent.ElementType.ALL
+		if ((event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE || event.getType() == RenderGameOverlayEvent.ElementType.JUMPBAR)
 				&& Config.Baked.temperatureEnabled 
 				&& mc.playerController.gameIsSurvivalOrAdventure())
 		{
@@ -59,33 +71,38 @@ public class TemperatureGUI
 			rand.setSeed((long) (updateCounter * 445));
 			
 			bind(ICONS);
-			TemperatureCapability cap = CapabilityUtil.getTempCapability(mc.player);
 			
-			renderGUI(event.getMatrixStack(), cap, scaledWidth, scaledHeight);
+			renderGUI(event.getMatrixStack(), mc.player, scaledWidth, scaledHeight);
 			
 			bind(AbstractGui.GUI_ICONS_LOCATION);
 		}
 	}
 	
-	public static void renderGUI(MatrixStack matrix, TemperatureCapability cap, int width, int height)
+	public static void renderGUI(MatrixStack matrix, PlayerEntity player, int width, int height)
 	{
 		RenderSystem.enableBlend();
+		
+		TemperatureCapability tempCap = CapabilityUtil.getTempCapability(player);
+		WetnessCapability wetCap = CapabilityUtil.getWetnessCapability(player);
 		
 		switch (Config.Baked.temperatureDisplayMode)
 		{
 		case SYMBOL:
-			drawTemperatureAsSymbol(matrix, cap, width, height);
+			drawTemperatureAsSymbol(matrix, tempCap, width, height);
 			break;
 		default:
 			break;
 		}
+		
+		if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
+			drawWetness(matrix, wetCap, width, height);
 		
 		RenderSystem.disableBlend();
 	}
 	
 	public static void drawTemperatureAsSymbol(MatrixStack matrix, TemperatureCapability cap, int width, int height)
 	{
-		int x = width / 2 - 8;
+		int x = width / 2 - (temperatureTextureWidth / 2);
 		int y = height - 54;
 		
 		int xOffset = 0;
@@ -202,6 +219,38 @@ public class TemperatureGUI
 		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, ovrXOffset, ovrYOffset, temperatureTextureWidth, temperatureTextureHeight);
 	}
 	
+	public static void drawWetness(MatrixStack matrix, WetnessCapability cap, int width, int height)
+	{
+		int wetness = cap.getWetness();
+		byte wetnessSymbol;
+		
+		int x = width / 2 - (wetnessTextureWidth / 2);
+		int y = height - 62;
+
+		
+		int xOffset = Config.Baked.wetnessIndicatorOffsetX;
+		int yOffset = Config.Baked.wetnessIndicatorOffsetY;
+		
+		if (wetness == 0)
+			return;
+		else
+			wetnessSymbol = (byte) (MathHelper.clamp(MathUtil.invLerp(0, WetnessCapability.WETNESS_LIMIT, wetness) * 4, 0, 3));
+		
+		if (lastWetnessSymbol != wetnessSymbol)
+		{
+			flashCounter = 3;
+			lastWetnessSymbol = wetnessSymbol;
+		}
+		
+		int texPosX = wetnessSymbol * wetnessTextureWidth;
+		int texPosY = wetnessTexturePosY + (flashCounter >= 0 ? wetnessTextureHeight : 0);
+		
+		Matrix4f m4f = matrix.getLast().getMatrix();
+		
+		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, texPosX, texPosY, wetnessTextureWidth, wetnessTextureHeight);
+		
+	}
+	
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event)
 	{
@@ -213,6 +262,8 @@ public class TemperatureGUI
 				
 				if (frameCounter >= 0)
 						frameCounter--;
+				if (flashCounter >= 0)
+					flashCounter--;
 				
 				if (startAnimation)
 				{

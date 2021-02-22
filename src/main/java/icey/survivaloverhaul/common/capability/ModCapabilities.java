@@ -8,11 +8,14 @@ import icey.survivaloverhaul.common.capability.heartmods.HeartModifierCapability
 import icey.survivaloverhaul.common.capability.heartmods.HeartModifierProvider;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureProvider;
+import icey.survivaloverhaul.common.capability.wetness.WetnessCapability;
+import icey.survivaloverhaul.common.capability.wetness.WetnessMode;
 import icey.survivaloverhaul.config.Config;
 import icey.survivaloverhaul.config.json.JsonConfig;
 import icey.survivaloverhaul.network.NetworkHandler;
 import icey.survivaloverhaul.network.packets.UpdateHeartsPacket;
 import icey.survivaloverhaul.network.packets.UpdateTemperaturesPacket;
+import icey.survivaloverhaul.network.packets.UpdateWetnessPacket;
 import icey.survivaloverhaul.util.CapabilityUtil;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -38,6 +41,7 @@ public class ModCapabilities
 {
 	public static final ResourceLocation TEMPERATURE_RES = new ResourceLocation(Main.MOD_ID, "temperature");
 	public static final ResourceLocation HEART_MOD_RES = new ResourceLocation(Main.MOD_ID, "heart_modifier");
+	public static final ResourceLocation WETNESS_RES = new ResourceLocation(Main.MOD_ID, "wetness");
 	// public static final ResourceLocation FROZEN_RES = new ResourceLocation(Main.MOD_ID, "frozen");
 	
 	@SubscribeEvent
@@ -51,6 +55,7 @@ public class ModCapabilities
 			{
 				event.addCapability(TEMPERATURE_RES, new TemperatureProvider());
 				event.addCapability(HEART_MOD_RES, new HeartModifierProvider());
+				event.addCapability(WETNESS_RES, (new WetnessCapability()).new Provider());
 			}
 		}
 	}
@@ -58,10 +63,7 @@ public class ModCapabilities
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event)
 	{
-		PlayerEntity player = event.player;
-		World world = player.world;
-		
-		if (world.isRemote)
+		if (event.player.world.isRemote)
 		{
 			// Client Side
 			return;
@@ -69,6 +71,8 @@ public class ModCapabilities
 		else
 		{
 			// Server Side
+			PlayerEntity player = event.player;
+			World world = player.world;
 			
 			if (Config.Baked.temperatureEnabled && !shouldSkipTick(player))
 			{
@@ -80,6 +84,26 @@ public class ModCapabilities
 				{
 					tempCap.setClean();
 					sendTemperatureUpdate(player);
+				}
+			}
+			
+			if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC && !shouldSkipTick(player))
+			{
+				WetnessCapability wetCap = CapabilityUtil.getWetnessCapability(player);
+				
+				wetCap.tickUpdate(player, world, event.phase);
+				
+				/**
+				 * Because of the way wetness is ticked, if it's dirty, it's probably going to be dirty next tick,
+				 * and if it's clean, it's probably going to be clean the next tick
+				 * Thus, we don't want to clean up the wetness capability every single tick
+				 * just because the player is standing out in the rain
+				 * since it's not good for performance
+				 */
+				if (event.phase == Phase.START && wetCap.getPacketTimer() % Config.Baked.routinePacketSync == 0 && wetCap.isDirty())
+				{
+					wetCap.setClean();
+					sendWetnessUpdate(player);
 				}
 			}
 		}
@@ -151,13 +175,21 @@ public class ModCapabilities
 				newCap.updateMaxHealth(player.getEntityWorld(), player);
 				sendHeartsUpdate(player);
 			}
+			
+			if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
+			{
+				WetnessCapability oldCap = CapabilityUtil.getWetnessCapability(orig);
+				WetnessCapability newCap = CapabilityUtil.getWetnessCapability(player);
+				newCap.readNBT(oldCap.writeNBT());
+				sendWetnessUpdate(player);
+			}
 		}
 	}
 
 	private static void sendTemperatureUpdate(PlayerEntity player)
 	{
 		if (!player.world.isRemote())
-		{			
+		{
 			UpdateTemperaturesPacket packet = new UpdateTemperaturesPacket(Main.TEMPERATURE_CAP.getStorage().writeNBT(Main.TEMPERATURE_CAP, CapabilityUtil.getTempCapability(player), null));
 			
 			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
@@ -167,8 +199,18 @@ public class ModCapabilities
 	private static void sendHeartsUpdate(PlayerEntity player)
 	{
 		if (!player.world.isRemote())
-		{			
+		{
 			UpdateHeartsPacket packet = new UpdateHeartsPacket(Main.HEART_MOD_CAP.getStorage().writeNBT(Main.HEART_MOD_CAP, CapabilityUtil.getHeartModCapability(player), null));
+			
+			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
+		}
+	}
+
+	private static void sendWetnessUpdate(PlayerEntity player)
+	{
+		if (!player.world.isRemote())
+		{
+			UpdateWetnessPacket packet = new UpdateWetnessPacket(Main.WETNESS_CAP.getStorage().writeNBT(Main.WETNESS_CAP, CapabilityUtil.getWetnessCapability(player), null));
 			
 			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
 		}
@@ -182,6 +224,8 @@ public class ModCapabilities
 			sendTemperatureUpdate(player);
 		if (Config.Baked.heartFruitsEnabled)
 			sendHeartsUpdate(player);
+		if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
+			sendWetnessUpdate(player);
 	}
 
 	@SubscribeEvent
@@ -192,6 +236,8 @@ public class ModCapabilities
 			sendTemperatureUpdate(player);
 		if (Config.Baked.heartFruitsEnabled)
 			sendHeartsUpdate(player);
+		if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
+			sendWetnessUpdate(player);
 	}
 	
 	protected static boolean shouldSkipTick(PlayerEntity player)
