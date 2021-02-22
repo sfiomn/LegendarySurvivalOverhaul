@@ -95,7 +95,7 @@ public class HeartModifierCapability implements IHeartModifierCapability
 	/*
 	 * Note that this does not update the player's maximum health attribute.
 	 * It is expected that any member calling this function will immediately call
-	 * this.updateMaxHealth afterwards.
+	 * HeartModifierCapability$updateMaxHealth afterwards.
 	 */
 	public void readNBT(CompoundNBT compound)
 	{

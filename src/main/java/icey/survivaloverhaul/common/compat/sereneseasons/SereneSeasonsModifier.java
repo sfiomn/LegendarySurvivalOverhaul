@@ -21,6 +21,9 @@ public class SereneSeasonsModifier extends ModifierBase
 		if (!Main.sereneSeasonsLoaded)
 			return 0.0f;
 		
+		if (!Config.Baked.seasonTemperatureEffects)
+			return 0.0f;
+		
 		try
 		{
 			// In theory, this should only ever run if Serene Seasons is installed
@@ -43,6 +46,9 @@ public class SereneSeasonsModifier extends ModifierBase
 		ISeasonState seasonState = SeasonHelper.getSeasonState(world);
 		
 		float value = 0.0f;
+		
+		// haha i totally didn't forget to break out of my switch statement before
+		// no sirree
 		switch(seasonState.getSubSeason())
 		{
 		case EARLY_SPRING:
@@ -82,8 +88,6 @@ public class SereneSeasonsModifier extends ModifierBase
 			value = Config.Baked.lateWinterModifier;
 			break;
 		}
-
-		Main.LOGGER.debug(seasonState.getSubSeason().toString() + ": " + value);
 		
 		return applyUndergroundEffect(value, world, pos);
 	}

@@ -7,12 +7,24 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.vector.Matrix4f;
 
-public class RenderUtil
+public final class RenderUtil
 {
-	// Basically a more sensibly-named version of Minecraft's included blit function
+	private RenderUtil() {}
 	
+	/**
+	 * Basically a more sensibly-named version of Minecraft's included blit function
+	 * @param matrix The matrix this should be drawn from
+	 * @param x Horizontal position on the screen where this texture should be drawn 
+	 * @param y Vertical position on the screen where this texture should be drawn
+	 * @param texX Horizontal position of the texture on the currently bound texture sheet.
+	 * @param texY Vertical position of the texture on the currently bound texture sheet.
+	 * @param width Width of the given texture, in pixels
+	 * @param height Height of the given texture, in pixels
+	 */
 	public static void drawTexturedModelRect(Matrix4f matrix, float x, float y, int texX, int texY, int width, int height)
 	{
+		// These are some weirdly specific constants but I'm too scared to change them
+		
 		float f = 0.00390625f;
 		float f1 = 0.00390625f;
 		float z = 0.0f;

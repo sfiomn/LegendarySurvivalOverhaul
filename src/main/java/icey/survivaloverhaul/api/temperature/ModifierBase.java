@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 {
 	/**
-	 * Unique World Modifiers
+	 * Global World Modifiers
 	 * 
 	 * Altitude
 	 * Biome
@@ -53,6 +53,10 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 	/**
 	 * Returns temperature from factors based directly on the player, such as what items they
 	 * are holding, if they are sprinting, on fire, or what temporary modifiers they have. 
+	 * 
+	 * Although it is also possible to get data from the world by calling player$getWorld and 
+	 * player$getPosition, it's not recommended as this will not affect thermometer temperatures
+	 * or other items/blocks that depend on world influences
 	 */
 	public float getPlayerInfluence(PlayerEntity player) { return 0.0f; }
 	
