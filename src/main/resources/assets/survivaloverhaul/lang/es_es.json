@@ -2,15 +2,15 @@
 	"item.survivaloverhaul.canteen": "Cantimplora",
 	"item.survivaloverhaul.netherite_canteen": "Cantimplora de Netherita",
 	
-	"item.survivaloverhaul.snow_head": "Sombrero de nieve",
-	"item.survivaloverhaul.snow_chest": "Túnica de nieve",
-	"item.survivaloverhaul.snow_legs": "Pantalones de nieve",
-	"item.survivaloverhaul.snow_feet": "Botas de nieve",
+	"item.survivaloverhaul.snow_helmet": "Sombrero de nieve",
+	"item.survivaloverhaul.snow_chestplate": "Túnica de nieve",
+	"item.survivaloverhaul.snow_leggings": "Pantalones de nieve",
+	"item.survivaloverhaul.snow_boots": "Botas de nieve",
 	
-	"item.survivaloverhaul.desert_head": "Sombrero del desierto",
-	"item.survivaloverhaul.desert_chest": "Camisa del desierto",
-	"item.survivaloverhaul.desert_legs": "Túnica del desierto",
-	"item.survivaloverhaul.desert_feet": "Sandalias del desierto",
+	"item.survivaloverhaul.desert_helmet": "Sombrero del desierto",
+	"item.survivaloverhaul.desert_chestplate": "Camisa del desierto",
+	"item.survivaloverhaul.desert_leggings": "Túnica del desierto",
+	"item.survivaloverhaul.desert_boots": "Sandalias del desierto",
 	
 	"item.survivaloverhaul.infernal_fern_leaf": "Hoja de helecho infernal",
 	"item.survivaloverhaul.stone_fern_leaf": "Hoja de helecho de piedra",
@@ -72,4 +72,8 @@
 	"survivaloverhaul.armorTooltip.heating": "Calentamiento",
 	"survivaloverhaul.armorTooltip.cooling": "Refrigeración",
 	"survivaloverhaul.armorTooltip.insulation": "Aislamiento"
+	
+	"entity.generic.freeze.enter.subtitles": "Algo se congela",
+	"entity.generic.freeze.exit.subtitles": "Algo se rompe",
+	"player.overheat.loop": "El jugador chisporrotea"
 }
