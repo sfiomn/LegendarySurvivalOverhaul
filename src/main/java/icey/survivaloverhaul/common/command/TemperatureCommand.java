@@ -3,15 +3,12 @@ package icey.survivaloverhaul.common.command;
 import java.util.UUID;
 
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import icey.survivaloverhaul.Main;
 import icey.survivaloverhaul.api.temperature.TemperatureUtil;
 import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability;
-import icey.survivaloverhaul.registry.BlockRegistry;
 import icey.survivaloverhaul.util.CapabilityUtil;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
