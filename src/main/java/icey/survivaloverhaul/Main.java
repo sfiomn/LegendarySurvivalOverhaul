@@ -52,6 +52,7 @@ import icey.survivaloverhaul.common.capability.temperature.TemperatureCapability
 import icey.survivaloverhaul.common.capability.temperature.TemperatureStorage;
 import icey.survivaloverhaul.common.world.OreGeneration;
 import icey.survivaloverhaul.common.capability.wetness.WetnessCapability;
+import icey.survivaloverhaul.common.compat.sereneseasons.SereneSeasonsModifier;
 import icey.survivaloverhaul.config.*;
 import icey.survivaloverhaul.config.json.JsonConfigRegistration;
 import icey.survivaloverhaul.network.NetworkHandler;
@@ -164,7 +165,7 @@ public class Main
 	{
 		CapabilityManager.INSTANCE.register(TemperatureCapability.class, new TemperatureStorage(), TemperatureCapability::new);
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
-		CapabilityManager.INSTANCE.register(WetnessCapability.class, (new WetnessCapability()).new Storage(), WetnessCapability::new);
+		CapabilityManager.INSTANCE.register(WetnessCapability.class, new WetnessCapability.Storage(), WetnessCapability::new);
 		
 		NetworkHandler.register();
 		// OreGeneration.register();
