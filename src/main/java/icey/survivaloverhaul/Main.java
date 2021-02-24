@@ -99,6 +99,8 @@ public class Main
 	public static Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "survivaloverhaul");
 	public static Path modConfigJsons = Paths.get(modConfigPath.toString(), "json");
 	
+	public static Path ssConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "sereneseasons");
+	
 	public static ForgeRegistry<ModifierBase> MODIFIERS;
 	public static ForgeRegistry<DynamicModifierBase> DYNAMIC_MODIFIERS;
 	
@@ -193,7 +195,8 @@ public class Main
 	
 	private void serverStarted(final FMLServerStartedEvent event)
 	{
-		
+		if (sereneSeasonsLoaded)
+			SereneSeasonsModifier.prepareBiomeIdentities();
 	}
 	
 	private static DistExecutor.SafeRunnable clientModelSetup()
