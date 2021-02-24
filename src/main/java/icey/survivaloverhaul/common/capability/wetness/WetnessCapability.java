@@ -197,7 +197,7 @@ public class WetnessCapability
 			this.wetness = compound.getInt("wetness");
 	}
 	
-	public class Provider implements ICapabilitySerializable<INBT>
+	public static class Provider implements ICapabilitySerializable<INBT>
 	{
 		private LazyOptional<WetnessCapability> instance = LazyOptional.of(Main.WETNESS_CAP::getDefaultInstance);
 		
@@ -221,7 +221,7 @@ public class WetnessCapability
 		
 	}
 	
-	public class Storage implements IStorage<WetnessCapability>
+	public static class Storage implements IStorage<WetnessCapability>
 	{
 		@Override
 		public INBT writeNBT(Capability<WetnessCapability> capability, WetnessCapability instance, Direction side)

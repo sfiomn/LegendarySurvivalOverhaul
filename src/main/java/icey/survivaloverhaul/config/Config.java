@@ -111,6 +111,14 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> midWinterModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> lateWinterModifier;
 		
+		public final ForgeConfigSpec.ConfigValue<Integer> earlyWetSeasonModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> midWetSeasonModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> lateWetSeasonModifier;
+		
+		public final ForgeConfigSpec.ConfigValue<Integer> earlyDrySeasonModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> midDrySeasonModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> lateDrySeasonModifier;
+		
 		// Heart Fruits
 		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsEnabled;
 		
@@ -293,6 +301,20 @@ public class Config
 			builder.pop();
 			builder.pop();
 			
+			builder.comment("Temperature modifiers per season in tropical biomes.").push("tropical");
+			builder.push("wet-season");
+			earlyWetSeasonModifier = builder.define("Early Wet Season Modifier", -1);
+			midWetSeasonModifier = builder.define("Mid Wet Season Modifier", -5);
+			lateWetSeasonModifier = builder.define("Late Wet Season Modifier", -1);
+			builder.pop();
+			
+			builder.push("dry-season");
+			earlyDrySeasonModifier = builder.define("Early Dry Season Modifier", 3);
+			midDrySeasonModifier = builder.define("Mid Dry Season Modifier", 7);
+			lateDrySeasonModifier = builder.define("Late Dry Season Modifier", 3);
+			
+			builder.pop();
+			
 			builder.pop();
 			builder.pop();
 			builder.pop();
@@ -451,6 +473,14 @@ public class Config
 		public static int earlyWinterModifier;
 		public static int midWinterModifier;
 		public static int lateWinterModifier;
+
+		public static int earlyWetSeasonModifier;
+		public static int midWetSeasonModifier;
+		public static int lateWetSeasonModifier;
+
+		public static int earlyDrySeasonModifier;
+		public static int midDrySeasonModifier;
+		public static int lateDrySeasonModifier;
 		
 		public static boolean heartFruitsEnabled;
 		public static int heartsLostOnDeath;
@@ -527,6 +557,14 @@ public class Config
 				earlyWinterModifier = COMMON.earlyWinterModifier.get();
 				midWinterModifier = COMMON.midWinterModifier.get();
 				lateWinterModifier = COMMON.lateWinterModifier.get();
+
+				earlyWetSeasonModifier = COMMON.earlyWetSeasonModifier.get();
+				midWetSeasonModifier = COMMON.midWetSeasonModifier.get();
+				lateWetSeasonModifier = COMMON.lateWetSeasonModifier.get();
+
+				earlyDrySeasonModifier = COMMON.earlyDrySeasonModifier.get();
+				midDrySeasonModifier = COMMON.midDrySeasonModifier.get();
+				lateDrySeasonModifier = COMMON.lateDrySeasonModifier.get();
 				
 				heartFruitsEnabled = COMMON.heartFruitsEnabled.get();
 				heartsLostOnDeath = COMMON.heartsLostOnDeath.get();

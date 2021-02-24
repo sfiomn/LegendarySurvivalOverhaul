@@ -55,7 +55,7 @@ public class ModCapabilities
 			{
 				event.addCapability(TEMPERATURE_RES, new TemperatureProvider());
 				event.addCapability(HEART_MOD_RES, new HeartModifierProvider());
-				event.addCapability(WETNESS_RES, (new WetnessCapability()).new Provider());
+				event.addCapability(WETNESS_RES, new WetnessCapability.Provider());
 			}
 		}
 	}

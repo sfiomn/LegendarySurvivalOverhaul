@@ -30,10 +30,10 @@ public class ItemRegistry
 	public static final RegistryObject<Item> CLOTH_LEGGINGS = ITEMS.register("snow_leggings", () -> new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.LEGS));
 	public static final RegistryObject<Item> CLOTH_BOOTS = ITEMS.register("snow_boots", () -> new ItemSnowArmor(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.FEET));
 
-	public static final RegistryObject<Item> DESERT_HELMET = ITEMS.register("desert_helmet", () -> new ItemSnowArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.HEAD));
-	public static final RegistryObject<Item> DESERT_CHEST = ITEMS.register("desert_chestplate", () -> new ItemSnowArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.CHEST));
-	public static final RegistryObject<Item> DESERT_LEGGINGS = ITEMS.register("desert_leggings", () -> new ItemSnowArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.LEGS));
-	public static final RegistryObject<Item> DESERT_BOOTS = ITEMS.register("desert_boots", () -> new ItemSnowArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.FEET));
+	public static final RegistryObject<Item> DESERT_HELMET = ITEMS.register("desert_helmet", () -> new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.HEAD));
+	public static final RegistryObject<Item> DESERT_CHEST = ITEMS.register("desert_chestplate", () -> new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.CHEST));
+	public static final RegistryObject<Item> DESERT_LEGGINGS = ITEMS.register("desert_leggings", () -> new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.LEGS));
+	public static final RegistryObject<Item> DESERT_BOOTS = ITEMS.register("desert_boots", () -> new ItemDesertArmor(DESERT_ARMOR_MATERIAL, EquipmentSlotType.FEET));
 	
 	public static final RegistryObject<Item> HEART_FRUIT = ITEMS.register("heart_fruit", () -> new ItemHeartFruit());
 	
