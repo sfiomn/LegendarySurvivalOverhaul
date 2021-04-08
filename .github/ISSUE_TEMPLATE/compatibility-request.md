@@ -1,6 +1,6 @@
 ---
 name: Compatibility Request
-about: Describe this issue template's purpose here.
+about: Adding support for another mod
 title: "[Compatibility]"
 labels: enhancement, compat
 assignees: ''
