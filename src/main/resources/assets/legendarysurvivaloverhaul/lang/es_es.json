@@ -1,0 +1,79 @@
+{
+	"item.legendarysurvivaloverhaul.canteen": "Cantimplora",
+	"item.legendarysurvivaloverhaul.netherite_canteen": "Cantimplora de Netherita",
+
+	"item.legendarysurvivaloverhaul.snow_helmet": "Sombrero de nieve",
+	"item.legendarysurvivaloverhaul.snow_chestplate": "Túnica de nieve",
+	"item.legendarysurvivaloverhaul.snow_leggings": "Pantalones de nieve",
+	"item.legendarysurvivaloverhaul.snow_boots": "Botas de nieve",
+
+	"item.legendarysurvivaloverhaul.desert_helmet": "Sombrero del desierto",
+	"item.legendarysurvivaloverhaul.desert_chestplate": "Camisa del desierto",
+	"item.legendarysurvivaloverhaul.desert_leggings": "Túnica del desierto",
+	"item.legendarysurvivaloverhaul.desert_boots": "Sandalias del desierto",
+
+	"item.legendarysurvivaloverhaul.infernal_fern_leaf": "Hoja de helecho infernal",
+	"item.legendarysurvivaloverhaul.stone_fern_leaf": "Hoja de helecho de piedra",
+	"item.legendarysurvivaloverhaul.thermometer": "Termómetro",
+	"item.legendarysurvivaloverhaul.heart_fruit": "Fruta del corazón",
+
+	"block.legendarysurvivaloverhaul.heater":"Coal Stove",
+	"block.legendarysurvivaloverhaul.cooler":"Ice Cooler",
+
+	"container.legendarysurvivaloverhaul.heater": "Coal Stove",
+	"container.legendarysurvivaloverhaul.cooler": "Ice Cooler",
+
+	"item.minecraft.potion.effect.heat_resistance": "Poción de resistencia al calor",
+	"item.minecraft.potion.effect.cold_resistance": "Poción de resistencia al frío",
+	"item.minecraft.potion.effect.heat_resistance_long": "Poción de resistencia al calor",
+	"item.minecraft.potion.effect.cold_resistance_long": "Poción de resistencia al frío",
+
+	"item.minecraft.splash_potion.effect.heat_resistance": "Poción de salpicadura de resistencia al calor",
+	"item.minecraft.splash_potion.effect.cold_resistance": "Poción de salpicadura de resistencia al frío",
+	"item.minecraft.splash_potion.effect.heat_resistance_long": "Poción de salpicadura de resistencia al calor",
+	"item.minecraft.splash_potion.effect.cold_resistance_long": "Poción de salpicadura de resistencia al frío",
+
+	"item.minecraft.lingering_potion.effect.heat_resistance": "Poción persistente de resistencia al calor",
+	"item.minecraft.lingering_potion.effect.cold_resistance": "Poción persistente de resistencia al frío",
+	"item.minecraft.lingering_potion.effect.heat_resistance_long": "Poción persistente de resistencia al calor",
+	"item.minecraft.lingering_potion.effect.cold_resistance_long": "Poción persistente de resistencia al frío",
+
+	"item.minecraft.tipped_arrow.effect.heat_resistance": "Flecha de resistencia al calor",
+	"item.minecraft.tipped_arrow.effect.cold_resistance": "Flecha de resistencia al frío",
+	"item.minecraft.tipped_arrow.effect.heat_resistance_long": "Flecha de resistencia al calor",
+	"item.minecraft.tipped_arrow.effect.cold_resistance_long": "Flecha de resistencia al frío",
+
+	"effect.legendarysurvivaloverhaul.heat_stroke": "Golpe de calor",
+	"effect.legendarysurvivaloverhaul.frostbite": "Congelación",
+	"effect.legendarysurvivaloverhaul.heat_resist": "Resistencia al calor",
+	"effect.legendarysurvivaloverhaul.cold_resist": "Resistencia al frío",
+	"effect.legendarysurvivaloverhaul.thirst": "Sed",
+
+	"enchantment.legendarysurvivaloverhaul.adaptive_barrier": "Barrera térmica adaptativa",
+	"enchantment.legendarysurvivaloverhaul.adaptive_barrier.desc": "Proporciona un efecto de calentamiento/enfriamiento adaptativo cuando se aplica a la armadura",
+	"enchantment.legendarysurvivaloverhaul.thermal_barrier": "Barrera térmica",
+	"enchantment.legendarysurvivaloverhaul.thermal_barrier.desc": "Proporciona un efecto de enfriamiento constante cuando se aplica a la armadura",
+	"enchantment.legendarysurvivaloverhaul.cold_barrier": "Barrera de enfriamiento",
+	"enchantment.legendarysurvivaloverhaul.cold_barrier.desc": "Proporciona un efecto de calentamiento constante cuando se aplica a la armadura",
+
+	"death.attack.legendarysurvivaloverhaul.hypothermia": "%1$s se congeló hasta morir",
+	"death.attack.legendarysurvivaloverhaul.hyperthermia": "%1$s no pudo soportar el calor",
+	"death.attack.legendarysurvivaloverhaul.dehydration": "%1$s murió de deshidratación",
+	"death.attack.legendarysurvivaloverhaul.breaking_arms": "%1$s se cayó de un lugar alto y se rompió los brazos",
+
+	"advancements.adventure.have_a_heart.títle": "Tener un corazón",
+	"advancements.adventure.have_a_heart.description": "Encuentra una fruta de corazón en un cofre del tesoro",
+
+	"advancements.adventure.eat_your_heart_out.title": "Cómete el corazón",
+	"advancements.adventure.eat_your_heart_out.description": "Adquiere una fila completa de corazones adicionales al comer frutas de corazón",
+
+	"key.legendarysurvivaloverhaul.climb": "Escalar",
+
+	"legendarysurvivaloverhaul.armorTooltip.heating": "Calentamiento",
+	"legendarysurvivaloverhaul.armorTooltip.cooling": "Refrigeración",
+	"legendarysurvivaloverhaul.armorTooltip.insulation": "Aislamiento",
+	
+	"entity.generic.freeze.enter.subtitles": "Algo se congela",
+	"entity.generic.freeze.exit.subtitles": "Algo se rompe",
+	"player.overheat.loop": "El jugador chisporrotea"
+}

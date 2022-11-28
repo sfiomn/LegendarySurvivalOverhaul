@@ -1,0 +1,44 @@
+{
+	"entity.generic.freeze.enter": {
+		"category": "neutral",
+		"subtitle": "entity.generic.freeze.enter.subtitles",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:freeze/ice_enter1",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:freeze/ice_enter2",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:freeze/ice_enter3",
+				"stream": true
+			}
+		]
+	},
+	"entity.generic.freeze.exit": {
+		"category": "neutral",
+		"subtitle": "entity.generic.freeze.exit.subtitles",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:freeze/ice_free1",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:freeze/ice_free2",
+				"stream": true
+			}
+		]
+	},
+	"player.overheat.loop": {
+		"category": "neutral",
+		"subtitle": "player.overheat.loop",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:sizzle_loop",
+				"stream": true
+			}
+		]
+	}
+}

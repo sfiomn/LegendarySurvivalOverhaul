@@ -1,0 +1,24 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "desert_armor",
+	"pattern":
+	[
+		"r r",
+		"# #"
+	],
+	"key": 
+	{
+		"#":
+		{
+			"item": "minecraft:leather"
+		},
+		"r":
+		{
+			"item": "minecraft:rabbit_hide"
+		}
+	},
+	"result":
+	{
+		"item": "legendarysurvivaloverhaul:desert_boots"
+	}
+}

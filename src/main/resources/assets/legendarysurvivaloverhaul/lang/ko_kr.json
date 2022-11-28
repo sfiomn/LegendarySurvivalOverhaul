@@ -1,0 +1,75 @@
+{
+	"item.legendarysurvivaloverhaul.canteen": "물통",
+	"item.legendarysurvivaloverhaul.netherite_canteen": "네더라이트 물통",
+	
+	"item.legendarysurvivaloverhaul.snow_helmet": "눈 모자",
+	"item.legendarysurvivaloverhaul.snow_chestplate": "눈 튜닉",
+	"item.legendarysurvivaloverhaul.snow_leggings": "눈 바지",
+	"item.legendarysurvivaloverhaul.snow_boots": "눈 장화",
+	
+	"item.legendarysurvivaloverhaul.desert_helmet": "사막 모자",
+	"item.legendarysurvivaloverhaul.desert_chestplate": "사막 셔츠",
+	"item.legendarysurvivaloverhaul.desert_leggings": "사막 튜닉",
+	"item.legendarysurvivaloverhaul.desert_boots": "사막 샌들",
+	
+	"item.legendarysurvivaloverhaul.infernal_fern_leaf": "지옥 고사리 잎",
+	"item.legendarysurvivaloverhaul.stone_fern_leaf": "돌 고사리 잎",
+	"item.legendarysurvivaloverhaul.thermometer": "온도계",
+	"item.legendarysurvivaloverhaul.heart_fruit": "하트 과일",
+
+	"block.legendarysurvivaloverhaul.heater":"Coal Stove",
+	"block.legendarysurvivaloverhaul.cooler":"Ice Cooler",
+
+	"container.legendarysurvivaloverhaul.heater": "Coal Stove",
+	"container.legendarysurvivaloverhaul.cooler": "Ice Cooler",
+	
+	"item.minecraft.potion.effect.heat_resistance":"더위 저항의 물약",
+	"item.minecraft.potion.effect.cold_resistance":"추위 저항의 물약",
+	"item.minecraft.potion.effect.heat_resistance_long":"더위 저항의 물약",
+	"item.minecraft.potion.effect.cold_resistance_long":"추위 저항의 물약",
+	
+	"item.minecraft.splash_potion.effect.heat_resistance":"투척용 더위 저항의 물약",
+	"item.minecraft.splash_potion.effect.cold_resistance":"투척용 추위 저항의 물약",
+	"item.minecraft.splash_potion.effect.heat_resistance_long":"투척용 더위 저항의 물약",
+	"item.minecraft.splash_potion.effect.cold_resistance_long":"투척용 추위 저항의 물약",
+	
+	"item.minecraft.lingering_potion.effect.heat_resistance":"잔류형 더위 저항의 물약",
+	"item.minecraft.lingering_potion.effect.cold_resistance":"잔류형 추위 저항의 물약",
+	"item.minecraft.lingering_potion.effect.heat_resistance_long":"잔류형 더위 저항의 물약",
+	"item.minecraft.lingering_potion.effect.cold_resistance_long":"잔류형 추위 저항의 물약",
+	
+	"item.minecraft.tipped_arrow.effect.heat_resistance":"더위 저항의 화살",
+	"item.minecraft.tipped_arrow.effect.cold_resistance":"추위 저항의 화살",
+	"item.minecraft.tipped_arrow.effect.heat_resistance_long":"더위 저항의 화살",
+	"item.minecraft.tipped_arrow.effect.cold_resistance_long":"추위 저항의 화살",
+	
+	"effect.legendarysurvivaloverhaul.heat_stroke": "열사병",
+	"effect.legendarysurvivaloverhaul.frostbite": "동상",
+	"effect.legendarysurvivaloverhaul.heat_resist": "더위 저항",
+	"effect.legendarysurvivaloverhaul.cold_resist": "추위 저항",
+	"effect.legendarysurvivaloverhaul.thirst": "갈증",
+	
+	"enchantment.legendarysurvivaloverhaul.adaptive_barrier": "적응성 단열막",
+	"enchantment.legendarysurvivaloverhaul.adaptive_barrier.desc": "갑옷에 적용 시 상황에 따라 가열/냉각 효과를 제공합니다.",
+	"enchantment.legendarysurvivaloverhaul.thermal_barrier": "온기 차단막",
+	"enchantment.legendarysurvivaloverhaul.thermal_barrier.desc": "갑옷에 적용 시 지속적인 냉각 효과를 제공합니다.",
+	"enchantment.legendarysurvivaloverhaul.cold_barrier": "냉기 차단막",
+	"enchantment.legendarysurvivaloverhaul.cold_barrier.desc": "갑옷에 적용 시 지속적인 가열 효과를 제공합니다.",
+	
+	"death.attack.legendarysurvivaloverhaul.hypothermia": "%1$s이(가) 얼어 죽었습니다",
+	"death.attack.legendarysurvivaloverhaul.hyperthermia": "%1$s은(는) 더위를 피할 수 없었습니다",
+	"death.attack.legendarysurvivaloverhaul.dehydration": "%1$s이(가) 탈수로 인해 죽었습니다",
+	"death.attack.legendarysurvivaloverhaul.breaking_arms": "%1$s이(가) 높은 곳에서 떨어져 팔이 부러졌습니다",
+	
+	"advancements.adventure.have_a_heart.title": "하트가 있어요",
+	"advancements.adventure.have_a_heart.description": "보물 상자에서 하트 과일을 찾으세요",
+	
+	"advancements.adventure.eat_your_heart_out.title": "하트를 먹어치우면",
+	"advancements.adventure.eat_your_heart_out.description": "하트 과일을 먹어 체력을 1줄 더 채우세요",
+	
+	"key.legendarysurvivaloverhaul.climb": "오르기",
+	
+	"legendarysurvivaloverhaul.armorTooltip.heating": "가열",
+	"legendarysurvivaloverhaul.armorTooltip.cooling": "냉각",
+	"legendarysurvivaloverhaul.armorTooltip.insulation": "절연 처리"
+}

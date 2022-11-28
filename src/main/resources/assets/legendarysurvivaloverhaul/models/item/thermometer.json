@@ -1,0 +1,39 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "legendarysurvivaloverhaul:item/thermometer/thermometer_00"
+  },
+    "overrides": [
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.0000000 }, "model": "legendarysurvivaloverhaul:item/thermometer_00" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.0333333 }, "model": "legendarysurvivaloverhaul:item/thermometer_01" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.0666666 }, "model": "legendarysurvivaloverhaul:item/thermometer_02" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.1000000 }, "model": "legendarysurvivaloverhaul:item/thermometer_03" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.1333333 }, "model": "legendarysurvivaloverhaul:item/thermometer_04" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.1666666 }, "model": "legendarysurvivaloverhaul:item/thermometer_05" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.2000000 }, "model": "legendarysurvivaloverhaul:item/thermometer_06" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.2333333 }, "model": "legendarysurvivaloverhaul:item/thermometer_07" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.2666666 }, "model": "legendarysurvivaloverhaul:item/thermometer_08" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.3000000 }, "model": "legendarysurvivaloverhaul:item/thermometer_09" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.3333333 }, "model": "legendarysurvivaloverhaul:item/thermometer_10" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.3666666 }, "model": "legendarysurvivaloverhaul:item/thermometer_11" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.4000000 }, "model": "legendarysurvivaloverhaul:item/thermometer_12" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.4333333 }, "model": "legendarysurvivaloverhaul:item/thermometer_13" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.4666666 }, "model": "legendarysurvivaloverhaul:item/thermometer_14" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.5000000 }, "model": "legendarysurvivaloverhaul:item/thermometer_15" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.5333333 }, "model": "legendarysurvivaloverhaul:item/thermometer_16" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.5666666 }, "model": "legendarysurvivaloverhaul:item/thermometer_17" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.6000000 }, "model": "legendarysurvivaloverhaul:item/thermometer_18" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.6333333 }, "model": "legendarysurvivaloverhaul:item/thermometer_19" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.6666666 }, "model": "legendarysurvivaloverhaul:item/thermometer_20" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.7000000 }, "model": "legendarysurvivaloverhaul:item/thermometer_21" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.7333333 }, "model": "legendarysurvivaloverhaul:item/thermometer_22" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.7666666 }, "model": "legendarysurvivaloverhaul:item/thermometer_23" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.8000000 }, "model": "legendarysurvivaloverhaul:item/thermometer_24" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.8333333 }, "model": "legendarysurvivaloverhaul:item/thermometer_25" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.8666666 }, "model": "legendarysurvivaloverhaul:item/thermometer_26" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.9000000 }, "model": "legendarysurvivaloverhaul:item/thermometer_27" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.9333333 }, "model": "legendarysurvivaloverhaul:item/thermometer_28" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 0.9666666 }, "model": "legendarysurvivaloverhaul:item/thermometer_29" },
+        { "predicate": { "legendarysurvivaloverhaul:temperature": 1.0000000 }, "model": "legendarysurvivaloverhaul:item/thermometer_29" }
+    ]
+}

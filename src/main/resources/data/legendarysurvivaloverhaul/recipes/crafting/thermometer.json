@@ -1,0 +1,32 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+		"IGI",
+		"#R#",
+		"I#I"
+	],
+	"key": 
+	{
+		"#":
+		{
+			"tag": "forge:glass/colorless"
+		},
+		"R":
+		{
+			"item": "minecraft:redstone"
+		},
+		"G":
+		{
+			"item": "minecraft:gold_nugget"
+		},
+		"I":
+		{
+			"item": "minecraft:iron_ingot"
+		}
+	},
+	"result":
+	{
+		"item": "legendarysurvivaloverhaul:thermometer"
+	}
+}

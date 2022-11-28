@@ -1,7 +1,0 @@
-{
-	"parent": "survivaloverhaul:block/heart_fruit_plant_base",
-	"textures": {
-		"stem": "survivaloverhaul:block/heartfruit_stem_03",
-		"fruit": "survivaloverhaul:block/heartfruit_fruit_01"
-	}
-}

@@ -1,0 +1,25 @@
+{
+	"pools": [
+		{
+			"name": "main",
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "item",
+					"name": "legendarysurvivaloverhaul:heart_fruit",
+					"weight": 15
+				},
+				{
+					"type": "item",
+					"name": "legendarysurvivaloverhaul:heart_fruit",
+					"count": 2,
+					"weight": 5
+				},
+				{
+					"type": "empty",
+					"weight": 80
+				}
+			]
+		}
+	]
+}

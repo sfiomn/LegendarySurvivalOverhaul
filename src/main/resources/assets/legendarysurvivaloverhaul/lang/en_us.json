@@ -1,0 +1,79 @@
+{
+	"item.legendarysurvivaloverhaul.canteen": "Canteen",
+	"item.legendarysurvivaloverhaul.netherite_canteen": "Netherite Canteen",
+	
+	"item.legendarysurvivaloverhaul.snow_helmet": "Snow Hat",
+	"item.legendarysurvivaloverhaul.snow_chestplate": "Snow Tunic",
+	"item.legendarysurvivaloverhaul.snow_leggings": "Snow Pants",
+	"item.legendarysurvivaloverhaul.snow_boots": "Snow Boots",
+	
+	"item.legendarysurvivaloverhaul.desert_helmet": "Desert Cap",
+	"item.legendarysurvivaloverhaul.desert_chestplate": "Desert Shirt",
+	"item.legendarysurvivaloverhaul.desert_leggings": "Desert Tunic",
+	"item.legendarysurvivaloverhaul.desert_boots": "Desert Sandals",
+	
+	"item.legendarysurvivaloverhaul.infernal_fern_leaf": "Infernal Fern Leaf",
+	"item.legendarysurvivaloverhaul.stone_fern_leaf": "Stone Fern Leaf",
+	"item.legendarysurvivaloverhaul.thermometer": "Thermometer",
+	"item.legendarysurvivaloverhaul.heart_fruit": "Heart Fruit",
+	
+	"block.legendarysurvivaloverhaul.heater":"Coal Stove",
+	"block.legendarysurvivaloverhaul.cooler":"Ice Cooler",
+
+	"container.legendarysurvivaloverhaul.heater": "Coal Stove",
+	"container.legendarysurvivaloverhaul.cooler": "Ice Cooler",
+	
+	"item.minecraft.potion.effect.heat_resistance":"Potion of Heat Resistance",
+	"item.minecraft.potion.effect.cold_resistance":"Potion of Cold Resistance",
+	"item.minecraft.potion.effect.heat_resistance_long":"Potion of Heat Resistance",
+	"item.minecraft.potion.effect.cold_resistance_long":"Potion of Cold Resistance",
+	
+	"item.minecraft.splash_potion.effect.heat_resistance":"Splash Potion of Heat Resistance",
+	"item.minecraft.splash_potion.effect.cold_resistance":"Splash Potion of Cold Resistance",
+	"item.minecraft.splash_potion.effect.heat_resistance_long":"Splash Potion of Heat Resistance",
+	"item.minecraft.splash_potion.effect.cold_resistance_long":"Splash Potion of Cold Resistance",
+	
+	"item.minecraft.lingering_potion.effect.heat_resistance":"Lingering Potion of Heat Resistance",
+	"item.minecraft.lingering_potion.effect.cold_resistance":"Lingering Potion of Cold Resistance",
+	"item.minecraft.lingering_potion.effect.heat_resistance_long":"Lingering Potion of Heat Resistance",
+	"item.minecraft.lingering_potion.effect.cold_resistance_long":"Lingering Potion of Cold Resistance",
+	
+	"item.minecraft.tipped_arrow.effect.heat_resistance":"Arrow of Heat Resistance",
+	"item.minecraft.tipped_arrow.effect.cold_resistance":"Arrow of Cold Resistance",
+	"item.minecraft.tipped_arrow.effect.heat_resistance_long":"Arrow of Heat Resistance",
+	"item.minecraft.tipped_arrow.effect.cold_resistance_long":"Arrow of Cold Resistance",
+	
+	"effect.legendarysurvivaloverhaul.heat_stroke": "Heat Stroke",
+	"effect.legendarysurvivaloverhaul.frostbite": "Frostbite",
+	"effect.legendarysurvivaloverhaul.heat_resist": "Heat Resistance",
+	"effect.legendarysurvivaloverhaul.cold_resist": "Cold Resistance",
+	"effect.legendarysurvivaloverhaul.thirst": "Thirst",
+	
+	"enchantment.legendarysurvivaloverhaul.adaptive_barrier": "Adaptive Thermal Barrier",
+	"enchantment.legendarysurvivaloverhaul.adaptive_barrier.desc": "Provides an adaptive heating/cooling effect when applied to armor.",
+	"enchantment.legendarysurvivaloverhaul.thermal_barrier": "Thermal Barrier",
+	"enchantment.legendarysurvivaloverhaul.thermal_barrier.desc": "Provides a constant cooling effect when applied to armor.",
+	"enchantment.legendarysurvivaloverhaul.cold_barrier": "Cooling Barrier",
+	"enchantment.legendarysurvivaloverhaul.cold_barrier.desc": "Provides a constant heating effect when applied to armor.",
+	
+	"death.attack.legendarysurvivaloverhaul.hypothermia": "%1$s froze to death",
+	"death.attack.legendarysurvivaloverhaul.hyperthermia": "%1$s couldn't take the heat",
+	"death.attack.legendarysurvivaloverhaul.dehydration": "%1$s died of dehydration",
+	"death.attack.legendarysurvivaloverhaul.breaking_arms": "%1$s fell from a high place and broke their arms",
+	
+	"advancements.adventure.have_a_heart.title": "Have a Heart",
+	"advancements.adventure.have_a_heart.description": "Find a Heart Fruit in a treasure chest",
+	
+	"advancements.adventure.eat_your_heart_out.title": "Eat Your Heart Out",
+	"advancements.adventure.eat_your_heart_out.description": "Acquire a full row of additional hearts from eating heart fruits",
+	
+	"key.legendarysurvivaloverhaul.climb": "Climb",
+	
+	"legendarysurvivaloverhaul.armorTooltip.heating": "Heating",
+	"legendarysurvivaloverhaul.armorTooltip.cooling": "Cooling",
+	"legendarysurvivaloverhaul.armorTooltip.insulation": "Insulation",
+	
+	"entity.generic.freeze.enter.subtitles": "Something freezes",
+	"entity.generic.freeze.exit.subtitles": "Something shatters",
+	"player.overheat.loop": "Player sizzles"
+}
