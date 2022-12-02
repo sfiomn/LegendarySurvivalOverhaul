@@ -70,7 +70,6 @@ public abstract class AbstractThermalTileEntity extends LockableTileEntity imple
             this.setChanged();
         }
 
-        this.tickCount++;
 
         if (this.tickCount > 20) {
             this.tickCount = 0;
@@ -98,6 +97,8 @@ public abstract class AbstractThermalTileEntity extends LockableTileEntity imple
                 this.setChanged();
             }
         }
+
+        this.tickCount++;
     }
 
     private void consumeFuel() {

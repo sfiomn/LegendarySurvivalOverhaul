@@ -16,7 +16,7 @@ import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
 public class TemperatureUtilInternal implements ITemperatureUtil
 {
-	private final String TEMPERATURE_TAG = "ArmorTemp";
+	private final String PADDING_TAG = "ArmorPadding";
 	
 	@Override
 	public int getPlayerTargetTemperature(PlayerEntity player)
@@ -54,7 +54,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 			sum += dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);
 		}
 		
-		return (int) sum;
+		return Math.round(sum);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	}
 
 	@Override
-	public void setArmorTemperatureTag(ItemStack stack, float temperature)
+	public void setArmorPaddingTag(ItemStack stack, String paddingId)
 	{
 		if (!stack.hasTag())
 		{
@@ -94,38 +94,39 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 		}
 		
 		final CompoundNBT compound = stack.getTag();
-		
-		compound.putFloat(TEMPERATURE_TAG, temperature);
+
+		if (compound != null) {
+			compound.putString(PADDING_TAG, paddingId);
+		}
 	}
 
 	@Override
-	public float getArmorTemperatureTag(ItemStack stack)
+	public String getArmorPaddingTag(ItemStack stack)
 	{
 		if (stack.hasTag())
 		{
 			final CompoundNBT compound = stack.getTag();
 			
-			if (compound.contains(TEMPERATURE_TAG))
+			if (compound.contains(PADDING_TAG))
 			{
-				float tempTag = compound.getFloat(TEMPERATURE_TAG);
+				String tempTag = compound.getString(PADDING_TAG);
 				
 				return tempTag;
 			}
 		}
-		return 0.0f;
+		return "";
 	}
 
 	@Override
-	public void removeArmorTemperatureTag(ItemStack stack)
+	public void removeArmorPaddingTag(ItemStack stack)
 	{
 		if(stack.hasTag())
 		{
 			final CompoundNBT compound = stack.getTag();
-			if (compound.contains(TEMPERATURE_TAG))
+			if (compound.contains(PADDING_TAG))
 			{
-				compound.remove(TEMPERATURE_TAG);
+				compound.remove(PADDING_TAG);
 			}
 		}
 	}
-
 }

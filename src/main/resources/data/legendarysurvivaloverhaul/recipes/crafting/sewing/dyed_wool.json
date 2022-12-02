@@ -1,0 +1,12 @@
+{
+	"type": "legendarysurvivaloverhaul:sewing",
+	"base": {
+		"item": "minecraft:white_wool"
+	},
+	"addition": {
+		"item": "minecraft:yellow_dye"
+	},
+	"result": {
+		"item": "minecraft:yellow_wool"
+	}
+}

@@ -7,13 +7,13 @@ import net.minecraft.util.text.StringTextComponent;
 
 import static sfiomn.legendarysurvivaloverhaul.util.RenderUtil.drawLegendaryFrame;
 
-public class RenderTooltipFrame {
+public class RenderLegendaryFrameTooltip {
     private final Minecraft mc;
     private final Entity entityLookedAt;
     private final MatrixStack matrixStack;
     private StringTextComponent textToShow;
 
-    public RenderTooltipFrame(Minecraft mc, MatrixStack matrixStack, Entity entityLookedAt) {
+    public RenderLegendaryFrameTooltip(Minecraft mc, MatrixStack matrixStack, Entity entityLookedAt) {
         this.mc = mc;
         this.entityLookedAt = entityLookedAt;
         this.matrixStack = matrixStack;

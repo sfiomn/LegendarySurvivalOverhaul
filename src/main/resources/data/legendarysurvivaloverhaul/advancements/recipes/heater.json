@@ -2,7 +2,7 @@
 	"parent": "minecraft:recipes/root",
 	"rewards": {
 		"recipes": [
-			"legendarysurvivaloverhaul:crafting/heating_coil"
+			"legendarysurvivaloverhaul:crafting/heater"
 		]
 	},
 	"criteria": {
@@ -19,7 +19,7 @@
 		"has_the_recipe": {
 			"trigger": "minecraft:recipe_unlocked",
 			"conditions": {
-				"recipe": "legendarysurvivaloverhaul:crafting/heating_coil"
+				"recipe": "legendarysurvivaloverhaul:crafting/heater"
 			}
 		}
 	},

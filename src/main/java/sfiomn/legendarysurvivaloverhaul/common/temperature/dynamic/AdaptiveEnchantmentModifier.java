@@ -39,12 +39,12 @@ public class AdaptiveEnchantmentModifier extends DynamicModifierBase
 		
 		if (adaptiveLevel > 0) 
 		{
-			int diff = (int) (currentTemperature - defaultTemperature);
-			if (currentTemperature > defaultTemperature) 
+			int diff = (int) (currentTemperature - middleTemperature);
+			if (currentTemperature > middleTemperature)
 			{
 				sum -= Math.min(adaptiveLevel * Config.Baked.enchantmentMultiplier, Math.abs(diff));
 			}
-			else if (currentTemperature < defaultTemperature)
+			else if (currentTemperature < middleTemperature)
 			{
 				sum += Math.min(adaptiveLevel * Config.Baked.enchantmentMultiplier, Math.abs(diff));
 			}

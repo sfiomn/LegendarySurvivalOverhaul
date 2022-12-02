@@ -1,4 +1,8 @@
 {
+	"key.legendarysurvivaloverhaul.addedDesc.title": "Additional Descriptions",
+	"key.legendarysurvivaloverhaul.addedDesc": "Show Description",
+	"tooltip.legendarysurvivaloverhaul.addedDesc.activate": "Press %s%s%s for padding descriptions",
+
 	"item.legendarysurvivaloverhaul.canteen": "Canteen",
 	"item.legendarysurvivaloverhaul.netherite_canteen": "Netherite Canteen",
 	
@@ -11,6 +15,19 @@
 	"item.legendarysurvivaloverhaul.desert_chestplate": "Desert Shirt",
 	"item.legendarysurvivaloverhaul.desert_leggings": "Desert Tunic",
 	"item.legendarysurvivaloverhaul.desert_boots": "Desert Sandals",
+
+	"item.legendarysurvivaloverhaul.cooler_padding_1" : "Cooler Padding I",
+	"item.legendarysurvivaloverhaul.cooler_padding_2" : "Cooler Padding II",
+	"item.legendarysurvivaloverhaul.cooler_padding_3" : "Cooler Padding III",
+	"tooltip.legendarysurvivaloverhaul.paddingItem.cooling.desc": "When applied to an armor, provides an adaptive cooling effect  up to",
+	"item.legendarysurvivaloverhaul.heater_padding_1" : "Heater Padding I",
+	"item.legendarysurvivaloverhaul.heater_padding_2" : "Heater Padding II",
+	"item.legendarysurvivaloverhaul.heater_padding_3" : "Heater Padding III",
+	"tooltip.legendarysurvivaloverhaul.paddingItem.heating.desc": "When applied to an armor, provides an adaptive heating effect up to",
+	"item.legendarysurvivaloverhaul.thermal_padding_1" : "Thermal Padding I",
+	"item.legendarysurvivaloverhaul.thermal_padding_2" : "Thermal Padding II",
+	"item.legendarysurvivaloverhaul.thermal_padding_3" : "Thermal Padding III",
+	"tooltip.legendarysurvivaloverhaul.paddingItem.thermal.desc": "When applied to an armor, provides an adaptive heating/cooling effect up to",
 	
 	"item.legendarysurvivaloverhaul.infernal_fern_leaf": "Infernal Fern Leaf",
 	"item.legendarysurvivaloverhaul.stone_fern_leaf": "Stone Fern Leaf",
@@ -19,9 +36,11 @@
 	
 	"block.legendarysurvivaloverhaul.heater":"Coal Stove",
 	"block.legendarysurvivaloverhaul.cooler":"Ice Cooler",
+	"block.legendarysurvivaloverhaul.sewing_table":"Sewing Table",
 
 	"container.legendarysurvivaloverhaul.heater": "Coal Stove",
 	"container.legendarysurvivaloverhaul.cooler": "Ice Cooler",
+	"container.legendarysurvivaloverhaul.sewing_table": "",
 	
 	"item.minecraft.potion.effect.heat_resistance":"Potion of Heat Resistance",
 	"item.minecraft.potion.effect.cold_resistance":"Potion of Cold Resistance",
@@ -69,9 +88,19 @@
 	
 	"key.legendarysurvivaloverhaul.climb": "Climb",
 	
-	"legendarysurvivaloverhaul.armorTooltip.heating": "Heating",
-	"legendarysurvivaloverhaul.armorTooltip.cooling": "Cooling",
-	"legendarysurvivaloverhaul.armorTooltip.insulation": "Insulation",
+	"tooltip.legendarysurvivaloverhaul.armor.heating": "Heating",
+	"tooltip.legendarysurvivaloverhaul.armor.cooling": "Cooling",
+	"tooltip.legendarysurvivaloverhaul.armor.insulation": "Insulation",
+
+	"tooltip.legendarysurvivaloverhaul.armorPadding.heating1": "Adaptive Heating I",
+	"tooltip.legendarysurvivaloverhaul.armorPadding.heating2": "Adaptive Heating II",
+	"tooltip.legendarysurvivaloverhaul.armorPadding.heating3": "Adaptive Heating III",
+	"tooltip.legendarysurvivaloverhaul.armorPadding.cooling1": "Adaptive Cooling I",
+	"tooltip.legendarysurvivaloverhaul.armorPadding.cooling2": "Adaptive Cooling II",
+	"tooltip.legendarysurvivaloverhaul.armorPadding.cooling3": "Adaptive Cooling III",
+	"tooltip.legendarysurvivaloverhaul.armorPadding.thermal1": "Adaptive Thermal I",
+	"tooltip.legendarysurvivaloverhaul.armorPadding.thermal2": "Adaptive Thermal II",
+	"tooltip.legendarysurvivaloverhaul.armorPadding.thermal3": "Adaptive Thermal III",
 	
 	"entity.generic.freeze.enter.subtitles": "Something freezes",
 	"entity.generic.freeze.exit.subtitles": "Something shatters",

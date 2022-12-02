@@ -4,6 +4,7 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.resources.ReloadListener;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
@@ -33,8 +34,10 @@ import org.apache.logging.log4j.Logger;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
-import sfiomn.legendarysurvivaloverhaul.client.screens.ThermalScreen;
+import sfiomn.legendarysurvivaloverhaul.registry.KeybindingRegistry;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.ThermometerProperty;
+import sfiomn.legendarysurvivaloverhaul.client.screens.SewingTableScreen;
+import sfiomn.legendarysurvivaloverhaul.client.screens.ThermalScreen;
 import sfiomn.legendarysurvivaloverhaul.common.capability.heartmods.HeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capability.heartmods.HeartModifierStorage;
 import sfiomn.legendarysurvivaloverhaul.common.capability.temperature.TemperatureCapability;
@@ -91,6 +94,8 @@ public class LegendarySurvivalOverhaul
 	
 	public static ForgeRegistry<ModifierBase> MODIFIERS;
 	public static ForgeRegistry<DynamicModifierBase> DYNAMIC_MODIFIERS;
+
+	private KeyBinding keyBinding;
 	
 	//@OnlyIn(Dist.CLIENT)//broke on server, no longer using const :(
 	//public static final KeyBinding KEY_CLIMB = new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory");
@@ -104,14 +109,15 @@ public class LegendarySurvivalOverhaul
 		modBus.addListener(this::onModConfigEvent);
 		modBus.addListener(this::buildRegistries);
 		modBus.addListener(this::clientEvents);
-		
-		ItemRegistry.register(modBus);
+
+		BlockRegistry.register(modBus);
+		ContainerRegistry.register(modBus);
 		EffectRegistry.register(modBus);
 		EnchantRegistry.register(modBus);
-		BlockRegistry.register(modBus);
+		ItemRegistry.register(modBus);
+		RecipeRegistry.register(modBus);
 		TemperatureModifierRegistry.register(modBus);
 		TileEntityRegistry.register(modBus);
-		ContainerRegistry.register(modBus);
 		
 		forgeBus.addListener(this::serverStarted);
 		forgeBus.addListener(this::reloadListener);
@@ -173,8 +179,9 @@ public class LegendarySurvivalOverhaul
 			RenderTypeLookup.setRenderLayer(BlockRegistry.HEATER.get(), RenderType.cutout());
 			ScreenManager.register(ContainerRegistry.COOLER_CONTAINER.get(), ThermalScreen::new);
 			ScreenManager.register(ContainerRegistry.HEATER_CONTAINER.get(), ThermalScreen::new);
+			ScreenManager.register(ContainerRegistry.SEWING_TABLE_CONTAINER.get(), SewingTableScreen::new);
 			DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientModelSetup);
-			DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientKeyBindsSetup);
+			KeybindingRegistry.register(event);
 		});
 	}
 	
@@ -194,23 +201,6 @@ public class LegendarySurvivalOverhaul
 			public void run()
 			{
 				ItemModelsProperties.register(ItemRegistry.THERMOMETER.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "temperature"), new ThermometerProperty());
-			}
-		};
-	}
-	
-	// public static KeyBinding KEY_CLIMB;
-	
-	private static DistExecutor.SafeRunnable clientKeyBindsSetup()
-	{
-		return new DistExecutor.SafeRunnable()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void run()
-			{
-				// ClientRegistry.registerKeyBinding(new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory"));
-				// KEY_CLIMB = new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory");
 			}
 		};
 	}
@@ -239,7 +229,7 @@ public class LegendarySurvivalOverhaul
 				}
 		);
 	}
-	
+
 	private void onModConfigEvent(final ModConfig.ModConfigEvent event)
 	{
 		final ModConfig config = event.getConfig();

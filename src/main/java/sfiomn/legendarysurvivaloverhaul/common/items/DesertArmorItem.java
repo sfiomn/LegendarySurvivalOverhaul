@@ -5,9 +5,9 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 
-public class ItemDesertArmor extends ArmorItem
+public class DesertArmorItem extends ArmorItem
 {
-	public ItemDesertArmor(IArmorMaterial material, EquipmentSlotType slot)
+	public DesertArmorItem(IArmorMaterial material, EquipmentSlotType slot)
 	{
 		super(material, slot, new Item.Properties().tab(ItemGroup.TAB_BREWING));
 	}

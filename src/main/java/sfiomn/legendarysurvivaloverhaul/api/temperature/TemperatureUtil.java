@@ -54,31 +54,31 @@ public class TemperatureUtil
 	}
 	
 	/**
-	 * Sets the armor temperature tag on the stack so it heats or cools
+	 * Sets the armor temperature type tag on the stack, so it heats, cools or both
 	 * @param stack Item stack armor
-	 * @param temperature Temperature
+	 * @param paddingId Padding Id
 	 */
-	public static void setArmorTemperatureTag(final ItemStack stack, float temperature)
+	public static void setArmorPaddingTag(final ItemStack stack, String paddingId)
 	{
-		internal.setArmorTemperatureTag(stack, temperature);
+		internal.setArmorPaddingTag(stack, paddingId);
+	}
+
+	/**
+	 * Gets the armor temperature type tag on the stack
+	 * @param stack Item stack armor
+	 * @return "" if tag is missing
+	 */
+	public static String getArmorPaddingTag(final ItemStack stack)
+	{
+		return internal.getArmorPaddingTag(stack);
 	}
 	
 	/**
-	 * Gets the armor temperature tag on the stack
-	 * @param stack Item stack armor
-	 * @return temperature, 0.0f if tag is missing
-	 */
-	public static float getArmorTemperatureTag(final ItemStack stack)
-	{
-		return internal.getArmorTemperatureTag(stack);
-	}
-	
-	/**
-	 * Removes the armor temperature tag on the stack if it exists
+	 * Removes the armor temperature type tag on the stack if it exists
 	 * @param stack Item stack armor
 	 */
-	public static void removeArmorTemperatureTag(final ItemStack stack)
+	public static void removeArmorPaddingTag(final ItemStack stack)
 	{
-		internal.removeArmorTemperatureTag(stack);
+		internal.removeArmorPaddingTag(stack);
 	}
 }

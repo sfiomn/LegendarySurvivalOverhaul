@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "legendarysurvivaloverhaul:item/snow_pants"
+    "layer0": "legendarysurvivaloverhaul:item/armor/snow_pants"
   }
 }

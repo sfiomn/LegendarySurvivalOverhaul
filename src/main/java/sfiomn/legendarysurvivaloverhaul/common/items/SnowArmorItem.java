@@ -9,9 +9,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
-public class ItemSnowArmor extends ArmorItem
+public class SnowArmorItem extends ArmorItem
 {
-	public ItemSnowArmor(IArmorMaterial material, EquipmentSlotType slot)
+	public SnowArmorItem(IArmorMaterial material, EquipmentSlotType slot)
 	{
 		super(material, slot, new Item.Properties().tab(ItemGroup.TAB_COMBAT));
 	}

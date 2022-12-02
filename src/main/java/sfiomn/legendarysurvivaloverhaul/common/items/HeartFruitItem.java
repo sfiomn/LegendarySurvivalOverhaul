@@ -19,11 +19,11 @@ import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 
-public class ItemHeartFruit extends Item
+public class HeartFruitItem extends Item
 {
 	public static final Food FOOD_STATS = (new Food.Builder()).nutrition(6).saturationMod(2.5f).alwaysEat().build();
 	
-	public ItemHeartFruit()
+	public HeartFruitItem()
 	{
 		super(new Item.Properties().tab(ItemGroup.TAB_FOOD).rarity(Rarity.RARE).food(FOOD_STATS));
 	}

@@ -36,7 +36,7 @@ public class TemperatureCommand extends CommandBase
 				float targetTemperature = TemperatureUtil.getPlayerTargetTemperature(source.getPlayerOrException());
 				TemperatureCapability cap = CapabilityUtil.getTempCapability(source.getPlayerOrException());
 				int playerTemp = cap.getTemperatureLevel();
-				int worldTemp =  TemperatureUtil.clampTemperature(TemperatureUtil.getWorldTemperature(source.getPlayerOrException().level, source.getPlayerOrException().blockPosition()));
+				int worldTemp =  TemperatureUtil.getWorldTemperature(source.getPlayerOrException().level, source.getPlayerOrException().blockPosition());
 
 				String reply1 = "Temp: "+  playerTemp,
 				reply2 = "Target Temp: " + targetTemperature,

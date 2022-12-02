@@ -10,6 +10,7 @@ import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.containers.CoolerContainer;
 import sfiomn.legendarysurvivaloverhaul.common.containers.HeaterContainer;
 import sfiomn.legendarysurvivaloverhaul.common.containers.AbstractThermalContainer;
+import sfiomn.legendarysurvivaloverhaul.common.containers.SewingTableContainer;
 
 public class ContainerRegistry {
     public static final DeferredRegister<ContainerType<?>> CONTAINERS =
@@ -20,6 +21,9 @@ public class ContainerRegistry {
 
     public static final RegistryObject<ContainerType<AbstractThermalContainer>> HEATER_CONTAINER
             = CONTAINERS.register("heater_container", () -> IForgeContainerType.create(HeaterContainer::new));
+
+    public static final RegistryObject<ContainerType<SewingTableContainer>> SEWING_TABLE_CONTAINER
+            = CONTAINERS.register("sewing_table_container", () -> IForgeContainerType.create(SewingTableContainer::new));
 
     public static void register(IEventBus eventBus) {
         CONTAINERS.register(eventBus);

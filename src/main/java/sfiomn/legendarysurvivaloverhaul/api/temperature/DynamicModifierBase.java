@@ -7,11 +7,11 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class DynamicModifierBase extends ForgeRegistryEntry<DynamicModifierBase>
 {
-	protected final float defaultTemperature;
+	protected final float middleTemperature;
 	
 	public DynamicModifierBase()
 	{
-		this.defaultTemperature = (TemperatureEnum.NORMAL.getUpperBound() + (float) TemperatureEnum.COLD.getUpperBound()) / 2;
+		this.middleTemperature = (TemperatureEnum.NORMAL.getUpperBound() + (float) TemperatureEnum.COLD.getUpperBound()) / 2;
 	}
 	
 	public float applyDynamicPlayerInfluence(PlayerEntity player, float currentTemperature)

@@ -7,6 +7,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
+import sfiomn.legendarysurvivaloverhaul.api.item.PaddingEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
@@ -14,6 +15,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.util.ICuriosHelper;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CuriosModifier extends ModifierBase
 {
@@ -66,7 +68,13 @@ public class CuriosModifier extends ModifierBase
 				if (!stack.isEmpty())
 				{
 					sum += processStackJson(stack);
-					sum += TemperatureUtil.getArmorTemperatureTag(stack);
+					String paddingId = TemperatureUtil.getArmorPaddingTag(stack);
+					PaddingEnum padding = PaddingEnum.getFromId(paddingId);
+					if (Objects.equals(padding.type(), "cooling")) {
+						sum -= padding.modifier();
+					} else if (Objects.equals(padding.type(), "heating")) {
+						sum += padding.modifier();
+					}
 				}
 			}
 			

@@ -20,7 +20,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import sereneseasons.api.SSItems;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.client.gui.RenderTooltipFrame;
+import sfiomn.legendarysurvivaloverhaul.client.gui.RenderLegendaryFrameTooltip;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
@@ -33,7 +33,7 @@ import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.timeInGame;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ModClientEvents {
-    public static RenderTooltipFrame renderer;
+    public static RenderLegendaryFrameTooltip renderer;
 
     @SubscribeEvent
     public static void onItemRightClick(PlayerInteractEvent.RightClickItem event){
@@ -63,7 +63,7 @@ public class ModClientEvents {
                 if (entityLookedAt instanceof ItemFrameEntity && !((ItemFrameEntity) entityLookedAt).getItem().isEmpty()) {
                     Item itemInFrame = ((ItemFrameEntity) entityLookedAt).getItem().getItem();
                     if (renderer == null || !renderer.hasSameEntity(entityLookedAt)) {
-                        renderer = new RenderTooltipFrame(mc, matrixStack, entityLookedAt);
+                        renderer = new RenderLegendaryFrameTooltip(mc, matrixStack, entityLookedAt);
                     }
 
                     // data that doesn't need to be updated while looking at the item frame

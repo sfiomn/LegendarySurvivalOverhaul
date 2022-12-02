@@ -1,0 +1,136 @@
+{
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "legendarysurvivaloverhaul:block/sewing_table",
+		"particle": "legendarysurvivaloverhaul:block/sewing_table"
+	},
+	"elements": [
+		{
+			"name": "table",
+			"from": [0, 0, 0],
+			"to": [16, 4, 16],
+			"faces": {
+				"north": {"uv": [4, 0, 8, 1], "texture": "#0"},
+				"east": {"uv": [4, 1, 8, 2], "texture": "#0"},
+				"south": {"uv": [4, 2, 8, 3], "texture": "#0"},
+				"west": {"uv": [4, 3, 8, 4], "texture": "#0"},
+				"up": {"uv": [4, 4, 0, 0], "texture": "#0"},
+				"down": {"uv": [4, 4, 0, 8], "texture": "#0"}
+			}
+		},
+		{
+			"name": "machine_base",
+			"from": [8, 4, 5],
+			"to": [14, 7, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -12, 0]},
+			"faces": {
+				"north": {"uv": [9.5, 10, 11, 10.75], "texture": "#0"},
+				"east": {"uv": [10.5, 3, 12, 3.75], "texture": "#0"},
+				"south": {"uv": [10.5, 3.75, 12, 4.5], "texture": "#0"},
+				"west": {"uv": [10.5, 4.5, 12, 5.25], "texture": "#0"},
+				"up": {"uv": [10.5, 4.5, 9, 3], "texture": "#0"},
+				"down": {"uv": [10.5, 4.5, 9, 6], "texture": "#0"}
+			}
+		},
+		{
+			"name": "machine_body",
+			"from": [9, 7, 6],
+			"to": [13, 13, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -12, 0]},
+			"faces": {
+				"north": {"uv": [10, 0, 11, 1.5], "texture": "#0"},
+				"east": {"uv": [10, 1.5, 11, 3], "texture": "#0"},
+				"south": {"uv": [4, 10, 5, 11.5], "texture": "#0"},
+				"west": {"uv": [5, 10, 6, 11.5], "texture": "#0"},
+				"up": {"uv": [1, 12, 0, 11], "texture": "#0"},
+				"down": {"uv": [12, 0, 11, 1], "texture": "#0"}
+			}
+		},
+		{
+			"name": "wheel_hook",
+			"from": [13, 10, 7],
+			"to": [14, 12, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -12, 0]},
+			"faces": {
+				"north": {"uv": [3.75, 11, 4, 11.5], "texture": "#0"},
+				"east": {"uv": [11, 2.5, 11.5, 3], "texture": "#0"},
+				"south": {"uv": [5.25, 11.5, 5.5, 12], "texture": "#0"},
+				"west": {"uv": [11.25, 1, 11.75, 1.5], "texture": "#0"},
+				"up": {"uv": [11.75, 5.75, 11.5, 5.25], "texture": "#0"},
+				"down": {"uv": [5.75, 11.5, 5.5, 12], "texture": "#0"}
+			}
+		},
+		{
+			"name": "wheel",
+			"from": [14, 8, 5],
+			"to": [15, 14, 11],
+			"rotation": {"angle": 45, "axis": "x", "origin": [15, 11, 8]},
+			"faces": {
+				"north": {"uv": [11, 1, 11.25, 2.5], "texture": "#0"},
+				"east": {"uv": [9, 6, 10.5, 7.5], "texture": "#0"},
+				"south": {"uv": [2, 11, 2.25, 12.5], "texture": "#0"},
+				"west": {"uv": [9, 7.5, 10.5, 9], "texture": "#0"},
+				"up": {"uv": [2.5, 12.5, 2.25, 11], "texture": "#0"},
+				"down": {"uv": [2.75, 11, 2.5, 12.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "machine_head",
+			"from": [2, 10, 6],
+			"to": [9, 13, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -12, 0]},
+			"faces": {
+				"north": {"uv": [6, 10, 7.75, 10.75], "texture": "#0"},
+				"east": {"uv": [10.5, 8.25, 11.5, 9], "texture": "#0"},
+				"south": {"uv": [7.75, 10, 9.5, 10.75], "texture": "#0"},
+				"west": {"uv": [1, 11, 2, 11.75], "texture": "#0"},
+				"up": {"uv": [9.75, 10, 8, 9], "texture": "#0"},
+				"down": {"uv": [11.5, 9, 9.75, 10], "texture": "#0"}
+			}
+		},
+		{
+			"name": "needle_support",
+			"from": [3, 7, 7],
+			"to": [5, 10, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -12, 0]},
+			"faces": {
+				"north": {"uv": [2.75, 11, 3.25, 11.75], "texture": "#0"},
+				"east": {"uv": [3.25, 11, 3.75, 11.75], "texture": "#0"},
+				"south": {"uv": [11, 10, 11.5, 10.75], "texture": "#0"},
+				"west": {"uv": [11, 10.75, 11.5, 11.5], "texture": "#0"},
+				"up": {"uv": [11.75, 2, 11.25, 1.5], "texture": "#0"},
+				"down": {"uv": [11.75, 2, 11.25, 2.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "needle1",
+			"from": [4, 5, 7.5],
+			"to": [4, 7, 9.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -12, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.5], "texture": "#0"},
+				"east": {"uv": [11.5, 2.5, 12, 3], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 0.5], "texture": "#0"},
+				"west": {"uv": [3.75, 11.5, 4.25, 12], "texture": "#0"},
+				"up": {"uv": [0, 0.5, 0, 0], "texture": "#0"},
+				"down": {"uv": [0, 0, 0, 0.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "needle2",
+			"from": [3.5, 5, 8],
+			"to": [5.5, 7, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [4, 6, 8]},
+			"faces": {
+				"north": {"uv": [4.25, 11.5, 4.75, 12], "texture": "#0"},
+				"east": {"uv": [0, 0, 0, 0.5], "texture": "#0"},
+				"south": {"uv": [4.75, 11.5, 5.25, 12], "texture": "#0"},
+				"west": {"uv": [0, 0, 0, 0.5], "texture": "#0"},
+				"up": {"uv": [0.5, 0, 0, 0], "texture": "#0"},
+				"down": {"uv": [0.5, 0, 0, 0], "texture": "#0"}
+			}
+		}
+	]
+}

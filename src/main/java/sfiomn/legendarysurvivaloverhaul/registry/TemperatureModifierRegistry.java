@@ -35,6 +35,7 @@ public class TemperatureModifierRegistry
 	public static final RegistryObject<ModifierBase> CURIOS = MODIFIERS.register("compat/curios", CuriosModifier::new);
 	
 	public static final RegistryObject<DynamicModifierBase> ADAPTIVE_ENCHANT = DYNAMIC_MODIFIERS.register("adaptive_enchant", AdaptiveEnchantmentModifier::new);
+	public static final RegistryObject<DynamicModifierBase> ADAPTIVE_PADDING = DYNAMIC_MODIFIERS.register("adaptive_padding", AdaptivePaddingModifier::new);
 
 	public static void register(IEventBus eventBus){
 		MODIFIERS.register(eventBus);

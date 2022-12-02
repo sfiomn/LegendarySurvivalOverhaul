@@ -1,15 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
-import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
-import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
-import sfiomn.legendarysurvivaloverhaul.registry.EnchantRegistry;
 
 import java.util.List;
 
@@ -39,15 +35,8 @@ public class ArmorModifier extends ModifierBase
 				return 0.0f;
 		
 		float sum = 0.0f;
-		int coolingLevel = EnchantmentHelper.getItemEnchantmentLevel(EnchantRegistry.COLD_BARRIER.get(), stack);
-		int heatingLevel = EnchantmentHelper.getItemEnchantmentLevel(EnchantRegistry.THERMAL_BARRIER.get(), stack);
-		
-		if (coolingLevel > 0 )
-			sum -= coolingLevel * Config.Baked.enchantmentMultiplier;
-		if (heatingLevel > 0)
-			sum += heatingLevel * Config.Baked.enchantmentMultiplier;
+
 		sum += processStackJson(stack);
-		sum += TemperatureUtil.getArmorTemperatureTag(stack);
 		return sum;
 	}
 	

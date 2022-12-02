@@ -9,14 +9,14 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 
-public class ItemThermometer extends Item {
-    public ItemThermometer(Properties properties){
+public class ThermometerItem extends Item {
+    public ThermometerItem(Properties properties){
         super(properties);
     }
 
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        int worldTemp = TemperatureUtil.clampTemperature(TemperatureUtil.getWorldTemperature(world, player.blockPosition()));
+        int worldTemp = TemperatureUtil.getWorldTemperature(world, player.blockPosition());
         player.displayClientMessage(new StringTextComponent(worldTemp + "\u00B0C"), (true));
 
         return super.use(world, player, hand);
