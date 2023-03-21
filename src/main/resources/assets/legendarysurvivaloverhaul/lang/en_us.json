@@ -1,10 +1,7 @@
 {
-	"key.legendarysurvivaloverhaul.addedDesc.title": "Additional Descriptions",
-	"key.legendarysurvivaloverhaul.addedDesc": "Show Description",
-	"tooltip.legendarysurvivaloverhaul.addedDesc.activate": "Press %s%s%s for padding descriptions",
-
-	"item.legendarysurvivaloverhaul.canteen": "Canteen",
-	"item.legendarysurvivaloverhaul.netherite_canteen": "Netherite Canteen",
+	"key.legendarysurvivaloverhaul.added_desc.title": "Additional Descriptions",
+	"key.legendarysurvivaloverhaul.added_desc": "Show Description",
+	"tooltip.legendarysurvivaloverhaul.added_desc.activate": "Press %s%s%s for coat descriptions",
 	
 	"item.legendarysurvivaloverhaul.snow_helmet": "Snow Hat",
 	"item.legendarysurvivaloverhaul.snow_chestplate": "Snow Tunic",
@@ -16,31 +13,34 @@
 	"item.legendarysurvivaloverhaul.desert_leggings": "Desert Tunic",
 	"item.legendarysurvivaloverhaul.desert_boots": "Desert Sandals",
 
-	"item.legendarysurvivaloverhaul.cooler_padding_1" : "Cooler Padding I",
-	"item.legendarysurvivaloverhaul.cooler_padding_2" : "Cooler Padding II",
-	"item.legendarysurvivaloverhaul.cooler_padding_3" : "Cooler Padding III",
-	"tooltip.legendarysurvivaloverhaul.paddingItem.cooling.desc": "When applied to an armor, provides an adaptive cooling effect  up to",
-	"item.legendarysurvivaloverhaul.heater_padding_1" : "Heater Padding I",
-	"item.legendarysurvivaloverhaul.heater_padding_2" : "Heater Padding II",
-	"item.legendarysurvivaloverhaul.heater_padding_3" : "Heater Padding III",
-	"tooltip.legendarysurvivaloverhaul.paddingItem.heating.desc": "When applied to an armor, provides an adaptive heating effect up to",
-	"item.legendarysurvivaloverhaul.thermal_padding_1" : "Thermal Padding I",
-	"item.legendarysurvivaloverhaul.thermal_padding_2" : "Thermal Padding II",
-	"item.legendarysurvivaloverhaul.thermal_padding_3" : "Thermal Padding III",
-	"tooltip.legendarysurvivaloverhaul.paddingItem.thermal.desc": "When applied to an armor, provides an adaptive heating/cooling effect up to",
-	
-	"item.legendarysurvivaloverhaul.infernal_fern_leaf": "Infernal Fern Leaf",
-	"item.legendarysurvivaloverhaul.stone_fern_leaf": "Stone Fern Leaf",
+	"item.legendarysurvivaloverhaul.cooling_coat_1" : "Common Cooling Coat",
+	"item.legendarysurvivaloverhaul.cooling_coat_2" : "Rare Cooling Coat",
+	"item.legendarysurvivaloverhaul.cooling_coat_3" : "Epic Cooling Coat",
+	"tooltip.legendarysurvivaloverhaul.coat_item.cooling.desc": "When applied to an armor, provides an adaptive cooling effect  up to",
+	"item.legendarysurvivaloverhaul.heating_coat_1" : "Common Warming Coat",
+	"item.legendarysurvivaloverhaul.heating_coat_2" : "Rare Warming Coat",
+	"item.legendarysurvivaloverhaul.heating_coat_3" : "Epic Warming Coat",
+	"tooltip.legendarysurvivaloverhaul.coat_item.heating.desc": "When applied to an armor, provides an adaptive heating effect up to",
+	"item.legendarysurvivaloverhaul.thermal_coat_1" : "Common Thermal Coat",
+	"item.legendarysurvivaloverhaul.thermal_coat_2" : "Rare Thermal Coat",
+	"item.legendarysurvivaloverhaul.thermal_coat_3" : "Epic Thermal Coat",
+	"tooltip.legendarysurvivaloverhaul.coat_item.thermal.desc": "When applied to an armor, provides an adaptive heating/cooling effect up to",
+
 	"item.legendarysurvivaloverhaul.thermometer": "Thermometer",
 	"item.legendarysurvivaloverhaul.heart_fruit": "Heart Fruit",
+
+	"item.legendarysurvivaloverhaul.cold_string" : "Cold String",
+	"item.legendarysurvivaloverhaul.warm_string" : "Warm String",
 	
 	"block.legendarysurvivaloverhaul.heater":"Coal Stove",
-	"block.legendarysurvivaloverhaul.cooler":"Ice Cooler",
+	"block.legendarysurvivaloverhaul.cooler":"Ice Box",
 	"block.legendarysurvivaloverhaul.sewing_table":"Sewing Table",
+	"block.legendarysurvivaloverhaul.sun_fern": "Sun Fern",
+	"block.legendarysurvivaloverhaul.ice_fern": "Ice Fern",
 
-	"container.legendarysurvivaloverhaul.heater": "Coal Stove",
-	"container.legendarysurvivaloverhaul.cooler": "Ice Cooler",
-	"container.legendarysurvivaloverhaul.sewing_table": "",
+	"container.legendarysurvivaloverhaul.heater": "",
+	"container.legendarysurvivaloverhaul.cooler": "",
+	"container.legendarysurvivaloverhaul.sewing_table": "Sewing Table",
 	
 	"item.minecraft.potion.effect.heat_resistance":"Potion of Heat Resistance",
 	"item.minecraft.potion.effect.cold_resistance":"Potion of Cold Resistance",
@@ -66,43 +66,36 @@
 	"effect.legendarysurvivaloverhaul.frostbite": "Frostbite",
 	"effect.legendarysurvivaloverhaul.heat_resist": "Heat Resistance",
 	"effect.legendarysurvivaloverhaul.cold_resist": "Cold Resistance",
-	"effect.legendarysurvivaloverhaul.thirst": "Thirst",
-	
-	"enchantment.legendarysurvivaloverhaul.adaptive_barrier": "Adaptive Thermal Barrier",
-	"enchantment.legendarysurvivaloverhaul.adaptive_barrier.desc": "Provides an adaptive heating/cooling effect when applied to armor.",
-	"enchantment.legendarysurvivaloverhaul.thermal_barrier": "Thermal Barrier",
-	"enchantment.legendarysurvivaloverhaul.thermal_barrier.desc": "Provides a constant cooling effect when applied to armor.",
-	"enchantment.legendarysurvivaloverhaul.cold_barrier": "Cooling Barrier",
-	"enchantment.legendarysurvivaloverhaul.cold_barrier.desc": "Provides a constant heating effect when applied to armor.",
-	
+
 	"death.attack.legendarysurvivaloverhaul.hypothermia": "%1$s froze to death",
 	"death.attack.legendarysurvivaloverhaul.hyperthermia": "%1$s couldn't take the heat",
 	"death.attack.legendarysurvivaloverhaul.dehydration": "%1$s died of dehydration",
-	"death.attack.legendarysurvivaloverhaul.breaking_arms": "%1$s fell from a high place and broke their arms",
 	
 	"advancements.adventure.have_a_heart.title": "Have a Heart",
 	"advancements.adventure.have_a_heart.description": "Find a Heart Fruit in a treasure chest",
 	
 	"advancements.adventure.eat_your_heart_out.title": "Eat Your Heart Out",
 	"advancements.adventure.eat_your_heart_out.description": "Acquire a full row of additional hearts from eating heart fruits",
-	
-	"key.legendarysurvivaloverhaul.climb": "Climb",
-	
+
+	"advancements.adventure.sew_a_coat.title": "Sew your first coat",
+	"advancements.adventure.sew_a_coat.description": "Craft a coat and sew it to an armor piece using the sewing table",
+
 	"tooltip.legendarysurvivaloverhaul.armor.heating": "Heating",
 	"tooltip.legendarysurvivaloverhaul.armor.cooling": "Cooling",
 	"tooltip.legendarysurvivaloverhaul.armor.insulation": "Insulation",
 
-	"tooltip.legendarysurvivaloverhaul.armorPadding.heating1": "Adaptive Heating I",
-	"tooltip.legendarysurvivaloverhaul.armorPadding.heating2": "Adaptive Heating II",
-	"tooltip.legendarysurvivaloverhaul.armorPadding.heating3": "Adaptive Heating III",
-	"tooltip.legendarysurvivaloverhaul.armorPadding.cooling1": "Adaptive Cooling I",
-	"tooltip.legendarysurvivaloverhaul.armorPadding.cooling2": "Adaptive Cooling II",
-	"tooltip.legendarysurvivaloverhaul.armorPadding.cooling3": "Adaptive Cooling III",
-	"tooltip.legendarysurvivaloverhaul.armorPadding.thermal1": "Adaptive Thermal I",
-	"tooltip.legendarysurvivaloverhaul.armorPadding.thermal2": "Adaptive Thermal II",
-	"tooltip.legendarysurvivaloverhaul.armorPadding.thermal3": "Adaptive Thermal III",
-	
-	"entity.generic.freeze.enter.subtitles": "Something freezes",
-	"entity.generic.freeze.exit.subtitles": "Something shatters",
-	"player.overheat.loop": "Player sizzles"
+	"tooltip.legendarysurvivaloverhaul.armor_coat.heating1": "Adaptive Heating I",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.heating2": "Adaptive Heating II",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.heating3": "Adaptive Heating III",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.cooling1": "Adaptive Cooling I",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.cooling2": "Adaptive Cooling II",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.cooling3": "Adaptive Cooling III",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.thermal1": "Adaptive Thermal I",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.thermal2": "Adaptive Thermal II",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.thermal3": "Adaptive Thermal III",
+
+	"sounds.legendarysurvivaloverhaul.heat_stroke": "Player suffocates",
+	"sounds.legendarysurvivaloverhaul.frostbite": "Player shivers",
+	"sounds.legendarysurvivaloverhaul.cooler_block": "Icebox crackles",
+	"sounds.legendarysurvivaloverhaul.sewing_table": "Sewing Table Used"
 }

@@ -7,9 +7,9 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.common.containers.AbstractThermalContainer;
 import sfiomn.legendarysurvivaloverhaul.common.containers.CoolerContainer;
 import sfiomn.legendarysurvivaloverhaul.common.containers.HeaterContainer;
-import sfiomn.legendarysurvivaloverhaul.common.containers.AbstractThermalContainer;
 import sfiomn.legendarysurvivaloverhaul.common.containers.SewingTableContainer;
 
 public class ContainerRegistry {

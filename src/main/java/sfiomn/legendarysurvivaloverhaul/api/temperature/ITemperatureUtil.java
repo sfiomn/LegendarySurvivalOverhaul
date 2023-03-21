@@ -15,9 +15,9 @@ public interface ITemperatureUtil
 	
 	public TemperatureEnum getTemperatureEnum(int temp);
 	
-	public void setArmorPaddingTag(final ItemStack stack, String temperatureType);
+	public void setArmorCoatTag(final ItemStack stack, String temperatureType);
 	
-	public String getArmorPaddingTag(final ItemStack stack);
+	public String getArmorCoatTag(final ItemStack stack);
 	
-	public void removeArmorPaddingTag(final ItemStack stack);
+	public void removeArmorCoatTag(final ItemStack stack);
 }

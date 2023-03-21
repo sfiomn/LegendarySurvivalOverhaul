@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.effects;
 
+import net.minecraft.potion.Effects;
 import sfiomn.legendarysurvivaloverhaul.api.DamageSources;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.DamageUtil;
@@ -36,5 +37,10 @@ public class HeatStrokeEffect extends GenericEffect
 	{
 		int time = 50 >> amplifier;
 		return time == 0 || duration % time == 0;
+	}
+
+	public static boolean playerIsImmuneToHeat(PlayerEntity player)
+	{
+		return player.hasEffect(EffectRegistry.HEAT_RESISTANCE.get()) || player.hasEffect(Effects.FIRE_RESISTANCE);
 	}
 }

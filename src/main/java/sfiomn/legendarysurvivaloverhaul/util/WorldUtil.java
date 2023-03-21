@@ -4,17 +4,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public final class WorldUtil
 {
@@ -129,5 +133,29 @@ public final class WorldUtil
 		String minuteOfTheDay = String.format("%2s", (dayTime % 1000) * 6 / 100).replace(' ', '0');
 
 		return "Day " + dayCount + ", " + hourOfTheDay + ":" + minuteOfTheDay;
+	}
+
+	public static Set<Vector3i> getAllDirectionsVectors() {
+		Set<Vector3i> allDirectionsVectors = new HashSet<>();
+		for (Direction direction : Direction.values()) {
+			allDirectionsVectors.add(direction.getNormal());
+			for (Direction direction1 : Direction.values()) {
+				if (direction1.getAxis() != direction.getAxis()) {
+					Vector3i newDirection = direction.getNormal().relative(direction1, 1);
+					allDirectionsVectors.add(newDirection);
+					for (Direction direction2 : Direction.values()) {
+						if (direction2.getAxis() != direction1.getAxis() && direction2.getAxis() != direction.getAxis()) {
+							Vector3i newDirection1 = newDirection.relative(direction2, 1);
+							allDirectionsVectors.add(newDirection1);
+						}
+					}
+				}
+			}
+		}
+		return allDirectionsVectors;
+	}
+
+	public static Vector3i getOppositeVector(Vector3i originalVector) {
+		return new Vector3i(-originalVector.getX(), -originalVector.getY(), -originalVector.getZ());
 	}
 }

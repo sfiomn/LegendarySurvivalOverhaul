@@ -37,4 +37,9 @@ public class FrostbiteEffect extends GenericEffect
 		int time = 50 >> amplifier;
 		return time == 0 || duration % time == 0;
 	}
+
+	public static boolean playerIsImmuneToFrost(PlayerEntity player)
+	{
+		return player.hasEffect(EffectRegistry.COLD_RESISTANCE.get());
+	}
 }

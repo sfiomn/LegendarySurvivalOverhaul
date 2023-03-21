@@ -11,14 +11,15 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import sfiomn.legendarysurvivaloverhaul.api.item.PaddingEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
-import sfiomn.legendarysurvivaloverhaul.common.items.PaddingItem;
+import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 import sfiomn.legendarysurvivaloverhaul.data.recipes.SewingRecipe;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.ContainerRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.RecipeRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -29,8 +30,8 @@ public class SewingTableContainer extends Container {
     private final int SLOT_COUNT;
     @Nullable
     private SewingRecipe selectedRecipe;
-    private final List<SewingRecipe> recipes;
-    protected final CraftResultInventory resultSlots = new CraftResultInventory();
+    private final List<SewingRecipe> sewingRecipes;
+    protected final CraftResultInventory resultSlot = new CraftResultInventory();
     protected final IInventory inputSlots = new Inventory(2) {
         public void setChanged() {
             super.setChanged();
@@ -48,12 +49,12 @@ public class SewingTableContainer extends Container {
         super(ContainerRegistry.SEWING_TABLE_CONTAINER.get(), windowId);
         this.world = playerInventory.player.level;
         this.access = pos;
-        this.recipes = this.world.getRecipeManager().getAllRecipesFor(RecipeRegistry.SEWING_RECIPE);
+        this.sewingRecipes = this.world.getRecipeManager().getAllRecipesFor(RecipeRegistry.SEWING_RECIPE);
 
         addSlot(new Slot(inputSlots, 0, 18, 39));
         addSlot(new Slot(inputSlots, 1, 65, 39));
 
-        addSlot(new Slot(resultSlots, 2, 134, 39) {
+        addSlot(new Slot(resultSlot, 2, 134, 39) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;
@@ -64,8 +65,8 @@ public class SewingTableContainer extends Container {
             }
         });
 
-        this.SLOT_COUNT = this.inputSlots.getContainerSize() + this.resultSlots.getContainerSize();
-        layoutPlayerInventorySlots(playerInventory, 8, 86);
+        this.SLOT_COUNT = this.inputSlots.getContainerSize() + this.resultSlot.getContainerSize();
+        layoutPlayerInventorySlots(playerInventory, 8, 84);
     }
 
     public void slotsChanged(IInventory inventory) {
@@ -76,54 +77,39 @@ public class SewingTableContainer extends Container {
     }
 
     public void createResult() {
-        List<SewingRecipe> list = this.world.getRecipeManager().getRecipesFor(RecipeRegistry.SEWING_RECIPE, this.inputSlots, this.world);
+        List<SewingRecipe> sewingRecipes = this.world.getRecipeManager().getRecipesFor(RecipeRegistry.SEWING_RECIPE, this.inputSlots, this.world);
+        ItemStack itemStack = ItemStack.EMPTY;
 
         //  Proceed to the found recipe
-        if (!list.isEmpty()) {
-            this.selectedRecipe = list.get(0);
-            ItemStack itemstack = this.selectedRecipe.assemble(this.inputSlots);
-            this.resultSlots.setRecipeUsed(this.selectedRecipe);
-            this.resultSlots.setItem(0, itemstack);
+        if (!sewingRecipes.isEmpty()) {
+            this.selectedRecipe = sewingRecipes.get(0);
+            itemStack = this.selectedRecipe.assemble(this.inputSlots);
+            this.resultSlot.setRecipeUsed(this.selectedRecipe);
 
-        //  Check a padding is possible
-        } else {
-            if (isItemArmor(this.inputSlots.getItem(0)) &&
-                    isItemPadding(this.inputSlots.getItem(1))) {
-                PaddingItem paddingItem = (PaddingItem) this.inputSlots.getItem(1).getItem();
-                PaddingEnum padding = paddingItem.padding;
-                ItemStack itemStack1 = this.inputSlots.getItem(0);
-                ItemStack result;
-
-                result = itemStack1.copy();
-                TemperatureUtil.setArmorPaddingTag(result, padding.id());
-
-                this.resultSlots.setItem(0, result);
-
-            } else {
-                this.resultSlots.setItem(0, ItemStack.EMPTY);
-            }
+        //  Check a coat is possible
+        } else if (isItemArmor(inputSlots.getItem(0)) && isItemCoat(inputSlots.getItem(1))) {
+            itemStack = this.inputSlots.getItem(0).copy();
+            CoatItem coatItem = (CoatItem) inputSlots.getItem(1).getItem();
+            TemperatureUtil.setArmorCoatTag(itemStack, coatItem.coat.id());
         }
+
+        this.resultSlot.setItem(0, itemStack);
+        this.broadcastChanges();
     }
 
     private void shrinkStackInSlot(int index) {
-        ItemStack itemstack = this.inputSlots.getItem(index);
-        itemstack.shrink(1);
-        this.inputSlots.setItem(index, itemstack);
+        this.inputSlots.removeItem(index, 1);
     }
 
     protected ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
         itemStack.onCraftedBy(player.level, player, itemStack.getCount());
-        this.resultSlots.awardUsedRecipes(player);
-        if (isItemArmor(this.inputSlots.getItem(1)) &&
-                isItemPadding(itemStack)) {
-            String paddingId = TemperatureUtil.getArmorPaddingTag(this.inputSlots.getItem(1));
-            PaddingEnum padding = PaddingEnum.getFromId(paddingId);
-        } else {
-            this.shrinkStackInSlot(0);
-            this.shrinkStackInSlot(1);
-        }
+        this.resultSlot.awardUsedRecipes(player);
+
+        this.shrinkStackInSlot(0);
+        this.shrinkStackInSlot(1);
+
         this.access.execute((world, pos) -> {
-            world.levelEvent(1044, pos, 0);
+            world.playSound((PlayerEntity)null, pos, SoundRegistry.SEWING_TABLE.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
         });
         return itemStack;
     }
@@ -132,8 +118,8 @@ public class SewingTableContainer extends Container {
         return itemStack.getItem() instanceof ArmorItem;
     }
 
-    public static boolean isItemPadding(ItemStack itemStack) {
-        return itemStack.getItem() instanceof PaddingItem;
+    public static boolean isItemCoat(ItemStack itemStack) {
+        return itemStack.getItem() instanceof CoatItem;
     }
 
     @Override
@@ -171,7 +157,6 @@ public class SewingTableContainer extends Container {
     private void layoutPlayerInventorySlots(PlayerInventory playerInventory, int leftCol, int topRow) {
         int lastIndex = addSlotRange(playerInventory, 0, leftCol, topRow + 58, 9, 18);
         addSlotBox(playerInventory, lastIndex, leftCol, topRow, 9, 18, 3, 18);
-
     }
 
     //  0 - 2 = ContainerInventory slots, which map to our Container slot numbers 0 - 2)
@@ -192,7 +177,7 @@ public class SewingTableContainer extends Container {
                     return ItemStack.EMPTY;
                 }
             // Move to Container inventory first / second slot
-            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, 2, false)) {
                 return ItemStack.EMPTY;
             // Index is in Player hot bar
             } else if (index < SLOT_COUNT + 9) {

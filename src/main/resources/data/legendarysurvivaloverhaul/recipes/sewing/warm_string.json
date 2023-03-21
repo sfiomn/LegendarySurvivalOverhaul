@@ -1,0 +1,15 @@
+{
+	"type": "legendarysurvivaloverhaul:sewing",
+	"base": {
+		"item": "minecraft:string"
+	},
+	"addition": {
+		"type": "forge:nbt",
+		"item": "minecraft:potion",
+		"count": 1,
+		"nbt": "{Potion:\"legendarysurvivaloverhaul:heat_resistance\"}"
+	},
+	"result": {
+		"item": "legendarysurvivaloverhaul:warm_string"
+	}
+}

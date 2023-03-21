@@ -4,7 +4,6 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.resources.ReloadListener;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
@@ -16,7 +15,6 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -34,16 +32,15 @@ import org.apache.logging.log4j.Logger;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
-import sfiomn.legendarysurvivaloverhaul.registry.KeybindingRegistry;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.ThermometerProperty;
 import sfiomn.legendarysurvivaloverhaul.client.screens.SewingTableScreen;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ThermalScreen;
-import sfiomn.legendarysurvivaloverhaul.common.capability.heartmods.HeartModifierCapability;
-import sfiomn.legendarysurvivaloverhaul.common.capability.heartmods.HeartModifierStorage;
-import sfiomn.legendarysurvivaloverhaul.common.capability.temperature.TemperatureCapability;
-import sfiomn.legendarysurvivaloverhaul.common.capability.temperature.TemperatureStorage;
-import sfiomn.legendarysurvivaloverhaul.common.capability.wetness.WetnessCapability;
-import sfiomn.legendarysurvivaloverhaul.common.compat.sereneseasons.SereneSeasonsModifier;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierStorage;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureStorage;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
+import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
@@ -94,11 +91,8 @@ public class LegendarySurvivalOverhaul
 	
 	public static ForgeRegistry<ModifierBase> MODIFIERS;
 	public static ForgeRegistry<DynamicModifierBase> DYNAMIC_MODIFIERS;
-
-	private KeyBinding keyBinding;
 	
 	//@OnlyIn(Dist.CLIENT)//broke on server, no longer using const :(
-	//public static final KeyBinding KEY_CLIMB = new KeyBinding("key." + MOD_ID + ".grab", GLFW.GLFW_KEY_R, "key.categories.inventory");
 	
 	public LegendarySurvivalOverhaul()
 	{
@@ -113,16 +107,17 @@ public class LegendarySurvivalOverhaul
 		BlockRegistry.register(modBus);
 		ContainerRegistry.register(modBus);
 		EffectRegistry.register(modBus);
-		EnchantRegistry.register(modBus);
 		ItemRegistry.register(modBus);
+		ParticleTypeRegistry.register(modBus);
 		RecipeRegistry.register(modBus);
+		SoundRegistry.register(modBus);
 		TemperatureModifierRegistry.register(modBus);
 		TileEntityRegistry.register(modBus);
 		
 		forgeBus.addListener(this::serverStarted);
 		forgeBus.addListener(this::reloadListener);
-		
-		MinecraftForge.EVENT_BUS.register(this);
+
+		forgeBus.register(this);
 		
 		Config.register();
 		
@@ -130,10 +125,10 @@ public class LegendarySurvivalOverhaul
 		Config.Baked.bakeCommon();
 		
 		TemperatureUtil.internal = new TemperatureUtilInternal();
-		modCompat();
+		modIntegration();
 	}
 	
-	private void modCompat()
+	private void modIntegration()
 	{
 		sereneSeasonsLoaded = ModList.get().isLoaded("sereneseasons");
 		curiosLoaded = ModList.get().isLoaded("curios");
@@ -159,29 +154,28 @@ public class LegendarySurvivalOverhaul
 		CapabilityManager.INSTANCE.register(TemperatureCapability.class, new TemperatureStorage(), TemperatureCapability::new);
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
 		CapabilityManager.INSTANCE.register(WetnessCapability.class, new WetnessCapability.Storage(), WetnessCapability::new);
-		
+
 		NetworkHandler.register();
 		
-		event.enqueueWork(EffectRegistry::registerPotionRecipes);
-	}
-	
-	@SuppressWarnings("unused")
-	private void biomeModification(final BiomeLoadingEvent event)
-	{
-		// FeatureRegistry.biomeModification(event);
+		event.enqueueWork(EffectRegistry::registerBrewingRecipes);
 	}
 	
 	private void clientEvents(final FMLClientSetupEvent event)
 	{
 		event.enqueueWork(() ->
 		{
+			RenderTypeLookup.setRenderLayer(BlockRegistry.SEWING_TABLE.get(), RenderType.cutout());
 			RenderTypeLookup.setRenderLayer(BlockRegistry.COOLER.get(), RenderType.cutout());
 			RenderTypeLookup.setRenderLayer(BlockRegistry.HEATER.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(BlockRegistry.SUN_FERN.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(BlockRegistry.ICE_FERN.get(), RenderType.cutout());
+
 			ScreenManager.register(ContainerRegistry.COOLER_CONTAINER.get(), ThermalScreen::new);
 			ScreenManager.register(ContainerRegistry.HEATER_CONTAINER.get(), ThermalScreen::new);
 			ScreenManager.register(ContainerRegistry.SEWING_TABLE_CONTAINER.get(), SewingTableScreen::new);
-			DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientModelSetup);
-			KeybindingRegistry.register(event);
+
+			DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientItemPropertiesSetup);
+			DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientKeyBindingSetup);
 		});
 	}
 	
@@ -191,7 +185,7 @@ public class LegendarySurvivalOverhaul
 			SereneSeasonsModifier.prepareBiomeIdentities();
 	}
 	
-	private static DistExecutor.SafeRunnable clientModelSetup()
+	private static DistExecutor.SafeRunnable clientItemPropertiesSetup()
 	{
 		return new DistExecutor.SafeRunnable()
 		{
@@ -201,6 +195,20 @@ public class LegendarySurvivalOverhaul
 			public void run()
 			{
 				ItemModelsProperties.register(ItemRegistry.THERMOMETER.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "temperature"), new ThermometerProperty());
+			}
+		};
+	}
+
+	private static DistExecutor.SafeRunnable clientKeyBindingSetup()
+	{
+		return new DistExecutor.SafeRunnable()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void run()
+			{
+				KeybindingRegistry.register();
 			}
 		};
 	}

@@ -1,0 +1,29 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "heating_coat",
+	"pattern":
+	[
+		" db",
+		"db#",
+		"b##"
+	],
+	"key": 
+	{
+		"d":
+		{
+			"item": "minecraft:diamond"
+		},
+		"b":
+		{
+			"item": "minecraft:blaze_rod"
+		},
+		"#":
+		{
+			"item": "legendarysurvivaloverhaul:heating_coat_1"
+		}
+	},
+	"result":
+	{
+		"item": "legendarysurvivaloverhaul:heating_coat_2"
+	}
+}

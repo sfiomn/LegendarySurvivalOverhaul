@@ -4,9 +4,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ITemperatureTileEntity;
@@ -16,12 +16,9 @@ import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.util.SpreadPoint;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static sfiomn.legendarysurvivaloverhaul.util.MathUtil.addToAverage;
+import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.getOppositeVector;
 
 public class BlockModifier extends ModifierBase
 {
@@ -31,9 +28,7 @@ public class BlockModifier extends ModifierBase
 	private float hotTotal = 0.0f;
 	private float coldTotal = 0.0f;
 
-	private int tickCount = 0;
-	private double maxProcessTime = 0;
-	private float averageProcessTime = 0;
+	private static boolean once = true;
 
 	public BlockModifier()
 	{
@@ -79,18 +74,10 @@ public class BlockModifier extends ModifierBase
 	
 	private void doBlocksAndFluidsRoutine(World world, BlockPos pos)
 	{
-		// We don't use a MutableBoundingBox since it's easier to conceptualize
-
 		HashMap<BlockPos, SpreadPoint> spreadBlockPos = new HashMap<>();
 		ArrayList<SpreadPoint> spreadPointToProcess = new ArrayList<>();
 
-		// TODO : remove perf logs when done with updating mod
-		float start = 0;
-		if (false) {
-			start = (float) System.nanoTime() / 1000000;
-		}
-
-		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, null, tempInfluenceMaximumDist - 1, 0, new ArrayList<>(), world);
+		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, null, (tempInfluenceMaximumDist - 1), 0, world);
 		spreadPointToProcess.add(spreadPointFeetPlayer);
 		spreadBlockPos.put(spreadPointFeetPlayer.position(), spreadPointFeetPlayer);
 
@@ -99,20 +86,27 @@ public class BlockModifier extends ModifierBase
 			spreadPoint.setCanSeeSky();
 
 			for (Direction direction : Direction.values()) {
-
+				Vector3i directionVector = direction.getNormal();
 				//  Avoid spreading to the direction we are coming from
-				if (spreadPoint.originalDirection() == null || direction != spreadPoint.originalDirection().getOpposite()) {
-					BlockPos newBlockPos = spreadPoint.newSpreadPos(direction);
+				if (spreadPoint.originalDirection() == null || !Objects.equals(directionVector, getOppositeVector(spreadPoint.originalDirection()))) {
+					boolean validSpreadPoint = this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector);
 
-					//  Check that the new spread location isn't an already processed location or is an already processed location but closer to the player
-					if (!spreadBlockPos.containsKey(newBlockPos)) {
-
-						SpreadPoint newSpreadPoint = spreadPoint.spreadTo(direction);
-						spreadBlockPos.put(newSpreadPoint.position(), newSpreadPoint);
-
-						//  If it is a valid spreadPoint (= AIR or not colliding block), store the spreadPoint as to be processed
-						if (newSpreadPoint.isValidSpreadPoint()) {
-							spreadPointToProcess.add(newSpreadPoint);
+					if (validSpreadPoint) {
+						for (Direction direction1 : Direction.values()) {
+							//  Check plan diagonal blocks
+							if (direction1.getAxis() != direction.getAxis()) {
+								Vector3i directionVector1 = direction.getNormal().relative(direction1, 1);
+								boolean validSpreadPoint1 = this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector1);
+								if (validSpreadPoint1) {
+									for (Direction direction2 : Direction.values()) {
+										//  Check 3D diagonal blocks
+										if (direction2.getAxis() != direction1.getAxis() && direction2.getAxis() != direction.getAxis()) {
+											Vector3i directionVector2 = directionVector1.relative(direction2, 1);
+											this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector2);
+										}
+									}
+								}
+							}
 						}
 					}
 				}
@@ -122,26 +116,38 @@ public class BlockModifier extends ModifierBase
 		for (SpreadPoint spreadPoint : spreadBlockPos.values()) {
 			processTemp(getTemperatureFromSpreadPoint(world, spreadPoint));
 		}
+		once = false;
+	}
 
-		// TODO : remove perf logs when done with updating mod
-		if (false) {
-			float end = (float) System.nanoTime() / 1000000;
-			averageProcessTime += addToAverage(averageProcessTime, tickCount, end - start);
-			tickCount++;
-			if (maxProcessTime < (end - start)) {
-				maxProcessTime = end - start;
+	private boolean processDirectionFrom(ArrayList<SpreadPoint> spreadPointToProcess, HashMap<BlockPos, SpreadPoint> spreadBlockPos, SpreadPoint spreadPoint, Vector3i directionVector) {
+		BlockPos newBlockPos = spreadPoint.newSpreadPos(directionVector);
+
+		//  Check that the new spread location isn't an already processed location or is an already processed location but closer to the player
+		if (!spreadBlockPos.containsKey(newBlockPos)) {
+
+			SpreadPoint newSpreadPoint = spreadPoint.spreadTo(directionVector);
+			spreadBlockPos.put(newSpreadPoint.position(), newSpreadPoint);
+
+			//  If it is a valid spreadPoint (= not colliding block), store the spreadPoint as to be processed
+			if (newSpreadPoint.isValidSpreadPoint()) {
+				spreadPointToProcess.add(newSpreadPoint);
+				return true;
 			}
-			if (tickCount % 100 == 0) {
-				LegendarySurvivalOverhaul.LOGGER.debug("Average Elapsed Time in ms: " + averageProcessTime + " for " + tickCount + " ticks");
-				LegendarySurvivalOverhaul.LOGGER.debug("Max Elapsed Time in ms: " + maxProcessTime);
-				LegendarySurvivalOverhaul.LOGGER.debug("CanSeeSky average process time " + SpreadPoint.averageProcessTimeCanSeeSkyCheck + " for " + SpreadPoint.numberCanSeeSkyCheck + " checks");
-				LegendarySurvivalOverhaul.LOGGER.debug("NoCollide block average process time " + SpreadPoint.averageProcessTimeNoCollideBlockCheck + " for " + SpreadPoint.numberNoCollideBlockCheck + " checks");
-				LegendarySurvivalOverhaul.LOGGER.debug("Empty block average process time " + SpreadPoint.averageProcessTimeEmptyBlockCheck + " for " + SpreadPoint.numberEmptyBlockCheck + " checks");
-				tickCount = 0;
-				averageProcessTime = 0;
-				SpreadPoint.resetCounters();
+		} /*else {
+			double newSpreadCapacity = spreadPoint.newSpreadCapacity(directionVector);
+			if ((newSpreadCapacity - spreadBlockPos.get(newBlockPos).spreadCapacity()) > 0.2) {
+				SpreadPoint newSpreadPoint = spreadPoint.spreadTo(directionVector);
+				spreadBlockPos.put(newSpreadPoint.position(), newSpreadPoint);
+
+				//  If it is a valid spreadPoint (= not colliding block), store the spreadPoint as to be processed
+				if (newSpreadPoint.isValidSpreadPoint()) {
+					spreadPointToProcess.removeIf(spreadPoint1 -> spreadPoint1.position().toShortString().equals(newSpreadPoint.position().toShortString()));
+					spreadPointToProcess.add(newSpreadPoint);
+					return true;
+				}
 			}
-		}
+		}*/
+		return false;
 	}
 	
 	private void doTileEntitiesRoutine(World world, BlockPos pos)
@@ -273,8 +279,17 @@ public class BlockModifier extends ModifierBase
 		if (spreadPoint.influenceDistance() <= distanceBeforeDecrease) {
 			return tempIn;
 		} else {
+			//  Having how much spread capacity is consumed per distance to reach the point :
+			//      max spread - spread capacity = spread consumed to reach the point
+			//      divided by the distance to reach the point
 			float normalizedSpreadCost = (float) ((tempInfluenceMaximumDist - spreadPoint.spreadCapacity()) / spreadPoint.influenceDistance());
-			return (float) (tempIn * (spreadPoint.spreadCapacity() / (tempInfluenceMaximumDist - distanceBeforeDecrease * normalizedSpreadCost)));
+			//  (1) dist before decrease * normalized spread cost = capacity consumed by the min dist that has max effect temp
+			//  (2) spreadCapacity + (1) = add the capacity consumed by the min dist to the current capacity means that when we the border of the min
+			//  dist, we are at the original capacity of the spread point.
+			//  (2) / max capacity = % of capacity left vs max capacity.
+			//      At max capacity it means that the min border of spread point is close to the player
+			//      if there is almost not spread capacity left vs max capacity, it means the player is far from the min border
+			return (float) (tempIn * (spreadPoint.spreadCapacity() + distanceBeforeDecrease * normalizedSpreadCost) / tempInfluenceMaximumDist);
 		}
 	}
 }

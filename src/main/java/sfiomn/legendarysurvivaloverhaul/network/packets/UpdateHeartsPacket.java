@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.common.capability.heartmods.HeartModifierCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
 
 import java.util.function.Supplier;
 

@@ -6,12 +6,15 @@ import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.client.gui.TemperatureDisplayEnum;
-import sfiomn.legendarysurvivaloverhaul.common.capability.wetness.WetnessMode;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Config
 {
@@ -39,7 +42,7 @@ public class Config
 			Files.createDirectory(LegendarySurvivalOverhaul.modConfigPath);
 			Files.createDirectory(LegendarySurvivalOverhaul.modConfigJsons);
 		}
-		catch (FileAlreadyExistsException e) {}
+		catch (FileAlreadyExistsException ignored) {}
 		catch (IOException e)
 		{
 			LegendarySurvivalOverhaul.LOGGER.error("Failed to create Legendary Survival Overhaul config directories");
@@ -63,6 +66,7 @@ public class Config
 		
 		// Temperature
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureEnabled;
+		public final ForgeConfigSpec.ConfigValue<Boolean> showPotionEffectParticles;
 
 		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousTemperature;
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureSecondaryEffects;
@@ -82,9 +86,7 @@ public class Config
 		
 		public final ForgeConfigSpec.ConfigValue<String> wetnessMode;
 		public final ForgeConfigSpec.ConfigValue<Double> wetMultiplier;
-		
-		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceHorizontalDist;
-		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceVerticalDist;
+
 		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceMaximumDist;
 		public final ForgeConfigSpec.ConfigValue<Double> tempInfluenceUpDistMultiplier;
 		public final ForgeConfigSpec.ConfigValue<Double> tempInfluenceOutsideDistMultiplier;
@@ -94,6 +96,18 @@ public class Config
 
 		public final ForgeConfigSpec.ConfigValue<Double> playerHuddlingModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> playerHuddlingRadius;
+
+		public final ForgeConfigSpec.ConfigValue<Double> heatingCoat1Modifier;
+		public final ForgeConfigSpec.ConfigValue<Double> heatingCoat2Modifier;
+		public final ForgeConfigSpec.ConfigValue<Double> heatingCoat3Modifier;
+
+		public final ForgeConfigSpec.ConfigValue<Double> coolingCoat1Modifier;
+		public final ForgeConfigSpec.ConfigValue<Double> coolingCoat2Modifier;
+		public final ForgeConfigSpec.ConfigValue<Double> coolingCoat3Modifier;
+
+		public final ForgeConfigSpec.ConfigValue<Double> thermalCoat1Modifier;
+		public final ForgeConfigSpec.ConfigValue<Double> thermalCoat2Modifier;
+		public final ForgeConfigSpec.ConfigValue<Double> thermalCoat3Modifier;
 		
 		public final ForgeConfigSpec.ConfigValue<Boolean> seasonTemperatureEffects;
 		
@@ -120,6 +134,11 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> earlyDrySeasonModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> midDrySeasonModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> lateDrySeasonModifier;
+
+		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeNames;
+		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeTypes;
+		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeNames;
+		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeTypes;
 		
 		// Heart Fruits
 		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsEnabled;
@@ -129,9 +148,7 @@ public class Config
 		
 		public final ForgeConfigSpec.ConfigValue<Integer> additionalHeartsPerFruit;
 		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsGiveRegen;
-		
-		// Stamina
-		// public final ForgeConfigSpec.ConfigValue<Boolean> staminaEnabled;
+
 		
 		
 		Common(ForgeConfigSpec.Builder builder)
@@ -147,29 +164,13 @@ public class Config
 			heartFruitsEnabled = builder
 					.comment(" Whether or not heart fruits are functional and generate in-world.")
 					.define("Heart Fruits Enabled", true);
-			/*
-			staminaEnabled = builder
-					.comment(" Whether or not the stamina system is enabled.")
-					.define("Stamina Enabled", true);
-			*/
+
 			builder.push("advanced");
 			routinePacketSync = builder
-					.comment(new String[] 
-							{
-									" How often player temperature is regularly synced between the client and server, in ticks.",
-									" Lower values will increase accuracy at the cost of performance"
-							})
+					.comment(" How often player temperature is regularly synced between the client and server, in ticks.",
+							" Lower values will increase accuracy at the cost of performance")
 					.defineInRange("Routine Packet Sync", 30, 1, Integer.MAX_VALUE);
-			/*
-			forceDisableFlightKick = builder
-					.comment(new String[] 
-							{
-									" If true, Survival Overhaul will forcefully enable the \"allow-flight\" parameter in server.properties.",
-									" Useful if you keep getting kicked for flying when you're just trying to climb up a wall.",
-									" Disable only if you know what you're doing. Requires a server restart to take effect."
-							})
-					.define("Force Allow Flight", true);
-					*/
+
 			builder.pop();
 			builder.pop();
 			
@@ -190,16 +191,18 @@ public class Config
 			enchantmentMultiplier = builder
 					.comment(" Increases/decreases the effect that cooling/heating enchantments have on a player's temperature.")
 					.define("Enchantment Modifier", 1.0d);
+			showPotionEffectParticles = builder
+					.comment(" If enabled, players will see particles on them when temperature resistance effect active.\n" +
+							 " If disabled, the potion color will turn black due to forge weird behavior.")
+					.define("Show Temperature Potion Effect Particles", true);
 			
 			builder.push("wetness");
 			wetnessMode = builder
-					.comment(new String[] {
-							" How a player's \"wetness\" is determined. Accepted values are as follows:",
+					.comment(" How a player's \"wetness\" is determined. Accepted values are as follows:",
 							"   DISABLE - Disable wetness and any effects on temperature it might have.",
 							"   SIMPLE - Wetness is only based on whether you're in water/rain or not. Slightly better in terms of performance.",
 							"   DYNAMIC - Wetness can change dynamically based on various conditions, and does not instantly go away when moving out of water.",
-							" Any other value will default to DISABLE."
-					})
+							" Any other value will default to DISABLE.")
 					.define("Wetness Mode", "DYNAMIC");
 			
 			wetMultiplier = builder
@@ -209,7 +212,7 @@ public class Config
 			
 			builder.push("huddling");
 			playerHuddlingModifier = builder
-					.comment(new String[] { " How much nearby players increase the ambient temperature by.", " Note that this value stacks!" })
+					.comment(" How much nearby players increase the ambient temperature by.", " Note that this value stacks!")
 					.define("Player Huddling Modifier", 0.5d);
 			playerHuddlingRadius = builder
 					.comment(" The radius, in blocks, around which players will add to each other's temperature.")
@@ -217,6 +220,14 @@ public class Config
 			builder.pop();
 			
 			builder.push("environment");
+
+			builder.push("flowers");
+			sunFernBiomeNames = builder.comment(" In which biome names the Sun Fern will spawn").define("Sun Fern Biome Names Spawn List", new ArrayList<>(Collections.singleton("minecraft:savanna")));
+			sunFernBiomeTypes = builder.comment(" In which biome types the Sun Fern will spawn").define("Sun Fern Biome Types Spawn List", new ArrayList<>(Collections.singleton("SANDY")));
+			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn").define("Ice Fern Biome Names Spawn List", new ArrayList<>(Collections.singleton("minecraft:taiga")));
+			iceFernBiomeTypes = builder.comment(" In which biome types the Ice Fern will spawn").define("Ice Fern Biome Types Spawn List", new ArrayList<>(Collections.singleton("SNOWY")));
+			builder.pop();
+
 			altitudeModifier = builder
 					.comment(" How much the effects of the player's altitude on temperature are multiplied.")
 					.define("Altitude Modifier", 3.0d);
@@ -251,18 +262,36 @@ public class Config
 					.defineInRange("Biome Time Multiplier", 1.75d, 1.0d, Double.POSITIVE_INFINITY);
 			builder.pop();
 			timeShadeModifier = builder
-					.comment(new String[] {" Staying in the shade will reduce a player's temperature by this amount.", " Only effective in hot biomes!"} )
+					.comment(" Staying in the shade will reduce a player's temperature by this amount.", " Only effective in hot biomes!")
 					.define("Time Shade Modifier", -3);
+			builder.pop();
+			builder.pop();
+
+			builder.comment(" Temperature coat adds temperature effects on armors by using the sewing table.").push("coat");
+			builder.comment(" Add an adaptive heating effect on armors.").push("heating");
+
+			heatingCoat1Modifier = builder.define("Heating Coat I", 1.0d);
+			heatingCoat2Modifier = builder.define("Heating Coat II", 2.0d);
+			heatingCoat3Modifier = builder.define("Heating Coat III", 3.0d);
+
+			builder.pop();
+			builder.comment(" Add an adaptive cooling effect on armors.").push("cooling");
+
+			coolingCoat1Modifier = builder.define("Cooling Coat I", 1.0d);
+			coolingCoat2Modifier = builder.define("Cooling Coat II", 2.0d);
+			coolingCoat3Modifier = builder.define("Cooling Coat III", 3.0d);
+
+			builder.pop();
+			builder.comment(" Add an adaptive temperature effect on armors that can both heat and cool the player.").push("thermal");
+
+			thermalCoat1Modifier = builder.define("Thermal Coat I", 1.0d);
+			thermalCoat2Modifier = builder.define("Thermal Coat II", 2.0d);
+			thermalCoat3Modifier = builder.define("Thermal Coat III", 3.0d);
+
 			builder.pop();
 			builder.pop();
 			
 			builder.push("advanced");
-			tempInfluenceHorizontalDist = builder
-					.comment(" Maximum horizontal distance, in blocks, where heat sources will have an effect on temperature.")
-					.defineInRange("Temperature Influence Horizontal Distance", 3, 1, 10);
-			tempInfluenceVerticalDist = builder
-					.comment(" Maximum vertical distance, in blocks, where heat sources will have an effect on temperature.")
-					.defineInRange("Temperature Influence Vertical Distance", 2, 1, 10);
 			tempInfluenceMaximumDist = builder
 					.comment(" Maximum distance, in blocks, where thermal sources will have an effect on temperature.")
 					.defineInRange("Temperature Influence Maximum Distance", 15, 1, 30);
@@ -283,11 +312,11 @@ public class Config
 			builder.pop();
 			builder.pop();
 			
-			builder.push("compat");
+			builder.push("integration");
 			
 			builder.push("seasons");
 			seasonTemperatureEffects = builder
-					.comment(new String[] {" If Serene Seasons is installed, then seasons", " will have an effect on the player's temperature."})
+					.comment(" If Serene Seasons is installed, then seasons", " will have an effect on the player's temperature.")
 					.define("Seasons affect Temperature", true);
 			
 			builder.comment("Temperature modifiers per season in temperate biomes.").push("temperate");
@@ -339,11 +368,9 @@ public class Config
 					.comment(" Maximum number of additional hearts that can be given by Heart Fruits.")
 					.defineInRange("Maximum Additional Hearts", 10, 1, Integer.MAX_VALUE);
 			heartsLostOnDeath = builder
-					.comment(new String[] {
-							" The number of additional hearts lost on death.",
+					.comment(" The number of additional hearts lost on death.",
 							" Set to -1 to force loss of all additional hearts on death.",
-							" Set to 0 to make additional hearts permanent."
-					})
+							" Set to 0 to make additional hearts permanent.")
 					.defineInRange("Hearts Lost On Death", -1, -1, Integer.MAX_VALUE);
 			
 			builder.push("effects");
@@ -366,13 +393,6 @@ public class Config
 		
 		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetY;
-		/*
-		public final ForgeConfigSpec.ConfigValue<String> staminaDisplayMode;
-		public final ForgeConfigSpec.ConfigValue<Integer> staminaDisplayOffsetX;
-		public final ForgeConfigSpec.ConfigValue<Integer> staminaDisplayOffsetY;
-		
-		public final ForgeConfigSpec.ConfigValue<Boolean> climbingKeyIsToggle;
-		*/
 		Client(ForgeConfigSpec.Builder builder)
 		{
 			
@@ -382,12 +402,9 @@ public class Config
 			
 			builder.push("temperature");
 			temperatureDisplayMode = builder
-					.comment(new String[]
-							{
-									" How temperature is displayed. Accepted values are as follows:",
-									"    SYMBOL - Display the player's current temperature as a symbol above the hotbar.",
-									"    NONE - Disable the temperature indicator."
-							})
+					.comment(" How temperature is displayed. Accepted values are as follows:",
+							"    SYMBOL - Display the player's current temperature as a symbol above the hotbar.",
+							"    NONE - Disable the temperature indicator.")
 					.define("Temperature Display Mode", "SYMBOL");
 			temperatureDisplayOffsetX = builder
 					.comment(" The X and Y offset of the temperature indicator. Set both to 0 for no offset.")
@@ -404,31 +421,11 @@ public class Config
 			builder.pop();
 			builder.pop();
 			builder.pop();
-			/*
-			builder.push("stamina");
-			staminaDisplayMode = builder
-					.comment("How stamina is displayed. Accepted values are \"ABOVE_ARMOR,\" \"BAR,\" and \"NONE.\"")
-					.define("Stamina Display Mode", "ABOVE_ARMOR");
-			staminaDisplayOffsetX = builder
-					.comment("The X and Y offset of the stamina meter. Set to 0 for no offset.")
-					.define("Stamina Display X Offset", 0);
-			staminaDisplayOffsetY = builder
-					.define("Stamina Display Y Offset", 0);
-			builder.pop();
-			builder.pop();
-			builder.comment("Options relating to accessibility").push("accessibility");
-			climbingKeyIsToggle = builder
-					.comment("If true, then you can press your climbing key once to activate it, rather than having to hold it down.")
-					.define("Climbing key is toggle", false);
-			builder.pop();
-			*/
 		}
 	}
 	
 	public static class Server
 	{
-		
-		
 		Server(ForgeConfigSpec.Builder builder)
 		{
 			
@@ -438,6 +435,7 @@ public class Config
 	public static class Baked
 	{
 		public static boolean temperatureEnabled;
+		public static boolean showPotionEffectParticles;
 		
 		public static boolean dangerousTemperature;
 		public static boolean temperatureSecondaryEffects;
@@ -450,6 +448,11 @@ public class Config
 		public static double snowTemperatureModifier;
 		
 		public static double altitudeModifier;
+
+		public static List<String> sunFernBiomeNames;
+		public static List<String> sunFernBiomeTypes;
+		public static List<String> iceFernBiomeNames;
+		public static List<String> iceFernBiomeTypes;
 		
 		public static int minTickRate;
 		public static int maxTickRate;
@@ -460,9 +463,6 @@ public class Config
 		public static double timeMultiplier;
 		public static double biomeTimeMultiplier;
 		public static int timeShadeModifier;
-		
-		public static int tempInfluenceHorizontalDist;
-		public static int tempInfluenceVerticalDist;
 		public static int tempInfluenceMaximumDist;
 		public static double tempInfluenceUpDistMultiplier;
 		public static double tempInfluenceOutsideDistMultiplier;
@@ -477,6 +477,18 @@ public class Config
 		
 		public static WetnessMode wetnessMode;
 		public static double wetMultiplier;
+
+		public static double heatingCoat1Modifier;
+		public static double heatingCoat2Modifier;
+		public static double heatingCoat3Modifier;
+
+		public static double coolingCoat1Modifier;
+		public static double coolingCoat2Modifier;
+		public static double coolingCoat3Modifier;
+
+		public static double thermalCoat1Modifier;
+		public static double thermalCoat2Modifier;
+		public static double thermalCoat3Modifier;
 		
 		public static int earlySpringModifier;
 		public static int midSpringModifier;
@@ -507,8 +519,7 @@ public class Config
 		public static int maxAdditionalHearts;
 		public static int additionalHeartsPerFruit;
 		public static boolean heartFruitsGiveRegen;
-		
-		public static boolean staminaEnabled;
+
 		
 		// Client Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
@@ -517,23 +528,23 @@ public class Config
 		
 		public static int wetnessIndicatorOffsetX;
 		public static int wetnessIndicatorOffsetY;
-		/*
-		public static StaminaDisplayEnum staminaDisplayMode;
-		public static int staminaDisplayOffsetX;
-		public static int staminaDisplayOffsetY;
-
-		public static boolean climbingKeyIsToggle;
-		*/
 		public static void bakeCommon()
 		{
 			try
 			{
 				temperatureEnabled = COMMON.temperatureEnabled.get();
+				showPotionEffectParticles = COMMON.showPotionEffectParticles.get();
 				
 				dangerousTemperature = COMMON.dangerousTemperature.get();
 				temperatureSecondaryEffects = COMMON.temperatureSecondaryEffects.get();
 				
 				altitudeModifier = COMMON.altitudeModifier.get();
+
+				sunFernBiomeNames = COMMON.sunFernBiomeNames.get();
+				sunFernBiomeTypes = COMMON.sunFernBiomeTypes.get();
+
+				iceFernBiomeNames = COMMON.iceFernBiomeNames.get();
+				iceFernBiomeTypes = COMMON.iceFernBiomeTypes.get();
 				
 				rainTemperatureModifier = COMMON.rainTemperatureModifier.get();
 				snowTemperatureModifier = COMMON.snowTemperatureModifier.get();
@@ -544,9 +555,7 @@ public class Config
 				timeMultiplier = COMMON.timeMultiplier.get();
 				biomeTimeMultiplier = COMMON.biomeTimeMultiplier.get();
 				timeShadeModifier = COMMON.timeShadeModifier.get();
-				
-				tempInfluenceHorizontalDist = COMMON.tempInfluenceHorizontalDist.get();
-				tempInfluenceVerticalDist = COMMON.tempInfluenceVerticalDist.get();
+
 				tempInfluenceMaximumDist = COMMON.tempInfluenceMaximumDist.get();
 				tempInfluenceUpDistMultiplier = COMMON.tempInfluenceUpDistMultiplier.get();
 				tempInfluenceOutsideDistMultiplier = COMMON.tempInfluenceOutsideDistMultiplier.get();
@@ -563,7 +572,19 @@ public class Config
 				
 				playerHuddlingModifier = COMMON.playerHuddlingModifier.get();
 				playerHuddlingRadius = COMMON.playerHuddlingRadius.get();
-				
+
+				heatingCoat1Modifier = COMMON.heatingCoat1Modifier.get();
+				heatingCoat2Modifier = COMMON.heatingCoat2Modifier.get();
+				heatingCoat3Modifier = COMMON.heatingCoat3Modifier.get();
+
+				coolingCoat1Modifier = COMMON.coolingCoat1Modifier.get();
+				coolingCoat2Modifier = COMMON.coolingCoat2Modifier.get();
+				coolingCoat3Modifier = COMMON.coolingCoat3Modifier.get();
+
+				thermalCoat1Modifier = COMMON.thermalCoat1Modifier.get();
+				thermalCoat2Modifier = COMMON.thermalCoat2Modifier.get();
+				thermalCoat3Modifier = COMMON.thermalCoat3Modifier.get();
+
 				seasonTemperatureEffects = COMMON.seasonTemperatureEffects.get();
 				
 				earlySpringModifier = COMMON.earlySpringModifier.get();
@@ -595,8 +616,7 @@ public class Config
 				maxAdditionalHearts = COMMON.maxAdditionalHearts.get();
 				additionalHeartsPerFruit = COMMON.additionalHeartsPerFruit.get();
 				heartFruitsGiveRegen = COMMON.heartFruitsGiveRegen.get();
-				
-				// staminaEnabled = COMMON.staminaEnabled.get();
+
 			}
 			catch (Exception e)
 			{
@@ -615,13 +635,6 @@ public class Config
 				
 				wetnessIndicatorOffsetX = CLIENT.wetnessIndicatorOffsetX.get();
 				wetnessIndicatorOffsetY = CLIENT.wetnessIndicatorOffsetY.get();
-				/*
-				staminaDisplayMode = StaminaDisplayEnum.getDisplayFromString(CLIENT.staminaDisplayMode.get());
-				staminaDisplayOffsetX = CLIENT.staminaDisplayOffsetX.get();
-				staminaDisplayOffsetY = CLIENT.staminaDisplayOffsetY.get();
-				
-				climbingKeyIsToggle = CLIENT.climbingKeyIsToggle.get();
-				*/
 			}
 			catch (Exception e)
 			{

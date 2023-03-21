@@ -44,11 +44,8 @@ public class JsonConfig
 		}
 		else 
 		{
-			for (int i = 0; i < currentList.size(); i++)
-			{
-				JsonPropertyTemperature jpt = currentList.get(i);
-				if (jpt.properties.keySet().size() > 0)
-				{
+			for (JsonPropertyTemperature jpt : currentList) {
+				if (jpt.properties.keySet().size() > 0) {
 					return false;
 				}
 			}
@@ -68,29 +65,19 @@ public class JsonConfig
 	}
 	// JsonArmorIdentity
 	
-	public static void registerArmorTemperature(String registryName, float temperature, float insulation)
-	{
-		registerArmorTemperature(registryName, temperature, insulation, new JsonItemIdentity(null));
-	}
-	
 	public static void registerArmorTemperature(String registryName, float temperature)
 	{
-		registerArmorTemperature(registryName, temperature, 1.0f, new JsonItemIdentity(null));
+		registerArmorTemperature(registryName, temperature, new JsonItemIdentity(null));
 	}
 	
 	public static void registerArmorTemperature(String registryName, float temperature, JsonItemIdentity identity)
-	{
-		registerArmorTemperature(registryName, temperature, 1.0f, identity);
-	}
-	
-	public static void registerArmorTemperature(String registryName, float temperature, float insulation, JsonItemIdentity identity)
 	{
 		if(!armorTemperatures.containsKey(registryName))
 				armorTemperatures.put(registryName, new ArrayList<JsonArmorIdentity>());
 		
 		final List<JsonArmorIdentity> currentList = armorTemperatures.get(registryName);
 		
-		JsonArmorIdentity result = new JsonArmorIdentity(temperature, insulation, identity);
+		JsonArmorIdentity result = new JsonArmorIdentity(temperature, identity);
 		
 		for (int i = 0; i < currentList.size(); i++)
 		{

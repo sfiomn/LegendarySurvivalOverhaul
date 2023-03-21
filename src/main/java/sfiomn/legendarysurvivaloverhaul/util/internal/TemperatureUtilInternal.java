@@ -16,7 +16,7 @@ import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
 public class TemperatureUtilInternal implements ITemperatureUtil
 {
-	private final String PADDING_TAG = "ArmorPadding";
+	private final String COAT_TAG = "ArmorPadding";
 	
 	@Override
 	public int getPlayerTargetTemperature(PlayerEntity player)
@@ -36,7 +36,6 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 			sum += dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);
 			sum += dynamicModifier.applyDynamicPlayerInfluence(player, sum);
 		}
-		
 		return Math.round(sum);
 	}
 
@@ -53,7 +52,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 		{
 			sum += dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);
 		}
-		
+
 		return Math.round(sum);
 	}
 
@@ -86,7 +85,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	}
 
 	@Override
-	public void setArmorPaddingTag(ItemStack stack, String paddingId)
+	public void setArmorCoatTag(ItemStack stack, String coatId)
 	{
 		if (!stack.hasTag())
 		{
@@ -96,20 +95,20 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 		final CompoundNBT compound = stack.getTag();
 
 		if (compound != null) {
-			compound.putString(PADDING_TAG, paddingId);
+			compound.putString(COAT_TAG, coatId);
 		}
 	}
 
 	@Override
-	public String getArmorPaddingTag(ItemStack stack)
+	public String getArmorCoatTag(ItemStack stack)
 	{
 		if (stack.hasTag())
 		{
 			final CompoundNBT compound = stack.getTag();
 			
-			if (compound.contains(PADDING_TAG))
+			if (compound.contains(COAT_TAG))
 			{
-				String tempTag = compound.getString(PADDING_TAG);
+				String tempTag = compound.getString(COAT_TAG);
 				
 				return tempTag;
 			}
@@ -118,14 +117,14 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	}
 
 	@Override
-	public void removeArmorPaddingTag(ItemStack stack)
+	public void removeArmorCoatTag(ItemStack stack)
 	{
 		if(stack.hasTag())
 		{
 			final CompoundNBT compound = stack.getTag();
-			if (compound.contains(PADDING_TAG))
+			if (compound.contains(COAT_TAG))
 			{
-				compound.remove(PADDING_TAG);
+				compound.remove(COAT_TAG);
 			}
 		}
 	}

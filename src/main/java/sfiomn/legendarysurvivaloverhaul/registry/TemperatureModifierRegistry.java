@@ -4,8 +4,8 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
-import sfiomn.legendarysurvivaloverhaul.common.compat.curios.CuriosModifier;
-import sfiomn.legendarysurvivaloverhaul.common.compat.sereneseasons.SereneSeasonsModifier;
+import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosModifier;
+import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier;
 import sfiomn.legendarysurvivaloverhaul.common.temperature.*;
 import sfiomn.legendarysurvivaloverhaul.common.temperature.dynamic.*;
 import net.minecraftforge.fml.RegistryObject;
@@ -33,9 +33,8 @@ public class TemperatureModifierRegistry
 	// Mod Compat
 	public static final RegistryObject<ModifierBase> SERENE_SEASONS = MODIFIERS.register("compat/serene_seasons", SereneSeasonsModifier::new);
 	public static final RegistryObject<ModifierBase> CURIOS = MODIFIERS.register("compat/curios", CuriosModifier::new);
-	
-	public static final RegistryObject<DynamicModifierBase> ADAPTIVE_ENCHANT = DYNAMIC_MODIFIERS.register("adaptive_enchant", AdaptiveEnchantmentModifier::new);
-	public static final RegistryObject<DynamicModifierBase> ADAPTIVE_PADDING = DYNAMIC_MODIFIERS.register("adaptive_padding", AdaptivePaddingModifier::new);
+
+	public static final RegistryObject<DynamicModifierBase> ADAPTIVE_COAT = DYNAMIC_MODIFIERS.register("adaptive_coat", AdaptiveCoatModifier::new);
 
 	public static void register(IEventBus eventBus){
 		MODIFIERS.register(eventBus);

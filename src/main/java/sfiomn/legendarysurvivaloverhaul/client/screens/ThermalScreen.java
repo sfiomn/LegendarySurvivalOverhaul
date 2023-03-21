@@ -16,8 +16,8 @@ import sfiomn.legendarysurvivaloverhaul.common.containers.AbstractThermalContain
 public class ThermalScreen extends ContainerScreen<AbstractThermalContainer> {
     public static final ResourceLocation HEATER_SCREEN = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/heater_screen.png");
     public static final ResourceLocation COOLER_SCREEN = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/cooler_screen.png");
-    public static final int FUEL_LEVEL_HEIGHT = 27;
     public static final int FUEL_LEVEL_WIDTH = 29;
+    public static final int FUEL_LEVEL_HEIGHT = 27;
 
     public ThermalScreen(AbstractThermalContainer screenContainer, PlayerInventory playerInventory, ITextComponent titleIn) {
         super(screenContainer, playerInventory, titleIn);
@@ -47,10 +47,10 @@ public class ThermalScreen extends ContainerScreen<AbstractThermalContainer> {
 
         // Fuel level
         int fuelTimeHeight = (int) (menu.getFuelTimeScale() * FUEL_LEVEL_HEIGHT);
-        blit(matrixStack, this.leftPos + 73, this.topPos + 35 + (FUEL_LEVEL_HEIGHT - fuelTimeHeight), 175, 12 + (FUEL_LEVEL_HEIGHT - fuelTimeHeight), FUEL_LEVEL_WIDTH, fuelTimeHeight);
+        blit(matrixStack, this.leftPos + 73, this.topPos + 35 + (FUEL_LEVEL_HEIGHT - fuelTimeHeight), 176, 24 + (FUEL_LEVEL_HEIGHT - fuelTimeHeight), FUEL_LEVEL_WIDTH, fuelTimeHeight);
 
         // Powered status
         if (menu.isPowered())
-            blit(matrixStack, this.leftPos + 136, this.topPos + 45, 175, 0, 12, 12);
+            blit(matrixStack, this.leftPos + 137, this.topPos + 37, 176, 0, 12, 24);
     }
 }

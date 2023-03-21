@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.common.capability.temperature.TemperatureCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
 
 import java.util.function.Supplier;
 

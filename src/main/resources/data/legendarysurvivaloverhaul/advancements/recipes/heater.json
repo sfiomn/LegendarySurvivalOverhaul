@@ -6,16 +6,6 @@
 		]
 	},
 	"criteria": {
-		"has_quartz": {
-			"trigger": "minecraft:inventory_changed",
-			"conditions": {
-				"items": [
-					{
-						"item": "minecraft:quartz"
-					}
-				]
-			}
-		},
 		"has_the_recipe": {
 			"trigger": "minecraft:recipe_unlocked",
 			"conditions": {
@@ -25,7 +15,6 @@
 	},
 	"requirements": [
 		[
-			"has_quartz",
 			"has_the_recipe"
 		]
 	]

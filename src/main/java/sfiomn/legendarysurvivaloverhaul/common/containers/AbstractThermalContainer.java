@@ -26,13 +26,13 @@ public abstract class AbstractThermalContainer extends Container {
         this.tileEntity = te;
 
         if (te != null) {
-            addSlot(addThermalSlot(te, 0, 12, 32));
-            addSlot(addThermalSlot(te, 1, 31, 32));
-            addSlot(addThermalSlot(te, 2, 12, 51));
-            addSlot(addThermalSlot(te, 3, 31, 51));
+            addSlot(addThermalSlot(te, 0, 14, 32));
+            addSlot(addThermalSlot(te, 1, 34, 32));
+            addSlot(addThermalSlot(te, 2, 14, 52));
+            addSlot(addThermalSlot(te, 3, 34, 52));
         }
 
-        layoutPlayerInventorySlots(playerInventory, 8, 86);
+        layoutPlayerInventorySlots(playerInventory, 8, 84);
     }
 
     private Slot addThermalSlot(AbstractThermalTileEntity te, int index, int posX, int posY) {

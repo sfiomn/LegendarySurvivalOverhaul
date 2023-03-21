@@ -1,7 +1,7 @@
 package sfiomn.legendarysurvivaloverhaul.common.items;
 
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.common.capability.heartmods.HeartModifierCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.network.packets.UpdateHeartsPacket;

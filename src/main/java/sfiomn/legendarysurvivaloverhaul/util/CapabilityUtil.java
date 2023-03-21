@@ -1,9 +1,9 @@
 package sfiomn.legendarysurvivaloverhaul.util;
 
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.common.capability.heartmods.HeartModifierCapability;
-import sfiomn.legendarysurvivaloverhaul.common.capability.temperature.TemperatureCapability;
-import sfiomn.legendarysurvivaloverhaul.common.capability.wetness.WetnessCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import net.minecraft.entity.player.PlayerEntity;
 
 /**

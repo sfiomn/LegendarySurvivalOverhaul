@@ -45,7 +45,7 @@ public class LootTableInjectors
 	{
 		return LootPool.lootPool()
 				.add(getInjectEntry(entryName))
-				.name("survivaloverhaul_inject")
+				.name("legendarysurvivaloverhaul_inject")
 				.build();
 	}
 	

@@ -17,14 +17,14 @@ public final class RenderUtil
 {
 	public static final ResourceLocation legendaryFrame = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/legendary_frame.png");
 
-	private static final int legendarySmallFrameOffsetIndex = 0;
-	private static final int legendarySmallFrameWidth = 38;
-	private static final int legendaryMediumFrameOffsetIndex = 1;
-	private static final int legendaryMediumFrameWidth = 92;
-	private static final int legendaryLargeFrameOffsetIndex = 2;
-	private static final int legendaryLargeFrameWidth = 122;
-	private static final int legendaryFrameHeight = 30;
-	private static final int legendaryFrameTextureSize = 128;
+	private static final int smallFrameOffsetIndex = 0;
+	private static final int smallFrameWidth = 38;
+	private static final int mediumFrameOffsetIndex = 1;
+	private static final int mediumFrameWidth = 92;
+	private static final int largeFrameOffsetIndex = 2;
+	private static final int largeFrameWidth = 122;
+	private static final int frameHeight = 30;
+	private static final int frameTextureSize = 128;
 
 
 	private RenderUtil() {}
@@ -62,29 +62,42 @@ public final class RenderUtil
 		tessellator.end();
 	}
 
-	public static void drawLegendaryFrame(Minecraft mc, MatrixStack matrix, StringTextComponent text) {
+	public static void drawTexturedModelRectWithAlpha(Matrix4f matrix, float x, float y, int width, int height, int texX, int texY, int texWidth, int texHeight, float alpha)
+	{
+
+		RenderSystem.disableAlphaTest();
+
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, alpha);
+
+		RenderUtil.drawTexturedModelRect(matrix, x, y, width, height, texX, texY, texWidth, texHeight);
+		RenderSystem.color4f(1.0F,1.0F,1.0F,1.0F);
+
+		RenderSystem.enableAlphaTest();
+	}
+
+	public static void drawFrame(Minecraft mc, MatrixStack matrix, StringTextComponent text) {
 		int width = mc.getWindow().getGuiScaledWidth();
 		int height = mc.getWindow().getGuiScaledHeight();
 
 		int textWidth = mc.font.width(text);
 		int white = 0xFFFFFF;
-		int y = height / 2 + legendaryFrameHeight / 2;
+		int y = height / 2 + frameHeight / 2;
 
 		mc.getTextureManager().bind(legendaryFrame);
 		RenderSystem.enableBlend();
 
 		if (textWidth < 27) {
-			int x = width / 2 - legendarySmallFrameWidth / 2;
-			AbstractGui.blit(matrix, x, y, 0, legendarySmallFrameOffsetIndex * legendaryFrameHeight, legendaryLargeFrameWidth, legendaryFrameHeight, legendaryFrameTextureSize, legendaryFrameTextureSize);
+			int x = width / 2 - smallFrameWidth / 2;
+			AbstractGui.blit(matrix, x, y, 0, smallFrameOffsetIndex * frameHeight, largeFrameWidth, frameHeight, frameTextureSize, frameTextureSize);
 		} else if (textWidth < 81) {
-			int x = width / 2 - legendaryMediumFrameWidth / 2;
-			AbstractGui.blit(matrix, x, y, 0, legendaryMediumFrameOffsetIndex * legendaryFrameHeight, legendaryMediumFrameWidth, legendaryFrameHeight, legendaryFrameTextureSize, legendaryFrameTextureSize);
+			int x = width / 2 - mediumFrameWidth / 2;
+			AbstractGui.blit(matrix, x, y, 0, mediumFrameOffsetIndex * frameHeight, mediumFrameWidth, frameHeight, frameTextureSize, frameTextureSize);
 		} else {
-			int x = width / 2 - legendaryLargeFrameWidth / 2;
-			AbstractGui.blit(matrix, x, y, 0, legendaryLargeFrameOffsetIndex * legendaryFrameHeight, legendaryLargeFrameWidth, legendaryFrameHeight, legendaryFrameTextureSize, legendaryFrameTextureSize);
+			int x = width / 2 - largeFrameWidth / 2;
+			AbstractGui.blit(matrix, x, y, 0, largeFrameOffsetIndex * frameHeight, largeFrameWidth, frameHeight, frameTextureSize, frameTextureSize);
 		}
 
-		mc.font.draw(matrix, text, (float) width / 2 - (float) textWidth / 2, y + (float) legendaryFrameHeight / 2 - 4, white);
+		mc.font.draw(matrix, text, (float) width / 2 - (float) textWidth / 2, y + (float) frameHeight / 2 - 4, white);
 		RenderSystem.disableBlend();
 	}
 }

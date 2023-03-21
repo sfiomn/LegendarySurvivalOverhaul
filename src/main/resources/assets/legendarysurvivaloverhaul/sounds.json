@@ -1,42 +1,56 @@
 {
-	"entity.generic.freeze.enter": {
+	"heat_stroke": {
 		"category": "neutral",
-		"subtitle": "entity.generic.freeze.enter.subtitles",
+		"subtitle": "heat_stroke",
 		"sounds": [
 			{
-				"name": "legendarysurvivaloverhaul:freeze/ice_enter1",
-				"stream": true
-			},
-			{
-				"name": "legendarysurvivaloverhaul:freeze/ice_enter2",
-				"stream": true
-			},
-			{
-				"name": "legendarysurvivaloverhaul:freeze/ice_enter3",
+				"name": "legendarysurvivaloverhaul:heat_stroke",
 				"stream": true
 			}
 		]
 	},
-	"entity.generic.freeze.exit": {
+	"frostbite": {
 		"category": "neutral",
-		"subtitle": "entity.generic.freeze.exit.subtitles",
+		"subtitle": "frostbite",
 		"sounds": [
 			{
-				"name": "legendarysurvivaloverhaul:freeze/ice_free1",
+				"name": "legendarysurvivaloverhaul:frostbite_1",
 				"stream": true
 			},
 			{
-				"name": "legendarysurvivaloverhaul:freeze/ice_free2",
+				"name": "legendarysurvivaloverhaul:frostbite_2",
 				"stream": true
 			}
 		]
 	},
-	"player.overheat.loop": {
+	"cooler_block": {
 		"category": "neutral",
-		"subtitle": "player.overheat.loop",
+		"subtitle": "cooler_block",
 		"sounds": [
 			{
-				"name": "legendarysurvivaloverhaul:sizzle_loop",
+				"name": "legendarysurvivaloverhaul:cooler_block_1",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:cooler_block_2",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:cooler_block_3",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:cooler_block_4",
+				"stream": true
+			}
+		]
+	},
+	"sewing_table": {
+		"category": "neutral",
+		"subtitle": "sewing_table",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:sewing_table",
 				"stream": true
 			}
 		]

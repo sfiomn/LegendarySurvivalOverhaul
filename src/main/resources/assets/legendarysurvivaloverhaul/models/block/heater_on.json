@@ -1,9 +1,0 @@
-{
-	"parent": "legendarysurvivaloverhaul:block/temperature_coil",
-	"textures": {
-		"side": "legendarysurvivaloverhaul:block/coil_stand_side",
-		"top": "legendarysurvivaloverhaul:block/coil_stand_top",
-		"coil": "legendarysurvivaloverhaul:block/heating_coil_on",
-		"particle": "legendarysurvivaloverhaul:block/heating_coil_on"
-	}
-}

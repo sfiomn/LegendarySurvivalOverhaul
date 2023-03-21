@@ -8,7 +8,7 @@ import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonItemIdentity;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.TemporaryModifierGroup;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
-import sfiomn.legendarysurvivaloverhaul.common.compat.CompatController;
+import sfiomn.legendarysurvivaloverhaul.common.integration.IntegrationController;
 import sfiomn.legendarysurvivaloverhaul.config.JsonFileName;
 import sfiomn.legendarysurvivaloverhaul.config.JsonTypeToken;
 
@@ -78,15 +78,15 @@ public class JsonConfigRegistration
 		JsonConfig.registerArmorTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_chestplate", -3.0f);
 		JsonConfig.registerArmorTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_helmet", -1.5f);
 		
-		JsonConfig.registerArmorTemperature("minecraft:leather_boots", 0.25f, 0.9f);
-		JsonConfig.registerArmorTemperature("minecraft:leather_leggings", 0.75f, 0.9f);
-		JsonConfig.registerArmorTemperature("minecraft:leather_chestplate", 1.0f, 0.9f);
-		JsonConfig.registerArmorTemperature("minecraft:leather_helmet", 0.5f, 0.9f);
+		JsonConfig.registerArmorTemperature("minecraft:leather_boots", 0.25f);
+		JsonConfig.registerArmorTemperature("minecraft:leather_leggings", 0.75f);
+		JsonConfig.registerArmorTemperature("minecraft:leather_chestplate", 1.0f);
+		JsonConfig.registerArmorTemperature("minecraft:leather_helmet", 0.5f);
 		
-		JsonConfig.registerArmorTemperature("minecraft:iron_boots", 0f, 1.2f);
-		JsonConfig.registerArmorTemperature("minecraft:iron_leggings", 0f, 1.2f);
-		JsonConfig.registerArmorTemperature("minecraft:iron_chestplate", 0f, 1.2f);
-		JsonConfig.registerArmorTemperature("minecraft:iron_helmet", 0f, 1.2f);
+		JsonConfig.registerArmorTemperature("minecraft:iron_boots", 0f);
+		JsonConfig.registerArmorTemperature("minecraft:iron_leggings", 0f);
+		JsonConfig.registerArmorTemperature("minecraft:iron_chestplate", 0f);
+		JsonConfig.registerArmorTemperature("minecraft:iron_helmet", 0f);
 		
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "minecraft:mushroom_stew", 1.0f, 1200, DEFAULT_ITEM_IDENTITY);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "minecraft:rabbit_stew", 1.0f, 1200, DEFAULT_ITEM_IDENTITY);
@@ -110,7 +110,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerFuelItems("minecraft:blue_ice", ThermalTypeEnum.COOLING, 30);
 		JsonConfig.registerFuelItems("minecraft:packed_ice", ThermalTypeEnum.COOLING, 30);
 		
-		CompatController.initCompat();
+		IntegrationController.initCompat();
 	}
 	
 	public static void clearContainers()
@@ -137,7 +137,7 @@ public class JsonConfigRegistration
 					if (jtm.identity != null)
 							jtm.identity.tryPopulateCompound();
 					
-					JsonConfig.registerArmorTemperature(entry.getKey(), jtm.temperature, jtm.insulation, jtm.identity == null ? DEFAULT_ITEM_IDENTITY : jtm.identity);
+					JsonConfig.registerArmorTemperature(entry.getKey(), jtm.temperature, jtm.identity == null ? DEFAULT_ITEM_IDENTITY : jtm.identity);
 				}
 			}
 		}

@@ -8,8 +8,4 @@ public final class MathUtil
 	{
 		return (value - from) / (to - from);
 	}
-
-	public static float addToAverage(float averageValue, int nbTime, float newValueToAdd) {
-		return (float) (1 / (nbTime + 1)) * (newValueToAdd - averageValue);
-	}
 }

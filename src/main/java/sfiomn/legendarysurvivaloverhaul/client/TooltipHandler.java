@@ -15,9 +15,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
-import sfiomn.legendarysurvivaloverhaul.api.item.PaddingEnum;
+import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
-import sfiomn.legendarysurvivaloverhaul.common.items.PaddingItem;
+import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.registry.KeybindingRegistry;
 
@@ -44,41 +44,25 @@ public class TooltipHandler
 				tooltip.add(baseArmorTempTooltip);
 			}
 
-			ITextComponent paddingArmorTempTooltip = getArmorPaddingTemperature(stack);
+			ITextComponent coatArmorTempTooltip = getArmorCoatTemperature(stack);
 
-			if (paddingArmorTempTooltip != null)
+			if (coatArmorTempTooltip != null)
 			{
-				tooltip.add(paddingArmorTempTooltip);
+				tooltip.add(coatArmorTempTooltip);
 			}
 
-			// Added Description for padding items.
-			if (stack.getItem() instanceof PaddingItem) {
-				ITextComponent addedDescPaddingItem = getAddedDescPaddingItem((PaddingItem) stack.getItem());
-				if (addedDescPaddingItem != null) {
-					tooltip.add(addedDescPaddingItem);
+			// Added Description for coat items.
+			if (stack.getItem() instanceof CoatItem) {
+				ITextComponent addedDescCoatItem = getAddedDescCoatItem((CoatItem) stack.getItem());
+				if (addedDescCoatItem != null) {
+					tooltip.add(addedDescCoatItem);
 				}
 			}
-			
-			/*
-			if (insulation != 1.0f)
-			{
-				ITextComponent insulationTranslation = new TranslationTextComponent("legendarysurvivaloverhaul.armorTooltip.insulation");
-				int insulationPercent = (int) ((insulation - 1.0f) * 100);
-				TextFormatting color = insulationPercent < 0 ? TextFormatting.BLUE : TextFormatting.RED;
-				
-				ITextComponent text = new StringTextComponent(insulationPercent < 0 ? "+" : "-")
-						.mergeStyle(color)
-						.appendString(Math.abs(insulationPercent) + "% ")
-						.append(insulationTranslation);
-				tooltip.add(text);
-			}
-			*/
 		}
 	}
 
 	private static ITextComponent getArmorBaseTemperature(ItemStack stack) {
 		float temperature = 0.0f;
-		float insulation = 1.0f;
 
 		List<JsonArmorIdentity> identities = JsonConfig.armorTemperatures.get(stack.getItem().getRegistryName().toString());
 
@@ -89,7 +73,6 @@ public class TooltipHandler
 				if (jai.matches(stack))
 				{
 					temperature = jai.temperature;
-					insulation = jai.insulation;
 					break;
 				}
 			}
@@ -113,16 +96,16 @@ public class TooltipHandler
 		return text;
 	}
 
-	private static ITextComponent getArmorPaddingTemperature(ItemStack stack) {
-		String paddingId = TemperatureUtil.getArmorPaddingTag(stack);
-		PaddingEnum padding = PaddingEnum.getFromId(paddingId);
+	private static ITextComponent getArmorCoatTemperature(ItemStack stack) {
+		String coatId = TemperatureUtil.getArmorCoatTag(stack);
+		CoatEnum coat = CoatEnum.getFromId(coatId);
 
 		ITextComponent text;
 
-		if (padding != null && padding.modifier() > 0) {
-			text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armorPadding." + paddingId);
+		if (coat != null && coat.modifier() > 0) {
+			text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor_coat." + coatId);
 		}
-		else if (padding != null && padding.modifier() == 0)
+		else if (coat != null && coat.modifier() == 0)
 			text = new StringTextComponent("Error");
 		else {
 			return null;
@@ -135,16 +118,16 @@ public class TooltipHandler
 		return text;
 	}
 
-	private static ITextComponent getAddedDescPaddingItem (PaddingItem paddingItem) {
+	private static ITextComponent getAddedDescCoatItem(CoatItem coatItem) {
 
-		PaddingEnum padding = paddingItem.padding;
+		CoatEnum coat = coatItem.coat;
 
 		ITextComponent text;
 		if (InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), KeybindingRegistry.showAddedDesc.getKey().getValue())) {
-			if (padding != null && padding.modifier() > 0) {
-				text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".paddingItem." + padding.type() + ".desc")
-						.append(" " + padding.modifier() + "\u00B0C");
-			} else if (padding != null && padding.modifier() == 0)
+			if (coat != null && coat.modifier() > 0) {
+				text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".coat_item." + coat.type() + ".desc")
+						.append(" " + coat.modifier() + "\u00B0C");
+			} else if (coat != null && coat.modifier() == 0)
 				text = new StringTextComponent("Error");
 			else {
 				return null;
@@ -154,7 +137,7 @@ public class TooltipHandler
 					.withStyle(TextFormatting.DARK_GRAY)
 					.append(text);
 		} else {
-			text = new StringTextComponent(TextFormatting.GRAY + I18n.get("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".addedDesc.activate", TextFormatting.LIGHT_PURPLE, I18n.get(KeybindingRegistry.showAddedDesc.getTranslatedKeyMessage().getString()), TextFormatting.GRAY));
+			text = new StringTextComponent(TextFormatting.GRAY + I18n.get("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".added_desc.activate", TextFormatting.LIGHT_PURPLE, I18n.get(KeybindingRegistry.showAddedDesc.getTranslatedKeyMessage().getString()), TextFormatting.GRAY));
 		}
 
 		return text;
