@@ -101,12 +101,16 @@ public class ModClientEvents {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
 
         if (Config.Baked.temperatureEnabled
-                && minecraft.gameMode != null && minecraft.gameMode.hasExperience())
+                && minecraft.gameMode != null &&
+                minecraft.gameMode.hasExperience()
+        )
         {
             int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
             int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
 
-            RenderTemperatureGUI.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+            if (!minecraft.options.hideGui) {
+                RenderTemperatureGUI.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+            }
             RenderTemperatureEffect.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
         }
     }
