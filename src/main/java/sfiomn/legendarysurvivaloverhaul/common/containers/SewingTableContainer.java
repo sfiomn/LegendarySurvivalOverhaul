@@ -23,6 +23,7 @@ import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
 public class SewingTableContainer extends Container {
     private final World world;
@@ -86,11 +87,15 @@ public class SewingTableContainer extends Container {
             itemStack = this.selectedRecipe.assemble(this.inputSlots);
             this.resultSlot.setRecipeUsed(this.selectedRecipe);
 
-        //  Check a coat is possible
+            //  Check a coat is possible
         } else if (isItemArmor(inputSlots.getItem(0)) && isItemCoat(inputSlots.getItem(1))) {
-            itemStack = this.inputSlots.getItem(0).copy();
-            CoatItem coatItem = (CoatItem) inputSlots.getItem(1).getItem();
-            TemperatureUtil.setArmorCoatTag(itemStack, coatItem.coat.id());
+            //  Check coat effect not already applied on amor
+            if (!Objects.equals(TemperatureUtil.getArmorCoatTag(inputSlots.getItem(0)),
+                    ((CoatItem) (inputSlots.getItem(1).getItem())).coat.id())) {
+                itemStack = this.inputSlots.getItem(0).copy();
+                CoatItem coatItem = (CoatItem) inputSlots.getItem(1).getItem();
+                TemperatureUtil.setArmorCoatTag(itemStack, coatItem.coat.id());
+            }
         }
 
         this.resultSlot.setItem(0, itemStack);
@@ -109,7 +114,7 @@ public class SewingTableContainer extends Container {
         this.shrinkStackInSlot(1);
 
         this.access.execute((world, pos) -> {
-            world.playSound((PlayerEntity)null, pos, SoundRegistry.SEWING_TABLE.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.playSound((PlayerEntity) null, pos, SoundRegistry.SEWING_TABLE.get(), SoundCategory.BLOCKS, 1.0f, 1.0f);
         });
         return itemStack;
     }

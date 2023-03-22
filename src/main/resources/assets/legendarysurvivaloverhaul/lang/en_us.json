@@ -94,6 +94,8 @@
 	"tooltip.legendarysurvivaloverhaul.armor_coat.thermal2": "Adaptive Thermal II",
 	"tooltip.legendarysurvivaloverhaul.armor_coat.thermal3": "Adaptive Thermal III",
 
+	"tooltip.legendarysurvivaloverhaul.sewing_table_disabled": "Coat Already Applied",
+
 	"sounds.legendarysurvivaloverhaul.heat_stroke": "Player suffocates",
 	"sounds.legendarysurvivaloverhaul.frostbite": "Player shivers",
 	"sounds.legendarysurvivaloverhaul.cooler_block": "Icebox crackles",
