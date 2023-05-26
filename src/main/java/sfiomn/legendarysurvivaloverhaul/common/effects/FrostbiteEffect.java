@@ -19,7 +19,7 @@ public class FrostbiteEffect extends GenericEffect
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier)
 	{
-		if(entity instanceof PlayerEntity && !entity.hasEffect(EffectRegistry.HEAT_RESISTANCE.get()))
+		if(entity instanceof PlayerEntity && !entity.hasEffect(EffectRegistry.COLD_RESISTANCE.get()))
 		{
 			World world = entity.getCommandSenderWorld();
 			PlayerEntity player = (PlayerEntity) entity;
