@@ -2,7 +2,7 @@
 	"type": "minecraft:crafting_shaped",
 	"pattern":
 	[
-		"IGI",
+		"#G#",
 		"#R#",
 		"I#I"
 	],
@@ -18,7 +18,7 @@
 		},
 		"G":
 		{
-			"item": "minecraft:gold_nugget"
+			"item": "minecraft:gold_ingot"
 		},
 		"I":
 		{

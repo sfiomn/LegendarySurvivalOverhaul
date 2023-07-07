@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -44,11 +44,10 @@ public class ModCapabilities
 	public static final ResourceLocation WETNESS_RES = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "wetness");
 	
 	@SubscribeEvent
-	public static void attachCapability(AttachCapabilitiesEvent<Entity> event)
+	public static void attachCapabilityPlayer(AttachCapabilitiesEvent<Entity> event)
 	{
 		if (event.getObject() instanceof LivingEntity)
 		{
-			
 			if (event.getObject() instanceof PlayerEntity)
 			{
 				event.addCapability(TEMPERATURE_RES, new TemperatureProvider());
@@ -108,26 +107,22 @@ public class ModCapabilities
 	}
 	
 	@SubscribeEvent
-	public static void onLivingEntityUseItemFinish(LivingEntityUseItemEvent event)
+	public static void onFoodEaten(LivingEntityUseItemEvent.Finish event)
 	{
 		if (event.getEntityLiving() instanceof PlayerEntity && !event.getEntityLiving().level.isClientSide)
 		{
 			PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 			
-			ItemStack stack = event.getItem();
+			ResourceLocation itemRegistryName = event.getItem().getItem().getRegistryName();
+			List<JsonConsumableTemperature> jsonConsumableTemperatures = null;
+			if (itemRegistryName != null)
+				jsonConsumableTemperatures = JsonConfig.consumableTemperature.get(itemRegistryName.toString());
 			
-			List<JsonConsumableTemperature> consumableList = JsonConfig.consumableTemperature.get(stack.getItem().getRegistryName().toString());
-			
-			if (consumableList != null)
-			{
-				for (JsonConsumableTemperature jct : consumableList)
-				{
-					if (jct == null)
-						continue;
-					
-					if (jct.matches(stack))
-					{
-						CapabilityUtil.getTempCapability(player).setTemporaryModifier(jct.group, jct.temperature, jct.duration);
+			if (jsonConsumableTemperatures != null) {
+				for (JsonConsumableTemperature jct : jsonConsumableTemperatures) {
+					if (jct.getEffect() != null) {
+						player.addEffect(new EffectInstance(jct.getEffect(), jct.duration, (jct.temperatureLevel - 1), false, false, true));
+						player.removeEffect(jct.getOppositeEffect());
 					}
 				}
 			}

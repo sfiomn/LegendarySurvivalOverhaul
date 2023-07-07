@@ -1,9 +1,9 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
-import sfiomn.legendarysurvivaloverhaul.config.Config;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 public class TimeModifier extends ModifierBase
 {
@@ -26,14 +26,13 @@ public class TimeModifier extends ModifierBase
 
 		float timeTemperature = (float) Math.sin ((time * Math.PI) / 12000.0f) * (float) Config.Baked.timeMultiplier;
 		
-		float biomeMultiplier = 1.0f + (Math.abs(normalizeToPosNeg(getTempForBiome(world.getBiome(pos)))) * ((float)Config.Baked.biomeTimeMultiplier - 1.0f));
+		float biomeMultiplier = 1.0f + (Math.abs(normalizeToPositiveNegative(getTempForBiome(world, world.getBiome(pos)))) * ((float)Config.Baked.biomeTimeMultiplier - 1.0f));
 		timeTemperature *= biomeMultiplier;
-		
-		if(timeTemperature > 0 && Config.Baked.timeShadeModifier != 0 && !world.canSeeSky(pos.above()))
-		{
-			timeTemperature = Math.max(0, timeTemperature + Config.Baked.timeShadeModifier);
-		}
-		
+
+		// LegendarySurvivalOverhaul.LOGGER.debug("Time temp influence : " + timeTemperature);
+		// float tempInfl = applyUndergroundEffect(timeTemperature, world, pos);
+		// LegendarySurvivalOverhaul.LOGGER.debug("Time temp influence after underground : " + tempInfl);
+
 		return applyUndergroundEffect(timeTemperature, world, pos);
 	}
 }

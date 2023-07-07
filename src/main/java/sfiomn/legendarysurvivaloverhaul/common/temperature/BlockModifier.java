@@ -1,22 +1,21 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
-import sfiomn.legendarysurvivaloverhaul.api.temperature.ITemperatureTileEntity;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.util.SpreadPoint;
-import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.getOppositeVector;
 
@@ -45,7 +44,6 @@ public class BlockModifier extends ModifierBase
 		coldTotal = 0.0f;
 		
 		doBlocksAndFluidsRoutine(world, pos);
-		doTileEntitiesRoutine(world, pos);
 		
 		hotTotal -= hottestValue;
 		coldTotal -= coldestValue;
@@ -57,17 +55,20 @@ public class BlockModifier extends ModifierBase
 
 		if(result > hottestValue)
 		{
-			//Hotter than hottestValue, clamp
+			// LegendarySurvivalOverhaul.LOGGER.debug("Block temp influence hotter than max : " + Math.min(hottestValue + 2.5f, result));
+			// Hotter than hottestValue, clamp
 			return Math.min(hottestValue + 2.5f, result);
 		}
 		else if(result < coldestValue)
 		{
-			//Colder than coldestValue, clamp
+			// LegendarySurvivalOverhaul.LOGGER.debug("Block temp influence hotter than max : " + Math.max(coldestValue - 2.5f, result));
+			// Colder than coldestValue, clamp
 			return Math.max(coldestValue - 2.5f, result);
 		}
 		else
 		{
-			//Within bounds, no need to clamp
+			// LegendarySurvivalOverhaul.LOGGER.debug("Block temp influence : " + result);
+			// Within bounds, no need to clamp
 			return result;
 		}
 	}
@@ -150,17 +151,6 @@ public class BlockModifier extends ModifierBase
 		return false;
 	}
 	
-	private void doTileEntitiesRoutine(World world, BlockPos pos)
-	{
-		for (int x = -3; x <= 3; x++)
-		{
-			for (int z = -3; z <= 3; z++)
-			{
-				checkChunkAndProcess(world, pos.offset(x * 16, 0, z * 16), pos);
-			}
-		}
-	}
-	
 	private void processTemp(float temp)
 	{
 		if (temp == 0.0f)
@@ -182,42 +172,6 @@ public class BlockModifier extends ModifierBase
 				coldestValue = temp;
 			}
 		}
-	}
-	
-	private void checkChunkAndProcess(World world, BlockPos pos, BlockPos selfPos)
-	{
-		try
-		{
-			if (WorldUtil.isChunkLoaded(world, pos))
-			{
-				Chunk chunk = world.getChunkSource().getChunk(pos.getX() >> 4, pos.getZ() >> 4, false);
-				
-				for (Map.Entry<BlockPos, TileEntity> entry : chunk.getBlockEntities().entrySet())
-				{
-					processTemp(checkTileEntity(world, entry.getKey(), entry.getValue(), selfPos));
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			
-		}
-	}
-	
-	private float checkTileEntity(World world, BlockPos pos, TileEntity tileEntity, BlockPos selfPos)
-	{
-		double distance = pos.distSqr(selfPos);
-		if (distance < 2500.0d)
-		{
-			// Within 50 blocks
-			
-			if (tileEntity instanceof ITemperatureTileEntity)
-			{
-				return ((ITemperatureTileEntity) tileEntity).getInfluence(selfPos, distance);
-			}
-		}
-		
-		return 0.0f;
 	}
 	
 	private float easyLog(float f)
@@ -271,7 +225,7 @@ public class BlockModifier extends ModifierBase
 
 		return temperatureAfterDistanceInfluence(temperature, spreadPoint);
 	}
-
+/*
 	private float temperatureAfterDistanceInfluence(float tempIn, SpreadPoint spreadPoint) {
 		float distanceBeforeDecrease = 2.0f;
 
@@ -284,12 +238,22 @@ public class BlockModifier extends ModifierBase
 			//      divided by the distance to reach the point
 			float normalizedSpreadCost = (float) ((tempInfluenceMaximumDist - spreadPoint.spreadCapacity()) / spreadPoint.influenceDistance());
 			//  (1) dist before decrease * normalized spread cost = capacity consumed by the min dist that has max effect temp
-			//  (2) spreadCapacity + (1) = add the capacity consumed by the min dist to the current capacity means that when we the border of the min
+			//  (2) spreadCapacity + (1) = add the capacity consumed by the min dist to the current capacity means that when we reach the border of the min
 			//  dist, we are at the original capacity of the spread point.
 			//  (2) / max capacity = % of capacity left vs max capacity.
 			//      At max capacity it means that the min border of spread point is close to the player
 			//      if there is almost not spread capacity left vs max capacity, it means the player is far from the min border
 			return (float) (tempIn * (spreadPoint.spreadCapacity() + distanceBeforeDecrease * normalizedSpreadCost) / tempInfluenceMaximumDist);
 		}
+	}*/
+
+	private float temperatureAfterDistanceInfluence(float tempIn, SpreadPoint spreadPoint) {
+		// I use the sqrt(x) graph to convert how much the block temp should be decreased vs the distance to the block
+		// [1] max spread - spread capacity = spread consumed to reach the point
+		//     divided by max spread capacity to know the % of spread capacity consumed
+		float capacityConsumed = (float) ((tempInfluenceMaximumDist - spreadPoint.spreadCapacity()) / tempInfluenceMaximumDist);
+		// [2] sqrt([1]) = % of temperature the block influence has lost
+		// [3] (1 - [2]) * block temp = block influence based on distance of the player
+		return ((float) (1 - Math.sqrt(capacityConsumed))) * tempIn;
 	}
 }

@@ -1,19 +1,22 @@
 package sfiomn.legendarysurvivaloverhaul.api.temperature;
 
+import net.minecraft.potion.Effect;
+import net.minecraftforge.fml.RegistryObject;
+import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
+
 public enum TemporaryModifierGroupEnum
 {
-	FOOD("food"),
-	DRINK("drink");
+	FOOD("food", EffectRegistry.HOT_FOOD, EffectRegistry.COLD_FOOD),
+	DRINK("drink", EffectRegistry.HOT_DRINk, EffectRegistry.COLD_DRINK);
 	
-	private String group;
+	public final String group;
+	public final RegistryObject<Effect> hotEffect;
+	public final RegistryObject<Effect> coldEffect;
 	
-	private TemporaryModifierGroupEnum(String group)
+	TemporaryModifierGroupEnum(String group, RegistryObject<Effect> hotEffect, RegistryObject<Effect> coldEffect)
 	{
 		this.group = group;
-	}
-	
-	public String group()
-	{
-		return group;
+		this.hotEffect = hotEffect;
+		this.coldEffect = coldEffect;
 	}
 }

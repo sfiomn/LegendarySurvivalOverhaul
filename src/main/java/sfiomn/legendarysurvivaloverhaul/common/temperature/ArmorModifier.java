@@ -3,11 +3,10 @@ package sfiomn.legendarysurvivaloverhaul.common.temperature;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
+import net.minecraft.util.ResourceLocation;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
-
-import java.util.List;
 
 public class ArmorModifier extends ModifierBase
 {
@@ -25,7 +24,7 @@ public class ArmorModifier extends ModifierBase
 		value += checkArmorSlot(player.getItemBySlot(EquipmentSlotType.CHEST));
 		value += checkArmorSlot(player.getItemBySlot(EquipmentSlotType.LEGS));
 		value += checkArmorSlot(player.getItemBySlot(EquipmentSlotType.FEET));
-		
+		// LegendarySurvivalOverhaul.LOGGER.debug("Armor temp influence : " + value);
 		return value;
 	}
 	
@@ -42,20 +41,15 @@ public class ArmorModifier extends ModifierBase
 	
 	private float processStackJson(ItemStack stack)
 	{
-		List<JsonArmorIdentity> identity = JsonConfig.armorTemperatures.get(stack.getItem().getRegistryName().toString());
+		ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
+
+		JsonTemperature jsonTemperature = null;
+		if (itemRegistryName != null)
+			jsonTemperature = JsonConfig.armorTemperatures.get(itemRegistryName.toString());
 		
-		if (identity != null)
+		if (jsonTemperature != null)
 		{
-			for (JsonArmorIdentity jtm : identity)
-			{
-				if (jtm == null)
-						continue;
-				
-				if (jtm.matches(stack))
-				{
-					return jtm.temperature;
-				}
-			}
+			return jsonTemperature.temperature;
 		}
 		
 		return 0.0f;

@@ -27,7 +27,7 @@ public class RenderTemperatureEffect {
     private	static final int TEMPERATURE_EFFECT_HEIGHT = 256;
     public static float fadeLevel = 0;
     public static float targetFadeLevel = 0;
-    private static long updateTime = 0;
+    private static int updateTimer = 0;
     private static int lastTemperatureEffect = 0;
 
     public static void render(MatrixStack matrix, PlayerEntity player, int width, int height)
@@ -43,7 +43,7 @@ public class RenderTemperatureEffect {
 
     public static void drawTemperatureEffect(MatrixStack matrix, PlayerEntity player, int width, int height) {
 
-        int temperature = CapabilityUtil.getTempCapability(player).getTemperatureLevel();
+        float temperature = CapabilityUtil.getTempCapability(player).getTemperatureLevel();
 
         Matrix4f m4f = matrix.last().pose();
 
@@ -64,11 +64,13 @@ public class RenderTemperatureEffect {
             targetFadeLevel = 0;
         }
 
-        if (Math.abs(targetFadeLevel - fadeLevel) < 0.01f) {
-            fadeLevel = targetFadeLevel;
-        } else if ((System.currentTimeMillis() - updateTime) > 100) {
-            updateTime = System.currentTimeMillis();
-            fadeLevel = (targetFadeLevel + fadeLevel) / 2;
+        if (updateTimer % 2 == 0) {
+            if (Math.abs(targetFadeLevel - fadeLevel) < 0.01f) {
+                fadeLevel = targetFadeLevel;
+            }
+            if (targetFadeLevel != fadeLevel) {
+                fadeLevel = (targetFadeLevel + fadeLevel) / 2;
+            }
         }
 
         if (fadeLevel > 0) {
@@ -83,6 +85,10 @@ public class RenderTemperatureEffect {
         } else {
             lastTemperatureEffect = 0;
         }
+    }
+
+    public static void updateTemperatureEffect() {
+        updateTimer++;
     }
 
     private static void bind(ResourceLocation resource)

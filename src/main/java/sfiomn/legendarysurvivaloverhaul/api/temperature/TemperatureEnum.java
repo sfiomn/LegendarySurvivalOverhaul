@@ -19,8 +19,9 @@ public enum TemperatureEnum
 		this.upperBound = upperBound;
 	}
 	
-	public boolean matches(int temperature)
+	public boolean matches(float temperature)
 	{
+		temperature = TemperatureUtil.clampTemperature(temperature);
 		return (temperature>=this.lowerBound && temperature<=this.upperBound);
 	}
 	

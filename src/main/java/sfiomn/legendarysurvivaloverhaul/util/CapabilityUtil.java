@@ -1,8 +1,10 @@
 package sfiomn.legendarysurvivaloverhaul.util;
 
+import net.minecraft.item.ItemStack;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -43,5 +45,14 @@ public final class CapabilityUtil
 	{
 		return player.getCapability(LegendarySurvivalOverhaul.WETNESS_CAP).orElse(new WetnessCapability());
 	}
-	
+
+	/**
+	 * Gets the wetness capability of the given player.
+	 * @param itemStack ItemStack
+	 * @return The temperature item capability of the given itemstack if it exists, or a new dummy capability if it doesn't.
+	 */
+	public static TemperatureItemCapability getTempItemCapability(ItemStack itemStack)
+	{
+		return itemStack.getCapability(LegendarySurvivalOverhaul.TEMPERATURE_ITEM_CAP).orElse(new TemperatureItemCapability());
+	}
 }

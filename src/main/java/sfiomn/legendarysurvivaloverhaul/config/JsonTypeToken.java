@@ -13,7 +13,7 @@ public class JsonTypeToken
 	{
 		switch(jcfn)
 		{
-			case ARMOR:				return new TypeToken<Map<String, List<JsonArmorIdentity>>>(){}.getType();
+			case ARMOR:				return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
 			case BLOCK:				return new TypeToken<Map<String, List<JsonPropertyTemperature>>>(){}.getType();
 			case LIQUID: 			return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
 			case BIOME: 			return new TypeToken<Map<String, JsonBiomeIdentity>>(){}.getType();

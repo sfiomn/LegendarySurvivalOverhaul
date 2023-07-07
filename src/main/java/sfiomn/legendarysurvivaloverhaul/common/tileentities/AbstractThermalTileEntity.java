@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.common.tileentity;
+package sfiomn.legendarysurvivaloverhaul.common.tileentities;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

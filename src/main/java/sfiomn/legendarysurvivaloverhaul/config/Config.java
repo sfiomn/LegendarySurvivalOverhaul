@@ -77,7 +77,7 @@ public class Config
 		
 		public final ForgeConfigSpec.ConfigValue<Double> timeMultiplier;
 		public final ForgeConfigSpec.ConfigValue<Double> biomeTimeMultiplier;
-		public final ForgeConfigSpec.ConfigValue<Integer> timeShadeModifier;
+		public final ForgeConfigSpec.ConfigValue<Integer> shadeTimeMultiplier;
 
 		public final ForgeConfigSpec.ConfigValue<Double> altitudeModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> sprintModifier;
@@ -255,15 +255,15 @@ public class Config
 			builder.push("time");
 			builder.push("multipliers");
 			timeMultiplier = builder
-					.comment(" How strongly the effects of time on temperature are multiplied.")
+					.comment(" How strongly the effects of time on temperature are multiplied.", " Maximum effect at noon and midnight")
 					.defineInRange("Time Multiplier", 2.0d, 0.0d, Double.POSITIVE_INFINITY);
 			biomeTimeMultiplier = builder
 					.comment(" How strongly different biomes affect temperature, based on time.")
 					.defineInRange("Biome Time Multiplier", 1.75d, 1.0d, Double.POSITIVE_INFINITY);
 			builder.pop();
-			timeShadeModifier = builder
-					.comment(" Staying in the shade will reduce a player's temperature by this amount.", " Only effective in hot biomes!")
-					.define("Time Shade Modifier", -3);
+			shadeTimeMultiplier = builder
+					.comment(" Staying in the shade or during cloudy weather will reduce player's temperature by this amount based on time of the day.", " Only effective in hot biomes and during day time!")
+					.define("Shade Time Multiplier", 3);
 			builder.pop();
 			builder.pop();
 
@@ -462,7 +462,7 @@ public class Config
 		
 		public static double timeMultiplier;
 		public static double biomeTimeMultiplier;
-		public static int timeShadeModifier;
+		public static int shadeTimeMultiplier;
 		public static int tempInfluenceMaximumDist;
 		public static double tempInfluenceUpDistMultiplier;
 		public static double tempInfluenceOutsideDistMultiplier;
@@ -554,7 +554,7 @@ public class Config
 				biomeTemperatureMultiplier = COMMON.biomeTemperatureMultiplier.get();
 				timeMultiplier = COMMON.timeMultiplier.get();
 				biomeTimeMultiplier = COMMON.biomeTimeMultiplier.get();
-				timeShadeModifier = COMMON.timeShadeModifier.get();
+				shadeTimeMultiplier = COMMON.shadeTimeMultiplier.get();
 
 				tempInfluenceMaximumDist = COMMON.tempInfluenceMaximumDist.get();
 				tempInfluenceUpDistMultiplier = COMMON.tempInfluenceUpDistMultiplier.get();

@@ -1,26 +1,22 @@
 package sfiomn.legendarysurvivaloverhaul.api.temperature;
 
-import com.google.common.collect.ImmutableMap;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 
 public interface ITemperatureCapability
 {
-	public int getTemperatureLevel();
+	public float getTemperatureLevel();
+	public float getTargetTemperatureLevel();
 	public int getTemperatureTickTimer();
 	public TemperatureEnum getTemperatureEnum();
-	public ImmutableMap<String, TemporaryModifier> getTemporaryModifiers();
 	
-	public void setTemperatureLevel(int temperature);
+	public void setTemperatureLevel(float temperature);
+	public void setTargetTemperatureLevel(float targetTemperature);
 	public void setTemperatureTickTimer(int tickTimer);
-	public void setTemporaryModifier(String name, float temp, int duration);
 	
-	public void addTemperatureLevel(int temperature);
+	public void addTemperatureLevel(float temperature);
 	public void addTemperatureTickTimer(int tickTimer);
-	
-	public void clearTemporaryModifiers();
 	
 	/**
 	 * (Don't use this!) <br>

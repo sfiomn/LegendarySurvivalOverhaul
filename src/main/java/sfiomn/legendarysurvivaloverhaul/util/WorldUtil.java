@@ -5,13 +5,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 
@@ -56,14 +60,29 @@ public final class WorldUtil
 			return ((ServerWorld) world).getChunkSource().hasChunk(pos.getX() >> 4, pos.getZ() >> 4);
 		}
 	}
+
+	public static ResourceLocation getBiomeName(World world, Biome biome) {
+		if (world.registryAccess().registry(Registry.BIOME_REGISTRY).isPresent()) {
+			return world.registryAccess().registry(Registry.BIOME_REGISTRY).get().getKey(biome);
+		}
+		return null;
+	}
+
+	public static boolean isRainingAt(World world, BlockPos pos) {
+		if (!world.isRaining()) {
+			return false;
+		} else if (!world.canSeeSky(pos)) {
+			return false;
+		} else return world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING, pos).getY() <= pos.getY();
+	}
 	
-	public static int calculateClientWorldEntityTemperature(World world, Entity entity)
+	public static float calculateClientWorldEntityTemperature(World world, Entity entity)
 	{
-		return TemperatureUtil.clampTemperature(TemperatureUtil.getWorldTemperature(world, getSidedBlockPos(world, entity)));
+		return TemperatureUtil.getWorldTemperature(world, getSidedBlockPos(world, entity));
 	}
 	public static Entity getEntityLookedAt(PlayerEntity e, double finalDistance) {
 		Entity foundEntity = null;
-		double distance = finalDistance;
+		double distance;
 		RayTraceResult positionLookedAt = raycast(e, finalDistance);
 		Vector3d positionVector = e.position();
 

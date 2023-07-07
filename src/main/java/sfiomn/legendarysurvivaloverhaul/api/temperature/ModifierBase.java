@@ -1,13 +1,15 @@
 package sfiomn.legendarysurvivaloverhaul.api.temperature;
 
-import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
-import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
+import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
+import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
 /**
  * Abstract class representing temperature modifiers.
@@ -15,6 +17,8 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
  */
 public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 {
+	private static final float COLDEST_BIOME_TEMP = -0.5f;
+	private static final float HOTTEST_BIOME_TEMP = 2.0f;
 	/**
 	 * Global World Modifiers
 	 * 
@@ -83,12 +87,8 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 		{
 			return temperature;
 		}
-		
-		// Charles445's comments in this part of the code say
-		// that there's probably an easier way to do this
-		// that takes into account distance inside of a cave,
-		// but fuck if I know
-		if(world.canSeeSky(pos) || world.canSeeSky(pos.above()))
+
+		if(world.canSeeSky(pos))
 		{
 			return temperature;
 		}
@@ -103,29 +103,51 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 		return temperature * (float)(pos.getY() - cutoff) / (64.0f - cutoff);
 	}
 	
-	protected float getTempForBiome(Biome biome)
+	protected float getTempForBiome(World world, Biome biome)
 	{
-		// Get the biome's temperature, clamp it between 0 and 1.5,
+		// Minecraft's temperatures go from -0.7 to 2.0
+		// Get the biome's temperature, clamp it between -0.7 and 2.0 in case of extreme biomes from other mods,
 		// and then normalize it.
-		
-		String name = biome.getRegistryName().toString();
-		
-		if (JsonConfig.biomeOverrides.containsKey(name))
+		// Plains returned temperature 0.44, savanna 0.7, Ice plain 0.26
+
+		ResourceLocation name = WorldUtil.getBiomeName(world, biome);
+		if (name != null && JsonConfig.biomeOverrides.containsKey(name.toString()))
 		{
-			JsonBiomeIdentity identity = JsonConfig.biomeOverrides.get(name);
-			
-			return clampTemperature(identity.temperature);
+			JsonBiomeIdentity identity = JsonConfig.biomeOverrides.get(name.toString());
+
+			return identity.temperature;
 		}
+
+		// LegendarySurvivalOverhaul.LOGGER.debug("Biome base temp for " + name + " is " + biome.getBaseTemperature());
 		
-		return clampTemperature(biome.getBaseTemperature());
+		return clampNormalizeTemperature(biome.getBaseTemperature());
 	}
-	
-	protected float clampTemperature(float temp)
+
+	protected float getHumidityForBiome(World world, Biome biome)
 	{
-		return MathHelper.clamp(temp, 0.0f, 1.5f)/ 1.5f;
+		// Get the biome's humidity
+		// Dry biomes have humidity below 0.2
+
+		ResourceLocation name = WorldUtil.getBiomeName(world, biome);
+		if (name != null && JsonConfig.biomeOverrides.containsKey(name.toString()))
+		{
+			JsonBiomeIdentity identity = JsonConfig.biomeOverrides.get(name.toString());
+
+			return identity.isDry ? 0.1f : 0.5f;
+		}
+
+		return biome.getDownfall();
 	}
-	
-	protected float normalizeToPosNeg(float value)
+
+	// Clamp and normalize the temperature
+	protected float clampNormalizeTemperature(float temp)
+	{
+		return ((MathHelper.clamp(temp, COLDEST_BIOME_TEMP, HOTTEST_BIOME_TEMP)) - COLDEST_BIOME_TEMP )/ (HOTTEST_BIOME_TEMP - COLDEST_BIOME_TEMP);
+	}
+
+	//  Assume input is between 0 and 1
+	//  Convert range to -1 and 1 instead
+	protected float normalizeToPositiveNegative(float value)
 	{
 		return (value * 2.0f) - 1.0f;
 	}

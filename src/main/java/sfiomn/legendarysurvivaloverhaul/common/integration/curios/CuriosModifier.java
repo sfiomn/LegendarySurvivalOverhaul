@@ -2,11 +2,12 @@ package sfiomn.legendarysurvivaloverhaul.common.integration.curios;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonArmorIdentity;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
@@ -14,7 +15,6 @@ import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.util.ICuriosHelper;
 
-import java.util.List;
 import java.util.Objects;
 
 public class CuriosModifier extends ModifierBase
@@ -86,20 +86,14 @@ public class CuriosModifier extends ModifierBase
 	
 	private float processStackJson(ItemStack stack)
 	{
-		List<JsonArmorIdentity> identity = JsonConfig.armorTemperatures.get(stack.getItem().getRegistryName().toString());
+		ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
+		JsonTemperature jsonTemperature = null;
+		if (itemRegistryName != null)
+			jsonTemperature = JsonConfig.armorTemperatures.get(itemRegistryName.toString());
 		
-		if (identity != null)
+		if (jsonTemperature != null)
 		{
-			for (JsonArmorIdentity jai : identity)
-			{
-				if (jai == null)
-						continue;
-				
-				if (jai.matches(stack))
-				{
-					return jai.temperature;
-				}
-			}
+			return jsonTemperature.temperature;
 		}
 		
 		return 0.0f;

@@ -23,8 +23,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
-import sfiomn.legendarysurvivaloverhaul.common.tileentity.CoolerTileEntity;
-import sfiomn.legendarysurvivaloverhaul.common.tileentity.HeaterTileEntity;
+import sfiomn.legendarysurvivaloverhaul.common.tileentities.CoolerTileEntity;
+import sfiomn.legendarysurvivaloverhaul.common.tileentities.HeaterTileEntity;
 import sfiomn.legendarysurvivaloverhaul.registry.TileEntityRegistry;
 
 import javax.annotation.Nullable;

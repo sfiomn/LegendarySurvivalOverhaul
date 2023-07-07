@@ -8,4 +8,9 @@ public final class MathUtil
 	{
 		return (value - from) / (to - from);
 	}
+
+	public static float round (float value, int precision) {
+		int scale = (int) Math.pow(10, precision);
+		return (float) Math.round(value * scale) / scale;
+	}
 }

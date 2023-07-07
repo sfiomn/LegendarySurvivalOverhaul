@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
@@ -71,7 +72,7 @@ public class SereneSeasonsModifier extends ModifierBase
 		catch (Exception e)
 		{
 			// If an error somehow occurs, disable compatibility 
-			LegendarySurvivalOverhaul.LOGGER.error("An error has occured with Serene Seasons compatability, disabling modifier", e);
+			LegendarySurvivalOverhaul.LOGGER.error("An error has occurred with Serene Seasons compatibility, disabling modifier", e);
 			LegendarySurvivalOverhaul.sereneSeasonsLoaded = false;
 			
 			return 0.0f;
@@ -102,11 +103,12 @@ public class SereneSeasonsModifier extends ModifierBase
 			float temperature = biome.getBaseTemperature();
 			
 			boolean useTropicalMods;
+
+			ResourceLocation biomeName = biome.getRegistryName();
 			
-			
-			if (biomeIdentities.containsKey(biome.getRegistryName().toString()))
+			if (biomeName != null && biomeIdentities.containsKey(biomeName.toString()))
 			{
-				SSBiomeIdentity identity = biomeIdentities.get(biome.getRegistryName().toString());
+				SSBiomeIdentity identity = biomeIdentities.get(biomeName.toString());
 				if (!identity.seasonEffects)
 					continue;
 				useTropicalMods = identity.isTropical;
@@ -185,7 +187,10 @@ public class SereneSeasonsModifier extends ModifierBase
 		}
 		
 		value /= posOffsets.length;
-		
+
+		// LegendarySurvivalOverhaul.LOGGER.debug("Serene temp influence : " + value);
+		// float tempInfl = applyUndergroundEffect(value, world, pos);
+		// LegendarySurvivalOverhaul.LOGGER.debug("Serene temp influence after underground : " + tempInfl);
 		return applyUndergroundEffect(value, world, pos);
 	}
 }

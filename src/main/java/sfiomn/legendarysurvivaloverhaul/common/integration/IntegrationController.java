@@ -1,10 +1,9 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration;
 
-import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonItemIdentity;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.TemporaryModifierGroup;
+import net.minecraftforge.fml.ModList;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyValue;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
-import net.minecraftforge.fml.ModList;
 
 /**
  * This class is specifically for implementing default configuration values
@@ -14,8 +13,6 @@ import net.minecraftforge.fml.ModList;
  */
 public final class IntegrationController
 {
-	private static final JsonItemIdentity DEFAULT_IDENTITY = new JsonItemIdentity(null);
-	
 	public static void initCompat()
 	{
 		ModList mods = ModList.get();
@@ -64,13 +61,13 @@ public final class IntegrationController
 		JsonConfig.registerBlockTemperature("farmersdelight:stove", 7.5f, new JsonPropertyValue("lit", "true"));
 		JsonConfig.registerBlockTemperature("farmersdelight:stove", 0.0f, new JsonPropertyValue("lit", "false"));
 		
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:beef_stew", 1.5f, 2400, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:chicken_soup", 1.5f, 2400, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:vegetable_soup", 1.5f, 2400, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:fish_stew", 1.5f, 2400, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:pumpkin_soup", 1.5f, 2400, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "farmersdelight:baked_cod_stew", 1.5f, 2400, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.DRINK.group(), "farmersdelight:hot_cocoa", 3.5f, 3600, DEFAULT_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:beef_stew", 2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:chicken_soup", 2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:vegetable_soup", 2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:fish_stew", 2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:pumpkin_soup", 2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:baked_cod_stew", 2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "farmersdelight:hot_cocoa", 3, 3600);
 	}
 	
 	private static void initRealisticTorches()
@@ -128,39 +125,39 @@ public final class IntegrationController
 	
 	private static void initNeapolitan()
 	{
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "neapolitan:ice_cubes", -1.0f, 3600, DEFAULT_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "neapolitan:ice_cubes", -1, 3600);
 		
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "neapolitan:chocolate_ice_cream", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "neapolitan:vanilla_ice_cream", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "neapolitan:strawberry_ice_cream", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "neapolitan:banana_ice_cream", -3.0f, 3600, DEFAULT_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "neapolitan:chocolate_ice_cream", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "neapolitan:vanilla_ice_cream", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "neapolitan:strawberry_ice_cream", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "neapolitan:banana_ice_cream", -3, 3600);
 
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.DRINK.group(), "neapolitan:chocolate_milkshake", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.DRINK.group(), "neapolitan:vanilla_milkshake", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.DRINK.group(), "neapolitan:strawberry_milkshake", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.DRINK.group(), "neapolitan:banana_milkshake", -3.0f, 3600, DEFAULT_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "neapolitan:chocolate_milkshake", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "neapolitan:vanilla_milkshake", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "neapolitan:strawberry_milkshake", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "neapolitan:banana_milkshake", -3, 3600);
 		
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "neapolitan:neapolitan_ice_cream", -3.0f, 3600, DEFAULT_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "neapolitan:neapolitan_ice_cream", -3, 3600);
 	}
 	
 	private static void initSeasonals()
 	{
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "seasonals:pumpkin_ice_cream", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "seasonals:sweet_berry_ice_cream", -3.0f, 3600, DEFAULT_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "seasonals:pumpkin_ice_cream", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "seasonals:sweet_berry_ice_cream", -3, 3600);
 		
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.DRINK.group(), "seasonals:pumpkin_milkshake", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.DRINK.group(), "seasonals:sweet_berry_milkshake", -3.0f, 3600, DEFAULT_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "seasonals:pumpkin_milkshake", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "seasonals:sweet_berry_milkshake", -3, 3600);
 	}
 	
 	private static void initPeculiars()
 	{
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "peculiars:yucca_ice_cream", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "peculiars:aloe_ice_cream", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "peculiars:passionfruit_ice_cream", -3.0f, 3600, DEFAULT_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "peculiars:yucca_ice_cream", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "peculiars:aloe_ice_cream", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "peculiars:passionfruit_ice_cream", -3, 3600);
 		
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.DRINK.group(), "peculiars:yucca_milkshake", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.DRINK.group(), "peculiars:aloe_milkshake", -3.0f, 3600, DEFAULT_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.DRINK.group(), "peculiars:passionfruit_milkshake", -3.0f, 3600, DEFAULT_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "peculiars:yucca_milkshake", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "peculiars:aloe_milkshake", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "peculiars:passionfruit_milkshake", -3, 3600);
 	}
 	
 	private static void initBetterEndForge()

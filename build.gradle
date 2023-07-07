@@ -56,6 +56,8 @@ minecraft {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
+            args '--username', 'Armkath', '--userType', 'microsoft', '--accessToken', 'eyJraWQiOiJhYzg0YSIsImFsZyI6IkhTMjU2In0.eyJ4dWlkIjoiMjUzNTQxMjExMTgwMTc2NiIsImFnZyI6IkFkdWx0Iiwic3ViIjoiNTkzZmNlNDctN2IxOS00MjI3LWFjM2ItMThjZmQzODNjNWFjIiwiYXV0aCI6IlhCT1giLCJucyI6ImRlZmF1bHQiLCJyb2xlcyI6W10sImlzcyI6ImF1dGhlbnRpY2F0aW9uIiwiZmxhZ3MiOlsidHdvZmFjdG9yYXV0aCIsIm1pbmVjcmFmdF9uZXQiLCJvcmRlcnNfMjAyMiJdLCJwbGF0Zm9ybSI6IlVOS05PV04iLCJ5dWlkIjoiZWU5MmU4NTY2M2VkNTZlNTQ2NjRmMGRlYmI1YTYzYTYiLCJuYmYiOjE2ODc3ODMyMjEsImV4cCI6MTY4Nzg2OTYyMSwiaWF0IjoxNjg3NzgzMjIxfQ.Pof9-V51vSrgB61UlzmBfiscvl2WdVWD3dvpfMVnPF8'
+
             mods {
                 legendarysurvivaloverhaul {
                     source sourceSets.main

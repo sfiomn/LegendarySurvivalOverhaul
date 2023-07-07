@@ -6,8 +6,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.common.tileentity.CoolerTileEntity;
-import sfiomn.legendarysurvivaloverhaul.common.tileentity.HeaterTileEntity;
+import sfiomn.legendarysurvivaloverhaul.common.tileentities.CoolerTileEntity;
+import sfiomn.legendarysurvivaloverhaul.common.tileentities.HeaterTileEntity;
 
 public class TileEntityRegistry {
     public static DeferredRegister<TileEntityType<?>> TILE_ENTITIES =

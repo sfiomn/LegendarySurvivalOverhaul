@@ -5,8 +5,7 @@ import com.google.gson.GsonBuilder;
 import org.apache.commons.io.FileUtils;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonItemIdentity;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.TemporaryModifierGroup;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
 import sfiomn.legendarysurvivaloverhaul.common.integration.IntegrationController;
 import sfiomn.legendarysurvivaloverhaul.config.JsonFileName;
@@ -22,8 +21,6 @@ import java.util.Map;
 
 public class JsonConfigRegistration
 {
-	public static final JsonItemIdentity DEFAULT_ITEM_IDENTITY = new JsonItemIdentity(null);
-	
 	public static void init(File configDir)
 	{
 		registerTemperatures(configDir);
@@ -56,7 +53,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerBlockTemperature("minecraft:smoker", 0.0f, new JsonPropertyValue("false", "true"));
 		
 		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", -10.0f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 10.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 15.0f, new JsonPropertyValue("lit", "true"));
 		
 		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", 0.0f, new JsonPropertyValue("lit", "false"));
 		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 0.0f, new JsonPropertyValue("lit", "false"));
@@ -88,8 +85,10 @@ public class JsonConfigRegistration
 		JsonConfig.registerArmorTemperature("minecraft:iron_chestplate", 0f);
 		JsonConfig.registerArmorTemperature("minecraft:iron_helmet", 0f);
 		
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "minecraft:mushroom_stew", 1.0f, 1200, DEFAULT_ITEM_IDENTITY);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroup.FOOD.group(), "minecraft:rabbit_stew", 1.0f, 1200, DEFAULT_ITEM_IDENTITY);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:mushroom_stew", 1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "minecraft:mushroom_stew", 1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:rabbit_stew", 2, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:melon_slice", -1, 1200);
 		
 		JsonConfig.registerBiomeOverride("minecraft:crimson_forest", 0.75f, false);
 		JsonConfig.registerBiomeOverride("minecraft:warped_forest", 0.75f, false);
@@ -125,20 +124,14 @@ public class JsonConfigRegistration
 	
 	public static void processAllJson(File jsonDir)
 	{
-		Map<String, List<JsonArmorIdentity>> jsonArmorTemperatures = processJson(JsonFileName.ARMOR, JsonConfig.armorTemperatures, jsonDir, true);
+		Map<String, JsonTemperature> jsonArmorTemperatures = processJson(JsonFileName.ARMOR, JsonConfig.armorTemperatures, jsonDir, true);
 		
 		if (jsonArmorTemperatures != null)
 		{
 			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonArmorTemperatures.size() + " armor temperature values from JSON");
-			for (Map.Entry<String, List<JsonArmorIdentity>> entry : jsonArmorTemperatures.entrySet())
+			for (Map.Entry<String, JsonTemperature> entry : jsonArmorTemperatures.entrySet())
 			{
-				for (JsonArmorIdentity jtm : entry.getValue())
-				{
-					if (jtm.identity != null)
-							jtm.identity.tryPopulateCompound();
-					
-					JsonConfig.registerArmorTemperature(entry.getKey(), jtm.temperature, jtm.identity == null ? DEFAULT_ITEM_IDENTITY : jtm.identity);
-				}
+				JsonConfig.registerArmorTemperature(entry.getKey(), entry.getValue().temperature);
 			}
 		}
 		
@@ -206,18 +199,14 @@ public class JsonConfigRegistration
 		}
 		
 		Map<String, List<JsonConsumableTemperature>> jsonConsumableTemperatures = processJson(JsonFileName.CONSUMABLE, JsonConfig.consumableTemperature, jsonDir, true);
-		
+
 		if (jsonConsumableTemperatures != null)
 		{
 			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonConsumableTemperatures.size() + " consumable temperature values from JSON");
 			for (Map.Entry<String, List<JsonConsumableTemperature>> entry : jsonConsumableTemperatures.entrySet())
 			{
-				for (JsonConsumableTemperature jct : entry.getValue())
-				{
-					if (jct.identity != null)
-						jct.identity.tryPopulateCompound();
-					
-					JsonConfig.registerConsumableTemperature(jct.group, entry.getKey(), jct.temperature, jct.duration, jct.identity);
+				for (JsonConsumableTemperature jct: entry.getValue()) {
+					JsonConfig.registerConsumableTemperature(jct.group, entry.getKey(), jct.temperatureLevel, jct.duration);
 				}
 			}
 			

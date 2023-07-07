@@ -2,16 +2,17 @@ package sfiomn.legendarysurvivaloverhaul.config.json;
 
 import com.google.common.collect.Maps;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonItemIdentity;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class JsonConfig
 {
-	public static Map<String, List<JsonArmorIdentity>> armorTemperatures = Maps.newHashMap();
+	public static Map<String, JsonTemperature> armorTemperatures = Maps.newHashMap();
 	public static Map<String, List<JsonPropertyTemperature>> blockTemperatures = Maps.newHashMap();
 	public static Map<String, JsonTemperature> fluidTemperatures = Maps.newHashMap();
 	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
@@ -63,56 +64,34 @@ public class JsonConfig
 			return true;
 		}
 	}
-	// JsonArmorIdentity
-	
 	public static void registerArmorTemperature(String registryName, float temperature)
 	{
-		registerArmorTemperature(registryName, temperature, new JsonItemIdentity(null));
-	}
-	
-	public static void registerArmorTemperature(String registryName, float temperature, JsonItemIdentity identity)
-	{
 		if(!armorTemperatures.containsKey(registryName))
-				armorTemperatures.put(registryName, new ArrayList<JsonArmorIdentity>());
-		
-		final List<JsonArmorIdentity> currentList = armorTemperatures.get(registryName);
-		
-		JsonArmorIdentity result = new JsonArmorIdentity(temperature, identity);
-		
-		for (int i = 0; i < currentList.size(); i++)
-		{
-			JsonTemperatureIdentity jtm = currentList.get(i);
-			
-			if (jtm.matches(identity))
-			{
-				currentList.set(i, result);
-				return;
-			}
-		}
-		
-		currentList.add(result);
+			armorTemperatures.put(registryName, new JsonTemperature(temperature));
 	}
 	
-	public static void registerConsumableTemperature(String group, String registryName, float temperature, int duration, JsonItemIdentity identity)
+	public static boolean registerConsumableTemperature(TemporaryModifierGroupEnum group, String registryName, int temperatureLevel, int duration)
 	{
-		if (!consumableTemperature.containsKey(registryName))
-			consumableTemperature.put(registryName, new ArrayList<JsonConsumableTemperature>());
-		
+		if (!consumableTemperature.containsKey(registryName)) {
+			consumableTemperature.put(registryName, new ArrayList<>());
+		}
+
 		final List<JsonConsumableTemperature> currentList = consumableTemperature.get(registryName);
-		
-		JsonConsumableTemperature result = new JsonConsumableTemperature(group, temperature, duration, identity);
-		
+
+		JsonConsumableTemperature jsonConsumableTemperature = new JsonConsumableTemperature(group, temperatureLevel, duration);
+
 		for (int i = 0; i < currentList.size(); i++)
 		{
 			JsonConsumableTemperature jct = currentList.get(i);
-			if (jct.matches(identity))
+			if (Objects.equals(jct.group, jsonConsumableTemperature.group))
 			{
-				currentList.set(i, result);
-				return;
+				currentList.set(i, jsonConsumableTemperature);
+				return true;
 			}
 		}
-		
-		currentList.add(result);
+
+		currentList.add(jsonConsumableTemperature);
+		return true;
 	}
 	
 	public static void registerFluidTemperature(String registryName, float temperature)

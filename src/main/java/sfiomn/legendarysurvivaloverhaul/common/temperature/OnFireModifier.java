@@ -1,8 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
+import net.minecraft.entity.player.PlayerEntity;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-import net.minecraft.entity.player.PlayerEntity;
 
 public class OnFireModifier extends ModifierBase
 {
@@ -18,6 +18,7 @@ public class OnFireModifier extends ModifierBase
 	{
 		if (player.getRemainingFireTicks() > 0)
 		{
+			// LegendarySurvivalOverhaul.LOGGER.debug("On fire temp influence : " + String.valueOf(Config.Baked.onFireModifier));
 			return (float) Config.Baked.onFireModifier;
 		}
 		

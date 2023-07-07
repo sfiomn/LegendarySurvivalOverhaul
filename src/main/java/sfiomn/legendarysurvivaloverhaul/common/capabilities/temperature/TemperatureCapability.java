@@ -1,6 +1,5 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature;
 
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Items;
@@ -13,30 +12,24 @@ import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ITemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
-import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifier;
 import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
 import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
-
-import java.util.HashMap;
-import java.util.Map;
 
 // Code adapted from 
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/capability/TemperatureCapability.java
 
 public class TemperatureCapability implements ITemperatureCapability
 {
-	private int temperature;
+	private float temperature;
 	private int temperatureTickTimer;
-	private Map<String, TemporaryModifier> temporaryModifiers;
 	
 	//Unsaved data
-	private int oldTemperature;
+	private float oldTemperature;
 	private int updateTimer; //Update immediately first time around
-	private int targetTemp;
+	private float targetTemp;
 	private boolean manualDirty;
-	private int oldModifierSize;
 	private int packetTimer;
 	
 	public TemperatureCapability() 
@@ -49,19 +42,22 @@ public class TemperatureCapability implements ITemperatureCapability
 		this.temperature = TemperatureEnum.NORMAL.getMiddle();
 		this.temperatureTickTimer = 0;
 		
-		this.temporaryModifiers = new HashMap<String, TemporaryModifier>();
-		
 		this.oldTemperature = 0;
 		this.targetTemp = 0;
 		this.manualDirty = false;
-		this.oldModifierSize = 0;
 		this.packetTimer = 0;
 	}
 	
 	@Override
-	public int getTemperatureLevel()
+	public float getTemperatureLevel()
 	{
 		return temperature;
+	}
+
+	@Override
+	public float getTargetTemperatureLevel()
+	{
+		return targetTemp;
 	}
 
 	@Override
@@ -71,15 +67,14 @@ public class TemperatureCapability implements ITemperatureCapability
 	}
 
 	@Override
-	public ImmutableMap<String, TemporaryModifier> getTemporaryModifiers()
+	public void setTemperatureLevel(float temperature)
 	{
-		return ImmutableMap.copyOf(temporaryModifiers);
+		this.temperature = temperature;
 	}
 
 	@Override
-	public void setTemperatureLevel(int temperature)
-	{
-		this.temperature = TemperatureUtil.clampTemperature(temperature);
+	public void setTargetTemperatureLevel(float targetTemperature) {
+		this.targetTemp = targetTemperature;
 	}
 
 	@Override
@@ -88,25 +83,8 @@ public class TemperatureCapability implements ITemperatureCapability
 		this.temperatureTickTimer = tickTimer;
 	}
 
-
 	@Override
-	public void setTemporaryModifier(String name, float temp, int duration)
-	{
-		if (temp == 0.0f || !Float.isFinite(temp))
-		{
-			return;
-		}
-		
-		if (this.getTemporaryModifiers().containsKey(name))
-		{
-			this.manualDirty = true;
-		}
-		
-		this.temporaryModifiers.put(name, new TemporaryModifier(temp, duration));
-	}
-
-	@Override
-	public void addTemperatureLevel(int temperature)
+	public void addTemperatureLevel(float temperature)
 	{
 		this.setTemperatureLevel(getTemperatureLevel() + temperature);
 	}
@@ -115,12 +93,6 @@ public class TemperatureCapability implements ITemperatureCapability
 	public void addTemperatureTickTimer(int tickTimer)
 	{
 		this.setTemperatureTickTimer(this.temperatureTickTimer + tickTimer);
-	}
-
-	@Override
-	public void clearTemporaryModifiers()
-	{
-		this.temporaryModifiers.clear();
 	}
 	
 	@Override
@@ -131,12 +103,10 @@ public class TemperatureCapability implements ITemperatureCapability
 			packetTimer++;
 			return;
 		}
-		
 		updateTimer++;
 		if(updateTimer >= 10)
 		{
 			updateTimer = 0;
-			
 			targetTemp = TemperatureUtil.getPlayerTargetTemperature(player);
 		}
 
@@ -147,7 +117,7 @@ public class TemperatureCapability implements ITemperatureCapability
 
 			TemperatureEnum tempEnum = getTemperatureEnum();
 
-			int destinationTemp = TemperatureUtil.clampTemperature(targetTemp);
+			float destinationTemp = targetTemp;
 
 			if (getTemperatureLevel() != destinationTemp) {
 				tickTemperature(getTemperatureLevel(), destinationTemp);
@@ -160,7 +130,6 @@ public class TemperatureCapability implements ITemperatureCapability
 				applyDangerousEffects(player, tempEnum);
 			}
 		}
-		updateTemporaryModifiers();
 	}
 
 	private void applyDangerousEffects(PlayerEntity player, TemperatureEnum tempEnum) {
@@ -183,37 +152,11 @@ public class TemperatureCapability implements ITemperatureCapability
 		player.removeEffect(EffectRegistry.FROSTBITE.get());
 	}
 	
-	private void updateTemporaryModifiers()
+	private void tickTemperature(float currentTemp, float destination)
 	{
-		Map<String, TemporaryModifier> tweaks = new HashMap<String, TemporaryModifier>();
+		float diff = Math.abs(destination - currentTemp);
 		
-		for(Map.Entry<String, TemporaryModifier> entry : temporaryModifiers.entrySet())
-		{
-			TemporaryModifier tm = entry.getValue();
-			
-			if (tm.duration > 0)
-			{
-				tweaks.put(entry.getKey(), new TemporaryModifier(tm.temperature, tm.duration -1));
-			}
-		}
-		
-		temporaryModifiers.clear();
-		temporaryModifiers.putAll(tweaks);
-		tweaks.clear();
-		
-		if (oldModifierSize != temporaryModifiers.size())
-		{
-			this.manualDirty = true;
-		}
-		
-		oldModifierSize = temporaryModifiers.size();
-	}
-	
-	private void tickTemperature(int currentTemp, int destination)
-	{
-		int diff = Math.abs(destination - currentTemp);
-		
-		int tickTowards = 1;
+		float tickTowards = Math.min(1, diff);
 		
 		if (diff > 15)
 		{
@@ -230,18 +173,18 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 	}
 	
-	private int getTemperatureTickLimit()
+	private float getTemperatureTickLimit()
 	{
 		int tickMax = Config.Baked.maxTickRate;
 		int tickMin = Config.Baked.minTickRate;
 		
-		int tickrange = tickMax - tickMin;
+		int tickRange = tickMax - tickMin;
 		
 		int tempRange = TemperatureEnum.HEAT_STROKE.getUpperBound() - TemperatureEnum.FROSTBITE.getLowerBound();
 		
-		int currentrange = Math.abs(getTemperatureLevel() - targetTemp);
+		float currentRange = Math.abs(getTemperatureLevel() - targetTemp);
 		
-		return Math.max(tickMin, tickMax - ((currentrange * tickrange) / tempRange));
+		return Math.max(tickMin, tickMax - ((currentRange * tickRange) / tempRange));
 	}
 
 	@Override
@@ -273,22 +216,9 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		CompoundNBT compound = new CompoundNBT();
 		
-		compound.putInt("temperature", this.temperature);
+		compound.putFloat("temperature", this.temperature);
+		compound.putFloat("targettemperature", this.targetTemp);
 		compound.putInt("ticktimer", this.temperatureTickTimer);
-		
-		CompoundNBT modifiers = new CompoundNBT();
-		
-		for (String entry : temporaryModifiers.keySet())
-		{
-			CompoundNBT savedMod = new CompoundNBT();
-			TemporaryModifier modifier = temporaryModifiers.get(entry);
-			savedMod.putFloat("temperature", modifier.temperature);
-			savedMod.putInt("duration", modifier.duration);
-			
-			modifiers.put(entry, savedMod);
-		}
-		
-		compound.put("temporaryModifiers", modifiers);
 		
 		return compound;
 	}
@@ -297,24 +227,10 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		this.init();
 		if (compound.contains("temperature"))
-			this.setTemperatureLevel(compound.getInt("temperature"));
+			this.setTemperatureLevel(compound.getFloat("temperature"));
+		if (compound.contains("targettemperature"))
+			this.setTargetTemperatureLevel(compound.getFloat("targettemperature"));
 		if (compound.contains("tickTimer"))
 			this.setTemperatureTickTimer(compound.getInt("tickTimer"));
-		
-		
-		if(compound.contains("temporaryModifiers"))
-		{
-			this.clearTemporaryModifiers();
-			
-			CompoundNBT modifiers = (CompoundNBT) compound.get("temporaryModifiers");
-			
-			for (String entry : modifiers.getAllKeys())
-			{
-				float modTemp = ((CompoundNBT) modifiers.get(entry)).getFloat("temperature");
-				int modDuration = ((CompoundNBT) modifiers.get(entry)).getInt("duration");
-				
-				this.setTemporaryModifier(entry, modTemp, modDuration);
-			}
-		}
 	}
 }

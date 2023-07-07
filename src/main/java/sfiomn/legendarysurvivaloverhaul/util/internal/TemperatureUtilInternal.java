@@ -11,6 +11,7 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ITemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
+import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
 
@@ -19,7 +20,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	private final String COAT_TAG = "ArmorPadding";
 	
 	@Override
-	public int getPlayerTargetTemperature(PlayerEntity player)
+	public float getPlayerTargetTemperature(PlayerEntity player)
 	{
 		float sum = 0.0f;
 		World world = player.getCommandSenderWorld();
@@ -36,11 +37,11 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 			sum += dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);
 			sum += dynamicModifier.applyDynamicPlayerInfluence(player, sum);
 		}
-		return Math.round(sum);
+		return MathUtil.round(sum, 1);
 	}
 
 	@Override
-	public int getWorldTemperature(World world, BlockPos pos)
+	public float getWorldTemperature(World world, BlockPos pos)
 	{
 		float sum = 0.0f;
 
@@ -53,28 +54,28 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 			sum += dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);
 		}
 
-		return Math.round(sum);
+		return MathUtil.round(sum, 1);
 	}
 
 	@Override
-	public int clampTemperature(int temperature)
+	public float clampTemperature(float temperature)
 	{
 		return MathHelper.clamp(temperature, TemperatureEnum.FROSTBITE.getLowerBound(), TemperatureEnum.HEAT_STROKE.getUpperBound());
 	}
 
 	@Override
-	public TemperatureEnum getTemperatureEnum(int temp)
+	public TemperatureEnum getTemperatureEnum(float temperature)
 	{
 		for(TemperatureEnum tempEnum : TemperatureEnum.values())
 		{
-			if(tempEnum.matches(temp))
+			if(tempEnum.matches(temperature))
 			{
 				return tempEnum;
 			}
 		}
 		
 		// Temperature invalid, assume extremes
-		if(temp < 0)
+		if(temperature < 0)
 		{
 			return TemperatureEnum.FROSTBITE;
 		}

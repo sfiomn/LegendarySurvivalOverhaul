@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.common.tileentity;
+package sfiomn.legendarysurvivaloverhaul.common.tileentities;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -7,26 +7,26 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
-import sfiomn.legendarysurvivaloverhaul.common.containers.CoolerContainer;
+import sfiomn.legendarysurvivaloverhaul.common.containers.HeaterContainer;
 import sfiomn.legendarysurvivaloverhaul.registry.TileEntityRegistry;
 
-public class CoolerTileEntity extends AbstractThermalTileEntity {
+public class HeaterTileEntity extends AbstractThermalTileEntity {
 
-    public CoolerTileEntity() {
-        this(TileEntityRegistry.COOLER_TILE_ENTITY.get());
+    public HeaterTileEntity() {
+        this(TileEntityRegistry.HEATER_TILE_ENTITY.get());
     }
 
-    public CoolerTileEntity(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn, ThermalTypeEnum.COOLING);
+    public HeaterTileEntity(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn, ThermalTypeEnum.HEATING);
     }
 
     @Override
     public ITextComponent getDefaultName() {
-        return new TranslationTextComponent("container." + LegendarySurvivalOverhaul.MOD_ID + ".cooler");
+        return new TranslationTextComponent("container." + LegendarySurvivalOverhaul.MOD_ID + ".heater");
     }
 
     @Override
     public Container createMenu(int id, PlayerInventory playerInventory) {
-        return new CoolerContainer(id, playerInventory, this);
+        return new HeaterContainer(id, playerInventory, this);
     }
 }

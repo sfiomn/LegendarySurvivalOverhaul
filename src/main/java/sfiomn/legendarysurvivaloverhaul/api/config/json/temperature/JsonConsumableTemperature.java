@@ -1,8 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.api.config.json.temperature;
 
-import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonItemIdentity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effect;
+import net.minecraftforge.fml.RegistryObject;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 
 /**
  * Code taken and adapted from Charles445's SimpleDifficulty mod
@@ -13,37 +13,33 @@ import net.minecraft.nbt.CompoundNBT;
 
 public class JsonConsumableTemperature
 {
-	public JsonItemIdentity identity;
-	
-	public String group;
-	public float temperature;
+	public TemporaryModifierGroupEnum group;
+	public int temperatureLevel;
 	public int duration;
+	private RegistryObject<Effect> effect;
+	private RegistryObject<Effect> oppositeEffect;
 	
-	public JsonConsumableTemperature(String group, float temperature, int duration, String nbt)
+	public JsonConsumableTemperature(TemporaryModifierGroupEnum group, int temperatureLevel, int duration)
 	{
-		this(group, temperature, duration, new JsonItemIdentity(nbt));
-	}
-	
-	public JsonConsumableTemperature(String group, float temperature, int duration, JsonItemIdentity identity)
-	{
-		this.temperature = temperature;
+		this.temperatureLevel = Math.abs(temperatureLevel);
 		this.duration = duration;
-		this.group = group.toLowerCase();
-		this.identity = identity;
+		this.group = group;
+		this.effect = null;
+		this.oppositeEffect = null;
+		if (temperatureLevel > 0) {
+			this.effect = group.hotEffect;
+			this.oppositeEffect = group.coldEffect;
+		} else if (temperatureLevel < 0) {
+			this.effect = group.coldEffect;
+			this.oppositeEffect = group.hotEffect;
+		}
 	}
-	
-	public boolean matches(ItemStack stack)
-	{
-		return identity.matches(stack);
+
+	public Effect getEffect() {
+		return this.effect.get();
 	}
-	
-	public boolean matches(JsonItemIdentity sentIdentity)
-	{
-		return identity.matches(sentIdentity);
-	}
-	
-	public boolean matches(CompoundNBT compound)
-	{
-		return identity.matches(compound);
+
+	public Effect getOppositeEffect() {
+		return this.oppositeEffect.get();
 	}
 }

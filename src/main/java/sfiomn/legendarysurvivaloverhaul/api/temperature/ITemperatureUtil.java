@@ -7,13 +7,13 @@ import net.minecraft.item.ItemStack;
 
 public interface ITemperatureUtil
 {
-	public int getPlayerTargetTemperature(PlayerEntity player);
+	public float getPlayerTargetTemperature(PlayerEntity player);
 	
-	public int getWorldTemperature(World world, BlockPos pos);
+	public float getWorldTemperature(World world, BlockPos pos);
 	
-	public int clampTemperature(int temperature);
+	public float clampTemperature(float temperature);
 	
-	public TemperatureEnum getTemperatureEnum(int temp);
+	public TemperatureEnum getTemperatureEnum(float temperature);
 	
 	public void setArmorCoatTag(final ItemStack stack, String temperatureType);
 	

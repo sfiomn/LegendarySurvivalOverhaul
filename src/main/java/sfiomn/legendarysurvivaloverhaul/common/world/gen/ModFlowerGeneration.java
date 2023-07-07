@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.world.gen;
+package sfiomn.legendarysurvivaloverhaul.common.world.gen;
 
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.Registry;
@@ -7,7 +7,6 @@ import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 import java.util.List;
@@ -27,23 +26,23 @@ public class ModFlowerGeneration {
 
         if (Config.Baked.iceFernBiomeNames.contains(key.location().toString())) {
             canIceFernSpawn = true;
-            LegendarySurvivalOverhaul.LOGGER.debug("Add ice fern in biome " + key.location());
+            // LegendarySurvivalOverhaul.LOGGER.debug("Add ice fern in biome " + key.location());
         } else {
             for (BiomeDictionary.Type type : types) {
                 if (Config.Baked.iceFernBiomeTypes.contains(type.getName())) {
                     canIceFernSpawn = true;
-                    LegendarySurvivalOverhaul.LOGGER.debug("Add ice fern biome " + key.location() + " with type " + type.getName());
+                    // LegendarySurvivalOverhaul.LOGGER.debug("Add ice fern biome " + key.location() + " with type " + type.getName());
                 }
             }
         }
         if (Config.Baked.sunFernBiomeNames.contains(key.location().toString())) {
             canSunFernSpawn = true;
-            LegendarySurvivalOverhaul.LOGGER.debug("Add sun fern in biome " + key.location());
+            // LegendarySurvivalOverhaul.LOGGER.debug("Add sun fern in biome " + key.location());
         } else {
             for (BiomeDictionary.Type type : types) {
                 if (Config.Baked.sunFernBiomeTypes.contains(type.getName())) {
                     canSunFernSpawn = true;
-                    LegendarySurvivalOverhaul.LOGGER.debug("Add sun fern biome " + key.location() + " with type " + type.getName());
+                    // LegendarySurvivalOverhaul.LOGGER.debug("Add sun fern biome " + key.location() + " with type " + type.getName());
                 }
             }
         }

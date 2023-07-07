@@ -16,7 +16,7 @@ public class TemperatureUtil
 	 * @param player Player
 	 * @return Player's target temperature
 	 */
-	public static int getPlayerTargetTemperature(PlayerEntity player)
+	public static float getPlayerTargetTemperature(PlayerEntity player)
 	{
 		return internal.getPlayerTargetTemperature(player);
 	}
@@ -28,7 +28,7 @@ public class TemperatureUtil
 	 * @param pos Position
 	 * @return World temperature at position
 	 */
-	public static int getWorldTemperature(World world, BlockPos pos)
+	public static float getWorldTemperature(World world, BlockPos pos)
 	{
 		return internal.getWorldTemperature(world, pos);
 	}
@@ -38,7 +38,7 @@ public class TemperatureUtil
 	 * @param temperature Temperature
 	 * @return Clamped temperature
 	 */
-	public static int clampTemperature(int temperature)
+	public static float clampTemperature(float temperature)
 	{
 		return internal.clampTemperature(temperature);
 	}
@@ -48,7 +48,7 @@ public class TemperatureUtil
 	 * @param temperature Temperature
 	 * @return TemperatureEnum for the temperature
 	 */
-	public static TemperatureEnum getTemperatureEnum(int temperature)
+	public static TemperatureEnum getTemperatureEnum(float temperature)
 	{
 		return internal.getTemperatureEnum(temperature);
 	}

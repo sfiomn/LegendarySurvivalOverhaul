@@ -36,9 +36,8 @@ public class RenderTemperatureGUI
 	
 	private static final int WETNESS_TEXTURE_WIDTH = 9;
 	private static final int WETNESS_TEXTURE_HEIGHT = 9;
-
-	private static int oldTemperature = -1;
 	private static int frameCounter = -1;
+	private static int delay = 0;
 	private static boolean risingTemperature = false;
 	private static boolean startAnimation = false;
 	
@@ -80,10 +79,10 @@ public class RenderTemperatureGUI
 		
 		int xOffset = 0;
 		int yOffset = 0;
-		
-		int temperature = cap.getTemperatureLevel();
-		
-		TemperatureEnum tempEnum = cap.getTemperatureEnum(); 
+
+		float temperature = cap.getTemperatureLevel();
+		float targetTemperature = cap.getTargetTemperatureLevel();
+		TemperatureEnum tempEnum = cap.getTemperatureEnum();
 		
 		IconPair icon;
 		
@@ -94,7 +93,7 @@ public class RenderTemperatureGUI
 		case HEAT_STROKE:
 			icon = IconPair.FIRE;
 			
-			if (temperature == TemperatureEnum.HEAT_STROKE.getLowerBound())
+			if ((int) temperature == TemperatureEnum.HEAT_STROKE.getLowerBound())
 			{
 				shakeFrequency = 0;
 			}
@@ -120,7 +119,7 @@ public class RenderTemperatureGUI
 		case FROSTBITE:
 			icon = IconPair.SNOWFLAKE;
 			
-			if (temperature == TemperatureEnum.FROSTBITE.getUpperBound())
+			if ((int) temperature == TemperatureEnum.FROSTBITE.getUpperBound())
 			{
 				shakeFrequency = 0;
 			}
@@ -173,16 +172,14 @@ public class RenderTemperatureGUI
 		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT, TEMPERATURE_TEXTURE_WIDTH * icon.getIconIndex(), TEMPERATURE_TEXTURE_POS_Y, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT);
 		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT, TEMPERATURE_TEXTURE_WIDTH * icon.getIconHolder(), TEMPERATURE_TEXTURE_POS_Y, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT);
 
-		if (oldTemperature == -1)
-		{
-			oldTemperature = temperature;
-		}
-		
-		if (oldTemperature != temperature)
-		{
-			risingTemperature = oldTemperature < temperature;
-			oldTemperature = temperature;
-			startAnimation = true;
+		if (delay == 0) {
+			if ((int) targetTemperature != (int) temperature) {
+				risingTemperature = targetTemperature > temperature;
+				startAnimation = true;
+				delay = 80;
+			}
+		} else if (frameCounter == -1){
+			delay --;
 		}
 		
 		int ovrXOffset = TEMPERATURE_TEXTURE_WIDTH * ((frameCounter / 2) - 1);

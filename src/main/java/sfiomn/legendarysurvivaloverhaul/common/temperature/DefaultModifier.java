@@ -1,8 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 
 public class DefaultModifier extends ModifierBase
 {
@@ -14,6 +14,7 @@ public class DefaultModifier extends ModifierBase
 	@Override
 	public float getWorldInfluence(World world, BlockPos pos)
 	{
+		// LegendarySurvivalOverhaul.LOGGER.debug("Default temp influence : " + defaultTemperature);
 		return defaultTemperature;
 	}
 }

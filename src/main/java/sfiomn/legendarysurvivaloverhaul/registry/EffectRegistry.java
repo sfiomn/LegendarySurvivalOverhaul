@@ -7,10 +7,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.common.effects.ColdResistanceEffect;
-import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
-import sfiomn.legendarysurvivaloverhaul.common.effects.HeatResistanceEffect;
-import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
+import sfiomn.legendarysurvivaloverhaul.common.effects.*;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 public class EffectRegistry
@@ -26,6 +23,11 @@ public class EffectRegistry
 	public static final RegistryObject<Potion> HEAT_RESISTANCE_POTION_LONG = POTIONS.register("heat_resistance_long", () -> new Potion("heat_resistance_long", new EffectInstance(HEAT_RESISTANCE.get(), 9600, 0, false, Config.Baked.showPotionEffectParticles, true)));
 	public static final RegistryObject<Potion> COLD_RESISTANCE_POTION = POTIONS.register("cold_resistance", () -> new Potion("cold_resistance", new EffectInstance(COLD_RESISTANCE.get(), 3600, 0, false, Config.Baked.showPotionEffectParticles, true)));
 	public static final RegistryObject<Potion> COLD_RESISTANCE_POTION_LONG = POTIONS.register("cold_resistance_long", () -> new Potion("cold_resistance_long", new EffectInstance(COLD_RESISTANCE.get(), 9600, 0, false, Config.Baked.showPotionEffectParticles, true)));
+
+	public static final RegistryObject<Effect> HOT_FOOD = EFFECTS.register("hot_food", HotFoodEffect::new);
+	public static final RegistryObject<Effect> HOT_DRINk = EFFECTS.register("hot_drink", HotDrinkEffect::new);
+	public static final RegistryObject<Effect> COLD_FOOD = EFFECTS.register("cold_food", ColdFoodEffect::new);
+	public static final RegistryObject<Effect> COLD_DRINK = EFFECTS.register("cold_drink", ColdDrinkEffect::new);
 	
 	public static void registerBrewingRecipes()
 	{

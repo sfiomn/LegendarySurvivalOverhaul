@@ -37,8 +37,7 @@ import sfiomn.legendarysurvivaloverhaul.client.screens.SewingTableScreen;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ThermalScreen;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierStorage;
-import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
-import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureStorage;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.*;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -148,12 +147,15 @@ public class LegendarySurvivalOverhaul
 	public static final Capability<HeartModifierCapability> HEART_MOD_CAP = null;
 	@CapabilityInject(WetnessCapability.class)
 	public static final Capability<WetnessCapability> WETNESS_CAP = null;
+	@CapabilityInject(TemperatureItemCapability.class)
+	public static final Capability<TemperatureItemCapability> TEMPERATURE_ITEM_CAP = null;
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		CapabilityManager.INSTANCE.register(TemperatureCapability.class, new TemperatureStorage(), TemperatureCapability::new);
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
 		CapabilityManager.INSTANCE.register(WetnessCapability.class, new WetnessCapability.Storage(), WetnessCapability::new);
+		CapabilityManager.INSTANCE.register(TemperatureItemCapability.class, new TemperatureItemCapability.Storage(), TemperatureItemCapability::new);
 
 		NetworkHandler.register();
 		

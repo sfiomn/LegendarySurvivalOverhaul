@@ -70,7 +70,7 @@ public class HeaterBaseBlock extends ThermalBlock {
         super.neighborChanged(state, world, pos, block, fromPos, isMoving);
         if (world.getBlockState(pos.above()).getBlock() != BlockRegistry.HEATER_TOP.get())
         {
-            world.removeBlock(pos, true);
+            world.destroyBlock(pos, true);
         }
     }
 

@@ -25,7 +25,8 @@ public class AltitudeModifier extends ModifierBase
 			//64 - 128 = (0 to -1) * multiplier + 1		(-1 to -2)
 			//128 - 192 = (-1 to -2) * multiplier + 1	(-2 to -5)
 			//192 - 256 = (-2 to -3) * multiplier + 1	(-5 to -8)
-			return -1.0f * (Math.abs(((64.0f - pos.getY()) / 64.0f * ((float) Config.Baked.altitudeModifier)) + 1.0f));
+			// LegendarySurvivalOverhaul.LOGGER.debug("Altitude temp influence : " + -1.0f * (Math.abs((64.0f - pos.getY()) / 64.0f * ((float) Config.Baked.altitudeModifier))));
+			return -1.0f * (Math.abs((64.0f - pos.getY()) / 64.0f * ((float) Config.Baked.altitudeModifier)));
 		}
 	}
 }

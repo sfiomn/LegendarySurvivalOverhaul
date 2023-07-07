@@ -66,9 +66,15 @@
 	"effect.legendarysurvivaloverhaul.frostbite": "Frostbite",
 	"effect.legendarysurvivaloverhaul.heat_resist": "Heat Resistance",
 	"effect.legendarysurvivaloverhaul.cold_resist": "Cold Resistance",
+	"effect.legendarysurvivaloverhaul.hot_food": "Hot Food",
+	"effect.legendarysurvivaloverhaul.cold_food": "Cold Food",
+	"effect.legendarysurvivaloverhaul.hot_drink": "Hot Drink",
+	"effect.legendarysurvivaloverhaul.cold_drink": "Cold Drink",
 
 	"death.attack.legendarysurvivaloverhaul.hypothermia": "%1$s froze to death",
+	"death.attack.legendarysurvivaloverhaul.hypothermia.player": "%1$s froze to death",
 	"death.attack.legendarysurvivaloverhaul.hyperthermia": "%1$s couldn't take the heat",
+	"death.attack.legendarysurvivaloverhaul.hyperthermia.player": "%1$s couldn't take the heat",
 	"death.attack.legendarysurvivaloverhaul.dehydration": "%1$s died of dehydration",
 	
 	"advancements.adventure.have_a_heart.title": "Have a Heart",

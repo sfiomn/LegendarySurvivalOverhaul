@@ -26,34 +26,35 @@ public class WetModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
-	{
+	public float getWorldInfluence(World world, BlockPos pos) {
 		if (Config.Baked.wetnessMode != WetnessMode.SIMPLE)
 			return 0.0f;
-		
+
 		FluidState state = world.getFluidState(pos);
 		Fluid fluid = state.getType();
-		
-		if (!state.isEmpty())
-		{
-			for (Map.Entry<String, JsonTemperature> entry : JsonConfig.fluidTemperatures.entrySet())
-			{
+
+		if (!state.isEmpty()) {
+			for (Map.Entry<String, JsonTemperature> entry : JsonConfig.fluidTemperatures.entrySet()) {
 				if (entry.getValue() == null)
 					continue;
-				
-				if (entry.getKey().contentEquals(fluid.getRegistryName().toString()))
-				{
+
+				if (entry.getKey().contentEquals(fluid.getRegistryName().toString())) {
+					// LegendarySurvivalOverhaul.LOGGER.debug("Wet world temp influence : " + entry.getValue().temperature);
 					return entry.getValue().temperature;
 				}
 			}
 		}
-		
-		if (fluid.isSame(Fluids.WATER) || fluid.isSame(Fluids.FLOWING_WATER))
+
+		if (fluid.isSame(Fluids.WATER) || fluid.isSame(Fluids.FLOWING_WATER)) {
+			// LegendarySurvivalOverhaul.LOGGER.debug("Wet world temp influence : " + String.valueOf(Config.Baked.wetMultiplier));
 			return (float) Config.Baked.wetMultiplier;
-		else if (world.isRainingAt(pos))
+		} else if (world.isRainingAt(pos)) {
+			// LegendarySurvivalOverhaul.LOGGER.debug("Wet world temp influence : " + String.valueOf(Config.Baked.wetMultiplier));
 			return (float) Config.Baked.wetMultiplier;
-		else
+		} else {
+			// LegendarySurvivalOverhaul.LOGGER.debug("Wet world temp influence : " + 0.0f);
 			return 0.0f;
+		}
 	}
 	
 	@Override
@@ -76,10 +77,13 @@ public class WetModifier extends ModifierBase
 				break;
 			case DYNAMIC:
 				WetnessCapability wetCap = CapabilityUtil.getWetnessCapability(player);
-				if (wetCap.getWetness() == 0)
+				if (wetCap.getWetness() == 0) {
+					// LegendarySurvivalOverhaul.LOGGER.debug("Wet player temp influence : " + 0.0f);
 					return 0.0f;
-				else
+				} else {
+					// LegendarySurvivalOverhaul.LOGGER.debug("Wet player temp influence : " + (float) (Config.Baked.wetMultiplier * MathUtil.invLerp(0, WetnessCapability.WETNESS_LIMIT, wetCap.getWetness())));
 					return (float) (Config.Baked.wetMultiplier * MathUtil.invLerp(0, WetnessCapability.WETNESS_LIMIT, wetCap.getWetness()));
+				}
 			default:
 				break;
 		}

@@ -29,7 +29,7 @@ public class CoolerBlock extends ThermalBlock {
                 .of(Material.WOOD)
                 .sound(SoundType.WOOD)
                 .strength(2f, 10f)
-                .harvestTool(ToolType.PICKAXE)
+                .harvestTool(ToolType.AXE)
                 .harvestLevel(1)
                 .noOcclusion();
     }

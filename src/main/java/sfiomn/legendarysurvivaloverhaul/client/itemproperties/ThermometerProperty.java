@@ -10,13 +10,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
-import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
+import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 
 public class ThermometerProperty implements IItemPropertyGetter {
-
-    private long updateTime;
-    private float lastTemperature = 0.0f;
 
     @OnlyIn(Dist.CLIENT)
     @Override
@@ -38,13 +37,11 @@ public class ThermometerProperty implements IItemPropertyGetter {
         {
             try
             {
-                long currTime = System.currentTimeMillis();
-                if ((currTime - updateTime) > 500) {
-                    updateTime = currTime;
-                    float d = (float) WorldUtil.calculateClientWorldEntityTemperature(world, holder) / TemperatureEnum.HEAT_STROKE.getUpperBound();
-                    lastTemperature = MathHelper.positiveModulo(d, 1.0333333f);
+                TemperatureItemCapability tempItemCap = CapabilityUtil.getTempItemCapability(stack);
+                if (holder != null && tempItemCap.shouldUpdate()) {
+                    tempItemCap.updateWorldTemperature(world, holder);
                 }
-                return lastTemperature;
+                return MathHelper.positiveModulo(TemperatureUtil.clampTemperature((int) tempItemCap.getWorldTemperatureLevel()) / TemperatureEnum.HEAT_STROKE.getUpperBound(), 1.0333333f);
             }
             catch (NullPointerException e)
             {

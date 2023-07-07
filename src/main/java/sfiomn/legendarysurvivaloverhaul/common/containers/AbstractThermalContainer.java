@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.RegistryObject;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
-import sfiomn.legendarysurvivaloverhaul.common.tileentity.AbstractThermalTileEntity;
+import sfiomn.legendarysurvivaloverhaul.common.tileentities.AbstractThermalTileEntity;
 
 public abstract class AbstractThermalContainer extends Container {
 

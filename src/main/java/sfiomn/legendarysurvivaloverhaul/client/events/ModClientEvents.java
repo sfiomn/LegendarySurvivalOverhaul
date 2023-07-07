@@ -22,10 +22,13 @@ import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureEffect;
 import sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureGUI;
 import sfiomn.legendarysurvivaloverhaul.client.gui.TooltipFrame;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
+import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
+import static sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureEffect.updateTemperatureEffect;
 import static sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureGUI.updateTemperatureGui;
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil.formatSeasonName;
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil.plantCanGrow;
@@ -35,6 +38,8 @@ import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.timeInGame;
 public class ModClientEvents {
     private static final Minecraft minecraft = Minecraft.getInstance();
     public static TooltipFrame renderer;
+    public static Entity entityLookedAt;
+    public static int clientUpdateTimer;
 
     @SubscribeEvent
     public static void onItemRightClick(PlayerInteractEvent.RightClickItem event){
@@ -58,9 +63,8 @@ public class ModClientEvents {
     public static void onRenderGameOverlayTooltip(RenderGameOverlayEvent.Post event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
 
-        if (Minecraft.renderNames() && !minecraft.isPaused()) {
+        if (Minecraft.renderNames() && !minecraft.isPaused() && minecraft.level != null) {
             if(event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-                Entity entityLookedAt = WorldUtil.getEntityLookedAt(minecraft.player, 6);
                 MatrixStack matrixStack = event.getMatrixStack();
                 if (entityLookedAt instanceof ItemFrameEntity && !((ItemFrameEntity) entityLookedAt).getItem().isEmpty()) {
                     Item itemInFrame = ((ItemFrameEntity) entityLookedAt).getItem().getItem();
@@ -76,7 +80,8 @@ public class ModClientEvents {
                             }
                         }
                         if (itemInFrame == ItemRegistry.THERMOMETER.get()) {
-                            renderer.setText(new StringTextComponent(WorldUtil.calculateClientWorldEntityTemperature(minecraft.level, entityLookedAt) + "\u00B0C"));
+                            TemperatureItemCapability tempItemCap = CapabilityUtil.getTempItemCapability(((ItemFrameEntity) entityLookedAt).getItem());
+                            renderer.setText(new StringTextComponent(tempItemCap.getWorldTemperatureLevel() + "\u00B0C"));
                         } else if (itemInFrame == Items.COMPASS) {
                             renderer.setText(new StringTextComponent("XYZ: " + entityLookedAt.blockPosition().getX() +
                                     " / " + entityLookedAt.blockPosition().getY() + " / " + entityLookedAt.blockPosition().getZ()));
@@ -120,9 +125,24 @@ public class ModClientEvents {
         if (event.phase == TickEvent.Phase.END) {
             if (!minecraft.isPaused()) {
                 updateTemperatureGui();
+                updateTemperatureEffect();
             }
         }
     }
+
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.player.level.isClientSide) {
+            if (!minecraft.isPaused()) {
+                clientUpdateTimer++;
+                if (clientUpdateTimer >= 5) {
+                    entityLookedAt = WorldUtil.getEntityLookedAt(event.player, 6);
+                    clientUpdateTimer = 0;
+                }
+            }
+        }
+    }
+
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onApplyBonemeal(BonemealEvent event)
