@@ -39,9 +39,7 @@ public class JsonConfig
 					return true;
 				}
 			}
-			
-			currentList.add(result);
-			return true;
+
 		}
 		else 
 		{
@@ -59,10 +57,10 @@ public class JsonConfig
 					return true;
 				}
 			}
-			
-			currentList.add(result);
-			return true;
+
 		}
+		currentList.add(result);
+		return true;
 	}
 	public static void registerArmorTemperature(String registryName, float temperature)
 	{

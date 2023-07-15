@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class Config
@@ -136,9 +136,9 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> lateDrySeasonModifier;
 
 		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeNames;
-		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeTypes;
+		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeCategories;
 		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeNames;
-		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeTypes;
+		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeCategories;
 		
 		// Heart Fruits
 		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsEnabled;
@@ -222,10 +222,10 @@ public class Config
 			builder.push("environment");
 
 			builder.push("flowers");
-			sunFernBiomeNames = builder.comment(" In which biome names the Sun Fern will spawn").define("Sun Fern Biome Names Spawn List", new ArrayList<>(Collections.singleton("minecraft:savanna")));
-			sunFernBiomeTypes = builder.comment(" In which biome types the Sun Fern will spawn").define("Sun Fern Biome Types Spawn List", new ArrayList<>(Collections.singleton("SANDY")));
-			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn").define("Ice Fern Biome Names Spawn List", new ArrayList<>(Collections.singleton("minecraft:taiga")));
-			iceFernBiomeTypes = builder.comment(" In which biome types the Ice Fern will spawn").define("Ice Fern Biome Types Spawn List", new ArrayList<>(Collections.singleton("SNOWY")));
+			sunFernBiomeNames = builder.comment(" In which biome names the Sun Fern will spawn").define("Sun Fern Biome Names Spawn List", new ArrayList<>());
+			sunFernBiomeCategories = builder.comment(" In which biome categories the Sun Fern will spawn").define("Sun Fern Biome Categories Spawn List", Arrays.asList("DESERT", "SAVANNA"));
+			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn").define("Ice Fern Biome Names Spawn List", new ArrayList<>());
+			iceFernBiomeCategories = builder.comment(" In which biome categories the Ice Fern will spawn").define("Ice Fern Biome Categories Spawn List", Arrays.asList("TAIGA", "ICY"));
 			builder.pop();
 
 			altitudeModifier = builder
@@ -450,9 +450,9 @@ public class Config
 		public static double altitudeModifier;
 
 		public static List<String> sunFernBiomeNames;
-		public static List<String> sunFernBiomeTypes;
+		public static List<String> sunFernBiomeCategories;
 		public static List<String> iceFernBiomeNames;
-		public static List<String> iceFernBiomeTypes;
+		public static List<String> iceFernBiomeCategories;
 		
 		public static int minTickRate;
 		public static int maxTickRate;
@@ -541,10 +541,10 @@ public class Config
 				altitudeModifier = COMMON.altitudeModifier.get();
 
 				sunFernBiomeNames = COMMON.sunFernBiomeNames.get();
-				sunFernBiomeTypes = COMMON.sunFernBiomeTypes.get();
+				sunFernBiomeCategories = COMMON.sunFernBiomeCategories.get();
 
 				iceFernBiomeNames = COMMON.iceFernBiomeNames.get();
-				iceFernBiomeTypes = COMMON.iceFernBiomeTypes.get();
+				iceFernBiomeCategories = COMMON.iceFernBiomeCategories.get();
 				
 				rainTemperatureModifier = COMMON.rainTemperatureModifier.get();
 				snowTemperatureModifier = COMMON.snowTemperatureModifier.get();
