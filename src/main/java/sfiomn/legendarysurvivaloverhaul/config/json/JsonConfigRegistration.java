@@ -125,36 +125,12 @@ public class JsonConfigRegistration
 	}
 
 	public static void writeAllToJson(File jsonDir) {
-		try {
-			manuallyWriteToJson(JsonFileName.ARMOR, JsonConfig.armorTemperatures, jsonDir);
-		} catch (Exception e) {
-			LegendarySurvivalOverhaul.LOGGER.error("Error writing ARMOR JSON file", e);
-		}
-		try {
-			manuallyWriteToJson(JsonFileName.BLOCK, JsonConfig.blockTemperatures, jsonDir);
-		} catch (Exception e) {
-			LegendarySurvivalOverhaul.LOGGER.error("Error writing BLOCK JSON file", e);
-		}
-		try {
-			manuallyWriteToJson(JsonFileName.LIQUID, JsonConfig.fluidTemperatures, jsonDir);
-		} catch (Exception e) {
-			LegendarySurvivalOverhaul.LOGGER.error("Error writing LIQUID JSON file", e);
-		}
-		try {
-			manuallyWriteToJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir);
-		} catch (Exception e) {
-			LegendarySurvivalOverhaul.LOGGER.error("Error writing BIOME JSON file", e);
-		}
-		try {
-			manuallyWriteToJson(JsonFileName.CONSUMABLE, JsonConfig.consumableTemperature, jsonDir);
-		} catch (Exception e) {
-			LegendarySurvivalOverhaul.LOGGER.error("Error writing CONSUMABLE JSON file", e);
-		}
-		try {
-			manuallyWriteToJson(JsonFileName.FUEL, JsonConfig.fuelItems, jsonDir);
-		} catch (Exception e) {
-			LegendarySurvivalOverhaul.LOGGER.error("Error writing FUEL JSON file", e);
-		}
+		manuallyWriteToJson(JsonFileName.ARMOR, JsonConfig.armorTemperatures, jsonDir);
+		manuallyWriteToJson(JsonFileName.BLOCK, JsonConfig.blockTemperatures, jsonDir);
+		manuallyWriteToJson(JsonFileName.LIQUID, JsonConfig.fluidTemperatures, jsonDir);
+		manuallyWriteToJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir);
+		manuallyWriteToJson(JsonFileName.CONSUMABLE, JsonConfig.consumableTemperature, jsonDir);
+		manuallyWriteToJson(JsonFileName.FUEL, JsonConfig.fuelItems, jsonDir);
 	}
 	
 	public static void processAllJson(File jsonDir)
@@ -276,9 +252,13 @@ public class JsonConfigRegistration
 		return null;
 	}
 	
-	private static <T> void manuallyWriteToJson(JsonFileName jfn, final T container, File jsonDir) throws Exception
+	private static <T> void manuallyWriteToJson(JsonFileName jfn, final T container, File jsonDir)
 	{
-		manuallyWriteToJson(jfn, container, jsonDir, false);
+		try {
+			manuallyWriteToJson(jfn, container, jsonDir, false);
+		} catch (Exception e) {
+			LegendarySurvivalOverhaul.LOGGER.error("Error writing " + jfn + " JSON file", e);
+		}
 	}
 	
 	private static <T> void manuallyWriteToJson(JsonFileName jfn, final T container, File jsonDir, boolean forceWrite) throws Exception
