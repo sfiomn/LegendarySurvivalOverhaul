@@ -6,13 +6,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.StringTextComponent;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
-
-import java.util.UUID;
 
 public class TemperatureCommand extends CommandBase
 {
@@ -33,22 +32,19 @@ public class TemperatureCommand extends CommandBase
 		{
 			if (source.getEntity() instanceof PlayerEntity)
 			{
-				float targetTemperature = TemperatureUtil.getPlayerTargetTemperature(source.getPlayerOrException());
-				TemperatureCapability cap = CapabilityUtil.getTempCapability(source.getPlayerOrException());
+				PlayerEntity player = (PlayerEntity) source.getEntity();
+				float targetTemperature = TemperatureUtil.getPlayerTargetTemperature(player);
+				TemperatureCapability cap = CapabilityUtil.getTempCapability(player);
 				float playerTemp = cap.getTemperatureLevel();
-				float worldTemp =  TemperatureUtil.getWorldTemperature(source.getPlayerOrException().level, source.getPlayerOrException().blockPosition());
+				float worldTemp =  TemperatureUtil.getWorldTemperature(player.level, player.blockPosition());
 
 				String reply1 = "Temp: " +  playerTemp,
 				reply2 = "Target Temp: " + targetTemperature,
 				reply3 = "World Temp: " + worldTemp;
 
-				LegendarySurvivalOverhaul.LOGGER.debug(reply1);
-				LegendarySurvivalOverhaul.LOGGER.debug(reply2);
-				LegendarySurvivalOverhaul.LOGGER.debug(reply3);
-
-				source.getPlayerOrException().sendMessage(new StringTextComponent((reply1)), UUID.randomUUID());
-				source.getPlayerOrException().sendMessage(new StringTextComponent((reply2)), UUID.randomUUID());
-				source.getPlayerOrException().sendMessage(new StringTextComponent((reply3)), UUID.randomUUID());
+				source.getPlayerOrException().sendMessage(new StringTextComponent(reply1), ChatType.GAME_INFO, source.getEntity().getUUID());
+				source.getPlayerOrException().sendMessage(new StringTextComponent(reply2), ChatType.GAME_INFO, source.getEntity().getUUID());
+				source.getPlayerOrException().sendMessage(new StringTextComponent(reply3), ChatType.GAME_INFO, source.getEntity().getUUID());
 			}
 		}
 		catch(Exception e) 

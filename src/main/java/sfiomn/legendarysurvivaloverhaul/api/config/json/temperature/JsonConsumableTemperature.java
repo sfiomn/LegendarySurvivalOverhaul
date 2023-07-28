@@ -21,7 +21,7 @@ public class JsonConsumableTemperature
 	
 	public JsonConsumableTemperature(TemporaryModifierGroupEnum group, int temperatureLevel, int duration)
 	{
-		this.temperatureLevel = Math.abs(temperatureLevel);
+		this.temperatureLevel = temperatureLevel;
 		this.duration = duration;
 		this.group = group;
 		this.effect = null;

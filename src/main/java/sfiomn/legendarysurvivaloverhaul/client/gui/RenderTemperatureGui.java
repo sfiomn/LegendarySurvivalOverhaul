@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
@@ -14,13 +15,14 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.Temperat
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
+import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 import sfiomn.legendarysurvivaloverhaul.util.RenderUtil;
 
 import java.util.Random;
 
-public class RenderTemperatureGUI
+public class RenderTemperatureGui
 {
 	private static int updateCounter = 0;
 
@@ -34,8 +36,11 @@ public class RenderTemperatureGUI
 	
 	private static final int WETNESS_TEXTURE_POS_Y = 96;
 	
-	private static final int WETNESS_TEXTURE_WIDTH = 9;
-	private static final int WETNESS_TEXTURE_HEIGHT = 9;
+	private static final int WETNESS_TEXTURE_WIDTH = 10;
+	private static final int WETNESS_TEXTURE_HEIGHT = 10;
+
+	private static final int HUNGER_TEXTURE_WIDTH = 9;
+	private static final int HUNGER_TEXTURE_HEIGHT = 9;
 	private static int frameCounter = -1;
 	private static int delay = 0;
 	private static boolean risingTemperature = false;
@@ -67,7 +72,18 @@ public class RenderTemperatureGUI
 		
 		if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
 			drawWetness(matrix, wetCap, width, height);
-		
+
+		RenderSystem.disableBlend();
+		bind(AbstractGui.GUI_ICONS_LOCATION);
+	}
+
+	public static void renderFoodBarEffect(MatrixStack matrix, PlayerEntity player, int width, int height) {
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+
+		if (Config.Baked.temperatureSecondaryEffects)
+			drawHungerSecondaryEffect(matrix, player, width, height);
+
 		RenderSystem.disableBlend();
 		bind(AbstractGui.GUI_ICONS_LOCATION);
 	}
@@ -75,7 +91,7 @@ public class RenderTemperatureGUI
 	public static void drawTemperatureAsSymbol(MatrixStack matrix, TemperatureCapability cap, int width, int height)
 	{
 		int x = width / 2 - (TEMPERATURE_TEXTURE_WIDTH / 2);
-		int y = height - 55;
+		int y = height - 52;
 		
 		int xOffset = 0;
 		int yOffset = 0;
@@ -196,7 +212,7 @@ public class RenderTemperatureGUI
 		byte wetnessSymbol;
 		
 		int x = width / 2 - (WETNESS_TEXTURE_WIDTH / 2);
-		int y = height - 62;
+		int y = height - 61;
 
 		
 		int xOffset = Config.Baked.wetnessIndicatorOffsetX;
@@ -221,7 +237,47 @@ public class RenderTemperatureGUI
 		bind(ICONS);
 		
 		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, WETNESS_TEXTURE_WIDTH, WETNESS_TEXTURE_HEIGHT, texPosX, texPosY, WETNESS_TEXTURE_WIDTH, WETNESS_TEXTURE_HEIGHT);
-		
+	}
+
+	public static void drawHungerSecondaryEffect(MatrixStack matrix, PlayerEntity player, int width, int height) {
+		if (player.hasEffect(EffectRegistry.COLD_SECONDARY_EFFECT.get())) {
+
+			Matrix4f m4f = matrix.last().pose();
+
+			bind(ICONS);
+
+			int xTextureOffset = HUNGER_TEXTURE_WIDTH * 6;
+			int yTextureOffset = HUNGER_TEXTURE_HEIGHT;
+
+			if (player.hasEffect(Effects.HUNGER)) {
+				xTextureOffset += HUNGER_TEXTURE_WIDTH * 3;
+			}
+
+			int left = width / 2 + 91; // Same x offset as the hunger bar
+			int top = height - 39;
+
+			// Draw the 10 hunger meats
+			for (int i = 0; i < 10; i++)
+			{
+				int halfIcon = i * 2 + 1;
+				int x = left - i * 8 - 9;
+				int y = top;
+				int yOffset = 0;
+
+				// Shake based on thirst level and saturation level
+				if (Config.Baked.showVanillaAnimationOverlay && player.getFoodData().getSaturationLevel() <= 0.0f && updateCounter % (player.getFoodData().getFoodLevel() * 3 + 1) == 0)
+				{
+					yOffset = (rand.nextInt(3) - 1);
+				}
+
+				if (halfIcon < player.getFoodData().getFoodLevel()) // Full hunger icon
+					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset + HUNGER_TEXTURE_WIDTH, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
+				else if (halfIcon == player.getFoodData().getFoodLevel()) // Half hunger icon
+					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset + (HUNGER_TEXTURE_WIDTH * 2), yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
+				else
+					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
+			}
+		}
 	}
 
 	public static void updateTemperatureGui()

@@ -2,9 +2,8 @@ package sfiomn.legendarysurvivaloverhaul.config;
 
 public enum JsonFileName
 {
-	ARMOR("armorTemperatures.json"),
+	ITEM("itemTemperatures.json"),
 	BLOCK("blockTemperatures.json"),
-	LIQUID("liquidTemperatures.json"),
 	BIOME("biomeOverrides.json"),
 	CONSUMABLE("temperatureConsumables.json"),
 	FUEL("fuelItems.json");

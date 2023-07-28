@@ -16,6 +16,7 @@ public class EffectRegistry
 	public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTION_TYPES, LegendarySurvivalOverhaul.MOD_ID);
 	
 	public static final RegistryObject<Effect> FROSTBITE = EFFECTS.register("frostbite", FrostbiteEffect::new);
+	public static final RegistryObject<Effect> COLD_SECONDARY_EFFECT = EFFECTS.register("cold_secondary_effect", HungerEffect::new);
 	public static final RegistryObject<Effect> HEAT_STROKE = EFFECTS.register("heat_stroke", HeatStrokeEffect::new);
 	public static final RegistryObject<Effect> COLD_RESISTANCE = EFFECTS.register("cold_resist", ColdResistanceEffect::new);
 	public static final RegistryObject<Effect> HEAT_RESISTANCE = EFFECTS.register("heat_resist", HeatResistanceEffect::new);

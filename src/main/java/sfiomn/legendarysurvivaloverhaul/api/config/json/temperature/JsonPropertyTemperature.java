@@ -2,6 +2,7 @@ package sfiomn.legendarysurvivaloverhaul.api.config.json.temperature;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.block.BlockState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.state.Property;
 
 import java.util.ArrayList;
@@ -63,6 +64,26 @@ public class JsonPropertyTemperature
 			}
 		}
 		
+		return true;
+	}
+
+	public boolean matchesState(FluidState fluidState)
+	{
+		for(Property<?> property : fluidState.getProperties())
+		{
+			String name = property.getName();
+
+			if(properties.containsKey(name))
+			{
+				String stateValue = fluidState.getValue(property).toString();
+
+				if(!properties.get(name).equals(stateValue))
+				{
+					return false;
+				}
+			}
+		}
+
 		return true;
 	}
 	

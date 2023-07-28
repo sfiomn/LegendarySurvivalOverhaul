@@ -5,9 +5,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
@@ -16,7 +17,7 @@ import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
-import java.util.Map;
+import java.util.List;
 
 public class WetModifier extends ModifierBase
 {
@@ -34,25 +35,30 @@ public class WetModifier extends ModifierBase
 		Fluid fluid = state.getType();
 
 		if (!state.isEmpty()) {
-			for (Map.Entry<String, JsonTemperature> entry : JsonConfig.fluidTemperatures.entrySet()) {
-				if (entry.getValue() == null)
-					continue;
+			ResourceLocation fluidRegistryName = fluid.getRegistryName();
+			if (fluidRegistryName != null) {
+				List<JsonPropertyTemperature> tempPropertyList = JsonConfig.blockTemperatures.get(fluid.getRegistryName().toString());
 
-				if (entry.getKey().contentEquals(fluid.getRegistryName().toString())) {
-					// LegendarySurvivalOverhaul.LOGGER.debug("Wet world temp influence : " + entry.getValue().temperature);
-					return entry.getValue().temperature;
+				if (tempPropertyList == null) {
+					return 0.0f;
+				}
+
+				for (JsonPropertyTemperature tempInfo : tempPropertyList) {
+					if (tempInfo == null)
+						continue;
+
+					if (tempInfo.matchesState(state)) {
+						return tempInfo.temperature;
+					}
 				}
 			}
 		}
 
 		if (fluid.isSame(Fluids.WATER) || fluid.isSame(Fluids.FLOWING_WATER)) {
-			// LegendarySurvivalOverhaul.LOGGER.debug("Wet world temp influence : " + String.valueOf(Config.Baked.wetMultiplier));
 			return (float) Config.Baked.wetMultiplier;
 		} else if (world.isRainingAt(pos)) {
-			// LegendarySurvivalOverhaul.LOGGER.debug("Wet world temp influence : " + String.valueOf(Config.Baked.wetMultiplier));
 			return (float) Config.Baked.wetMultiplier;
 		} else {
-			// LegendarySurvivalOverhaul.LOGGER.debug("Wet world temp influence : " + 0.0f);
 			return 0.0f;
 		}
 	}

@@ -6,7 +6,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
@@ -194,32 +193,20 @@ public class BlockModifier extends ModifierBase
 			return 0.0f;
 		}
 
-		if (blockState.getMaterial().isLiquid()) {
-			//  Temperature a fluid generates
-			JsonTemperature tempInfo = JsonConfig.fluidTemperatures.get(blockState.getBlock().getRegistryName().toString());
+		//  List of combination of a temperature and a list of properties a block must have in order to generate this temperature
+		List<JsonPropertyTemperature> tempPropertyList = JsonConfig.blockTemperatures.get(blockState.getBlock().getRegistryName().toString());
 
-			if (tempInfo == null) {
-				return 0.0f;
-			}
+		if (tempPropertyList == null) {
+			return 0.0f;
+		}
 
-			temperature = tempInfo.temperature;
-		} else {
+		for (JsonPropertyTemperature tempInfo : tempPropertyList) {
+			if (tempInfo == null)
+				continue;
 
-			//  List of combination of a temperature and a list of properties a block must have in order to generate this temperature
-			List<JsonPropertyTemperature> tempInfoList = JsonConfig.blockTemperatures.get(blockState.getBlock().getRegistryName().toString());
-
-			if (tempInfoList == null) {
-				return 0.0f;
-			}
-
-			for (JsonPropertyTemperature tempInfo : tempInfoList) {
-				if (tempInfo == null)
-					continue;
-
-				if (tempInfo.matchesState(blockState)) {
-					temperature = tempInfo.temperature;
-					break;
-				}
+			if (tempInfo.matchesState(blockState)) {
+				temperature = tempInfo.temperature;
+				break;
 			}
 		}
 

@@ -94,9 +94,9 @@ public final class IntegrationController
 	
 	private static void initArtifacts()
 	{
-		JsonConfig.registerArmorTemperature("artifacts:villager_hat", -2.5f);
-		JsonConfig.registerArmorTemperature("artifacts:lucky_scarf", 2.5f);
-		JsonConfig.registerArmorTemperature("artifacts:scarf_of_invisibility", 2.5f);
+		JsonConfig.registerItemTemperature("artifacts:villager_hat", -2.5f);
+		JsonConfig.registerItemTemperature("artifacts:lucky_scarf", 2.5f);
+		JsonConfig.registerItemTemperature("artifacts:scarf_of_invisibility", 2.5f);
 	}
 	
 	private static void initEndergeticExpansion() 

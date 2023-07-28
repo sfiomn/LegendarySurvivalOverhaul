@@ -22,12 +22,12 @@ public enum TemperatureEnum
 	public boolean matches(float temperature)
 	{
 		temperature = TemperatureUtil.clampTemperature(temperature);
-		return (temperature>=this.lowerBound && temperature<=this.upperBound);
+		return (temperature >= this.lowerBound && temperature < this.upperBound + 1);
 	}
 	
-	public int getMiddle()
+	public float getMiddle()
 	{
-		return (this.upperBound + this.lowerBound)/2;
+		return (this.upperBound + this.lowerBound) / 2.0f;
 	}
 	
 	public int getLowerBound() 

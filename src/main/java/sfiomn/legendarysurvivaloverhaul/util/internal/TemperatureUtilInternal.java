@@ -107,7 +107,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 		{
 			final CompoundNBT compound = stack.getTag();
 			
-			if (compound.contains(COAT_TAG))
+			if (compound != null && compound.contains(COAT_TAG))
 			{
 				String tempTag = compound.getString(COAT_TAG);
 				
@@ -123,7 +123,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 		if(stack.hasTag())
 		{
 			final CompoundNBT compound = stack.getTag();
-			if (compound.contains(COAT_TAG))
+			if (compound != null && compound.contains(COAT_TAG))
 			{
 				compound.remove(COAT_TAG);
 			}

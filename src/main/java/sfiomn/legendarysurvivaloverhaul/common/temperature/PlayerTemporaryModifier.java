@@ -27,7 +27,7 @@ public class PlayerTemporaryModifier extends ModifierBase
 
 		if (player.hasEffect(EffectRegistry.HOT_DRINk.get())) {
 			sum += 1 + Objects.requireNonNull(player.getEffect(EffectRegistry.HOT_DRINk.get())).getAmplifier();
-		} else if (player.hasEffect(EffectRegistry.COLD_FOOD.get())) {
+		} else if (player.hasEffect(EffectRegistry.COLD_DRINK.get())) {
 			sum -= 1 + Objects.requireNonNull(player.getEffect(EffectRegistry.COLD_DRINK.get())).getAmplifier();
 		}
 

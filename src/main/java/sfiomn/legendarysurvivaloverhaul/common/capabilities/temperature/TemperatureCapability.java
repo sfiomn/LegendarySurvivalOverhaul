@@ -115,13 +115,13 @@ public class TemperatureCapability implements ITemperatureCapability
 		if (getTemperatureTickTimer() >= getTemperatureTickLimit()) {
 			setTemperatureTickTimer(0);
 
-			TemperatureEnum tempEnum = getTemperatureEnum();
-
 			float destinationTemp = targetTemp;
 
 			if (getTemperatureLevel() != destinationTemp) {
 				tickTemperature(getTemperatureLevel(), destinationTemp);
 			}
+
+			TemperatureEnum tempEnum = getTemperatureEnum();
 
 			if (player.getItemBySlot(EquipmentSlotType.MAINHAND).getItem() == Items.DEBUG_STICK)
 				LegendarySurvivalOverhaul.LOGGER.info(tempEnum + ", " + getTemperatureLevel() + " -> " + destinationTemp);
@@ -129,12 +129,16 @@ public class TemperatureCapability implements ITemperatureCapability
 			if (Config.Baked.dangerousTemperature) {
 				applyDangerousEffects(player, tempEnum);
 			}
+
+			if (Config.Baked.temperatureSecondaryEffects) {
+				applySecondaryEffects(player, tempEnum);
+			}
 		}
 	}
 
 	private void applyDangerousEffects(PlayerEntity player, TemperatureEnum tempEnum) {
 		if (tempEnum == TemperatureEnum.HEAT_STROKE) {
-			if (TemperatureEnum.HEAT_STROKE.getMiddle() < getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
+			if (TemperatureEnum.HEAT_STROKE.getMiddle() <= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply hyperthermia
 				player.removeEffect(EffectRegistry.HEAT_STROKE.get());
 				player.addEffect(new EffectInstance(EffectRegistry.HEAT_STROKE.get(), 300, 0, false, true));
@@ -150,6 +154,26 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 		player.removeEffect(EffectRegistry.HEAT_STROKE.get());
 		player.removeEffect(EffectRegistry.FROSTBITE.get());
+	}
+
+	private void applySecondaryEffects(PlayerEntity player, TemperatureEnum tempEnum) {
+		if (tempEnum == TemperatureEnum.HEAT_STROKE) {
+			if (!player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
+				// Apply secondary effect hyperthermia
+				player.removeEffect(EffectRegistry.COLD_SECONDARY_EFFECT.get());
+				player.addEffect(new EffectInstance(EffectRegistry.HEAT_SECONDARY_EFFECT.get(), 300, 0, false, false));
+				return;
+			}
+		} else if (tempEnum == TemperatureEnum.FROSTBITE) {
+			if (!player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
+				// Apply secondary effect hypothermia
+				player.removeEffect(EffectRegistry.HEAT_SECONDARY_EFFECT.get());
+				player.addEffect(new EffectInstance(EffectRegistry.COLD_SECONDARY_EFFECT.get(), 300, 0, false, false));
+				return;
+			}
+		}
+		player.removeEffect(EffectRegistry.HEAT_SECONDARY_EFFECT.get());
+		player.removeEffect(EffectRegistry.COLD_SECONDARY_EFFECT.get());
 	}
 	
 	private void tickTemperature(float currentTemp, float destination)

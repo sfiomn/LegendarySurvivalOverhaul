@@ -40,7 +40,7 @@ public class WeatherModifier extends ModifierBase
 			}
 		}
 
-		if(WorldUtil.isRainingAt(world, pos.above())) {
+		if(WorldUtil.isRainingOrSnowingAt(world, pos.above())) {
 			// LegendarySurvivalOverhaul.LOGGER.debug("Weather Biome temp : " + world.getBiome(pos).getTemperature(pos));
 
 			if (biome.getTemperature(pos) < 0.15f) {

@@ -89,7 +89,7 @@ public class CuriosModifier extends ModifierBase
 		ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
 		JsonTemperature jsonTemperature = null;
 		if (itemRegistryName != null)
-			jsonTemperature = JsonConfig.armorTemperatures.get(itemRegistryName.toString());
+			jsonTemperature = JsonConfig.itemTemperatures.get(itemRegistryName.toString());
 		
 		if (jsonTemperature != null)
 		{

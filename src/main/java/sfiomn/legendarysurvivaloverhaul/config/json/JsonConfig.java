@@ -12,9 +12,8 @@ import java.util.Objects;
 
 public class JsonConfig
 {
-	public static Map<String, JsonTemperature> armorTemperatures = Maps.newHashMap();
+	public static Map<String, JsonTemperature> itemTemperatures = Maps.newHashMap();
 	public static Map<String, List<JsonPropertyTemperature>> blockTemperatures = Maps.newHashMap();
-	public static Map<String, JsonTemperature> fluidTemperatures = Maps.newHashMap();
 	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
 	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = Maps.newHashMap();
 	public static Map<String, JsonFuelItemIdentity> fuelItems = Maps.newHashMap();
