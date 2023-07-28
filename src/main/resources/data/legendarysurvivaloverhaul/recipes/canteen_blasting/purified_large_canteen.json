@@ -1,0 +1,15 @@
+{
+	"type": "legendarysurvivaloverhaul:canteen_blasting",
+	"ingredient":
+	[
+		{
+			"item": "legendarysurvivaloverhaul:large_canteen"
+		}
+	],
+	"result":
+	{
+		"item": "legendarysurvivaloverhaul:large_canteen"
+	},
+	"experience": 1.0,
+	"cookingtime": 80
+}

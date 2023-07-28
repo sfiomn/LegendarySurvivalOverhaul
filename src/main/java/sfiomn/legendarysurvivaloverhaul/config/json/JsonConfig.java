@@ -16,6 +16,7 @@ public class JsonConfig
 	public static Map<String, List<JsonPropertyTemperature>> blockTemperatures = Maps.newHashMap();
 	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
 	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = Maps.newHashMap();
+	public static Map<String, JsonThirst> consumableThirst = Maps.newHashMap();
 	public static Map<String, JsonFuelItemIdentity> fuelItems = Maps.newHashMap();
 	
 	public static boolean registerBlockTemperature(String registryName, float temperature, JsonPropertyValue... properties)
@@ -61,10 +62,10 @@ public class JsonConfig
 		currentList.add(result);
 		return true;
 	}
-	public static void registerArmorTemperature(String registryName, float temperature)
+	public static void registerItemTemperature(String registryName, float temperature)
 	{
-		if(!armorTemperatures.containsKey(registryName))
-			armorTemperatures.put(registryName, new JsonTemperature(temperature));
+		if(!itemTemperatures.containsKey(registryName))
+			itemTemperatures.put(registryName, new JsonTemperature(temperature));
 	}
 	
 	public static boolean registerConsumableTemperature(TemporaryModifierGroupEnum group, String registryName, int temperatureLevel, int duration)
@@ -90,10 +91,15 @@ public class JsonConfig
 		currentList.add(jsonConsumableTemperature);
 		return true;
 	}
-	
-	public static void registerFluidTemperature(String registryName, float temperature)
-	{
-		fluidTemperatures.put(registryName, new JsonTemperature(temperature));
+
+	public static void registerConsumableThirst(String registryName, int thirst, float saturation) {
+		registerConsumableThirst(registryName, thirst, saturation, 0);
+	}
+
+	public static void registerConsumableThirst(String registryName, int thirst, float saturation, float dirtiness) {
+		if (!consumableThirst.containsKey(registryName)) {
+			consumableThirst.put(registryName, new JsonThirst(thirst, saturation, dirtiness));
+		}
 	}
 	
 	public static void registerBiomeOverride(String registryName, float temperature)

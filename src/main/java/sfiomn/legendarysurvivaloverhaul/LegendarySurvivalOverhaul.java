@@ -32,12 +32,18 @@ import org.apache.logging.log4j.Logger;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
+import sfiomn.legendarysurvivaloverhaul.client.itemproperties.CanteenProperty;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.ThermometerProperty;
 import sfiomn.legendarysurvivaloverhaul.client.screens.SewingTableScreen;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ThermalScreen;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierStorage;
-import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.*;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureStorage;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstStorage;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -45,6 +51,7 @@ import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.registry.*;
 import sfiomn.legendarysurvivaloverhaul.util.internal.TemperatureUtilInternal;
+import sfiomn.legendarysurvivaloverhaul.util.internal.ThirstUtilInternal;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -78,9 +85,6 @@ public class LegendarySurvivalOverhaul
 
 	public static boolean curiosLoaded = false;
 
-	/**
-	 * The original. The one and only. Hope.
-	 */
 	public static boolean toughAsNailsLoaded = false;
 	
 	public static Path configPath = FMLPaths.CONFIGDIR.get();
@@ -90,8 +94,7 @@ public class LegendarySurvivalOverhaul
 	
 	public static ForgeRegistry<ModifierBase> MODIFIERS;
 	public static ForgeRegistry<DynamicModifierBase> DYNAMIC_MODIFIERS;
-	
-	//@OnlyIn(Dist.CLIENT)//broke on server, no longer using const :(
+
 	
 	public LegendarySurvivalOverhaul()
 	{
@@ -124,6 +127,7 @@ public class LegendarySurvivalOverhaul
 		Config.Baked.bakeCommon();
 		
 		TemperatureUtil.internal = new TemperatureUtilInternal();
+		ThirstUtil.internal = new ThirstUtilInternal();
 		modIntegration();
 	}
 	
@@ -140,24 +144,29 @@ public class LegendarySurvivalOverhaul
 		if (surviveLoaded)
 			LOGGER.debug("Survive is loaded, I hope you know what you're doing");
 	}
-	
+
 	@CapabilityInject(TemperatureCapability.class)
 	public static final Capability<TemperatureCapability> TEMPERATURE_CAP = null;
+	@CapabilityInject(TemperatureItemCapability.class)
+	public static final Capability<TemperatureItemCapability> TEMPERATURE_ITEM_CAP = null;
 	@CapabilityInject(HeartModifierCapability.class)
 	public static final Capability<HeartModifierCapability> HEART_MOD_CAP = null;
 	@CapabilityInject(WetnessCapability.class)
 	public static final Capability<WetnessCapability> WETNESS_CAP = null;
-	@CapabilityInject(TemperatureItemCapability.class)
-	public static final Capability<TemperatureItemCapability> TEMPERATURE_ITEM_CAP = null;
+	@CapabilityInject(ThirstCapability.class)
+	public static final Capability<ThirstCapability> THIRST_CAP = null;
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		CapabilityManager.INSTANCE.register(TemperatureCapability.class, new TemperatureStorage(), TemperatureCapability::new);
-		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
 		CapabilityManager.INSTANCE.register(WetnessCapability.class, new WetnessCapability.Storage(), WetnessCapability::new);
+		CapabilityManager.INSTANCE.register(ThirstCapability.class, new ThirstStorage(), ThirstCapability::new);
+		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
 		CapabilityManager.INSTANCE.register(TemperatureItemCapability.class, new TemperatureItemCapability.Storage(), TemperatureItemCapability::new);
 
 		NetworkHandler.register();
+
+
 		
 		event.enqueueWork(EffectRegistry::registerBrewingRecipes);
 	}
@@ -197,6 +206,8 @@ public class LegendarySurvivalOverhaul
 			public void run()
 			{
 				ItemModelsProperties.register(ItemRegistry.THERMOMETER.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "temperature"), new ThermometerProperty());
+				ItemModelsProperties.register(ItemRegistry.CANTEEN.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirst_enum"), new CanteenProperty());
+				ItemModelsProperties.register(ItemRegistry.LARGE_CANTEEN.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirst_enum"), new CanteenProperty());
 			}
 		};
 	}

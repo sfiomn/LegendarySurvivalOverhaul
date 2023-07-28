@@ -9,8 +9,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -20,16 +22,19 @@ import net.minecraftforge.fml.common.Mod;
 import sereneseasons.api.SSItems;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureEffect;
-import sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureGUI;
+import sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureGui;
+import sfiomn.legendarysurvivaloverhaul.client.gui.RenderThirstGui;
 import sfiomn.legendarysurvivaloverhaul.client.gui.TooltipFrame;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
+import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
 import static sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureEffect.updateTemperatureEffect;
-import static sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureGUI.updateTemperatureGui;
+import static sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureGui.updateTemperatureGui;
+import static sfiomn.legendarysurvivaloverhaul.client.gui.RenderThirstGui.updateThirstGui;
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil.formatSeasonName;
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil.plantCanGrow;
 import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.timeInGame;
@@ -101,22 +106,60 @@ public class ModClientEvents {
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onApplyBonemeal(BonemealEvent event)
+    {
+        Block plant = event.getBlock().getBlock();
+        if (event.getPlayer() == null || plant.getRegistryName() == null) {
+            return;
+        }
+        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && !plantCanGrow(event.getWorld(), event.getPos(), plant)) {
+            event.getPlayer().displayClientMessage(new TranslationTextComponent("message." + LegendarySurvivalOverhaul.MOD_ID + ".bonemeal.not_correct_season"), true);
+        }
+    }
     @SubscribeEvent
-    public static void onRenderGameOverlayTemperature(RenderGameOverlayEvent.Post event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
+    public static void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL || minecraft.gameMode == null || !minecraft.gameMode.hasExperience()) return;
 
-        if (Config.Baked.temperatureEnabled
-                && minecraft.gameMode != null &&
-                minecraft.gameMode.hasExperience()
-        )
-        {
-            int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
-            int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
+        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
+        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
 
+        if (Config.Baked.temperatureEnabled) {
             if (!minecraft.options.hideGui) {
-                RenderTemperatureGUI.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+                RenderTemperatureGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
             RenderTemperatureEffect.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+        }
+
+        if (Config.Baked.thirstEnabled) {
+            if (!minecraft.options.hideGui) {
+                RenderThirstGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onRenderGameOverlaySecondaryTemperatureEffect(RenderGameOverlayEvent.Post event) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.FOOD || minecraft.gameMode == null || !minecraft.gameMode.hasExperience())
+            return;
+
+        if (event.isCanceled() || !Config.Baked.temperatureEnabled)
+            return;
+
+        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
+        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
+
+        if (!minecraft.options.hideGui) {
+            assert minecraft.player != null;
+            RenderTemperatureGui.renderFoodBarEffect(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+        }
+    }
+
+    @SubscribeEvent
+    public static void preRenderFood(RenderGameOverlayEvent.Pre event) {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD) {
+            if (minecraft.player != null && minecraft.player.hasEffect(EffectRegistry.COLD_SECONDARY_EFFECT.get()))
+                ForgeIngameGui.renderFood = false;
         }
     }
 
@@ -126,6 +169,7 @@ public class ModClientEvents {
             if (!minecraft.isPaused()) {
                 updateTemperatureGui();
                 updateTemperatureEffect();
+                updateThirstGui();
             }
         }
     }
@@ -140,19 +184,6 @@ public class ModClientEvents {
                     clientUpdateTimer = 0;
                 }
             }
-        }
-    }
-
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onApplyBonemeal(BonemealEvent event)
-    {
-        Block plant = event.getBlock().getBlock();
-        if (event.getPlayer() == null || plant.getRegistryName() == null) {
-            return;
-        }
-        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && !plantCanGrow(event.getWorld(), event.getPos(), plant)) {
-            event.getPlayer().displayClientMessage(new StringTextComponent("This crop can't grow during this season"), true);
         }
     }
 }

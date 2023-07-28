@@ -1,0 +1,15 @@
+{
+	"type": "legendarysurvivaloverhaul:canteen_smelting",
+	"ingredient":
+	[
+		{
+			"item": "legendarysurvivaloverhaul:canteen"
+		}
+	],
+	"result":
+	{
+		"item": "legendarysurvivaloverhaul:canteen"
+	},
+	"experience": 1.0,
+	"cookingtime": 240
+}

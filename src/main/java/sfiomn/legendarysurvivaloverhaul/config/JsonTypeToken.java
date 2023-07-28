@@ -16,7 +16,8 @@ public class JsonTypeToken
 			case ITEM:				return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
 			case BLOCK:				return new TypeToken<Map<String, List<JsonPropertyTemperature>>>(){}.getType();
 			case BIOME: 			return new TypeToken<Map<String, JsonBiomeIdentity>>(){}.getType();
-			case CONSUMABLE: 		return new TypeToken<Map<String, List<JsonConsumableTemperature>>>(){}.getType();
+			case CONSUMABLE_TEMP: 		return new TypeToken<Map<String, List<JsonConsumableTemperature>>>(){}.getType();
+			case CONSUMABLE_THIRST: 		return new TypeToken<Map<String, JsonThirst>>(){}.getType();
 			case FUEL:				return new TypeToken<Map<String, JsonFuelItemIdentity>>(){}.getType();
 			default: 		return null;
 		}

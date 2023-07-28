@@ -13,7 +13,7 @@ public final class DamageUtil
 	
 	public static boolean isModDangerous(World world)
 	{
-		// can the mod do thermal damage?
+		// can the mod do damage?
 		
 		if(world.getDifficulty() != Difficulty.PEACEFUL)
 		{

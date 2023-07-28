@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "legendarysurvivaloverhaul:item/canteen"
+  },
+  "overrides": [
+    { "predicate": { "legendarysurvivaloverhaul:thirst_enum": 3}, "model": "legendarysurvivaloverhaul:item/canteen_purified" }
+    ]
+}

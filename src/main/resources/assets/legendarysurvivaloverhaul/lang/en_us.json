@@ -28,6 +28,23 @@
 
 	"item.legendarysurvivaloverhaul.thermometer": "Thermometer",
 	"item.legendarysurvivaloverhaul.heart_fruit": "Heart Fruit",
+	"item.legendarysurvivaloverhaul.canteen_empty": "Empty Canteen",
+	"item.legendarysurvivaloverhaul.canteen": "Canteen",
+	"item.legendarysurvivaloverhaul.canteen_purified": "Purified Canteen",
+	"item.legendarysurvivaloverhaul.large_canteen_empty": "Empty Large Canteen",
+	"item.legendarysurvivaloverhaul.large_canteen": "Large Canteen",
+	"item.legendarysurvivaloverhaul.large_canteen_purified": "Purified Large Canteen",
+	"item.legendarysurvivaloverhaul.purified_water_bottle": "Purified Water Bottle",
+	"item.legendarysurvivaloverhaul.apple_juice": "Apple Juice",
+	"item.legendarysurvivaloverhaul.beetroot_juice": "Beetroot Juice",
+	"item.legendarysurvivaloverhaul.cactus_juice": "Cactus Juice",
+	"item.legendarysurvivaloverhaul.carrot_juice": "Carrot Juice",
+	"item.legendarysurvivaloverhaul.chorus_fruit_juice": "Chorus Fruit Juice",
+	"item.legendarysurvivaloverhaul.golden_apple_juice": "Golden Apple Juice",
+	"item.legendarysurvivaloverhaul.golden_carrot_juice": "Golden Carrot Juice",
+	"item.legendarysurvivaloverhaul.glistering_melon_juice": "Glistering Melon Juice",
+	"item.legendarysurvivaloverhaul.melon_juice": "Melon Juice",
+	"item.legendarysurvivaloverhaul.pumpkin_juice": "Pumpkin Juice",
 
 	"item.legendarysurvivaloverhaul.cold_string" : "Cold String",
 	"item.legendarysurvivaloverhaul.warm_string" : "Warm String",
@@ -44,26 +61,37 @@
 	
 	"item.minecraft.potion.effect.heat_resistance":"Potion of Heat Resistance",
 	"item.minecraft.potion.effect.cold_resistance":"Potion of Cold Resistance",
+	"item.minecraft.potion.effect.thirst":"Potion of Thirst",
 	"item.minecraft.potion.effect.heat_resistance_long":"Potion of Heat Resistance",
 	"item.minecraft.potion.effect.cold_resistance_long":"Potion of Cold Resistance",
+	"item.minecraft.potion.effect.thirst_long":"Potion of Thirst",
 	
 	"item.minecraft.splash_potion.effect.heat_resistance":"Splash Potion of Heat Resistance",
 	"item.minecraft.splash_potion.effect.cold_resistance":"Splash Potion of Cold Resistance",
+	"item.minecraft.splash_potion.effect.thirst":"Splash Potion of Thirst",
 	"item.minecraft.splash_potion.effect.heat_resistance_long":"Splash Potion of Heat Resistance",
 	"item.minecraft.splash_potion.effect.cold_resistance_long":"Splash Potion of Cold Resistance",
+	"item.minecraft.splash_potion.effect.thirst_long":"Splash Potion of Thirst",
 	
 	"item.minecraft.lingering_potion.effect.heat_resistance":"Lingering Potion of Heat Resistance",
 	"item.minecraft.lingering_potion.effect.cold_resistance":"Lingering Potion of Cold Resistance",
+	"item.minecraft.lingering_potion.effect.thirst":"Lingering Potion of Thirst",
 	"item.minecraft.lingering_potion.effect.heat_resistance_long":"Lingering Potion of Heat Resistance",
 	"item.minecraft.lingering_potion.effect.cold_resistance_long":"Lingering Potion of Cold Resistance",
+	"item.minecraft.lingering_potion.effect.thirst_long":"Lingering Potion of Thirst",
 	
 	"item.minecraft.tipped_arrow.effect.heat_resistance":"Arrow of Heat Resistance",
 	"item.minecraft.tipped_arrow.effect.cold_resistance":"Arrow of Cold Resistance",
+	"item.minecraft.tipped_arrow.effect.thirst":"Arrow of Thirst",
 	"item.minecraft.tipped_arrow.effect.heat_resistance_long":"Arrow of Heat Resistance",
 	"item.minecraft.tipped_arrow.effect.cold_resistance_long":"Arrow of Cold Resistance",
+	"item.minecraft.tipped_arrow.effect.thirst_long":"Arrow of Thirst",
 	
 	"effect.legendarysurvivaloverhaul.heat_stroke": "Heat Stroke",
+	"effect.legendarysurvivaloverhaul.heat_secondary_effect": "Heat Thirst",
 	"effect.legendarysurvivaloverhaul.frostbite": "Frostbite",
+	"effect.legendarysurvivaloverhaul.cold_secondary_effect": "Cold Hunger",
+	"effect.legendarysurvivaloverhaul.thirsty": "Thirsty",
 	"effect.legendarysurvivaloverhaul.heat_resist": "Heat Resistance",
 	"effect.legendarysurvivaloverhaul.cold_resist": "Cold Resistance",
 	"effect.legendarysurvivaloverhaul.hot_food": "Hot Food",
@@ -104,6 +132,9 @@
 
 	"sounds.legendarysurvivaloverhaul.heat_stroke": "Player suffocates",
 	"sounds.legendarysurvivaloverhaul.frostbite": "Player shivers",
+	"sounds.legendarysurvivaloverhaul.dehydration": "Player suffers dehydration",
 	"sounds.legendarysurvivaloverhaul.cooler_block": "Icebox crackles",
-	"sounds.legendarysurvivaloverhaul.sewing_table": "Sewing Table Used"
+	"sounds.legendarysurvivaloverhaul.sewing_table": "Sewing Table Used",
+
+	"message.legendarysurvivaloverhaul.bonemeal.not_correct_season": "This crop can't grow during this season"
 }

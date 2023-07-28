@@ -5,8 +5,9 @@ public enum JsonFileName
 	ITEM("itemTemperatures.json"),
 	BLOCK("blockTemperatures.json"),
 	BIOME("biomeOverrides.json"),
-	CONSUMABLE("temperatureConsumables.json"),
-	FUEL("fuelItems.json");
+	CONSUMABLE_TEMP("temperatureConsumables.json"),
+	FUEL("fuelItems.json"),
+	CONSUMABLE_THIRST("thirstConsumables.json");
 	
 	private String fileName;
 	

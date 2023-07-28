@@ -5,6 +5,7 @@ import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -24,6 +25,16 @@ public final class CapabilityUtil
 	public static TemperatureCapability getTempCapability(PlayerEntity player)
 	{
 		return player.getCapability(LegendarySurvivalOverhaul.TEMPERATURE_CAP).orElse(new TemperatureCapability());
+	}
+
+	/**
+	 * Gets the temperature item capability of the given itemstack.
+	 * @param itemStack ItemStack
+	 * @return The temperature item capability of the given itemstack if it exists, or a new dummy capability if it doesn't.
+	 */
+	public static TemperatureItemCapability getTempItemCapability(ItemStack itemStack)
+	{
+		return itemStack.getCapability(LegendarySurvivalOverhaul.TEMPERATURE_ITEM_CAP).orElse(new TemperatureItemCapability());
 	}
 
 	/**
@@ -47,12 +58,12 @@ public final class CapabilityUtil
 	}
 
 	/**
-	 * Gets the wetness capability of the given player.
-	 * @param itemStack ItemStack
-	 * @return The temperature item capability of the given itemstack if it exists, or a new dummy capability if it doesn't.
+	 * Gets the thirst capability of the given player.
+	 * @param player Player
+	 * @return The thirst capability of the given player if it exists, or a new dummy capability if it doesn't.
 	 */
-	public static TemperatureItemCapability getTempItemCapability(ItemStack itemStack)
+	public static ThirstCapability getThirstCapability(PlayerEntity player)
 	{
-		return itemStack.getCapability(LegendarySurvivalOverhaul.TEMPERATURE_ITEM_CAP).orElse(new TemperatureItemCapability());
+		return player.getCapability(LegendarySurvivalOverhaul.THIRST_CAP).orElse(new ThirstCapability());
 	}
 }

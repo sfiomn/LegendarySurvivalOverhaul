@@ -8,7 +8,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
@@ -68,7 +67,7 @@ public final class WorldUtil
 		return null;
 	}
 
-	public static boolean isRainingAt(World world, BlockPos pos) {
+	public static boolean isRainingOrSnowingAt(World world, BlockPos pos) {
 		if (!world.isRaining()) {
 			return false;
 		} else if (!world.canSeeSky(pos)) {
@@ -80,21 +79,22 @@ public final class WorldUtil
 	{
 		return TemperatureUtil.getWorldTemperature(world, getSidedBlockPos(world, entity));
 	}
-	public static Entity getEntityLookedAt(PlayerEntity e, double finalDistance) {
+
+	public static Entity getEntityLookedAt(PlayerEntity player, double finalDistance) {
 		Entity foundEntity = null;
 		double distance;
-		RayTraceResult positionLookedAt = raycast(e, finalDistance);
-		Vector3d positionVector = e.position();
+		RayTraceResult positionLookedAt = player.pick(finalDistance, 0.0f, false);
+		Vector3d positionVector = player.position();
 
-		positionVector = positionVector.add(0, e.getEyeHeight(e.getPose()), 0);
+		positionVector = positionVector.add(0, player.getEyeHeight(player.getPose()), 0);
 
 		distance = positionLookedAt.getLocation().distanceTo(positionVector);
 
-		Vector3d lookVector = e.getLookAngle();
+		Vector3d lookVector = player.getLookAngle();
 		Vector3d reachVector = positionVector.add(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance);
 
 		Entity lookedEntity = null;
-		List<Entity> entitiesInBoundingBox = e.getCommandSenderWorld().getEntities(e, e.getBoundingBox().inflate(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance).expandTowards(1F, 1F, 1F));
+		List<Entity> entitiesInBoundingBox = player.getCommandSenderWorld().getEntities(player, player.getBoundingBox().inflate(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance).expandTowards(1F, 1F, 1F));
 		double minDistance = distance;
 
 		for (Entity entity : entitiesInBoundingBox) {
@@ -122,20 +122,6 @@ public final class WorldUtil
 		}
 
 		return foundEntity;
-	}
-
-	public static RayTraceResult raycast(PlayerEntity e, double len) {
-		Vector3d vec = new Vector3d(e.getX(), e.getY(), e.getZ());
-		vec = vec.add(new Vector3d(0, e.getEyeHeight(e.getPose()), 0));
-
-		Vector3d look = e.getLookAngle();
-
-		return raycast(vec, look, e, len);
-	}
-
-	public static RayTraceResult raycast(Vector3d origin, Vector3d ray, PlayerEntity e, double len) {
-		Vector3d next = origin.add(ray.normalize().scale(len));
-		return e.level.clip(new RayTraceContext(origin, next, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE, e));
 	}
 
 	public static String timeInGame(Minecraft mc) {

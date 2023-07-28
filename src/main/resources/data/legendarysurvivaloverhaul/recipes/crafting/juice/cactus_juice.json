@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients":
+	[
+		{"item": "legendarysurvivaloverhaul:purified_water_bottle"},
+		{"item": "minecraft:sugar"},
+		{"item": "minecraft:cactus"}
+	],
+	"result":
+	{
+		"item": "legendarysurvivaloverhaul:cactus_juice"
+	}
+}
