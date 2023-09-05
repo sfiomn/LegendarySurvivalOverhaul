@@ -4,10 +4,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
@@ -19,8 +21,6 @@ import net.minecraft.world.server.ServerWorld;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public final class WorldUtil
@@ -82,44 +82,52 @@ public final class WorldUtil
 
 	public static Entity getEntityLookedAt(PlayerEntity player, double finalDistance) {
 		Entity foundEntity = null;
-		double distance;
+		double distanceFromEye;
 		RayTraceResult positionLookedAt = player.pick(finalDistance, 0.0f, false);
-		Vector3d positionVector = player.position();
+		Vector3d eyePosition = player.getEyePosition(0.0f);
 
-		positionVector = positionVector.add(0, player.getEyeHeight(player.getPose()), 0);
-
-		distance = positionLookedAt.getLocation().distanceTo(positionVector);
+		distanceFromEye = positionLookedAt.getLocation().distanceTo(eyePosition);
 
 		Vector3d lookVector = player.getLookAngle();
-		Vector3d reachVector = positionVector.add(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance);
+		Vector3d reachVector = eyePosition.add(lookVector.x * distanceFromEye, lookVector.y * distanceFromEye, lookVector.z * distanceFromEye);
+		AxisAlignedBB expandedPlayerBound = player.getBoundingBox().inflate(lookVector.x * distanceFromEye, lookVector.y * distanceFromEye, lookVector.z * distanceFromEye).expandTowards(1F, 1F, 1F);
 
+		EntityRayTraceResult entityRayTraceResult = ProjectileHelper.getEntityHitResult(player, eyePosition, reachVector, expandedPlayerBound, (entity) -> !entity.isSpectator() && entity.isPickable(), distanceFromEye * distanceFromEye);
+		if (entityRayTraceResult != null) {
+			foundEntity = entityRayTraceResult.getEntity();
+		}
+
+		// Here for the understanding of ProjectileHelper
+		/*
 		Entity lookedEntity = null;
-		List<Entity> entitiesInBoundingBox = player.getCommandSenderWorld().getEntities(player, player.getBoundingBox().inflate(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance).expandTowards(1F, 1F, 1F));
-		double minDistance = distance;
+		List<Entity> entitiesInBoundingBox = player.level.getEntities(player, expandedPlayerBound, (entity) -> !entity.isSpectator() && entity.isPickable());
+
+		double minDistance = distanceFromEye;
 
 		for (Entity entity : entitiesInBoundingBox) {
-			if (entity.isPickable()) {
-				AxisAlignedBB collisionBox = entity.getBoundingBoxForCulling();
-				Optional<Vector3d> interceptPosition = collisionBox.clip(positionVector, reachVector);
+			AxisAlignedBB collisionBox = entity.getBoundingBoxForCulling();
+			Optional<Vector3d> interceptPosition = collisionBox.clip(eyePosition, reachVector);
 
-				if (collisionBox.contains(positionVector)) {
-					if (minDistance >= 0.0D) {
+			if (collisionBox.contains(eyePosition)) {
+				if (minDistance >= 0.0D) {
+					lookedEntity = entity;
+					minDistance = 0.0D;
+				}
+			} else if (interceptPosition.isPresent()) {
+				double distanceToEntity = eyePosition.distanceTo(interceptPosition.get());
+				if (entity.getRootVehicle() == player.getRootVehicle() && !entity.canRiderInteract()) {
+					if (minDistance == 0.0D) {
 						lookedEntity = entity;
-						minDistance = 0.0D;
 					}
-				} else if (interceptPosition.isPresent()) {
-					double distanceToEntity = positionVector.distanceTo(interceptPosition.get());
-
-					if (minDistance > distanceToEntity || minDistance == 0.0D) {
-						lookedEntity = entity;
-						minDistance = distanceToEntity;
-					}
+				} else if (minDistance > distanceToEntity || minDistance == 0.0D) {
+					lookedEntity = entity;
+					minDistance = distanceToEntity;
 				}
 			}
 
-			if (lookedEntity != null && minDistance < distance)
+			if (lookedEntity != null && minDistance < distanceFromEye)
 				foundEntity = lookedEntity;
-		}
+		}*/
 
 		return foundEntity;
 	}

@@ -4,44 +4,45 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.Style;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstEnum;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.RenderUtil;
 
 import java.util.Optional;
 
-public class ThirstTooltip {
+public class HydrationTooltip {
 
     public static final ResourceLocation ICONS = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/overlay.png");
     public static final int THIRST_TEXTURE_WIDTH = 9;
     public static final int THIRST_TEXTURE_HEIGHT = 9;
 
-    public int thirst;
+    public int hydration;
     public float saturation;
     public float dirty;
-    public int thirstIconNumber;
-    private String thirstBarText;
+    public int hydrationIconNumber;
+    private String hydrationBarText;
     public int saturationIconNumber;
     private String saturationBarText;
     public int dirtyIconNumber;
     private String placeholderTooltip;
 
-    public ThirstTooltip(int thirst, float saturation, float dirty) {
-        this.thirst = thirst;
+    public HydrationTooltip(int hydration, float saturation, float dirty) {
+        this.hydration = hydration;
         this.saturation = saturation;
         this.dirty = dirty;
 
-        this.thirstIconNumber = (int) Math.ceil(Math.abs(thirst) / 2f);
-        if (thirstIconNumber > 10)
+        this.hydrationIconNumber = (int) Math.ceil(Math.abs(hydration) / 2f);
+        if (hydrationIconNumber > 10)
         {
-            thirstBarText = "x" + ((thirst < 0 ? -1 : 1) * thirstIconNumber);
-            thirstIconNumber = 1;
+            hydrationBarText = "x" + ((hydration < 0 ? -1 : 1) * hydrationIconNumber);
+            hydrationIconNumber = 1;
         }
 
         if (Config.Baked.thirstSaturationDisplayed) {
@@ -49,20 +50,20 @@ public class ThirstTooltip {
         } else {
             this.saturationIconNumber = 0;
         }
-        if (saturationIconNumber > 10 || saturation == 0)
+        if (saturationIconNumber > 10)
         {
             saturationBarText = "x" + ((saturation < 0 ? -1 : 1) * saturationIconNumber);
             saturationIconNumber = 1;
         }
 
         this.dirtyIconNumber = 0;
-        if (dirty > 0.0f && dirty < 1.0f) {
+        if (dirty > 0.0f && dirty < 1.0f && (hydrationIconNumber > 0 || saturationIconNumber > 0)) {
             dirtyIconNumber = 5;
         }
     }
 
-    public ThirstTooltip(ThirstEnum thirstEnum) {
-        this(thirstEnum.getThirst(), thirstEnum.getSaturation(), thirstEnum.getDirtiness());
+    public HydrationTooltip(HydrationEnum hydrationEnum) {
+        this(hydrationEnum.getHydration(), hydrationEnum.getSaturation(), hydrationEnum.getDirtiness());
     }
 
     public String getPlaceholderTooltip() {
@@ -73,9 +74,9 @@ public class ThirstTooltip {
         // Scale blank string to match 9x9 icon
         float scale = 2.2f;
 
-        float thirstBarLength = thirstIconNumber * scale;
-        if (thirstBarText != null)
-            thirstBarLength += thirstBarText.length();
+        float thirstBarLength = hydrationIconNumber * scale;
+        if (hydrationBarText != null)
+            thirstBarLength += hydrationBarText.length();
 
         float saturationBarLength = 0;
         if (Config.Baked.thirstSaturationDisplayed) {
@@ -105,12 +106,20 @@ public class ThirstTooltip {
 
         Minecraft.getInstance().getTextureManager().bind(ICONS);
 
+        int leftMax = 0;
+        leftMax = Math.max(tooltipX + (this.hydrationIconNumber - 1) * THIRST_TEXTURE_WIDTH,
+                tooltipX + (saturationIconNumber - 1) * THIRST_TEXTURE_WIDTH);
+
         // Thirst bar
-        int left = tooltipX + (this.thirstIconNumber - 1) * THIRST_TEXTURE_WIDTH;
+        int left = 0;
+        if (!Config.Baked.mergeHydrationAndSaturationTooltip)
+            left = tooltipX + (this.hydrationIconNumber - 1) * THIRST_TEXTURE_WIDTH;
+        else
+            left = leftMax;
         int top = tooltipY + 2;
 
         int xOffsetTexture = 0;
-        if (this.thirst >= 0) {
+        if (this.hydration >= 0) {
             xOffsetTexture = THIRST_TEXTURE_WIDTH;
             // Show the thirst bar dirty if dirty chance 100%
             if (dirty >= 1.0f) {
@@ -124,34 +133,38 @@ public class ThirstTooltip {
             }
         }
 
-        // Draw the thirst bubbles
-        for (int i = 0; i < this.thirstIconNumber; i++)
+        // Draw the hydration bubbles
+        for (int i = 0; i < this.hydrationIconNumber; i++)
         {
             int halfIcon = i * 2 + 1;
             int x = left - i * THIRST_TEXTURE_WIDTH;
             int y = top;
 
             Matrix4f m4f = matrixStack.last().pose();
-            if (halfIcon < Math.abs(this.thirst)) // Full thirst icon
+            if (halfIcon < Math.abs(this.hydration)) // Full thirst icon
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-            else if (halfIcon == Math.abs(this.thirst)) // Half thirst icon
+            else if (halfIcon == Math.abs(this.hydration)) // Half thirst icon
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture + THIRST_TEXTURE_WIDTH, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
         }
-        if (thirstBarText != null) {
+        if (hydrationBarText != null) {
             int x = left + 18;
             int y = top;
             matrixStack.pushPose();
             matrixStack.translate(x, y, 0);
             matrixStack.scale(0.75f, 0.75f, 0.75f);
-            Minecraft.getInstance().font.draw(matrixStack, thirstBarText, 2, 2, 0xFFAAAAAA);
+            Minecraft.getInstance().font.draw(matrixStack, hydrationBarText, 2, 2, 0xFFAAAAAA);
             matrixStack.popPose();
         }
 
         // Saturation bar
         // If merge thirst and saturation, left is kept from thirst alignment to align both the saturation bar and the thirst bar
-        if (saturationIconNumber > 0 && Config.Baked.thirstSaturationDisplayed && !Config.Baked.mergeThirstAndSaturationTooltip) {
-            top += 10;
-            left = tooltipX + (saturationIconNumber - 1) * THIRST_TEXTURE_WIDTH;
+        if (saturationIconNumber > 0 && Config.Baked.thirstSaturationDisplayed) {
+            if (hydrationIconNumber > 0 && !Config.Baked.mergeHydrationAndSaturationTooltip)
+                top += 10;
+            if (!Config.Baked.mergeHydrationAndSaturationTooltip)
+                left = tooltipX + (saturationIconNumber - 1) * THIRST_TEXTURE_WIDTH;
+            else
+                left = leftMax;
         }
 
         if (this.saturation >= 0) {
@@ -221,17 +234,18 @@ public class ThirstTooltip {
 
         // reset to drawHoveringText state
         RenderSystem.disableRescaleNormal();
-        RenderSystem.enableLighting();
-        RenderSystem.enableAlphaTest();
+        RenderHelper.turnOff();
+        RenderSystem.disableLighting();
+        RenderSystem.disableDepthTest();
     }
 
     static class ThirstFont extends ResourceLocation
     {
-        ThirstTooltip thirstTooltip;
-        ThirstFont(ThirstTooltip thirstTooltip)
+        HydrationTooltip hydrationTooltip;
+        ThirstFont(HydrationTooltip hydrationTooltip)
         {
             super(Style.DEFAULT_FONT.getNamespace(), Style.DEFAULT_FONT.getPath());
-            this.thirstTooltip = thirstTooltip;
+            this.hydrationTooltip = hydrationTooltip;
         }
 
         static Object getFontId(ITextProperties line)
@@ -249,11 +263,11 @@ public class ThirstTooltip {
             return fontId[0];
         }
 
-        static ThirstTooltip getThirstTooltip(ITextProperties line)
+        static HydrationTooltip getHydrationTooltip(ITextProperties line)
         {
             Object fontId = getFontId(line);
             if (fontId instanceof ThirstFont) {
-                return ((ThirstFont) fontId).thirstTooltip;
+                return ((ThirstFont) fontId).hydrationTooltip;
             }
             return null;
         }

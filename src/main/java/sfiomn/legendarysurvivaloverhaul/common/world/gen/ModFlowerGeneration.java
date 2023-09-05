@@ -16,7 +16,7 @@ public class ModFlowerGeneration {
     public static void generateFlowers(final BiomeLoadingEvent event) {
 
         ResourceLocation biomeName = event.getName();
-        Biome.Category biomeCagegory = event.getCategory();
+        Biome.Category biomeCategory = event.getCategory();
 
         boolean canIceFernSpawn = false;
         boolean canSunFernSpawn = false;
@@ -29,12 +29,12 @@ public class ModFlowerGeneration {
         //  biomeCategory.getName() returns the lowercase name of the category
         //  biomeCategory.toString() is the normal uppercase name of the category
         if (!canIceFernSpawn)
-            canIceFernSpawn = Config.Baked.iceFernBiomeCategories.contains(biomeCagegory.getName()) ||
-                    Config.Baked.iceFernBiomeCategories.contains(biomeCagegory.toString());
+            canIceFernSpawn = Config.Baked.iceFernBiomeCategories.contains(biomeCategory.getName()) ||
+                    Config.Baked.iceFernBiomeCategories.contains(biomeCategory.toString());
 
         if (!canSunFernSpawn)
-            canSunFernSpawn = Config.Baked.sunFernBiomeCategories.contains(biomeCagegory.getName()) ||
-                    Config.Baked.sunFernBiomeCategories.contains(biomeCagegory.toString());
+            canSunFernSpawn = Config.Baked.sunFernBiomeCategories.contains(biomeCategory.getName()) ||
+                    Config.Baked.sunFernBiomeCategories.contains(biomeCategory.toString());
 
         if (canIceFernSpawn) {
             LegendarySurvivalOverhaul.LOGGER.debug("Generate ice fern in biome " + biomeName);

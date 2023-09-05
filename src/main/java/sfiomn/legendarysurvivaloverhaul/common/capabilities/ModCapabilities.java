@@ -17,6 +17,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.network.PacketDistributor;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodProvider;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierProvider;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
@@ -40,6 +42,7 @@ public class ModCapabilities
 	public static final ResourceLocation WETNESS_RES = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "wetness");
 	public static final ResourceLocation THIRST_RES = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirst");
 	public static final ResourceLocation HEART_MOD_RES = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "heart_modifier");
+	public static final ResourceLocation FOOD_RES = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "food");
 	
 	@SubscribeEvent
 	public static void attachCapabilityPlayer(AttachCapabilitiesEvent<Entity> event)
@@ -52,6 +55,7 @@ public class ModCapabilities
 				event.addCapability(WETNESS_RES, new WetnessCapability.Provider());
 				event.addCapability(THIRST_RES, new ThirstProvider());
 				event.addCapability(HEART_MOD_RES, new HeartModifierProvider());
+				event.addCapability(FOOD_RES, new FoodProvider());
 			}
 		}
 	}
@@ -62,7 +66,6 @@ public class ModCapabilities
 		if (event.player.level.isClientSide)
 		{
 			// Client Side
-			return;
 		}
 		else
 		{
@@ -114,6 +117,12 @@ public class ModCapabilities
 					thirstCap.setClean();
 					sendThirstUpdate(player);
 				}
+			}
+
+			if (Config.Baked.baseFoodExhaustion > 0 && !shouldSkipTick(player)) {
+				FoodCapability foodCapability = CapabilityUtil.getFoodCapability(player);
+
+				foodCapability.tickUpdate(player, world, event.phase);
 			}
 		}
 	}

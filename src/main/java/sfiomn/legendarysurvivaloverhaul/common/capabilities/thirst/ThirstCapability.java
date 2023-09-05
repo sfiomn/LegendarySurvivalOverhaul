@@ -23,9 +23,9 @@ public class ThirstCapability implements IThirstCapability
 	//Unsaved data
 	private int oldThirst;
 	private float oldThirstSaturation;
-	private Vector3d oldPosition;
 	private boolean wasSprinting;
-	private int updateTimer; //Update immediately first time around
+	private Vector3d oldPos;
+	private int updateTimer; // Update immediately first time around
 	private int packetTimer;
 
 	public ThirstCapability()
@@ -42,8 +42,8 @@ public class ThirstCapability implements IThirstCapability
 
 		this.oldThirst = 0;
 		this.oldThirstSaturation = 0.0f;
-		this.oldPosition = null;
 		this.wasSprinting = false;
+		this.oldPos = null;
 		this.updateTimer = 0;
 		this.packetTimer = 0;
 	}
@@ -57,18 +57,16 @@ public class ThirstCapability implements IThirstCapability
 			return;
 		}
 
-		if (this.oldPosition == null) {
-			this.oldPosition = player.position();
-		}
+		if (oldPos == null)
+			oldPos = player.position();
 
 		updateTimer++;
 		if(updateTimer >= 10)
 		{
 			updateTimer = 0;
 
-			Vector3d newPosition = player.position();
-			// if player at least moved 1 block, trigger the thirst exhaust, allowing afk player not dying from thirst
-			if (oldPosition.distanceTo(newPosition) > 1) {
+			// if player has moved at least 1 block, trigger the thirst exhaust, allowing afk player not dying from thirst
+			if (oldPos.distanceTo(player.position()) > 1) {
 				float thirstExhausted;
 				if (player.isSprinting() && this.wasSprinting)
 					thirstExhausted = Config.Baked.sprintingThirstExhaustion;
@@ -76,10 +74,11 @@ public class ThirstCapability implements IThirstCapability
 					thirstExhausted = (Config.Baked.sprintingThirstExhaustion + Config.Baked.baseThirstExhaustion) / 2;
 				else
 					thirstExhausted = Config.Baked.baseThirstExhaustion;
+
 				this.addThirstExhaustion(thirstExhausted);
+				this.oldPos = player.position();
+				this.wasSprinting = player.isSprinting();
 			}
-			this.wasSprinting = player.isSprinting();
-			this.oldPosition = newPosition;
 		}
 
 		// Process exhaustion, similar to hunger system. At 4 exhaustion, remove 1 thirst level or thirst saturation
@@ -88,20 +87,20 @@ public class ThirstCapability implements IThirstCapability
 			// Exhausted, do a thirst tick
 			this.addThirstExhaustion(-4.0f);
 
-			if(this.getThirstSaturation() > 0.0f)
+			if(this.getSaturationLevel() > 0.0f)
 			{
 				// Exhaust from saturation
-				this.addThirstSaturation(-1.0f);
+				this.addSaturationLevel(-1.0f);
 			}
 			else if(DamageUtil.isModDangerous(world))
 			{
 				// Exhaust from thirst
-				this.addThirstLevel(-1);
+				this.addHydrationLevel(-1);
 			}
 		}
 
 		// Hurt ticking
-		if(this.getThirstLevel() <= 0 )
+		if(this.getHydrationLevel() <= 0 )
 		{
 			this.addThirstTickTimer(1);
 
@@ -154,13 +153,13 @@ public class ThirstCapability implements IThirstCapability
 	}
 
 	@Override
-	public int getThirstLevel()
+	public int getHydrationLevel()
 	{
 		return thirst;
 	}
 
 	@Override
-	public float getThirstSaturation()
+	public float getSaturationLevel()
 	{
 		return thirstSaturation;
 	}
@@ -187,7 +186,7 @@ public class ThirstCapability implements IThirstCapability
 	}
 
 	@Override
-	public void setThirstLevel(int thirst)
+	public void setHydrationLevel(int thirst)
 	{
 		this.thirst = MathHelper.clamp(thirst, 0, 20);
 
@@ -221,16 +220,16 @@ public class ThirstCapability implements IThirstCapability
 	}
 
 	@Override
-	public void addThirstLevel(int thirst)
+	public void addHydrationLevel(int thirst)
 	{
-		this.setThirstLevel(this.getThirstLevel() + thirst);
+		this.setHydrationLevel(this.getHydrationLevel() + thirst);
 	}
 
 	@Override
-	public void addThirstSaturation(float saturation)
+	public void addSaturationLevel(float saturation)
 	{
 		// Never allow thirst saturation lower than 0
-		this.setThirstSaturation(Math.max(Math.round(((this.getThirstSaturation() + saturation) * 100.0f) / 100.0f), 0.0f));
+		this.setThirstSaturation(Math.max(Math.round((this.getSaturationLevel() + saturation) * 100.0f) / 100.0f, 0.0f));
 	}
 
 	@Override
@@ -246,9 +245,9 @@ public class ThirstCapability implements IThirstCapability
 	}
 
 	@Override
-	public boolean isThirstLevelAtMax()
+	public boolean isHydrationLevelAtMax()
 	{
-		return this.getThirstLevel() >= 20;
+		return this.getHydrationLevel() >= 20;
 	}
 
 	@Override
@@ -261,8 +260,8 @@ public class ThirstCapability implements IThirstCapability
 	{
 		CompoundNBT compound = new CompoundNBT();
 		compound.putFloat("thirstExhaustion", this.getThirstExhaustion());
-		compound.putInt("thirstLevel", this.getThirstLevel());
-		compound.putFloat("thirstSaturation", this.getThirstSaturation());
+		compound.putInt("thirstLevel", this.getHydrationLevel());
+		compound.putFloat("thirstSaturation", this.getSaturationLevel());
 		compound.putInt("thirstTickTimer", this.getThirstTickTimer());
 		compound.putInt("thirstDamageCounter", this.getThirstDamageCounter());
 		return compound;
@@ -274,7 +273,7 @@ public class ThirstCapability implements IThirstCapability
 		if(nbt.contains("thirstExhaustion"))
 			this.setThirstExhaustion(nbt.getFloat("thirstExhaustion"));
 		if(nbt.contains("thirstLevel"))
-			this.setThirstLevel(nbt.getInt("thirstLevel"));
+			this.setHydrationLevel(nbt.getInt("thirstLevel"));
 		if(nbt.contains("thirstSaturation"))
 			this.setThirstSaturation(nbt.getFloat("thirstSaturation"));
 		if(nbt.contains("thirstTickTimer"))

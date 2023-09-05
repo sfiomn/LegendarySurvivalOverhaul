@@ -37,6 +37,8 @@ import sfiomn.legendarysurvivaloverhaul.client.itemproperties.CanteenProperty;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.ThermometerProperty;
 import sfiomn.legendarysurvivaloverhaul.client.screens.SewingTableScreen;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ThermalScreen;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodStorage;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierStorage;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
@@ -138,9 +140,9 @@ public class LegendarySurvivalOverhaul
 		surviveLoaded = ModList.get().isLoaded("survive");
 		
 		if (sereneSeasonsLoaded)
-			LOGGER.debug("Serene Seasons is loaded, enabling compatability");
+			LOGGER.debug("Serene Seasons is loaded, enabling compatibility");
 		if (curiosLoaded)
-			LOGGER.debug("Curios is loaded, enabling compatability");
+			LOGGER.debug("Curios is loaded, enabling compatibility");
 		if (surviveLoaded)
 			LOGGER.debug("Survive is loaded, I hope you know what you're doing");
 	}
@@ -155,6 +157,8 @@ public class LegendarySurvivalOverhaul
 	public static final Capability<WetnessCapability> WETNESS_CAP = null;
 	@CapabilityInject(ThirstCapability.class)
 	public static final Capability<ThirstCapability> THIRST_CAP = null;
+	@CapabilityInject(FoodCapability.class)
+	public static final Capability<FoodCapability> FOOD_CAP = null;
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
@@ -163,10 +167,9 @@ public class LegendarySurvivalOverhaul
 		CapabilityManager.INSTANCE.register(ThirstCapability.class, new ThirstStorage(), ThirstCapability::new);
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
 		CapabilityManager.INSTANCE.register(TemperatureItemCapability.class, new TemperatureItemCapability.Storage(), TemperatureItemCapability::new);
+		CapabilityManager.INSTANCE.register(FoodCapability.class, new FoodStorage(), FoodCapability::new);
 
 		NetworkHandler.register();
-
-
 		
 		event.enqueueWork(EffectRegistry::registerBrewingRecipes);
 	}
@@ -184,10 +187,10 @@ public class LegendarySurvivalOverhaul
 			ScreenManager.register(ContainerRegistry.COOLER_CONTAINER.get(), ThermalScreen::new);
 			ScreenManager.register(ContainerRegistry.HEATER_CONTAINER.get(), ThermalScreen::new);
 			ScreenManager.register(ContainerRegistry.SEWING_TABLE_CONTAINER.get(), SewingTableScreen::new);
-
-			DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientItemPropertiesSetup);
-			DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientKeyBindingSetup);
 		});
+
+		DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientItemPropertiesSetup);
+		DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientKeyBindingSetup);
 	}
 	
 	private void serverStarted(final FMLServerStartedEvent event)
@@ -244,6 +247,7 @@ public class LegendarySurvivalOverhaul
 					protected void apply(Void objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn)
 					{
 						Config.Baked.bakeCommon();
+						Config.Baked.bakeClient();
 						JsonConfigRegistration.init(modConfigJsons.toFile());
 					}
 			

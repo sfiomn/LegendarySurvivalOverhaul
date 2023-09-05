@@ -4,14 +4,10 @@
 	"pattern":
 	[
 		"w w",
-		"# #"
+		"w w"
 	],
-	"key": 
+	"key":
 	{
-		"#":
-		{
-			"item": "minecraft:leather"
-		},
 		"w":
 		{
 			"tag": "minecraft:wool"

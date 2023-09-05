@@ -9,7 +9,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstEnum;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
@@ -30,31 +30,31 @@ public class CanteenItem extends DrinkItem {
     }
 
     public boolean canDrink(ItemStack stack){
-        return ThirstUtil.getCapacityTag(stack) > 0 && ThirstUtil.getThirstEnumTag(stack) != null;
+        return ThirstUtil.getCapacityTag(stack) > 0 && ThirstUtil.getHydrationEnumTag(stack) != null;
     }
 
     public boolean canFill(ItemStack stack) {
         // Prevent filling if canteen contains other than normal water
         return Config.Baked.allowOverridePurifiedWater ?
                 ThirstUtil.getCapacityTag(stack) < getMaxCapacity() :
-                ThirstUtil.getCapacityTag(stack) < getMaxCapacity() && ThirstUtil.getThirstEnumTag(stack) == ThirstEnum.NORMAL;
+                ThirstUtil.getCapacityTag(stack) < getMaxCapacity() && ThirstUtil.getHydrationEnumTag(stack) == HydrationEnum.NORMAL;
     }
 
     public void fill(ItemStack stack) {
         ThirstUtil.setCapacityTag(stack, ThirstUtil.getCapacityTag(stack) + 1);
-        ThirstUtil.setThirstEnumTag(stack, ThirstEnum.NORMAL);
+        ThirstUtil.setHydrationEnumTag(stack, HydrationEnum.NORMAL);
     }
 
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        ThirstEnum thirstEnum = ThirstUtil.traceWater(player);
+        HydrationEnum hydrationEnum = ThirstUtil.traceWater(player);
         ItemStack itemstack = player.getItemInHand(hand);
-        if (canFill(itemstack) && thirstEnum == ThirstEnum.NORMAL) {
+        if (canFill(itemstack) && hydrationEnum == HydrationEnum.NORMAL) {
             world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             this.fill(itemstack);
             return ActionResult.success(itemstack);
         }
-        if (canDrink(itemstack) && !CapabilityUtil.getThirstCapability(player).isThirstLevelAtMax()) {
+        if (canDrink(itemstack) && !CapabilityUtil.getThirstCapability(player).isHydrationLevelAtMax()) {
             player.startUsingItem(hand);
             return ActionResult.success(itemstack);
         }
@@ -64,7 +64,7 @@ public class CanteenItem extends DrinkItem {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity player) {
         if (player instanceof PlayerEntity && canDrink(stack) && !world.isClientSide && Config.Baked.thirstEnabled) {
-            ThirstUtil.takeDrink((PlayerEntity) player, ThirstUtil.getThirstEnumTag(stack));
+            ThirstUtil.takeDrink((PlayerEntity) player, ThirstUtil.getHydrationEnumTag(stack));
             ThirstUtil.setCapacityTag(stack, ThirstUtil.getCapacityTag(stack) - 1);
         }
         return stack;
@@ -75,7 +75,7 @@ public class CanteenItem extends DrinkItem {
         if(ThirstUtil.getCapacityTag(stack) == 0)
             return "item." + LegendarySurvivalOverhaul.MOD_ID + ".canteen_empty";
 
-        if (ThirstUtil.getThirstEnumTag(stack) == ThirstEnum.PURIFIED)
+        if (ThirstUtil.getHydrationEnumTag(stack) == HydrationEnum.PURIFIED)
             return "item." + LegendarySurvivalOverhaul.MOD_ID + ".canteen_purified";
         else
             return "item." + LegendarySurvivalOverhaul.MOD_ID + ".canteen";
@@ -84,7 +84,7 @@ public class CanteenItem extends DrinkItem {
     @Override
     public boolean showDurabilityBar(ItemStack stack)
     {
-        return true;
+        return ThirstUtil.getCapacityTag(stack) > 0;
     }
 
     @Override

@@ -14,11 +14,11 @@ public class TileEntityRegistry {
             DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, LegendarySurvivalOverhaul.MOD_ID);
 
     public static RegistryObject<TileEntityType<HeaterTileEntity>> HEATER_TILE_ENTITY =
-            TILE_ENTITIES.register("heater_tile_entity", () -> TileEntityType.Builder.of(
+            TILE_ENTITIES.register(LegendarySurvivalOverhaul.MOD_ID + "heater_tile_entity", () -> TileEntityType.Builder.of(
                     HeaterTileEntity::new, BlockRegistry.HEATER.get()).build(null));
 
     public static RegistryObject<TileEntityType<CoolerTileEntity>> COOLER_TILE_ENTITY =
-            TILE_ENTITIES.register("cooler_tile_entity", () -> TileEntityType.Builder.of(
+            TILE_ENTITIES.register(LegendarySurvivalOverhaul.MOD_ID + "cooler_tile_entity", () -> TileEntityType.Builder.of(
                     CoolerTileEntity::new, BlockRegistry.COOLER.get()).build(null));
 
     public static void register(IEventBus eventBus) {

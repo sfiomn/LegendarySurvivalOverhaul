@@ -22,7 +22,7 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperat
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonThirst;
 import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
-import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstEnum;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 import sfiomn.legendarysurvivaloverhaul.common.items.DrinkItem;
@@ -56,15 +56,14 @@ public class TooltipHandler
 			}
 
 			// Added Description for coat items.
-			if (stack.getItem() instanceof CoatItem && Config.Baked.temperatureEnabled) {
+			if (stack.getItem() instanceof CoatItem && Config.Baked.temperatureEnabled)
 				addCoatItemDescText((CoatItem) stack.getItem(), tooltip);
-			}
-
-			if (Config.Baked.thirstEnabled && Config.Baked.showTooltipThirst)
-				addThirstText(stack, tooltip);
 
 			if (Config.Baked.temperatureEnabled)
 				addFoodEffectText(stack, tooltip);
+
+			if (Config.Baked.thirstEnabled && Config.Baked.showHydrationTooltip)
+				addHydrationText(stack, tooltip);
 		}
 	}
 
@@ -84,23 +83,23 @@ public class TooltipHandler
 		int toolTipZ = 400; // tooltip text zLevel is 400, hardcode in GuiUtils.
 
 		// Find thirst font of text lines.
-		ThirstTooltip thirstTooltip = null;
+		HydrationTooltip hydrationTooltip = null;
 		List<? extends ITextProperties> lines = event.getLines();
 		for (int i = 0; i < lines.size(); ++i)
 		{
-			thirstTooltip = ThirstTooltip.ThirstFont.getThirstTooltip(lines.get(i));
-			if (thirstTooltip != null)
+			hydrationTooltip = HydrationTooltip.ThirstFont.getHydrationTooltip(lines.get(i));
+			if (hydrationTooltip != null)
 			{
 				toolTipY += i * 10;
 				break;
 			}
 		}
 
-		if (thirstTooltip == null)
+		if (hydrationTooltip == null)
 			return;
 
 
-		thirstTooltip.renderTooltipIcons(event.getMatrixStack(), toolTipX, toolTipY, toolTipZ);
+		hydrationTooltip.renderTooltipIcons(event.getMatrixStack(), toolTipX, toolTipY, toolTipZ);
 	}
 
 	private static void addArmorBaseTemperatureText(ResourceLocation itemRegistryName, List<ITextComponent> tooltip) {
@@ -207,41 +206,42 @@ public class TooltipHandler
 		}
 	}
 
-	private static void addThirstText(ItemStack stack, List<ITextComponent> tooltip) {
+	private static void addHydrationText(ItemStack stack, List<ITextComponent> tooltip) {
 		ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
 		assert itemRegistryName != null;
 		JsonThirst jsonThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
 
-		ThirstTooltip thirstTooltip = null;
+		HydrationTooltip hydrationTooltip = null;
 		if (jsonThirst != null) {
-			thirstTooltip = new ThirstTooltip(jsonThirst.thirst, jsonThirst.saturation, jsonThirst.dirty);
+			hydrationTooltip = new HydrationTooltip(jsonThirst.hydration, jsonThirst.saturation, jsonThirst.dirty);
 		} else if (stack.getItem() == Items.POTION) {
 			Potion potion = PotionUtils.getPotion(stack);
 			if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
 			{
-				thirstTooltip = new ThirstTooltip(ThirstEnum.NORMAL);
+				hydrationTooltip = new HydrationTooltip(HydrationEnum.NORMAL);
 			}
 			else if (potion != Potions.EMPTY)
 			{
-				thirstTooltip = new ThirstTooltip(ThirstEnum.POTION);
+				hydrationTooltip = new HydrationTooltip(HydrationEnum.POTION);
 			}
 		} else if (stack.getItem() instanceof DrinkItem) {
-			ThirstEnum thirstEnum = ThirstUtil.getThirstEnumTag(stack);
-			if (thirstEnum != null)
-				thirstTooltip = new ThirstTooltip(thirstEnum);
+			HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
+			if (hydrationEnum != null)
+				hydrationTooltip = new HydrationTooltip(hydrationEnum);
 		}
 
-		if (thirstTooltip == null) {
+		if (hydrationTooltip == null) {
 			return;
 		}
 
-		Style thirstStyle = Style.EMPTY.withFont(new ThirstTooltip.ThirstFont(thirstTooltip));
-		StringTextComponent placeholder = new StringTextComponent(thirstTooltip.getPlaceholderTooltip());
-		if (thirstTooltip.thirstIconNumber > 0)
+		Style thirstStyle = Style.EMPTY.withFont(new HydrationTooltip.ThirstFont(hydrationTooltip));
+		StringTextComponent placeholder = new StringTextComponent(hydrationTooltip.getPlaceholderTooltip());
+		if (hydrationTooltip.hydrationIconNumber > 0)
 			tooltip.add(placeholder.setStyle(thirstStyle));
-		if (thirstTooltip.saturationIconNumber > 0 && !Config.Baked.mergeThirstAndSaturationTooltip)
+		if ((hydrationTooltip.saturationIconNumber > 0 && !Config.Baked.mergeHydrationAndSaturationTooltip) ||
+				(hydrationTooltip.hydrationIconNumber <= 0 && hydrationTooltip.saturationIconNumber > 0) )
 			tooltip.add(placeholder.setStyle(thirstStyle));
-		if (thirstTooltip.dirtyIconNumber > 0)
+		if (hydrationTooltip.dirtyIconNumber > 0)
 			tooltip.add(placeholder.setStyle(thirstStyle));
 	}
 }

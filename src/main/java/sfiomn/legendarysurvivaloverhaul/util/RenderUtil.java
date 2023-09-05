@@ -1,32 +1,14 @@
 package sfiomn.legendarysurvivaloverhaul.util;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.text.StringTextComponent;
 import org.lwjgl.opengl.GL11;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 
 public final class RenderUtil
 {
-	public static final ResourceLocation legendaryFrame = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/legendary_frame.png");
-
-	private static final int smallFrameOffsetIndex = 0;
-	private static final int smallFrameWidth = 38;
-	private static final int mediumFrameOffsetIndex = 1;
-	private static final int mediumFrameWidth = 92;
-	private static final int largeFrameOffsetIndex = 2;
-	private static final int largeFrameWidth = 122;
-	private static final int frameHeight = 30;
-	private static final int frameTextureSize = 128;
-
-
 	private RenderUtil() {}
 	
 	/**
@@ -73,31 +55,5 @@ public final class RenderUtil
 		RenderSystem.color4f(1.0F,1.0F,1.0F,1.0F);
 
 		RenderSystem.enableAlphaTest();
-	}
-
-	public static void drawFrame(Minecraft mc, MatrixStack matrix, StringTextComponent text) {
-		int width = mc.getWindow().getGuiScaledWidth();
-		int height = mc.getWindow().getGuiScaledHeight();
-
-		int textWidth = mc.font.width(text);
-		int white = 0xFFFFFF;
-		int y = height / 2 + frameHeight / 2;
-
-		mc.getTextureManager().bind(legendaryFrame);
-		RenderSystem.enableBlend();
-
-		if (textWidth < 27) {
-			int x = width / 2 - smallFrameWidth / 2;
-			AbstractGui.blit(matrix, x, y, 0, smallFrameOffsetIndex * frameHeight, largeFrameWidth, frameHeight, frameTextureSize, frameTextureSize);
-		} else if (textWidth < 81) {
-			int x = width / 2 - mediumFrameWidth / 2;
-			AbstractGui.blit(matrix, x, y, 0, mediumFrameOffsetIndex * frameHeight, mediumFrameWidth, frameHeight, frameTextureSize, frameTextureSize);
-		} else {
-			int x = width / 2 - largeFrameWidth / 2;
-			AbstractGui.blit(matrix, x, y, 0, largeFrameOffsetIndex * frameHeight, largeFrameWidth, frameHeight, frameTextureSize, frameTextureSize);
-		}
-
-		mc.font.draw(matrix, text, (float) width / 2 - (float) textWidth / 2, y + (float) frameHeight / 2 - 4, white);
-		RenderSystem.disableBlend();
 	}
 }

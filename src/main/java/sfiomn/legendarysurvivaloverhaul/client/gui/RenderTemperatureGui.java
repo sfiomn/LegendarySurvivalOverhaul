@@ -240,18 +240,14 @@ public class RenderTemperatureGui
 	}
 
 	public static void drawHungerSecondaryEffect(MatrixStack matrix, PlayerEntity player, int width, int height) {
-		if (player.hasEffect(EffectRegistry.COLD_SECONDARY_EFFECT.get())) {
+		if (player.hasEffect(EffectRegistry.COLD_HUNGER.get())) {
 
 			Matrix4f m4f = matrix.last().pose();
 
 			bind(ICONS);
 
-			int xTextureOffset = HUNGER_TEXTURE_WIDTH * 6;
-			int yTextureOffset = HUNGER_TEXTURE_HEIGHT;
-
-			if (player.hasEffect(Effects.HUNGER)) {
-				xTextureOffset += HUNGER_TEXTURE_WIDTH * 3;
-			}
+			int foodLevel = player.getFoodData().getFoodLevel();
+			float saturationLevelInt = (int) player.getFoodData().getSaturationLevel();
 
 			int left = width / 2 + 91; // Same x offset as the hunger bar
 			int top = height - 39;
@@ -259,23 +255,44 @@ public class RenderTemperatureGui
 			// Draw the 10 hunger meats
 			for (int i = 0; i < 10; i++)
 			{
+
 				int halfIcon = i * 2 + 1;
 				int x = left - i * 8 - 9;
 				int y = top;
-				int yOffset = 0;
 
 				// Shake based on thirst level and saturation level
+				int yOffset = 0;
 				if (Config.Baked.showVanillaAnimationOverlay && player.getFoodData().getSaturationLevel() <= 0.0f && updateCounter % (player.getFoodData().getFoodLevel() * 3 + 1) == 0)
 				{
 					yOffset = (rand.nextInt(3) - 1);
 				}
 
-				if (halfIcon < player.getFoodData().getFoodLevel()) // Full hunger icon
+				int xTextureOffset = HUNGER_TEXTURE_WIDTH * 6;
+				int yTextureOffset = HUNGER_TEXTURE_HEIGHT;
+
+				if (player.hasEffect(Effects.HUNGER)) {
+					xTextureOffset += HUNGER_TEXTURE_WIDTH * 3;
+				}
+
+				if (halfIcon < foodLevel) // Full hunger icon
 					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset + HUNGER_TEXTURE_WIDTH, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
-				else if (halfIcon == player.getFoodData().getFoodLevel()) // Half hunger icon
+				else if (halfIcon == foodLevel) // Half hunger icon
 					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset + (HUNGER_TEXTURE_WIDTH * 2), yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
 				else
 					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
+
+
+				// Reassign texture offset for saturation
+				xTextureOffset = HUNGER_TEXTURE_WIDTH * 12;
+				if(saturationLevelInt > 0 && Config.Baked.thirstSaturationDisplayed)
+				{
+					if (halfIcon < saturationLevelInt) { // Full saturation icon
+						RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
+					}
+					else if (halfIcon == saturationLevelInt) { // Half saturation icon
+						RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset + HUNGER_TEXTURE_WIDTH, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
+					}
+				}
 			}
 		}
 	}

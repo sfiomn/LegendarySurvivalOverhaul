@@ -1,32 +1,22 @@
 {
-	"type": "minecraft:crafting_shaped",
-	"pattern":
-	[
-		"LqL",
-		"LqL",
-		"#R#"
-	],
-	"key": 
-	{
-		"#":
-		{
-			"item": "minecraft:stone"
-		},
-		"q":
-		{
-			"item": "minecraft:quartz"
-		},
-		"L":
-		{
-			"item": "minecraft:blaze_powder"
-		},
-		"R":
-		{
-			"item": "minecraft:redstone"
-		}
-	},
-	"result":
-	{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " i ",
+        "iCi",
+        "iWi"
+    ],
+    "key": {
+        "i": {
+            "item": "minecraft:iron_ingot"
+        },
+        "C": {
+            "item": "minecraft:campfire"
+        },
+        "W": {
+            "item": "minecraft:coal_block"
+        }
+    },
+    "result": {
 		"item": "legendarysurvivaloverhaul:heater"
-	}
+    }
 }

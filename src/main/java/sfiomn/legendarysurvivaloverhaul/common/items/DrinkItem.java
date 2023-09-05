@@ -19,7 +19,7 @@ import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 public abstract class DrinkItem extends Item {
 
     public DrinkItem(Properties properties) {
-        super(properties.stacksTo(16).defaultDurability(0));
+        super(properties.stacksTo(16));
     }
 
     public void runSecondaryEffect(PlayerEntity player, ItemStack stack)
@@ -47,12 +47,14 @@ public abstract class DrinkItem extends Item {
         if(!Config.Baked.thirstEnabled)
         {
             // Don't restrict drinking if thirst is disabled
+            player.startUsingItem(hand);
             return ActionResult.success(stack);
         }
 
         IThirstCapability capability = CapabilityUtil.getThirstCapability(player);
-        if(!capability.isThirstLevelAtMax())
+        if(!capability.isHydrationLevelAtMax())
         {
+            player.startUsingItem(hand);
             return ActionResult.success(stack);
         }
 
@@ -74,7 +76,7 @@ public abstract class DrinkItem extends Item {
             jsonThirst = JsonConfig.consumableThirst.get(this.getRegistryName().toString());
 
         if(jsonThirst != null)
-            ThirstUtil.takeDrink(player, jsonThirst.thirst, jsonThirst.saturation, jsonThirst.dirty);
+            ThirstUtil.takeDrink(player, jsonThirst.hydration, jsonThirst.saturation, jsonThirst.dirty);
 
         runSecondaryEffect(player, stack);
 

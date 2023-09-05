@@ -1,7 +1,5 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -19,7 +17,6 @@ import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 public class TemperatureItemCapability implements ITemperatureItemCapability {
     private float temperature;
     private long updateTick;
-    private ClientWorld level = Minecraft.getInstance().level;
 
     public TemperatureItemCapability() {
         this.init();
@@ -31,16 +28,13 @@ public class TemperatureItemCapability implements ITemperatureItemCapability {
     }
 
     @Override
-    public boolean shouldUpdate() {
-        long currentTick = 0;
-        if (level != null)
-            currentTick = level.getGameTime();
+    public boolean shouldUpdate(long currentTick) {
         return (currentTick - this.updateTick) > 10;
     }
 
     @Override
-    public void updateWorldTemperature(World world, Entity holder) {
-        this.updateTick = level.getGameTime();
+    public void updateWorldTemperature(World world, Entity holder, long currentTick) {
+        this.updateTick = currentTick;
         this.temperature = WorldUtil.calculateClientWorldEntityTemperature(world, holder);
     }
 

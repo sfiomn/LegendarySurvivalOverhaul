@@ -1,13 +1,10 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness;
 
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.LavaFluid;
-import net.minecraft.fluid.WaterFluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.particles.ParticleTypes;
@@ -19,12 +16,14 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 public class WetnessCapability
 {
@@ -32,6 +31,7 @@ public class WetnessCapability
 	
 	private int wetness;
 	private int packetTimer;
+	private int updateTimer; //Update immediately first time around
 	
 	private int oldWetness;
 	
@@ -44,6 +44,7 @@ public class WetnessCapability
 	{
 		this.wetness = 0;
 		this.packetTimer = 0;
+		this.updateTimer = 0;
 		
 		this.oldWetness = this.wetness;
 	}
@@ -75,6 +76,16 @@ public class WetnessCapability
 			packetTimer++;
 			return;
 		}
+
+		updateTimer++;
+		if(updateTimer < 4)
+		{
+			return;
+		}
+		updateTimer = 0;
+
+		if (this.wetness > 0 && player.getRemainingFireTicks() > 0 && !player.fireImmune())
+			this.addWetness(-10);
 		
 		BlockPos pos = player.blockPosition();
 		
@@ -83,45 +94,38 @@ public class WetnessCapability
 		if (player.getVehicle() instanceof BoatEntity && !player.getVehicle().hasImpulse)
 		{
 			pos = pos.above();
+			if (this.wetness > 0 && world.getFluidState(pos).isEmpty())
+				worldParticles(player, world);
+		} else {
+			if (this.wetness > 0 && (world.getFluidState(pos).isEmpty() || world.getFluidState(pos.above()).isEmpty()))
+				worldParticles(player, world);
 		}
-		
-		if (this.wetness > 0 && (world.getFluidState(pos).isEmpty() || world.getFluidState(pos.above()).isEmpty()))
-			worldParticles(player, world);
-		
-		// Only tick wetness every 4 ticks
-		if (world.getLevelData().getGameTime() % 4 != 0)
-			return;
-		
-		if (player.getRemainingFireTicks() > 0 && !player.fireImmune())
-			this.addWetness(-10);
-		
-		if (world.isRainingAt(pos))
-			this.addWetness(5);
-		else if (world.getFluidState(pos) != null)
+
+		FluidState fluidState = world.getFluidState(pos);
+
+		// If no fluid on the pos of the player (or above if in a boat)
+		// only check for raining on pos above player (to avoid issue with half blocks)
+		if (fluidState.isEmpty())
 		{
-			FluidState fluidState = world.getFluidState(pos);
-			
-			// If the fluid is empty, we can just be like 
-			// "alright cool" and ditch it
-			if (fluidState.isEmpty())
-			{
+			if (wetness < WETNESS_LIMIT && world.isRainingAt(player.blockPosition().above()))
+				this.addWetness(5);
+			else if (this.wetness > 0)
 				this.addWetness(-3);
-				return;
-			}
-			
+		}
+		else
+		{
 			Fluid fluid = fluidState.getType();
 			
 			float fractionalLevel = MathUtil.invLerp(1, 8, fluidState.getAmount());
 			
 			if (((float) player.position().y()) > ((float) pos.getY()) + fractionalLevel + 0.0625f)
 				return;
-			
-			// If/Else chains are frowned upon, i know, but just bear with me please
+
 			if (fluid instanceof ForgeFlowingFluid)
 			{
 				ForgeFlowingFluid forgeFluid = (ForgeFlowingFluid) fluidState.getType();
 				
-				if (forgeFluid.getAttributes().isGaseous())
+				if (this.wetness > 0 &&  forgeFluid.getAttributes().isGaseous())
 				{
 					this.addWetness(-3);
 					return;
@@ -129,27 +133,23 @@ public class WetnessCapability
 				
 				int temperature = forgeFluid.getAttributes().getTemperature();
 				
-				if (temperature < 400)
+				if (this.wetness < WETNESS_LIMIT && temperature < 400)
 				{
 					this.addWetness(temperature / 100);
 				}
-				else
+				else if (this.wetness > 0)
 				{
 					this.addWetness(-(temperature / 100));
 				}
 			}
-			else if (fluid instanceof LavaFluid)
+			else if (this.wetness > 0 && fluid instanceof LavaFluid)
 			{
-				this.addWetness(-Math.round(40.0f * fractionalLevel));
+				this.addWetness(-Math.round(20.0f * fractionalLevel));
 			}
-			else if (fluid instanceof WaterFluid)
+			// Last fallback, just assume that it's the same as water and go from there
+			else if (this.wetness < WETNESS_LIMIT)
 			{
-				this.addWetness(Math.round(8.0f * fractionalLevel));
-			}
-			else
-			{
-				// Last fallback, just assume that it's the same as water and go from there
-				this.addWetness(Math.round(8.0f * fractionalLevel));
+				this.addWetness(Math.round(4.0f * fractionalLevel));
 			}
 		}
 	}

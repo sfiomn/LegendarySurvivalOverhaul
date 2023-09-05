@@ -3,10 +3,10 @@
 	"group": "snow_Armor",
 	"pattern":
 	[
-		"###",
+		"w#w",
 		"w w"
 	],
-	"key": 
+	"key":
 	{
 		"#":
 		{

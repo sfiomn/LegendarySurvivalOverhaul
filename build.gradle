@@ -56,7 +56,7 @@ minecraft {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
-            args '--username', 'Armkath', '--userType', 'microsoft', '--accessToken', 'eyJraWQiOiJhYzg0YSIsImFsZyI6IkhTMjU2In0.eyJ4dWlkIjoiMjUzNTQxMjExMTgwMTc2NiIsImFnZyI6IkFkdWx0Iiwic3ViIjoiNTkzZmNlNDctN2IxOS00MjI3LWFjM2ItMThjZmQzODNjNWFjIiwiYXV0aCI6IlhCT1giLCJucyI6ImRlZmF1bHQiLCJyb2xlcyI6W10sImlzcyI6ImF1dGhlbnRpY2F0aW9uIiwiZmxhZ3MiOlsidHdvZmFjdG9yYXV0aCIsIm1pbmVjcmFmdF9uZXQiLCJvcmRlcnNfMjAyMiJdLCJwbGF0Zm9ybSI6IlVOS05PV04iLCJ5dWlkIjoiZWU5MmU4NTY2M2VkNTZlNTQ2NjRmMGRlYmI1YTYzYTYiLCJuYmYiOjE2ODc3ODMyMjEsImV4cCI6MTY4Nzg2OTYyMSwiaWF0IjoxNjg3NzgzMjIxfQ.Pof9-V51vSrgB61UlzmBfiscvl2WdVWD3dvpfMVnPF8'
+            args '--username', 'Armkath', '--userType', 'microsoft', '--accessToken', 'eyJraWQiOiJhYzg0YSIsImFsZyI6IkhTMjU2In0.eyJ4dWlkIjoiMjUzNTQxMjExMTgwMTc2NiIsImFnZyI6IkFkdWx0Iiwic3ViIjoiNTkzZmNlNDctN2IxOS00MjI3LWFjM2ItMThjZmQzODNjNWFjIiwiYXV0aCI6IlhCT1giLCJucyI6ImRlZmF1bHQiLCJyb2xlcyI6W10sImlzcyI6ImF1dGhlbnRpY2F0aW9uIiwiZmxhZ3MiOlsidHdvZmFjdG9yYXV0aCIsIm1pbmVjcmFmdF9uZXQiLCJvcmRlcnNfMjAyMiJdLCJwbGF0Zm9ybSI6IlVOS05PV04iLCJ5dWlkIjoiZWU5MmU4NTY2M2VkNTZlNTQ2NjRmMGRlYmI1YTYzYTYiLCJuYmYiOjE2OTA5MDg4MjAsImV4cCI6MTY5MDk5NTIyMCwiaWF0IjoxNjkwOTA4ODIwfQ.-1TXoy3SYTgc6fKK1p6YQfgVs6JecAjXdSZLF3y6ooE'
 
             mods {
                 legendarysurvivaloverhaul {
@@ -160,7 +160,7 @@ dependencies {
 
 	// Runtime mods. These are primarily for testing and can be removed as necessary.
 	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.8.2") // Curios
-	runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}") //
+	runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}") // JEI
     runtimeOnly fg.deobf("curse.maven:SereneSeasons-291874:3894516") // Serene Seasons deobf
     // For more info...
 

@@ -116,6 +116,8 @@ public class ThermalBlock extends HorizontalBlock
 				InventoryHelper.dropContents(world, pos, (IInventory) tileEntity);
 				world.updateNeighbourForOutputSignal(pos, this);
 			}
+			if (tileEntity != null)
+				tileEntity.setRemoved();
 			super.onRemove(state, world, pos, newState, isMoving);
 		}
 	}

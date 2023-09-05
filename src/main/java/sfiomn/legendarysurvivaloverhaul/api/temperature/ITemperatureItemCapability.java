@@ -7,6 +7,6 @@ public interface ITemperatureItemCapability
 {
 	public float getWorldTemperatureLevel();
 	public void setWorldTemperatureLevel(float temperature);
-	public boolean shouldUpdate();
-	public void updateWorldTemperature(World world, Entity holder);
+	public boolean shouldUpdate(long currentTick);
+	public void updateWorldTemperature(World world, Entity holder, long currentTick);
 }

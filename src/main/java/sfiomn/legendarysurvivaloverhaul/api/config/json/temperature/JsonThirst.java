@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class JsonThirst
 {
-	@SerializedName("thirst")
-	public int thirst;
+	@SerializedName("hydration")
+	public int hydration;
 	@SerializedName("saturation")
 	public float saturation;
 	@SerializedName("dirty")
 	public float dirty;
 
-	public JsonThirst(int thirst, float saturation, float dirty) {
-		this.thirst = thirst;
+	public JsonThirst(int hydration, float saturation, float dirty) {
+		this.hydration = hydration;
 		this.saturation = saturation;
 		this.dirty = dirty;
 	}

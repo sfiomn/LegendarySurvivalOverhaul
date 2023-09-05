@@ -42,7 +42,7 @@ public class BlockModifier extends ModifierBase
 		hotTotal = 0.0f;
 		coldTotal = 0.0f;
 		
-		doBlocksAndFluidsRoutine(world, pos);
+		doBlocksAndFluidsRoutine(world, pos.above());
 		
 		hotTotal -= hottestValue;
 		coldTotal -= coldestValue;

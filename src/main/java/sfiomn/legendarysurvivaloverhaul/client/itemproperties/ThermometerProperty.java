@@ -38,8 +38,8 @@ public class ThermometerProperty implements IItemPropertyGetter {
             try
             {
                 TemperatureItemCapability tempItemCap = CapabilityUtil.getTempItemCapability(stack);
-                if (holder != null && tempItemCap.shouldUpdate()) {
-                    tempItemCap.updateWorldTemperature(world, holder);
+                if (holder != null && tempItemCap.shouldUpdate(world.getGameTime())) {
+                    tempItemCap.updateWorldTemperature(world, holder, world.getGameTime());
                 }
                 return MathHelper.positiveModulo(TemperatureUtil.clampTemperature((int) tempItemCap.getWorldTemperatureLevel()) / TemperatureEnum.HEAT_STROKE.getUpperBound(), 1.0333333f);
             }

@@ -63,12 +63,16 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> minTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> maxTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
+		public final ForgeConfigSpec.ConfigValue<Boolean> hideInfoFromDebug;
+		public final ForgeConfigSpec.ConfigValue<Float> baseFoodExhaustion;
 		
 		// Temperature
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureEnabled;
 		public final ForgeConfigSpec.ConfigValue<Boolean> showPotionEffectParticles;
 		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousTemperature;
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureSecondaryEffects;
+		public final ForgeConfigSpec.ConfigValue<Float> heatThirstEffectModifier;
+		public final ForgeConfigSpec.ConfigValue<Float> coldHungerEffectModifier;
 		
 		public final ForgeConfigSpec.ConfigValue<Boolean> biomeEffectsEnabled;
 		public final ForgeConfigSpec.ConfigValue<Boolean> biomeDrynessEffectEnabled;
@@ -142,27 +146,28 @@ public class Config
 		// Thirst
 		public final ForgeConfigSpec.ConfigValue<Boolean> thirstEnabled;
 		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousThirst;
+		public final ForgeConfigSpec.ConfigValue<Float> thirstDamageScaling;
+		public final ForgeConfigSpec.ConfigValue<Float> thirstEffectModifier;
 		public final ForgeConfigSpec.ConfigValue<Float> baseThirstExhaustion;
 		public final ForgeConfigSpec.ConfigValue<Float> sprintingThirstExhaustion;
 		public final ForgeConfigSpec.ConfigValue<Float> onJumpThirstExhaustion;
 		public final ForgeConfigSpec.ConfigValue<Float> onBlockBreakThirstExhaustion;
 		public final ForgeConfigSpec.ConfigValue<Float> onAttackThirstExhaustion;
-		public final ForgeConfigSpec.ConfigValue<Float> thirstDamageScaling;
 		public final ForgeConfigSpec.ConfigValue<Integer> canteenCapacity;
 		public final ForgeConfigSpec.ConfigValue<Integer> largeCanteenCapacity;
 		public final ForgeConfigSpec.ConfigValue<Boolean> allowOverridePurifiedWater;
 		public final ForgeConfigSpec.ConfigValue<Boolean> drinkFromRain;
-		public final ForgeConfigSpec.ConfigValue<Integer> thirstRain;
+		public final ForgeConfigSpec.ConfigValue<Integer> hydrationRain;
 		public final ForgeConfigSpec.ConfigValue<Float> saturationRain;
 		public final ForgeConfigSpec.ConfigValue<Float> dirtyRain;
 		public final ForgeConfigSpec.ConfigValue<Boolean> drinkFromWater;
-		public final ForgeConfigSpec.ConfigValue<Integer> thirstWater;
+		public final ForgeConfigSpec.ConfigValue<Integer> hydrationWater;
 		public final ForgeConfigSpec.ConfigValue<Float> saturationWater;
 		public final ForgeConfigSpec.ConfigValue<Float> dirtyWater;
-		public final ForgeConfigSpec.ConfigValue<Integer> thirstPotion;
+		public final ForgeConfigSpec.ConfigValue<Integer> hydrationPotion;
 		public final ForgeConfigSpec.ConfigValue<Float> saturationPotion;
 		public final ForgeConfigSpec.ConfigValue<Float> dirtyPotion;
-		public final ForgeConfigSpec.ConfigValue<Integer> thirstPurified;
+		public final ForgeConfigSpec.ConfigValue<Integer> hydrationPurified;
 		public final ForgeConfigSpec.ConfigValue<Float> saturationPurified;
 		public final ForgeConfigSpec.ConfigValue<Float> dirtyPurified;
 
@@ -194,6 +199,9 @@ public class Config
 			heartFruitsEnabled = builder
 					.comment(" Whether or not heart fruits are functional and generate in-world.")
 					.define("Heart Fruits Enabled", true);
+			hideInfoFromDebug = builder
+					.comment(" Id enabled, information like position will be hidden from the debug screen (F3).")
+					.define("Hide Info From Debug", true);
 
 			builder.push("advanced");
 			routinePacketSync = builder
@@ -203,15 +211,30 @@ public class Config
 
 			builder.pop();
 			builder.pop();
+
+			builder.comment(" Options related to the player food data").push("food");
+			baseFoodExhaustion = builder
+					.comment(" Food exhausted every 10 ticks. Increase the base minecraft food exhaustion.")
+					.define("Base Food Exhaustion", 0.03f);
+			builder.pop();
 			
 			builder.comment(" Options related to the temperature system").push("temperature");
 			dangerousTemperature = builder
 					.comment(" If enabled, players will take damage from the effects of temperature.")
 					.define("Dangerous Temperature Effects", true);
+			builder.push("secondary_effet");
 			temperatureSecondaryEffects = builder
-					.comment(" If enabled, players will also receive other effects from their current temperature state.")
+					.comment(" If enabled, players will also receive other effects from their current temperature state.",
+							" If the player is too hot, hydration will deplete faster. If the player is too cold, hunger will deplete faster.")
 					.define("Secondary Temperature Effects", true);
-
+			heatThirstEffectModifier = builder
+					.comment(" How much thirst exhaustion will be added every 50 ticks with no amplification effect.")
+					.define("Heat Thirst Effect Modifier", 0.1f);
+			coldHungerEffectModifier = builder
+					.comment(" How much food exhaustion will be added every 50 ticks with no amplification effect.",
+							" As reference, the hunger effect add 0.025 food exhaustion every 50 ticks.")
+					.define("Cold Hunger Modifier", 0.05f);
+			builder.pop();
 			onFireModifier = builder
 					.comment(" How much of an effect being on fire has on a player's temperature.")
 					.define("Player On Fire Modifier", 12.5d);
@@ -401,23 +424,27 @@ public class Config
 			builder.push("exhaustion");
 			baseThirstExhaustion = builder
 					.comment(" Thirst exhausted every 10 ticks.")
-					.define("Base Thirst Exhaustion", 0.01f);
+					.define("Base Thirst Exhaustion", 0.03f);
 			sprintingThirstExhaustion = builder
 					.comment(" Thirst exhausted when sprinting, replacing the base thirst exhausted.")
-					.define("Sprinting Thirst Exhaustion", 0.1f);
+					.define("Sprinting Thirst Exhaustion", 0.15f);
 			onJumpThirstExhaustion = builder
 					.comment(" Thirst exhausted on every jump.")
-					.define("On Jump Thirst Exhaustion", 0.05f);
+					.define("On Jump Thirst Exhaustion", 0.3f);
 			onBlockBreakThirstExhaustion = builder
 					.comment(" Thirst exhausted on every block break.")
-					.define("On Block Break Thirst Exhaustion", 0.025f);
+					.define("On Block Break Thirst Exhaustion", 0.1f);
 			onAttackThirstExhaustion = builder
 					.comment(" Thirst exhausted on every attack.")
-					.define("On Attack Thirst Exhaustion", 0.2f);
+					.define("On Attack Thirst Exhaustion", 0.5f);
 			builder.pop();
 			thirstDamageScaling = builder
 					.comment(" Scaling of the damages dealt when the thirst falls at 0. Each tick damage will be increased by this value.")
 					.define("Thirst Damage Scaling", 0.3f);
+			thirstEffectModifier = builder
+					.comment(" How many thirst exhaustion will be added every 50 ticks when the player suffers from not amplified Thirst Effect.",
+							" The player will suffer not amplified Thirst Effect from water dirtiness by example.")
+					.define("Thirst Effect Modifier", 0.25f);
 			builder.push("canteen");
 			canteenCapacity = builder
 					.comment(" Capacity of the canteen used to store water.")
@@ -426,57 +453,57 @@ public class Config
 					.comment(" Capacity of the large canteen used to store water.")
 					.define("Large Canteen Capacity", 10);
 			allowOverridePurifiedWater = builder
-					.comment(" Allow override purified water stored in canteen with normal water.")
+					.comment(" Allow override of purified water stored in canteen with normal water.")
 					.define("Allow Override Purified Water", true);
 			builder.pop();
 			builder.push("rain");
 			drinkFromRain = builder
 					.comment(" Whether players can drink from rain or not.")
 					.define("Drink From Rain", true);
-			thirstRain = builder
-					.comment(" Amount of thirst recovered when drinking from the rain.")
-					.define("Thirst", 1);
+			hydrationRain = builder
+					.comment(" Amount of hydration recovered when drinking from the rain.")
+					.define("Hydration", 1);
 			saturationRain = builder
 					.comment(" Amount of saturation recovered when drinking from the rain.")
-					.define("Saturation", 0.1f);
+					.define("Saturation", 0.0f);
 			dirtyRain = builder
-					.comment(" Chance of getting a thirsty effect while drinking from the rain.")
+					.comment(" Chance of getting a thirst effect while drinking from the rain.")
 					.define("Dirty", 0.0f);
 			builder.pop();
 			builder.push("water");
 			drinkFromWater = builder
 					.comment(" Whether players can drink from water (or flowing water) block or not.")
 					.define("Drink From Water", true);
-			thirstWater = builder
-					.comment(" Amount of thirst recovered while drinking water.")
-					.define("Thirst", 3);
+			hydrationWater = builder
+					.comment(" Amount of hydration recovered while drinking water.")
+					.define("Hydration", 3);
 			saturationWater = builder
 					.comment(" Amount of saturation recovered while drinking water.")
-					.define("Saturation", 0.3f);
+					.define("Saturation", 0.0f);
 			dirtyWater = builder
-					.comment(" Chance of getting a thirsty effect while drinking water.")
+					.comment(" Chance of getting a thirst effect while drinking water.")
 					.define("Dirty", 0.75f);
 			builder.pop();
 			builder.comment(" Amount recovered by potions with effects").push("potion");
-			thirstPotion = builder
-					.comment(" Amount of thirst recovered while drinking a potion.")
-					.define("Thirst", 3);
+			hydrationPotion = builder
+					.comment(" Amount of hydration recovered while drinking a potion.")
+					.define("Hydration", 3);
 			saturationPotion = builder
 					.comment(" Amount of saturation recovered while drinking a potion.")
 					.define("Saturation", 0.3f);
 			dirtyPotion = builder
-					.comment(" Chance of getting a thirsty effect while drinking a potion.")
+					.comment(" Chance of getting a thirst effect while drinking a potion.")
 					.define("Dirty", 0.0f);
 			builder.pop();
 			builder.push("purified_water");
-			thirstPurified = builder
-					.comment(" Amount of thirst recovered while drinking purified water.")
-					.define("Thirst", 6);
+			hydrationPurified = builder
+					.comment(" Amount of hydration recovered while drinking purified water.")
+					.define("Hydration", 6);
 			saturationPurified = builder
 					.comment(" Amount of saturation recovered while drinking purified water.")
-					.define("Saturation", 3.0f);
+					.define("Saturation", 1.5f);
 			dirtyPurified = builder
-					.comment(" Chance of getting a thirsty effect while drinking purified water.")
+					.comment(" Chance of getting a thirst effect while drinking purified water.")
 					.define("Dirty", 0.0f);
 			builder.pop();
 			builder.pop();
@@ -509,12 +536,13 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<String> temperatureDisplayMode;
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetY;
+		public final ForgeConfigSpec.ConfigValue<Boolean> foodSaturationDisplayed;
 		
 		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetY;
 
-		public final ForgeConfigSpec.ConfigValue<Boolean> showTooltipThirst;
-		public final ForgeConfigSpec.ConfigValue<Boolean> mergeThirstAndSaturationTooltip;
+		public final ForgeConfigSpec.ConfigValue<Boolean> showHydrationTooltip;
+		public final ForgeConfigSpec.ConfigValue<Boolean> mergeHydrationAndSaturationTooltip;
 		public final ForgeConfigSpec.ConfigValue<Boolean> thirstSaturationDisplayed;
 
 		Client(ForgeConfigSpec.Builder builder)
@@ -526,7 +554,7 @@ public class Config
 			builder.push("general");
 
 			showVanillaAnimationOverlay = builder
-					.comment(" Whether or not the vanilla animation of the Food bar and Thirst bar is rendered. The bar shakes more the lower they are.",
+					.comment(" Whether or not the vanilla animation of the Food bar and Hydration bar is rendered. The bar shakes more the lower they are.",
 							" This mod render a new food bar as a secondary effect of a cold temperature.",
 							" Disable this animation if the temperature secondary effect is enabled to allow a compatibility with other mods rendering the food bar (by example Appleskin).")
 					.define("Show Vanilla Animation Overlay", true);
@@ -543,6 +571,9 @@ public class Config
 					.define("Temperature Display X Offset", 0);
 			temperatureDisplayOffsetY = builder
 					.define("Temperature Display Y Offset", 0);
+			foodSaturationDisplayed = builder
+					.comment(" If enabled, the food saturation will be rendered on the Food Bar while the player suffers Cold Hunger Effect (secondary temperature effect).")
+					.define("Show Food Saturation Bar", true);
 			builder.push("wetness");
 			
 			builder.comment(" The X and Y offset of the wetness indicator. Set both to 0 for no offset.").push("offset");
@@ -554,12 +585,12 @@ public class Config
 			builder.pop();
 			builder.pop();
 			builder.push("thirst");
-			showTooltipThirst = builder
-					.comment(" If enabled, show the thirst values in the item tooltip.")
-					.define("Show Tooltip Thirst", true);
-			mergeThirstAndSaturationTooltip = builder
-					.comment(" If enabled, show the thirst and the saturation values on the same line in the tooltip.")
-					.define("Merge Thirst And Saturation Tooltip", false);
+			showHydrationTooltip = builder
+					.comment(" If enabled, show the hydration values in the item tooltip.")
+					.define("Show Hydration Tooltip", true);
+			mergeHydrationAndSaturationTooltip = builder
+					.comment(" If enabled, show the hydration and the saturation values on the same line in the tooltip.")
+					.define("Merge Hydration And Saturation Tooltip", false);
 			thirstSaturationDisplayed = builder
 					.comment(" Whether the Thirst Saturation is displayed or not.")
 					.define("Render the thirst saturation", true);
@@ -577,11 +608,23 @@ public class Config
 	
 	public static class Baked
 	{
+		// Core
+		public static int minTickRate;
+		public static int maxTickRate;
+		public static int routinePacketSync;
+		public static boolean hideInfoFromDebug;
+		public static float baseFoodExhaustion;
+
+
+		// Temperature
 		public static boolean temperatureEnabled;
 		public static boolean showPotionEffectParticles;
 
 		public static boolean dangerousTemperature;
 		public static boolean temperatureSecondaryEffects;
+		public static float heatThirstEffectModifier;
+		public static float coldHungerEffectModifier;
+		public static boolean foodSaturationDisplayed;
 		public static boolean showVanillaAnimationOverlay;
 		
 		public static boolean biomeEffectsEnabled;
@@ -597,10 +640,6 @@ public class Config
 		public static List<String> sunFernBiomeCategories;
 		public static List<String> iceFernBiomeNames;
 		public static List<String> iceFernBiomeCategories;
-
-		public static int minTickRate;
-		public static int maxTickRate;
-		public static int routinePacketSync;
 		
 		public static boolean seasonTemperatureEffects;
 		
@@ -659,9 +698,10 @@ public class Config
 		// Thirst
 		public static boolean thirstEnabled;
 		public static boolean dangerousThirst;
-		public static boolean showTooltipThirst;
-		public static boolean mergeThirstAndSaturationTooltip;
 		public static float thirstDamageScaling;
+		public static float thirstEffectModifier;
+		public static boolean showHydrationTooltip;
+		public static boolean mergeHydrationAndSaturationTooltip;
 		public static float baseThirstExhaustion;
 		public static float sprintingThirstExhaustion;
 		public static float onJumpThirstExhaustion;
@@ -671,17 +711,17 @@ public class Config
 		public static int largeCanteenCapacity;
 		public static boolean allowOverridePurifiedWater;
 		public static boolean drinkFromRain;
-		public static int thirstRain;
+		public static int hydrationRain;
 		public static float saturationRain;
 		public static float dirtyRain;
 		public static boolean drinkFromWater;
-		public static int thirstWater;
+		public static int hydrationWater;
 		public static float saturationWater;
 		public static float dirtyWater;
-		public static int thirstPotion;
+		public static int hydrationPotion;
 		public static float saturationPotion;
 		public static float dirtyPotion;
-		public static int thirstPurified;
+		public static int hydrationPurified;
 		public static float saturationPurified;
 		public static float dirtyPurified;
 
@@ -705,13 +745,22 @@ public class Config
 		public static boolean thirstSaturationDisplayed;
 		public static void bakeCommon()
 		{
+			LegendarySurvivalOverhaul.LOGGER.debug("Load Common configuration from file");
 			try
 			{
+				hideInfoFromDebug = COMMON.hideInfoFromDebug.get();
+				minTickRate = COMMON.minTickRate.get();
+				maxTickRate = COMMON.maxTickRate.get();
+				routinePacketSync = COMMON.routinePacketSync.get();
+				baseFoodExhaustion = COMMON.baseFoodExhaustion.get();
+
 				temperatureEnabled = COMMON.temperatureEnabled.get();
 				showPotionEffectParticles = COMMON.showPotionEffectParticles.get();
 				
 				dangerousTemperature = COMMON.dangerousTemperature.get();
 				temperatureSecondaryEffects = COMMON.temperatureSecondaryEffects.get();
+				heatThirstEffectModifier = COMMON.heatThirstEffectModifier.get();
+				coldHungerEffectModifier = COMMON.coldHungerEffectModifier.get();
 				
 				altitudeModifier = COMMON.altitudeModifier.get();
 
@@ -734,9 +783,6 @@ public class Config
 				tempInfluenceMaximumDist = COMMON.tempInfluenceMaximumDist.get();
 				tempInfluenceUpDistMultiplier = COMMON.tempInfluenceUpDistMultiplier.get();
 				tempInfluenceOutsideDistMultiplier = COMMON.tempInfluenceOutsideDistMultiplier.get();
-				minTickRate = COMMON.minTickRate.get();
-				maxTickRate = COMMON.maxTickRate.get();
-				routinePacketSync = COMMON.routinePacketSync.get();
 				
 				onFireModifier = COMMON.onFireModifier.get();
 				sprintModifier = COMMON.sprintModifier.get();
@@ -788,6 +834,8 @@ public class Config
 
 				thirstEnabled = COMMON.thirstEnabled.get();
 				dangerousThirst = COMMON.dangerousThirst.get();
+				thirstDamageScaling = COMMON.thirstDamageScaling.get();
+				thirstEffectModifier = COMMON.thirstEffectModifier.get();
 
 				baseThirstExhaustion = COMMON.baseThirstExhaustion.get();
 				sprintingThirstExhaustion = COMMON.sprintingThirstExhaustion.get();
@@ -795,24 +843,22 @@ public class Config
 				onBlockBreakThirstExhaustion = COMMON.onBlockBreakThirstExhaustion.get();
 				onAttackThirstExhaustion = COMMON.onAttackThirstExhaustion.get();
 
-				thirstDamageScaling = COMMON.thirstDamageScaling.get();
-
 				canteenCapacity = COMMON.canteenCapacity.get();
 				largeCanteenCapacity = COMMON.largeCanteenCapacity.get();
 				allowOverridePurifiedWater = COMMON.allowOverridePurifiedWater.get();
 
 				drinkFromRain = COMMON.drinkFromRain.get();
-				thirstRain = COMMON.thirstRain.get();
+				hydrationRain = COMMON.hydrationRain.get();
 				saturationRain = COMMON.saturationRain.get();
 				dirtyRain = COMMON.dirtyRain.get();
 				drinkFromWater = COMMON.drinkFromWater.get();
-				thirstWater = COMMON.thirstWater.get();
+				hydrationWater = COMMON.hydrationWater.get();
 				saturationWater = COMMON.saturationWater.get();
 				dirtyWater = COMMON.dirtyWater.get();
-				thirstPotion = COMMON.thirstPotion.get();
+				hydrationPotion = COMMON.hydrationPotion.get();
 				saturationPotion = COMMON.saturationPotion.get();
 				dirtyPotion = COMMON.dirtyPotion.get();
-				thirstPurified = COMMON.thirstPurified.get();
+				hydrationPurified = COMMON.hydrationPurified.get();
 				saturationPurified = COMMON.saturationPurified.get();
 				dirtyPurified = COMMON.dirtyPurified.get();
 
@@ -832,6 +878,7 @@ public class Config
 		
 		public static void bakeClient()
 		{
+			LegendarySurvivalOverhaul.LOGGER.debug("Load Client configuration from file");
 			try
 			{
 				temperatureDisplayMode = TemperatureDisplayEnum.getDisplayFromString(CLIENT.temperatureDisplayMode.get());
@@ -842,9 +889,10 @@ public class Config
 				wetnessIndicatorOffsetX = CLIENT.wetnessIndicatorOffsetX.get();
 				wetnessIndicatorOffsetY = CLIENT.wetnessIndicatorOffsetY.get();
 
+				foodSaturationDisplayed = CLIENT.foodSaturationDisplayed.get();
 				thirstSaturationDisplayed = CLIENT.thirstSaturationDisplayed.get();
-				showTooltipThirst = CLIENT.showTooltipThirst.get();
-				mergeThirstAndSaturationTooltip = CLIENT.mergeThirstAndSaturationTooltip.get();
+				showHydrationTooltip = CLIENT.showHydrationTooltip.get();
+				mergeHydrationAndSaturationTooltip = CLIENT.mergeHydrationAndSaturationTooltip.get();
 			}
 			catch (Exception e)
 			{

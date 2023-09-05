@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" # ",
+		"O O",
+		"OOO"
+	],
+	"key": {
+		"#": {
+			"item": "minecraft:netherite_ingot"
+		},
+		"O": {
+			"item": "minecraft:leather"
+		}
+	},
+	"result": {
+		"item": "legendarysurvivaloverhaul:large_canteen",
+		"count": 1
+	}
+}

@@ -6,7 +6,7 @@ import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstEnum;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 
 
@@ -19,9 +19,9 @@ public class CanteenProperty implements IItemPropertyGetter {
         int capacity = ThirstUtil.getCapacityTag(stack);
         stack.setDamageValue(capacity);
 
-        ThirstEnum thirstEnum = ThirstUtil.getThirstEnumTag(stack);
-        if (thirstEnum != null) {
-            return thirstEnum.ordinal();
+        HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
+        if (hydrationEnum != null) {
+            return hydrationEnum.ordinal();
         }
 
         return 0.0f;

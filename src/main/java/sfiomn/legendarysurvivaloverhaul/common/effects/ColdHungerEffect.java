@@ -3,10 +3,11 @@ package sfiomn.legendarysurvivaloverhaul.common.effects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectType;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 
-public class HungerEffect extends GenericEffect {
+public class ColdHungerEffect extends GenericEffect {
 
-    public HungerEffect()
+    public ColdHungerEffect()
     {
         super(10870382, EffectType.HARMFUL);
         // TODO Auto-generated constructor stub
@@ -17,7 +18,7 @@ public class HungerEffect extends GenericEffect {
     {
         if(entity instanceof PlayerEntity)
         {
-            ((PlayerEntity)entity).causeFoodExhaustion(0.025F * (float)(amplifier + 1));
+            ((PlayerEntity)entity).causeFoodExhaustion(Config.Baked.coldHungerEffectModifier * (float)(amplifier + 1));
         }
     }
 

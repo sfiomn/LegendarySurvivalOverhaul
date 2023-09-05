@@ -115,17 +115,18 @@ public class JsonConfigRegistration
 
 		JsonConfig.registerConsumableThirst("minecraft:melon_slice", 2, 1.0f, 0);
 		JsonConfig.registerConsumableThirst("minecraft:rotten_flesh", -1, 0.0f, 1.0f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":apple_juice",8,6.4f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":apple_juice",6,3.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":beetroot_juice",10,8.0f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":cactus_juice",9,2.7f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":carrot_juice",8,4.8f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":chorus_fruit_juice",12,7.2f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":cactus_juice",9,3.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":carrot_juice",4,2.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":chorus_fruit_juice",12,10.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":golden_apple_juice",20,20.0f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":golden_carrot_juice",14,14.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":golden_carrot_juice",12,12.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":glistering_melon_juice",16,16.0f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":melon_juice",8,4.0f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":pumpkin_juice",7,4.9f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":purified_water_bottle", 6, 3.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":melon_juice",8,5.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":pumpkin_juice",7,4.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":purified_water_bottle", 6, 1.5f);
+		JsonConfig.registerConsumableThirst("minecraft:apple", 21, 21);
 
 		IntegrationController.initCompat();
 	}
@@ -233,7 +234,7 @@ public class JsonConfigRegistration
 			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonConsumableThirst.size() + " consumable thirst values from JSON");
 			for (Map.Entry<String, JsonThirst> entry : jsonConsumableThirst.entrySet())
 			{
-				JsonConfig.registerConsumableThirst(entry.getKey(), entry.getValue().thirst, entry.getValue().saturation, entry.getValue().dirty);
+				JsonConfig.registerConsumableThirst(entry.getKey(), entry.getValue().hydration, entry.getValue().saturation, entry.getValue().dirty);
 			}
 		}
 	}

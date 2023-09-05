@@ -20,13 +20,13 @@ import net.minecraftforge.fml.common.Mod;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonThirst;
-import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstEnum;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
-import sfiomn.legendarysurvivaloverhaul.network.packets.MessageDrinkWater;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
+import sfiomn.legendarysurvivaloverhaul.network.packets.MessageDrinkWater;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 import java.util.List;
@@ -63,17 +63,17 @@ public class ModCommonEvents {
             if (itemRegistryName != null)
                 jsonConsumableThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
 
-            if (jsonConsumableThirst != null && (jsonConsumableThirst.thirst != 0 || jsonConsumableThirst.saturation != 0)) {
-                ThirstUtil.takeDrink(player, jsonConsumableThirst.thirst, jsonConsumableThirst.saturation, jsonConsumableThirst.dirty);
+            if (jsonConsumableThirst != null && (jsonConsumableThirst.hydration != 0 || jsonConsumableThirst.saturation != 0)) {
+                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.dirty);
             } else if (event.getItem().getItem() == Items.POTION){
                 Potion potion = PotionUtils.getPotion(event.getItem());
                 if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
                 {
-                    ThirstUtil.takeDrink(player, ThirstEnum.NORMAL);
+                    ThirstUtil.takeDrink(player, HydrationEnum.NORMAL);
                 }
                 else if (potion != Potions.EMPTY)
                 {
-                    ThirstUtil.takeDrink(player, ThirstEnum.POTION);
+                    ThirstUtil.takeDrink(player, HydrationEnum.POTION);
                 }
             }
         }
@@ -113,7 +113,7 @@ public class ModCommonEvents {
             // Only run on main hand (otherwise it runs twice)
             if(event.getHand() == Hand.MAIN_HAND)
             {
-                ThirstEnum water = playerDrink(event.getPlayer());
+                HydrationEnum water = playerGetHydrationEnum(event.getPlayer());
 
                 if (water != null) {
                     playerDrinkEffect(event.getPlayer());
@@ -130,7 +130,7 @@ public class ModCommonEvents {
             // Only run on main hand (otherwise it runs twice)
             if(event.getHand()==Hand.MAIN_HAND && event.getPlayer().getMainHandItem().isEmpty())
             {
-                ThirstEnum water = playerDrink(event.getPlayer());
+                HydrationEnum water = playerGetHydrationEnum(event.getPlayer());
 
                 if (water != null) {
                     if (event.getWorld().isClientSide)
@@ -153,6 +153,11 @@ public class ModCommonEvents {
         return !player.isCreative() && !player.isSpectator() && Config.Baked.temperatureEnabled;
     }
 
+    private static boolean shouldApplyFoodExhaustion(PlayerEntity player)
+    {
+        return !player.isCreative() && !player.isSpectator() && Config.Baked.baseFoodExhaustion > 0;
+    }
+
     private static void playerDrinkEffect(PlayerEntity player)
     {
         //Play sound and swing arm
@@ -160,14 +165,14 @@ public class ModCommonEvents {
         player.playSound(SoundEvents.GENERIC_DRINK, 1.0f, 1.0f);
     }
 
-    private static ThirstEnum playerDrink(PlayerEntity player) {
-        ThirstEnum thirstEnum = ThirstUtil.traceWater(player);
-        if (thirstEnum != null && player.getMainHandItem().isEmpty()) {
+    private static HydrationEnum playerGetHydrationEnum(PlayerEntity player) {
+        HydrationEnum hydrationEnum = ThirstUtil.traceWater(player);
+        if (hydrationEnum != null && player.getMainHandItem().isEmpty()) {
             ThirstCapability thirstCapability = CapabilityUtil.getThirstCapability(player);
-            if (thirstCapability.isThirstLevelAtMax()) {
+            if (thirstCapability.isHydrationLevelAtMax()) {
                 return null;
             }
-            return thirstEnum;
+            return hydrationEnum;
         }
         return null;
     }

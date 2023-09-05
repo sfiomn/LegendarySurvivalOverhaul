@@ -7,29 +7,29 @@ import net.minecraftforge.event.TickEvent;
 public interface IThirstCapability
 {
 	public float getThirstExhaustion();
-	public int getThirstLevel();
-	public float getThirstSaturation();
+	public int getHydrationLevel();
+	public float getSaturationLevel();
 	public int getThirstTickTimer();
 	public int getThirstDamageCounter();
 
 	public void setThirstExhaustion(float exhaustion);
-	public void setThirstLevel(int thirst);
+	public void setHydrationLevel(int thirst);
 	public void setThirstSaturation(float saturation);
 	public void setThirstTickTimer(int ticktimer);
 	public void setThirstDamageCounter(int damagecounter);
 
 	public void addThirstExhaustion(float exhaustion);
-	public void addThirstLevel(int thirst);
-	public void addThirstSaturation(float saturation);
+	public void addHydrationLevel(int thirst);
+	public void addSaturationLevel(float saturation);
 	public void addThirstTickTimer(int ticktimer);
 	public void addThirstDamageCounter(int damagecounter);
 
 	/**
-	 * Check whether the thirst level is at maximum or not
+	 * Check whether the hydration level is at maximum or not
 	 * <br>
-	 * @return boolean thirst is at maximum
+	 * @return boolean hydration is at maximum
 	 */
-	public boolean isThirstLevelAtMax();
+	public boolean isHydrationLevelAtMax();
 
 	/**
 	 * (Don't use this!) <br>

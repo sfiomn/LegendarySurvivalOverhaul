@@ -18,7 +18,7 @@ public class ThirstUtil
 	 *
 	 */
 	@Nullable
-	public static ThirstEnum traceWater(PlayerEntity player)
+	public static HydrationEnum traceWater(PlayerEntity player)
 	{
 		return internal.traceWater(player);
 	}
@@ -26,34 +26,34 @@ public class ThirstUtil
 	/**
 	 * Player takes a drink with the specified values and a chance to make them thirsty
 	 * @param player
-	 * @param thirst
+	 * @param hydration
 	 * @param saturation
 	 * @param dirtyChance 0.0f - 1.0f
 	 */
-	public static void takeDrink(PlayerEntity player, int thirst, float saturation, float dirtyChance)
+	public static void takeDrink(PlayerEntity player, int hydration, float saturation, float dirtyChance)
 	{
-		internal.takeDrink(player, thirst, saturation, dirtyChance);
+		internal.takeDrink(player, hydration, saturation, dirtyChance);
 	}
 
 	/**
 	 * Player takes a drink with the specified values and no chance to make them thirsty
 	 * @param player
-	 * @param thirst
+	 * @param hydration
 	 * @param saturation
 	 */
-	public static void takeDrink(PlayerEntity player, int thirst, float saturation)
+	public static void takeDrink(PlayerEntity player, int hydration, float saturation)
 	{
-		internal.takeDrink(player, thirst, saturation);
+		internal.takeDrink(player, hydration, saturation);
 	}
 
 	/**
-	 * Player takes a drink with the values of the ThirstEnum
+	 * Player takes a drink with the values of the HydrationEnum
 	 * @param player
-	 * @param thirstEnum
+	 * @param hydrationEnum
 	 */
-	public static void takeDrink(PlayerEntity player, ThirstEnum thirstEnum)
+	public static void takeDrink(PlayerEntity player, HydrationEnum hydrationEnum)
 	{
-		internal.takeDrink(player, thirstEnum);
+		internal.takeDrink(player, hydrationEnum);
 	}
 
 	/**
@@ -67,51 +67,43 @@ public class ThirstUtil
 	}
 
 	/**
-	 * Get the ThirstEnum from the targeted fluid player is looking at, up to the final distance
+	 * Get hydration enum the player is looking at, with the given maximum distance
 	 * @param player
 	 * @param finalDistance
 	 */
-	public static ThirstEnum getThirstEnumLookedAt(PlayerEntity player, double finalDistance) {
-		return internal.getThirstEnumLookedAt(player, finalDistance);
-	}
 
-	/**
-	 * Returns a new Purified Water Bucket item
-	 * @return ItemStack purified water bucket
-	 */
-	public static ItemStack createPurifiedWaterBucket()
-	{
-		return internal.createPurifiedWaterBucket();
+	public HydrationEnum getHydrationEnumLookedAt(PlayerEntity player, double finalDistance) {
+		return internal.getHydrationEnumLookedAt(player, finalDistance);
 	}
 
 	/**
 	 * Sets the thirst enum name tag on the stack
 	 * @param stack Item stack drink
-	 * @param thirstEnum Thirst Enum
+	 * @param hydrationEnum Thirst Enum
 	 */
-	public static void setThirstEnumTag(final ItemStack stack, ThirstEnum thirstEnum)
+	public static void setHydrationEnumTag(final ItemStack stack, HydrationEnum hydrationEnum)
 	{
-		internal.setThirstEnumTag(stack, thirstEnum);
+		internal.setThirstEnumTag(stack, hydrationEnum);
 	}
 
 	/**
-	 * Gets the thirst enum from the thirst enum tag on the stack
+	 * Gets the hydration enum from the thirst enum tag on the stack
 	 * @param stack Item stack drink
 	 * @return null if tag is missing
 	 */
 	@Nullable
-	public static ThirstEnum getThirstEnumTag(final ItemStack stack)
+	public static HydrationEnum getHydrationEnumTag(final ItemStack stack)
 	{
-		return internal.getThirstEnumTag(stack);
+		return internal.getHydrationEnumTag(stack);
 	}
 
 	/**
-	 * Removes the thirst enum tag on the stack if it exists
+	 * Removes the hydration enum tag on the stack if it exists
 	 * @param stack Item stack drink
 	 */
-	public static void removeThirstEnumTag(final ItemStack stack)
+	public static void removeHydrationEnumTag(final ItemStack stack)
 	{
-		internal.removeThirstEnumTag(stack);
+		internal.removeHydrationEnumTag(stack);
 	}
 
 	/**

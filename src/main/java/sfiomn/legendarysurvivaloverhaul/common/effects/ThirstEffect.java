@@ -4,11 +4,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectType;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
-public class ThirstyEffect extends GenericEffect
+public class ThirstEffect extends GenericEffect
 {
-	public ThirstyEffect()
+	public ThirstEffect()
 	{
 		super(10870382, EffectType.HARMFUL);
 		// TODO Auto-generated constructor stub
@@ -21,8 +22,8 @@ public class ThirstyEffect extends GenericEffect
 		{
 			ThirstCapability thirstCapability = CapabilityUtil.getThirstCapability((PlayerEntity) entity);
 
-			// Equivalent strength as Hunger effect
-			thirstCapability.addThirstExhaustion(0.025F * (float)(amplifier + 1));
+			// Twice strength of Hunger effect
+			thirstCapability.addThirstExhaustion(Config.Baked.thirstEffectModifier * (float)(amplifier + 1));
 		}
 	}
 

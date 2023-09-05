@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstEnum;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.items.CanteenItem;
 import sfiomn.legendarysurvivaloverhaul.registry.RecipeRegistry;
@@ -32,22 +32,22 @@ public class CanteenFurnaceRecipe extends FurnaceRecipe {
     }
 
     public ItemStack assemble(IInventory inventory) {
-        int thirstCapacity = ThirstUtil.getCapacityTag(inventory.getItem(0));
+        int hydrationCapacity = ThirstUtil.getCapacityTag(inventory.getItem(0));
         ItemStack result = this.result.copy();
-        ThirstUtil.setThirstEnumTag(result, ThirstEnum.PURIFIED);
-        ThirstUtil.setCapacityTag(result, thirstCapacity);
+        ThirstUtil.setHydrationEnumTag(result, HydrationEnum.PURIFIED);
+        ThirstUtil.setCapacityTag(result, hydrationCapacity);
         return result;
     }
 
     public ItemStack getResultItem() {
         ItemStack result = this.result.copy();
-        int maxThirstCapacity = 0;
+        int maxHydrationCapacity = 0;
         if (this.result.getItem() instanceof CanteenItem) {
             CanteenItem resultItem = (CanteenItem) this.result.getItem();
-            maxThirstCapacity = resultItem.getMaxCapacity();
+            maxHydrationCapacity = resultItem.getMaxCapacity();
         }
-        ThirstUtil.setThirstEnumTag(result, ThirstEnum.PURIFIED);
-        ThirstUtil.setCapacityTag(result, maxThirstCapacity);
+        ThirstUtil.setHydrationEnumTag(result, HydrationEnum.PURIFIED);
+        ThirstUtil.setCapacityTag(result, maxHydrationCapacity);
         return result;
     }
 

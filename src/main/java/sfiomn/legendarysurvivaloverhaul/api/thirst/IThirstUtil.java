@@ -8,25 +8,23 @@ import javax.annotation.Nullable;
 public interface IThirstUtil
 {
 	@Nullable
-	public ThirstEnum traceWater(PlayerEntity player);
+	public HydrationEnum traceWater(PlayerEntity player);
 
 	public void takeDrink(PlayerEntity player, int thirst, float saturation, float dirtyChance);
 
 	public void takeDrink(PlayerEntity player, int thirst, float saturation);
 
-	public void takeDrink(PlayerEntity player, ThirstEnum type);
+	public void takeDrink(PlayerEntity player, HydrationEnum type);
 
 	public void addExhaustion(PlayerEntity player, float exhaustion);
 
-	public ThirstEnum getThirstEnumLookedAt(PlayerEntity player, double finalDistance);
+	public HydrationEnum getHydrationEnumLookedAt(PlayerEntity player, double finalDistance);
 
-	public ItemStack createPurifiedWaterBucket();
+	public void setThirstEnumTag(final ItemStack stack, HydrationEnum hydrationEnum);
 
-	public void setThirstEnumTag(final ItemStack stack, ThirstEnum thirstEnum);
+	public HydrationEnum getHydrationEnumTag(final ItemStack stack);
 
-	public ThirstEnum getThirstEnumTag(final ItemStack stack);
-
-	public void removeThirstEnumTag(final ItemStack stack);
+	public void removeHydrationEnumTag(final ItemStack stack);
 
 	public void setCapacityTag(final ItemStack stack, int capacity);
 

@@ -2,6 +2,7 @@ package sfiomn.legendarysurvivaloverhaul.util;
 
 import net.minecraft.item.ItemStack;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
@@ -65,5 +66,15 @@ public final class CapabilityUtil
 	public static ThirstCapability getThirstCapability(PlayerEntity player)
 	{
 		return player.getCapability(LegendarySurvivalOverhaul.THIRST_CAP).orElse(new ThirstCapability());
+	}
+
+	/**
+	 * Gets the Food capability of the given player.
+	 * @param player Player
+	 * @return The food capability of the given player if it exists, or a new dummy capability if it doesn't.
+	 */
+	public static FoodCapability getFoodCapability(PlayerEntity player)
+	{
+		return player.getCapability(LegendarySurvivalOverhaul.FOOD_CAP).orElse(new FoodCapability());
 	}
 }

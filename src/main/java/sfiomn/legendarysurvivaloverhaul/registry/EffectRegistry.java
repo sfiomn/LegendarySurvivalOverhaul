@@ -15,13 +15,13 @@ public class EffectRegistry
 	public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, LegendarySurvivalOverhaul.MOD_ID);
 	public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTION_TYPES, LegendarySurvivalOverhaul.MOD_ID);
 
-	public static final RegistryObject<Effect> THIRSTY = EFFECTS.register("thirsty", ThirstyEffect::new);
-	public static final RegistryObject<Potion> THIRST_POTION = POTIONS.register("thirst", () -> new Potion("thirst", new EffectInstance(THIRSTY.get(), 3600, 0, false, true, false)));
-	public static final RegistryObject<Potion> THIRST_POTION_LONG = POTIONS.register("thirst_long", () -> new Potion("thirst_long", new EffectInstance(THIRSTY.get(), 9600, 0, false, true, false)));
+	public static final RegistryObject<Effect> THIRST = EFFECTS.register("thirst", ThirstEffect::new);
+	public static final RegistryObject<Potion> THIRST_POTION = POTIONS.register("thirst", () -> new Potion("thirst", new EffectInstance(THIRST.get(), 3600, 0, false, true, false)));
+	public static final RegistryObject<Potion> THIRST_POTION_LONG = POTIONS.register("thirst_long", () -> new Potion("thirst_long", new EffectInstance(THIRST.get(), 9600, 0, false, true, false)));
 	public static final RegistryObject<Effect> FROSTBITE = EFFECTS.register("frostbite", FrostbiteEffect::new);
-	public static final RegistryObject<Effect> COLD_SECONDARY_EFFECT = EFFECTS.register("cold_secondary_effect", HungerEffect::new);
+	public static final RegistryObject<Effect> COLD_HUNGER = EFFECTS.register("cold_hunger", ColdHungerEffect::new);
 	public static final RegistryObject<Effect> HEAT_STROKE = EFFECTS.register("heat_stroke", HeatStrokeEffect::new);
-	public static final RegistryObject<Effect> HEAT_SECONDARY_EFFECT = EFFECTS.register("heat_secondary_effect", ThirstyEffect::new);
+	public static final RegistryObject<Effect> HEAT_Thirst = EFFECTS.register("heat_thirst", HeatThirstEffect::new);
 	public static final RegistryObject<Effect> COLD_RESISTANCE = EFFECTS.register("cold_resist", ColdResistanceEffect::new);
 	public static final RegistryObject<Effect> HEAT_RESISTANCE = EFFECTS.register("heat_resist", HeatResistanceEffect::new);
 	public static final RegistryObject<Potion> HEAT_RESISTANCE_POTION = POTIONS.register("heat_resistance", () -> new Potion("heat_resistance", new EffectInstance(HEAT_RESISTANCE.get(), 3600, 0, false, Config.Baked.showPotionEffectParticles, true)));

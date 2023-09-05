@@ -2,6 +2,8 @@
 	"key.legendarysurvivaloverhaul.added_desc.title": "Additional Descriptions",
 	"key.legendarysurvivaloverhaul.added_desc": "Show Description",
 	"tooltip.legendarysurvivaloverhaul.added_desc.activate": "Press %s%s%s for coat descriptions",
+
+	"itemGroup.legendarysurvivaloverhaul": "Legendary Survival Overhaul",
 	
 	"item.legendarysurvivaloverhaul.snow_helmet": "Snow Hat",
 	"item.legendarysurvivaloverhaul.snow_chestplate": "Snow Tunic",
@@ -88,10 +90,10 @@
 	"item.minecraft.tipped_arrow.effect.thirst_long":"Arrow of Thirst",
 	
 	"effect.legendarysurvivaloverhaul.heat_stroke": "Heat Stroke",
-	"effect.legendarysurvivaloverhaul.heat_secondary_effect": "Heat Thirst",
+	"effect.legendarysurvivaloverhaul.heat_thirst": "Heat Thirst",
 	"effect.legendarysurvivaloverhaul.frostbite": "Frostbite",
-	"effect.legendarysurvivaloverhaul.cold_secondary_effect": "Cold Hunger",
-	"effect.legendarysurvivaloverhaul.thirsty": "Thirsty",
+	"effect.legendarysurvivaloverhaul.cold_hunger": "Cold Hunger",
+	"effect.legendarysurvivaloverhaul.thirst": "Thirst",
 	"effect.legendarysurvivaloverhaul.heat_resist": "Heat Resistance",
 	"effect.legendarysurvivaloverhaul.cold_resist": "Cold Resistance",
 	"effect.legendarysurvivaloverhaul.hot_food": "Hot Food",

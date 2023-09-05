@@ -1,25 +1,16 @@
 {
 	"type": "minecraft:crafting_shaped",
-	"group": "snow_Armor",
-	"pattern":
-	[
+	"pattern": [
 		"###",
-		"w w",
+		"# #",
 		"# #"
 	],
-	"key": 
-	{
-		"#":
-		{
-			"item": "minecraft:leather"
-		},
-		"w":
-		{
+	"key": {
+		"#": {
 			"tag": "minecraft:wool"
 		}
 	},
-	"result":
-	{
+	"result": {
 		"item": "legendarysurvivaloverhaul:snow_leggings"
 	}
 }

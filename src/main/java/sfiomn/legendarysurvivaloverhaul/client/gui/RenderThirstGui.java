@@ -42,19 +42,19 @@ public class RenderThirstGui
 		RenderSystem.defaultBlendFunc();
 
 		bind(ICONS);
-		drawThirstBar(matrix, player, width, height);
+		drawHydrationBar(matrix, player, width, height);
 
 		RenderSystem.disableBlend();
 		bind(AbstractGui.GUI_ICONS_LOCATION);
 	}
 	
-	public static void drawThirstBar(MatrixStack matrix, PlayerEntity player, int width, int height)
+	public static void drawHydrationBar(MatrixStack matrix, PlayerEntity player, int width, int height)
 	{
 		ThirstCapability thirstCap = CapabilityUtil.getThirstCapability(player);
 
-		// thirst is 0 - 20
-		int thirst = thirstCap.getThirstLevel();
-		float thirstSaturation = thirstCap.getThirstSaturation();
+		// hydration is 0 - 20
+		int hydration = thirstCap.getHydrationLevel();
+		float saturation = thirstCap.getSaturationLevel();
 
 		Matrix4f m4f = matrix.last().pose();
 
@@ -62,59 +62,54 @@ public class RenderThirstGui
 		int top = height - ForgeIngameGui.right_height;
 		ForgeIngameGui.right_height += 10;
 
-		int xTextureOffset = THIRST_TEXTURE_POS_X;
-		int yTextureOffset = THIRST_TEXTURE_POS_Y;
-		if (player.hasEffect(EffectRegistry.THIRSTY.get()))
-		{
-			xTextureOffset = THIRST_TEXTURE_WIDTH * 3;
-		}
-		if (player.hasEffect(EffectRegistry.HEAT_SECONDARY_EFFECT.get())) {
-			yTextureOffset = THIRST_TEXTURE_HEIGHT;
-		}
+		int saturationInt = (int)saturation;
 
-		// Draw the 10 thirst bubbles
+		// Draw the 10 hydration / saturation bubbles
 		for (int i = 0; i < 10; i++)
 		{
+
 			int halfIcon = i * 2 + 1;
 			int x = left - i * 8 - 9;
 			int y = top;
-			int yOffset = 0;
 
-			// Shake based on thirst level and saturation level
-			if (Config.Baked.showVanillaAnimationOverlay && thirstSaturation <= 0.0f && updateCounter % (thirst * 3 + 1) == 0)
+			// Shake based on hydration level and saturation level
+			int yOffset = 0;
+			if (Config.Baked.showVanillaAnimationOverlay && saturation <= 0.0f && updateCounter % (hydration * 3 + 1) == 0)
 			{
 				yOffset = (rand.nextInt(3) - 1);
 			}
 
-			if (halfIcon < thirst) // Full thirst icon
+			int xTextureOffset = THIRST_TEXTURE_POS_X;
+			int yTextureOffset = THIRST_TEXTURE_POS_Y;
+			if (player.hasEffect(EffectRegistry.THIRST.get()))
+			{
+				xTextureOffset = THIRST_TEXTURE_WIDTH * 3;
+			}
+			if (player.hasEffect(EffectRegistry.HEAT_Thirst.get())) {
+				yTextureOffset = THIRST_TEXTURE_HEIGHT;
+			}
+
+			if (halfIcon < hydration) // Full hydration icon
 				RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + THIRST_TEXTURE_WIDTH, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-			else if (halfIcon == thirst) // Half thirst icon
+			else if (halfIcon == hydration) // Half hydration icon
 				RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + (THIRST_TEXTURE_WIDTH * 2), yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 			else
 				RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-		}
 
-		// Draw the 10 saturation bubbles
-		// Because AppleSkin is awesome and everybody knows it
-		int thirstSaturationInt = (int)thirstSaturation;
-		if(thirstSaturationInt > 0)
-		{
-			if(Config.Baked.thirstSaturationDisplayed)
+			// Reassign texture offset for saturation
+			yTextureOffset = 0;
+			xTextureOffset = THIRST_TEXTURE_WIDTH * 6;
+			if (player.hasEffect(EffectRegistry.THIRST.get()))
 			{
-				for(int i = 0; i < 10; i++)
-				{
-					int halfIcon = i * 2 + 1;
-					int x = left - i * 8 - 9;
-					int y = top;
-
-					if (halfIcon < thirstSaturationInt) { // Full saturation icon
-						xTextureOffset = THIRST_TEXTURE_WIDTH * 6;
-						RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-					}
-					else if (halfIcon == thirstSaturationInt) { // Half saturation icon
-						xTextureOffset = THIRST_TEXTURE_WIDTH * 7;
-						RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-					}
+				xTextureOffset += THIRST_TEXTURE_WIDTH * 2;
+			}
+			if(saturationInt > 0 && Config.Baked.thirstSaturationDisplayed)
+			{
+				if (halfIcon < saturationInt) { // Full saturation icon
+					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
+				}
+				else if (halfIcon == saturationInt) { // Half saturation icon
+					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + THIRST_TEXTURE_WIDTH, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 				}
 			}
 		}

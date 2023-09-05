@@ -25,8 +25,8 @@ public class ThermometerItem extends Item {
         if (world.isClientSide()) {
             TemperatureItemCapability tempCap = CapabilityUtil.getTempItemCapability(player.getMainHandItem());
 
-            if (tempCap.shouldUpdate()) {
-                tempCap.updateWorldTemperature(world, player);
+            if (tempCap.shouldUpdate(world.getGameTime())) {
+                tempCap.updateWorldTemperature(world, player, world.getGameTime());
             }
             player.displayClientMessage(new StringTextComponent(tempCap.getWorldTemperatureLevel() + "\u00B0C"), (true));
         }
