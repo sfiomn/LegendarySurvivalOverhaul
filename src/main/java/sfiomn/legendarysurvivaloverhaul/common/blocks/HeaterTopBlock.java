@@ -63,7 +63,7 @@ public class HeaterTopBlock extends HorizontalBlock {
     public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult)
     {
         BlockState bottomState = worldIn.getBlockState(pos.below());
-        if (bottomState.getBlock() == BlockRegistry.HEATER.get())
+        if (bottomState.is(BlockRegistry.HEATER.get()))
         {
             ((HeaterBaseBlock) bottomState.getBlock()).use(bottomState, worldIn, pos.below(), player, hand, rayTraceResult);
         }
@@ -75,7 +75,7 @@ public class HeaterTopBlock extends HorizontalBlock {
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
     {
         super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
-        if (worldIn.getBlockState(pos.below()).getBlock() != BlockRegistry.HEATER.get())
+        if (!worldIn.getBlockState(pos.below()).is(BlockRegistry.HEATER.get()))
         {
             worldIn.removeBlock(pos, false);
         }

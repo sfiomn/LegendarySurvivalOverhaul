@@ -114,7 +114,6 @@ public class ThermalBlock extends HorizontalBlock
 			TileEntity tileEntity = world.getBlockEntity(pos);
 			if (tileEntity instanceof IInventory) {
 				InventoryHelper.dropContents(world, pos, (IInventory) tileEntity);
-				world.updateNeighbourForOutputSignal(pos, this);
 			}
 			if (tileEntity != null)
 				tileEntity.setRemoved();
