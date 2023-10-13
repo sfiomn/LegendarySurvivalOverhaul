@@ -90,7 +90,8 @@ public final class WorldUtil
 
 		Vector3d lookVector = player.getLookAngle();
 		Vector3d reachVector = eyePosition.add(lookVector.x * distanceFromEye, lookVector.y * distanceFromEye, lookVector.z * distanceFromEye);
-		AxisAlignedBB expandedPlayerBound = player.getBoundingBox().inflate(lookVector.x * distanceFromEye, lookVector.y * distanceFromEye, lookVector.z * distanceFromEye).expandTowards(1F, 1F, 1F);
+
+		AxisAlignedBB expandedPlayerBound = player.getBoundingBox().expandTowards(lookVector.x * distanceFromEye, lookVector.y * distanceFromEye, lookVector.z * distanceFromEye);
 
 		EntityRayTraceResult entityRayTraceResult = ProjectileHelper.getEntityHitResult(player, eyePosition, reachVector, expandedPlayerBound, (entity) -> !entity.isSpectator() && entity.isPickable(), distanceFromEye * distanceFromEye);
 		if (entityRayTraceResult != null) {

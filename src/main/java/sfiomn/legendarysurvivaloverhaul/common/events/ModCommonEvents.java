@@ -23,6 +23,7 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonThirst;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
+import sfiomn.legendarysurvivaloverhaul.common.items.DrinkItem;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
@@ -38,10 +39,13 @@ public class ModCommonEvents {
     public static void onFoodEaten(LivingEntityUseItemEvent.Finish event)
     {
         Entity entity = event.getEntityLiving();
-        if (entity instanceof PlayerEntity && shouldApplyTemperature((PlayerEntity) entity) && !entity.level.isClientSide) {
-            PlayerEntity player = (PlayerEntity) entity;
+        if (!(entity instanceof PlayerEntity) || entity.level.isClientSide)
+            return;
 
-            ResourceLocation itemRegistryName = event.getItem().getItem().getRegistryName();
+        PlayerEntity player = (PlayerEntity) entity;
+        ResourceLocation itemRegistryName = event.getItem().getItem().getRegistryName();
+
+        if (shouldApplyTemperature((PlayerEntity) entity)) {
             List<JsonConsumableTemperature> jsonConsumableTemperatures = null;
             if (itemRegistryName != null)
                 jsonConsumableTemperatures = JsonConfig.consumableTemperature.get(itemRegistryName.toString());
@@ -55,10 +59,8 @@ public class ModCommonEvents {
                 }
             }
         }
-        if (entity instanceof PlayerEntity && shouldApplyThirst((PlayerEntity) entity) && !entity.level.isClientSide) {
-            PlayerEntity player = (PlayerEntity) entity;
 
-            ResourceLocation itemRegistryName = event.getItem().getItem().getRegistryName();
+        if (shouldApplyThirst((PlayerEntity) entity) && !(event.getItem().getItem() instanceof DrinkItem)) {
             JsonThirst jsonConsumableThirst = null;
             if (itemRegistryName != null)
                 jsonConsumableThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());

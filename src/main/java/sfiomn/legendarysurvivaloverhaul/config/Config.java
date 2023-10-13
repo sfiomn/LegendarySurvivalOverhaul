@@ -14,6 +14,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Config
@@ -142,6 +143,8 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeCategories;
 		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeNames;
 		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeCategories;
+		public final ForgeConfigSpec.ConfigValue<List<String>> waterPlantBiomeNames;
+		public final ForgeConfigSpec.ConfigValue<List<String>> waterPlantBiomeCategories;
 
 		// Thirst
 		public final ForgeConfigSpec.ConfigValue<Boolean> thirstEnabled;
@@ -279,6 +282,8 @@ public class Config
 			sunFernBiomeCategories = builder.comment(" In which biome categories the Sun Fern will spawn").define("Sun Fern Biome Categories Spawn List", Arrays.asList("DESERT", "SAVANNA"));
 			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn").define("Ice Fern Biome Names Spawn List", new ArrayList<>());
 			iceFernBiomeCategories = builder.comment(" In which biome categories the Ice Fern will spawn").define("Ice Fern Biome Categories Spawn List", Arrays.asList("TAIGA", "ICY"));
+			waterPlantBiomeNames = builder.comment(" In which biome names the Water Plant will spawn").define("Water Plant Biome Names Spawn List", new ArrayList<>());
+			waterPlantBiomeCategories = builder.comment(" In which biome categories the Water Plant will spawn").define("Water Plant Biome Categories Spawn List", Collections.singletonList("DESERT"));
 			builder.pop();
 
 			altitudeModifier = builder
@@ -640,6 +645,8 @@ public class Config
 		public static List<String> sunFernBiomeCategories;
 		public static List<String> iceFernBiomeNames;
 		public static List<String> iceFernBiomeCategories;
+		public static List<String> waterPlantBiomeNames;
+		public static List<String> waterPlantBiomeCategories;
 		
 		public static boolean seasonTemperatureEffects;
 		
@@ -766,10 +773,11 @@ public class Config
 
 				sunFernBiomeNames = COMMON.sunFernBiomeNames.get();
 				sunFernBiomeCategories = COMMON.sunFernBiomeCategories.get();
-
 				iceFernBiomeNames = COMMON.iceFernBiomeNames.get();
 				iceFernBiomeCategories = COMMON.iceFernBiomeCategories.get();
-				
+				waterPlantBiomeNames = COMMON.waterPlantBiomeNames.get();
+				waterPlantBiomeCategories = COMMON.waterPlantBiomeCategories.get();
+
 				rainTemperatureModifier = COMMON.rainTemperatureModifier.get();
 				snowTemperatureModifier = COMMON.snowTemperatureModifier.get();
 				

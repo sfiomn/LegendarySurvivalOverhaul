@@ -92,8 +92,8 @@ public class JsonConfig
 		return true;
 	}
 
-	public static void registerConsumableThirst(String registryName, int thirst, float saturation) {
-		registerConsumableThirst(registryName, thirst, saturation, 0);
+	public static void registerConsumableThirst(String registryName, int hydration, float saturation) {
+		registerConsumableThirst(registryName, hydration, saturation, 0);
 	}
 
 	public static void registerConsumableThirst(String registryName, int hydration, float saturation, float dirtiness) {

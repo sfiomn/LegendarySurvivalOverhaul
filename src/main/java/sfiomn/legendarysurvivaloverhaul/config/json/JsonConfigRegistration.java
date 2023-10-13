@@ -126,6 +126,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":melon_juice",8,5.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":pumpkin_juice",7,4.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":purified_water_bottle", 6, 1.5f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":water_plant_bag", 2, 0.0f);
 		JsonConfig.registerConsumableThirst("minecraft:apple", 21, 21);
 
 		IntegrationController.initCompat();

@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.world.gen;
 
+import net.minecraft.world.gen.blockplacer.DoublePlantBlockPlacer;
 import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
 import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
@@ -31,4 +32,15 @@ public class ModConfiguredFeatures {
             .decorated(Features.Placements.HEIGHTMAP)
             .squared()
             .decorated(Placement.COUNT_NOISE.configured(new NoiseDependant(-0.8D, 15, 3)));
+
+
+    public static final ConfiguredFeature<?, ?> WATER_PLANT_CONFIG = Feature.RANDOM_PATCH
+            .configured((new BlockClusterFeatureConfig.Builder(
+                    new SimpleBlockStateProvider(BlockRegistry.WATER_PLANT.get().defaultBlockState()), DoublePlantBlockPlacer.INSTANCE))
+                    .tries(2)
+                    .build())
+            .decorated(Features.Placements.ADD_32)
+            .decorated(Features.Placements.HEIGHTMAP)
+            .squared()
+            .decorated(Placement.COUNT_NOISE.configured(new NoiseDependant(-0.8D, 3, 1)));
 }

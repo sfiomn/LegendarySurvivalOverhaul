@@ -62,9 +62,9 @@ public class CanteenItem extends DrinkItem {
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity player) {
-        if (player instanceof PlayerEntity && canDrink(stack) && !world.isClientSide && Config.Baked.thirstEnabled) {
-            ThirstUtil.takeDrink((PlayerEntity) player, ThirstUtil.getHydrationEnumTag(stack));
+    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity) {
+        if (entity instanceof PlayerEntity && canDrink(stack) && !world.isClientSide && Config.Baked.thirstEnabled) {
+            ThirstUtil.takeDrink((PlayerEntity) entity, ThirstUtil.getHydrationEnumTag(stack));
             ThirstUtil.setCapacityTag(stack, ThirstUtil.getCapacityTag(stack) - 1);
         }
         return stack;

@@ -12,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.common.ForgeMod;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstUtil;
@@ -155,8 +154,6 @@ public class ThirstUtilInternal implements IThirstUtil {
         {
             player.addEffect(new EffectInstance(EffectRegistry.THIRST.get(),600, 0, false, true));
         }
-
-        LegendarySurvivalOverhaul.LOGGER.debug("new thirst cap : " + capability.getHydrationLevel() + ", " + capability.getSaturationLevel());
     }
 
     @Override

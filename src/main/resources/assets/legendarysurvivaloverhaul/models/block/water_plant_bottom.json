@@ -1,0 +1,7 @@
+{
+	"parent": "block/cross",
+	"textures": {
+		"cross": "legendarysurvivaloverhaul:block/water_plant_bottom",
+		"particle": "legendarysurvivaloverhaul:block/water_plant_bottom"
+	}
+}

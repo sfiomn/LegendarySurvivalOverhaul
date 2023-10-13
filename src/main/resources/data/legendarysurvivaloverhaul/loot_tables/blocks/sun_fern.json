@@ -8,6 +8,11 @@
           "type": "minecraft:item",
           "name": "legendarysurvivaloverhaul:sun_fern"
         }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
       ]
     }
   ]

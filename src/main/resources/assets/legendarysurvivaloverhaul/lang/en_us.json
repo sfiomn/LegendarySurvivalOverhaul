@@ -47,6 +47,7 @@
 	"item.legendarysurvivaloverhaul.glistering_melon_juice": "Glistering Melon Juice",
 	"item.legendarysurvivaloverhaul.melon_juice": "Melon Juice",
 	"item.legendarysurvivaloverhaul.pumpkin_juice": "Pumpkin Juice",
+	"item.legendarysurvivaloverhaul.water_plant_bag": "Water Plant Bag",
 
 	"item.legendarysurvivaloverhaul.cold_string" : "Cold String",
 	"item.legendarysurvivaloverhaul.warm_string" : "Warm String",
@@ -56,6 +57,7 @@
 	"block.legendarysurvivaloverhaul.sewing_table":"Sewing Table",
 	"block.legendarysurvivaloverhaul.sun_fern": "Sun Fern",
 	"block.legendarysurvivaloverhaul.ice_fern": "Ice Fern",
+	"block.legendarysurvivaloverhaul.water_plant": "Water Plant",
 
 	"container.legendarysurvivaloverhaul.heater": "",
 	"container.legendarysurvivaloverhaul.cooler": "",

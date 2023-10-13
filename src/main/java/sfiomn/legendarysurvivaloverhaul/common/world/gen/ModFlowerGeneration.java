@@ -20,10 +20,12 @@ public class ModFlowerGeneration {
 
         boolean canIceFernSpawn = false;
         boolean canSunFernSpawn = false;
+        boolean canWaterPlantSpawn = false;
 
         if (biomeName != null) {
             canIceFernSpawn = Config.Baked.iceFernBiomeNames.contains(biomeName.toString());
             canSunFernSpawn = Config.Baked.sunFernBiomeNames.contains(biomeName.toString());
+            canWaterPlantSpawn = Config.Baked.waterPlantBiomeNames.contains(biomeName.toString());
         }
 
         //  biomeCategory.getName() returns the lowercase name of the category
@@ -35,6 +37,10 @@ public class ModFlowerGeneration {
         if (!canSunFernSpawn)
             canSunFernSpawn = Config.Baked.sunFernBiomeCategories.contains(biomeCategory.getName()) ||
                     Config.Baked.sunFernBiomeCategories.contains(biomeCategory.toString());
+
+        if (!canWaterPlantSpawn)
+            canWaterPlantSpawn = Config.Baked.waterPlantBiomeCategories.contains(biomeCategory.getName()) ||
+                    Config.Baked.waterPlantBiomeCategories.contains(biomeCategory.toString());
 
         if (canIceFernSpawn) {
             LegendarySurvivalOverhaul.LOGGER.debug("Generate ice fern in biome " + biomeName);
@@ -48,6 +54,13 @@ public class ModFlowerGeneration {
             List<Supplier<ConfiguredFeature<?, ?>>> base = event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION);
 
             base.add(() -> ModConfiguredFeatures.SUN_FERN_CONFIG);
+        }
+
+        if (canWaterPlantSpawn) {
+            LegendarySurvivalOverhaul.LOGGER.debug("Generate water plant in biome " + biomeName);
+            List<Supplier<ConfiguredFeature<?, ?>>> base = event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION);
+
+            base.add(() -> ModConfiguredFeatures.WATER_PLANT_CONFIG);
         }
     }
 }
