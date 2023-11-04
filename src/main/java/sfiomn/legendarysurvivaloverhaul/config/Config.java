@@ -173,6 +173,7 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> hydrationPurified;
 		public final ForgeConfigSpec.ConfigValue<Float> saturationPurified;
 		public final ForgeConfigSpec.ConfigValue<Float> dirtyPurified;
+		public final ForgeConfigSpec.ConfigValue<Boolean> glassBottleLootAfterDrink;
 
 
 		// Heart Fruits
@@ -511,6 +512,11 @@ public class Config
 					.comment(" Chance of getting a thirst effect while drinking purified water.")
 					.define("Dirty", 0.0f);
 			builder.pop();
+			builder.push("juices");
+			glassBottleLootAfterDrink = builder
+					.comment(" Whether or not the player retrieves a glass bottle after drinking a juice.")
+					.define("Glass Bottle Loot After Drinking A Juice", true);
+			builder.pop();
 			builder.pop();
 			
 			builder.comment(" Options related to heart fruits").push("heart-fruits");
@@ -731,6 +737,7 @@ public class Config
 		public static int hydrationPurified;
 		public static float saturationPurified;
 		public static float dirtyPurified;
+		public static boolean glassBottleLootAfterDrink;
 
 
 		// Heart fruit
@@ -869,6 +876,7 @@ public class Config
 				hydrationPurified = COMMON.hydrationPurified.get();
 				saturationPurified = COMMON.saturationPurified.get();
 				dirtyPurified = COMMON.dirtyPurified.get();
+				glassBottleLootAfterDrink = COMMON.glassBottleLootAfterDrink.get();
 
 				heartFruitsEnabled = COMMON.heartFruitsEnabled.get();
 				heartsLostOnDeath = COMMON.heartsLostOnDeath.get();
