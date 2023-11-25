@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.client.gui;
+package sfiomn.legendarysurvivaloverhaul.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;

@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.client.gui;
+package sfiomn.legendarysurvivaloverhaul.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -27,8 +27,8 @@ public class RenderTemperatureGui
 	private static int updateCounter = 0;
 
 	private static final Random rand = new Random();
-	
-	public static final ResourceLocation ICONS = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/overlay.png");
+
+	private static final ResourceLocation ICONS = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/overlay.png");
 
 	private static final int TEMPERATURE_TEXTURE_POS_Y = 48;
 	private static final int TEMPERATURE_TEXTURE_WIDTH = 16;
@@ -48,8 +48,8 @@ public class RenderTemperatureGui
 	
 	private static int lastWetnessSymbol = 0;
 	private static int flashCounter = -1;
-	
-	public static boolean shakeSide = false;
+
+	private static boolean shakeSide = false;
 	
 	public static void render(MatrixStack matrix, PlayerEntity player, int width, int height)
 	{
@@ -297,7 +297,7 @@ public class RenderTemperatureGui
 		}
 	}
 
-	public static void updateTemperatureGui()
+	public static void updateTimer()
 	{
 		updateCounter++;
 

@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.client.gui;
+package sfiomn.legendarysurvivaloverhaul.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -19,10 +19,10 @@ import java.util.Random;
 
 public class RenderThirstGui
 {
-	private static int updateCounter = 0;
+	private static int updateTimer = 0;
 
 	private static final Random rand = new Random();
-	
+
 	public static final ResourceLocation ICONS = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/overlay.png");
 
 	// Row position on the overlay sheet
@@ -36,7 +36,7 @@ public class RenderThirstGui
 	// Similar to net.minecraftforge.client.ForgeIngameGui.renderFood
 	public static void render(MatrixStack matrix, PlayerEntity player, int width, int height)
 	{
-		rand.setSeed(updateCounter * 445L);
+		rand.setSeed(updateTimer * 445L);
 
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
@@ -67,14 +67,13 @@ public class RenderThirstGui
 		// Draw the 10 hydration / saturation bubbles
 		for (int i = 0; i < 10; i++)
 		{
-
 			int halfIcon = i * 2 + 1;
 			int x = left - i * 8 - 9;
 			int y = top;
 
 			// Shake based on hydration level and saturation level
 			int yOffset = 0;
-			if (Config.Baked.showVanillaAnimationOverlay && saturation <= 0.0f && updateCounter % (hydration * 3 + 1) == 0)
+			if (Config.Baked.showVanillaAnimationOverlay && saturation <= 0.0f && updateTimer % (hydration * 3 + 1) == 0)
 			{
 				yOffset = (rand.nextInt(3) - 1);
 			}
@@ -115,9 +114,9 @@ public class RenderThirstGui
 		}
 	}
 
-	public static void updateThirstGui()
+	public static void updateTimer()
 	{
-		updateCounter++;
+		updateTimer++;
 	}
 	
 	private static void bind(ResourceLocation resource)

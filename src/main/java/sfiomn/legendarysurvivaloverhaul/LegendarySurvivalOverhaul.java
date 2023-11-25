@@ -37,6 +37,7 @@ import sfiomn.legendarysurvivaloverhaul.client.itemproperties.CanteenProperty;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.ThermometerProperty;
 import sfiomn.legendarysurvivaloverhaul.client.screens.SewingTableScreen;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ThermalScreen;
+import sfiomn.legendarysurvivaloverhaul.client.shaders.FocusShader;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodStorage;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
@@ -247,11 +248,11 @@ public class LegendarySurvivalOverhaul
 					@Override
 					protected void apply(Void objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn)
 					{
+						JsonConfigRegistration.init(modConfigJsons.toFile());
 						Config.Baked.bakeCommon();
 						Config.Baked.bakeClient();
-						JsonConfigRegistration.init(modConfigJsons.toFile());
+						FocusShader.loadResources();
 					}
-			
 				}
 		);
 	}

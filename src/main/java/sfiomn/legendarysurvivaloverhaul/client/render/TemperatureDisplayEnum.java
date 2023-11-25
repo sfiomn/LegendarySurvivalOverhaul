@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.client.gui;
+package sfiomn.legendarysurvivaloverhaul.client.render;
 
 public enum TemperatureDisplayEnum
 {

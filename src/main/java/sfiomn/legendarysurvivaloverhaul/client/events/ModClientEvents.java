@@ -22,10 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import sereneseasons.api.SSItems;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.client.gui.RenderFrame;
-import sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureEffect;
-import sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureGui;
-import sfiomn.legendarysurvivaloverhaul.client.gui.RenderThirstGui;
+import sfiomn.legendarysurvivaloverhaul.client.render.*;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
@@ -35,9 +32,6 @@ import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
 import java.util.ListIterator;
 
-import static sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureEffect.updateTemperatureEffect;
-import static sfiomn.legendarysurvivaloverhaul.client.gui.RenderTemperatureGui.updateTemperatureGui;
-import static sfiomn.legendarysurvivaloverhaul.client.gui.RenderThirstGui.updateThirstGui;
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil.formatSeasonName;
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil.plantCanGrow;
 import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.timeInGame;
@@ -118,7 +112,7 @@ public class ModClientEvents {
             if (!minecraft.options.hideGui) {
                 RenderTemperatureGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
-            RenderTemperatureEffect.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+            RenderTemperatureOverlay.render(event.getMatrixStack(), scaledWidth, scaledHeight);
         }
     }
 
@@ -133,6 +127,15 @@ public class ModClientEvents {
             if (!minecraft.options.hideGui) {
                 RenderThirstGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRenderTickThirst(TickEvent.RenderTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || minecraft.gameMode == null || !minecraft.gameMode.hasExperience() || minecraft.player == null) return;
+
+        if (Config.Baked.thirstEnabled) {
+            RenderThirstOverlay.render(event.renderTickTime);
         }
     }
 
@@ -163,7 +166,7 @@ public class ModClientEvents {
     }
 
     @SubscribeEvent
-    public static void renderOverlayEventHideDebugInfo(RenderGameOverlayEvent.Text event) {
+    public static void onRenderOverlayEventHideDebugInfo(RenderGameOverlayEvent.Text event) {
         PlayerEntity player = minecraft.player;
         if (player == null || player.isCreative() || player.isSpectator() || !Config.Baked.hideInfoFromDebug)
             return;
@@ -187,9 +190,14 @@ public class ModClientEvents {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             if (!minecraft.isPaused()) {
-                updateTemperatureGui();
-                updateTemperatureEffect();
-                updateThirstGui();
+                if (Config.Baked.temperatureEnabled) {
+                    RenderTemperatureGui.updateTimer();
+                    RenderTemperatureOverlay.updateTemperatureEffect(minecraft.player);
+                }
+                if (Config.Baked.thirstEnabled) {
+                    RenderThirstGui.updateTimer();
+                    RenderThirstOverlay.updateThirstEffect(minecraft.player);
+                }
             }
         }
     }

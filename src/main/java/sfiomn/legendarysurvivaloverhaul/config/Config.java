@@ -5,7 +5,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.client.gui.TemperatureDisplayEnum;
+import sfiomn.legendarysurvivaloverhaul.client.render.TemperatureDisplayEnum;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 
