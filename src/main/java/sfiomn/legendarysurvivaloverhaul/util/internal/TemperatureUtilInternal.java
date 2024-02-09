@@ -47,10 +47,12 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 
 		for(ModifierBase modifier : GameRegistry.findRegistry(ModifierBase.class).getValues())
 		{
+			// LegendarySurvivalOverhaul.LOGGER.debug("tmp influence : " + modifier.getRegistryName() + ", " + modifier.getWorldInfluence(world, pos));
 			sum += modifier.getWorldInfluence(world, pos);
 		}
 		for (DynamicModifierBase dynamicModifier : GameRegistry.findRegistry(DynamicModifierBase.class).getValues())
 		{
+			// LegendarySurvivalOverhaul.LOGGER.debug("tmp influence : " + dynamicModifier.getRegistryName() + ", " + dynamicModifier.applyDynamicWorldInfluence(world, pos, sum));
 			sum += dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);
 		}
 
