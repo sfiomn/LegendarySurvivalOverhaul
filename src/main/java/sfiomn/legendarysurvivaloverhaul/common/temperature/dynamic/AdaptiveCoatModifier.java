@@ -46,11 +46,11 @@ public class AdaptiveCoatModifier extends DynamicModifierBase
 
 		if (diff > 0) {
 			if (Objects.equals(coat.type(), "cooling") || Objects.equals(coat.type(), "thermal")) {
-				sum -= Math.min(coat.modifier(), Math.abs(diff));
+				sum -= (float) Math.min(coat.modifier(), Math.abs(diff));
 			}
 		} else if (diff < 0) {
 			if (Objects.equals(coat.type(), "heating") || Objects.equals(coat.type(), "thermal")) {
-				sum += Math.min(coat.modifier(), Math.abs(diff));
+				sum += (float) Math.min(coat.modifier(), Math.abs(diff));
 			}
 		}
 		return sum;

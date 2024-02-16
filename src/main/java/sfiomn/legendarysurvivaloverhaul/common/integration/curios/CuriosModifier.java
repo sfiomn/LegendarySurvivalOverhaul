@@ -55,7 +55,7 @@ public class CuriosModifier extends ModifierBase
 		
 		LazyOptional<IItemHandlerModifiable> lazyOptional = helper.getEquippedCurios(player);
 		
-		if (lazyOptional.isPresent())
+		if (lazyOptional.isPresent() && lazyOptional.resolve().isPresent())
 		{
 			IItemHandler itemHandler = lazyOptional.resolve().get();
 			
@@ -70,10 +70,12 @@ public class CuriosModifier extends ModifierBase
 					sum += processStackJson(stack);
 					String coatId = TemperatureUtil.getArmorCoatTag(stack);
 					CoatEnum coat = CoatEnum.getFromId(coatId);
+					if (coat == null)
+						continue;
 					if (Objects.equals(coat.type(), "cooling")) {
-						sum -= coat.modifier();
+						sum -= (float) coat.modifier();
 					} else if (Objects.equals(coat.type(), "heating")) {
-						sum += coat.modifier();
+						sum += (float) coat.modifier();
 					}
 				}
 			}
