@@ -14,13 +14,11 @@ public class FocusShader {
     public static final ResourceLocation BLUR_SHADER = new ResourceLocation("shaders/post/blobs2.json");
     public float intensity;
 
-    @OnlyIn(value = Dist.CLIENT)
     public static ModShaderGroup shaderGroup;
     public FocusShader() {
         this.intensity = 0;
     }
 
-    @OnlyIn(value = Dist.CLIENT)
     public static void loadResources() {
         Minecraft mc = Minecraft.getInstance();
         if (shaderGroup != null)

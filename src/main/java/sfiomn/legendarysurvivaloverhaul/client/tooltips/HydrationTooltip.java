@@ -27,9 +27,7 @@ public class HydrationTooltip {
     public float saturation;
     public float dirty;
     public int hydrationIconNumber;
-    private String hydrationBarText;
     public int saturationIconNumber;
-    private String saturationBarText;
     public int dirtyIconNumber;
     private String placeholderTooltip;
 
@@ -38,22 +36,12 @@ public class HydrationTooltip {
         this.saturation = saturation;
         this.dirty = dirty;
 
-        this.hydrationIconNumber = (int) Math.ceil(Math.abs(hydration) / 2f);
-        if (hydrationIconNumber > 10)
-        {
-            hydrationBarText = "x" + ((hydration < 0 ? -1 : 1) * hydrationIconNumber);
-            hydrationIconNumber = 1;
-        }
+        this.hydrationIconNumber = Math.min((int) Math.ceil(Math.abs(hydration) / 2f), 10);
 
         if (Config.Baked.thirstSaturationDisplayed) {
-            this.saturationIconNumber = (int) Math.ceil(Math.abs(saturation) / 2f);
+            this.saturationIconNumber = Math.min((int) Math.ceil(Math.abs(saturation) / 2f), 10);
         } else {
             this.saturationIconNumber = 0;
-        }
-        if (saturationIconNumber > 10)
-        {
-            saturationBarText = "x" + ((saturation < 0 ? -1 : 1) * saturationIconNumber);
-            saturationIconNumber = 1;
         }
 
         this.dirtyIconNumber = 0;
@@ -75,14 +63,10 @@ public class HydrationTooltip {
         float scale = 2.2f;
 
         float thirstBarLength = hydrationIconNumber * scale;
-        if (hydrationBarText != null)
-            thirstBarLength += hydrationBarText.length();
 
         float saturationBarLength = 0;
         if (Config.Baked.thirstSaturationDisplayed) {
             saturationBarLength = saturationIconNumber * scale;
-            if (saturationBarText != null)
-                saturationBarLength += saturationBarText.length();
         }
         float dirtyBarLength = dirtyIconNumber * scale;
 
@@ -106,11 +90,13 @@ public class HydrationTooltip {
 
         Minecraft.getInstance().getTextureManager().bind(ICONS);
 
+        Matrix4f m4f = matrixStack.last().pose();
+
         int leftMax = 0;
         leftMax = Math.max(tooltipX + (this.hydrationIconNumber - 1) * THIRST_TEXTURE_WIDTH,
                 tooltipX + (saturationIconNumber - 1) * THIRST_TEXTURE_WIDTH);
 
-        // Thirst bar
+        // Hydration bar
         int left = 0;
         if (!Config.Baked.mergeHydrationAndSaturationTooltip)
             left = tooltipX + (this.hydrationIconNumber - 1) * THIRST_TEXTURE_WIDTH;
@@ -139,21 +125,10 @@ public class HydrationTooltip {
             int halfIcon = i * 2 + 1;
             int x = left - i * THIRST_TEXTURE_WIDTH;
             int y = top;
-
-            Matrix4f m4f = matrixStack.last().pose();
             if (halfIcon < Math.abs(this.hydration)) // Full thirst icon
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
             else if (halfIcon == Math.abs(this.hydration)) // Half thirst icon
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture + THIRST_TEXTURE_WIDTH, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-        }
-        if (hydrationBarText != null) {
-            int x = left + 18;
-            int y = top;
-            matrixStack.pushPose();
-            matrixStack.translate(x, y, 0);
-            matrixStack.scale(0.75f, 0.75f, 0.75f);
-            Minecraft.getInstance().font.draw(matrixStack, hydrationBarText, 2, 2, 0xFFAAAAAA);
-            matrixStack.popPose();
         }
 
         // Saturation bar
@@ -170,12 +145,10 @@ public class HydrationTooltip {
         if (this.saturation >= 0) {
             xOffsetTexture = THIRST_TEXTURE_WIDTH * 6;
             // Show the thirst bar dirty if dirty chance 100%
-            if (dirty >= 1.0f) {
+            if (dirty >= 1.0f)
                 xOffsetTexture += THIRST_TEXTURE_WIDTH * 2;
-            }
-        } else {
+        } else
             xOffsetTexture = THIRST_TEXTURE_WIDTH * 14;
-        }
 
         // Draw the saturation bubbles
         for (int i = 0; i < saturationIconNumber; i++) {
@@ -183,23 +156,10 @@ public class HydrationTooltip {
             int x = left - i * THIRST_TEXTURE_WIDTH;
             int y = top;
 
-            Matrix4f m4f = matrixStack.last().pose();
-            if (halfIcon < (int) Math.ceil(Math.abs(saturation))) { // Full saturation icon
+            if (halfIcon < (int) Math.ceil(Math.abs(saturation))) // Full saturation icon
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-            } else if (halfIcon == (int) Math.ceil(Math.abs(saturation))) { // Half saturation icon
+            else if (halfIcon == (int) Math.ceil(Math.abs(saturation))) // Half saturation icon
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture + THIRST_TEXTURE_WIDTH, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-            }
-        }
-
-        if (saturationBarText != null)
-        {
-            int x = left + 18;
-            int y = top;
-            matrixStack.pushPose();
-            matrixStack.translate(x, y, 0);
-            matrixStack.scale(0.75f, 0.75f, 0.75f);
-            Minecraft.getInstance().font.draw(matrixStack, saturationBarText, 2, 1, 0xFFAAAAAA);
-            matrixStack.popPose();
         }
 
         // Dirty bar
@@ -215,7 +175,6 @@ public class HydrationTooltip {
             int x = left - i * THIRST_TEXTURE_WIDTH;
             int y = top;
 
-            Matrix4f m4f = matrixStack.last().pose();
             if (halfIcon < (int) (dirty * 10)) { // Full dirty icon
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture + THIRST_TEXTURE_WIDTH, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
             } else if (halfIcon == (int) (dirty * 10)) { // Half dirty icon
