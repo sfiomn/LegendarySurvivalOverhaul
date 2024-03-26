@@ -6,7 +6,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.StringTextComponent;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
@@ -38,13 +37,9 @@ public class TemperatureCommand extends CommandBase
 				float playerTemp = cap.getTemperatureLevel();
 				float worldTemp =  TemperatureUtil.getWorldTemperature(player.level, player.blockPosition());
 
-				String reply1 = "Temp: " +  playerTemp,
-				reply2 = "Target Temp: " + targetTemperature,
-				reply3 = "World Temp: " + worldTemp;
+				String reply = "Temp: " +  playerTemp + "\nTarget Temp: " + targetTemperature + "\nWorld Temp: " + worldTemp;
 
-				source.getPlayerOrException().sendMessage(new StringTextComponent(reply1), ChatType.GAME_INFO, source.getEntity().getUUID());
-				source.getPlayerOrException().sendMessage(new StringTextComponent(reply2), ChatType.GAME_INFO, source.getEntity().getUUID());
-				source.getPlayerOrException().sendMessage(new StringTextComponent(reply3), ChatType.GAME_INFO, source.getEntity().getUUID());
+				source.getPlayerOrException().sendMessage(new StringTextComponent(reply), source.getEntity().getUUID());
 			}
 		}
 		catch(Exception e) 
