@@ -17,7 +17,7 @@ import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 public class CanteenItem extends DrinkItem {
 
     public CanteenItem(Properties properties){
-        super(properties);
+        super(properties.stacksTo(1));
     }
 
     public int getMaxCapacity() {
