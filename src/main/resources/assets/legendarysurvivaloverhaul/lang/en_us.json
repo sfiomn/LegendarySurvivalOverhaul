@@ -52,7 +52,7 @@
 	"item.legendarysurvivaloverhaul.cold_string" : "Cold String",
 	"item.legendarysurvivaloverhaul.warm_string" : "Warm String",
 	
-	"block.legendarysurvivaloverhaul.heater":"Coal Stove",
+	"block.legendarysurvivaloverhaul.heater":"Boiler",
 	"block.legendarysurvivaloverhaul.cooler":"Ice Box",
 	"block.legendarysurvivaloverhaul.sewing_table":"Sewing Table",
 	"block.legendarysurvivaloverhaul.sun_fern": "Sun Fern",
