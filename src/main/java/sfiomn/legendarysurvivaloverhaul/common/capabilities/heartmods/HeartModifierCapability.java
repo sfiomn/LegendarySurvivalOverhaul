@@ -39,14 +39,14 @@ public class HeartModifierCapability implements IHeartModifierCapability
 	
 	public void updateMaxHealth(World world, PlayerEntity player)
 	{
-		ModifiableAttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
+		ModifiableAttributeInstance healthAttribute = player.getAttribute(Attributes.MAX_HEALTH);
 
-        AttributeModifier modifier = health.getModifier(HEART_MODIFIER_ATTRIBUTE);
+        AttributeModifier modifier = healthAttribute.getModifier(HEART_MODIFIER_ATTRIBUTE);
         if (modifier != null) {
-            health.removeModifier(modifier);
+            healthAttribute.removeModifier(modifier);
         }
         
-        health.addPermanentModifier(new AttributeModifier(HEART_MODIFIER_ATTRIBUTE, LegendarySurvivalOverhaul.MOD_ID + ":extra_hearts", extraHearts * 2, AttributeModifier.Operation.ADDITION));
+        healthAttribute.addPermanentModifier(new AttributeModifier(HEART_MODIFIER_ATTRIBUTE, LegendarySurvivalOverhaul.MOD_ID + ":extra_hearts", extraHearts * 2, AttributeModifier.Operation.ADDITION));
 	}
 	
 	public void setMaxHealth(int extraHearts)
