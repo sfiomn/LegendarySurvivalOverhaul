@@ -11,6 +11,7 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.init.ModFertility;
 import sereneseasons.init.ModTags;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier.biomeIdentities;
 
@@ -40,6 +41,9 @@ public class SereneSeasonsUtil {
         {
             isBiomeTropical = temperature > 0.8f;
         }
+
+        if (!Config.Baked.tropicalSeasonsEnabled)
+            isBiomeTropical = false;
 
         if(isBiomeTropical){
             for(String word : season.getTropicalSeason().toString().split("_", 0)){

@@ -34,6 +34,8 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.CanteenProperty;
+import sfiomn.legendarysurvivaloverhaul.client.itemproperties.SeasonalCalendarTimeProperty;
+import sfiomn.legendarysurvivaloverhaul.client.itemproperties.SeasonalCalendarSeasonTypeProperty;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.ThermometerProperty;
 import sfiomn.legendarysurvivaloverhaul.client.screens.SewingTableScreen;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ThermalScreen;
@@ -212,6 +214,8 @@ public class LegendarySurvivalOverhaul
 				ItemModelsProperties.register(ItemRegistry.THERMOMETER.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "temperature"), new ThermometerProperty());
 				ItemModelsProperties.register(ItemRegistry.CANTEEN.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirst_enum"), new CanteenProperty());
 				ItemModelsProperties.register(ItemRegistry.LARGE_CANTEEN.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirst_enum"), new CanteenProperty());
+				ItemModelsProperties.register(ItemRegistry.SEASONAL_CALENDAR.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "time"), new SeasonalCalendarTimeProperty());
+				ItemModelsProperties.register(ItemRegistry.SEASONAL_CALENDAR.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "seasontype"), new SeasonalCalendarSeasonTypeProperty());
 			}
 		};
 	}

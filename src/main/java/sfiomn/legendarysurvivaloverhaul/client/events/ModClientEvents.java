@@ -22,6 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import sereneseasons.api.SSItems;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons.RenderSeasonCards;
 import sfiomn.legendarysurvivaloverhaul.client.render.*;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -71,7 +72,7 @@ public class ModClientEvents {
                 if (entity instanceof ItemFrameEntity && !((ItemFrameEntity) entity).getItem().isEmpty()) {
                     Item itemInFrame = ((ItemFrameEntity) entity).getItem().getItem();
 
-                    if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && itemInFrame == SSItems.calendar.getItem()) {
+                    if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && (itemInFrame == SSItems.calendar.getItem() || itemInFrame == ItemRegistry.SEASONAL_CALENDAR.get())) {
                         RenderFrame.render(minecraft, matrixStack, formatSeasonName(entity.blockPosition(), entity.level));
                     } else if (itemInFrame == ItemRegistry.THERMOMETER.get()) {
                         TemperatureItemCapability tempItemCap = CapabilityUtil.getTempItemCapability(((ItemFrameEntity) entity).getItem());
@@ -105,10 +106,10 @@ public class ModClientEvents {
     public static void onRenderGameOverlayTemperature(RenderGameOverlayEvent.Post event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL || minecraft.gameMode == null || !minecraft.gameMode.hasExperience()) return;
 
-        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
-        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
-
         if (Config.Baked.temperatureEnabled) {
+            int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
+            int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
+
             if (!minecraft.options.hideGui) {
                 RenderTemperatureGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
@@ -120,12 +121,26 @@ public class ModClientEvents {
     public static void onRenderGameOverlayThirst(RenderGameOverlayEvent.Post event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.FOOD || minecraft.gameMode == null || !minecraft.gameMode.hasExperience()) return;
 
-        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
-        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
-
         if (Config.Baked.thirstEnabled) {
+            int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
+            int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
+
             if (!minecraft.options.hideGui) {
                 RenderThirstGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRenderGameOverlaySeasonCard(RenderGameOverlayEvent.Post event) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL || minecraft.gameMode == null) return;
+
+        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && Config.Baked.seasonCardsEnabled) {
+            int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
+            int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
+
+            if (!minecraft.options.hideGui) {
+                RenderSeasonCards.render(event.getMatrixStack(), scaledWidth, scaledHeight);
             }
         }
     }
@@ -197,6 +212,9 @@ public class ModClientEvents {
                 if (Config.Baked.thirstEnabled) {
                     RenderThirstGui.updateTimer();
                     RenderThirstOverlay.updateThirstEffect(minecraft.player);
+                }
+                if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && Config.Baked.seasonCardsEnabled) {
+                    RenderSeasonCards.updateSeasonCardFading(minecraft.player);
                 }
             }
         }

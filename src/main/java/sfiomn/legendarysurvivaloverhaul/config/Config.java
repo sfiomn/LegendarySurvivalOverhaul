@@ -114,6 +114,8 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Double> thermalCoat3Modifier;
 		
 		public final ForgeConfigSpec.ConfigValue<Boolean> seasonTemperatureEffects;
+		public final ForgeConfigSpec.ConfigValue<Boolean> tropicalSeasonsEnabled;
+		public final ForgeConfigSpec.ConfigValue<Boolean> seasonCardsEnabled;
 		
 		public final ForgeConfigSpec.ConfigValue<Integer> earlySpringModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> midSpringModifier;
@@ -377,7 +379,13 @@ public class Config
 			seasonTemperatureEffects = builder
 					.comment(" If Serene Seasons is installed, then seasons", " will have an effect on the player's temperature.")
 					.define("Seasons affect Temperature", true);
-			
+			tropicalSeasonsEnabled = builder
+					.comment(" If the tropical seasons are disabled", " the normal summer-autumn-winter-spring seasons are applied.")
+					.define("Tropical Seasons Enabled", true);
+			seasonCardsEnabled = builder
+					.comment(" If season cards are enabled", " season cards will appear at every season changes.")
+					.define("Season Cards Enabled", true);
+
 			builder.comment("Temperature modifiers per season in temperate biomes.").push("temperate");
 			builder.push("spring");
 			earlySpringModifier = builder.define("Early Spring Modifier", -3);
@@ -655,6 +663,8 @@ public class Config
 		public static List<String> waterPlantBiomeCategories;
 		
 		public static boolean seasonTemperatureEffects;
+		public static boolean tropicalSeasonsEnabled;
+		public static boolean seasonCardsEnabled;
 		
 		public static double timeMultiplier;
 		public static double biomeTimeMultiplier;
@@ -822,6 +832,8 @@ public class Config
 				thermalCoat3Modifier = COMMON.thermalCoat3Modifier.get();
 
 				seasonTemperatureEffects = COMMON.seasonTemperatureEffects.get();
+				tropicalSeasonsEnabled = COMMON.tropicalSeasonsEnabled.get();
+				seasonCardsEnabled = COMMON.seasonCardsEnabled.get();
 				
 				earlySpringModifier = COMMON.earlySpringModifier.get();
 				midSpringModifier = COMMON.midSpringModifier.get();

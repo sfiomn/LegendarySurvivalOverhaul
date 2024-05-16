@@ -1,0 +1,33 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "legendarysurvivaloverhaul:item/seasonal_calendar/spring1"
+    },
+    "overrides": [
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.0000000 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_spring1" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.0833333 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_spring2" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.1666666 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_spring3" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.2500000 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_summer1" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.3333333 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_summer2" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.4166666 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_summer3" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.5000000 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_autumn1" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.5833333 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_autumn2" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.6666666 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_autumn3" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.7500000 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_winter1" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.8333333 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_winter2" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 0, "legendarysurvivaloverhaul:time": 0.9166666 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_winter3" },
+		{ "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.0000000 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_wet1" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.0833333 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_wet1" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.1666666 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_wet2" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.2500000 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_wet2" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.3333333 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_wet3" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.4166666 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_wet3" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.5000000 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_dry1" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.5833333 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_dry1" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.6666666 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_dry2" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.7500000 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_dry2" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.8333333 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_dry3" },
+        { "predicate": { "legendarysurvivaloverhaul:seasontype": 1, "legendarysurvivaloverhaul:time": 0.9166666 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_dry3" },
+		{ "predicate": { "legendarysurvivaloverhaul:seasontype": 2, "legendarysurvivaloverhaul:time": 0.0000000 }, "model": "legendarysurvivaloverhaul:item/seasonal_calendar/seasonal_calendar_null" }
+    ]
+}

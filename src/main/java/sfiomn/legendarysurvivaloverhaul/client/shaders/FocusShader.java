@@ -43,6 +43,8 @@ public class FocusShader {
 
     @OnlyIn(value = Dist.CLIENT)
     public void updateIntensity(float intensity) {
+        if (shaderGroup == null)
+            return;
         for (Shader mcShader : shaderGroup.getShaders()) {
             ShaderUniform shaderuniform = mcShader.getEffect().getUniform("Radius");
 

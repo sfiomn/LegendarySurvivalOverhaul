@@ -41,10 +41,8 @@ public class RenderTemperatureOverlay {
     }
 
     public static void drawTemperatureEffect(MatrixStack matrix, int width, int height) {
-
-        Matrix4f m4f = matrix.last().pose();
-
         if (temperatureEffect != null) {
+            Matrix4f m4f = matrix.last().pose();
             bind(temperatureEffect);
             RenderUtil.drawTexturedModelRectWithAlpha(m4f, 0, 0, width, height, 0, 0, TEMPERATURE_EFFECT_WIDTH, TEMPERATURE_EFFECT_HEIGHT, fadeLevel);
         }
