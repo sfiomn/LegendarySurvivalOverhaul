@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.config.SeasonsConfig;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -102,7 +103,7 @@ public class SereneSeasonsModifier extends ModifierBase
 			Biome biome = world.getBiome(pos.offset(offset));
 			int seasonType = SereneSeasonsUtil.getSeasonType(biome);
 
-			if (seasonType == 2)
+			if (seasonType == 2 || !SeasonsConfig.isDimensionWhitelisted(world.dimension()))
 				continue;
 			
 			boolean useTropicalMods = seasonType == 1 && Config.Baked.tropicalSeasonsEnabled;

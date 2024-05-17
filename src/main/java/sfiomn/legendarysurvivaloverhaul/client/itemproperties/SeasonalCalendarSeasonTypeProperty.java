@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import sereneseasons.config.SeasonsConfig;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SSBiomeIdentity;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil;
@@ -41,6 +42,9 @@ public class SeasonalCalendarSeasonTypeProperty implements IItemPropertyGetter {
         {
             try
             {
+                if (!SeasonsConfig.isDimensionWhitelisted(world.dimension()))
+                    return 2.0f;
+
                 Biome biome = world.getBiome(new BlockPos(holder.position()));
                 int seasonType = SereneSeasonsUtil.getSeasonType(biome);
 
