@@ -84,7 +84,7 @@ public class SereneSeasonsModifier extends ModifierBase
 	{
 		ISeasonState seasonState = SeasonHelper.getSeasonState(world);
 		
-		if (seasonState == null)
+		if (seasonState == null || !SeasonsConfig.isDimensionWhitelisted(world.dimension()))
 			return 0.0f;
 
 		Vector3i[] posOffsets = 
@@ -103,7 +103,7 @@ public class SereneSeasonsModifier extends ModifierBase
 			Biome biome = world.getBiome(pos.offset(offset));
 			int seasonType = SereneSeasonsUtil.getSeasonType(biome);
 
-			if (seasonType == 2 || !SeasonsConfig.isDimensionWhitelisted(world.dimension()))
+			if (seasonType == 2)
 				continue;
 			
 			boolean useTropicalMods = seasonType == 1 && Config.Baked.tropicalSeasonsEnabled;
