@@ -29,11 +29,11 @@ public class WeatherModifier extends ModifierBase
 		float weatherTemperature = 0.0f;
 		long time = world.getLevelData().getDayTime();
 
-		if(Config.Baked.shadeTimeMultiplier != 0 && time <= 12000)
+		if(Config.Baked.shadeTimeModifier != 0 && time <= 12000)
 		{
 			if ((TemperatureModifierRegistry.BIOME.get().getWorldInfluence(world, pos) +
 					TemperatureModifierRegistry.SERENE_SEASONS.get().getWorldInfluence(world, pos)) > 15) {
-				float shadeTemperature = -1.0f * (float) Config.Baked.shadeTimeMultiplier * (float) Math.sin((time * Math.PI) / 12000.0f);
+				float shadeTemperature = (float) Config.Baked.shadeTimeModifier * (float) Math.sin((time * Math.PI) / 12000.0f);
 				weatherTemperature += applyUndergroundEffect(shadeTemperature, world, pos);
 				// LegendarySurvivalOverhaul.LOGGER.debug("Shade temp influence : " + weatherTemperature + "biome temp : " + TemperatureModifierRegistry.BIOME.get().getWorldInfluence(world, pos) +
 				// 		", season temp : " + TemperatureModifierRegistry.SERENE_SEASONS.get().getWorldInfluence(world, pos));

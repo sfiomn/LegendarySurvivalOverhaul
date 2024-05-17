@@ -43,7 +43,7 @@ public class FoodCapability implements IFoodCapability
 
 			// if player is not in pause, trigger the food exhaust, allowing afk player not dying from hunger
 			if (oldPos.distanceTo(player.position()) > 1) {
-				player.getFoodData().addExhaustion(Config.Baked.baseFoodExhaustion);
+				player.getFoodData().addExhaustion((float) Config.Baked.baseFoodExhaustion);
 				oldPos = player.position();
 			}
 		}

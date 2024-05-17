@@ -5,9 +5,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import sereneseasons.api.season.Season;
@@ -33,10 +35,11 @@ public class RenderSeasonCards {
     private static ResourceLocation seasonCard = null;
     private static Season lastSeason = null;
     private static SereneSeasonsUtil.TropicalSeason lastTropicalSeason = null;
-    private static DimensionType lastDimension = null;
+    private static RegistryKey<World> lastDimension = null;
     private static boolean isDimensionSeasonal;
     private static float fadeLevel = 0;
-    private static int delayTimer = 40;
+    private static final int delayTimeTicks = Config.Baked.seasonCardsSpawnDimensionDelayInTicks;
+    private static int delayTimer = delayTimeTicks;
     private static int cardTimer = 0;
 
     public static void render(MatrixStack matrix, int width, int height)
@@ -62,37 +65,40 @@ public class RenderSeasonCards {
 
     public static void updateSeasonCardFading(PlayerEntity player) {
         if (player != null && player.isAlive()) {
+            if (lastDimension == null || lastDimension != player.level.dimension()) {
+                isDimensionSeasonal = SeasonsConfig.isDimensionWhitelisted(player.level.dimension());
+                lastDimension = player.level.dimension();
+            }
+
+            if (!isDimensionSeasonal) {
+                if (lastSeason != null || lastTropicalSeason != null)
+                    reset();
+                return;
+            }
+
             if (delayTimer > 0) {
                 delayTimer--;
                 return;
             }
 
-            if (lastDimension == null || lastDimension != player.level.dimensionType()) {
-                isDimensionSeasonal = SeasonsConfig.isDimensionWhitelisted(player.level.dimension());
-                lastDimension = player.level.dimensionType();
-            }
-
             Season currentSeason = null;
             SereneSeasonsUtil.TropicalSeason currentTropicalSeason = null;
-            int seasonType;
-            if (isDimensionSeasonal) {
-                seasonType = SereneSeasonsUtil.getSeasonType(player.level.getBiome(player.blockPosition()));
-                if (seasonType == 0 || (seasonType == 1 && !Config.Baked.tropicalSeasonsEnabled))
-                    currentSeason = SeasonHelper.getSeasonState(player.level).getSeason();
-                else if (seasonType == 1)
-                    currentTropicalSeason = SereneSeasonsUtil.TropicalSeason.getTropicalSeason(SeasonHelper.getSeasonState(player.level).getTropicalSeason());
-            } else if (lastSeason != null)
-                reset();
+            int seasonType = SereneSeasonsUtil.getSeasonType(player.level.getBiome(player.blockPosition()));
+
+            if (seasonType == 0 || (seasonType == 1 && !Config.Baked.tropicalSeasonsEnabled))
+                currentSeason = SeasonHelper.getSeasonState(player.level).getSeason();
+            else if (seasonType == 1)
+                currentTropicalSeason = SereneSeasonsUtil.TropicalSeason.getTropicalSeason(SeasonHelper.getSeasonState(player.level).getTropicalSeason());
 
             float targetFadeLevel = 0;
             if (((currentSeason != lastSeason && currentSeason != null) || (currentTropicalSeason != lastTropicalSeason && currentTropicalSeason != null)) && isDimensionSeasonal)
                 targetFadeLevel = 1.0f;
 
             if (targetFadeLevel > fadeLevel) {
-                fadeLevel = Math.min(targetFadeLevel, fadeLevel + 0.05f);
+                fadeLevel = Math.min(targetFadeLevel, fadeLevel + (Math.round(1.0f / Config.Baked.seasonCardsFadeInInTicks * 100) / 100.0f));
             }
             if (targetFadeLevel < fadeLevel) {
-                fadeLevel = Math.max(targetFadeLevel, fadeLevel - 0.05f);
+                fadeLevel = Math.max(targetFadeLevel, fadeLevel - (Math.round(1.0f / Config.Baked.seasonCardsFadeOutInTicks * 100) / 100.0f));
             }
 
             if (fadeLevel > 0 && fadeLevel < 1.0f) {
@@ -113,7 +119,7 @@ public class RenderSeasonCards {
                         seasonCard = WET_CARD;
                 }
             } else if (fadeLevel == 1.0f) {
-                if (cardTimer++ >= 60) {
+                if (cardTimer++ >= Config.Baked.seasonCardsDisplayTimeInTicks) {
                     if (currentSeason != null)
                         lastSeason = currentSeason;
                     else if (currentTropicalSeason != null) {
@@ -129,7 +135,7 @@ public class RenderSeasonCards {
     public static void reset() {
         lastSeason = null;
         lastTropicalSeason = null;
-        delayTimer = 40;
+        delayTimer = delayTimeTicks;
         fadeLevel = 0;
     }
 

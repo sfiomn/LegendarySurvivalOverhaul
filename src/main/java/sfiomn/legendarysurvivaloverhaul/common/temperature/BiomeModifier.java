@@ -38,7 +38,7 @@ public class BiomeModifier extends ModifierBase
 		{
 			Biome biome = world.getBiome(pos.offset(offset));
 			float humidity = getHumidityForBiome(world, biome);
-			float addedTemperature = getTempForBiome(world, biome);
+			float addedTemperature = getNormalizedTempForBiome(world, biome);
 			
 			if (humidity < 0.2f && worldTime > 12000 && addedTemperature > 0.80f && !world.dimensionType().hasCeiling() && Config.Baked.biomeDrynessEffectEnabled)
 			{

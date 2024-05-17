@@ -103,11 +103,11 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 		return temperature * (float)(pos.getY() - cutoff) / (64.0f - cutoff);
 	}
 	
-	protected float getTempForBiome(World world, Biome biome)
+	protected float getNormalizedTempForBiome(World world, Biome biome)
 	{
-		// Minecraft's temperatures go from -0.7 to 2.0
-		// Get the biome's temperature, clamp it between -0.7 and 2.0 in case of extreme biomes from other mods,
-		// and then normalize it.
+		// Minecraft's temperatures is defined from -0.7 to 2.0, plains are at 0.8
+		// Get the biome's temperature, clamp it between -0.5 and 2.0 in case of extreme biomes from other mods,
+		// and then normalize it from 0 to 1
 		// Plains returned temperature 0.44, savanna 0.7, Ice plain 0.26
 
 		ResourceLocation name = WorldUtil.getBiomeName(world, biome);
@@ -142,7 +142,7 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 	// Clamp and normalize the temperature
 	protected float clampNormalizeTemperature(float temp)
 	{
-		return ((MathHelper.clamp(temp, COLDEST_BIOME_TEMP, HOTTEST_BIOME_TEMP)) - COLDEST_BIOME_TEMP )/ (HOTTEST_BIOME_TEMP - COLDEST_BIOME_TEMP);
+		return ((MathHelper.clamp(temp, COLDEST_BIOME_TEMP, HOTTEST_BIOME_TEMP)) - COLDEST_BIOME_TEMP ) / (HOTTEST_BIOME_TEMP - COLDEST_BIOME_TEMP);
 	}
 
 	//  Assume input is between 0 and 1

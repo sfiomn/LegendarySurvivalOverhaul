@@ -24,9 +24,10 @@ public class TimeModifier extends ModifierBase
 		
 		long time = world.getLevelData().getDayTime();
 
-		float timeTemperature = (float) Math.sin ((time * Math.PI) / 12000.0f) * (float) Config.Baked.timeMultiplier;
+		// Add + - timeModifier temperature value based on time of the day
+		float timeTemperature = (float) Math.sin ((time * Math.PI) / 12000.0f) * (float) Config.Baked.timeModifier;
 		
-		float biomeMultiplier = 1.0f + (Math.abs(normalizeToPositiveNegative(getTempForBiome(world, world.getBiome(pos)))) * ((float)Config.Baked.biomeTimeMultiplier - 1.0f));
+		float biomeMultiplier = 1.0f + (Math.abs(normalizeToPositiveNegative(getNormalizedTempForBiome(world, world.getBiome(pos)))) * ((float)Config.Baked.biomeTimeMultiplier - 1.0f));
 		timeTemperature *= biomeMultiplier;
 
 		// LegendarySurvivalOverhaul.LOGGER.debug("Time temp influence : " + timeTemperature);

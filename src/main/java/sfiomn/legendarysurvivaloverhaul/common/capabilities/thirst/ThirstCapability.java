@@ -69,11 +69,11 @@ public class ThirstCapability implements IThirstCapability
 			if (oldPos.distanceTo(player.position()) > 1) {
 				float thirstExhausted;
 				if (player.isSprinting() && this.wasSprinting)
-					thirstExhausted = Config.Baked.sprintingThirstExhaustion;
+					thirstExhausted = (float) Config.Baked.sprintingThirstExhaustion;
 				else if (player.isSprinting() || this.wasSprinting)
-					thirstExhausted = (Config.Baked.sprintingThirstExhaustion + Config.Baked.baseThirstExhaustion) / 2;
+					thirstExhausted = (float) ((Config.Baked.sprintingThirstExhaustion + Config.Baked.baseThirstExhaustion) / 2.0d);
 				else
-					thirstExhausted = Config.Baked.baseThirstExhaustion;
+					thirstExhausted = (float) Config.Baked.baseThirstExhaustion;
 
 				this.addThirstExhaustion(thirstExhausted);
 				this.oldPos = player.position();
@@ -129,7 +129,7 @@ public class ThirstCapability implements IThirstCapability
 	private void applyDangerousEffect(PlayerEntity player) {
 		// Apply dehydration damages
 		this.addThirstDamageCounter(1);
-		float thirstDamageToApply = (float) this.getThirstDamageCounter() * Config.Baked.thirstDamageScaling;
+		float thirstDamageToApply = (float) (this.getThirstDamageCounter() * Config.Baked.thirstDamageScaling);
 		player.hurt(DamageSources.DEHYDRATION, thirstDamageToApply);
 	}
 

@@ -166,7 +166,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     @Override
     public void takeDrink(PlayerEntity player, HydrationEnum type)
     {
-        takeDrink(player, type.getHydration(), type.getSaturation(), type.getDirtiness());
+        takeDrink(player, type.getHydration(), (float) type.getSaturation(), (float) type.getDirtiness());
     }
 
     @Override

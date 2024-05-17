@@ -19,7 +19,7 @@ import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.
 
 public class SeasonalCalendarItem extends Item {
     public SeasonalCalendarItem(Properties properties){
-        super(properties);
+        super(properties.stacksTo(1));
     }
 
     @Override

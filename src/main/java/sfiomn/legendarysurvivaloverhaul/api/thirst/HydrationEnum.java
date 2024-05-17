@@ -11,12 +11,12 @@ public enum HydrationEnum
 	POTION	("potion", Config.Baked.hydrationPotion, Config.Baked.saturationPotion, Config.Baked.dirtyPotion),
 	PURIFIED("purified", Config.Baked.hydrationPurified, Config.Baked.saturationPurified,Config.Baked.dirtyPurified);
 
-	private String name;
-	private int hydration;
-	private float saturation;
-	private float dirty;
+	private final String name;
+	private final int hydration;
+	private final double saturation;
+	private final double dirty;
 
-	private HydrationEnum(String name, int hydration, float saturation, float dirty)
+	private HydrationEnum(String name, int hydration, double saturation, double dirty)
 	{
 		this.name = name;
 		this.hydration = hydration;
@@ -34,12 +34,12 @@ public enum HydrationEnum
 		return hydration;
 	}
 
-	public float getSaturation()
+	public double getSaturation()
 	{
 		return saturation;
 	}
 
-	public float getDirtiness()
+	public double getDirtiness()
 	{
 		return dirty;
 	}

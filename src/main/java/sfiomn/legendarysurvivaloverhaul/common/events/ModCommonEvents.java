@@ -85,7 +85,7 @@ public class ModCommonEvents {
     public static void onJump(LivingEvent.LivingJumpEvent event) {
         Entity entity = event.getEntityLiving();
         if (entity instanceof PlayerEntity && shouldApplyThirst((PlayerEntity) entity) && !entity.level.isClientSide) {
-            ThirstUtil.addExhaustion((PlayerEntity) entity, Config.Baked.onJumpThirstExhaustion);
+            ThirstUtil.addExhaustion((PlayerEntity) entity, (float) Config.Baked.onJumpThirstExhaustion);
         }
     }
 
@@ -93,7 +93,7 @@ public class ModCommonEvents {
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         PlayerEntity player = event.getPlayer();
         if (shouldApplyThirst(player) && !player.level.isClientSide && event.getState().getBlock().canHarvestBlock(event.getState(), event.getWorld(), event.getPos(), player) && event.getState().getDestroySpeed(event.getWorld(), event.getPos()) > 0.0f) {
-            ThirstUtil.addExhaustion(player, Config.Baked.onBlockBreakThirstExhaustion);
+            ThirstUtil.addExhaustion(player, (float) Config.Baked.onBlockBreakThirstExhaustion);
         }
     }
 
@@ -103,7 +103,7 @@ public class ModCommonEvents {
         if (shouldApplyThirst(player) && !player.level.isClientSide) {
             Entity monster = event.getTarget();
             if(monster.isAttackable()) {
-                ThirstUtil.addExhaustion(player, Config.Baked.onAttackThirstExhaustion);
+                ThirstUtil.addExhaustion(player, (float) Config.Baked.onAttackThirstExhaustion);
             }
         }
     }

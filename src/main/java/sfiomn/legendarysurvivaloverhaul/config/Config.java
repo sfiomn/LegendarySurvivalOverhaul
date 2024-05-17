@@ -65,23 +65,27 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> maxTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
 		public final ForgeConfigSpec.ConfigValue<Boolean> hideInfoFromDebug;
-		public final ForgeConfigSpec.ConfigValue<Float> baseFoodExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> baseFoodExhaustion;
 		
 		// Temperature
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureEnabled;
 		public final ForgeConfigSpec.ConfigValue<Boolean> showPotionEffectParticles;
 		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousTemperature;
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureSecondaryEffects;
-		public final ForgeConfigSpec.ConfigValue<Float> heatThirstEffectModifier;
-		public final ForgeConfigSpec.ConfigValue<Float> coldHungerEffectModifier;
+		public final ForgeConfigSpec.ConfigValue<Double> heatThirstEffectModifier;
+		public final ForgeConfigSpec.ConfigValue<Double> coldHungerEffectModifier;
 		
 		public final ForgeConfigSpec.ConfigValue<Boolean> biomeEffectsEnabled;
 		public final ForgeConfigSpec.ConfigValue<Boolean> biomeDrynessEffectEnabled;
 		public final ForgeConfigSpec.ConfigValue<Double> biomeTemperatureMultiplier;
+
+		public final ForgeConfigSpec.ConfigValue<Double> overworldDefaultTemperature;
+		public final ForgeConfigSpec.ConfigValue<Double> netherDefaultTemperature;
+		public final ForgeConfigSpec.ConfigValue<Double> endDefaultTemperature;
 		
-		public final ForgeConfigSpec.ConfigValue<Double> timeMultiplier;
+		public final ForgeConfigSpec.ConfigValue<Double> timeModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> biomeTimeMultiplier;
-		public final ForgeConfigSpec.ConfigValue<Integer> shadeTimeMultiplier;
+		public final ForgeConfigSpec.ConfigValue<Integer> shadeTimeModifier;
 
 		public final ForgeConfigSpec.ConfigValue<Double> altitudeModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> sprintModifier;
@@ -151,30 +155,30 @@ public class Config
 		// Thirst
 		public final ForgeConfigSpec.ConfigValue<Boolean> thirstEnabled;
 		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousThirst;
-		public final ForgeConfigSpec.ConfigValue<Float> thirstDamageScaling;
-		public final ForgeConfigSpec.ConfigValue<Float> thirstEffectModifier;
-		public final ForgeConfigSpec.ConfigValue<Float> baseThirstExhaustion;
-		public final ForgeConfigSpec.ConfigValue<Float> sprintingThirstExhaustion;
-		public final ForgeConfigSpec.ConfigValue<Float> onJumpThirstExhaustion;
-		public final ForgeConfigSpec.ConfigValue<Float> onBlockBreakThirstExhaustion;
-		public final ForgeConfigSpec.ConfigValue<Float> onAttackThirstExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstDamageScaling;
+		public final ForgeConfigSpec.ConfigValue<Double> thirstEffectModifier;
+		public final ForgeConfigSpec.ConfigValue<Double> baseThirstExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> sprintingThirstExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> onJumpThirstExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> onBlockBreakThirstExhaustion;
+		public final ForgeConfigSpec.ConfigValue<Double> onAttackThirstExhaustion;
 		public final ForgeConfigSpec.ConfigValue<Integer> canteenCapacity;
 		public final ForgeConfigSpec.ConfigValue<Integer> largeCanteenCapacity;
 		public final ForgeConfigSpec.ConfigValue<Boolean> allowOverridePurifiedWater;
 		public final ForgeConfigSpec.ConfigValue<Boolean> drinkFromRain;
 		public final ForgeConfigSpec.ConfigValue<Integer> hydrationRain;
-		public final ForgeConfigSpec.ConfigValue<Float> saturationRain;
-		public final ForgeConfigSpec.ConfigValue<Float> dirtyRain;
+		public final ForgeConfigSpec.ConfigValue<Double> saturationRain;
+		public final ForgeConfigSpec.ConfigValue<Double> dirtyRain;
 		public final ForgeConfigSpec.ConfigValue<Boolean> drinkFromWater;
 		public final ForgeConfigSpec.ConfigValue<Integer> hydrationWater;
-		public final ForgeConfigSpec.ConfigValue<Float> saturationWater;
-		public final ForgeConfigSpec.ConfigValue<Float> dirtyWater;
+		public final ForgeConfigSpec.ConfigValue<Double> saturationWater;
+		public final ForgeConfigSpec.ConfigValue<Double> dirtyWater;
 		public final ForgeConfigSpec.ConfigValue<Integer> hydrationPotion;
-		public final ForgeConfigSpec.ConfigValue<Float> saturationPotion;
-		public final ForgeConfigSpec.ConfigValue<Float> dirtyPotion;
+		public final ForgeConfigSpec.ConfigValue<Double> saturationPotion;
+		public final ForgeConfigSpec.ConfigValue<Double> dirtyPotion;
 		public final ForgeConfigSpec.ConfigValue<Integer> hydrationPurified;
-		public final ForgeConfigSpec.ConfigValue<Float> saturationPurified;
-		public final ForgeConfigSpec.ConfigValue<Float> dirtyPurified;
+		public final ForgeConfigSpec.ConfigValue<Double> saturationPurified;
+		public final ForgeConfigSpec.ConfigValue<Double> dirtyPurified;
 		public final ForgeConfigSpec.ConfigValue<Boolean> glassBottleLootAfterDrink;
 
 
@@ -221,13 +225,14 @@ public class Config
 			builder.comment(" Options related to the player food data").push("food");
 			baseFoodExhaustion = builder
 					.comment(" Food exhausted every 10 ticks. Increase the base minecraft food exhaustion.")
-					.define("Base Food Exhaustion", 0.03f);
+					.defineInRange("Base Food Exhaustion", 0.03d, 0, 1000.0D);
 			builder.pop();
 			
 			builder.comment(" Options related to the temperature system").push("temperature");
 			dangerousTemperature = builder
 					.comment(" If enabled, players will take damage from the effects of temperature.")
 					.define("Dangerous Temperature Effects", true);
+
 			builder.push("secondary_effet");
 			temperatureSecondaryEffects = builder
 					.comment(" If enabled, players will also receive other effects from their current temperature state.",
@@ -235,18 +240,22 @@ public class Config
 					.define("Secondary Temperature Effects", true);
 			heatThirstEffectModifier = builder
 					.comment(" How much thirst exhaustion will be added every 50 ticks with no amplification effect.")
-					.define("Heat Thirst Effect Modifier", 0.1f);
+					.defineInRange("Heat Thirst Effect Modifier", 0.1d, 0, 1000.0d);
 			coldHungerEffectModifier = builder
 					.comment(" How much food exhaustion will be added every 50 ticks with no amplification effect.",
 							" As reference, the hunger effect add 0.025 food exhaustion every 50 ticks.")
-					.define("Cold Hunger Modifier", 0.05f);
+					.defineInRange("Cold Hunger Modifier", 0.05d, 0, 1000.0d);
 			builder.pop();
+
 			onFireModifier = builder
 					.comment(" How much of an effect being on fire has on a player's temperature.")
 					.define("Player On Fire Modifier", 12.5d);
 			sprintModifier = builder
 					.comment(" How much of an effect sprinting has on a player's temperature.")
 					.define("Player Sprint Modifier", 1.5d);
+			altitudeModifier = builder
+					.comment(" How much the effects of the player's altitude on temperature are multiplied starting at Y 64.", "Each 64 blocks father from Y 64 will reduce player's temperature by this value.")
+					.define("Altitude Modifier", -3.0d);
 			enchantmentMultiplier = builder
 					.comment(" Increases/decreases the effect that cooling/heating enchantments have on a player's temperature.")
 					.define("Enchantment Modifier", 1.0d);
@@ -268,6 +277,12 @@ public class Config
 					.comment(" How much being wet influences the player's temperature.")
 					.define("Wetness Modifier", -7.0d);
 			builder.pop();
+
+			builder.comment(" Default temperature added to the player, based on the dimension.").push("dimension-default");
+			overworldDefaultTemperature = builder.define( "Default Overworld Modifier", 15.0d);
+			netherDefaultTemperature = builder.define( "Default Nether Modifier", 20.0d);
+			endDefaultTemperature = builder.define( "Default The End Modifier", 10.0d);
+			builder.pop();
 			
 			builder.push("huddling");
 			playerHuddlingModifier = builder
@@ -277,21 +292,7 @@ public class Config
 					.comment(" The radius, in blocks, around which players will add to each other's temperature.")
 					.defineInRange("Player Huddling Radius", 1, 0, 10);
 			builder.pop();
-			
-			builder.push("environment");
 
-			builder.push("flowers");
-			sunFernBiomeNames = builder.comment(" In which biome names the Sun Fern will spawn").define("Sun Fern Biome Names Spawn List", new ArrayList<>());
-			sunFernBiomeCategories = builder.comment(" In which biome categories the Sun Fern will spawn").define("Sun Fern Biome Categories Spawn List", Arrays.asList("DESERT", "SAVANNA"));
-			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn").define("Ice Fern Biome Names Spawn List", new ArrayList<>());
-			iceFernBiomeCategories = builder.comment(" In which biome categories the Ice Fern will spawn").define("Ice Fern Biome Categories Spawn List", Arrays.asList("TAIGA", "ICY"));
-			waterPlantBiomeNames = builder.comment(" In which biome names the Water Plant will spawn").define("Water Plant Biome Names Spawn List", new ArrayList<>());
-			waterPlantBiomeCategories = builder.comment(" In which biome categories the Water Plant will spawn").define("Water Plant Biome Categories Spawn List", Collections.singletonList("DESERT"));
-			builder.pop();
-
-			altitudeModifier = builder
-					.comment(" How much the effects of the player's altitude on temperature are multiplied.")
-					.define("Altitude Modifier", 3.0d);
 			builder.push("biomes");
 			biomeTemperatureMultiplier = builder
 					.comment(" How much a biome's temperature effects are multiplied.")
@@ -314,41 +315,35 @@ public class Config
 			builder.pop();
 			
 			builder.push("time");
-			builder.push("multipliers");
-			timeMultiplier = builder
-					.comment(" How strongly the effects of time on temperature are multiplied.", " Maximum effect at noon and midnight")
-					.defineInRange("Time Multiplier", 2.0d, 0.0d, Double.POSITIVE_INFINITY);
+			timeModifier = builder
+					.comment(" How much Time has effect on Temperature.", " Maximum effect at noon (positive) and midnight (negative), following a sinusoidal")
+					.defineInRange("Time Based Temperature Modifier", 2.0d, 0.0d, Double.POSITIVE_INFINITY);
 			biomeTimeMultiplier = builder
-					.comment(" How strongly different biomes affect temperature, based on time.")
+					.comment(" How strongly time in extreme biomes affect temperature.", "Extreme biomes will multiply the time based temperature by this value, while temperate biome won't be affected by this value, following a linear")
 					.defineInRange("Biome Time Multiplier", 1.75d, 1.0d, Double.POSITIVE_INFINITY);
-			builder.pop();
-			shadeTimeMultiplier = builder
-					.comment(" Staying in the shade or during cloudy weather will reduce player's temperature by this amount based on time of the day.", " Only effective in hot biomes and during day time!")
-					.define("Shade Time Multiplier", 3);
-			builder.pop();
+			shadeTimeModifier = builder
+					.comment(" Staying in the shade or during cloudy weather will reduce player's temperature by this amount based on time of the day (maximum effect at noon, following sinusoidal).", " Only effective in hot biomes and during day time!")
+					.define("Shade Time Modifier", -3);
 			builder.pop();
 
-			builder.comment(" Temperature coat adds temperature effects on armors by using the sewing table.").push("coat");
+			builder.comment(" Temperature coat adds temperature effects on armors by using the sewing table.", "Adaptive means the coating will maintain the player's temperature temperate.").push("coat");
+
 			builder.comment(" Add an adaptive heating effect on armors.").push("heating");
-
-			heatingCoat1Modifier = builder.define("Heating Coat I", 1.0d);
-			heatingCoat2Modifier = builder.define("Heating Coat II", 2.0d);
-			heatingCoat3Modifier = builder.define("Heating Coat III", 3.0d);
-
+			heatingCoat1Modifier = builder.defineInRange("Heating Coat I", 1.0d, 0, 1000.0d);
+			heatingCoat2Modifier = builder.defineInRange("Heating Coat II", 2.0d, 0, 1000.0d);
+			heatingCoat3Modifier = builder.defineInRange("Heating Coat III", 3.0d, 0, 1000.0d);
 			builder.pop();
+
 			builder.comment(" Add an adaptive cooling effect on armors.").push("cooling");
-
-			coolingCoat1Modifier = builder.define("Cooling Coat I", 1.0d);
-			coolingCoat2Modifier = builder.define("Cooling Coat II", 2.0d);
-			coolingCoat3Modifier = builder.define("Cooling Coat III", 3.0d);
-
+			coolingCoat1Modifier = builder.defineInRange("Cooling Coat I", 1.0d, 0, 1000.0d);
+			coolingCoat2Modifier = builder.defineInRange("Cooling Coat II", 2.0d, 0, 1000.0d);
+			coolingCoat3Modifier = builder.defineInRange("Cooling Coat III", 3.0d, 0, 1000.0d);
 			builder.pop();
+
 			builder.comment(" Add an adaptive temperature effect on armors that can both heat and cool the player.").push("thermal");
-
-			thermalCoat1Modifier = builder.define("Thermal Coat I", 1.0d);
-			thermalCoat2Modifier = builder.define("Thermal Coat II", 2.0d);
-			thermalCoat3Modifier = builder.define("Thermal Coat III", 3.0d);
-
+			thermalCoat1Modifier = builder.defineInRange("Thermal Coat I", 1.0d, 0, 1000.0d);
+			thermalCoat2Modifier = builder.defineInRange("Thermal Coat II", 2.0d, 0, 1000.0d);
+			thermalCoat3Modifier = builder.defineInRange("Thermal Coat III", 3.0d, 0, 1000.0d);
 			builder.pop();
 			builder.pop();
 			
@@ -423,12 +418,24 @@ public class Config
 			earlyDrySeasonModifier = builder.define("Early Dry Season Modifier", 3);
 			midDrySeasonModifier = builder.define("Mid Dry Season Modifier", 7);
 			lateDrySeasonModifier = builder.define("Late Dry Season Modifier", 3);
-			
-			builder.pop();
-			
 			builder.pop();
 			builder.pop();
+
 			builder.pop();
+			builder.pop();
+			builder.pop();
+
+			builder.push("environment");
+
+			builder.push("flowers");
+			sunFernBiomeNames = builder.comment(" In which biome names the Sun Fern will spawn").define("Sun Fern Biome Names Spawn List", new ArrayList<>());
+			sunFernBiomeCategories = builder.comment(" In which biome categories the Sun Fern will spawn").define("Sun Fern Biome Categories Spawn List", Arrays.asList("DESERT", "SAVANNA"));
+			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn").define("Ice Fern Biome Names Spawn List", new ArrayList<>());
+			iceFernBiomeCategories = builder.comment(" In which biome categories the Ice Fern will spawn").define("Ice Fern Biome Categories Spawn List", Arrays.asList("TAIGA", "ICY"));
+			waterPlantBiomeNames = builder.comment(" In which biome names the Water Plant will spawn").define("Water Plant Biome Names Spawn List", new ArrayList<>());
+			waterPlantBiomeCategories = builder.comment(" In which biome categories the Water Plant will spawn").define("Water Plant Biome Categories Spawn List", Collections.singletonList("DESERT"));
+			builder.pop();
+
 			builder.pop();
 
 			builder.comment(" Options related to thirst").push("thirst");
@@ -438,34 +445,34 @@ public class Config
 			builder.push("exhaustion");
 			baseThirstExhaustion = builder
 					.comment(" Thirst exhausted every 10 ticks.")
-					.define("Base Thirst Exhaustion", 0.03f);
+					.defineInRange("Base Thirst Exhaustion", 0.03d, 0, 1000.0d);
 			sprintingThirstExhaustion = builder
 					.comment(" Thirst exhausted when sprinting, replacing the base thirst exhausted.")
-					.define("Sprinting Thirst Exhaustion", 0.15f);
+					.defineInRange("Sprinting Thirst Exhaustion", 0.15d, 0, 1000.0d);
 			onJumpThirstExhaustion = builder
 					.comment(" Thirst exhausted on every jump.")
-					.define("On Jump Thirst Exhaustion", 0.3f);
+					.defineInRange("On Jump Thirst Exhaustion", 0.3d, 0, 1000.0d);
 			onBlockBreakThirstExhaustion = builder
 					.comment(" Thirst exhausted on every block break.")
-					.define("On Block Break Thirst Exhaustion", 0.1f);
+					.defineInRange("On Block Break Thirst Exhaustion", 0.1d, 0, 1000.0d);
 			onAttackThirstExhaustion = builder
 					.comment(" Thirst exhausted on every attack.")
-					.define("On Attack Thirst Exhaustion", 0.5f);
+					.defineInRange("On Attack Thirst Exhaustion", 0.5d, 0, 1000.0d);
 			builder.pop();
 			thirstDamageScaling = builder
 					.comment(" Scaling of the damages dealt when the thirst falls at 0. Each tick damage will be increased by this value.")
-					.define("Thirst Damage Scaling", 0.3f);
+					.defineInRange("Thirst Damage Scaling", 0.3d, 0, 1000.0d);
 			thirstEffectModifier = builder
 					.comment(" How many thirst exhaustion will be added every 50 ticks when the player suffers from not amplified Thirst Effect.",
 							" The player will suffer not amplified Thirst Effect from water dirtiness by example.")
-					.define("Thirst Effect Modifier", 0.25f);
+					.defineInRange("Thirst Effect Modifier", 0.25d, 0, 1000);
 			builder.push("canteen");
 			canteenCapacity = builder
 					.comment(" Capacity of the canteen used to store water.")
-					.define("Canteen Capacity", 5);
+					.defineInRange("Canteen Capacity", 5, 0, 1000);
 			largeCanteenCapacity = builder
 					.comment(" Capacity of the large canteen used to store water.")
-					.define("Large Canteen Capacity", 10);
+					.defineInRange("Large Canteen Capacity", 10, 0, 1000);
 			allowOverridePurifiedWater = builder
 					.comment(" Allow override of purified water stored in canteen with normal water.")
 					.define("Allow Override Purified Water", true);
@@ -476,13 +483,13 @@ public class Config
 					.define("Drink From Rain", true);
 			hydrationRain = builder
 					.comment(" Amount of hydration recovered when drinking from the rain.")
-					.define("Hydration", 1);
+					.defineInRange("Hydration", 1, 0, 20);
 			saturationRain = builder
 					.comment(" Amount of saturation recovered when drinking from the rain.")
-					.define("Saturation", 0.0f);
+					.defineInRange("Saturation", 0, 0, 20.0d);
 			dirtyRain = builder
 					.comment(" Chance of getting a thirst effect while drinking from the rain.")
-					.define("Dirty", 0.0f);
+					.defineInRange("Dirty", 0, 0, 1.0d);
 			builder.pop();
 			builder.push("water");
 			drinkFromWater = builder
@@ -490,35 +497,35 @@ public class Config
 					.define("Drink From Water", true);
 			hydrationWater = builder
 					.comment(" Amount of hydration recovered while drinking water.")
-					.define("Hydration", 3);
+					.defineInRange("Hydration", 3, 0, 20);
 			saturationWater = builder
 					.comment(" Amount of saturation recovered while drinking water.")
-					.define("Saturation", 0.0f);
+					.defineInRange("Saturation", 0, 0, 20.0d);
 			dirtyWater = builder
 					.comment(" Chance of getting a thirst effect while drinking water.")
-					.define("Dirty", 0.75f);
+					.defineInRange("Dirty", 0.75d, 0, 1.0d);
 			builder.pop();
 			builder.comment(" Amount recovered by potions with effects").push("potion");
 			hydrationPotion = builder
 					.comment(" Amount of hydration recovered while drinking a potion.")
-					.define("Hydration", 3);
+					.defineInRange("Hydration", 3, 0, 20);
 			saturationPotion = builder
 					.comment(" Amount of saturation recovered while drinking a potion.")
-					.define("Saturation", 0.3f);
+					.defineInRange("Saturation", 0.3d, 0, 20.0d);
 			dirtyPotion = builder
 					.comment(" Chance of getting a thirst effect while drinking a potion.")
-					.define("Dirty", 0.0f);
+					.defineInRange("Dirty", 0, 0, 1.0d);
 			builder.pop();
-			builder.push("purified_water");
+			builder.push("purified-water");
 			hydrationPurified = builder
 					.comment(" Amount of hydration recovered while drinking purified water.")
-					.define("Hydration", 6);
+					.defineInRange("Hydration", 6, 0, 20);
 			saturationPurified = builder
 					.comment(" Amount of saturation recovered while drinking purified water.")
-					.define("Saturation", 1.5f);
+					.defineInRange("Saturation", 1.5d, 0, 20.0d);
 			dirtyPurified = builder
 					.comment(" Chance of getting a thirst effect while drinking purified water.")
-					.define("Dirty", 0.0f);
+					.defineInRange("Dirty", 0, 0, 1.0d);
 			builder.pop();
 			builder.push("juices");
 			glassBottleLootAfterDrink = builder
@@ -562,6 +569,10 @@ public class Config
 
 		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsOffsetY;
+		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsSpawnDimensionDelayInTicks;
+		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsDisplayTimeInTicks;
+		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsFadeInInTicks;
+		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsFadeOutInTicks;
 
 		public final ForgeConfigSpec.ConfigValue<Boolean> showHydrationTooltip;
 		public final ForgeConfigSpec.ConfigValue<Boolean> mergeHydrationAndSaturationTooltip;
@@ -580,14 +591,6 @@ public class Config
 							" This mod render a new food bar as a secondary effect of a cold temperature.",
 							" Disable this animation if the temperature secondary effect is enabled to allow a compatibility with other mods rendering the food bar (by example Appleskin).")
 					.define("Show Vanilla Animation Overlay", true);
-			builder.pop();
-
-			builder.push("season_cards");
-			seasonCardsOffsetX = builder
-					.comment(" The X and Y offset of the season cards. Set both to 0 for no offset.", "By default, render first top quarter vertically and centered horizontally.")
-					.define("Season Cards X Offset", 0);
-			seasonCardsOffsetY = builder
-					.define("Season Cards Y Offset", 0);
 			builder.pop();
 			
 			builder.push("temperature");
@@ -614,6 +617,29 @@ public class Config
 			builder.pop();
 			builder.pop();
 			builder.pop();
+
+			builder.pop();
+
+			builder.push("season-cards");
+			seasonCardsOffsetX = builder
+					.comment(" The X and Y offset of the season cards. Set both to 0 for no offset.", "By default, render first top quarter vertically and centered horizontally.")
+					.define("Season Cards X Offset", 0);
+			seasonCardsOffsetY = builder
+					.define("Season Cards Y Offset", 0);
+			seasonCardsSpawnDimensionDelayInTicks = builder
+					.comment(" The delay before rendering the season card at first player spawn or player dimension change.")
+					.defineInRange("Season Cards Delay In Ticks", 40, 0, Integer.MAX_VALUE);
+			seasonCardsDisplayTimeInTicks = builder
+					.comment(" The display time in ticks that the season card will be fully rendered.")
+					.defineInRange("Season Cards Display Time In Ticks", 40, 0, Integer.MAX_VALUE);
+			seasonCardsFadeInInTicks = builder
+					.comment(" The fade in time in ticks that the season card will appear.")
+					.defineInRange("Season Cards Fade in In Ticks", 20, 0, Integer.MAX_VALUE);
+			seasonCardsFadeOutInTicks = builder
+					.comment(" The fade out time in ticks that the season card will disappear.")
+					.defineInRange("Season Cards Fade Out In Ticks", 20, 0, Integer.MAX_VALUE);
+			builder.pop();
+
 			builder.push("thirst");
 			showHydrationTooltip = builder
 					.comment(" If enabled, show the hydration values in the item tooltip.")
@@ -643,7 +669,7 @@ public class Config
 		public static int maxTickRate;
 		public static int routinePacketSync;
 		public static boolean hideInfoFromDebug;
-		public static float baseFoodExhaustion;
+		public static double baseFoodExhaustion;
 
 
 		// Temperature
@@ -652,34 +678,31 @@ public class Config
 
 		public static boolean dangerousTemperature;
 		public static boolean temperatureSecondaryEffects;
-		public static float heatThirstEffectModifier;
-		public static float coldHungerEffectModifier;
+		public static double heatThirstEffectModifier;
+		public static double coldHungerEffectModifier;
 		public static boolean foodSaturationDisplayed;
 		public static boolean showVanillaAnimationOverlay;
 		
 		public static boolean biomeEffectsEnabled;
 		public static boolean biomeDrynessEffectEnabled;
 		public static double biomeTemperatureMultiplier;
+
+		public static double overworldDefaultTemperature;
+		public static double netherDefaultTemperature;
+		public static double endDefaultTemperature;
 		
 		public static double rainTemperatureModifier;
 		public static double snowTemperatureModifier;
 		
 		public static double altitudeModifier;
-
-		public static List<String> sunFernBiomeNames;
-		public static List<String> sunFernBiomeCategories;
-		public static List<String> iceFernBiomeNames;
-		public static List<String> iceFernBiomeCategories;
-		public static List<String> waterPlantBiomeNames;
-		public static List<String> waterPlantBiomeCategories;
 		
 		public static boolean seasonTemperatureEffects;
 		public static boolean tropicalSeasonsEnabled;
 		public static boolean seasonCardsEnabled;
 		
-		public static double timeMultiplier;
+		public static double timeModifier;
 		public static double biomeTimeMultiplier;
-		public static int shadeTimeMultiplier;
+		public static int shadeTimeModifier;
 		public static int tempInfluenceMaximumDist;
 		public static double tempInfluenceUpDistMultiplier;
 		public static double tempInfluenceOutsideDistMultiplier;
@@ -729,35 +752,42 @@ public class Config
 		public static int midDrySeasonModifier;
 		public static int lateDrySeasonModifier;
 
+		public static List<String> sunFernBiomeNames;
+		public static List<String> sunFernBiomeCategories;
+		public static List<String> iceFernBiomeNames;
+		public static List<String> iceFernBiomeCategories;
+		public static List<String> waterPlantBiomeNames;
+		public static List<String> waterPlantBiomeCategories;
+
 		// Thirst
 		public static boolean thirstEnabled;
 		public static boolean dangerousThirst;
-		public static float thirstDamageScaling;
-		public static float thirstEffectModifier;
+		public static double thirstDamageScaling;
+		public static double thirstEffectModifier;
 		public static boolean showHydrationTooltip;
 		public static boolean mergeHydrationAndSaturationTooltip;
-		public static float baseThirstExhaustion;
-		public static float sprintingThirstExhaustion;
-		public static float onJumpThirstExhaustion;
-		public static float onBlockBreakThirstExhaustion;
-		public static float onAttackThirstExhaustion;
+		public static double baseThirstExhaustion;
+		public static double sprintingThirstExhaustion;
+		public static double onJumpThirstExhaustion;
+		public static double onBlockBreakThirstExhaustion;
+		public static double onAttackThirstExhaustion;
 		public static int canteenCapacity;
 		public static int largeCanteenCapacity;
 		public static boolean allowOverridePurifiedWater;
 		public static boolean drinkFromRain;
 		public static int hydrationRain;
-		public static float saturationRain;
-		public static float dirtyRain;
+		public static double saturationRain;
+		public static double dirtyRain;
 		public static boolean drinkFromWater;
 		public static int hydrationWater;
-		public static float saturationWater;
-		public static float dirtyWater;
+		public static double saturationWater;
+		public static double dirtyWater;
 		public static int hydrationPotion;
-		public static float saturationPotion;
-		public static float dirtyPotion;
+		public static double saturationPotion;
+		public static double dirtyPotion;
 		public static int hydrationPurified;
-		public static float saturationPurified;
-		public static float dirtyPurified;
+		public static double saturationPurified;
+		public static double dirtyPurified;
 		public static boolean glassBottleLootAfterDrink;
 
 
@@ -776,6 +806,10 @@ public class Config
 
 		public static int seasonCardsOffsetX;
 		public static int seasonCardsOffsetY;
+		public static int seasonCardsSpawnDimensionDelayInTicks;
+		public static int seasonCardsDisplayTimeInTicks;
+		public static int seasonCardsFadeInInTicks;
+		public static int seasonCardsFadeOutInTicks;
 		
 		public static int wetnessIndicatorOffsetX;
 		public static int wetnessIndicatorOffsetY;
@@ -799,25 +833,21 @@ public class Config
 				temperatureSecondaryEffects = COMMON.temperatureSecondaryEffects.get();
 				heatThirstEffectModifier = COMMON.heatThirstEffectModifier.get();
 				coldHungerEffectModifier = COMMON.coldHungerEffectModifier.get();
-				
-				altitudeModifier = COMMON.altitudeModifier.get();
 
-				sunFernBiomeNames = COMMON.sunFernBiomeNames.get();
-				sunFernBiomeCategories = COMMON.sunFernBiomeCategories.get();
-				iceFernBiomeNames = COMMON.iceFernBiomeNames.get();
-				iceFernBiomeCategories = COMMON.iceFernBiomeCategories.get();
-				waterPlantBiomeNames = COMMON.waterPlantBiomeNames.get();
-				waterPlantBiomeCategories = COMMON.waterPlantBiomeCategories.get();
+				overworldDefaultTemperature = COMMON.overworldDefaultTemperature.get();
+				netherDefaultTemperature = COMMON.netherDefaultTemperature.get();
+				endDefaultTemperature = COMMON.endDefaultTemperature.get();
 
 				rainTemperatureModifier = COMMON.rainTemperatureModifier.get();
 				snowTemperatureModifier = COMMON.snowTemperatureModifier.get();
-				
+
+				altitudeModifier = COMMON.altitudeModifier.get();
 				biomeEffectsEnabled = COMMON.biomeEffectsEnabled.get();
 				biomeDrynessEffectEnabled = COMMON.biomeDrynessEffectEnabled.get();
 				biomeTemperatureMultiplier = COMMON.biomeTemperatureMultiplier.get();
-				timeMultiplier = COMMON.timeMultiplier.get();
+				timeModifier = COMMON.timeModifier.get();
 				biomeTimeMultiplier = COMMON.biomeTimeMultiplier.get();
-				shadeTimeMultiplier = COMMON.shadeTimeMultiplier.get();
+				shadeTimeModifier = COMMON.shadeTimeModifier.get();
 
 				tempInfluenceMaximumDist = COMMON.tempInfluenceMaximumDist.get();
 				tempInfluenceUpDistMultiplier = COMMON.tempInfluenceUpDistMultiplier.get();
@@ -872,6 +902,13 @@ public class Config
 				earlyDrySeasonModifier = COMMON.earlyDrySeasonModifier.get();
 				midDrySeasonModifier = COMMON.midDrySeasonModifier.get();
 				lateDrySeasonModifier = COMMON.lateDrySeasonModifier.get();
+
+				sunFernBiomeNames = COMMON.sunFernBiomeNames.get();
+				sunFernBiomeCategories = COMMON.sunFernBiomeCategories.get();
+				iceFernBiomeNames = COMMON.iceFernBiomeNames.get();
+				iceFernBiomeCategories = COMMON.iceFernBiomeCategories.get();
+				waterPlantBiomeNames = COMMON.waterPlantBiomeNames.get();
+				waterPlantBiomeCategories = COMMON.waterPlantBiomeCategories.get();
 
 				thirstEnabled = COMMON.thirstEnabled.get();
 				dangerousThirst = COMMON.dangerousThirst.get();
@@ -930,6 +967,10 @@ public class Config
 
 				seasonCardsOffsetX = CLIENT.seasonCardsOffsetX.get();
 				seasonCardsOffsetY = CLIENT.seasonCardsOffsetY.get();
+				seasonCardsSpawnDimensionDelayInTicks = CLIENT.seasonCardsSpawnDimensionDelayInTicks.get();
+				seasonCardsDisplayTimeInTicks = CLIENT.seasonCardsDisplayTimeInTicks.get();
+				seasonCardsFadeInInTicks = CLIENT.seasonCardsFadeInInTicks.get();
+				seasonCardsFadeOutInTicks = CLIENT.seasonCardsFadeOutInTicks.get();
 				
 				wetnessIndicatorOffsetX = CLIENT.wetnessIndicatorOffsetX.get();
 				wetnessIndicatorOffsetY = CLIENT.wetnessIndicatorOffsetY.get();

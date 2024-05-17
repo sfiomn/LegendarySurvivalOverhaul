@@ -18,7 +18,7 @@ public class ColdHungerEffect extends GenericEffect {
     {
         if(entity instanceof PlayerEntity)
         {
-            ((PlayerEntity)entity).causeFoodExhaustion(Config.Baked.coldHungerEffectModifier * (float)(amplifier + 1));
+            ((PlayerEntity)entity).causeFoodExhaustion((float) (Config.Baked.coldHungerEffectModifier * (amplifier + 1)));
         }
     }
 

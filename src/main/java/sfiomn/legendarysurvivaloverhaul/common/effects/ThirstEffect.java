@@ -23,7 +23,7 @@ public class ThirstEffect extends GenericEffect
 			ThirstCapability thirstCapability = CapabilityUtil.getThirstCapability((PlayerEntity) entity);
 
 			// Twice strength of Hunger effect
-			thirstCapability.addThirstExhaustion(Config.Baked.thirstEffectModifier * (float)(amplifier + 1));
+			thirstCapability.addThirstExhaustion((float) (Config.Baked.thirstEffectModifier * amplifier + 1));
 		}
 	}
 

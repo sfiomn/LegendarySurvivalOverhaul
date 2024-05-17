@@ -51,7 +51,7 @@ public class HydrationTooltip {
     }
 
     public HydrationTooltip(HydrationEnum hydrationEnum) {
-        this(hydrationEnum.getHydration(), hydrationEnum.getSaturation(), hydrationEnum.getDirtiness());
+        this(hydrationEnum.getHydration(), (float) hydrationEnum.getSaturation(), (float) hydrationEnum.getDirtiness());
     }
 
     public String getPlaceholderTooltip() {
