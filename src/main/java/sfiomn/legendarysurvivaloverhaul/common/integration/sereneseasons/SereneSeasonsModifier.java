@@ -100,85 +100,76 @@ public class SereneSeasonsModifier extends ModifierBase
 		for (Vector3i offset : posOffsets)
 		{
 			Biome biome = world.getBiome(pos.offset(offset));
-			float temperature = biome.getBaseTemperature();
-			
-			boolean useTropicalMods;
+			int seasonType = SereneSeasonsUtil.getSeasonType(biome);
 
-			ResourceLocation biomeName = biome.getRegistryName();
+			if (seasonType == 2)
+				continue;
 			
-			if (biomeName != null && biomeIdentities.containsKey(biomeName.toString())) {
-				SSBiomeIdentity identity = biomeIdentities.get(biomeName.toString());
-				if (!identity.seasonEffects)
-					continue;
-				useTropicalMods = identity.isTropical;
+			boolean useTropicalMods = seasonType == 1 && Config.Baked.tropicalSeasonsEnabled;
+
+			if (!useTropicalMods) {
+				switch(seasonState.getSubSeason())
+				{
+				case EARLY_SPRING:
+					value += Config.Baked.earlySpringModifier;
+					break;
+				case MID_SPRING:
+					value += Config.Baked.midSpringModifier;
+					break;
+				case LATE_SPRING:
+					value += Config.Baked.lateSpringModifier;
+					break;
+				case EARLY_SUMMER:
+					value += Config.Baked.earlySummerModifier;
+					break;
+				case MID_SUMMER:
+					value += Config.Baked.midSummerModifier;
+					break;
+				case LATE_SUMMER:
+					value += Config.Baked.lateSummerModifier;
+					break;
+				case EARLY_AUTUMN:
+					value += Config.Baked.earlyAutumnModifier;
+					break;
+				case MID_AUTUMN:
+					value += Config.Baked.midAutumnModifier;
+					break;
+				case LATE_AUTUMN:
+					value += Config.Baked.lateAutumnModifier;
+					break;
+				case EARLY_WINTER:
+					value += Config.Baked.earlyWinterModifier;
+					break;
+				case MID_WINTER:
+					value +=  Config.Baked.midWinterModifier;
+					break;
+				case LATE_WINTER:
+					value += Config.Baked.lateWinterModifier;
+					break;
+				}
 			} else {
-				useTropicalMods = temperature > 0.8f;
+				switch (seasonState.getTropicalSeason())
+				{
+				case EARLY_DRY:
+					value += Config.Baked.earlyDrySeasonModifier;
+					break;
+				case MID_DRY:
+					value += Config.Baked.midDrySeasonModifier;
+					break;
+				case LATE_DRY:
+					value += Config.Baked.lateDrySeasonModifier;
+					break;
+				case EARLY_WET:
+					value += Config.Baked.earlyWetSeasonModifier;
+					break;
+				case MID_WET:
+					value += Config.Baked.midWetSeasonModifier;
+					break;
+				case LATE_WET:
+					value += Config.Baked.lateWetSeasonModifier;
+					break;
+				}
 			}
-
-			if (!Config.Baked.tropicalSeasonsEnabled)
-                if (!useTropicalMods) {
-                    switch(seasonState.getSubSeason())
-                    {
-                    case EARLY_SPRING:
-                        value += Config.Baked.earlySpringModifier;
-                        break;
-                    case MID_SPRING:
-                        value += Config.Baked.midSpringModifier;
-                        break;
-                    case LATE_SPRING:
-                        value += Config.Baked.lateSpringModifier;
-                        break;
-                    case EARLY_SUMMER:
-                        value += Config.Baked.earlySummerModifier;
-                        break;
-                    case MID_SUMMER:
-                        value += Config.Baked.midSummerModifier;
-                        break;
-                    case LATE_SUMMER:
-                        value += Config.Baked.lateSummerModifier;
-                        break;
-                    case EARLY_AUTUMN:
-                        value += Config.Baked.earlyAutumnModifier;
-                        break;
-                    case MID_AUTUMN:
-                        value += Config.Baked.midAutumnModifier;
-                        break;
-                    case LATE_AUTUMN:
-                        value += Config.Baked.lateAutumnModifier;
-                        break;
-                    case EARLY_WINTER:
-                        value += Config.Baked.earlyWinterModifier;
-                        break;
-                    case MID_WINTER:
-                        value +=  Config.Baked.midWinterModifier;
-                        break;
-                    case LATE_WINTER:
-                        value += Config.Baked.lateWinterModifier;
-                        break;
-                    }
-                } else {
-                    switch (seasonState.getTropicalSeason())
-                    {
-                    case EARLY_DRY:
-                        value += Config.Baked.earlyDrySeasonModifier;
-                        break;
-                    case MID_DRY:
-                        value += Config.Baked.midDrySeasonModifier;
-                        break;
-                    case LATE_DRY:
-                        value += Config.Baked.lateDrySeasonModifier;
-                        break;
-                    case EARLY_WET:
-                        value += Config.Baked.earlyWetSeasonModifier;
-                        break;
-                    case MID_WET:
-                        value += Config.Baked.midWetSeasonModifier;
-                        break;
-                    case LATE_WET:
-                        value += Config.Baked.lateWetSeasonModifier;
-                        break;
-                    }
-                }
         }
 		
 		value /= posOffsets.length;

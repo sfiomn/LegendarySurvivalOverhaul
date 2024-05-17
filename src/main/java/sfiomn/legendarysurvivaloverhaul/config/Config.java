@@ -380,10 +380,10 @@ public class Config
 					.comment(" If Serene Seasons is installed, then seasons", " will have an effect on the player's temperature.")
 					.define("Seasons affect Temperature", true);
 			tropicalSeasonsEnabled = builder
-					.comment(" If the tropical seasons are disabled", " the normal summer-autumn-winter-spring seasons are applied.")
+					.comment(" If the tropical seasons are disabled, the normal summer-autumn-winter-spring seasons are applied.", "If disabled, dry and wet seasons are applied for hot biomes.")
 					.define("Tropical Seasons Enabled", true);
 			seasonCardsEnabled = builder
-					.comment(" If season cards are enabled", " season cards will appear at every season changes.")
+					.comment(" If season cards are enabled, season cards will appear at every season changes.")
 					.define("Season Cards Enabled", true);
 
 			builder.comment("Temperature modifiers per season in temperate biomes.").push("temperate");
@@ -560,6 +560,9 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetY;
 
+		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsOffsetX;
+		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsOffsetY;
+
 		public final ForgeConfigSpec.ConfigValue<Boolean> showHydrationTooltip;
 		public final ForgeConfigSpec.ConfigValue<Boolean> mergeHydrationAndSaturationTooltip;
 		public final ForgeConfigSpec.ConfigValue<Boolean> thirstSaturationDisplayed;
@@ -577,6 +580,14 @@ public class Config
 							" This mod render a new food bar as a secondary effect of a cold temperature.",
 							" Disable this animation if the temperature secondary effect is enabled to allow a compatibility with other mods rendering the food bar (by example Appleskin).")
 					.define("Show Vanilla Animation Overlay", true);
+			builder.pop();
+
+			builder.push("season_cards");
+			seasonCardsOffsetX = builder
+					.comment(" The X and Y offset of the season cards. Set both to 0 for no offset.", "By default, render first top quarter vertically and centered horizontally.")
+					.define("Season Cards X Offset", 0);
+			seasonCardsOffsetY = builder
+					.define("Season Cards Y Offset", 0);
 			builder.pop();
 			
 			builder.push("temperature");
@@ -762,6 +773,9 @@ public class Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
+
+		public static int seasonCardsOffsetX;
+		public static int seasonCardsOffsetY;
 		
 		public static int wetnessIndicatorOffsetX;
 		public static int wetnessIndicatorOffsetY;
@@ -913,6 +927,9 @@ public class Config
 				temperatureDisplayOffsetX = CLIENT.temperatureDisplayOffsetX.get();
 				temperatureDisplayOffsetY = CLIENT.temperatureDisplayOffsetY.get();
 				showVanillaAnimationOverlay = CLIENT.showVanillaAnimationOverlay.get();
+
+				seasonCardsOffsetX = CLIENT.seasonCardsOffsetX.get();
+				seasonCardsOffsetY = CLIENT.seasonCardsOffsetY.get();
 				
 				wetnessIndicatorOffsetX = CLIENT.wetnessIndicatorOffsetX.get();
 				wetnessIndicatorOffsetY = CLIENT.wetnessIndicatorOffsetY.get();

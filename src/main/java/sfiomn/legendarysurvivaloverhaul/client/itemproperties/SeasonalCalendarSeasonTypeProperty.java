@@ -13,6 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SSBiomeIdentity;
+import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier.biomeIdentities;
@@ -41,21 +42,14 @@ public class SeasonalCalendarSeasonTypeProperty implements IItemPropertyGetter {
             try
             {
                 Biome biome = world.getBiome(new BlockPos(holder.position()));
-                ResourceLocation biomeName = biome.getRegistryName();
-                float temperature = biome.getBaseTemperature();
-                boolean isTropical;
+                int seasonType = SereneSeasonsUtil.getSeasonType(biome);
 
-                if (biomeName != null && biomeIdentities.containsKey(biomeName.toString())) {
-                    SSBiomeIdentity identity = biomeIdentities.get(biomeName.toString());
-                    if (!identity.seasonEffects)
-                        return 2.0f;
-                    else
-                        isTropical = identity.isTropical;
-                } else
-                    isTropical = temperature > 0.8f;
-                if (Config.Baked.tropicalSeasonsEnabled && isTropical)
+                if (seasonType == 2)
+                    return 2.0f;
+                else if (seasonType == 1 && Config.Baked.tropicalSeasonsEnabled)
                     return 1.0f;
-                return 0;
+                else
+                    return 0;
             }
             catch (NullPointerException e)
             {
