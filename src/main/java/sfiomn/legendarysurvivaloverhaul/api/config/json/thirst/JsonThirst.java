@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.api.config.json.temperature;
+package sfiomn.legendarysurvivaloverhaul.api.config.json.thirst;
 
 import com.google.gson.annotations.SerializedName;
 

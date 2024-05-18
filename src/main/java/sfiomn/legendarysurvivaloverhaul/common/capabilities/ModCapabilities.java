@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.network.PacketDistributor;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageProvider;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodProvider;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
@@ -43,6 +44,7 @@ public class ModCapabilities
 	public static final ResourceLocation THIRST_RES = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirst");
 	public static final ResourceLocation HEART_MOD_RES = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "heart_modifier");
 	public static final ResourceLocation FOOD_RES = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "food");
+	public static final ResourceLocation BODY_DAMAGE_RES = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "body_damage");
 	
 	@SubscribeEvent
 	public static void attachCapabilityPlayer(AttachCapabilitiesEvent<Entity> event)
@@ -56,6 +58,7 @@ public class ModCapabilities
 				event.addCapability(THIRST_RES, new ThirstProvider());
 				event.addCapability(HEART_MOD_RES, new HeartModifierProvider());
 				event.addCapability(FOOD_RES, new FoodProvider());
+				event.addCapability(BODY_DAMAGE_RES, new BodyDamageProvider());
 			}
 		}
 	}

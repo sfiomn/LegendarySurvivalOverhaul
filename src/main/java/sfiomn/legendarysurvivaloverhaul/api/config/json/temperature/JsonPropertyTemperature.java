@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.state.Property;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;

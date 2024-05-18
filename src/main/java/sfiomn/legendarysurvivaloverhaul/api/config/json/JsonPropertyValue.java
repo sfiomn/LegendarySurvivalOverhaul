@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.api.config.json.temperature;
+package sfiomn.legendarysurvivaloverhaul.api.config.json;
 
 /**
  * Code taken and adapted from Charles445's SimpleDifficulty mod

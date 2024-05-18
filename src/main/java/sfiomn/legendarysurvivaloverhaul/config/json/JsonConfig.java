@@ -2,7 +2,9 @@ package sfiomn.legendarysurvivaloverhaul.config.json;
 
 import com.google.common.collect.Maps;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 
 import java.util.ArrayList;

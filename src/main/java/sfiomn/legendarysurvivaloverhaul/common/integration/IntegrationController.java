@@ -2,7 +2,7 @@ package sfiomn.legendarysurvivaloverhaul.common.integration;
 
 import net.minecraftforge.fml.ModList;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyValue;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 
 /**

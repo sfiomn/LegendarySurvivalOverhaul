@@ -12,6 +12,7 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.init.ModFertility;
 import sereneseasons.init.ModTags;
+import sereneseasons.season.SeasonTime;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 import java.util.Objects;
@@ -23,25 +24,22 @@ public class SereneSeasonsUtil {
         StringBuilder seasonText = new StringBuilder();
 
         ISeasonState season = SeasonHelper.getSeasonState(world);
+        int seasonType = getSeasonType(world.getBiome(blockPos));
+        int subSeasonDuration = (int) ((double) season.getSubSeasonDuration() / (double) season.getDayDuration());
 
-        if (season == null) {
+        if (season == null || seasonType == 2) {
             return new StringTextComponent("");
-        }
-
-        Biome biome = world.getBiome(blockPos);
-        int seasonType = getSeasonType(biome);
-        if (seasonType == 2)
-            return new StringTextComponent("");
-        else if (seasonType == 1 && Config.Baked.tropicalSeasonsEnabled) {
+        } else if (seasonType == 1 && Config.Baked.tropicalSeasonsEnabled) {
             for(String word : season.getTropicalSeason().toString().split("_", 0)) {
                 seasonText.append(word.charAt(0)).append(word.substring(1).toLowerCase()).append(" ");
             }
+            seasonText.append("Season").append(", Day ").append((season.getDay() + subSeasonDuration) % (subSeasonDuration * 2)).append("/").append(subSeasonDuration * 2);
         } else {
             for(String word : season.getSubSeason().toString().split("_", 0)) {
                 seasonText.append(word.charAt(0)).append(word.substring(1).toLowerCase()).append(" ");
             }
+            seasonText.append("Season").append(", Day ").append(season.getDay() % subSeasonDuration).append("/").append(subSeasonDuration);
         }
-        seasonText.append("Season");
         return new StringTextComponent(seasonText.toString());
     }
 

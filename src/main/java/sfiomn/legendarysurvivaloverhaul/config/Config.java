@@ -59,7 +59,6 @@ public class Config
 	public static class Common
 	{
 		// Core/Advanced
-		
 		// public final ForgeConfigSpec.ConfigValue<Boolean> forceDisableFlightKick;
 		public final ForgeConfigSpec.ConfigValue<Integer> minTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> maxTickRate;
@@ -181,7 +180,6 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Double> dirtyPurified;
 		public final ForgeConfigSpec.ConfigValue<Boolean> glassBottleLootAfterDrink;
 
-
 		// Heart Fruits
 		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsEnabled;
 		
@@ -191,7 +189,8 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> additionalHeartsPerFruit;
 		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsGiveRegen;
 
-		
+		// Localized Body Damage
+		public final ForgeConfigSpec.ConfigValue<Boolean> localizedBodyDamageEnabled;
 		
 		Common(ForgeConfigSpec.Builder builder)
 		{
@@ -209,6 +208,9 @@ public class Config
 			heartFruitsEnabled = builder
 					.comment(" Whether or not heart fruits are functional and generate in-world.")
 					.define("Heart Fruits Enabled", true);
+			localizedBodyDamageEnabled = builder
+					.comment(" Whether or not body members receive localized damages.")
+					.define("Localized Body Damage Enabled", true);
 			hideInfoFromDebug = builder
 					.comment(" Id enabled, information like position will be hidden from the debug screen (F3).")
 					.define("Hide Info From Debug", true);
@@ -671,7 +673,6 @@ public class Config
 		public static boolean hideInfoFromDebug;
 		public static double baseFoodExhaustion;
 
-
 		// Temperature
 		public static boolean temperatureEnabled;
 		public static boolean showPotionEffectParticles;
@@ -752,6 +753,7 @@ public class Config
 		public static int midDrySeasonModifier;
 		public static int lateDrySeasonModifier;
 
+		// Environment
 		public static List<String> sunFernBiomeNames;
 		public static List<String> sunFernBiomeCategories;
 		public static List<String> iceFernBiomeNames;
@@ -790,7 +792,6 @@ public class Config
 		public static double dirtyPurified;
 		public static boolean glassBottleLootAfterDrink;
 
-
 		// Heart fruit
 		public static boolean heartFruitsEnabled;
 		public static int heartsLostOnDeath;
@@ -798,7 +799,9 @@ public class Config
 		public static int additionalHeartsPerFruit;
 		public static boolean heartFruitsGiveRegen;
 
-		
+		// Body members damage
+		public static boolean localizedBodyDamageEnabled;
+
 		// Client Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
@@ -946,6 +949,8 @@ public class Config
 				maxAdditionalHearts = COMMON.maxAdditionalHearts.get();
 				additionalHeartsPerFruit = COMMON.additionalHeartsPerFruit.get();
 				heartFruitsGiveRegen = COMMON.heartFruitsGiveRegen.get();
+
+				localizedBodyDamageEnabled = COMMON.localizedBodyDamageEnabled.get();
 
 			}
 			catch (Exception e)

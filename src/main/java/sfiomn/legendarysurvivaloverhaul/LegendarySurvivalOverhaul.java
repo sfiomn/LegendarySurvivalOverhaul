@@ -29,6 +29,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
@@ -39,6 +40,8 @@ import sfiomn.legendarysurvivaloverhaul.client.itemproperties.SeasonalCalendarSe
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.ThermometerProperty;
 import sfiomn.legendarysurvivaloverhaul.client.screens.SewingTableScreen;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ThermalScreen;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageStorage;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodStorage;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
@@ -54,6 +57,7 @@ import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.registry.*;
+import sfiomn.legendarysurvivaloverhaul.util.internal.BodyDamageUtilInternal;
 import sfiomn.legendarysurvivaloverhaul.util.internal.TemperatureUtilInternal;
 import sfiomn.legendarysurvivaloverhaul.util.internal.ThirstUtilInternal;
 
@@ -132,6 +136,7 @@ public class LegendarySurvivalOverhaul
 		
 		TemperatureUtil.internal = new TemperatureUtilInternal();
 		ThirstUtil.internal = new ThirstUtilInternal();
+		BodyDamageUtil.internal = new BodyDamageUtilInternal();
 		modIntegration();
 	}
 	
@@ -161,6 +166,8 @@ public class LegendarySurvivalOverhaul
 	public static final Capability<ThirstCapability> THIRST_CAP = null;
 	@CapabilityInject(FoodCapability.class)
 	public static final Capability<FoodCapability> FOOD_CAP = null;
+	@CapabilityInject(BodyDamageCapability.class)
+	public static final Capability<BodyDamageCapability> BODY_DAMAGE_CAP = null;
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
@@ -170,6 +177,7 @@ public class LegendarySurvivalOverhaul
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
 		CapabilityManager.INSTANCE.register(TemperatureItemCapability.class, new TemperatureItemCapability.Storage(), TemperatureItemCapability::new);
 		CapabilityManager.INSTANCE.register(FoodCapability.class, new FoodStorage(), FoodCapability::new);
+		CapabilityManager.INSTANCE.register(BodyDamageCapability.class, new BodyDamageStorage(), BodyDamageCapability::new);
 
 		NetworkHandler.register();
 		

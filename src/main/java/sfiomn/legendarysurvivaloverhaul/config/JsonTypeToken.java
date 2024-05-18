@@ -2,6 +2,7 @@ package sfiomn.legendarysurvivaloverhaul.config;
 
 import com.google.gson.reflect.TypeToken;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
 
 import java.lang.reflect.Type;
 import java.util.List;
