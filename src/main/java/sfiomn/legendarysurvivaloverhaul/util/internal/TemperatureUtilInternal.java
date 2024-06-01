@@ -1,12 +1,15 @@
 package sfiomn.legendarysurvivaloverhaul.util.internal;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DebugStickItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ITemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
@@ -28,14 +31,24 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 		
 		for(ModifierBase modifier : GameRegistry.findRegistry(ModifierBase.class).getValues())
 		{
-			sum += modifier.getWorldInfluence(world, pos);
-			sum += modifier.getPlayerInfluence(player);
+			float worldInfluence = modifier.getWorldInfluence(world, pos);
+			float playerInfluence = modifier.getPlayerInfluence(player);
+			if (player.getMainHandItem().getItem() == Items.DEBUG_STICK) {
+				LegendarySurvivalOverhaul.LOGGER.debug(modifier.getRegistryName() + " : world influence=" + worldInfluence + ", player influence=" + playerInfluence);
+			}
+
+			sum += worldInfluence + playerInfluence;
 		}
 		
 		for (DynamicModifierBase dynamicModifier : GameRegistry.findRegistry(DynamicModifierBase.class).getValues())
 		{
-			sum += dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);
-			sum += dynamicModifier.applyDynamicPlayerInfluence(player, sum);
+			float worldInfluence = dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);
+			float playerInfluence = dynamicModifier.applyDynamicPlayerInfluence(player, sum);
+			if (player.getMainHandItem().getItem() == Items.DEBUG_STICK) {
+				LegendarySurvivalOverhaul.LOGGER.debug(dynamicModifier.getRegistryName() + " : world influence=" + worldInfluence + ", player influence=" + playerInfluence);
+			}
+
+			sum += worldInfluence + playerInfluence;
 		}
 		return MathUtil.round(sum, 1);
 	}

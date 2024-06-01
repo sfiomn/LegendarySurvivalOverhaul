@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
-import sfiomn.legendarysurvivaloverhaul.common.items.CanteenItem;
+import sfiomn.legendarysurvivaloverhaul.common.items.drink.CanteenItem;
 import sfiomn.legendarysurvivaloverhaul.data.recipes.CanteenBlastingRecipe;
 import sfiomn.legendarysurvivaloverhaul.data.recipes.CanteenFurnaceRecipe;
 import sfiomn.legendarysurvivaloverhaul.data.recipes.SewingRecipe;

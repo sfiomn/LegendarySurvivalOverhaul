@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.common.items;
+package sfiomn.legendarysurvivaloverhaul.common.items.drink;
 
 public class JuiceItem extends BottledDrinkItem {
     public JuiceItem(Properties properties) {

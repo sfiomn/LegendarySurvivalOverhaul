@@ -23,9 +23,9 @@ public class HeartFruitItem extends Item
 {
 	public static final Food FOOD_STATS = (new Food.Builder()).nutrition(6).saturationMod(2.5f).alwaysEat().build();
 	
-	public HeartFruitItem()
+	public HeartFruitItem(Properties properties)
 	{
-		super(new Item.Properties().tab(ItemGroup.TAB_FOOD).rarity(Rarity.RARE).food(FOOD_STATS));
+		super(properties.food(FOOD_STATS));
 	}
 	
 	@Override

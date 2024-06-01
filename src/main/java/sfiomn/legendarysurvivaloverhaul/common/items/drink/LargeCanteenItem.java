@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.common.items;
+package sfiomn.legendarysurvivaloverhaul.common.items.drink;
 
 import net.minecraft.item.ItemStack;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;

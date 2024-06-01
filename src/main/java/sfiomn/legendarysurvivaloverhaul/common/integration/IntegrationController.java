@@ -1,9 +1,15 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration;
 
 import net.minecraftforge.fml.ModList;
+import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
+import sfiomn.legendarysurvivaloverhaul.api.bodydamage.DamageDistributionEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
+import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * This class is specifically for implementing default configuration values
@@ -35,6 +41,10 @@ public final class IntegrationController
 			initBiomesOPlenty();
 		if (mods.isLoaded("betterendforge"))
 			initBetterEndForge();
+		if (mods.isLoaded("atmospheric"))
+			initAtmospheric();
+		if (mods.isLoaded("legendarycreatures"))
+			initLegendaryCreatures();
 		
 		if (mods.isLoaded("neapolitan"))
 		{
@@ -68,6 +78,11 @@ public final class IntegrationController
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:pumpkin_soup", 2, 2400);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:baked_cod_stew", 2, 2400);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "farmersdelight:hot_cocoa", 3, 3600);
+
+		JsonConfig.registerConsumableThirst("farmersdelight:chicken_soup", 2, 1.0f);
+		JsonConfig.registerConsumableThirst("farmersdelight:vegetable_soup", 2, 1.0f);
+		JsonConfig.registerConsumableThirst("farmersdelight:pumpkin_soup", 2, 1.0f);
+		JsonConfig.registerConsumableThirst("farmersdelight:hot_cocoa", 4, 1.0f);
 	}
 	
 	private static void initRealisticTorches()
@@ -84,7 +99,7 @@ public final class IntegrationController
 	private static void initBYG()
 	{
 		JsonConfig.registerBlockTemperature("byg:boric_fire", 5.0f);
-		JsonConfig.registerBlockTemperature("byg:boric_campfire", 7.5f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockTemperature("byg:boric_campfire", 10.0f, new JsonPropertyValue("lit", "true"));
 		JsonConfig.registerBlockTemperature("byg:boric_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
 
 		JsonConfig.registerBlockTemperature("byg:cryptic_fire", 5.0f);
@@ -101,8 +116,8 @@ public final class IntegrationController
 	
 	private static void initEndergeticExpansion() 
 	{
-		JsonConfig.registerBlockTemperature("endergetic:ender_fire", -5.0f);
-		JsonConfig.registerBlockTemperature("endergetic:ender_campfire", -7.5f);
+		JsonConfig.registerBlockTemperature("endergetic:ender_fire", -10.0f);
+		JsonConfig.registerBlockTemperature("endergetic:ender_campfire", -16.0f);
 		JsonConfig.registerBlockTemperature("endergetic:ender_torch", -1.5f);
 		JsonConfig.registerBlockTemperature("endergetic:ender_wall_torch", -1.5f);
 	}
@@ -110,7 +125,7 @@ public final class IntegrationController
 	private static void initInfernalExpansion()
 	{
 		JsonConfig.registerBlockTemperature("infernalexp:fire_glow", 5.0f);
-		JsonConfig.registerBlockTemperature("infernalexp:campfire_glow", 7.5f);
+		JsonConfig.registerBlockTemperature("infernalexp:campfire_glow", 10.0f);
 		JsonConfig.registerBlockTemperature("infernalexp:torch_glow", 1.5f);
 		JsonConfig.registerBlockTemperature("infernalexp:torch_glow_wall", 1.5f);
 	}
@@ -164,5 +179,20 @@ public final class IntegrationController
 	{
 		JsonConfig.registerBiomeOverride("betterendforge:sulphur_springs", 1.1f);
 		JsonConfig.registerBiomeOverride("betterendforge:ice_starfield", 0.1f);
+	}
+
+	private static void initAtmospheric() {
+
+		JsonConfig.registerDamageSourceBodyParts("atmospheric.yuccaSapling", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
+		JsonConfig.registerDamageSourceBodyParts("atmospheric.yuccaFlower", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
+		JsonConfig.registerDamageSourceBodyParts("atmospheric.yuccaBranch", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
+		JsonConfig.registerDamageSourceBodyParts("atmospheric.yuccaLeaves", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
+		JsonConfig.registerDamageSourceBodyParts("atmospheric.barrelCactus", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
+		JsonConfig.registerDamageSourceBodyParts("atmospheric.aloeLeaves", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
+	}
+
+	private static void initLegendaryCreatures() {
+
+		JsonConfig.registerDamageSourceBodyParts("legendarycreatures.root_attack", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
 	}
 }

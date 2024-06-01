@@ -20,6 +20,6 @@ public class CommandBase
 		
 	public LiteralArgumentBuilder<CommandSource> getBuilder() { return builder;}
 		
-	public int execute(CommandSource source) throws CommandSyntaxException {return Command.SINGLE_SUCCESS;}
-	public int execute(CommandSource source,String[] args) throws CommandSyntaxException {return Command.SINGLE_SUCCESS;}
+	public int get(CommandSource source) throws CommandSyntaxException {return Command.SINGLE_SUCCESS;}
+	public int get(CommandSource source, String[] args) throws CommandSyntaxException {return Command.SINGLE_SUCCESS;}
 }

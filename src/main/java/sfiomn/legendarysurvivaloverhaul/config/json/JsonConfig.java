@@ -1,16 +1,17 @@
 package sfiomn.legendarysurvivaloverhaul.config.json;
 
 import com.google.common.collect.Maps;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
+import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
+import sfiomn.legendarysurvivaloverhaul.api.bodydamage.DamageDistributionEnum;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonBodyPartsDamageSource;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class JsonConfig
 {
@@ -20,6 +21,7 @@ public class JsonConfig
 	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = Maps.newHashMap();
 	public static Map<String, JsonThirst> consumableThirst = Maps.newHashMap();
 	public static Map<String, JsonFuelItemIdentity> fuelItems = Maps.newHashMap();
+	public static Map<String, JsonBodyPartsDamageSource> damageSourceBodyParts = Maps.newHashMap();
 	
 	public static boolean registerBlockTemperature(String registryName, float temperature, JsonPropertyValue... properties)
 	{
@@ -115,9 +117,13 @@ public class JsonConfig
 			biomeOverrides.put(registryName, new JsonBiomeIdentity(temperature, isDry));
 	}
 
-	public static void registerFuelItems(String registryName, ThermalTypeEnum thermalType, int fuelValue)
-	{
+	public static void registerFuelItems(String registryName, ThermalTypeEnum thermalType, int fuelValue) {
 		if(!fuelItems.containsKey(registryName))
 			fuelItems.put(registryName, new JsonFuelItemIdentity(thermalType, fuelValue));
+	}
+
+	public static void registerDamageSourceBodyParts(String damageSource, DamageDistributionEnum damageDistribution, List<BodyPartEnum> bodyParts) {
+		if (!damageSourceBodyParts.containsKey(damageSource))
+			damageSourceBodyParts.put(damageSource, new JsonBodyPartsDamageSource(damageDistribution, bodyParts));
 	}
 }

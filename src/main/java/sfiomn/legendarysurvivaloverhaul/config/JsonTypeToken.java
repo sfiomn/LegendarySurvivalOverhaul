@@ -1,6 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.config;
 
 import com.google.gson.reflect.TypeToken;
+import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonBodyPartsDamageSource;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
 
@@ -20,6 +22,7 @@ public class JsonTypeToken
 			case CONSUMABLE_TEMP: 		return new TypeToken<Map<String, List<JsonConsumableTemperature>>>(){}.getType();
 			case CONSUMABLE_THIRST: 		return new TypeToken<Map<String, JsonThirst>>(){}.getType();
 			case FUEL:				return new TypeToken<Map<String, JsonFuelItemIdentity>>(){}.getType();
+			case DAMAGE_SOURCE_BODY_PARTS:				return new TypeToken<Map<String, JsonBodyPartsDamageSource>>(){}.getType();
 			default: 		return null;
 		}
 	}

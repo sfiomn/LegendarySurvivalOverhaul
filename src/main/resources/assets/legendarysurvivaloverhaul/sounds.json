@@ -54,5 +54,25 @@
 				"stream": true
 			}
 		]
+	},
+	"headshot": {
+		"category": "neutral",
+		"subtitle": "heashot",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:headshot",
+				"stream": true
+			}
+		]
+	},
+	"heal_body_part": {
+		"category": "neutral",
+		"subtitle": "heashot",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:heal_body_part",
+				"stream": true
+			}
+		]
 	}
 }

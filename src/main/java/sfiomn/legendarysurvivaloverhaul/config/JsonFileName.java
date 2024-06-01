@@ -7,7 +7,8 @@ public enum JsonFileName
 	BIOME("biomeOverrides.json"),
 	CONSUMABLE_TEMP("temperatureConsumables.json"),
 	FUEL("fuelItems.json"),
-	CONSUMABLE_THIRST("thirstConsumables.json");
+	CONSUMABLE_THIRST("thirstConsumables.json"),
+	DAMAGE_SOURCE_BODY_PARTS("damageSourceBodyParts.json");;
 	
 	private String fileName;
 	

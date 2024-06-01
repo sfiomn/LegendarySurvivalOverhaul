@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import sereneseasons.api.season.ISeasonState;
@@ -27,19 +28,28 @@ public class SereneSeasonsUtil {
         int seasonType = getSeasonType(world.getBiome(blockPos));
         int subSeasonDuration = (int) ((double) season.getSubSeasonDuration() / (double) season.getDayDuration());
 
-        if (season == null || seasonType == 2) {
+        String subSeasonName = "";
+        TranslationTextComponent seasonTextTranslate;
+        if (seasonType == 2) {
             return new StringTextComponent("");
         } else if (seasonType == 1 && Config.Baked.tropicalSeasonsEnabled) {
             for(String word : season.getTropicalSeason().toString().split("_", 0)) {
-                seasonText.append(word.charAt(0)).append(word.substring(1).toLowerCase()).append(" ");
+                subSeasonName = word.charAt(0) + word.substring(1).toLowerCase();
             }
-            seasonText.append("Season").append(", Day ").append((season.getDay() + subSeasonDuration) % (subSeasonDuration * 2)).append("/").append(subSeasonDuration * 2);
+            seasonTextTranslate = new TranslationTextComponent("message.legendarysurvivaloverhaul.sereneseasons.season_info",
+                    subSeasonName,
+                    (season.getDay() + subSeasonDuration) % (subSeasonDuration * 2),
+                    subSeasonDuration * 2);
         } else {
             for(String word : season.getSubSeason().toString().split("_", 0)) {
-                seasonText.append(word.charAt(0)).append(word.substring(1).toLowerCase()).append(" ");
+                subSeasonName = word.charAt(0) + word.substring(1).toLowerCase();
             }
-            seasonText.append("Season").append(", Day ").append(season.getDay() % subSeasonDuration).append("/").append(subSeasonDuration);
+            seasonTextTranslate = new TranslationTextComponent("message.legendarysurvivaloverhaul.sereneseasons.season_info",
+                    subSeasonName,
+                    season.getDay() % subSeasonDuration,
+                    subSeasonDuration);
         }
+        seasonText.append(seasonTextTranslate);
         return new StringTextComponent(seasonText.toString());
     }
 

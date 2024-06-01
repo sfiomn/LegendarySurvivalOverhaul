@@ -28,10 +28,7 @@ public class FoodCapability implements IFoodCapability
 
 	public void tickUpdate(PlayerEntity player, World world, TickEvent.Phase phase)
 	{
-		if(phase == TickEvent.Phase.START)
-		{
-			return;
-		}
+		if(phase == TickEvent.Phase.START) return;
 
 		if (oldPos == null)
 			oldPos = player.position();

@@ -182,6 +182,8 @@ public class LegendarySurvivalOverhaul
 		NetworkHandler.register();
 		
 		event.enqueueWork(EffectRegistry::registerBrewingRecipes);
+
+		BodyDamageUtilInternal.initMalusConfig();
 	}
 	
 	private void clientEvents(final FMLClientSetupEvent event)

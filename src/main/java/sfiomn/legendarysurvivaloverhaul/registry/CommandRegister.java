@@ -3,6 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.registry;
 import com.mojang.brigadier.CommandDispatcher;
 
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.common.commands.BodyDamageCommand;
 import sfiomn.legendarysurvivaloverhaul.common.commands.CommandBase;
 import sfiomn.legendarysurvivaloverhaul.common.commands.TemperatureCommand;
 import net.minecraft.command.CommandSource;
@@ -16,6 +17,7 @@ public class CommandRegister
 	public static final class ModCommands
 	{
 		public static final CommandBase TEMPERATURE = new TemperatureCommand();
+		public static final CommandBase BODY_DAMAGE = new BodyDamageCommand();
 	}
 	
 	@SubscribeEvent
@@ -24,5 +26,6 @@ public class CommandRegister
 		CommandDispatcher<CommandSource> dispatcher = event.getDispatcher();
 
 		dispatcher.register(ModCommands.TEMPERATURE.getBuilder());
+		dispatcher.register(ModCommands.BODY_DAMAGE.getBuilder());
 	}
 }

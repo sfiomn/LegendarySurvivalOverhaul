@@ -18,6 +18,7 @@ public class EffectRegistry
 	public static final RegistryObject<Effect> THIRST = EFFECTS.register("thirst", ThirstEffect::new);
 	public static final RegistryObject<Potion> THIRST_POTION = POTIONS.register("thirst", () -> new Potion("thirst", new EffectInstance(THIRST.get(), 3600, 0, false, true, false)));
 	public static final RegistryObject<Potion> THIRST_POTION_LONG = POTIONS.register("thirst_long", () -> new Potion("thirst_long", new EffectInstance(THIRST.get(), 9600, 0, false, true, false)));
+
 	public static final RegistryObject<Effect> FROSTBITE = EFFECTS.register("frostbite", FrostbiteEffect::new);
 	public static final RegistryObject<Effect> COLD_HUNGER = EFFECTS.register("cold_hunger", ColdHungerEffect::new);
 	public static final RegistryObject<Effect> HEAT_STROKE = EFFECTS.register("heat_stroke", HeatStrokeEffect::new);
@@ -33,7 +34,13 @@ public class EffectRegistry
 	public static final RegistryObject<Effect> HOT_DRINk = EFFECTS.register("hot_drink", HotDrinkEffect::new);
 	public static final RegistryObject<Effect> COLD_FOOD = EFFECTS.register("cold_food", ColdFoodEffect::new);
 	public static final RegistryObject<Effect> COLD_DRINK = EFFECTS.register("cold_drink", ColdDrinkEffect::new);
-	
+
+	public static final RegistryObject<Effect> PAINKILLER = EFFECTS.register("painkiller", PainKillerEffect::new);
+
+	public static final RegistryObject<Effect> HARD_FALLING = EFFECTS.register("hard_falling", HardFallingEffect::new);
+	public static final RegistryObject<Effect> VULNERABILITY = EFFECTS.register("vulnerability", VulnerabilityEffect::new);
+	public static final RegistryObject<Effect> HEADACHE = EFFECTS.register("headache", HeadacheEffect::new);
+
 	public static void registerBrewingRecipes()
 	{
 		PotionBrewing.addMix(Potions.AWKWARD, ItemRegistry.SUN_FERN.get(), HEAT_RESISTANCE_POTION.get());

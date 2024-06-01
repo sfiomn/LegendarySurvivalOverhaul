@@ -17,6 +17,8 @@ public class SoundRegistry
 	public static final RegistryObject<SoundEvent> FROSTBITE = registerSoundEvent("frostbite");
 	public static final RegistryObject<SoundEvent> SEWING_TABLE = registerSoundEvent("sewing_table");
 	public static final RegistryObject<SoundEvent> COOLER_BLOCK = registerSoundEvent("cooler_block");
+	public static final RegistryObject<SoundEvent> HEADSHOT = registerSoundEvent("headshot");
+	public static final RegistryObject<SoundEvent> HEAL_BODY_PART = registerSoundEvent("heal_body_part");
 
 	private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
 		return SOUND_EVENTS.register(name, () -> new SoundEvent(

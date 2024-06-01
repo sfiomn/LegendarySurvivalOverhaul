@@ -3,6 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.registry;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -13,6 +14,10 @@ import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.common.items.*;
 import sfiomn.legendarysurvivaloverhaul.common.items.armor.ArmorMaterialBase;
+import sfiomn.legendarysurvivaloverhaul.common.items.armor.DesertArmorItem;
+import sfiomn.legendarysurvivaloverhaul.common.items.armor.SnowArmorItem;
+import sfiomn.legendarysurvivaloverhaul.common.items.drink.*;
+import sfiomn.legendarysurvivaloverhaul.common.items.heal.*;
 import sfiomn.legendarysurvivaloverhaul.itemgroup.ModItemGroup;
 
 public class ItemRegistry
@@ -68,10 +73,16 @@ public class ItemRegistry
 	public static final RegistryObject<Item> PURIFIED_WATER_BOTTLE = ITEMS.register("purified_water_bottle", () -> new PurifiedWaterBottleItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
 	public static final RegistryObject<Item> WATER_PLANT_BAG = ITEMS.register("water_plant_bag", () -> new DrinkItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
 
-
 	// Heart fruit
-	public static final RegistryObject<Item> HEART_FRUIT = ITEMS.register("heart_fruit", () -> new HeartFruitItem());
+	public static final RegistryObject<Item> HEART_FRUIT = ITEMS.register("heart_fruit", () -> new HeartFruitItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP).rarity(Rarity.RARE)));
 
+	// Body Healing
+	public static final RegistryObject<Item> HEALING_HERBS = ITEMS.register("healing_herbs", () -> new HealingHerbsItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
+	public static final RegistryObject<Item> PLASTER = ITEMS.register("plaster", () -> new PlasterItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
+	public static final RegistryObject<Item> BANDAGE = ITEMS.register("bandage", () -> new BandageItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
+	public static final RegistryObject<Item> TONIC = ITEMS.register("tonic", () -> new TonicItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
+	public static final RegistryObject<Item> MEDIKIT = ITEMS.register("medikit", () -> new MedikitItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
+	public static final RegistryObject<Item> MORPHINE = ITEMS.register("morphine", () -> new MorphineItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
 
 	public static void register(IEventBus eventBus){
 		ITEMS.register(eventBus);

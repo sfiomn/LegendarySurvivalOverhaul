@@ -104,8 +104,7 @@ public class TemperatureCapability implements ITemperatureCapability
 			return;
 		}
 
-		updateTimer++;
-		if(updateTimer >= 10)
+		if(updateTimer++ >= 10)
 		{
 			updateTimer = 0;
 			targetTemp = TemperatureUtil.getPlayerTargetTemperature(player);

@@ -20,12 +20,12 @@ public class TemperatureCommand extends CommandBase
 		super(Commands.literal("temperature")
 				.requires((p_198521_0_) -> p_198521_0_.hasPermission(2))
 				.then(Commands.literal("set").then(Commands.argument("Temperature", IntegerArgumentType.integer(0,30)).executes(src ->  new TemperatureCommand().set(src.getSource(), IntegerArgumentType.getInteger(src, "Temperature")))))
-				.then(Commands.literal("get").executes(src -> new TemperatureCommand().execute(src.getSource())))
+				.then(Commands.literal("get").executes(src -> new TemperatureCommand().get(src.getSource())))
 				);
 	}
 
 	@Override
-	public int execute(CommandSource source)
+	public int get(CommandSource source)
 	{
 		try
 		{

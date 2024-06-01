@@ -157,6 +157,7 @@ dependencies {
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.8.2:api") // Curios API
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api") // JEI API
     compileOnly fg.deobf("curse.maven:SereneSeasons-291874:3894516") // Serene Seasons deobf
+    compileOnly fg.deobf('curse.maven:atmospheric-362393:3553332') // Atmospheric
 
 	// Runtime mods. These are primarily for testing and can be removed as necessary.
 	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.8.2") // Curios

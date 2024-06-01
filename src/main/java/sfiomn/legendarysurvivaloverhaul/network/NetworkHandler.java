@@ -25,6 +25,8 @@ public class NetworkHandler
 		INSTANCE.registerMessage(id++, UpdateWetnessPacket.class, UpdateWetnessPacket::encode, UpdateWetnessPacket::decode, UpdateWetnessPacket::handle);
 		INSTANCE.registerMessage(id++, UpdateThirstPacket.class, UpdateThirstPacket::encode, UpdateThirstPacket::decode, UpdateThirstPacket::handle);
 		INSTANCE.registerMessage(id++, UpdateHeartsPacket.class, UpdateHeartsPacket::encode, UpdateHeartsPacket::decode, UpdateHeartsPacket::handle);
+		INSTANCE.registerMessage(id++, UpdateBodyDamagePacket.class, UpdateBodyDamagePacket::encode, UpdateBodyDamagePacket::decode, UpdateBodyDamagePacket::handle);
 		INSTANCE.registerMessage(id++, MessageDrinkWater.class, MessageDrinkWater::encode, MessageDrinkWater::decode, MessageDrinkWater::handle);
+		INSTANCE.registerMessage(id++, MessageBodyPartHealingItem.class, MessageBodyPartHealingItem::encode, MessageBodyPartHealingItem::decode, MessageBodyPartHealingItem::handle);
 	}
 }

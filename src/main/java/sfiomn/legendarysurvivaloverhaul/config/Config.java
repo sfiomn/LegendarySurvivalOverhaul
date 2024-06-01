@@ -191,13 +191,70 @@ public class Config
 
 		// Localized Body Damage
 		public final ForgeConfigSpec.ConfigValue<Boolean> localizedBodyDamageEnabled;
+		public final ForgeConfigSpec.ConfigValue<Double> headCriticalShotMultiplier;
+		public final ForgeConfigSpec.ConfigValue<Double> bodyDamageMultiplier;
+		public final ForgeConfigSpec.ConfigValue<Double> bodyDamageRecoveredFromSleep;
+
+		public final ForgeConfigSpec.ConfigValue<String> bodyPartHealthMode;
+		public final ForgeConfigSpec.ConfigValue<Double> headPartHealth;
+		public final ForgeConfigSpec.ConfigValue<Double> armsPartHealth;
+		public final ForgeConfigSpec.ConfigValue<Double> chestPartHealth;
+		public final ForgeConfigSpec.ConfigValue<Double> legsPartHealth;
+		public final ForgeConfigSpec.ConfigValue<Double> feetPartHealth;
+
+		public final ForgeConfigSpec.ConfigValue<List<String>> headPartEffects;
+		public final ForgeConfigSpec.ConfigValue<List<Integer>> headPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<Float>> headPartEffectThresholds;
+
+		public final ForgeConfigSpec.ConfigValue<List<String>> armsPartEffects;
+		public final ForgeConfigSpec.ConfigValue<List<Integer>> armsPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<Float>> armsPartEffectThresholds;
+		public final ForgeConfigSpec.ConfigValue<List<String>> bothArmsPartEffects;
+		public final ForgeConfigSpec.ConfigValue<List<Integer>> bothArmsPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<Float>> bothArmsPartEffectThresholds;
+
+		public final ForgeConfigSpec.ConfigValue<List<String>> chestPartEffects;
+		public final ForgeConfigSpec.ConfigValue<List<Integer>> chestPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<Float>> chestPartEffectThresholds;
+
+		public final ForgeConfigSpec.ConfigValue<List<String>> legsPartEffects;
+		public final ForgeConfigSpec.ConfigValue<List<Integer>> legsPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<Float>> legsPartEffectThresholds;
+		public final ForgeConfigSpec.ConfigValue<List<String>> bothLegsPartEffects;
+		public final ForgeConfigSpec.ConfigValue<List<Integer>> bothLegsPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<Float>> bothLegsPartEffectThresholds;
+
+		public final ForgeConfigSpec.ConfigValue<List<String>> feetPartEffects;
+		public final ForgeConfigSpec.ConfigValue<List<Integer>> feetPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<Float>> feetPartEffectThresholds;
+		public final ForgeConfigSpec.ConfigValue<List<String>> bothFeetPartEffects;
+		public final ForgeConfigSpec.ConfigValue<List<Integer>> bothFeetPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<Float>> bothFeetPartEffectThresholds;
+
+		public final ForgeConfigSpec.ConfigValue<Double> healingHerbsHealingValue;
+		public final ForgeConfigSpec.ConfigValue<Integer> healingHerbsHealingTime;
+		public final ForgeConfigSpec.ConfigValue<Integer> healingHerbsUseTime;
+		public final ForgeConfigSpec.ConfigValue<Integer> healingHerbsHealingCharges;
+		public final ForgeConfigSpec.ConfigValue<Double> plasterHealingValue;
+		public final ForgeConfigSpec.ConfigValue<Integer> plasterHealingTime;
+		public final ForgeConfigSpec.ConfigValue<Integer> plasterUseTime;
+		public final ForgeConfigSpec.ConfigValue<Integer> plasterHealingCharges;
+		public final ForgeConfigSpec.ConfigValue<Double> bandageHealingValue;
+		public final ForgeConfigSpec.ConfigValue<Integer> bandageHealingTime;
+		public final ForgeConfigSpec.ConfigValue<Integer> bandageUseTime;
+		public final ForgeConfigSpec.ConfigValue<Integer> bandageHealingCharges;
+		public final ForgeConfigSpec.ConfigValue<Double> tonicHealingValue;
+		public final ForgeConfigSpec.ConfigValue<Integer> tonicHealingTime;
+		public final ForgeConfigSpec.ConfigValue<Integer> tonicUseTime;
+		public final ForgeConfigSpec.ConfigValue<Double> medikitHealingValue;
+		public final ForgeConfigSpec.ConfigValue<Integer> medikitHealingTime;
+		public final ForgeConfigSpec.ConfigValue<Integer> medikitUseTime;
 		
 		Common(ForgeConfigSpec.Builder builder)
 		{
 			builder.comment(new String [] {
 						" Options related to enabling/disabling specific features",
-						" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc.",
-						" To reload your JSONs, type /reload into chat with cheats enabled; The same way you reload datapacks, crafttweaker scripts, etc."
+						" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc."
 					}).push("core");
 			temperatureEnabled = builder
 					.comment(" Whether or not the temperature system is enabled.")
@@ -212,7 +269,7 @@ public class Config
 					.comment(" Whether or not body members receive localized damages.")
 					.define("Localized Body Damage Enabled", true);
 			hideInfoFromDebug = builder
-					.comment(" Id enabled, information like position will be hidden from the debug screen (F3).")
+					.comment(" If enabled, information like position and direction will be hidden from the debug screen (F3).")
 					.define("Hide Info From Debug", true);
 
 			builder.push("advanced");
@@ -256,14 +313,15 @@ public class Config
 					.comment(" How much of an effect sprinting has on a player's temperature.")
 					.define("Player Sprint Modifier", 1.5d);
 			altitudeModifier = builder
-					.comment(" How much the effects of the player's altitude on temperature are multiplied starting at Y 64.", "Each 64 blocks father from Y 64 will reduce player's temperature by this value.")
+					.comment(" How much the effects of the player's altitude on temperature are multiplied starting at Y 64.",
+							" Each 64 blocks further from Y 64 will reduce player's temperature by this value.")
 					.define("Altitude Modifier", -3.0d);
 			enchantmentMultiplier = builder
 					.comment(" Increases/decreases the effect that cooling/heating enchantments have on a player's temperature.")
 					.define("Enchantment Modifier", 1.0d);
 			showPotionEffectParticles = builder
-					.comment(" If enabled, players will see particles on them when temperature resistance effect active.\n" +
-							 " If disabled, the potion color will turn black due to forge weird behavior.")
+					.comment(" If enabled, players will see particles on them when temperature resistance effect active.",
+							" If disabled, players won't see particles but the potion color will turn black due to forge weird behavior.")
 					.define("Show Temperature Potion Effect Particles", true);
 			
 			builder.push("wetness");
@@ -277,10 +335,11 @@ public class Config
 			
 			wetMultiplier = builder
 					.comment(" How much being wet influences the player's temperature.")
-					.define("Wetness Modifier", -7.0d);
+					.define("Wetness Modifier", -10.0d);
 			builder.pop();
 
-			builder.comment(" Default temperature added to the player, based on the dimension.").push("dimension-default");
+			builder.comment(" Default temperature added to the player, based on the dimension.")
+					.push("dimension-default");
 			overworldDefaultTemperature = builder.define( "Default Overworld Modifier", 15.0d);
 			netherDefaultTemperature = builder.define( "Default Nether Modifier", 20.0d);
 			endDefaultTemperature = builder.define( "Default The End Modifier", 10.0d);
@@ -318,17 +377,22 @@ public class Config
 			
 			builder.push("time");
 			timeModifier = builder
-					.comment(" How much Time has effect on Temperature.", " Maximum effect at noon (positive) and midnight (negative), following a sinusoidal")
+					.comment(" How much Time has effect on Temperature.",
+							" Maximum effect at noon (positive) and midnight (negative), following a sinusoidal")
 					.defineInRange("Time Based Temperature Modifier", 2.0d, 0.0d, Double.POSITIVE_INFINITY);
 			biomeTimeMultiplier = builder
-					.comment(" How strongly time in extreme biomes affect temperature.", "Extreme biomes will multiply the time based temperature by this value, while temperate biome won't be affected by this value, following a linear")
+					.comment(" How strongly time in extreme temperature biomes affect player's temperature.",
+							"Extreme temperature biomes (like snowy taiga, deserts, ...) will multiply the time based temperature by this value, while temperate biome won't be affected by this value, following a linear.")
 					.defineInRange("Biome Time Multiplier", 1.75d, 1.0d, Double.POSITIVE_INFINITY);
 			shadeTimeModifier = builder
-					.comment(" Staying in the shade or during cloudy weather will reduce player's temperature by this amount based on time of the day (maximum effect at noon, following sinusoidal).", " Only effective in hot biomes and during day time!")
-					.define("Shade Time Modifier", -3);
+					.comment(" Staying in the shade or during cloudy weather will reduce player's temperature by this amount based on time of the day (maximum effect at noon, following sinusoidal).",
+							" Only effective in hot biomes and during day time!")
+					.define("Shade Time Modifier", -6);
 			builder.pop();
 
-			builder.comment(" Temperature coat adds temperature effects on armors by using the sewing table.", "Adaptive means the coating will maintain the player's temperature temperate.").push("coat");
+			builder.comment(" Temperature coat adds temperature effects on armors by using the sewing table.",
+					"Adaptive means the coating will maintain the player's temperature temperate.")
+					.push("coat");
 
 			builder.comment(" Add an adaptive heating effect on armors.").push("heating");
 			heatingCoat1Modifier = builder.defineInRange("Heating Coat I", 1.0d, 0, 1000.0d);
@@ -342,7 +406,8 @@ public class Config
 			coolingCoat3Modifier = builder.defineInRange("Cooling Coat III", 3.0d, 0, 1000.0d);
 			builder.pop();
 
-			builder.comment(" Add an adaptive temperature effect on armors that can both heat and cool the player.").push("thermal");
+			builder.comment(" Add an adaptive temperature effect on armors that can both heat and cool the player.")
+					.push("thermal");
 			thermalCoat1Modifier = builder.defineInRange("Thermal Coat I", 1.0d, 0, 1000.0d);
 			thermalCoat2Modifier = builder.defineInRange("Thermal Coat II", 2.0d, 0, 1000.0d);
 			thermalCoat3Modifier = builder.defineInRange("Thermal Coat III", 3.0d, 0, 1000.0d);
@@ -377,7 +442,8 @@ public class Config
 					.comment(" If Serene Seasons is installed, then seasons", " will have an effect on the player's temperature.")
 					.define("Seasons affect Temperature", true);
 			tropicalSeasonsEnabled = builder
-					.comment(" If the tropical seasons are disabled, the normal summer-autumn-winter-spring seasons are applied.", "If disabled, dry and wet seasons are applied for hot biomes.")
+					.comment(" If the tropical seasons are disabled, the normal summer-autumn-winter-spring seasons are applied.",
+							"If disabled, dry and wet seasons are applied for hot biomes.")
 					.define("Tropical Seasons Enabled", true);
 			seasonCardsEnabled = builder
 					.comment(" If season cards are enabled, season cards will appear at every season changes.")
@@ -430,12 +496,18 @@ public class Config
 			builder.push("environment");
 
 			builder.push("flowers");
-			sunFernBiomeNames = builder.comment(" In which biome names the Sun Fern will spawn").define("Sun Fern Biome Names Spawn List", new ArrayList<>());
-			sunFernBiomeCategories = builder.comment(" In which biome categories the Sun Fern will spawn").define("Sun Fern Biome Categories Spawn List", Arrays.asList("DESERT", "SAVANNA"));
-			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn").define("Ice Fern Biome Names Spawn List", new ArrayList<>());
-			iceFernBiomeCategories = builder.comment(" In which biome categories the Ice Fern will spawn").define("Ice Fern Biome Categories Spawn List", Arrays.asList("TAIGA", "ICY"));
-			waterPlantBiomeNames = builder.comment(" In which biome names the Water Plant will spawn").define("Water Plant Biome Names Spawn List", new ArrayList<>());
-			waterPlantBiomeCategories = builder.comment(" In which biome categories the Water Plant will spawn").define("Water Plant Biome Categories Spawn List", Collections.singletonList("DESERT"));
+			sunFernBiomeNames = builder.comment(" In which biome names the Sun Fern will spawn")
+					.define("Sun Fern Biome Names Spawn List", new ArrayList<>());
+			sunFernBiomeCategories = builder.comment(" In which biome categories the Sun Fern will spawn")
+					.define("Sun Fern Biome Categories Spawn List", Arrays.asList("DESERT", "SAVANNA"));
+			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn")
+					.define("Ice Fern Biome Names Spawn List", new ArrayList<>());
+			iceFernBiomeCategories = builder.comment(" In which biome categories the Ice Fern will spawn")
+					.define("Ice Fern Biome Categories Spawn List", Arrays.asList("TAIGA", "ICY"));
+			waterPlantBiomeNames = builder.comment(" In which biome names the Water Plant will spawn")
+					.define("Water Plant Biome Names Spawn List", new ArrayList<>());
+			waterPlantBiomeCategories = builder.comment(" In which biome categories the Water Plant will spawn")
+					.define("Water Plant Biome Categories Spawn List", Collections.singletonList("DESERT"));
 			builder.pop();
 
 			builder.pop();
@@ -555,6 +627,146 @@ public class Config
 					.define("Heart Fruits Give Regen", true);
 			builder.pop();
 			builder.pop();
+
+			builder.comment(" Options related to localized body damage",
+					" The damageSourceBodyParts.json allows you to define for specific damage source, the damage spread across specified body parts.",
+					" The damage distribution can either be ONE_OF or ALL. ALL means the damage are equally divided across all body parts.").push("body-damage");
+			headCriticalShotMultiplier = builder
+					.comment(" Multiply the damage taken by the player when shot in the head")
+					.defineInRange("Headshot Multiplier", 2.0d, 1.0d, 1000.0d);
+			bodyDamageMultiplier = builder
+					.comment(" How much of the hurt player's damage is assigned to the body parts.")
+					.defineInRange("Body Damage Multiplier", 1.0d, 0.0d, 1000.0d);
+			bodyDamageRecoveredFromSleep = builder
+					.comment(" How much damage are recovered in all body parts from bed sleeping.")
+					.defineInRange("Body Part Damage Recovered", 2.0d, 0.0d, 1000.0d);
+
+			builder.push("healing-items");
+
+			builder.push("healing-herbs");
+			healingHerbsHealingValue = builder
+					.comment(" Total Healing Value recovered during the healing time.")
+					.defineInRange("Healing Herbs Healing Value", 2.0d, 0.0d, 1000.0d);
+			healingHerbsHealingTime = builder
+					.comment(" Healing Time in ticks along which the body part recovers its health.")
+					.defineInRange("Healing Herbs Healing Time", 600, 0, 1000);
+			healingHerbsUseTime = builder
+					.comment(" Item use time is ticks.")
+					.defineInRange("Healing Herbs Use Time", 20, 0, 1000);
+			healingHerbsHealingCharges = builder
+					.comment(" Healing Charges, each charge used when selecting a body part to heal.")
+					.defineInRange("Healing Herbs Healing Charges", 1, 0, 1000);
+			builder.pop();
+			builder.push("plaster");
+			plasterHealingValue = builder
+					.defineInRange("Plaster Healing Value", 3.0d, 0.0d, 1000.0d);
+			plasterHealingTime = builder
+					.defineInRange("Plaster Healing Time", 400, 0, 1000);
+			plasterUseTime = builder
+					.defineInRange("Plaster Use Time", 20, 0, 1000);
+			plasterHealingCharges = builder
+					.defineInRange("Plaster Healing Charges", 1, 0, 1000);
+			builder.pop();
+			builder.push("bandage");
+			bandageHealingValue = builder
+					.defineInRange("Bandage Healing Value", 3.0d, 0.0d, 1000.0d);
+			bandageHealingTime = builder
+					.defineInRange("Bandage Healing Time", 300, 0, 1000);
+			bandageUseTime = builder
+					.defineInRange("Bandage Use Time", 30, 0, 1000);
+			bandageHealingCharges = builder
+					.defineInRange("Bandage Healing Charges", 3, 0, 1000);
+			builder.pop();
+			builder.comment("Tonic heals all body parts").push("tonic");
+			tonicHealingValue = builder
+					.defineInRange("Tonic Healing Value", 5.0d, 0.0d, 1000.0d);
+			tonicHealingTime = builder
+					.defineInRange("Tonic Healing Time", 600, 0, 1000);
+			tonicUseTime = builder
+					.defineInRange("Tonic Use Time", 50, 0, 1000);
+			builder.pop();
+			builder.comment("Medikit heals all body parts").push("medikit");
+			medikitHealingValue = builder
+					.defineInRange("Medikit Healing Value", 8.0d, 0.0d, 1000.0d);
+			medikitHealingTime = builder
+					.defineInRange("Medikit Healing Time", 400, 0, 1000);
+			medikitUseTime = builder
+					.defineInRange("Medikit Use Time", 50, 0, 1000);
+			builder.pop();
+
+			builder.pop();
+
+			builder.push("body-parts-health");
+			bodyPartHealthMode = builder
+					.comment(" How a player's body part health is determined. Accepted values are as follows:",
+							"   SIMPLE - Body parts will have initial fixed values. The body parts health define the health value.",
+							"       In this case, if the 'headPartHeath = 10', the head will have '10' health.",
+							"   DYNAMIC - Body parts will have dynamic values based on the player's max health. In this case, the body parts health is a multiplier of the player's max health.",
+							"       In this case, if the 'headPartHeath = 0.3', the head will have '0.3' * 'player max health' health.",
+							" Any other value will default to SIMPLE.")
+					.define("Body Part Health Mode", "DYNAMIC");
+
+			headPartHealth = builder.defineInRange("Head Part Health", 0.2d, 0.0d, 1000.0d);
+			armsPartHealth = builder.comment(" Both arms will have this health")
+					.defineInRange("Arms Part Health", 0.2d, 0.0d, 1000.0d);;
+			chestPartHealth = builder.defineInRange("Chest Part Health", 0.3d, 0.0d, 1000.0d);;
+			legsPartHealth = builder.comment(" Both legs will have this health")
+					.defineInRange("Legs Part Health", 0.3d, 0.0d, 1000.0d);;
+			feetPartHealth = builder.comment(" Both feet will have this health")
+					.defineInRange("Feet Part Health", 0.2d, 0.0d, 1000.0d);;
+			builder.pop();
+
+			builder.push("body-parts-effects");
+			builder.comment(" Each effect, threshold and amplifier lists must have the same number of items.",
+					" The first effect will be triggered with the first amplifier value when the first threshold is reach.")
+					.push("head");
+			headPartEffects = builder
+					.comment(" The list of effects that will be triggered when the head is damaged by the percentage of remaining head health defined in the thresholds.")
+					.define("Head Part Effects", Collections.singletonList(LegendarySurvivalOverhaul.MOD_ID + ":headache"));
+			headPartEffectAmplifiers = builder
+					.comment(" The list of amplifiers the effect will have.",
+							" 0 means the basic effect, 1 means the effect is amplified once.")
+					.define(" Head Part Effect Amplifiers", Collections.singletonList(0));
+			headPartEffectThresholds = builder
+					.comment(" The list of thresholds for which each effect will be triggered. A threshold is a percentage of remaining head health.",
+							" 0 means the head is fully damaged.")
+					.define(" Head Part Effect Thresholds", Collections.singletonList(0.2f));
+			builder.pop();
+			builder.push("arms");
+			armsPartEffects = builder.define("Arms Part Effects", Collections.singletonList("minecraft:mining_fatigue"));
+			armsPartEffectAmplifiers = builder.define("Arms Part Effect Amplifiers", Collections.singletonList(0));
+			armsPartEffectThresholds = builder.define("Arms Part Effect Thresholds", Collections.singletonList(0.2f));
+			bothArmsPartEffects = builder
+					.comment(" These effects will be triggered when both arms reach the thresholds.",
+							" If a same effect is used with a higher amplifier, the higher prevails (normal Minecraft behaviour).")
+					.define("Both Arms Part Effects", Collections.singletonList("minecraft:weakness"));
+			bothArmsPartEffectAmplifiers = builder.define("Both Arms Part Effect Amplifiers", Collections.singletonList(0));
+			bothArmsPartEffectThresholds = builder.define("Both Arms Part Effect Thresholds", Collections.singletonList(0.2f));
+			builder.pop();
+			builder.push("chest");
+			chestPartEffects = builder.define(" Chest Part Effects", Collections.singletonList(LegendarySurvivalOverhaul.MOD_ID + ":vulnerability"));
+			chestPartEffectAmplifiers = builder.define(" Chest Part Effect Amplifier", Collections.singletonList(0));
+			chestPartEffectThresholds = builder.define(" Chest Part Effect Thresholds", Collections.singletonList(0.2f));
+			builder.pop();
+			builder.push("legs");
+			legsPartEffects = builder.define("Legs Part Effects", Collections.singletonList(LegendarySurvivalOverhaul.MOD_ID + ":hard_falling"));
+			legsPartEffectAmplifiers = builder.define("Legs Part Effect Amplifiers", Collections.singletonList(0));
+			legsPartEffectThresholds = builder.define("Legs Part Effect Thresholds", Collections.singletonList(0.2f));
+			bothLegsPartEffects = builder.define("Both Legs Part Effects", Collections.singletonList(LegendarySurvivalOverhaul.MOD_ID + ":hard_falling"));
+			bothLegsPartEffectAmplifiers = builder.define("Both Legs Part Effect Amplifiers", Collections.singletonList(1));
+			bothLegsPartEffectThresholds = builder.define("Both Legs Part Effect Thresholds", Collections.singletonList(0.2f));
+			builder.pop();
+			builder.push("feet");
+			feetPartEffects = builder.define("Feet Part Effects", Collections.singletonList("minecraft:slowness"));
+			feetPartEffectAmplifiers = builder.define("Feet Part Effect Amplifiers", Collections.singletonList(0));
+			feetPartEffectThresholds = builder.define("Feet Part Effect Thresholds", Collections.singletonList(0.2f));
+			bothFeetPartEffects = builder.define("Both Feet Part Effects", Collections.singletonList("minecraft:slowness"));
+			bothFeetPartEffectAmplifiers = builder.define("Both Feet Part Effect Amplifiers", Collections.singletonList(1));
+			bothFeetPartEffectThresholds = builder.define("Both Feet Part Effect Thresholds", Collections.singletonList(0.2f));
+			builder.pop();
+
+			builder.pop();
+			builder.pop();
 		}
 	}
 	
@@ -568,6 +780,9 @@ public class Config
 		
 		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetY;
+
+		public final ForgeConfigSpec.ConfigValue<Integer> bodyDamageIndicatorOffsetX;
+		public final ForgeConfigSpec.ConfigValue<Integer> bodyDamageIndicatorOffsetY;
 
 		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsOffsetY;
@@ -611,7 +826,8 @@ public class Config
 					.define("Show Food Saturation Bar", true);
 			builder.push("wetness");
 			
-			builder.comment(" The X and Y offset of the wetness indicator. Set both to 0 for no offset.").push("offset");
+			builder.comment(" The X and Y offset of the wetness indicator. Set both to 0 for no offset.")
+					.push("offset");
 			wetnessIndicatorOffsetX = builder
 					.define("Wetness Indicator X Offset", 0);
 			wetnessIndicatorOffsetY = builder
@@ -620,6 +836,13 @@ public class Config
 			builder.pop();
 			builder.pop();
 
+			builder.pop();
+
+			builder.push("body-damage");
+			bodyDamageIndicatorOffsetX = builder
+					.comment(" The X and Y offset of the body damage indicator. Set both to 0 for no offset.", "By default, render next to the inventory bar.")
+					.define("Body Damage Indicator X Offset", 0);
+			bodyDamageIndicatorOffsetY = builder.define("Body Damage Indicator Y Offset", 0);
 			builder.pop();
 
 			builder.push("season-cards");
@@ -648,7 +871,7 @@ public class Config
 					.define("Show Hydration Tooltip", true);
 			mergeHydrationAndSaturationTooltip = builder
 					.comment(" If enabled, show the hydration and the saturation values on the same line in the tooltip.")
-					.define("Merge Hydration And Saturation Tooltip", false);
+					.define("Merge Hydration And Saturation Tooltip", true);
 			thirstSaturationDisplayed = builder
 					.comment(" Whether the Thirst Saturation is displayed or not.")
 					.define("Render the thirst saturation", true);
@@ -766,8 +989,6 @@ public class Config
 		public static boolean dangerousThirst;
 		public static double thirstDamageScaling;
 		public static double thirstEffectModifier;
-		public static boolean showHydrationTooltip;
-		public static boolean mergeHydrationAndSaturationTooltip;
 		public static double baseThirstExhaustion;
 		public static double sprintingThirstExhaustion;
 		public static double onJumpThirstExhaustion;
@@ -801,6 +1022,64 @@ public class Config
 
 		// Body members damage
 		public static boolean localizedBodyDamageEnabled;
+		public static double headCriticalShotMultiplier;
+		public static double bodyDamageMultiplier;
+		public static double bodyDamageRecoveredFromSleep;
+
+		public static String bodyPartHealthMode;
+		public static double headPartHealth;
+		public static double armsPartHealth;
+		public static double chestPartHealth;
+		public static double legsPartHealth;
+		public static double feetPartHealth;
+
+		public static double healingHerbsHealingValue;
+		public static int healingHerbsHealingTime;
+		public static int healingHerbsUseTime;
+		public static int healingHerbsHealingCharges;
+		public static double plasterHealingValue;
+		public static int plasterHealingTime;
+		public static int plasterUseTime;
+		public static int plasterHealingCharges;
+		public static double bandageHealingValue;
+		public static int bandageHealingTime;
+		public static int bandageUseTime;
+		public static int bandageHealingCharges;
+		public static double tonicHealingValue;
+		public static int tonicHealingTime;
+		public static int tonicUseTime;
+		public static double medikitHealingValue;
+		public static int medikitHealingTime;
+		public static int medikitUseTime;
+
+		public static List<String> headPartEffects;
+		public static List<Integer> headPartEffectAmplifiers;
+		public static List<Float> headPartEffectThresholds;
+
+		public static List<String> armsPartEffects;
+		public static List<Integer> armsPartEffectAmplifiers;
+		public static List<Float> armsPartEffectThresholds;
+		public static List<String> bothArmsPartEffects;
+		public static List<Integer> bothArmsPartEffectAmplifiers;
+		public static List<Float> bothArmsPartEffectThresholds;
+
+		public static List<String> chestPartEffects;
+		public static List<Integer> chestPartEffectAmplifiers;
+		public static List<Float> chestPartEffectThresholds;
+
+		public static List<String> legsPartEffects;
+		public static List<Integer> legsPartEffectAmplifiers;
+		public static List<Float> legsPartEffectThresholds;
+		public static List<String> bothLegsPartEffects;
+		public static List<Integer> bothLegsPartEffectAmplifiers;
+		public static List<Float> bothLegsPartEffectThresholds;
+
+		public static List<String> feetPartEffects;
+		public static List<Integer> feetPartEffectAmplifiers;
+		public static List<Float> feetPartEffectThresholds;
+		public static List<String> bothFeetPartEffects;
+		public static List<Integer> bothFeetPartEffectAmplifiers;
+		public static List<Float> bothFeetPartEffectThresholds;
 
 		// Client Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
@@ -817,7 +1096,13 @@ public class Config
 		public static int wetnessIndicatorOffsetX;
 		public static int wetnessIndicatorOffsetY;
 
+		public static int bodyDamageIndicatorOffsetX;
+		public static int bodyDamageIndicatorOffsetY;
+
+		public static boolean showHydrationTooltip;
+		public static boolean mergeHydrationAndSaturationTooltip;
 		public static boolean thirstSaturationDisplayed;
+
 		public static void bakeCommon()
 		{
 			LegendarySurvivalOverhaul.LOGGER.debug("Load Common configuration from file");
@@ -951,11 +1236,64 @@ public class Config
 				heartFruitsGiveRegen = COMMON.heartFruitsGiveRegen.get();
 
 				localizedBodyDamageEnabled = COMMON.localizedBodyDamageEnabled.get();
+				headCriticalShotMultiplier = COMMON.headCriticalShotMultiplier.get();
+				bodyDamageMultiplier = COMMON.bodyDamageMultiplier.get();
+				bodyDamageRecoveredFromSleep = COMMON.bodyDamageRecoveredFromSleep.get();
 
+				bodyPartHealthMode = COMMON.bodyPartHealthMode.get();
+				headPartHealth = COMMON.headPartHealth.get();
+				chestPartHealth = COMMON.chestPartHealth.get();
+				armsPartHealth = COMMON.armsPartHealth.get();
+				legsPartHealth = COMMON.legsPartHealth.get();
+				feetPartHealth = COMMON.feetPartHealth.get();
+
+				healingHerbsHealingValue = COMMON.healingHerbsHealingValue.get();
+				healingHerbsHealingTime = COMMON.healingHerbsHealingTime.get();
+				healingHerbsUseTime = COMMON.healingHerbsUseTime.get();
+				healingHerbsHealingCharges = COMMON.healingHerbsHealingCharges.get();
+				plasterHealingValue = COMMON.plasterHealingValue.get();
+				plasterHealingTime = COMMON.plasterHealingTime.get();
+				plasterUseTime = COMMON.plasterUseTime.get();
+				plasterHealingCharges = COMMON.plasterHealingCharges.get();
+				bandageHealingValue = COMMON.bandageHealingValue.get();
+				bandageHealingTime = COMMON.bandageHealingTime.get();
+				bandageUseTime = COMMON.bandageUseTime.get();
+				bandageHealingCharges = COMMON.bandageHealingCharges.get();
+				tonicHealingValue = COMMON.tonicHealingValue.get();
+				tonicHealingTime = COMMON.tonicHealingTime.get();
+				tonicUseTime = COMMON.tonicUseTime.get();
+				medikitHealingValue = COMMON.medikitHealingValue.get();
+				medikitHealingTime = COMMON.medikitHealingTime.get();
+				medikitUseTime = COMMON.medikitUseTime.get();
+
+				headPartEffects = COMMON.headPartEffects.get();
+				headPartEffectAmplifiers = COMMON.headPartEffectAmplifiers.get();
+				headPartEffectThresholds = COMMON.headPartEffectThresholds.get();
+				armsPartEffects = COMMON.armsPartEffects.get();
+				armsPartEffectAmplifiers = COMMON.armsPartEffectAmplifiers.get();
+				armsPartEffectThresholds = COMMON.armsPartEffectThresholds.get();
+				bothArmsPartEffects = COMMON.bothArmsPartEffects.get();
+				bothArmsPartEffectAmplifiers = COMMON.bothArmsPartEffectAmplifiers.get();
+				bothArmsPartEffectThresholds = COMMON.bothArmsPartEffectThresholds.get();
+				chestPartEffects = COMMON.chestPartEffects.get();
+				chestPartEffectAmplifiers = COMMON.chestPartEffectAmplifiers.get();
+				chestPartEffectThresholds = COMMON.chestPartEffectThresholds.get();
+				legsPartEffects = COMMON.legsPartEffects.get();
+				legsPartEffectAmplifiers = COMMON.legsPartEffectAmplifiers.get();
+				legsPartEffectThresholds = COMMON.legsPartEffectThresholds.get();
+				bothLegsPartEffects = COMMON.bothLegsPartEffects.get();
+				bothLegsPartEffectAmplifiers = COMMON.bothLegsPartEffectAmplifiers.get();
+				bothLegsPartEffectThresholds = COMMON.bothLegsPartEffectThresholds.get();
+				feetPartEffects = COMMON.feetPartEffects.get();
+				feetPartEffectAmplifiers = COMMON.feetPartEffectAmplifiers.get();
+				feetPartEffectThresholds = COMMON.feetPartEffectThresholds.get();
+				bothFeetPartEffects = COMMON.bothFeetPartEffects.get();
+				bothFeetPartEffectAmplifiers = COMMON.bothFeetPartEffectAmplifiers.get();
+				bothFeetPartEffectThresholds = COMMON.bothFeetPartEffectThresholds.get();
 			}
 			catch (Exception e)
 			{
-				LegendarySurvivalOverhaul.LOGGER.warn("An exception was caused trying to load the common config for Survival Overhaul");
+				LegendarySurvivalOverhaul.LOGGER.warn("An exception was caused trying to load the common config for Legendary Survival Overhaul");
 				e.printStackTrace();
 			}
 		}
@@ -980,6 +1318,9 @@ public class Config
 				wetnessIndicatorOffsetX = CLIENT.wetnessIndicatorOffsetX.get();
 				wetnessIndicatorOffsetY = CLIENT.wetnessIndicatorOffsetY.get();
 
+				bodyDamageIndicatorOffsetX = CLIENT.bodyDamageIndicatorOffsetX.get();
+				bodyDamageIndicatorOffsetY = CLIENT.bodyDamageIndicatorOffsetY.get();
+
 				foodSaturationDisplayed = CLIENT.foodSaturationDisplayed.get();
 				thirstSaturationDisplayed = CLIENT.thirstSaturationDisplayed.get();
 				showHydrationTooltip = CLIENT.showHydrationTooltip.get();
@@ -987,7 +1328,7 @@ public class Config
 			}
 			catch (Exception e)
 			{
-				LegendarySurvivalOverhaul.LOGGER.warn("An exception was caused trying to load the client config for Survival Overhaul.");
+				LegendarySurvivalOverhaul.LOGGER.warn("An exception was caused trying to load the client config for Legendary Survival Overhaul.");
 				e.printStackTrace();
 			}
 		}

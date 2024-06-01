@@ -17,6 +17,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.network.PacketDistributor;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPart;
+import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageProvider;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodProvider;
@@ -30,10 +33,7 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapab
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
-import sfiomn.legendarysurvivaloverhaul.network.packets.UpdateHeartsPacket;
-import sfiomn.legendarysurvivaloverhaul.network.packets.UpdateTemperaturesPacket;
-import sfiomn.legendarysurvivaloverhaul.network.packets.UpdateThirstPacket;
-import sfiomn.legendarysurvivaloverhaul.network.packets.UpdateWetnessPacket;
+import sfiomn.legendarysurvivaloverhaul.network.packets.*;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, bus = EventBusSubscriber.Bus.FORGE)
@@ -75,9 +75,10 @@ public class ModCapabilities
 			// Server Side
 			PlayerEntity player = event.player;
 			World world = player.level;
+
+			if (shouldSkipTick(player)) return;
 			
-			if (Config.Baked.temperatureEnabled && !shouldSkipTick(player))
-			{
+			if (Config.Baked.temperatureEnabled) {
 				TemperatureCapability tempCap = CapabilityUtil.getTempCapability(player);
 				
 				tempCap.tickUpdate(player, world, event.phase);
@@ -89,8 +90,7 @@ public class ModCapabilities
 				}
 			}
 			
-			if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC && !shouldSkipTick(player))
-			{
+			if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC) {
 				WetnessCapability wetCap = CapabilityUtil.getWetnessCapability(player);
 				
 				wetCap.tickUpdate(player, world, event.phase);
@@ -109,8 +109,7 @@ public class ModCapabilities
 				}
 			}
 
-			if (Config.Baked.thirstEnabled && !shouldSkipTick(player))
-			{
+			if (Config.Baked.thirstEnabled) {
 				ThirstCapability thirstCap = CapabilityUtil.getThirstCapability(player);
 
 				thirstCap.tickUpdate(player, world, event.phase);
@@ -122,10 +121,22 @@ public class ModCapabilities
 				}
 			}
 
-			if (Config.Baked.baseFoodExhaustion > 0 && !shouldSkipTick(player)) {
+			if (Config.Baked.baseFoodExhaustion > 0) {
 				FoodCapability foodCapability = CapabilityUtil.getFoodCapability(player);
 
 				foodCapability.tickUpdate(player, world, event.phase);
+			}
+
+			if (Config.Baked.localizedBodyDamageEnabled) {
+				BodyDamageCapability bodyDamageCapability = CapabilityUtil.getBodyDamageCapability(player);
+
+				bodyDamageCapability.tickUpdate(player, world, event.phase);
+
+				if(event.phase == Phase.START && (bodyDamageCapability.isDirty() || bodyDamageCapability.getPacketTimer() % Config.Baked.routinePacketSync == 0))
+				{
+					bodyDamageCapability.setClean();
+					sendBodyDamageUpdate(player);
+				}
 			}
 		}
 	}
@@ -149,6 +160,11 @@ public class ModCapabilities
 				
 				newCap.updateMaxHealth(player.getCommandSenderWorld(), player);
 				sendHeartsUpdate(player);
+			}
+
+			if (Config.Baked.localizedBodyDamageEnabled) {
+
+				sendBodyDamageUpdate(player);
 			}
 		}
 		else
@@ -185,6 +201,14 @@ public class ModCapabilities
 				newCap.updateMaxHealth(player.getCommandSenderWorld(), player);
 				sendHeartsUpdate(player);
 			}
+
+			if (Config.Baked.localizedBodyDamageEnabled)
+			{
+				BodyDamageCapability oldCap = CapabilityUtil.getBodyDamageCapability(orig);
+				BodyDamageCapability newCap = CapabilityUtil.getBodyDamageCapability(player);
+				newCap.readNBT(oldCap.writeNBT());
+				sendBodyDamageUpdate(player);
+			}
 		}
 	}
 
@@ -218,6 +242,16 @@ public class ModCapabilities
 		}
 	}
 
+	private static void sendBodyDamageUpdate(PlayerEntity player)
+	{
+		if (!player.level.isClientSide)
+		{
+			UpdateBodyDamagePacket packet = new UpdateBodyDamagePacket(LegendarySurvivalOverhaul.BODY_DAMAGE_CAP.getStorage().writeNBT(LegendarySurvivalOverhaul.BODY_DAMAGE_CAP, CapabilityUtil.getBodyDamageCapability(player), null));
+
+			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
+		}
+	}
+
 	private static void sendHeartsUpdate(PlayerEntity player)
 	{
 		if (!player.level.isClientSide)
@@ -240,6 +274,8 @@ public class ModCapabilities
 			sendThirstUpdate(player);
 		if (Config.Baked.heartFruitsEnabled)
 			sendHeartsUpdate(player);
+		if (Config.Baked.localizedBodyDamageEnabled)
+			sendBodyDamageUpdate(player);
 	}
 
 	@SubscribeEvent
@@ -254,6 +290,8 @@ public class ModCapabilities
 			sendThirstUpdate(player);
 		if (Config.Baked.heartFruitsEnabled)
 			sendHeartsUpdate(player);
+		if (Config.Baked.localizedBodyDamageEnabled)
+			sendBodyDamageUpdate(player);
 	}
 	
 	protected static boolean shouldSkipTick(PlayerEntity player)

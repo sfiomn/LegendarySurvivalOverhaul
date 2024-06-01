@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.common.items;
+package sfiomn.legendarysurvivaloverhaul.common.items.drink;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

@@ -6,11 +6,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.WaterFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.common.ForgeMod;
@@ -26,10 +29,13 @@ import sereneseasons.api.SSItems;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons.RenderSeasonCards;
 import sfiomn.legendarysurvivaloverhaul.client.render.*;
+import sfiomn.legendarysurvivaloverhaul.client.screens.BodyHealthScreen;
+import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.KeybindingRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
@@ -60,35 +66,36 @@ public class ModClientEvents {
     }
 
     @SubscribeEvent
-    public static void onRenderGameOverlayTooltip(RenderGameOverlayEvent.Post event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
+    public static void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL || minecraft.isPaused() || minecraft.level == null || !Minecraft.renderNames()) return;
 
-        if (Minecraft.renderNames() && !minecraft.isPaused() && minecraft.level != null) {
-            if(event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-                MatrixStack matrixStack = event.getMatrixStack();
-                PlayerEntity player = Minecraft.getInstance().player;
-                if (player == null) {
-                    return;
-                }
-                Entity entity = WorldUtil.getEntityLookedAt(player, player.getAttributeValue(ForgeMod.REACH_DISTANCE.get()));
-                if (entity instanceof ItemFrameEntity && !((ItemFrameEntity) entity).getItem().isEmpty()) {
-                    Item itemInFrame = ((ItemFrameEntity) entity).getItem().getItem();
+        MatrixStack matrixStack = event.getMatrixStack();
+        PlayerEntity player = Minecraft.getInstance().player;
+        if (player != null) {
 
-                    if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && (itemInFrame == SSItems.calendar.getItem() || itemInFrame == ItemRegistry.SEASONAL_CALENDAR.get())) {
-                        RenderFrame.render(minecraft, matrixStack, formatSeasonName(entity.blockPosition(), entity.level));
-                    } else if (itemInFrame == ItemRegistry.THERMOMETER.get()) {
-                        TemperatureItemCapability tempItemCap = CapabilityUtil.getTempItemCapability(((ItemFrameEntity) entity).getItem());
-                        RenderFrame.render(minecraft, matrixStack, new StringTextComponent(tempItemCap.getWorldTemperatureLevel() + "\u00B0C"));
-                    } else if (itemInFrame == Items.COMPASS) {
-                        RenderFrame.render(minecraft, matrixStack, new StringTextComponent("XYZ: " + entity.blockPosition().getX() +
-                                " / " + entity.blockPosition().getY() + " / " + entity.blockPosition().getZ()));
-                    }
+            Entity entity = WorldUtil.getEntityLookedAt(player, player.getAttributeValue(ForgeMod.REACH_DISTANCE.get()));
+            if (entity instanceof ItemFrameEntity && !((ItemFrameEntity) entity).getItem().isEmpty()) {
+                Item itemInFrame = ((ItemFrameEntity) entity).getItem().getItem();
 
-                    if (itemInFrame == Items.CLOCK) {
-                        RenderFrame.render(minecraft, matrixStack, new StringTextComponent(timeInGame(minecraft)));
-                    }
+                if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && (itemInFrame == SSItems.calendar.getItem() || itemInFrame == ItemRegistry.SEASONAL_CALENDAR.get())) {
+                    RenderFrame.render(minecraft, matrixStack, formatSeasonName(entity.blockPosition(), entity.level));
+                } else if (itemInFrame == ItemRegistry.THERMOMETER.get()) {
+                    TemperatureItemCapability tempItemCap = CapabilityUtil.getTempItemCapability(((ItemFrameEntity) entity).getItem());
+                    RenderFrame.render(minecraft, matrixStack, new StringTextComponent(tempItemCap.getWorldTemperatureLevel() + "\u00B0C"));
+                } else if (itemInFrame == Items.COMPASS) {
+                    RenderFrame.render(minecraft, matrixStack, new StringTextComponent("XYZ: " + entity.blockPosition().getX() +
+                            " / " + entity.blockPosition().getY() + " / " + entity.blockPosition().getZ()));
+                } else if (itemInFrame == Items.CLOCK) {
+                    RenderFrame.render(minecraft, matrixStack, new StringTextComponent(timeInGame(minecraft)));
                 }
             }
+        }
+
+        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && Config.Baked.seasonCardsEnabled) {
+            int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
+            int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
+
+            RenderSeasonCards.render(matrixStack, scaledWidth, scaledHeight);
         }
     }
 
@@ -105,44 +112,35 @@ public class ModClientEvents {
     }
 
     @SubscribeEvent
-    public static void onRenderGameOverlayTemperature(RenderGameOverlayEvent.Post event) {
+    public static void onKeyPress(InputEvent event) {
+        if (KeybindingRegistry.showBodyHealth != null && Minecraft.getInstance().screen == null && KeybindingRegistry.showBodyHealth.consumeClick()) {
+            ClientHooks.openBodyHealthScreen(Minecraft.getInstance().player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRenderGameOverlayEffects(RenderGameOverlayEvent.Post event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL || minecraft.gameMode == null || !minecraft.gameMode.hasExperience()) return;
 
-        if (Config.Baked.temperatureEnabled) {
-            int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
-            int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
+        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
+        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
 
+        if (Config.Baked.temperatureEnabled) {
             if (!minecraft.options.hideGui) {
                 RenderTemperatureGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
             RenderTemperatureOverlay.render(event.getMatrixStack(), scaledWidth, scaledHeight);
         }
-    }
-
-    @SubscribeEvent
-    public static void onRenderGameOverlayThirst(RenderGameOverlayEvent.Post event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.FOOD || minecraft.gameMode == null || !minecraft.gameMode.hasExperience()) return;
 
         if (Config.Baked.thirstEnabled) {
-            int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
-            int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
-
             if (!minecraft.options.hideGui) {
                 RenderThirstGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
         }
-    }
 
-    @SubscribeEvent
-    public static void onRenderGameOverlaySeasonCard(RenderGameOverlayEvent.Post event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL || minecraft.gameMode == null) return;
-
-        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && Config.Baked.seasonCardsEnabled) {
-            int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
-            int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
-
+        if (Config.Baked.localizedBodyDamageEnabled) {
             if (!minecraft.options.hideGui) {
-                RenderSeasonCards.render(event.getMatrixStack(), scaledWidth, scaledHeight);
+                RenderBodyDamageGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
         }
     }
@@ -217,6 +215,9 @@ public class ModClientEvents {
                 }
                 if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && Config.Baked.seasonCardsEnabled) {
                     RenderSeasonCards.updateSeasonCardFading(minecraft.player);
+                }
+                if (Config.Baked.localizedBodyDamageEnabled) {
+                    RenderBodyDamageGui.updateTimer();
                 }
             }
         }

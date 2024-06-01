@@ -1,7 +1,8 @@
 {
-	"key.legendarysurvivaloverhaul.added_desc.title": "Additional Descriptions",
+	"key.legendarysurvivaloverhaul.title": "Legendary Survival Overhaul",
 	"key.legendarysurvivaloverhaul.added_desc": "Show Description",
 	"tooltip.legendarysurvivaloverhaul.added_desc.activate": "Press %s%s%s for coat descriptions",
+	"key.legendarysurvivaloverhaul.body_health": "Show Body Health",
 
 	"itemGroup.legendarysurvivaloverhaul": "Legendary Survival Overhaul",
 	
@@ -14,6 +15,9 @@
 	"item.legendarysurvivaloverhaul.desert_chestplate": "Desert Shirt",
 	"item.legendarysurvivaloverhaul.desert_leggings": "Desert Tunic",
 	"item.legendarysurvivaloverhaul.desert_boots": "Desert Sandals",
+
+	"item.legendarysurvivaloverhaul.cold_string" : "Cold String",
+	"item.legendarysurvivaloverhaul.warm_string" : "Warm String",
 
 	"item.legendarysurvivaloverhaul.cooling_coat_1" : "Common Cooling Coat",
 	"item.legendarysurvivaloverhaul.cooling_coat_2" : "Rare Cooling Coat",
@@ -31,6 +35,7 @@
 	"item.legendarysurvivaloverhaul.thermometer": "Thermometer",
 	"item.legendarysurvivaloverhaul.seasonal_calendar": "Seasonal Calendar",
 	"item.legendarysurvivaloverhaul.heart_fruit": "Heart Fruit",
+
 	"item.legendarysurvivaloverhaul.canteen_empty": "Empty Canteen",
 	"item.legendarysurvivaloverhaul.canteen": "Canteen",
 	"item.legendarysurvivaloverhaul.canteen_purified": "Purified Canteen",
@@ -50,8 +55,12 @@
 	"item.legendarysurvivaloverhaul.pumpkin_juice": "Pumpkin Juice",
 	"item.legendarysurvivaloverhaul.water_plant_bag": "Water Plant Bag",
 
-	"item.legendarysurvivaloverhaul.cold_string" : "Cold String",
-	"item.legendarysurvivaloverhaul.warm_string" : "Warm String",
+	"item.legendarysurvivaloverhaul.healing_herbs": "Healing Herbs",
+	"item.legendarysurvivaloverhaul.plaster": "Plaster",
+	"item.legendarysurvivaloverhaul.bandage": "Bandage",
+	"item.legendarysurvivaloverhaul.tonic": "Tonic",
+	"item.legendarysurvivaloverhaul.medikit": "Medikit",
+	"item.legendarysurvivaloverhaul.morphine": "Morphine",
 	
 	"block.legendarysurvivaloverhaul.heater":"Boiler",
 	"block.legendarysurvivaloverhaul.cooler":"Ice Box",
@@ -59,6 +68,8 @@
 	"block.legendarysurvivaloverhaul.sun_fern": "Sun Fern",
 	"block.legendarysurvivaloverhaul.ice_fern": "Ice Fern",
 	"block.legendarysurvivaloverhaul.water_plant": "Water Plant",
+
+	"screen.legendarysurvivaloverhaul.body_health_screen": "Body Health",
 
 	"container.legendarysurvivaloverhaul.heater": "",
 	"container.legendarysurvivaloverhaul.cooler": "",
@@ -114,6 +125,14 @@
 	"effect.legendarysurvivaloverhaul.hot_drink.description": "Increases player temperature thanks to drink item.",
 	"effect.legendarysurvivaloverhaul.cold_drink": "Cold Drink",
 	"effect.legendarysurvivaloverhaul.cold_drink.description": "Decreases player temperature thanks to drink item.",
+	"effect.legendarysurvivaloverhaul.painkiller": "Painkiller",
+	"effect.legendarysurvivaloverhaul.painkiller.description": "Negates the effects caused by bad body conditions.",
+	"effect.legendarysurvivaloverhaul.hard_falling": "Hard Falling",
+	"effect.legendarysurvivaloverhaul.hard_falling.description": "Fall damage is increased by 20% per amplifier level.",
+	"effect.legendarysurvivaloverhaul.vulnerability": "Vulnerability",
+	"effect.legendarysurvivaloverhaul.vulnerability.description": "All damage taken from any source except falling, is increased by 20% per amplifier level.",
+	"effect.legendarysurvivaloverhaul.headache": "Vision Trouble",
+	"effect.legendarysurvivaloverhaul.headache.description": "Only used by the localized body damage feature, when the head is damaged. Inflicts Blindness from time to time randomly.",
 
 	"death.attack.legendarysurvivaloverhaul.hypothermia": "%1$s froze to death",
 	"death.attack.legendarysurvivaloverhaul.hypothermia.player": "%1$s froze to death",
@@ -146,11 +165,19 @@
 
 	"tooltip.legendarysurvivaloverhaul.sewing_table_disabled": "Coat Already Applied",
 
+	"tooltip.legendarysurvivaloverhaul.body_heal_item.body_part": "Heals up to %s body limbs",
+	"tooltip.legendarysurvivaloverhaul.body_heal_item.whole_body": "Heals all body limbs",
+	"tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value": "Regenerates %s health over %ss",
+	"tooltip.legendarysurvivaloverhaul.body_heal_item.morphine": "Blocks all effects from wounded body limbs",
+
 	"sounds.legendarysurvivaloverhaul.heat_stroke": "Player suffocates",
 	"sounds.legendarysurvivaloverhaul.frostbite": "Player shivers",
 	"sounds.legendarysurvivaloverhaul.dehydration": "Player suffers dehydration",
 	"sounds.legendarysurvivaloverhaul.cooler_block": "Icebox crackles",
-	"sounds.legendarysurvivaloverhaul.sewing_table": "Sewing Table Used",
+	"sounds.legendarysurvivaloverhaul.sewing_table": "Sewing table used",
+	"sounds.legendarysurvivaloverhaul.headshot": "Headshot",
+	"sounds.legendarysurvivaloverhaul.heal_body_part": "Body limb healed",
 
-	"message.legendarysurvivaloverhaul.bonemeal.not_correct_season": "This crop can't grow during this season"
+	"message.legendarysurvivaloverhaul.bonemeal.not_correct_season": "This crop can't grow during this season",
+	"message.legendarysurvivaloverhaul.sereneseasons.season_info": "%s Season, Day %s/%s"
 }

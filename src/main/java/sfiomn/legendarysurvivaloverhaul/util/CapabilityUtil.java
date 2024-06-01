@@ -2,6 +2,7 @@ package sfiomn.legendarysurvivaloverhaul.util;
 
 import net.minecraft.item.ItemStack;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
@@ -76,5 +77,15 @@ public final class CapabilityUtil
 	public static FoodCapability getFoodCapability(PlayerEntity player)
 	{
 		return player.getCapability(LegendarySurvivalOverhaul.FOOD_CAP).orElse(new FoodCapability());
+	}
+
+	/**
+	 * Gets the Body Damage capability of the given player.
+	 * @param player Player
+	 * @return The body damage capability of the given player if it exists, or a new dummy capability if it doesn't.
+	 */
+	public static BodyDamageCapability getBodyDamageCapability(PlayerEntity player)
+	{
+		return player.getCapability(LegendarySurvivalOverhaul.BODY_DAMAGE_CAP).orElse(new BodyDamageCapability());
 	}
 }

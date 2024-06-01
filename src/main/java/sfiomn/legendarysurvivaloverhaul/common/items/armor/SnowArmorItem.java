@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.common.items;
+package sfiomn.legendarysurvivaloverhaul.common.items.armor;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;

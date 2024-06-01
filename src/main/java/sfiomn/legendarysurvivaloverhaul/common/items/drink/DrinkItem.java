@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.common.items;
+package sfiomn.legendarysurvivaloverhaul.common.items.drink;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -66,7 +66,7 @@ public class DrinkItem extends Item {
         if(world.isClientSide || !(entity instanceof PlayerEntity))
             return stack;
 
-        PlayerEntity player = (PlayerEntity)entity;
+        PlayerEntity player = (PlayerEntity) entity;
 
         JsonThirst jsonThirst = null;
         // Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over
