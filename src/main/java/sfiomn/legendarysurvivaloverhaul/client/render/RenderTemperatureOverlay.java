@@ -6,17 +6,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
-import sfiomn.legendarysurvivaloverhaul.client.sounds.FrostbiteSound;
-import sfiomn.legendarysurvivaloverhaul.client.sounds.HeatStrokeSound;
 import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
 import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
-import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
@@ -30,7 +26,7 @@ public class RenderTemperatureOverlay {
     private	static final int TEMPERATURE_EFFECT_HEIGHT = 256;
     private static ResourceLocation temperatureEffect = null;
     private static float fadeLevel = 0;
-    private static boolean triggerSound;
+    private static boolean triggerTemperatureSoundEffect;
 
     public static void render(MatrixStack matrix, int width, int height)
     {
@@ -65,34 +61,35 @@ public class RenderTemperatureOverlay {
                 temperatureEffect = FROSTBITE_EFFECT;
                 if (frostbiteLimit) {
                     targetFadeLevel = 0.5f;
-                    if (triggerSound) {
-                        triggerSound = false;
+                    if (triggerTemperatureSoundEffect) {
+                        triggerTemperatureSoundEffect = false;
                         player.playSound(SoundRegistry.FROSTBITE.get(), 1.0f, 1.0f);
                     }
                 } else {
                     targetFadeLevel = 0.25f;
-                    triggerSound = true;
+                    triggerTemperatureSoundEffect = true;
                     if (fadeLevel == 0) {
                         player.playSound(SoundRegistry.FROSTBITE_EARLY.get(), 1.0f, 1.0f);
                     }
                 }
             } else if (tempEnum == TemperatureEnum.HEAT_STROKE && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
                 temperatureEffect = HEAT_STROKE_EFFECT;
+
                 if (heatstrokeLimit) {
                     targetFadeLevel = 0.5f;
-                    if (triggerSound) {
-                        triggerSound = false;
+                    if (triggerTemperatureSoundEffect) {
+                        triggerTemperatureSoundEffect = false;
                         player.playSound(SoundRegistry.HEAT_STROKE.get(), 1.0f, 1.0f);
                     }
                 } else {
                     targetFadeLevel = 0.25f;
-                    triggerSound = true;
+                    triggerTemperatureSoundEffect = true;
                     if (fadeLevel == 0) {
                         player.playSound(SoundRegistry.HEAT_STROKE_EARLY.get(), 1.0f, 1.0f);
                     }
                 }
             } else {
-                triggerSound = true;
+                triggerTemperatureSoundEffect = true;
                 targetFadeLevel = 0;
             }
 

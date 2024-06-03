@@ -1,0 +1,29 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#i#",
+        "gAg",
+        "WWW"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:string"
+        },
+        "i": {
+            "item": "minecraft:iron_ingot"
+        },
+        "g": {
+            "item": "minecraft:gold_ingot"
+        },
+        "A": {
+            "item": "legendarysurvivaloverhaul:bandage"
+        },
+        "W": {
+            "tag": "minecraft:wool"
+        }
+    },
+    "result": {
+        "item": "legendarysurvivaloverhaul:medikit",
+        "count": 1
+    }
+}

@@ -12,6 +12,7 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
+import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 public class TemperatureCommand extends CommandBase
 {
@@ -35,7 +36,7 @@ public class TemperatureCommand extends CommandBase
 				PlayerEntity player = (PlayerEntity) source.getEntity();
 				float targetTemperature = TemperatureUtil.getPlayerTargetTemperature(player);
 				TemperatureCapability cap = CapabilityUtil.getTempCapability(player);
-				float playerTemp = cap.getTemperatureLevel();
+				float playerTemp = MathUtil.round(cap.getTemperatureLevel(), 2);
 				float worldTemp =  TemperatureUtil.getWorldTemperature(player.level, player.blockPosition());
 
 				String reply = "Temp: " +  playerTemp + "\nTarget Temp: " + targetTemperature + "\nWorld Temp: " + worldTemp;

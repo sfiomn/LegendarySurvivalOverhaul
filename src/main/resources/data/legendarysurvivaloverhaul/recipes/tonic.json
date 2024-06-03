@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " # ",
+        "gGg",
+        " g "
+    ],
+    "key": {
+        "#": {
+            "item": "legendarysurvivaloverhaul:healing_herbs"
+        },
+        "G": {
+            "item": "minecraft:glass_bottle"
+        },
+        "g": {
+            "item": "minecraft:gold_ingot"
+        }
+    },
+    "result": {
+        "item": "legendarysurvivaloverhaul:tonic",
+        "count": 1
+    }
+}

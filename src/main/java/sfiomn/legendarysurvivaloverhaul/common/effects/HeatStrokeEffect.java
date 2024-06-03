@@ -1,6 +1,7 @@
 package sfiomn.legendarysurvivaloverhaul.common.effects;
 
 import net.minecraft.potion.Effects;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.DamageSources;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.DamageUtil;

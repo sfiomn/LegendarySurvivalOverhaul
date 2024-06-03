@@ -118,7 +118,7 @@ public class TemperatureCapability implements ITemperatureCapability
 		if (this.soundTriggerTick > 0)
 			this.soundTriggerTick--;
 		
-		if (getTemperatureTickTimer() >= getTemperatureTickLimit()) {
+		if (getTemperatureTickTimer() >= Config.Baked.tickRate) {
 			setTemperatureTickTimer(0);
 
 			float destinationTemp = targetTemp;
@@ -137,32 +137,22 @@ public class TemperatureCapability implements ITemperatureCapability
 
 			if (Config.Baked.temperatureSecondaryEffects)
 				applySecondaryEffects(player, tempEnum);
-
-			if (this.soundTriggerTick <= 0) {
-				this.soundTriggerTick = 0;
-				if (tempEnum == TemperatureEnum.HEAT_STROKE)
-					player.playSound(SoundRegistry.PANTING.get(), 1.0f, 1.0f);
-				if (tempEnum == TemperatureEnum.FROSTBITE)
-					player.playSound(SoundRegistry.SHIVERING.get(), 1.0f, 1.0f);
-			}
 		}
 	}
 
 	private void applyDangerousEffects(PlayerEntity player, TemperatureEnum tempEnum) {
 		if (tempEnum == TemperatureEnum.HEAT_STROKE) {
-			if (this.soundTriggerTick == 0)
-				this.soundTriggerTick = 200 + player.getRandom().nextInt(600);
 			if (TemperatureEnum.HEAT_STROKE.getMiddle() <= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply hyperthermia
-				player.addEffect(new EffectInstance(EffectRegistry.HEAT_STROKE.get(), 300, 0, false, true));
+				if (!player.hasEffect(EffectRegistry.HEAT_STROKE.get()))
+					player.addEffect(new EffectInstance(EffectRegistry.HEAT_STROKE.get(), 1000, 0, false, true));
 				return;
 			}
 		} else if (tempEnum == TemperatureEnum.FROSTBITE) {
-			if (this.soundTriggerTick == 0)
-				this.soundTriggerTick = 200 + player.getRandom().nextInt(600);
 			if (TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply hypothermia
-				player.addEffect(new EffectInstance(EffectRegistry.FROSTBITE.get(), 300, 0, false, true));
+				if (!player.hasEffect(EffectRegistry.FROSTBITE.get()))
+					player.addEffect(new EffectInstance(EffectRegistry.FROSTBITE.get(), 1000, 0, false, true));
 				return;
 			}
 		}
@@ -194,35 +184,18 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		float diff = Math.abs(destination - currentTemp);
 		
-		float tickTowards = Math.min(1, diff);
+		double tickTowards = ((diff * (Config.Baked.maxTemperatureModification - Config.Baked.minTemperatureModification)) / (TemperatureEnum.HEAT_STROKE.getUpperBound() - TemperatureEnum.FROSTBITE.getLowerBound())) + Config.Baked.minTemperatureModification;
+
+		tickTowards = Math.min(tickTowards, diff);
 		
-		if (diff > 15)
+		if (currentTemp > destination)
 		{
-			tickTowards = 2;
-		}
-		
-		if (getTemperatureLevel() > destination)
-		{
-			addTemperatureLevel(-tickTowards);
+			addTemperatureLevel((float) -tickTowards);
 		}
 		else 
 		{
-			addTemperatureLevel(tickTowards);
+			addTemperatureLevel((float) tickTowards);
 		}
-	}
-	
-	private float getTemperatureTickLimit()
-	{
-		int tickMax = Config.Baked.maxTickRate;
-		int tickMin = Config.Baked.minTickRate;
-		
-		int tickRange = tickMax - tickMin;
-		
-		int tempRange = TemperatureEnum.HEAT_STROKE.getUpperBound() - TemperatureEnum.FROSTBITE.getLowerBound();
-		
-		float currentRange = Math.abs(getTemperatureLevel() - targetTemp);
-		
-		return Math.max(tickMin, tickMax - ((currentRange * tickRange) / tempRange));
 	}
 
 	@Override

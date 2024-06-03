@@ -60,14 +60,15 @@ public class Config
 	{
 		// Core/Advanced
 		// public final ForgeConfigSpec.ConfigValue<Boolean> forceDisableFlightKick;
-		public final ForgeConfigSpec.ConfigValue<Integer> minTickRate;
-		public final ForgeConfigSpec.ConfigValue<Integer> maxTickRate;
 		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
 		public final ForgeConfigSpec.ConfigValue<Boolean> hideInfoFromDebug;
 		public final ForgeConfigSpec.ConfigValue<Double> baseFoodExhaustion;
 		
 		// Temperature
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureEnabled;
+		public final ForgeConfigSpec.ConfigValue<Integer> tickRate;
+		public final ForgeConfigSpec.ConfigValue<Double> minTemperatureModification;
+		public final ForgeConfigSpec.ConfigValue<Double> maxTemperatureModification;
 		public final ForgeConfigSpec.ConfigValue<Boolean> showPotionEffectParticles;
 		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousTemperature;
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureResistanceOnDeathEnabled;
@@ -305,7 +306,7 @@ public class Config
 					.define("Temperature Resistance Enabled", true);
 			temperatureResistanceOnDeathTime = builder
 					.comment(" Temperature resistance period in ticks while the player is immune to temperature effects.")
-					.defineInRange("Temperature Resistance Time", 6000, 0, 1000000);
+					.defineInRange("Temperature Resistance Time", 1800, 0, 100000);
 			builder.pop();
 
 			builder.push("secondary_effects");
@@ -355,14 +356,14 @@ public class Config
 
 			wetnessDecrease = builder
 					.comment(" How much the wetness decrease when out of water, in case of dynamic wetness.")
-					.defineInRange("Wetness Modifier", -5, -1000, 0);
+					.defineInRange("Wetness Decrease", -5, -1000, 0);
 			wetnessRainIncrease = builder
 					.comment(" How much the wetness increase when under rain, in case of dynamic wetness.")
-					.defineInRange("Wetness Modifier", 5, 0, 1000);
+					.defineInRange("Wetness Under Rain Increase", 5, 0, 1000);
 			wetnessFluidIncrease = builder
 					.comment(" How much the wetness increase when the player is in a fluid, scale by the amount of fluid in the block, in case of dynamic wetness.",
 							" The defined value is for a full block of fluid, and goes up to 2 times this value when fully immerge.")
-					.defineInRange("Wetness Modifier", 10, 0, 1000);
+					.defineInRange("Wetness In Fluid Increase", 10, 0, 1000);
 			builder.pop();
 
 			builder.comment(" Default temperature added to the player, based on the dimension.")
@@ -452,13 +453,21 @@ public class Config
 			tempInfluenceOutsideDistMultiplier = builder
 					.comment(" How strongly distance outside a structure is reduced where thermal sources will have an effect on temperature.")
 					.defineInRange("Temperature Influence Outside Distance Multiplier", 0.75, 0.0, 1.0);
-			builder.push("tickrate");
-			maxTickRate = builder
-					.comment(" Maximum amount of time between temperature ticks.")
-					.defineInRange("Maximum Temperature Tickrate", 200, 20, Integer.MAX_VALUE);
-			minTickRate = builder
-					.comment(" Minimum amount of time between temperature ticks.")
-					.defineInRange("Minimum Temperature Tickrate", 20, 20, Integer.MAX_VALUE);
+			builder
+					.comment(" The player's temperature will be adjusted each temperature tick rate," ,
+							" by an amount of temperature defined between the minimum and the maximum temperature modification adjusted linearly.")
+					.push("temperature-modification");
+			tickRate = builder
+					.comment(" Amount of time in ticks between 2 player temperature modification.")
+					.defineInRange("Temperature Tick Rate", 10, 5, Integer.MAX_VALUE);
+			maxTemperatureModification = builder
+					.comment(" Maximum amount of temperature the player's temperature can be modified at each temperature tick rate.",
+							" Correspond to the amount of temperature given when temperature difference is maximum.")
+					.defineInRange("Maximum Temperature Modification", 2, 0.1, Integer.MAX_VALUE);
+			minTemperatureModification = builder
+					.comment(" Minimum amount of temperature the player's temperature can be modified at each temperature tick rate.",
+							" Correspond to the amount of temperature given when there is no temperature difference")
+					.defineInRange("Minimum Temperature Modification", 0.2, 0.1, Integer.MAX_VALUE);
 			builder.pop();
 			builder.pop();
 			
@@ -921,14 +930,15 @@ public class Config
 	public static class Baked
 	{
 		// Core
-		public static int minTickRate;
-		public static int maxTickRate;
 		public static int routinePacketSync;
 		public static boolean hideInfoFromDebug;
 		public static double baseFoodExhaustion;
 
 		// Temperature
 		public static boolean temperatureEnabled;
+		public static int tickRate;
+		public static double minTemperatureModification;
+		public static double maxTemperatureModification;
 		public static boolean showPotionEffectParticles;
 		public static boolean temperatureResistanceOnDeathEnabled;
 		public static int temperatureResistanceOnDeathTime;
@@ -1147,8 +1157,9 @@ public class Config
 			try
 			{
 				hideInfoFromDebug = COMMON.hideInfoFromDebug.get();
-				minTickRate = COMMON.minTickRate.get();
-				maxTickRate = COMMON.maxTickRate.get();
+				tickRate = COMMON.tickRate.get();
+				minTemperatureModification = COMMON.minTemperatureModification.get();
+				maxTemperatureModification = COMMON.maxTemperatureModification.get();
 				routinePacketSync = COMMON.routinePacketSync.get();
 				baseFoodExhaustion = COMMON.baseFoodExhaustion.get();
 
