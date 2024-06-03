@@ -1,7 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.events;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
@@ -152,16 +151,15 @@ public class ModCommonEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void onPlayerFalling(LivingFallEvent event) {
-        if (event.getEntityLiving().hasEffect(EffectRegistry.HARD_FALLING.get()))
-            event.setDamageMultiplier(Math.max(event.getDamageMultiplier(), 1 + 0.2f * Objects.requireNonNull(event.getEntityLiving().getEffect(EffectRegistry.HARD_FALLING.get())).getAmplifier() + 1));
-    }
-
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onEntityHurt(LivingHurtEvent event) {
         if (event.getSource() != DamageSource.FALL && event.getEntityLiving().hasEffect(EffectRegistry.VULNERABILITY.get()))
             event.setAmount(event.getAmount() * (1 + 0.2f * Objects.requireNonNull(event.getEntityLiving().getEffect(EffectRegistry.VULNERABILITY.get())).getAmplifier() + 1));
+
+        else if (event.getSource() == DamageSource.FALL && event.getEntityLiving().hasEffect(EffectRegistry.HARD_FALLING.get())) {
+            event.setAmount(event.getAmount() * (1 + 0.2f * Objects.requireNonNull(event.getEntityLiving().getEffect(EffectRegistry.HARD_FALLING.get())).getAmplifier() + 1));
+            event.getEntityLiving().level.playSound(null, event.getEntityLiving(), SoundRegistry.HARD_FALLING_HURT.get(), SoundCategory.PLAYERS, 1.0F, 1.0F);
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -212,9 +210,19 @@ public class ModCommonEvents {
     @SubscribeEvent
     public static void onSleepFinished(SleepFinishedTimeEvent event) {
         for (PlayerEntity player : event.getWorld().players()) {
-            if (player.isSleepingLongEnough())
-                for (BodyPartEnum bodyPart: BodyPartEnum.values())
-                    BodyDamageUtil.healBodyPart(player, bodyPart, (float) Config.Baked.bodyDamageRecoveredFromSleep);
+            if (player.isSleepingLongEnough()) {
+                if (Config.Baked.localizedBodyDamageEnabled && Config.Baked.bodyHealthRatioRecoveredFromSleep > 0) {
+                    for (BodyPartEnum bodyPart : BodyPartEnum.values()) {
+                        double healthRecovered = BodyDamageUtil.getMaxHealth(player, bodyPart) * Config.Baked.bodyHealthRatioRecoveredFromSleep;
+                        BodyDamageUtil.healBodyPart(player, bodyPart, (float) healthRecovered);
+                    }
+                }
+
+                if (Config.Baked.healthRatioRecoveredFromSleep > 0) {
+                    double healthRecovered = player.getMaxHealth() * Config.Baked.healthRatioRecoveredFromSleep;
+                    player.heal((float) healthRecovered);
+                }
+            }
         }
     }
 

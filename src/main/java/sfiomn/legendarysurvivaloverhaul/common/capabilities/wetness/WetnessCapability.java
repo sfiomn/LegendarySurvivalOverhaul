@@ -23,6 +23,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 public class WetnessCapability
@@ -102,32 +103,36 @@ public class WetnessCapability
 		}
 
 		FluidState fluidState = world.getFluidState(pos);
+		FluidState fluidStateUp = world.getFluidState(pos.above());
 
 		// If no fluid on the pos of the player (or above if in a boat)
 		// only check for raining on pos above player (to avoid issue with half blocks)
-		if (fluidState.isEmpty())
-		{
+		if (fluidState.isEmpty()) {
 			if (wetness < WETNESS_LIMIT && world.isRainingAt(player.blockPosition().above()))
-				this.addWetness(5);
+				this.addWetness(Config.Baked.wetnessRainIncrease);
 			else if (this.wetness > 0)
-				this.addWetness(-3);
+				this.addWetness(Config.Baked.wetnessDecrease);
 		}
-		else
-		{
+		else if (!fluidState.isEmpty()) {
 			Fluid fluid = fluidState.getType();
 			
 			float fractionalLevel = MathUtil.invLerp(1, 8, fluidState.getAmount());
-			
+
+			// if player is out of water
 			if (((float) player.position().y()) > ((float) pos.getY()) + fractionalLevel + 0.0625f)
 				return;
+
+			// add the amount of fluid in the upper block as well
+			if (!fluidStateUp.isEmpty())
+				fractionalLevel += MathUtil.invLerp(1, 8, fluidStateUp.getAmount());
 
 			if (fluid instanceof ForgeFlowingFluid)
 			{
 				ForgeFlowingFluid forgeFluid = (ForgeFlowingFluid) fluidState.getType();
 				
-				if (this.wetness > 0 &&  forgeFluid.getAttributes().isGaseous())
+				if (this.wetness > 0 && forgeFluid.getAttributes().isGaseous())
 				{
-					this.addWetness(-3);
+					this.addWetness(Config.Baked.wetnessDecrease);
 					return;
 				}
 				
@@ -135,21 +140,19 @@ public class WetnessCapability
 				
 				if (this.wetness < WETNESS_LIMIT && temperature < 400)
 				{
-					this.addWetness(temperature / 100);
+					this.addWetness(Math.round(Config.Baked.wetnessFluidIncrease * fractionalLevel));
 				}
 				else if (this.wetness > 0)
 				{
-					this.addWetness(-(temperature / 100));
+					this.addWetness(Config.Baked.wetnessDecrease);
 				}
-			}
-			else if (this.wetness > 0 && fluid instanceof LavaFluid)
-			{
+			} else if (this.wetness > 0 && fluid instanceof LavaFluid) {
 				this.addWetness(-Math.round(20.0f * fractionalLevel));
 			}
 			// Last fallback, just assume that it's the same as water and go from there
 			else if (this.wetness < WETNESS_LIMIT)
 			{
-				this.addWetness(Math.round(4.0f * fractionalLevel));
+				this.addWetness(Math.round(Config.Baked.wetnessFluidIncrease * fractionalLevel));
 			}
 		}
 	}

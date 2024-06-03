@@ -14,6 +14,7 @@ import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BodyDamageUtilInternal implements IBodyDamageUtil {
     private static final Map<MalusBodyPartEnum, Map<Float, Pair<Effect, Integer>>> bodyPartMalusEffects = new HashMap<>();
@@ -103,8 +104,11 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
         capability.hurt(bodyPartEnum, damageValue - remainingDamage);
 
         if (remainingDamage > 0 && !bodyPartEnum.getNeighbours().isEmpty()) {
-            int bodyPartPropagatedIndex = bodyPartEnum.getNeighbours().size() == 1 ? 0 : player.getRandom().nextInt(bodyPartEnum.getNeighbours().size() - 1);
-            capability.hurt(bodyPartEnum.getNeighbours().get(bodyPartPropagatedIndex), remainingDamage);
+            List<BodyPartEnum> damageableBodyParts = bodyPartEnum.getNeighbours().stream().filter(bodyPart -> capability.getBodyPartHealthRatio(bodyPart) > 0).collect(Collectors.toList());
+            if (!damageableBodyParts.isEmpty()){
+                BodyPartEnum bodyPart = DamageDistributionEnum.ONE_OF.getBodyParts(player, damageableBodyParts).get(0);
+                capability.hurt(bodyPart, remainingDamage);
+            }
         }
     }
 

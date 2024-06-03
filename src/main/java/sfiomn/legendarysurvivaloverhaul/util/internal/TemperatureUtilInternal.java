@@ -81,23 +81,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	@Override
 	public TemperatureEnum getTemperatureEnum(float temperature)
 	{
-		for(TemperatureEnum tempEnum : TemperatureEnum.values())
-		{
-			if(tempEnum.matches(temperature))
-			{
-				return tempEnum;
-			}
-		}
-		
-		// Temperature invalid, assume extremes
-		if(temperature < 0)
-		{
-			return TemperatureEnum.FROSTBITE;
-		}
-		else
-		{
-			return TemperatureEnum.HEAT_STROKE;
-		}
+		return TemperatureEnum.get(temperature);
 	}
 
 	@Override

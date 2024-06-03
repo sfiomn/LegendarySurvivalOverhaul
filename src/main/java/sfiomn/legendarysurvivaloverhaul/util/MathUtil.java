@@ -6,7 +6,8 @@ import net.minecraft.util.math.vector.Vector3d;
 public final class MathUtil
 {
 	private MathUtil() {}
-	
+
+	// Return value between [0-1] based on the position of value vs the boundaries
 	public static float invLerp(float from, float to, float value)
 	{
 		return (value - from) / (to - from);

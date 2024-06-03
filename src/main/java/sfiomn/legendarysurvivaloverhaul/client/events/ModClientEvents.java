@@ -113,7 +113,7 @@ public class ModClientEvents {
 
     @SubscribeEvent
     public static void onKeyPress(InputEvent event) {
-        if (KeybindingRegistry.showBodyHealth != null && Minecraft.getInstance().screen == null && KeybindingRegistry.showBodyHealth.consumeClick()) {
+        if (KeybindingRegistry.showBodyHealth != null && KeybindingRegistry.showBodyHealth.consumeClick()) {
             ClientHooks.openBodyHealthScreen(Minecraft.getInstance().player);
         }
     }

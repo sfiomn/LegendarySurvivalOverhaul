@@ -9,12 +9,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.RenderUtil;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import static net.minecraft.client.gui.AbstractGui.blit;
@@ -27,6 +29,7 @@ public class RenderBodyDamageGui
 	private static final int BODY_MODEL_TEXTURE_HEIGHT = 32;
 
 	private static final Map<BodyPartEnum, Integer> flashCounters = new HashMap<>();
+	private static final Map<BodyPartEnum, Float> bodyPartHealth = new HashMap<>();
 	
 	public static void render(MatrixStack matrix, PlayerEntity player, int width, int height) {
 		RenderSystem.enableBlend();
@@ -34,7 +37,7 @@ public class RenderBodyDamageGui
 		
 		BodyDamageCapability bodyDamageCap = CapabilityUtil.getBodyDamageCapability(player);
 
-		if (bodyDamageCap.isWounded())
+		if (Config.Baked.alwaysShowBodyDamageIndicator || bodyDamageCap.isWounded())
 			drawBodyDamage(matrix, bodyDamageCap, width, height);
 
 		RenderSystem.disableBlend();
@@ -50,35 +53,40 @@ public class RenderBodyDamageGui
 		bind(ICONS);
 
 		for (BodyPartEnum bodyPart: BodyPartEnum.values()) {
+
+			if (!bodyPartHealth.containsKey(bodyPart)) {
+				bodyPartHealth.put(bodyPart, cap.getBodyPartDamage(bodyPart));
+			} else {
+				if (bodyPartHealth.get(bodyPart) != cap.getBodyPartDamage(bodyPart)) {
+					flashCounters.put(bodyPart, 4);
+					bodyPartHealth.put(bodyPart, cap.getBodyPartDamage(bodyPart));
+				}
+			}
+
 			BodyPartIcon icon = BodyPartIcon.get(bodyPart);
 			if (icon == null)
 				continue;
 
 			float healthRatio = cap.getBodyPartHealthRatio(bodyPart);
-			boolean shouldFlash = false;
-			if (flashCounters.containsKey(bodyPart)) {
-				shouldFlash = true;
-			} else if (cap.shouldFlash(bodyPart)){
-				flashCounters.put(bodyPart, 10);
-				shouldFlash = true;
-			}
+			boolean shouldFlash = flashCounters.containsKey(bodyPart);
 
-			BodyPartCondition offset = BodyPartCondition.get(healthRatio, shouldFlash);
+            BodyPartCondition offset = BodyPartCondition.get(healthRatio, shouldFlash);
 
 			RenderUtil.drawTexturedModelRect(m4f, x + icon.x, y + icon.y, icon.width, icon.height,
 					BODY_MODEL_TEXTURE_WIDTH * offset.iconIndexX + icon.texX,
 					BODY_MODEL_TEXTURE_HEIGHT * offset.iconIndexY + icon.texY, icon.width, icon.height);
-
-			cap.hasFlash(bodyPart);
 		}
 	}
 
 	public static void updateTimer() {
-		for (Map.Entry<BodyPartEnum, Integer> flashBodyPart: flashCounters.entrySet())
+		Iterator<Map.Entry<BodyPartEnum, Integer>> iter = flashCounters.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<BodyPartEnum, Integer> flashBodyPart = iter.next();
 			if (flashBodyPart.getValue() > 0)
 				flashBodyPart.setValue(flashBodyPart.getValue() - 1);
 			else
-				flashCounters.remove(flashBodyPart.getKey());
+				iter.remove();
+		}
 	}
 	
 	private static void bind(ResourceLocation resource) {

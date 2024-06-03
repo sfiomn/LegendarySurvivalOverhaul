@@ -9,6 +9,16 @@
 			}
 		]
 	},
+	"heat_stroke_early": {
+		"category": "neutral",
+		"subtitle": "heat_stroke_early",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:heat_stroke_early",
+				"stream": true
+			}
+		]
+	},
 	"frostbite": {
 		"category": "neutral",
 		"subtitle": "frostbite",
@@ -19,6 +29,20 @@
 			},
 			{
 				"name": "legendarysurvivaloverhaul:frostbite_2",
+				"stream": true
+			}
+		]
+	},
+	"frostbite_early": {
+		"category": "neutral",
+		"subtitle": "frostbite",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:frostbite_early",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:frostbite_early",
 				"stream": true
 			}
 		]
@@ -57,7 +81,7 @@
 	},
 	"headshot": {
 		"category": "neutral",
-		"subtitle": "heashot",
+		"subtitle": "headhot",
 		"sounds": [
 			{
 				"name": "legendarysurvivaloverhaul:headshot",
@@ -67,10 +91,82 @@
 	},
 	"heal_body_part": {
 		"category": "neutral",
-		"subtitle": "heashot",
+		"subtitle": "heal_body_part",
 		"sounds": [
 			{
 				"name": "legendarysurvivaloverhaul:heal_body_part",
+				"stream": true
+			}
+		]
+	},
+	"hard_falling_hurt": {
+		"category": "neutral",
+		"subtitle": "hard_falling_hurt",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:hard_falling_hurt",
+				"stream": true
+			}
+		]
+	},
+	"headache_heartbeat": {
+		"category": "neutral",
+		"subtitle": "headache_heartbeat",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:headache_heartbeat",
+				"stream": true
+			}
+		]
+	},
+	"panting": {
+		"category": "neutral",
+		"subtitle": "panting",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:panting1",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:panting2",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:panting3",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:panting4",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:panting5",
+				"stream": true
+			}
+		]
+	},
+	"shivering": {
+		"category": "neutral",
+		"subtitle": "shivering",
+		"sounds": [
+			{
+				"name": "legendarysurvivaloverhaul:shivers1",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:shivers2",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:shivers3",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:shivers4",
+				"stream": true
+			},
+			{
+				"name": "legendarysurvivaloverhaul:shivers5",
 				"stream": true
 			}
 		]

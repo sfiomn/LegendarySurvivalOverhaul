@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.network.packets;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -70,7 +71,8 @@ public class MessageBodyPartHealingItem
 
             if (nbt.getBoolean("consumeItem")) {
                 ((BodyHealingItem) itemStack.getItem()).runSecondaryEffect(player, itemStack);
-                itemStack.shrink(1);
+                if (!player.isCreative())
+                    itemStack.shrink(1);
             }
         }
     }

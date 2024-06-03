@@ -70,6 +70,9 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureEnabled;
 		public final ForgeConfigSpec.ConfigValue<Boolean> showPotionEffectParticles;
 		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousTemperature;
+		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureResistanceOnDeathEnabled;
+		public final ForgeConfigSpec.ConfigValue<Integer> temperatureResistanceOnDeathTime;
+
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureSecondaryEffects;
 		public final ForgeConfigSpec.ConfigValue<Double> heatThirstEffectModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> coldHungerEffectModifier;
@@ -93,6 +96,9 @@ public class Config
 		
 		public final ForgeConfigSpec.ConfigValue<String> wetnessMode;
 		public final ForgeConfigSpec.ConfigValue<Double> wetMultiplier;
+		public final ForgeConfigSpec.ConfigValue<Integer> wetnessDecrease;
+		public final ForgeConfigSpec.ConfigValue<Integer> wetnessRainIncrease;
+		public final ForgeConfigSpec.ConfigValue<Integer> wetnessFluidIncrease;
 
 		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceMaximumDist;
 		public final ForgeConfigSpec.ConfigValue<Double> tempInfluenceUpDistMultiplier;
@@ -193,7 +199,8 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Boolean> localizedBodyDamageEnabled;
 		public final ForgeConfigSpec.ConfigValue<Double> headCriticalShotMultiplier;
 		public final ForgeConfigSpec.ConfigValue<Double> bodyDamageMultiplier;
-		public final ForgeConfigSpec.ConfigValue<Double> bodyDamageRecoveredFromSleep;
+		public final ForgeConfigSpec.ConfigValue<Double> bodyHealthRatioRecoveredFromSleep;
+		public final ForgeConfigSpec.ConfigValue<Double> healthRatioRecoveredFromSleep;
 
 		public final ForgeConfigSpec.ConfigValue<String> bodyPartHealthMode;
 		public final ForgeConfigSpec.ConfigValue<Double> headPartHealth;
@@ -292,7 +299,16 @@ public class Config
 					.comment(" If enabled, players will take damage from the effects of temperature.")
 					.define("Dangerous Temperature Effects", true);
 
-			builder.push("secondary_effet");
+			builder.push("on-death");
+			temperatureResistanceOnDeathEnabled = builder
+					.comment(" If enabled, players will be immune to temperature effects after death.")
+					.define("Temperature Resistance Enabled", true);
+			temperatureResistanceOnDeathTime = builder
+					.comment(" Temperature resistance period in ticks while the player is immune to temperature effects.")
+					.defineInRange("Temperature Resistance Time", 6000, 0, 1000000);
+			builder.pop();
+
+			builder.push("secondary_effects");
 			temperatureSecondaryEffects = builder
 					.comment(" If enabled, players will also receive other effects from their current temperature state.",
 							" If the player is too hot, hydration will deplete faster. If the player is too cold, hunger will deplete faster.")
@@ -336,13 +352,24 @@ public class Config
 			wetMultiplier = builder
 					.comment(" How much being wet influences the player's temperature.")
 					.define("Wetness Modifier", -10.0d);
+
+			wetnessDecrease = builder
+					.comment(" How much the wetness decrease when out of water, in case of dynamic wetness.")
+					.defineInRange("Wetness Modifier", -5, -1000, 0);
+			wetnessRainIncrease = builder
+					.comment(" How much the wetness increase when under rain, in case of dynamic wetness.")
+					.defineInRange("Wetness Modifier", 5, 0, 1000);
+			wetnessFluidIncrease = builder
+					.comment(" How much the wetness increase when the player is in a fluid, scale by the amount of fluid in the block, in case of dynamic wetness.",
+							" The defined value is for a full block of fluid, and goes up to 2 times this value when fully immerge.")
+					.defineInRange("Wetness Modifier", 10, 0, 1000);
 			builder.pop();
 
 			builder.comment(" Default temperature added to the player, based on the dimension.")
 					.push("dimension-default");
-			overworldDefaultTemperature = builder.define( "Default Overworld Modifier", 15.0d);
-			netherDefaultTemperature = builder.define( "Default Nether Modifier", 20.0d);
-			endDefaultTemperature = builder.define( "Default The End Modifier", 10.0d);
+			overworldDefaultTemperature = builder.define( "Default Overworld Modifier", 20.0d);
+			netherDefaultTemperature = builder.define( "Default Nether Modifier", 30.0d);
+			endDefaultTemperature = builder.define( "Default The End Modifier", 5.0d);
 			builder.pop();
 			
 			builder.push("huddling");
@@ -496,17 +523,17 @@ public class Config
 			builder.push("environment");
 
 			builder.push("flowers");
-			sunFernBiomeNames = builder.comment(" In which biome names the Sun Fern will spawn")
+			sunFernBiomeNames = builder.comment(" In which biome names the Sun Fern will spawn.")
 					.define("Sun Fern Biome Names Spawn List", new ArrayList<>());
-			sunFernBiomeCategories = builder.comment(" In which biome categories the Sun Fern will spawn")
+			sunFernBiomeCategories = builder.comment(" In which biome categories the Sun Fern will spawn.")
 					.define("Sun Fern Biome Categories Spawn List", Arrays.asList("DESERT", "SAVANNA"));
-			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn")
+			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn.")
 					.define("Ice Fern Biome Names Spawn List", new ArrayList<>());
-			iceFernBiomeCategories = builder.comment(" In which biome categories the Ice Fern will spawn")
+			iceFernBiomeCategories = builder.comment(" In which biome categories the Ice Fern will spawn.")
 					.define("Ice Fern Biome Categories Spawn List", Arrays.asList("TAIGA", "ICY"));
-			waterPlantBiomeNames = builder.comment(" In which biome names the Water Plant will spawn")
+			waterPlantBiomeNames = builder.comment(" In which biome names the Water Plant will spawn.")
 					.define("Water Plant Biome Names Spawn List", new ArrayList<>());
-			waterPlantBiomeCategories = builder.comment(" In which biome categories the Water Plant will spawn")
+			waterPlantBiomeCategories = builder.comment(" In which biome categories the Water Plant will spawn.")
 					.define("Water Plant Biome Categories Spawn List", Collections.singletonList("DESERT"));
 			builder.pop();
 
@@ -632,14 +659,17 @@ public class Config
 					" The damageSourceBodyParts.json allows you to define for specific damage source, the damage spread across specified body parts.",
 					" The damage distribution can either be ONE_OF or ALL. ALL means the damage are equally divided across all body parts.").push("body-damage");
 			headCriticalShotMultiplier = builder
-					.comment(" Multiply the damage taken by the player when shot in the head")
+					.comment(" Multiply the damage taken by the player when shot in the head.")
 					.defineInRange("Headshot Multiplier", 2.0d, 1.0d, 1000.0d);
 			bodyDamageMultiplier = builder
 					.comment(" How much of the hurt player's damage is assigned to the body parts.")
 					.defineInRange("Body Damage Multiplier", 1.0d, 0.0d, 1000.0d);
-			bodyDamageRecoveredFromSleep = builder
-					.comment(" How much damage are recovered in all body parts from bed sleeping.")
-					.defineInRange("Body Part Damage Recovered", 2.0d, 0.0d, 1000.0d);
+			bodyHealthRatioRecoveredFromSleep = builder
+					.comment(" How much health ratio are recovered in all body parts from bed sleeping.")
+					.defineInRange("Body Part Health Ratio Recovered", 0.3d, 0.0d, 1.0d);
+			healthRatioRecoveredFromSleep = builder
+					.comment(" How much health ratio are recovered from bed sleeping.")
+					.defineInRange("Health Ratio Recovered", 0.3d, 0.0d, 1.0d);
 
 			builder.push("healing-items");
 
@@ -677,7 +707,7 @@ public class Config
 			bandageHealingCharges = builder
 					.defineInRange("Bandage Healing Charges", 3, 0, 1000);
 			builder.pop();
-			builder.comment("Tonic heals all body parts").push("tonic");
+			builder.comment(" Tonic heals all body parts.").push("tonic");
 			tonicHealingValue = builder
 					.defineInRange("Tonic Healing Value", 5.0d, 0.0d, 1000.0d);
 			tonicHealingTime = builder
@@ -685,7 +715,7 @@ public class Config
 			tonicUseTime = builder
 					.defineInRange("Tonic Use Time", 50, 0, 1000);
 			builder.pop();
-			builder.comment("Medikit heals all body parts").push("medikit");
+			builder.comment(" Medikit heals all body parts.").push("medikit");
 			medikitHealingValue = builder
 					.defineInRange("Medikit Healing Value", 8.0d, 0.0d, 1000.0d);
 			medikitHealingTime = builder
@@ -707,12 +737,12 @@ public class Config
 					.define("Body Part Health Mode", "DYNAMIC");
 
 			headPartHealth = builder.defineInRange("Head Part Health", 0.2d, 0.0d, 1000.0d);
-			armsPartHealth = builder.comment(" Both arms will have this health")
+			armsPartHealth = builder.comment(" Both arms will have this health.")
 					.defineInRange("Arms Part Health", 0.2d, 0.0d, 1000.0d);;
 			chestPartHealth = builder.defineInRange("Chest Part Health", 0.3d, 0.0d, 1000.0d);;
-			legsPartHealth = builder.comment(" Both legs will have this health")
+			legsPartHealth = builder.comment(" Both legs will have this health.")
 					.defineInRange("Legs Part Health", 0.3d, 0.0d, 1000.0d);;
-			feetPartHealth = builder.comment(" Both feet will have this health")
+			feetPartHealth = builder.comment(" Both feet will have this health.")
 					.defineInRange("Feet Part Health", 0.2d, 0.0d, 1000.0d);;
 			builder.pop();
 
@@ -783,6 +813,7 @@ public class Config
 
 		public final ForgeConfigSpec.ConfigValue<Integer> bodyDamageIndicatorOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> bodyDamageIndicatorOffsetY;
+		public final ForgeConfigSpec.ConfigValue<Boolean> alwaysShowBodyDamageIndicator;
 
 		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsOffsetY;
@@ -825,14 +856,11 @@ public class Config
 					.comment(" If enabled, the food saturation will be rendered on the Food Bar while the player suffers Cold Hunger Effect (secondary temperature effect).")
 					.define("Show Food Saturation Bar", true);
 			builder.push("wetness");
-			
-			builder.comment(" The X and Y offset of the wetness indicator. Set both to 0 for no offset.")
-					.push("offset");
 			wetnessIndicatorOffsetX = builder
+					.comment(" The X and Y offset of the wetness indicator. Set both to 0 for no offset.")
 					.define("Wetness Indicator X Offset", 0);
 			wetnessIndicatorOffsetY = builder
 					.define("Wetness Indicator Y Offset", 0);
-			builder.pop();
 			builder.pop();
 			builder.pop();
 
@@ -840,14 +868,17 @@ public class Config
 
 			builder.push("body-damage");
 			bodyDamageIndicatorOffsetX = builder
-					.comment(" The X and Y offset of the body damage indicator. Set both to 0 for no offset.", "By default, render next to the inventory bar.")
+					.comment(" The X and Y offset of the body damage indicator. Set both to 0 for no offset.", " By default, render next to the inventory bar.")
 					.define("Body Damage Indicator X Offset", 0);
 			bodyDamageIndicatorOffsetY = builder.define("Body Damage Indicator Y Offset", 0);
+			alwaysShowBodyDamageIndicator = builder
+					.comment(" If true, the body damage indicator will always be rendered", " By default, the body damage indicator disappears when no wounded body limbs.")
+					.define("Body Damage indicator Always Rendered", false);
 			builder.pop();
 
 			builder.push("season-cards");
 			seasonCardsOffsetX = builder
-					.comment(" The X and Y offset of the season cards. Set both to 0 for no offset.", "By default, render first top quarter vertically and centered horizontally.")
+					.comment(" The X and Y offset of the season cards. Set both to 0 for no offset.", " By default, render first top quarter vertically and centered horizontally.")
 					.define("Season Cards X Offset", 0);
 			seasonCardsOffsetY = builder
 					.define("Season Cards Y Offset", 0);
@@ -899,6 +930,8 @@ public class Config
 		// Temperature
 		public static boolean temperatureEnabled;
 		public static boolean showPotionEffectParticles;
+		public static boolean temperatureResistanceOnDeathEnabled;
+		public static int temperatureResistanceOnDeathTime;
 
 		public static boolean dangerousTemperature;
 		public static boolean temperatureSecondaryEffects;
@@ -939,6 +972,9 @@ public class Config
 		
 		public static WetnessMode wetnessMode;
 		public static double wetMultiplier;
+		public static int wetnessDecrease;
+		public static int wetnessRainIncrease;
+		public static int wetnessFluidIncrease;
 
 		public static double heatingCoat1Modifier;
 		public static double heatingCoat2Modifier;
@@ -1024,7 +1060,8 @@ public class Config
 		public static boolean localizedBodyDamageEnabled;
 		public static double headCriticalShotMultiplier;
 		public static double bodyDamageMultiplier;
-		public static double bodyDamageRecoveredFromSleep;
+		public static double bodyHealthRatioRecoveredFromSleep;
+		public static double healthRatioRecoveredFromSleep;
 
 		public static String bodyPartHealthMode;
 		public static double headPartHealth;
@@ -1098,6 +1135,7 @@ public class Config
 
 		public static int bodyDamageIndicatorOffsetX;
 		public static int bodyDamageIndicatorOffsetY;
+		public static boolean alwaysShowBodyDamageIndicator;
 
 		public static boolean showHydrationTooltip;
 		public static boolean mergeHydrationAndSaturationTooltip;
@@ -1116,6 +1154,9 @@ public class Config
 
 				temperatureEnabled = COMMON.temperatureEnabled.get();
 				showPotionEffectParticles = COMMON.showPotionEffectParticles.get();
+
+				temperatureResistanceOnDeathEnabled = COMMON.temperatureResistanceOnDeathEnabled.get();
+				temperatureResistanceOnDeathTime = COMMON.temperatureResistanceOnDeathTime.get();
 				
 				dangerousTemperature = COMMON.dangerousTemperature.get();
 				temperatureSecondaryEffects = COMMON.temperatureSecondaryEffects.get();
@@ -1147,6 +1188,9 @@ public class Config
 				
 				wetnessMode = WetnessMode.getDisplayFromString(COMMON.wetnessMode.get());
 				wetMultiplier = COMMON.wetMultiplier.get();
+				wetnessDecrease = COMMON.wetnessDecrease.get();
+				wetnessRainIncrease = COMMON.wetnessRainIncrease.get();
+				wetnessFluidIncrease = COMMON.wetnessFluidIncrease.get();
 				
 				playerHuddlingModifier = COMMON.playerHuddlingModifier.get();
 				playerHuddlingRadius = COMMON.playerHuddlingRadius.get();
@@ -1238,7 +1282,8 @@ public class Config
 				localizedBodyDamageEnabled = COMMON.localizedBodyDamageEnabled.get();
 				headCriticalShotMultiplier = COMMON.headCriticalShotMultiplier.get();
 				bodyDamageMultiplier = COMMON.bodyDamageMultiplier.get();
-				bodyDamageRecoveredFromSleep = COMMON.bodyDamageRecoveredFromSleep.get();
+				bodyHealthRatioRecoveredFromSleep = COMMON.bodyHealthRatioRecoveredFromSleep.get();
+				healthRatioRecoveredFromSleep = COMMON.healthRatioRecoveredFromSleep.get();
 
 				bodyPartHealthMode = COMMON.bodyPartHealthMode.get();
 				headPartHealth = COMMON.headPartHealth.get();
@@ -1320,6 +1365,7 @@ public class Config
 
 				bodyDamageIndicatorOffsetX = CLIENT.bodyDamageIndicatorOffsetX.get();
 				bodyDamageIndicatorOffsetY = CLIENT.bodyDamageIndicatorOffsetY.get();
+				alwaysShowBodyDamageIndicator = CLIENT.alwaysShowBodyDamageIndicator.get();
 
 				foodSaturationDisplayed = CLIENT.foodSaturationDisplayed.get();
 				thirstSaturationDisplayed = CLIENT.thirstSaturationDisplayed.get();

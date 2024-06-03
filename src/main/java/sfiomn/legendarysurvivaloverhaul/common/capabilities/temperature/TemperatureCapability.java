@@ -16,6 +16,7 @@ import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
 import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 
 // Code adapted from 
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/capability/TemperatureCapability.java
@@ -31,6 +32,7 @@ public class TemperatureCapability implements ITemperatureCapability
 	private float targetTemp;
 	private boolean manualDirty;
 	private int packetTimer;
+	private int soundTriggerTick;
 	
 	public TemperatureCapability() 
 	{
@@ -46,6 +48,7 @@ public class TemperatureCapability implements ITemperatureCapability
 		this.targetTemp = 0;
 		this.manualDirty = false;
 		this.packetTimer = 0;
+		this.soundTriggerTick = 0;
 	}
 	
 	@Override
@@ -111,6 +114,9 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 
 		addTemperatureTickTimer(1);
+
+		if (this.soundTriggerTick > 0)
+			this.soundTriggerTick--;
 		
 		if (getTemperatureTickTimer() >= getTemperatureTickLimit()) {
 			setTemperatureTickTimer(0);
@@ -126,28 +132,36 @@ public class TemperatureCapability implements ITemperatureCapability
 			if (player.getItemBySlot(EquipmentSlotType.MAINHAND).getItem() == Items.DEBUG_STICK)
 				LegendarySurvivalOverhaul.LOGGER.info(tempEnum + ", " + getTemperatureLevel() + " -> " + destinationTemp);
 
-			if (Config.Baked.dangerousTemperature) {
+			if (Config.Baked.dangerousTemperature)
 				applyDangerousEffects(player, tempEnum);
-			}
 
-			if (Config.Baked.temperatureSecondaryEffects) {
+			if (Config.Baked.temperatureSecondaryEffects)
 				applySecondaryEffects(player, tempEnum);
+
+			if (this.soundTriggerTick <= 0) {
+				this.soundTriggerTick = 0;
+				if (tempEnum == TemperatureEnum.HEAT_STROKE)
+					player.playSound(SoundRegistry.PANTING.get(), 1.0f, 1.0f);
+				if (tempEnum == TemperatureEnum.FROSTBITE)
+					player.playSound(SoundRegistry.SHIVERING.get(), 1.0f, 1.0f);
 			}
 		}
 	}
 
 	private void applyDangerousEffects(PlayerEntity player, TemperatureEnum tempEnum) {
 		if (tempEnum == TemperatureEnum.HEAT_STROKE) {
+			if (this.soundTriggerTick == 0)
+				this.soundTriggerTick = 200 + player.getRandom().nextInt(600);
 			if (TemperatureEnum.HEAT_STROKE.getMiddle() <= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply hyperthermia
-				player.removeEffect(EffectRegistry.HEAT_STROKE.get());
 				player.addEffect(new EffectInstance(EffectRegistry.HEAT_STROKE.get(), 300, 0, false, true));
 				return;
 			}
 		} else if (tempEnum == TemperatureEnum.FROSTBITE) {
+			if (this.soundTriggerTick == 0)
+				this.soundTriggerTick = 200 + player.getRandom().nextInt(600);
 			if (TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply hypothermia
-				player.removeEffect(EffectRegistry.FROSTBITE.get());
 				player.addEffect(new EffectInstance(EffectRegistry.FROSTBITE.get(), 300, 0, false, true));
 				return;
 			}
@@ -233,7 +247,7 @@ public class TemperatureCapability implements ITemperatureCapability
 	@Override
 	public TemperatureEnum getTemperatureEnum()
 	{
-		return TemperatureUtil.getTemperatureEnum(getTemperatureLevel());
+		return TemperatureEnum.get(temperature);
 	}
 	
 	public CompoundNBT writeNBT() 

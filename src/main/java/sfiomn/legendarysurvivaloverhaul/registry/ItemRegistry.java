@@ -80,8 +80,8 @@ public class ItemRegistry
 	public static final RegistryObject<Item> HEALING_HERBS = ITEMS.register("healing_herbs", () -> new HealingHerbsItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
 	public static final RegistryObject<Item> PLASTER = ITEMS.register("plaster", () -> new PlasterItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
 	public static final RegistryObject<Item> BANDAGE = ITEMS.register("bandage", () -> new BandageItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
-	public static final RegistryObject<Item> TONIC = ITEMS.register("tonic", () -> new TonicItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
-	public static final RegistryObject<Item> MEDIKIT = ITEMS.register("medikit", () -> new MedikitItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
+	public static final RegistryObject<Item> TONIC = ITEMS.register("tonic", () -> new TonicItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP).rarity(Rarity.RARE)));
+	public static final RegistryObject<Item> MEDIKIT = ITEMS.register("medikit", () -> new MedikitItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP).rarity(Rarity.EPIC)));
 	public static final RegistryObject<Item> MORPHINE = ITEMS.register("morphine", () -> new MorphineItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
 
 	public static void register(IEventBus eventBus){

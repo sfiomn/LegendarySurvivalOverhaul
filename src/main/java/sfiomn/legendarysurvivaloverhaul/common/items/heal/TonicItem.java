@@ -3,6 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.common.items.heal;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
@@ -20,6 +21,11 @@ import java.util.List;
 public class TonicItem extends BodyHealingItem {
     public TonicItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public UseAction getUseAnimation(ItemStack stack) {
+        return UseAction.DRINK;
     }
 
     @Override

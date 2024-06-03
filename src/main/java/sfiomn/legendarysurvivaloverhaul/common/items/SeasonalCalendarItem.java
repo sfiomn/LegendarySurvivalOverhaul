@@ -28,9 +28,4 @@ public class SeasonalCalendarItem extends Item {
             player.displayClientMessage(formatSeasonName(player.blockPosition(), player.level), true);
         return super.use(world, player, hand);
     }
-
-    @Override
-    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt) {
-        return new TemperatureItemCapability.TemperatureItemProvider();
-    }
 }

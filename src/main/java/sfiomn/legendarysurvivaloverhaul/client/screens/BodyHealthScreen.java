@@ -23,8 +23,8 @@ import java.util.Map;
 
 public class BodyHealthScreen extends Screen {
     public static final ResourceLocation BODY_HEALTH_SCREEN = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/body_health_screen.png");
-    public static final int HEALTH_SCREEN_WIDTH = 175;
-    public static final int HEALTH_SCREEN_HEIGHT = 182;
+    public static final int HEALTH_SCREEN_WIDTH = 176;
+    public static final int HEALTH_SCREEN_HEIGHT = 183;
     public static final int HEALTH_BAR_WIDTH = 30;
     public static final int HEALTH_BAR_HEIGHT = 5;
     public static final int TEX_HEALTH_BAR_X = 176;
@@ -95,6 +95,8 @@ public class BodyHealthScreen extends Screen {
         if (healingCharges > 0) {
             MessageBodyPartHealingItem messageBodyPartHealingItemToServer = new MessageBodyPartHealingItem(bodyPart, this.hand, this.consumeItem);
             NetworkHandler.INSTANCE.sendToServer(messageBodyPartHealingItemToServer);
+            if (player.getItemInHand(this.hand).getItem() instanceof BodyHealingItem)
+                BodyDamageUtil.applyHealingItem(player, bodyPart, (BodyHealingItem) player.getItemInHand(this.hand).getItem());
             if (this.consumeItem)
                 this.consumeItem = false;
             this.healingCharges--;

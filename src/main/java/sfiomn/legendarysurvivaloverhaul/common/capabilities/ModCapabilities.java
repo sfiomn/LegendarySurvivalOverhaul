@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -34,6 +35,7 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.network.packets.*;
+import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, bus = EventBusSubscriber.Bus.FORGE)
@@ -149,6 +151,10 @@ public class ModCapabilities
 		
 		if (event.isWasDeath())
 		{
+			if (Config.Baked.temperatureResistanceOnDeathEnabled) {
+				player.addEffect(new EffectInstance(EffectRegistry.HEAT_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime));
+				player.addEffect(new EffectInstance(EffectRegistry.COLD_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime));
+			}
 			if (Config.Baked.heartFruitsEnabled && Config.Baked.heartsLostOnDeath >= 0)
 			{
 				HeartModifierCapability oldCap = CapabilityUtil.getHeartModCapability(orig);

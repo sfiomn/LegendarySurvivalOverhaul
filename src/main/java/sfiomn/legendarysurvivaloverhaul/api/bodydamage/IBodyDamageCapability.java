@@ -22,10 +22,6 @@ public interface IBodyDamageCapability
 
 	public void applyHealingItem(BodyPartEnum part, int healingTicks, float healingPerTick);
 
-	public boolean shouldFlash(BodyPartEnum part);
-
-	public boolean hasFlash(BodyPartEnum part);
-
 	public float getRemainingHealingTicks(BodyPartEnum part);
 
 	public float getHealingPerTicks(BodyPartEnum part);

@@ -6,12 +6,15 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import org.apache.commons.lang3.tuple.Triple;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.*;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 import java.util.*;
@@ -28,7 +31,6 @@ public class BodyDamageCapability implements IBodyDamageCapability
 	private float playerMaxHealth;
 	private boolean manualDirty;
 	private int packetTimer;
-	private List<BodyPartEnum> flashBodyPart;
 	private List<Triple<MalusBodyPartEnum, Effect, Integer>> malus;
 
 	public BodyDamageCapability()
@@ -44,7 +46,6 @@ public class BodyDamageCapability implements IBodyDamageCapability
 		this.manualDirty = false;
 
 		this.bodyParts = new HashMap<>();
-		this.flashBodyPart = new ArrayList<>();
 		this.malus = new ArrayList<>();
 
 		this.bodyParts.put(BodyPartEnum.HEAD, new BodyPart(BodyPartEnum.HEAD, (float) Config.Baked.headPartHealth));
@@ -149,6 +150,7 @@ public class BodyDamageCapability implements IBodyDamageCapability
 
 		if (player.hasEffect(EffectRegistry.HEADACHE.get())) {
 			if (this.headacheTimer-- < 0) {
+				player.level.playSound(null ,player, SoundRegistry.HEADACHE_HEARTBEAT.get(), SoundCategory.PLAYERS, 1.f, 1.0f);
 				applyHeadache(player, Objects.requireNonNull(player.getEffect(EffectRegistry.HEADACHE.get())).getAmplifier());
 			}
 		} else {
@@ -194,30 +196,16 @@ public class BodyDamageCapability implements IBodyDamageCapability
 	@Override
 	public void heal(BodyPartEnum part, float healingValue) {
 		this.bodyParts.get(part).heal(healingValue);
-		if (!this.shouldFlash(part))
-			this.flashBodyPart.add(part);
 	}
 
 	@Override
 	public void hurt(BodyPartEnum part, float damageValue) {
 		this.bodyParts.get(part).hurt(damageValue);
-		if (!this.shouldFlash(part))
-			this.flashBodyPart.add(part);
 	}
 
 	@Override
 	public void applyHealingItem(BodyPartEnum part, int healingTicks, float healingPerTick) {
 		this.bodyParts.get(part).setHealing(healingTicks, healingPerTick);
-	}
-
-	@Override
-	public boolean shouldFlash(BodyPartEnum part) {
-		return this.flashBodyPart.contains(part);
-	}
-
-	@Override
-	public boolean hasFlash(BodyPartEnum part) {
-		return this.flashBodyPart.remove(part);
 	}
 
 	@Override

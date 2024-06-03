@@ -154,8 +154,6 @@ public class PlayerModelUtil {
 
         hitVector = new Vector3d(hitVector.x, 0, hitVector.z).normalize();
         playerVector = new Vector3d(playerVector.x, 0, playerVector.z).normalize();
-        getRightRatioDistance(hitPosition, player);
-        getForwardRatioDistance(hitPosition, player);
         return ((Math.atan2((playerVector.cross(hitVector).dot(new Vector3d(0, 1, 0))), playerVector.dot(hitVector)) / (2 * Math.PI)) * 360) % 180;
     }
 

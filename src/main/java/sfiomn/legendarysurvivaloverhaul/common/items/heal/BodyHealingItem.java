@@ -103,7 +103,8 @@ public class BodyHealingItem extends Item {
                 BodyDamageUtil.applyHealingItem((PlayerEntity) entity, bodyPart, (BodyHealingItem) stack.getItem());
             }
             world.playSound(null, entity, SoundRegistry.HEAL_BODY_PART.get(), SoundCategory.PLAYERS, 1.0f, 1.0f);
-            stack.shrink(1);
+            if (!((PlayerEntity) entity).isCreative())
+                stack.shrink(1);
         }
 
         return stack;
