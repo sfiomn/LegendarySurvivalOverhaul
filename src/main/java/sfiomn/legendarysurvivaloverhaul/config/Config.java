@@ -160,8 +160,8 @@ public class Config
 
 		// Thirst
 		public final ForgeConfigSpec.ConfigValue<Boolean> thirstEnabled;
-		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousThirst;
-		public final ForgeConfigSpec.ConfigValue<Double> thirstDamageScaling;
+		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousDehydration;
+		public final ForgeConfigSpec.ConfigValue<Double> dehydrationDamageScaling;
 		public final ForgeConfigSpec.ConfigValue<Double> thirstEffectModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> baseThirstExhaustion;
 		public final ForgeConfigSpec.ConfigValue<Double> sprintingThirstExhaustion;
@@ -265,16 +265,16 @@ public class Config
 						" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc."
 					}).push("core");
 			temperatureEnabled = builder
-					.comment(" Whether or not the temperature system is enabled.")
+					.comment(" Whether the temperature system is enabled.")
 					.define("Temperature Enabled", true);
 			thirstEnabled = builder
-					.comment(" Whether or not the thirst system is enabled.")
+					.comment(" Whether the thirst system is enabled.")
 					.define("Thirst Enabled", true);
 			heartFruitsEnabled = builder
-					.comment(" Whether or not heart fruits are functional and generate in-world.")
+					.comment(" Whether heart fruits are functional and generate in-world.")
 					.define("Heart Fruits Enabled", true);
 			localizedBodyDamageEnabled = builder
-					.comment(" Whether or not body members receive localized damages.")
+					.comment(" Whether body members receive localized damages.")
 					.define("Localized Body Damage Enabled", true);
 			hideInfoFromDebug = builder
 					.comment(" If enabled, information like position and direction will be hidden from the debug screen (F3).")
@@ -387,10 +387,10 @@ public class Config
 					.comment(" How much a biome's temperature effects are multiplied.")
 					.defineInRange("Biome Temperature Multiplier", 16.0d, 0.0d, Double.POSITIVE_INFINITY);
 			biomeEffectsEnabled = builder
-					.comment(" Whether or not biomes will have an effect on a player's temperature.")
+					.comment(" Whether biomes will have an effect on a player's temperature.")
 					.define("Biomes affect Temperature", true);
 			biomeDrynessEffectEnabled = builder
-					.comment(" Whether or not hot biome's dryness will make days really hot and nights really cold.")
+					.comment(" Whether hot biome's dryness will make days really hot and nights really cold.")
 					.define("Biome's dryness affects Temperature", false);
 			builder.pop();
 			
@@ -410,7 +410,7 @@ public class Config
 					.defineInRange("Time Based Temperature Modifier", 2.0d, 0.0d, Double.POSITIVE_INFINITY);
 			biomeTimeMultiplier = builder
 					.comment(" How strongly time in extreme temperature biomes affect player's temperature.",
-							"Extreme temperature biomes (like snowy taiga, deserts, ...) will multiply the time based temperature by this value, while temperate biome won't be affected by this value, following a linear.")
+							" Extreme temperature biomes (like snowy taiga, deserts, ...) will multiply the time based temperature by this value, while temperate biome won't be affected by this value, following a linear.")
 					.defineInRange("Biome Time Multiplier", 1.75d, 1.0d, Double.POSITIVE_INFINITY);
 			shadeTimeModifier = builder
 					.comment(" Staying in the shade or during cloudy weather will reduce player's temperature by this amount based on time of the day (maximum effect at noon, following sinusoidal).",
@@ -419,7 +419,7 @@ public class Config
 			builder.pop();
 
 			builder.comment(" Temperature coat adds temperature effects on armors by using the sewing table.",
-					"Adaptive means the coating will maintain the player's temperature temperate.")
+					" Adaptive means the coating will maintain the player's temperature temperate.")
 					.push("coat");
 
 			builder.comment(" Add an adaptive heating effect on armors.").push("heating");
@@ -479,13 +479,13 @@ public class Config
 					.define("Seasons affect Temperature", true);
 			tropicalSeasonsEnabled = builder
 					.comment(" If the tropical seasons are disabled, the normal summer-autumn-winter-spring seasons are applied.",
-							"If disabled, dry and wet seasons are applied for hot biomes.")
+							" If disabled, dry and wet seasons are applied for hot biomes.")
 					.define("Tropical Seasons Enabled", true);
 			seasonCardsEnabled = builder
 					.comment(" If season cards are enabled, season cards will appear at every season changes.")
 					.define("Season Cards Enabled", true);
 
-			builder.comment("Temperature modifiers per season in temperate biomes.").push("temperate");
+			builder.comment(" Temperature modifiers per season in temperate biomes.").push("temperate");
 			builder.push("spring");
 			earlySpringModifier = builder.define("Early Spring Modifier", -3);
 			midSpringModifier = builder.define("Mid Spring Modifier", 0);
@@ -511,7 +511,7 @@ public class Config
 			builder.pop();
 			builder.pop();
 			
-			builder.comment("Temperature modifiers per season in tropical biomes.").push("tropical");
+			builder.comment(" Temperature modifiers per season in tropical biomes.").push("tropical");
 			builder.push("wet-season");
 			earlyWetSeasonModifier = builder.define("Early Wet Season Modifier", -1);
 			midWetSeasonModifier = builder.define("Mid Wet Season Modifier", -5);
@@ -549,9 +549,9 @@ public class Config
 			builder.pop();
 
 			builder.comment(" Options related to thirst").push("thirst");
-			dangerousThirst = builder
-					.comment(" If enabled, players will take damage from the effects of thirst.")
-					.define("Dangerous Thirst Effect", true);
+			dangerousDehydration = builder
+					.comment(" If enabled, players will take damage from the complete dehydration.")
+					.define("Dangerous Dehydration", true);
 			builder.push("exhaustion");
 			baseThirstExhaustion = builder
 					.comment(" Thirst exhausted every 10 ticks.")
@@ -569,12 +569,12 @@ public class Config
 					.comment(" Thirst exhausted on every attack.")
 					.defineInRange("On Attack Thirst Exhaustion", 0.5d, 0, 1000.0d);
 			builder.pop();
-			thirstDamageScaling = builder
-					.comment(" Scaling of the damages dealt when the thirst falls at 0. Each tick damage will be increased by this value.")
-					.defineInRange("Thirst Damage Scaling", 0.3d, 0, 1000.0d);
+			dehydrationDamageScaling = builder
+					.comment(" Scaling of the damages dealt when completely dehydrated. Each tick damage will be increased by this value.")
+					.defineInRange("Dehydration Damage Scaling", 0.3d, 0, 1000.0d);
 			thirstEffectModifier = builder
 					.comment(" How many thirst exhaustion will be added every 50 ticks when the player suffers from not amplified Thirst Effect.",
-							" The player will suffer not amplified Thirst Effect from water dirtiness by example.")
+							" The player will suffer Thirst Effect from dirty water by example.")
 					.defineInRange("Thirst Effect Modifier", 0.25d, 0, 1000);
 			builder.push("canteen");
 			canteenCapacity = builder
@@ -639,7 +639,7 @@ public class Config
 			builder.pop();
 			builder.push("juices");
 			glassBottleLootAfterDrink = builder
-					.comment(" Whether or not the player retrieves a glass bottle after drinking a juice.")
+					.comment(" Whether the player retrieves a glass bottle after drinking a juice.")
 					.define("Glass Bottle Loot After Drinking A Juice", true);
 			builder.pop();
 			builder.pop();
@@ -659,7 +659,7 @@ public class Config
 					.comment(" Amount of hearts gained from eating a Heart Fruit.")
 					.defineInRange("Additional Hearts Per Heart Fruit", 1, 1, Integer.MAX_VALUE);
 			heartFruitsGiveRegen = builder
-					.comment(" Whether or not Heart Fruits give a strong regeneration effect.")
+					.comment(" Whether Heart Fruits give a strong regeneration effect.")
 					.define("Heart Fruits Give Regen", true);
 			builder.pop();
 			builder.pop();
@@ -844,7 +844,7 @@ public class Config
 			builder.push("general");
 
 			showVanillaAnimationOverlay = builder
-					.comment(" Whether or not the vanilla animation of the Food bar and Hydration bar is rendered. The bar shakes more the lower they are.",
+					.comment(" Whether the vanilla animation of the Food bar and Hydration bar is rendered. The bar shakes more the lower they are.",
 							" This mod render a new food bar as a secondary effect of a cold temperature.",
 							" Disable this animation if the temperature secondary effect is enabled to allow a compatibility with other mods rendering the food bar (by example Appleskin).")
 					.define("Show Vanilla Animation Overlay", true);
@@ -1032,8 +1032,8 @@ public class Config
 
 		// Thirst
 		public static boolean thirstEnabled;
-		public static boolean dangerousThirst;
-		public static double thirstDamageScaling;
+		public static boolean dangerousDehydration;
+		public static double dehydrationDamageScaling;
 		public static double thirstEffectModifier;
 		public static double baseThirstExhaustion;
 		public static double sprintingThirstExhaustion;
@@ -1254,8 +1254,8 @@ public class Config
 				waterPlantBiomeCategories = COMMON.waterPlantBiomeCategories.get();
 
 				thirstEnabled = COMMON.thirstEnabled.get();
-				dangerousThirst = COMMON.dangerousThirst.get();
-				thirstDamageScaling = COMMON.thirstDamageScaling.get();
+				dangerousDehydration = COMMON.dangerousDehydration.get();
+				dehydrationDamageScaling = COMMON.dehydrationDamageScaling.get();
 				thirstEffectModifier = COMMON.thirstEffectModifier.get();
 
 				baseThirstExhaustion = COMMON.baseThirstExhaustion.get();

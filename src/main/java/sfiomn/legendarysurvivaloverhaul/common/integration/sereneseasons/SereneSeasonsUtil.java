@@ -22,8 +22,6 @@ import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.
 
 public class SereneSeasonsUtil {
     public static StringTextComponent formatSeasonName(BlockPos blockPos, World world){
-        StringBuilder seasonText = new StringBuilder();
-
         ISeasonState season = SeasonHelper.getSeasonState(world);
         int seasonType = getSeasonType(world.getBiome(blockPos));
         int subSeasonDuration = (int) ((double) season.getSubSeasonDuration() / (double) season.getDayDuration());
@@ -49,8 +47,7 @@ public class SereneSeasonsUtil {
                     season.getDay() % subSeasonDuration,
                     subSeasonDuration);
         }
-        seasonText.append(seasonTextTranslate);
-        return new StringTextComponent(seasonText.toString());
+        return new StringTextComponent(seasonTextTranslate.getString());
     }
 
     //  Season type 0 = normal, Season type 1 = tropical, Season type 2 = no season

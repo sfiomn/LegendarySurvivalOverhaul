@@ -112,7 +112,7 @@ public class ThirstCapability implements IThirstCapability
 				if(DamageUtil.isModDangerous(world) &&
 						DamageUtil.healthAboveDifficulty(world, player) &&
 						!player.isSpectator() && !player.isCreative() &&
-						Config.Baked.dangerousThirst)
+						Config.Baked.dangerousDehydration)
 				{
 					applyDangerousEffect(player);
 				}
@@ -129,7 +129,7 @@ public class ThirstCapability implements IThirstCapability
 	private void applyDangerousEffect(PlayerEntity player) {
 		// Apply dehydration damages
 		this.addThirstDamageCounter(1);
-		float thirstDamageToApply = (float) (this.getThirstDamageCounter() * Config.Baked.thirstDamageScaling);
+		float thirstDamageToApply = (float) (this.getThirstDamageCounter() * Config.Baked.dehydrationDamageScaling);
 		player.hurt(DamageSources.DEHYDRATION, thirstDamageToApply);
 	}
 

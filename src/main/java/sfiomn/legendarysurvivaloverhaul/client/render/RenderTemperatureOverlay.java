@@ -60,13 +60,13 @@ public class RenderTemperatureOverlay {
             if (tempEnum == TemperatureEnum.FROSTBITE && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
                 temperatureEffect = FROSTBITE_EFFECT;
                 if (frostbiteLimit) {
-                    targetFadeLevel = 0.5f;
+                    targetFadeLevel = 0.65f;
                     if (triggerTemperatureSoundEffect) {
                         triggerTemperatureSoundEffect = false;
                         player.playSound(SoundRegistry.FROSTBITE.get(), 1.0f, 1.0f);
                     }
                 } else {
-                    targetFadeLevel = 0.25f;
+                    targetFadeLevel = 0.35f;
                     triggerTemperatureSoundEffect = true;
                     if (fadeLevel == 0) {
                         player.playSound(SoundRegistry.FROSTBITE_EARLY.get(), 1.0f, 1.0f);

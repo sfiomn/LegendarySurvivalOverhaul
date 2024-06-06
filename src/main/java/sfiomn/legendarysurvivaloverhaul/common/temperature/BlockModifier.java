@@ -1,10 +1,12 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -20,13 +22,11 @@ import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.getOppositeVector;
 
 public class BlockModifier extends ModifierBase
 {
-	private final int tempInfluenceMaximumDist = Config.Baked.tempInfluenceMaximumDist;
+	private final int tempInfluenceMaximumDist = Config.Baked.tempInfluenceMaximumDist - 1;
 	private float coldestValue = 0.0f;
 	private float hottestValue = 0.0f;
 	private float hotTotal = 0.0f;
 	private float coldTotal = 0.0f;
-
-	private static boolean once = true;
 
 	public BlockModifier()
 	{
@@ -77,7 +77,7 @@ public class BlockModifier extends ModifierBase
 		HashMap<BlockPos, SpreadPoint> spreadBlockPos = new HashMap<>();
 		ArrayList<SpreadPoint> spreadPointToProcess = new ArrayList<>();
 
-		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, null, (tempInfluenceMaximumDist - 1), 0, world);
+		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, null, tempInfluenceMaximumDist + 1, 0, world);
 		spreadPointToProcess.add(spreadPointFeetPlayer);
 		spreadBlockPos.put(spreadPointFeetPlayer.position(), spreadPointFeetPlayer);
 
@@ -116,13 +116,12 @@ public class BlockModifier extends ModifierBase
 		for (SpreadPoint spreadPoint : spreadBlockPos.values()) {
 			processTemp(getTemperatureFromSpreadPoint(world, spreadPoint));
 		}
-		once = false;
 	}
 
 	private boolean processDirectionFrom(ArrayList<SpreadPoint> spreadPointToProcess, HashMap<BlockPos, SpreadPoint> spreadBlockPos, SpreadPoint spreadPoint, Vector3i directionVector) {
 		BlockPos newBlockPos = spreadPoint.newSpreadPos(directionVector);
 
-		//  Check that the new spread location isn't an already processed location or is an already processed location but closer to the player
+		//  Check that the new spread location isn't an already processed location
 		if (!spreadBlockPos.containsKey(newBlockPos)) {
 
 			SpreadPoint newSpreadPoint = spreadPoint.spreadTo(directionVector);
@@ -241,6 +240,6 @@ public class BlockModifier extends ModifierBase
 		float capacityConsumed = (float) ((tempInfluenceMaximumDist - spreadPoint.spreadCapacity()) / tempInfluenceMaximumDist);
 		// [2] sqrt([1]) = % of temperature the block influence has lost
 		// [3] (1 - [2]) * block temp = block influence based on distance of the player
-		return ((float) (1 - Math.sqrt(capacityConsumed))) * tempIn;
+		return (float) (Math.sqrt(1 - capacityConsumed) * tempIn);
 	}
 }

@@ -10,6 +10,7 @@ import net.minecraft.potion.Potions;
 import net.minecraft.util.*;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.SleepFinishedTimeEvent;
@@ -223,6 +224,18 @@ public class ModCommonEvents {
                     player.heal((float) healthRecovered);
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        if (event.isEndConquered())
+            return;
+
+        PlayerEntity player = event.getPlayer();
+        if (Config.Baked.temperatureResistanceOnDeathEnabled) {
+            player.addEffect(new EffectInstance(EffectRegistry.HEAT_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime));
+            player.addEffect(new EffectInstance(EffectRegistry.COLD_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime));
         }
     }
 

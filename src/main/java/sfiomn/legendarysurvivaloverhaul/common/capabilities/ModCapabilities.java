@@ -148,13 +148,9 @@ public class ModCapabilities
 	{
 		PlayerEntity orig = event.getOriginal();
 		PlayerEntity player = event.getPlayer();
-		
+
 		if (event.isWasDeath())
 		{
-			if (Config.Baked.temperatureResistanceOnDeathEnabled) {
-				player.addEffect(new EffectInstance(EffectRegistry.HEAT_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime));
-				player.addEffect(new EffectInstance(EffectRegistry.COLD_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime));
-			}
 			if (Config.Baked.heartFruitsEnabled && Config.Baked.heartsLostOnDeath >= 0)
 			{
 				HeartModifierCapability oldCap = CapabilityUtil.getHeartModCapability(orig);

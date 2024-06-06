@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.client.sounds;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.TickableSound;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
@@ -35,9 +36,9 @@ public class TemperatureEffectSound {
         if (delay-- <= 0) {
             delay = 200 + player.getRandom().nextInt(200);
             if (temperatureEnum == TemperatureEnum.FROSTBITE)
-                player.playSound(SoundRegistry.SHIVERING.get(), 1.0f, 1.0f);
+                Minecraft.getInstance().getSoundManager().play(new DynamicPositionSound(SoundRegistry.SHIVERING.get(), player));
             else
-                player.playSound(SoundRegistry.PANTING.get(), 1.0f, 1.0f);
+                Minecraft.getInstance().getSoundManager().play(new DynamicPositionSound(SoundRegistry.PANTING.get(), player));
         }
     }
 
