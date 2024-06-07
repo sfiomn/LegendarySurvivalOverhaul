@@ -147,12 +147,17 @@ public final class IntegrationController
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "neapolitan:strawberry_ice_cream", -3, 3600);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "neapolitan:banana_ice_cream", -3, 3600);
 
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "neapolitan:neapolitan_ice_cream", -3, 3600);
+
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "neapolitan:chocolate_milkshake", -3, 3600);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "neapolitan:vanilla_milkshake", -3, 3600);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "neapolitan:strawberry_milkshake", -3, 3600);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "neapolitan:banana_milkshake", -3, 3600);
-		
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "neapolitan:neapolitan_ice_cream", -3, 3600);
+
+		JsonConfig.registerConsumableThirst("neapolitan:chocolate_milkshake", 4, 1.0f);
+		JsonConfig.registerConsumableThirst("neapolitan:vanilla_milkshake", 4, 1.0f);
+		JsonConfig.registerConsumableThirst("neapolitan:strawberry_milkshake", 4, 1.0f);
+		JsonConfig.registerConsumableThirst("neapolitan:banana_milkshake", 4, 1.0f);
 	}
 	
 	private static void initSeasonals()
@@ -162,6 +167,8 @@ public final class IntegrationController
 		
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "seasonals:pumpkin_milkshake", -3, 3600);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "seasonals:sweet_berry_milkshake", -3, 3600);
+		JsonConfig.registerConsumableThirst("seasonals:pumpkin_milkshake", 4, 1.0f);
+		JsonConfig.registerConsumableThirst("seasonals:sweet_berry_milkshake", 4, 1.0f);
 	}
 	
 	private static void initPeculiars()
@@ -173,6 +180,9 @@ public final class IntegrationController
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "peculiars:yucca_milkshake", -3, 3600);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "peculiars:aloe_milkshake", -3, 3600);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "peculiars:passionfruit_milkshake", -3, 3600);
+		JsonConfig.registerConsumableThirst("peculiars:yucca_milkshake", 6, 2.0f);
+		JsonConfig.registerConsumableThirst("peculiars:aloe_milkshake", 6, 2.0f);
+		JsonConfig.registerConsumableThirst("peculiars:passionfruit_milkshake", 6, 2.0f);
 	}
 	
 	private static void initBetterEndForge()
