@@ -6,11 +6,13 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.core.pattern.NotANumber;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
+import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 import sfiomn.legendarysurvivaloverhaul.util.SpreadPoint;
 
 import java.util.ArrayList;
@@ -237,9 +239,9 @@ public class BlockModifier extends ModifierBase
 		// I use the sqrt(x) graph to convert how much the block temp should be decreased vs the distance to the block
 		// [1] max spread - spread capacity = spread consumed to reach the point
 		//     divided by max spread capacity to know the % of spread capacity consumed
-		float capacityConsumed = (float) ((tempInfluenceMaximumDist - spreadPoint.spreadCapacity()) / tempInfluenceMaximumDist);
+		float capacityConsumed = MathUtil.round((float) (tempInfluenceMaximumDist - spreadPoint.spreadCapacity()) / tempInfluenceMaximumDist, 2);
 		// [2] sqrt([1]) = % of temperature the block influence has lost
 		// [3] (1 - [2]) * block temp = block influence based on distance of the player
-		return (float) (Math.sqrt(1 - capacityConsumed) * tempIn);
+		return MathUtil.round((float) Math.sqrt(1 - capacityConsumed) * tempIn, 2);
 	}
 }

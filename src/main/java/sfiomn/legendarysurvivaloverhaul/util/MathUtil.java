@@ -1,7 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.util;
 
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
 
 public final class MathUtil
 {

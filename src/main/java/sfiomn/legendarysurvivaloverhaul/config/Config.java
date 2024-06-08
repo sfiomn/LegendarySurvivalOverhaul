@@ -448,11 +448,13 @@ public class Config
 					.defineInRange("Temperature Influence Maximum Distance", 20, 1, 40);
 			tempInfluenceUpDistMultiplier = builder
 					.comment(" How strongly distance above the player is reduced where thermal sources will have an effect on temperature.")
-					.comment(" Example max dist is 10, up mult is 0.75 -> max distance is 10 * 0.75 above the player.")
-					.defineInRange("Temperature Influence Up Distance Multiplier", 0.85, 0.0, 1.0);
+					.comment(" Example max dist is 10, up mult is 0.75 -> max distance is 10 * 0.75 = 7.5 blocks above the player.",
+							" Logic is as the heat goes up, the strength of the heat source above the player is decreased faster with distance.")
+					.defineInRange("Temperature Influence Up Distance Multiplier", 0.75, 0.0, 1.0);
 			tempInfluenceOutsideDistMultiplier = builder
-					.comment(" How strongly distance outside a structure is reduced where thermal sources will have an effect on temperature.")
-					.defineInRange("Temperature Influence Outside Distance Multiplier", 0.75, 0.0, 1.0);
+					.comment(" How strongly distance outside a structure is reduced where thermal sources will have an effect on temperature.",
+							" The outside maximum distance is defined as the maximum distance * this value")
+					.defineInRange("Temperature Influence Outside Distance Multiplier", 0.5, 0.0, 1.0);
 			builder
 					.comment(" The player's temperature will be adjusted each temperature tick rate," ,
 							" by an amount of temperature defined between the minimum and the maximum temperature modification adjusted linearly.")

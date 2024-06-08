@@ -87,24 +87,30 @@ public class SereneSeasonsModifier extends ModifierBase
 		if (seasonState == null || !SeasonsConfig.isDimensionWhitelisted(world.dimension()))
 			return 0.0f;
 
-		Vector3i[] posOffsets = 
-			{
+		Vector3i[] posOffsets;
+		if (Config.Baked.tropicalSeasonsEnabled)
+			posOffsets = new Vector3i[]{
 					new Vector3i(0, 0, 0),
-					new Vector3i(10, 0, 0),
-					new Vector3i(-10, 0, 0),
-					new Vector3i(0, 0, 10),
-					new Vector3i(0, 0, -10)
-			};
+                    new Vector3i(10, 0, 0),
+                    new Vector3i(-10, 0, 0),
+                    new Vector3i(0, 0, 10),
+                    new Vector3i(0, 0, -10)
+		};
+		else
+			posOffsets = new Vector3i[]{new Vector3i(0, 0, 0)};
 		
 		float value = 0.0f;
+		int validSpot = posOffsets.length;
 
 		for (Vector3i offset : posOffsets)
 		{
 			Biome biome = world.getBiome(pos.offset(offset));
 			int seasonType = SereneSeasonsUtil.getSeasonType(biome);
 
-			if (seasonType == 2)
+			if (seasonType == 2) {
+				validSpot -= 1;
 				continue;
+			}
 			
 			boolean useTropicalMods = seasonType == 1 && Config.Baked.tropicalSeasonsEnabled;
 
@@ -172,8 +178,8 @@ public class SereneSeasonsModifier extends ModifierBase
 				}
 			}
         }
-		
-		value /= posOffsets.length;
+
+		value = validSpot == 0 ? 0 : value / validSpot;
 
 		// LegendarySurvivalOverhaul.LOGGER.debug("Serene temp influence : " + value);
 		// float tempInfl = applyUndergroundEffect(value, world, pos);

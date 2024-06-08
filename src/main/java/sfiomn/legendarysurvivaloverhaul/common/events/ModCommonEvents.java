@@ -227,6 +227,7 @@ public class ModCommonEvents {
         }
     }
 
+
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (event.isEndConquered())

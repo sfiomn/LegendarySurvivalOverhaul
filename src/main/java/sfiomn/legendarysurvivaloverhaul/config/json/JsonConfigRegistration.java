@@ -36,8 +36,8 @@ public class JsonConfigRegistration
 	
 	public static void registerDefaults(File configDir)
 	{
-		JsonConfig.registerBlockTemperature("minecraft:campfire", 16f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("minecraft:soul_campfire", -15f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockTemperature("minecraft:campfire", 10f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockTemperature("minecraft:soul_campfire", -8f, new JsonPropertyValue("lit", "true"));
 		JsonConfig.registerBlockTemperature("minecraft:campfire", 0.0f, new JsonPropertyValue("lit", "false"));
 		JsonConfig.registerBlockTemperature("minecraft:soul_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
 
@@ -47,24 +47,24 @@ public class JsonConfigRegistration
 		JsonConfig.registerBlockTemperature("minecraft:wall_torch", 3.0f);
 		JsonConfig.registerBlockTemperature("minecraft:soul_wall_torch", 0.75f);
 
-		JsonConfig.registerBlockTemperature("minecraft:fire", 10.0f);
+		JsonConfig.registerBlockTemperature("minecraft:fire", 7.0f);
 		JsonConfig.registerBlockTemperature("minecraft:soul_fire", 2.5f);
 
-		JsonConfig.registerBlockTemperature("minecraft:furnace", 5.0f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("minecraft:blast_furnace", 5.0f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("minecraft:smoker", 5.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockTemperature("minecraft:furnace", 6.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockTemperature("minecraft:blast_furnace", 6.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockTemperature("minecraft:smoker", 6.0f, new JsonPropertyValue("lit", "true"));
 
 		JsonConfig.registerBlockTemperature("minecraft:furnace", 0.0f, new JsonPropertyValue("lit", "false"));
 		JsonConfig.registerBlockTemperature("minecraft:blast_furnace", 0.0f, new JsonPropertyValue("lit", "false"));
 		JsonConfig.registerBlockTemperature("minecraft:smoker", 0.0f, new JsonPropertyValue("false", "true"));
 
-		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", -17.5f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 17.5f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", -15f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 15f, new JsonPropertyValue("lit", "true"));
 
 		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", 0.0f, new JsonPropertyValue("lit", "false"));
 		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 0.0f, new JsonPropertyValue("lit", "false"));
 
-		JsonConfig.registerBlockTemperature("minecraft:magma_block", 10.0f);
+		JsonConfig.registerBlockTemperature("minecraft:magma_block", 12.0f);
 
 		JsonConfig.registerBlockTemperature("minecraft:jack_o_lantern", 3.0f);
 

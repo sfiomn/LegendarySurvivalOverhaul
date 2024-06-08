@@ -4,11 +4,11 @@ package sfiomn.legendarysurvivaloverhaul.api.temperature;
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/api/temperature/TemperatureEnum.java
 public enum TemperatureEnum
 {
-	FROSTBITE(0, 7), // You start dying.
-	COLD(7, 13),
-	NORMAL(13, 29),
-	HOT(29,35), // The player will begin to sweat. This grows in intensity as the player gets hotter.
-	HEAT_STROKE(35,40); // You start dying.
+	FROSTBITE(0, 10), // You start dying.
+	COLD(10, 16),
+	NORMAL(16, 24),
+	HOT(24,30), // The player will begin to sweat. This grows in intensity as the player gets hotter.
+	HEAT_STROKE(30,40); // You start dying.
 	
 	private final int lowerBound;
 	private final int upperBound;

@@ -116,15 +116,15 @@ public final class IntegrationController
 	
 	private static void initEndergeticExpansion() 
 	{
-		JsonConfig.registerBlockTemperature("endergetic:ender_fire", -10.0f);
-		JsonConfig.registerBlockTemperature("endergetic:ender_campfire", -16.0f);
+		JsonConfig.registerBlockTemperature("endergetic:ender_fire", -7.0f);
+		JsonConfig.registerBlockTemperature("endergetic:ender_campfire", -10.0f);
 		JsonConfig.registerBlockTemperature("endergetic:ender_torch", -1.5f);
 		JsonConfig.registerBlockTemperature("endergetic:ender_wall_torch", -1.5f);
 	}
 	
 	private static void initInfernalExpansion()
 	{
-		JsonConfig.registerBlockTemperature("infernalexp:fire_glow", 5.0f);
+		JsonConfig.registerBlockTemperature("infernalexp:fire_glow", 7.0f);
 		JsonConfig.registerBlockTemperature("infernalexp:campfire_glow", 10.0f);
 		JsonConfig.registerBlockTemperature("infernalexp:torch_glow", 1.5f);
 		JsonConfig.registerBlockTemperature("infernalexp:torch_glow_wall", 1.5f);
