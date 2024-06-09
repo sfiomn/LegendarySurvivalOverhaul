@@ -115,6 +115,30 @@ public class ModClientEvents {
     }
 
     @SubscribeEvent
+    public static void preRenderGameOverlay(RenderGameOverlayEvent.Pre event) {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD) {
+            int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
+            int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
+
+            // Cancel the vanilla food rendering when cold hunger effect active (the mod redraws a custom food bar)
+            if (minecraft.player != null && minecraft.player.hasEffect(EffectRegistry.COLD_HUNGER.get()))
+                ForgeIngameGui.renderFood = false;
+
+            if (Config.Baked.thirstEnabled) {
+                if (!minecraft.options.hideGui) {
+                    RenderThirstGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+                }
+            }
+
+            if (Config.Baked.localizedBodyDamageEnabled) {
+                if (!minecraft.options.hideGui) {
+                    RenderBodyDamageGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void onRenderGameOverlayEffects(RenderGameOverlayEvent.Post event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL || minecraft.gameMode == null || !minecraft.gameMode.hasExperience()) return;
 
@@ -126,18 +150,6 @@ public class ModClientEvents {
                 RenderTemperatureGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
             RenderTemperatureOverlay.render(event.getMatrixStack(), scaledWidth, scaledHeight);
-        }
-
-        if (Config.Baked.thirstEnabled) {
-            if (!minecraft.options.hideGui) {
-                RenderThirstGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
-            }
-        }
-
-        if (Config.Baked.localizedBodyDamageEnabled) {
-            if (!minecraft.options.hideGui) {
-                RenderBodyDamageGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
-            }
         }
     }
 
@@ -164,15 +176,6 @@ public class ModClientEvents {
         if (!minecraft.options.hideGui) {
             assert minecraft.player != null;
             RenderTemperatureGui.renderFoodBarEffect(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
-        }
-    }
-
-    // Cancel the vanilla food rendering when cold hunger effect active (the mod redraws a custom food bar)
-    @SubscribeEvent
-    public static void preRenderDisableVanillaFoodBar(RenderGameOverlayEvent.Pre event) {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD) {
-            if (minecraft.player != null && minecraft.player.hasEffect(EffectRegistry.COLD_HUNGER.get()))
-                ForgeIngameGui.renderFood = false;
         }
     }
 
