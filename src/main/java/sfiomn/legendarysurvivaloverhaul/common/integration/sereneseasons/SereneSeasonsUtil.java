@@ -11,6 +11,7 @@ import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.FertilityConfig;
+import sereneseasons.config.SeasonsConfig;
 import sereneseasons.init.ModFertility;
 import sereneseasons.init.ModTags;
 import sereneseasons.season.SeasonTime;
@@ -23,6 +24,10 @@ import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.
 public class SereneSeasonsUtil {
     public static StringTextComponent formatSeasonName(BlockPos blockPos, World world){
         ISeasonState season = SeasonHelper.getSeasonState(world);
+
+        if (!SeasonsConfig.isDimensionWhitelisted(world.dimension()))
+            return new StringTextComponent(new TranslationTextComponent("message.legendarysurvivaloverhaul.sereneseasons.no_season_dimension").getString());
+
         int seasonType = getSeasonType(world.getBiome(blockPos));
         int subSeasonDuration = (int) ((double) season.getSubSeasonDuration() / (double) season.getDayDuration());
 

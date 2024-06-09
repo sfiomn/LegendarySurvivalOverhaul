@@ -41,10 +41,10 @@ public class JsonConfigRegistration
 		JsonConfig.registerBlockTemperature("minecraft:campfire", 0.0f, new JsonPropertyValue("lit", "false"));
 		JsonConfig.registerBlockTemperature("minecraft:soul_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
 
-		JsonConfig.registerBlockTemperature("minecraft:torch", 3.0f);
+		JsonConfig.registerBlockTemperature("minecraft:torch", 1.5f);
 		JsonConfig.registerBlockTemperature("minecraft:soul_torch", 0.75f);
 
-		JsonConfig.registerBlockTemperature("minecraft:wall_torch", 3.0f);
+		JsonConfig.registerBlockTemperature("minecraft:wall_torch", 1.5f);
 		JsonConfig.registerBlockTemperature("minecraft:soul_wall_torch", 0.75f);
 
 		JsonConfig.registerBlockTemperature("minecraft:fire", 7.0f);
