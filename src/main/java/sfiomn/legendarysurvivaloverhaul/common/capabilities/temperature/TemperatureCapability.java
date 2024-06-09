@@ -184,17 +184,17 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		float diff = Math.abs(destination - currentTemp);
 		
-		double tickTowards = ((diff * (Config.Baked.maxTemperatureModification - Config.Baked.minTemperatureModification)) / (TemperatureEnum.HEAT_STROKE.getUpperBound() - TemperatureEnum.FROSTBITE.getLowerBound())) + Config.Baked.minTemperatureModification;
+		double temperatureTowards = ((diff * (Config.Baked.maxTemperatureModification - Config.Baked.minTemperatureModification)) / (TemperatureEnum.HEAT_STROKE.getUpperBound() - TemperatureEnum.FROSTBITE.getLowerBound())) + Config.Baked.minTemperatureModification;
 
-		tickTowards = Math.min(tickTowards, diff);
+		temperatureTowards = Math.min(temperatureTowards, diff);
 		
 		if (currentTemp > destination)
 		{
-			addTemperatureLevel((float) -tickTowards);
+			addTemperatureLevel((float) -temperatureTowards);
 		}
 		else 
 		{
-			addTemperatureLevel((float) tickTowards);
+			addTemperatureLevel((float) temperatureTowards);
 		}
 	}
 

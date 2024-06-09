@@ -29,7 +29,7 @@ public class SereneSeasonsUtil {
         String subSeasonName = "";
         TranslationTextComponent seasonTextTranslate;
         if (seasonType == 2) {
-            return new StringTextComponent("");
+            return new StringTextComponent(new TranslationTextComponent("message.legendarysurvivaloverhaul.sereneseasons.no_season_info").getString());
         } else if (seasonType == 1 && Config.Baked.tropicalSeasonsEnabled) {
             for(String word : season.getTropicalSeason().toString().split("_", 0)) {
                 subSeasonName = word.charAt(0) + word.substring(1).toLowerCase();
@@ -60,7 +60,7 @@ public class SereneSeasonsUtil {
         {
             SSBiomeIdentity identity = biomeIdentities.get(biome.getRegistryName().toString());
             if (!identity.seasonEffects)
-                return 2;
+                return Config.Baked.defaultSeasonEnabled ? temperature > 0.8f ? 1 : 0 : 2;
             isBiomeTropical = identity.isTropical;
         }
         else

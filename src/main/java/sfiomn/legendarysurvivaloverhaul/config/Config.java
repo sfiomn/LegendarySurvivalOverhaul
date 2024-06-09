@@ -126,6 +126,7 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Boolean> seasonTemperatureEffects;
 		public final ForgeConfigSpec.ConfigValue<Boolean> tropicalSeasonsEnabled;
 		public final ForgeConfigSpec.ConfigValue<Boolean> seasonCardsEnabled;
+		public final ForgeConfigSpec.ConfigValue<Boolean> defaultSeasonEnabled;
 		
 		public final ForgeConfigSpec.ConfigValue<Integer> earlySpringModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> midSpringModifier;
@@ -456,7 +457,7 @@ public class Config
 							" The outside maximum distance is defined as the maximum distance * this value")
 					.defineInRange("Temperature Influence Outside Distance Multiplier", 0.5, 0.0, 1.0);
 			builder
-					.comment(" The player's temperature will be adjusted each temperature tick rate," ,
+					.comment(" The player's temperature will be adjusted at each temperature tick rate," ,
 							" by an amount of temperature defined between the minimum and the maximum temperature modification adjusted linearly.")
 					.push("temperature-modification");
 			tickRate = builder
@@ -477,7 +478,7 @@ public class Config
 			
 			builder.push("seasons");
 			seasonTemperatureEffects = builder
-					.comment(" If Serene Seasons is installed, then seasons", " will have an effect on the player's temperature.")
+					.comment(" If Serene Seasons is installed, then seasons will have an effect on the player's temperature.")
 					.define("Seasons affect Temperature", true);
 			tropicalSeasonsEnabled = builder
 					.comment(" If the tropical seasons are disabled, the normal summer-autumn-winter-spring seasons are applied.",
@@ -486,6 +487,10 @@ public class Config
 			seasonCardsEnabled = builder
 					.comment(" If season cards are enabled, season cards will appear at every season changes.")
 					.define("Season Cards Enabled", true);
+			defaultSeasonEnabled = builder
+					.comment(" If default season is enabled, when serene season defines no season effect in a biome, the normal season temperature will be applied.",
+							" If disabled, when serene season defines no season effects, no season temperature will be applied.")
+					.define("Default Season Enabled", true);
 
 			builder.comment(" Temperature modifiers per season in temperate biomes.").push("temperate");
 			builder.push("spring");
@@ -965,10 +970,6 @@ public class Config
 		
 		public static double altitudeModifier;
 		
-		public static boolean seasonTemperatureEffects;
-		public static boolean tropicalSeasonsEnabled;
-		public static boolean seasonCardsEnabled;
-		
 		public static double timeModifier;
 		public static double biomeTimeMultiplier;
 		public static int shadeTimeModifier;
@@ -999,6 +1000,11 @@ public class Config
 		public static double thermalCoat1Modifier;
 		public static double thermalCoat2Modifier;
 		public static double thermalCoat3Modifier;
+
+		public static boolean seasonTemperatureEffects;
+		public static boolean tropicalSeasonsEnabled;
+		public static boolean seasonCardsEnabled;
+		public static boolean defaultSeasonEnabled;
 		
 		public static int earlySpringModifier;
 		public static int midSpringModifier;
@@ -1223,6 +1229,7 @@ public class Config
 				seasonTemperatureEffects = COMMON.seasonTemperatureEffects.get();
 				tropicalSeasonsEnabled = COMMON.tropicalSeasonsEnabled.get();
 				seasonCardsEnabled = COMMON.seasonCardsEnabled.get();
+				defaultSeasonEnabled = COMMON.defaultSeasonEnabled.get();
 				
 				earlySpringModifier = COMMON.earlySpringModifier.get();
 				midSpringModifier = COMMON.midSpringModifier.get();

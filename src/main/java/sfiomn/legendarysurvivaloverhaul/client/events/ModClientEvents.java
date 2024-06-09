@@ -117,12 +117,21 @@ public class ModClientEvents {
     @SubscribeEvent
     public static void preRenderGameOverlay(RenderGameOverlayEvent.Pre event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD) {
-            int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
-            int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
 
             // Cancel the vanilla food rendering when cold hunger effect active (the mod redraws a custom food bar)
             if (minecraft.player != null && minecraft.player.hasEffect(EffectRegistry.COLD_HUNGER.get()))
                 ForgeIngameGui.renderFood = false;
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRenderGameOverlayEffects(RenderGameOverlayEvent.Post event) {
+        if (minecraft.gameMode == null || !minecraft.gameMode.hasExperience()) return;
+
+        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
+        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
+
+        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD) {
 
             if (Config.Baked.thirstEnabled) {
                 if (!minecraft.options.hideGui) {
@@ -136,15 +145,9 @@ public class ModClientEvents {
                 }
             }
         }
-    }
 
-    @SubscribeEvent
-    public static void onRenderGameOverlayEffects(RenderGameOverlayEvent.Post event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL || minecraft.gameMode == null || !minecraft.gameMode.hasExperience()) return;
-
-        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
-        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
-
+        //  Render overlay after all rendering
+        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
         if (Config.Baked.temperatureEnabled) {
             if (!minecraft.options.hideGui) {
                 RenderTemperatureGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
