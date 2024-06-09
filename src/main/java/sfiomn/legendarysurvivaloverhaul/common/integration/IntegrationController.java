@@ -57,6 +57,9 @@ public final class IntegrationController
 			if (mods.isLoaded("peculiars"))
 				initPeculiars();
 		}
+
+		if (mods.isLoaded("supplementaries"))
+			initSupplementaries();
 	}
 	
 	private static void initCreate()
@@ -204,5 +207,9 @@ public final class IntegrationController
 	private static void initLegendaryCreatures() {
 
 		JsonConfig.registerDamageSourceBodyParts("legendarycreatures.root_attack", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
+	}
+
+	private static void initSupplementaries() {
+		JsonConfig.registerDamageSourceBodyParts("supplementaries.bamboo_spikes", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT));
 	}
 }
