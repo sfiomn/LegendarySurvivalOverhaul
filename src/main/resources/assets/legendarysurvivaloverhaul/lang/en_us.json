@@ -132,7 +132,7 @@
 	"effect.legendarysurvivaloverhaul.vulnerability": "Vulnerability",
 	"effect.legendarysurvivaloverhaul.vulnerability.description": "All damage taken from any source except falling, is increased by 20% per level.",
 	"effect.legendarysurvivaloverhaul.headache": "Headache",
-	"effect.legendarysurvivaloverhaul.headache.description": "Inflicts Blindness from time to time randomly. Occurs when head is heacily wounded.",
+	"effect.legendarysurvivaloverhaul.headache.description": "Inflicts Blindness from time to time randomly. Occurs when head is heavily wounded.",
 
 	"death.attack.legendarysurvivaloverhaul.hypothermia": "%1$s froze to death",
 	"death.attack.legendarysurvivaloverhaul.hypothermia.player": "%1$s froze to death",
