@@ -224,8 +224,10 @@ public class LegendarySurvivalOverhaul
 				ItemModelsProperties.register(ItemRegistry.THERMOMETER.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "temperature"), new ThermometerProperty());
 				ItemModelsProperties.register(ItemRegistry.CANTEEN.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirst_enum"), new CanteenProperty());
 				ItemModelsProperties.register(ItemRegistry.LARGE_CANTEEN.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirst_enum"), new CanteenProperty());
-				ItemModelsProperties.register(ItemRegistry.SEASONAL_CALENDAR.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "time"), new SeasonalCalendarTimeProperty());
-				ItemModelsProperties.register(ItemRegistry.SEASONAL_CALENDAR.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "seasontype"), new SeasonalCalendarSeasonTypeProperty());
+				if (sereneSeasonsLoaded) {
+					ItemModelsProperties.register(ItemRegistry.SEASONAL_CALENDAR.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "time"), new SeasonalCalendarTimeProperty());
+					ItemModelsProperties.register(ItemRegistry.SEASONAL_CALENDAR.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "seasontype"), new SeasonalCalendarSeasonTypeProperty());
+				}
 			}
 		};
 	}
