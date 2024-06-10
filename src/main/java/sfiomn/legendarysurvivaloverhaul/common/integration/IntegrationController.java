@@ -60,6 +60,8 @@ public final class IntegrationController
 
 		if (mods.isLoaded("supplementaries"))
 			initSupplementaries();
+		if (mods.isLoaded("crockpot"))
+			initCrockpot();
 	}
 	
 	private static void initCreate()
@@ -174,8 +176,7 @@ public final class IntegrationController
 		JsonConfig.registerConsumableThirst("seasonals:sweet_berry_milkshake", 4, 1.0f);
 	}
 	
-	private static void initPeculiars()
-	{
+	private static void initPeculiars() {
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "peculiars:yucca_ice_cream", -3, 3600);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "peculiars:aloe_ice_cream", -3, 3600);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "peculiars:passionfruit_ice_cream", -3, 3600);
@@ -188,14 +189,12 @@ public final class IntegrationController
 		JsonConfig.registerConsumableThirst("peculiars:passionfruit_milkshake", 6, 2.0f);
 	}
 	
-	private static void initBetterEndForge()
-	{
+	private static void initBetterEndForge() {
 		JsonConfig.registerBiomeOverride("betterendforge:sulphur_springs", 1.1f);
 		JsonConfig.registerBiomeOverride("betterendforge:ice_starfield", 0.1f);
 	}
 
 	private static void initAtmospheric() {
-
 		JsonConfig.registerDamageSourceBodyParts("atmospheric.yuccaSapling", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
 		JsonConfig.registerDamageSourceBodyParts("atmospheric.yuccaFlower", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
 		JsonConfig.registerDamageSourceBodyParts("atmospheric.yuccaBranch", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
@@ -205,11 +204,29 @@ public final class IntegrationController
 	}
 
 	private static void initLegendaryCreatures() {
-
 		JsonConfig.registerDamageSourceBodyParts("legendarycreatures.root_attack", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
 	}
 
 	private static void initSupplementaries() {
 		JsonConfig.registerDamageSourceBodyParts("supplementaries.bamboo_spikes", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT));
+	}
+
+	private static void initCrockpot() {
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:iced_tea", -2, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:ice_cream", -3, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:tea", 3, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:bone_stew", 1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:bunny_stew", 1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:bone_soup", 2, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:gazpacho", -2, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:fruit_medley", -1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:hot_chili", 2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:hot_cocoa", 3, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:moqueca", 1, 1800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:pepper_popper", 3, 6000);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:salsa", -1, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:turkey_dinner", 2, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:veg_stinger", -1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:watermelon_icle", -4, 1800);
 	}
 }
