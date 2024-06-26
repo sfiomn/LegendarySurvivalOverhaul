@@ -1,35 +1,36 @@
 package sfiomn.legendarysurvivaloverhaul.client.itemproperties;
 
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 
-public class ThermometerProperty implements IItemPropertyGetter {
+public class ThermometerProperty implements ClampedItemPropertyFunction {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public float call(ItemStack stack, ClientWorld clientWorld, LivingEntity entity)
-    {
-        World world = clientWorld;
-        Entity holder = (entity != null ? entity : stack.getFrame());
+    public float unclampedCall(@NotNull ItemStack itemStack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity entity, int i) {
+        Level level = clientLevel;
+        Entity holder = (entity != null ? entity : itemStack.getFrame());
 
-        if (world == null && holder != null)
+        if (level == null && holder != null)
         {
-            world = holder.level;
+            level = holder.level();
         }
 
-        if (world == null)
+        if (level == null)
         {
             return 0.5f;
         }
@@ -37,11 +38,11 @@ public class ThermometerProperty implements IItemPropertyGetter {
         {
             try
             {
-                TemperatureItemCapability tempItemCap = CapabilityUtil.getTempItemCapability(stack);
-                if (holder != null && tempItemCap.shouldUpdate(world.getGameTime())) {
-                    tempItemCap.updateWorldTemperature(world, holder, world.getGameTime());
+                TemperatureItemCapability tempItemCap = CapabilityUtil.getTempItemCapability(itemStack);
+                if (holder != null && tempItemCap.shouldUpdate(level.getGameTime())) {
+                    tempItemCap.updateWorldTemperature(level, holder, level.getGameTime());
                 }
-                return MathHelper.positiveModulo(TemperatureUtil.clampTemperature((int) tempItemCap.getWorldTemperatureLevel()) / TemperatureEnum.HEAT_STROKE.getUpperBound(), 1.0333333f);
+                return Mth.positiveModulo(TemperatureUtil.clampTemperature((int) tempItemCap.getWorldTemperatureLevel()) / TemperatureEnum.HEAT_STROKE.getUpperBound(), 1.0333333f);
             }
             catch (NullPointerException e)
             {

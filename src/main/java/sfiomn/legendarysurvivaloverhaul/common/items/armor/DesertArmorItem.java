@@ -1,20 +1,21 @@
 package sfiomn.legendarysurvivaloverhaul.common.items.armor;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.itemgroup.ModItemGroup;
 
 public class DesertArmorItem extends ArmorItem
 {
-	public DesertArmorItem(IArmorMaterial material, EquipmentSlotType slot)
+	public DesertArmorItem(ArmorMaterial material, ArmorItem.Type slot)
 	{
-		super(material, slot, new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP));
+		super(material, slot, new Item.Properties());
 	}
 	
-	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type)
+	public String getArmorTexture(ItemStack stack, Entity entity, ArmorItem.Type slot, String type)
 	{
-		return LegendarySurvivalOverhaul.MOD_ID + ":textures/models/armor/desert_armor_" + (slot == EquipmentSlotType.LEGS ? "2" : "1") + ".png";
+		return LegendarySurvivalOverhaul.MOD_ID + ":textures/models/armor/desert_armor_" + (slot == Type.LEGGINGS ? "2" : "1") + ".png";
 	}
 }

@@ -1,13 +1,13 @@
 package sfiomn.legendarysurvivaloverhaul.common.items;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
@@ -16,25 +16,25 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ThermometerItem extends Item {
-    public ThermometerItem(Properties properties){
+    public ThermometerItem(Item.Properties properties){
         super(properties);
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        if (world.isClientSide()) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (level.isClientSide()) {
             TemperatureItemCapability tempCap = CapabilityUtil.getTempItemCapability(player.getMainHandItem());
 
-            if (tempCap.shouldUpdate(world.getGameTime())) {
-                tempCap.updateWorldTemperature(world, player, world.getGameTime());
+            if (tempCap.shouldUpdate(level.getGameTime())) {
+                tempCap.updateWorldTemperature(level, player, level.getGameTime());
             }
-            player.displayClientMessage(new StringTextComponent(tempCap.getWorldTemperatureLevel() + "\u00B0C"), (true));
+            player.displayClientMessage(Component.literal(tempCap.getWorldTemperatureLevel() + "\u00B0C"), (true));
         }
-        return super.use(world, player, hand);
+        return super.use(level, player, hand);
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundTag nbt) {
         return new TemperatureItemCapability.TemperatureItemProvider();
     }
 }

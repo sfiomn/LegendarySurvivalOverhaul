@@ -3,10 +3,10 @@ package sfiomn.legendarysurvivaloverhaul.common.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.server.command.EnumArgument;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
@@ -29,17 +29,17 @@ public class BodyDamageCommand extends CommandBase
 				);
 	}
 
-	public int get(CommandSource source, BodyPartEnum bodyPart) {
+	public int get(CommandSourceStack source, BodyPartEnum bodyPart) {
 		try {
-			if (source.getEntity() instanceof PlayerEntity) {
-				PlayerEntity player = (PlayerEntity) source.getEntity();
+			if (source.getEntity() instanceof Player) {
+				Player player = (Player) source.getEntity();
 				BodyDamageCapability cap = CapabilityUtil.getBodyDamageCapability(player);
 				float bodyPartMaxHealth = cap.getBodyPartMaxHealth(bodyPart);
 				float bodyPartHealth = bodyPartMaxHealth - cap.getBodyPartDamage(bodyPart);
 
 				String reply = "Body Limb " + bodyPart.name() + " Health : " +  bodyPartHealth + "/" + bodyPartMaxHealth;
 
-				source.getPlayerOrException().sendMessage(new StringTextComponent(reply), source.getEntity().getUUID());
+				source.sendSuccess(() -> Component.literal(reply), false);
 			}
 		}
 		catch(Exception e) 
@@ -49,7 +49,7 @@ public class BodyDamageCommand extends CommandBase
 		return Command.SINGLE_SUCCESS;
 	}
 
-	private int set(CommandSource src, BodyPartEnum bodyPart, float healthValue) throws CommandSyntaxException {
+	private int set(CommandSourceStack src, BodyPartEnum bodyPart, float healthValue) throws CommandSyntaxException {
 		BodyDamageCapability cap = CapabilityUtil.getBodyDamageCapability(src.getPlayerOrException());
 		cap.setBodyPartDamage(bodyPart, cap.getBodyPartMaxHealth(bodyPart) -  healthValue);
 		return Command.SINGLE_SUCCESS;

@@ -6,6 +6,7 @@
 		"0": "legendarysurvivaloverhaul:block/cooler",
 		"particle": "legendarysurvivaloverhaul:block/cooler"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"name": "side",

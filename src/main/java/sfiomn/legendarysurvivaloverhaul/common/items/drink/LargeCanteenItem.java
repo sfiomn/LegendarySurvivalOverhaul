@@ -1,6 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.items.drink;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;

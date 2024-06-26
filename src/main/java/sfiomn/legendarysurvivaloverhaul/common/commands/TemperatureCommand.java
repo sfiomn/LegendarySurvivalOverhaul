@@ -3,10 +3,10 @@ package sfiomn.legendarysurvivaloverhaul.common.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.Component;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
@@ -27,21 +27,21 @@ public class TemperatureCommand extends CommandBase
 	}
 
 	@Override
-	public int get(CommandSource source)
+	public int get(CommandSourceStack source)
 	{
 		try
 		{
-			if (source.getEntity() instanceof PlayerEntity)
+			if (source.getEntity() instanceof Player)
 			{
-				PlayerEntity player = (PlayerEntity) source.getEntity();
+				Player player = (Player) source.getEntity();
 				float targetTemperature = TemperatureUtil.getPlayerTargetTemperature(player);
 				TemperatureCapability cap = CapabilityUtil.getTempCapability(player);
 				float playerTemp = MathUtil.round(cap.getTemperatureLevel(), 2);
-				float worldTemp =  TemperatureUtil.getWorldTemperature(player.level, player.blockPosition());
+				float worldTemp =  TemperatureUtil.getWorldTemperature(player.level(), player.blockPosition());
 
 				String reply = "Temp: " +  playerTemp + "\nTarget Temp: " + targetTemperature + "\nWorld Temp: " + worldTemp;
 
-				source.getPlayerOrException().sendMessage(new StringTextComponent(reply), source.getEntity().getUUID());
+				source.sendSuccess(() -> Component.literal(reply), false);
 			}
 		}
 		catch(Exception e) 
@@ -50,7 +50,7 @@ public class TemperatureCommand extends CommandBase
 		}
 		return Command.SINGLE_SUCCESS;
 	}
-	private int set(CommandSource src, int temp) throws CommandSyntaxException  
+	private int set(CommandSourceStack src, int temp) throws CommandSyntaxException
 	{
 		CapabilityUtil.getTempCapability(src.getPlayerOrException()).setTemperatureLevel(temp);
 		return Command.SINGLE_SUCCESS;

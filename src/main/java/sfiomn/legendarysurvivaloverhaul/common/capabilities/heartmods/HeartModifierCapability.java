@@ -1,12 +1,12 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods;
 
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.heartmod.IHeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -37,11 +37,14 @@ public class HeartModifierCapability implements IHeartModifierCapability
 		packetTimer = 0;
 	}
 	
-	public void updateMaxHealth(World world, PlayerEntity player)
+	public void updateMaxHealth(Level level, Player player)
 	{
-		ModifiableAttributeInstance healthAttribute = player.getAttribute(Attributes.MAX_HEALTH);
+		AttributeInstance healthAttribute = player.getAttribute(Attributes.MAX_HEALTH);
 
-        AttributeModifier modifier = healthAttribute.getModifier(HEART_MODIFIER_ATTRIBUTE);
+		AttributeModifier modifier = null;
+		if (healthAttribute != null)
+			modifier = healthAttribute.getModifier(HEART_MODIFIER_ATTRIBUTE);
+
         if (modifier != null) {
             healthAttribute.removeModifier(modifier);
         }
@@ -51,7 +54,7 @@ public class HeartModifierCapability implements IHeartModifierCapability
 	
 	public void setMaxHealth(int extraHearts)
 	{
-		this.extraHearts = MathHelper.clamp(extraHearts, 0, Config.Baked.maxAdditionalHearts);
+		this.extraHearts = Mth.clamp(extraHearts, 0, Config.Baked.maxAdditionalHearts);
 	}
 	
 	public void addMaxHealth(int extraHearts)
@@ -83,9 +86,9 @@ public class HeartModifierCapability implements IHeartModifierCapability
 		return packetTimer;
 	}
 	
-	public CompoundNBT writeNBT() 
+	public CompoundTag writeNBT() 
 	{
-		CompoundNBT compound = new CompoundNBT();
+		CompoundTag compound = new CompoundTag();
 		
 		compound.putInt("extraHearts", extraHearts);
 		
@@ -97,7 +100,7 @@ public class HeartModifierCapability implements IHeartModifierCapability
 	 * It is expected that any member calling this function will immediately call
 	 * HeartModifierCapability$updateMaxHealth afterwards.
 	 */
-	public void readNBT(CompoundNBT compound)
+	public void readNBT(CompoundTag compound)
 	{
 		this.init();
 

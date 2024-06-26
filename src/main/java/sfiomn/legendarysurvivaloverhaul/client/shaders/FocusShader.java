@@ -1,63 +1,49 @@
 package sfiomn.legendarysurvivaloverhaul.client.shaders;
 
-import com.google.gson.JsonSyntaxException;
+import com.mojang.blaze3d.shaders.Uniform;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.shader.Shader;
-import net.minecraft.client.shader.ShaderUniform;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.PostChain;
+import net.minecraft.client.renderer.PostPass;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
-import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class FocusShader {
     public static final ResourceLocation BLUR_SHADER = new ResourceLocation("shaders/post/blobs2.json");
+    private static final Field shaders = ObfuscationReflectionHelper.findField(PostChain.class, "f_110009_");
+
     public float intensity;
 
-    public static ModShaderGroup shaderGroup;
     public FocusShader() {
         this.intensity = 0;
     }
 
-    public static void loadResources() {
-        Minecraft mc = Minecraft.getInstance();
-        if (shaderGroup != null)
-            shaderGroup.close();
-
-        try {
-            if (mc.isSameThread()) {
-                shaderGroup = new ModShaderGroup(mc.getTextureManager(), mc.getResourceManager(), mc.getMainRenderTarget(), BLUR_SHADER);
-                shaderGroup.resize(mc.getWindow().getWidth(), mc.getWindow().getHeight());
-            }
-        } catch (JsonSyntaxException | IOException e) {}
-    }
-
-    public void render(float partialTicks) {
-        if (shaderGroup == null)
-            loadResources();
-        if (shaderGroup != null) {
-            updateIntensity(this.intensity);
-            shaderGroup.process(partialTicks);
+    public void render() {
+        PostChain currentEffect = Minecraft.getInstance().gameRenderer.currentEffect();
+        if (currentEffect == null ||
+                !currentEffect.getName().equals("minecraft:shaders/post/blobs2.json")) {
+            Minecraft.getInstance().gameRenderer.loadEffect(BLUR_SHADER);
         }
+
+        updateIntensity(this.intensity);
     }
 
     @OnlyIn(value = Dist.CLIENT)
     public void updateIntensity(float intensity) {
-        if (shaderGroup == null)
-            return;
-        for (Shader mcShader : shaderGroup.getShaders()) {
-            ShaderUniform shaderuniform = mcShader.getEffect().getUniform("Radius");
-
-            if (shaderuniform != null) {
-                shaderuniform.set(intensity);
-                this.intensity = intensity;
-            }
+        Uniform shaderRadius;
+        try {
+            shaderRadius = ((List<PostPass>) shaders.get(Minecraft.getInstance().gameRenderer.currentEffect())).get(0).getEffect().getUniform("Radius");
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            shaderRadius = null;
         }
-    }
 
-    @OnlyIn(value = Dist.CLIENT)
-    public void resize() {
-        if (shaderGroup != null)
-            shaderGroup.resize(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight());
+        if (shaderRadius != null) {
+            shaderRadius.set(intensity);
+            this.intensity = intensity;
+        }
     }
 }

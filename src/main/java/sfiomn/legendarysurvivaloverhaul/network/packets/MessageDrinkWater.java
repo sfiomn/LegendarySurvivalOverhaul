@@ -1,9 +1,9 @@
 package sfiomn.legendarysurvivaloverhaul.network.packets;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 
@@ -17,12 +17,12 @@ public class MessageDrinkWater
     {
     }
 
-    public static MessageDrinkWater decode(PacketBuffer buffer)
+    public static MessageDrinkWater decode(FriendlyByteBuf buffer)
     {
         return new MessageDrinkWater();
     }
 
-    public static void encode(MessageDrinkWater message, PacketBuffer buffer)
+    public static void encode(MessageDrinkWater message, FriendlyByteBuf buffer)
     {
     }
 
@@ -30,7 +30,7 @@ public class MessageDrinkWater
     {
         final NetworkEvent.Context context = supplier.get();
         if (context.getDirection() == NetworkDirection.PLAY_TO_SERVER) {
-            ServerPlayerEntity player = context.getSender();
+            ServerPlayer player = context.getSender();
             if (player != null) {
                 context.enqueueWork(() -> DrinkWaterOnServer(player));
             }
@@ -38,7 +38,7 @@ public class MessageDrinkWater
         supplier.get().setPacketHandled(true);
     }
 
-    public static void DrinkWaterOnServer(ServerPlayerEntity player) {
+    public static void DrinkWaterOnServer(ServerPlayer player) {
         HydrationEnum traceWater = ThirstUtil.traceWater(player);
 
         if (traceWater == null)

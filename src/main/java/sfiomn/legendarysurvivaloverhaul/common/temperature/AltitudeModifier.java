@@ -1,7 +1,7 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
@@ -13,9 +13,9 @@ public class AltitudeModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(Level level, BlockPos pos)
 	{
-		if (world.dimensionType().hasCeiling())
+		if (level.dimensionType().hasCeiling())
 		{
 			return 0.0f;
 		}

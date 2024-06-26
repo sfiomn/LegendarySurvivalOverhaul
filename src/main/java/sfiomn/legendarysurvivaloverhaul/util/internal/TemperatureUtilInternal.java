@@ -1,13 +1,21 @@
 package sfiomn.legendarysurvivaloverhaul.util.internal;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.item.DebugStickItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
@@ -23,13 +31,13 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	private final String COAT_TAG = "ArmorPadding";
 	
 	@Override
-	public float getPlayerTargetTemperature(PlayerEntity player)
+	public float getPlayerTargetTemperature(Player player)
 	{
 		float sum = 0.0f;
-		World world = player.getCommandSenderWorld();
+		Level world = player.getCommandSenderWorld();
 		BlockPos pos = WorldUtil.getSidedBlockPos(world, player);
 		
-		for(ModifierBase modifier : GameRegistry.findRegistry(ModifierBase.class).getValues())
+		for(ModifierBase modifier : RegistryAccess.fromRegistryOfRegistries(ModifierBase.class).getValues())
 		{
 			float worldInfluence = modifier.getWorldInfluence(world, pos);
 			float playerInfluence = modifier.getPlayerInfluence(player);
@@ -54,7 +62,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	}
 
 	@Override
-	public float getWorldTemperature(World world, BlockPos pos)
+	public float getWorldTemperature(Level world, BlockPos pos)
 	{
 		float sum = 0.0f;
 
@@ -75,7 +83,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	@Override
 	public float clampTemperature(float temperature)
 	{
-		return MathHelper.clamp(temperature, TemperatureEnum.FROSTBITE.getLowerBound(), TemperatureEnum.HEAT_STROKE.getUpperBound());
+		return Mth.clamp(temperature, TemperatureEnum.FROSTBITE.getLowerBound(), TemperatureEnum.HEAT_STROKE.getUpperBound());
 	}
 
 	@Override
@@ -89,10 +97,10 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	{
 		if (!stack.hasTag())
 		{
-			stack.setTag(new CompoundNBT());
+			stack.setTag(new CompoundTag());
 		}
 		
-		final CompoundNBT compound = stack.getTag();
+		final CompoundTag compound = stack.getTag();
 
 		if (compound != null) {
 			compound.putString(COAT_TAG, coatId);
@@ -104,7 +112,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	{
 		if (stack.hasTag())
 		{
-			final CompoundNBT compound = stack.getTag();
+			final CompoundTag compound = stack.getTag();
 			
 			if (compound != null && compound.contains(COAT_TAG))
 			{
@@ -121,7 +129,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	{
 		if(stack.hasTag())
 		{
-			final CompoundNBT compound = stack.getTag();
+			final CompoundTag compound = stack.getTag();
 			if (compound != null && compound.contains(COAT_TAG))
 			{
 				compound.remove(COAT_TAG);

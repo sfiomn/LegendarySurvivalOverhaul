@@ -1,13 +1,9 @@
 package sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage;
 
 import com.google.gson.annotations.SerializedName;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.DamageDistributionEnum;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class JsonBodyPartsDamageSource {
@@ -23,7 +19,7 @@ public class JsonBodyPartsDamageSource {
         this.bodyParts = bodyParts;
     }
 
-    public List<BodyPartEnum> getBodyParts(PlayerEntity player) {
+    public List<BodyPartEnum> getBodyParts(Player player) {
         return this.damageDistribution.getBodyParts(player, this.bodyParts);
     }
 }

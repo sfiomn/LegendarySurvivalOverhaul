@@ -1,13 +1,13 @@
 package sfiomn.legendarysurvivaloverhaul.common.effects;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
 
-public class GenericEffect extends Effect
+public class GenericEffect extends MobEffect
 {
 
-	public GenericEffect(int liquidColorIn, EffectType type)
+	public GenericEffect(int liquidColorIn, MobEffectCategory type)
 	{
 		super(type, liquidColorIn);
 	}

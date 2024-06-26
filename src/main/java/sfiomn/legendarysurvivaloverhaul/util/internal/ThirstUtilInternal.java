@@ -1,28 +1,26 @@
 package sfiomn.legendarysurvivaloverhaul.util.internal;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.ForgeMod;
+import org.jetbrains.annotations.Nullable;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
-import javax.annotation.Nullable;
-
-import static net.minecraft.block.CauldronBlock.LEVEL;
+import static net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL;
 
 public class ThirstUtilInternal implements IThirstUtil {
 
@@ -34,10 +32,10 @@ public class ThirstUtilInternal implements IThirstUtil {
     {
         if (!stack.hasTag())
         {
-            stack.setTag(new CompoundNBT());
+            stack.setTag(new CompoundTag());
         }
 
-        final CompoundNBT compound = stack.getTag();
+        final CompoundTag compound = stack.getTag();
 
         if (compound != null) {
             compound.putInt(HYDRATION_ENUM_TAG, hydrationEnum.ordinal());
@@ -49,7 +47,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     {
         if (stack.hasTag())
         {
-            final CompoundNBT compound = stack.getTag();
+            final CompoundTag compound = stack.getTag();
 
             if (compound != null && compound.contains(HYDRATION_ENUM_TAG))
             {
@@ -66,7 +64,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     {
         if(stack.hasTag())
         {
-            final CompoundNBT compound = stack.getTag();
+            final CompoundTag compound = stack.getTag();
             if (compound != null && compound.contains(HYDRATION_ENUM_TAG))
             {
                 compound.remove(HYDRATION_ENUM_TAG);
@@ -79,10 +77,10 @@ public class ThirstUtilInternal implements IThirstUtil {
     {
         if (!stack.hasTag())
         {
-            stack.setTag(new CompoundNBT());
+            stack.setTag(new CompoundTag());
         }
 
-        final CompoundNBT compound = stack.getTag();
+        final CompoundTag compound = stack.getTag();
 
         if (compound != null) {
             compound.putInt(CAPACITY_TAG, capacity);
@@ -94,7 +92,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     {
         if (stack.hasTag())
         {
-            final CompoundNBT compound = stack.getTag();
+            final CompoundTag compound = stack.getTag();
 
             if (compound != null && compound.contains(CAPACITY_TAG))
             {
@@ -109,7 +107,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     {
         if(stack.hasTag())
         {
-            final CompoundNBT compound = stack.getTag();
+            final CompoundTag compound = stack.getTag();
             if (compound != null && compound.contains(CAPACITY_TAG))
             {
                 compound.remove(CAPACITY_TAG);
@@ -121,9 +119,9 @@ public class ThirstUtilInternal implements IThirstUtil {
     // Returns a HydrationEnum based on what is being looked at
     @Nullable
     @Override
-    public HydrationEnum traceWater(PlayerEntity player)
+    public HydrationEnum traceWater(Player player)
     {
-        HydrationEnum hydrationEnum = getHydrationEnumLookedAt(player, player.getAttributeValue(ForgeMod.REACH_DISTANCE.get()) / 2);
+        HydrationEnum hydrationEnum = getHydrationEnumLookedAt(player, player.getAttributeValue(ForgeMod.BLOCK_REACH.get()) / 2);
 
         if(hydrationEnum == HydrationEnum.RAIN && !Config.Baked.drinkFromRain)
         {
@@ -138,7 +136,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     }
 
     @Override
-    public void takeDrink(PlayerEntity player, int hydration, float saturation, float dirtyChance)
+    public void takeDrink(Player player, int hydration, float saturation, float dirtyChance)
     {
         if(!Config.Baked.thirstEnabled)
             return;
@@ -150,46 +148,46 @@ public class ThirstUtilInternal implements IThirstUtil {
         capability.addSaturationLevel(saturation);
 
         // Check for dirtiness
-        if(dirtyChance != 0.0f && player.level.random.nextFloat() < dirtyChance)
+        if(dirtyChance != 0.0f && player.level().random.nextFloat() < dirtyChance)
         {
-            player.addEffect(new EffectInstance(EffectRegistry.THIRST.get(),600, 0, false, true));
+            player.addEffect(new MobEffectInstance(MobEffectRegistry.THIRST.get(),600, 0, false, true));
         }
     }
 
     @Override
-    public void takeDrink(PlayerEntity player, int hydration, float saturation)
+    public void takeDrink(Player player, int hydration, float saturation)
     {
         // Clean water
         takeDrink(player, hydration, saturation, 0.0f);
     }
 
     @Override
-    public void takeDrink(PlayerEntity player, HydrationEnum type)
+    public void takeDrink(Player player, HydrationEnum type)
     {
         takeDrink(player, type.getHydration(), (float) type.getSaturation(), (float) type.getDirtiness());
     }
 
     @Override
-    public void addExhaustion(PlayerEntity player, float exhaustion) {
+    public void addExhaustion(Player player, float exhaustion) {
         ThirstCapability thirstCap = CapabilityUtil.getThirstCapability(player);
         thirstCap.addThirstExhaustion(exhaustion);
     }
 
     @Override
-    public HydrationEnum getHydrationEnumLookedAt(PlayerEntity player, double finalDistance) {
+    public HydrationEnum getHydrationEnumLookedAt(Player player, double finalDistance) {
 
         // Check if player is looking up, if it's raining, if they can see sky, and if drinkFromRain is enabled
-        if(player.getViewXRot(1.0f) < -60.0f && player.level.isRainingAt(new BlockPos(player.position()).above()) && Config.Baked.drinkFromRain)
+        if(player.getViewXRot(1.0f) < -60.0f && player.level().isRainingAt(player.blockPosition().above()) && Config.Baked.drinkFromRain)
         {
             //Drinking rain
             return HydrationEnum.RAIN;
         }
 
-        RayTraceResult positionLookedAt = player.pick(finalDistance, 0.0F, true);
+        HitResult positionLookedAt = player.pick(finalDistance, 0.0F, true);
 
-        if (positionLookedAt.getType() == RayTraceResult.Type.BLOCK) {
-            BlockState blockState = player.level.getBlockState(((BlockRayTraceResult) positionLookedAt).getBlockPos());
-            Fluid fluidState = player.level.getFluidState(((BlockRayTraceResult) positionLookedAt).getBlockPos()).getType();
+        if (positionLookedAt.getType() == HitResult.Type.BLOCK) {
+            BlockState blockState = player.level().getBlockState(((BlockHitResult) positionLookedAt).getBlockPos());
+            Fluid fluidState = player.level().getFluidState(((BlockHitResult) positionLookedAt).getBlockPos()).getType();
             if (blockState.getBlock() == Blocks.CAULDRON) {
                 int level = blockState.getValue(LEVEL);
                 if(level > 0) {

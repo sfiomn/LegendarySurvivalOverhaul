@@ -1,82 +1,79 @@
 package sfiomn.legendarysurvivaloverhaul.client.screens;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.Rectangle2d;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.*;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.containers.SewingTableContainer;
 import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 
-import java.util.List;
+import java.awt.*;
 
 @OnlyIn(Dist.CLIENT)
-public class SewingTableScreen extends ContainerScreen<SewingTableContainer> {
+public class SewingTableScreen extends AbstractContainerScreen<SewingTableContainer> {
     public static final ResourceLocation SEWING_TABLE_SCREEN = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/sewing_table_screen.png");
-    Rectangle2d craftEnabledAre;
+    Rect2i craftEnabledAre;
 
-    public SewingTableScreen(SewingTableContainer screenContainer, PlayerInventory playerInventory, ITextComponent titleIn) {
+    public SewingTableScreen(SewingTableContainer screenContainer, Inventory playerInventory, Component titleIn) {
         super(screenContainer, playerInventory, titleIn);
     }
 
     @Override
     protected void init() {
         super.init();
-        craftEnabledAre = new Rectangle2d(this.leftPos + 93, this.topPos + 41, 13, 13);
+        craftEnabledAre = new Rect2i(this.leftPos + 93, this.topPos + 41, 13, 13);
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
+    public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(gui);
+        super.render(gui, mouseX, mouseY, partialTicks);
+        this.renderTooltip(gui, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(GuiGraphics gui, float partialTicks, int x, int y) {
         if (minecraft == null) {
             return;
         }
 
-        RenderSystem.color4f(1, 1, 1, 1);
-        minecraft.getTextureManager().bind(SEWING_TABLE_SCREEN);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
 
-        blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        gui.blit(SEWING_TABLE_SCREEN, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         if (this.menu.getSlot(0).getItem().getItem() instanceof ArmorItem &&
                 this.menu.getSlot(1).getItem().getItem() instanceof CoatItem &&
                 !this.menu.getSlot(2).hasItem()) {
-            blit(matrixStack, this.leftPos + 93, this.topPos + 41, 176, 0, 13, 13);
+            gui.blit(SEWING_TABLE_SCREEN, this.leftPos + 93, this.topPos + 41, 176, 0, 13, 13);
         }
     }
 
     @Override
-    protected void renderTooltip(MatrixStack matrixStack, int mouseX, int mouseY) {
-        super.renderTooltip(matrixStack, mouseX, mouseY);
+    protected void renderTooltip(GuiGraphics gui, int mouseX, int mouseY) {
+        super.renderTooltip(gui, mouseX, mouseY);
 
         if (Minecraft.getInstance().player == null) return;
         if (Minecraft.getInstance().screen == null) return;
 
-        if (Minecraft.getInstance().player.inventory.getCarried().isEmpty() && craftEnabledAre.contains(mouseX, mouseY)) {
+        if (Minecraft.getInstance().player.getInventory().getSelected().isEmpty() && craftEnabledAre.contains(mouseX, mouseY)) {
             if (this.menu.getSlot(0).getItem().getItem() instanceof ArmorItem &&
                     this.menu.getSlot(1).getItem().getItem() instanceof CoatItem &&
                     !this.menu.getSlot(2).hasItem()) {
 
-                List<ITextComponent> list = Lists.newArrayList();
-                TranslationTextComponent tooltipText = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".sewing_table_disabled");
-                IFormattableTextComponent iformattabletextcomponent = (new StringTextComponent("")).append(tooltipText);
-                list.add(iformattabletextcomponent);
+                Component tooltipText = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".sewing_table_disabled");
 
-                GuiUtils.drawHoveringText(matrixStack, list, mouseX, mouseY, Minecraft.getInstance().screen.width, Minecraft.getInstance().screen.height, Minecraft.getInstance().font.width(tooltipText), Minecraft.getInstance().font);
+                gui.drawCenteredString(Minecraft.getInstance().font, tooltipText, mouseX, mouseY, Color.BLACK.getRGB());
             }
         }
     }

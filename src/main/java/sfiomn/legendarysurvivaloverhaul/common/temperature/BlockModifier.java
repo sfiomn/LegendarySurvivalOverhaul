@@ -1,13 +1,12 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Items;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
-import org.apache.logging.log4j.core.pattern.NotANumber;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -36,7 +35,7 @@ public class BlockModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(Level level, BlockPos pos)
 	{
 		coldestValue = 0.0f;
 		hottestValue = 0.0f;
@@ -44,7 +43,7 @@ public class BlockModifier extends ModifierBase
 		hotTotal = 0.0f;
 		coldTotal = 0.0f;
 		
-		doBlocksAndFluidsRoutine(world, pos.above());
+		doBlocksAndFluidsRoutine(level, pos.above());
 		
 		hotTotal -= hottestValue;
 		coldTotal -= coldestValue;
@@ -74,12 +73,12 @@ public class BlockModifier extends ModifierBase
 		}
 	}
 	
-	private void doBlocksAndFluidsRoutine(World world, BlockPos pos)
+	private void doBlocksAndFluidsRoutine(Level level, BlockPos pos)
 	{
 		HashMap<BlockPos, SpreadPoint> spreadBlockPos = new HashMap<>();
 		ArrayList<SpreadPoint> spreadPointToProcess = new ArrayList<>();
 
-		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, null, tempInfluenceMaximumDist + 1, 0, world);
+		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, null, tempInfluenceMaximumDist + 1, 0, level);
 		spreadPointToProcess.add(spreadPointFeetPlayer);
 		spreadBlockPos.put(spreadPointFeetPlayer.position(), spreadPointFeetPlayer);
 
@@ -88,7 +87,7 @@ public class BlockModifier extends ModifierBase
 			spreadPoint.setCanSeeSky();
 
 			for (Direction direction : Direction.values()) {
-				Vector3i directionVector = direction.getNormal();
+				Vec3i directionVector = direction.getNormal();
 				//  Avoid spreading to the direction we are coming from
 				if (spreadPoint.originalDirection() == null || !Objects.equals(directionVector, getOppositeVector(spreadPoint.originalDirection()))) {
 					boolean validSpreadPoint = this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector);
@@ -97,13 +96,13 @@ public class BlockModifier extends ModifierBase
 						for (Direction direction1 : Direction.values()) {
 							//  Check plan diagonal blocks
 							if (direction1.getAxis() != direction.getAxis()) {
-								Vector3i directionVector1 = direction.getNormal().relative(direction1, 1);
+								Vec3i directionVector1 = direction.getNormal().relative(direction1, 1);
 								boolean validSpreadPoint1 = this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector1);
 								if (validSpreadPoint1) {
 									for (Direction direction2 : Direction.values()) {
 										//  Check 3D diagonal blocks
 										if (direction2.getAxis() != direction1.getAxis() && direction2.getAxis() != direction.getAxis()) {
-											Vector3i directionVector2 = directionVector1.relative(direction2, 1);
+											Vec3i directionVector2 = directionVector1.relative(direction2, 1);
 											this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector2);
 										}
 									}
@@ -116,11 +115,11 @@ public class BlockModifier extends ModifierBase
 		}
 
 		for (SpreadPoint spreadPoint : spreadBlockPos.values()) {
-			processTemp(getTemperatureFromSpreadPoint(world, spreadPoint));
+			processTemp(getTemperatureFromSpreadPoint(level, spreadPoint));
 		}
 	}
 
-	private boolean processDirectionFrom(ArrayList<SpreadPoint> spreadPointToProcess, HashMap<BlockPos, SpreadPoint> spreadBlockPos, SpreadPoint spreadPoint, Vector3i directionVector) {
+	private boolean processDirectionFrom(ArrayList<SpreadPoint> spreadPointToProcess, HashMap<BlockPos, SpreadPoint> spreadBlockPos, SpreadPoint spreadPoint, Vec3i directionVector) {
 		BlockPos newBlockPos = spreadPoint.newSpreadPos(directionVector);
 
 		//  Check that the new spread location isn't an already processed location
@@ -186,16 +185,16 @@ public class BlockModifier extends ModifierBase
 		}
 	}
 
-	private float getTemperatureFromSpreadPoint(World world, SpreadPoint spreadPoint) {
-		BlockState blockState = world.getBlockState(spreadPoint.position());
+	private float getTemperatureFromSpreadPoint(Level level, SpreadPoint spreadPoint) {
+		BlockState blockState = level.getBlockState(spreadPoint.position());
 		float temperature = 0.0f;
-
-		if (blockState.getBlock().getRegistryName() == null) {
+		ResourceLocation registryName = ForgeRegistries.BLOCKS.getKey(blockState.getBlock());
+		if (registryName == null) {
 			return 0.0f;
 		}
 
 		//  List of combination of a temperature and a list of properties a block must have in order to generate this temperature
-		List<JsonPropertyTemperature> tempPropertyList = JsonConfig.blockTemperatures.get(blockState.getBlock().getRegistryName().toString());
+		List<JsonPropertyTemperature> tempPropertyList = JsonConfig.blockTemperatures.get(registryName.toString());
 
 		if (tempPropertyList == null) {
 			return 0.0f;

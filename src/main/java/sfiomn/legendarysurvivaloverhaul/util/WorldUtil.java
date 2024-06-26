@@ -1,23 +1,21 @@
 package sfiomn.legendarysurvivaloverhaul.util;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 
 import java.util.HashSet;
@@ -27,20 +25,20 @@ public final class WorldUtil
 {
 	private WorldUtil() {}
 	
-	public static BlockPos getSidedBlockPos(World world, Entity entity)
+	public static BlockPos getSidedBlockPos(Level world, Entity entity)
 	{
 		if(!world.isClientSide)
 		{
 			return entity.blockPosition();
 		}
 		
-		if(entity instanceof PlayerEntity)
+		if(entity instanceof Player)
 		{
-			return new BlockPos(entity.position().add(0, 0.5d, 0));
+			return BlockPos.containing(entity.position().add(0, 0.5d, 0));
 		}
-		else if(entity instanceof ItemFrameEntity)
+		else if(entity instanceof ItemFrame)
 		{
-			return new BlockPos(entity.position().add(0, -0.45d, 0));
+			return BlockPos.containing(entity.position().add(0, -0.45d, 0));
 		}
 		else
 		{
@@ -48,7 +46,7 @@ public final class WorldUtil
 		}
 	}
 	
-	public static boolean isChunkLoaded(World world, BlockPos pos)
+	public static boolean isChunkLoaded(Level world, BlockPos pos)
 	{
 		if(world.isClientSide)
 		{
@@ -56,44 +54,44 @@ public final class WorldUtil
 		}
 		else
 		{
-			return ((ServerWorld) world).getChunkSource().hasChunk(pos.getX() >> 4, pos.getZ() >> 4);
+			return world.getChunkSource().hasChunk(pos.getX() >> 4, pos.getZ() >> 4);
 		}
 	}
 
-	public static ResourceLocation getBiomeName(World world, Biome biome) {
-		if (world.registryAccess().registry(Registry.BIOME_REGISTRY).isPresent()) {
-			return world.registryAccess().registry(Registry.BIOME_REGISTRY).get().getKey(biome);
+	public static ResourceLocation getBiomeName(Level world, Biome biome) {
+		if (world.registryAccess().registry(Registries.BIOME).isPresent()) {
+			return world.registryAccess().registry(Registries.BIOME).get().getKey(biome);
 		}
 		return null;
 	}
 
-	public static boolean isRainingOrSnowingAt(World world, BlockPos pos) {
+	public static boolean isRainingOrSnowingAt(Level world, BlockPos pos) {
 		if (!world.isRaining()) {
 			return false;
 		} else if (!world.canSeeSky(pos)) {
 			return false;
-		} else return world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING, pos).getY() <= pos.getY();
+		} else return world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos).getY() <= pos.getY();
 	}
 	
-	public static float calculateClientWorldEntityTemperature(World world, Entity entity)
+	public static float calculateClientWorldEntityTemperature(Level world, Entity entity)
 	{
 		return TemperatureUtil.getWorldTemperature(world, getSidedBlockPos(world, entity));
 	}
 
-	public static Entity getEntityLookedAt(PlayerEntity player, double finalDistance) {
+	public static Entity getEntityLookedAt(Player player, double finalDistance) {
 		Entity foundEntity = null;
 		double distanceFromEye;
-		RayTraceResult positionLookedAt = player.pick(finalDistance, 0.0f, false);
-		Vector3d eyePosition = player.getEyePosition(0.0f);
+		HitResult positionLookedAt = player.pick(finalDistance, 0.0f, false);
+		Vec3 eyePosition = player.getEyePosition(0.0f);
 
 		distanceFromEye = positionLookedAt.getLocation().distanceTo(eyePosition);
 
-		Vector3d lookVector = player.getLookAngle();
-		Vector3d reachVector = eyePosition.add(lookVector.x * distanceFromEye, lookVector.y * distanceFromEye, lookVector.z * distanceFromEye);
+		Vec3 lookVector = player.getLookAngle();
+		Vec3 reachVector = eyePosition.add(lookVector.x * distanceFromEye, lookVector.y * distanceFromEye, lookVector.z * distanceFromEye);
 
-		AxisAlignedBB expandedPlayerBound = player.getBoundingBox().expandTowards(lookVector.x * distanceFromEye, lookVector.y * distanceFromEye, lookVector.z * distanceFromEye);
+		AABB expandedPlayerBound = player.getBoundingBox().expandTowards(lookVector.x * distanceFromEye, lookVector.y * distanceFromEye, lookVector.z * distanceFromEye);
 
-		EntityRayTraceResult entityRayTraceResult = ProjectileHelper.getEntityHitResult(player, eyePosition, reachVector, expandedPlayerBound, (entity) -> !entity.isSpectator() && entity.isPickable(), distanceFromEye * distanceFromEye);
+		EntityHitResult entityRayTraceResult = ProjectileUtil.getEntityHitResult(player, eyePosition, reachVector, expandedPlayerBound, (entity) -> !entity.isSpectator() && entity.isPickable(), distanceFromEye * distanceFromEye);
 		if (entityRayTraceResult != null) {
 			foundEntity = entityRayTraceResult.getEntity();
 		}
@@ -149,27 +147,7 @@ public final class WorldUtil
 		return "Day " + dayCount + ", " + hourOfTheDay + ":" + minuteOfTheDay;
 	}
 
-	public static Set<Vector3i> getAllDirectionsVectors() {
-		Set<Vector3i> allDirectionsVectors = new HashSet<>();
-		for (Direction direction : Direction.values()) {
-			allDirectionsVectors.add(direction.getNormal());
-			for (Direction direction1 : Direction.values()) {
-				if (direction1.getAxis() != direction.getAxis()) {
-					Vector3i newDirection = direction.getNormal().relative(direction1, 1);
-					allDirectionsVectors.add(newDirection);
-					for (Direction direction2 : Direction.values()) {
-						if (direction2.getAxis() != direction1.getAxis() && direction2.getAxis() != direction.getAxis()) {
-							Vector3i newDirection1 = newDirection.relative(direction2, 1);
-							allDirectionsVectors.add(newDirection1);
-						}
-					}
-				}
-			}
-		}
-		return allDirectionsVectors;
-	}
-
-	public static Vector3i getOppositeVector(Vector3i originalVector) {
-		return new Vector3i(-originalVector.getX(), -originalVector.getY(), -originalVector.getZ());
+	public static Vec3i getOppositeVector(Vec3i originalVector) {
+		return new Vec3i(-originalVector.getX(), -originalVector.getY(), -originalVector.getZ());
 	}
 }

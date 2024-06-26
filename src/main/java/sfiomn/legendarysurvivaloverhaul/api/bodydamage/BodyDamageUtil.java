@@ -1,8 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.api.bodydamage;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effect;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffect;
 import sfiomn.legendarysurvivaloverhaul.common.items.heal.BodyHealingItem;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class BodyDamageUtil
 	 * @param headHealthRatio headHealthRatio
 	 * @return List of effects and associated amplifier
 	 */
-	public static List<Pair<Effect, Integer>> getEffects(MalusBodyPartEnum bodyPart, float headHealthRatio)
+	public static List<Pair<MobEffect, Integer>> getEffects(MalusBodyPartEnum bodyPart, float headHealthRatio)
 	{
 		return internal.getEffects(bodyPart, headHealthRatio);
 	}
@@ -29,7 +29,7 @@ public class BodyDamageUtil
 	 * @param bodyPart bodyPart enum where healing item is applied
 	 * @param healingItem healing item used
 	 */
-	public static void applyHealingItem(PlayerEntity player, BodyPartEnum bodyPart, BodyHealingItem healingItem)
+	public static void applyHealingItem(Player player, BodyPartEnum bodyPart, BodyHealingItem healingItem)
 	{
 		internal.applyHealingItem(player, bodyPart, healingItem);
 	}
@@ -40,7 +40,7 @@ public class BodyDamageUtil
 	 * @param bodyPart bodyPart enum to heal
 	 * @param healingValue quantity healed
 	 */
-	public static void healBodyPart(PlayerEntity player, BodyPartEnum bodyPart, float healingValue)
+	public static void healBodyPart(Player player, BodyPartEnum bodyPart, float healingValue)
 	{
 		internal.healBodyPart(player, bodyPart, healingValue);
 	}
@@ -52,7 +52,7 @@ public class BodyDamageUtil
 	 * @param bodyPart bodyPart enum to hurt
 	 * @param damageValue damage value inflicted to body part
 	 */
-	public static void hurtBodyPart(PlayerEntity player, BodyPartEnum bodyPart, float damageValue)
+	public static void hurtBodyPart(Player player, BodyPartEnum bodyPart, float damageValue)
 	{
 		internal.hurtBodyPart(player, bodyPart, damageValue);
 	}
@@ -64,7 +64,7 @@ public class BodyDamageUtil
 	 * @param bodyParts list of bodyPart enum to hurt
 	 * @param damageValue damage value inflicted to body part
 	 */
-	public static void balancedHurtBodyParts(PlayerEntity player, List<BodyPartEnum> bodyParts, float damageValue) {
+	public static void balancedHurtBodyParts(Player player, List<BodyPartEnum> bodyParts, float damageValue) {
 		internal.balancedHurtBodyParts(player, bodyParts, damageValue);
 	}
 
@@ -75,7 +75,7 @@ public class BodyDamageUtil
 	 * @param bodyParts list of bodyPart enum to hurt
 	 * @param damageValue damage value inflicted to body part
 	 */
-	public static void randomHurtBodyParts(PlayerEntity player, List<BodyPartEnum> bodyParts, float damageValue) {
+	public static void randomHurtBodyParts(Player player, List<BodyPartEnum> bodyParts, float damageValue) {
 		internal.randomHurtBodyParts(player, bodyParts, damageValue);
 	}
 
@@ -85,7 +85,7 @@ public class BodyDamageUtil
 	 * @param bodyPart bodyPart enum
 	 * @return health / max health of the player's body limb
 	 */
-	public static float getHealthRatio(PlayerEntity player, BodyPartEnum bodyPart)
+	public static float getHealthRatio(Player player, BodyPartEnum bodyPart)
 	{
 		return internal.getHealthRatio(player, bodyPart);
 	}
@@ -96,7 +96,7 @@ public class BodyDamageUtil
 	 * @param bodyPart bodyPart enum
 	 * @return remaining healing that will be applied to the body part
 	 */
-	public static float getTotalRemainingHealing(PlayerEntity player, BodyPartEnum bodyPart)
+	public static float getTotalRemainingHealing(Player player, BodyPartEnum bodyPart)
 	{
 		return internal.getTotalRemainingHealing(player, bodyPart);
 	}
@@ -107,7 +107,7 @@ public class BodyDamageUtil
 	 * @param bodyPart bodyPart enum
 	 * @return max health of the body part
 	 */
-	public static float getMaxHealth(PlayerEntity player, BodyPartEnum bodyPart)
+	public static float getMaxHealth(Player player, BodyPartEnum bodyPart)
 	{
 		return internal.getMaxHealth(player, bodyPart);
 	}

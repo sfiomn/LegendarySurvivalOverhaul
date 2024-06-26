@@ -1,32 +1,32 @@
 package sfiomn.legendarysurvivaloverhaul.common.effects;
 
-import sfiomn.legendarysurvivaloverhaul.api.DamageSources;
-import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import sfiomn.legendarysurvivaloverhaul.api.ModDamageTypes;
+import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
+import sfiomn.legendarysurvivaloverhaul.util.DamageSourceUtil;
 import sfiomn.legendarysurvivaloverhaul.util.DamageUtil;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectType;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
 
 public class FrostbiteEffect extends GenericEffect
 {
 	public FrostbiteEffect()
 	{
-		super(9164281, EffectType.HARMFUL);
+		super(9164281, MobEffectCategory.HARMFUL);
 		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier)
 	{
-		if(entity instanceof PlayerEntity && !entity.hasEffect(EffectRegistry.COLD_RESISTANCE.get()))
+		if(entity instanceof Player && !entity.hasEffect(MobEffectRegistry.COLD_RESISTANCE.get()))
 		{
-			World world = entity.getCommandSenderWorld();
-			PlayerEntity player = (PlayerEntity) entity;
-			
-			if (DamageUtil.isModDangerous(world) && DamageUtil.healthAboveDifficulty(world, player) && !player.isSleeping())
+			Level level = entity.getCommandSenderWorld();
+			Player player = (Player) entity;
+			if (DamageUtil.isModDangerous(level) && DamageUtil.healthAboveDifficulty(level, player) && !player.isSleeping())
 			{
-				player.hurt(DamageSources.HYPOTHERMIA, 1.0f);
+				player.hurt(DamageSourceUtil.getDamageSource(level, ModDamageTypes.HYPOTHERMIA), 1.0f);
 			}
 		}
 	}
@@ -38,8 +38,8 @@ public class FrostbiteEffect extends GenericEffect
 		return time == 0 || duration % time == 0;
 	}
 
-	public static boolean playerIsImmuneToFrost(PlayerEntity player)
+	public static boolean playerIsImmuneToFrost(Player player)
 	{
-		return player.hasEffect(EffectRegistry.COLD_RESISTANCE.get());
+		return player.hasEffect(MobEffectRegistry.COLD_RESISTANCE.get());
 	}
 }

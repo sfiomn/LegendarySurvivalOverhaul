@@ -6,6 +6,7 @@
 		"2": "legendarysurvivaloverhaul:block/heater_off",
 		"particle": "legendarysurvivaloverhaul:block/heater_off"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"name": "plate",

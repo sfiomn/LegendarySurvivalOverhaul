@@ -1,13 +1,15 @@
 package sfiomn.legendarysurvivaloverhaul.common.items.drink;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
@@ -17,19 +19,19 @@ import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 public class DrinkItem extends Item {
 
-    public DrinkItem(Properties properties) {
+    public DrinkItem(Item.Properties properties) {
         super(properties);
     }
 
-    public void runSecondaryEffect(PlayerEntity player, ItemStack stack)
+    public void runSecondaryEffect(Player player, ItemStack stack)
     {
         //Can be overridden to run a special task
     }
 
     @Override
-    public UseAction getUseAnimation(ItemStack stack)
+    public UseAnim getUseAnimation(ItemStack stack)
     {
-        return UseAction.DRINK;
+        return UseAnim.DRINK;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class DrinkItem extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand)
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
     {
         ItemStack stack = player.getItemInHand(hand);
 
@@ -47,31 +49,32 @@ public class DrinkItem extends Item {
         {
             // Don't restrict drinking if thirst is disabled
             player.startUsingItem(hand);
-            return ActionResult.success(stack);
+            return InteractionResultHolder.success(stack);
         }
 
         IThirstCapability capability = CapabilityUtil.getThirstCapability(player);
         if(!capability.isHydrationLevelAtMax())
         {
             player.startUsingItem(hand);
-            return ActionResult.success(stack);
+            return InteractionResultHolder.success(stack);
         }
 
-        return ActionResult.fail(stack);
+        return InteractionResultHolder.fail(stack);
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity)
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity)
     {
-        if(world.isClientSide || !(entity instanceof PlayerEntity))
+        if(level.isClientSide || !(entity instanceof Player))
             return stack;
 
-        PlayerEntity player = (PlayerEntity) entity;
+        Player player = (Player) entity;
 
         JsonThirst jsonThirst = null;
         // Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over
-        if (this.getRegistryName() != null)
-            jsonThirst = JsonConfig.consumableThirst.get(this.getRegistryName().toString());
+        ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(this);
+        if (registryName != null)
+            jsonThirst = JsonConfig.consumableThirst.get(registryName.toString());
 
         if(jsonThirst != null)
             ThirstUtil.takeDrink(player, jsonThirst.hydration, jsonThirst.saturation, jsonThirst.dirty);

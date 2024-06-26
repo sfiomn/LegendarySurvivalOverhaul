@@ -1,10 +1,10 @@
 package sfiomn.legendarysurvivaloverhaul.util.internal;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.*;
@@ -17,20 +17,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BodyDamageUtilInternal implements IBodyDamageUtil {
-    private static final Map<MalusBodyPartEnum, Map<Float, Pair<Effect, Integer>>> bodyPartMalusEffects = new HashMap<>();
+    private static final Map<MalusBodyPartEnum, Map<Float, Pair<MobEffect, Integer>>> bodyPartMalusEffects = new HashMap<>();
 
 
     public BodyDamageUtilInternal() {}
 
     public static void initMalusConfig() {
         for (MalusBodyPartEnum malus: MalusBodyPartEnum.values()) {
-            Map<Float, Pair<Effect, Integer>> malusEffects = new HashMap<>();
+            Map<Float, Pair<MobEffect, Integer>> malusEffects = new HashMap<>();
             if (malus.effects.size() != malus.amplifiers.size() || malus.effects.size() != malus.thresholds.size()) {
                 LegendarySurvivalOverhaul.LOGGER.debug("{} effects, amplifiers and thresholds elements number doesn't match. The last elements won't be used.", malus.name());
             }
 
             for (int i=0; i<malus.effects.size(); i++) {
-                Effect malusEffect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(malus.effects.get(i)));
+                MobEffect malusEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(malus.effects.get(i)));
                 int malusAmplifier;
                 float malusThreshold;
                 if (malusEffect == null) {
@@ -44,7 +44,7 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
                     continue;
                 }
                 try {
-                    malusThreshold = MathHelper.clamp(malus.thresholds.get(i), 0.0f, 1.0f);
+                    malusThreshold = Mth.clamp(malus.thresholds.get(i), 0.0f, 1.0f);
                 } catch (IndexOutOfBoundsException e) {
                     LegendarySurvivalOverhaul.LOGGER.debug("No threshold defined for effect {} in {}", Config.Baked.headPartEffects.get(i), malus.name());
                     continue;
@@ -55,12 +55,12 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
         }
     }
 
-    public List<Pair<Effect, Integer>> getEffects(MalusBodyPartEnum bodyPart, float healthRatio) {
-        List<Pair<Effect, Integer>> effects = new ArrayList<>();
+    public List<Pair<MobEffect, Integer>> getEffects(MalusBodyPartEnum bodyPart, float healthRatio) {
+        List<Pair<MobEffect, Integer>> effects = new ArrayList<>();
         if(bodyPart == null)
             return effects;
 
-        for (Map.Entry<Float, Pair<Effect, Integer>> effect: bodyPartMalusEffects.get(bodyPart).entrySet()) {
+        for (Map.Entry<Float, Pair<MobEffect, Integer>> effect: bodyPartMalusEffects.get(bodyPart).entrySet()) {
             if (healthRatio <= effect.getKey()) {
                 effects.add(effect.getValue());
             }
@@ -68,7 +68,7 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
         return effects;
     }
 
-    public void applyHealingItem(PlayerEntity player, BodyPartEnum bodyPartEnum, BodyHealingItem healingItem) {
+    public void applyHealingItem(Player player, BodyPartEnum bodyPartEnum, BodyHealingItem healingItem) {
 
         if(!Config.Baked.localizedBodyDamageEnabled || bodyPartEnum == null || healingItem == null)
             return;
@@ -82,7 +82,7 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
     }
 
     @Override
-    public void healBodyPart(PlayerEntity player, BodyPartEnum bodyPartEnum, float healingValue) {
+    public void healBodyPart(Player player, BodyPartEnum bodyPartEnum, float healingValue) {
 
         if(!Config.Baked.localizedBodyDamageEnabled)
             return;
@@ -92,7 +92,7 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
         capability.heal(bodyPartEnum, healingValue);
     }
 
-    public void hurtBodyPart(PlayerEntity player, BodyPartEnum bodyPartEnum, float damageValue) {
+    public void hurtBodyPart(Player player, BodyPartEnum bodyPartEnum, float damageValue) {
 
         if(!Config.Baked.localizedBodyDamageEnabled || bodyPartEnum == null)
             return;
@@ -112,7 +112,7 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
         }
     }
 
-    public void balancedHurtBodyParts(PlayerEntity player, List<BodyPartEnum> bodyParts, float damageValue) {
+    public void balancedHurtBodyParts(Player player, List<BodyPartEnum> bodyParts, float damageValue) {
 
         if(!Config.Baked.localizedBodyDamageEnabled || bodyParts.isEmpty())
             return;
@@ -124,7 +124,7 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
         }
     }
 
-    public void randomHurtBodyParts(PlayerEntity player, List<BodyPartEnum> bodyParts, float damageValue) {
+    public void randomHurtBodyParts(Player player, List<BodyPartEnum> bodyParts, float damageValue) {
         if(!Config.Baked.localizedBodyDamageEnabled || bodyParts.isEmpty())
             return;
         int bodyPartIndex = bodyParts.size() == 1 ? 0 : player.getRandom().nextInt(bodyParts.size() - 1);
@@ -132,7 +132,7 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
         hurtBodyPart(player, bodyParts.get(bodyPartIndex), damageValue);
     }
 
-    public float getHealthRatio(PlayerEntity player, BodyPartEnum bodyPartEnum) {
+    public float getHealthRatio(Player player, BodyPartEnum bodyPartEnum) {
         if(!Config.Baked.localizedBodyDamageEnabled || bodyPartEnum == null)
             return 0.0f;
 
@@ -141,7 +141,7 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
         return capability.getBodyPartHealthRatio(bodyPartEnum);
     }
 
-    public float getTotalRemainingHealing(PlayerEntity player, BodyPartEnum bodyPartEnum) {
+    public float getTotalRemainingHealing(Player player, BodyPartEnum bodyPartEnum) {
         if(!Config.Baked.localizedBodyDamageEnabled || bodyPartEnum == null)
             return 0.0f;
 
@@ -151,7 +151,7 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
     }
 
     @Override
-    public float getMaxHealth(PlayerEntity player, BodyPartEnum bodyPartEnum) {
+    public float getMaxHealth(Player player, BodyPartEnum bodyPartEnum) {
         if(!Config.Baked.localizedBodyDamageEnabled || bodyPartEnum == null)
             return 0.0f;
 

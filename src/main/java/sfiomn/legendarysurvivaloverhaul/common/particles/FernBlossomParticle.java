@@ -1,19 +1,19 @@
 package sfiomn.legendarysurvivaloverhaul.common.particles;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.Mth;
 
 import javax.annotation.Nullable;
 
 //  Deeply inspired by the tall AloeVera from MinecraftAbnormals
 //  https://github.com/team-abnormals/atmospheric/blob/1.16.x/src/main/java/com/minecraftabnormals/atmospheric/client/particle/AloeBlossomParticle.java
-public class FernBlossomParticle extends SpriteTexturedParticle {
-    protected final IAnimatedSprite animatedSprite;
+public class FernBlossomParticle extends TextureSheetParticle {
+    protected final SpriteSet animatedSprite;
     private float angle;
 
-    protected FernBlossomParticle(IAnimatedSprite animatedSprite, ClientWorld level, double x, double y, double z, double xd, double yd, double zd) {
+    protected FernBlossomParticle(SpriteSet animatedSprite, ClientLevel level, double x, double y, double z, double xd, double yd, double zd) {
         super(level, x, y, z, xd, yd, zd);
 
         this.setSpriteFromAge(animatedSprite);
@@ -61,7 +61,7 @@ public class FernBlossomParticle extends SpriteTexturedParticle {
     @Override
     protected int getLightColor(float partialTick) {
         float f = this.lifetime / (((this.age + (this.lifetime * 0.5F)) + partialTick));
-        f = MathHelper.clamp(f, 0F, 0.5F);
+        f = Mth.clamp(f, 0F, 0.5F);
         int i = super.getLightColor(partialTick);
         int j = i & 255;
         int k = i >> 16 & 255;
@@ -73,21 +73,21 @@ public class FernBlossomParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT.PARTICLE_SHEET_TRANSLUCENT;
     }
 
-    public static class Factory implements IParticleFactory<BasicParticleType> {
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
 
-        private final IAnimatedSprite animatedSprite;
+        private final SpriteSet animatedSprite;
 
-        public Factory(IAnimatedSprite animatedSprite) {
+        public Factory(SpriteSet animatedSprite) {
             this.animatedSprite = animatedSprite;
         }
 
         @Nullable
         @Override
-        public Particle createParticle(BasicParticleType type, ClientWorld level, double x, double y, double z, double xd, double yd, double zd) {
+        public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xd, double yd, double zd) {
             return new FernBlossomParticle(this.animatedSprite, level, x, y, z, xd, yd, zd);
         }
     }

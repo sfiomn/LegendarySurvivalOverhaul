@@ -1,9 +1,9 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
@@ -15,28 +15,28 @@ public class BiomeModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(Level world, BlockPos pos)
 	{
-		Vector3i[] posOffsets = 
+		Vec3i[] posOffsets =
 			{
-					new Vector3i(0, 0, 0),
-					new Vector3i(10, 0, 0),
-					new Vector3i(-10, 0, 0),
-					new Vector3i(0, 0, 10),
-					new Vector3i(0, 0, -10),
-					new Vector3i(7, 0, 7),
-					new Vector3i(7, 0, -7),
-					new Vector3i(-7, 0, 7),
-					new Vector3i(-7, 0, -7)
+					new Vec3i(0, 0, 0),
+					new Vec3i(10, 0, 0),
+					new Vec3i(-10, 0, 0),
+					new Vec3i(0, 0, 10),
+					new Vec3i(0, 0, -10),
+					new Vec3i(7, 0, 7),
+					new Vec3i(7, 0, -7),
+					new Vec3i(-7, 0, 7),
+					new Vec3i(-7, 0, -7)
 			};
 		
 		float biomeAverage = 0f;
 		
 		long worldTime = world.getLevelData().getDayTime() % 24000;
 		
-		for (Vector3i offset : posOffsets)
+		for (Vec3i offset : posOffsets)
 		{
-			Biome biome = world.getBiome(pos.offset(offset));
+			Biome biome = world.getBiome(pos.offset(offset)).get();
 			float humidity = getHumidityForBiome(world, biome);
 			float addedTemperature = getNormalizedTempForBiome(world, biome);
 			

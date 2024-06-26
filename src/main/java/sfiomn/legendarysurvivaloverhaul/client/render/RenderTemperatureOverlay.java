@@ -1,12 +1,9 @@
 package sfiomn.legendarysurvivaloverhaul.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
@@ -16,7 +13,6 @@ import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
 import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
-import sfiomn.legendarysurvivaloverhaul.util.RenderUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderTemperatureOverlay {
@@ -28,26 +24,25 @@ public class RenderTemperatureOverlay {
     private static float fadeLevel = 0;
     private static boolean triggerTemperatureSoundEffect;
 
-    public static void render(MatrixStack matrix, int width, int height)
+    public static void render(GuiGraphics gui, int width, int height)
     {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
+        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, fadeLevel);
 
-        drawTemperatureEffect(matrix, width, height);
+        drawTemperatureEffect(gui, width, height);
+        RenderSystem.clearColor(1.0F,1.0F,1.0F,1.0F);
 
         RenderSystem.disableBlend();
-        bind(AbstractGui.GUI_ICONS_LOCATION);
     }
 
-    public static void drawTemperatureEffect(MatrixStack matrix, int width, int height) {
+    public static void drawTemperatureEffect(GuiGraphics gui, int width, int height) {
         if (temperatureEffect != null) {
-            Matrix4f m4f = matrix.last().pose();
-            bind(temperatureEffect);
-            RenderUtil.drawTexturedModelRectWithAlpha(m4f, 0, 0, width, height, 0, 0, TEMPERATURE_EFFECT_WIDTH, TEMPERATURE_EFFECT_HEIGHT, fadeLevel);
+            gui.blit(temperatureEffect, 0, 0, width, height, 0, 0, TEMPERATURE_EFFECT_WIDTH, TEMPERATURE_EFFECT_HEIGHT);
         }
     }
 
-    public static void updateTemperatureEffect(PlayerEntity player) {
+    public static void updateTemperatureEffect(Player player) {
         if (player != null && player.isAlive()) {
 
             float temperature = CapabilityUtil.getTempCapability(player).getTemperatureLevel();
@@ -104,10 +99,5 @@ public class RenderTemperatureOverlay {
                 temperatureEffect = null;
             }
         }
-    }
-
-    private static void bind(ResourceLocation resource)
-    {
-        Minecraft.getInstance().getTextureManager().bind(resource);
     }
 }

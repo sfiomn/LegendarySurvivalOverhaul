@@ -1,11 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Dimension;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
+
+import java.awt.*;
 
 public class DefaultModifier extends ModifierBase
 {
@@ -15,12 +15,12 @@ public class DefaultModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(Level level, BlockPos pos)
 	{
 		// LegendarySurvivalOverhaul.LOGGER.debug("Default temp influence : " + defaultTemperature);
-		if (world.dimension() == World.NETHER)
+		if (level.dimension() == Level.NETHER)
 			return (float) Config.Baked.netherDefaultTemperature;
-		else if (world.dimension() == World.END)
+		else if (level.dimension() == Level.END)
 			return (float) Config.Baked.endDefaultTemperature;
 		return (float) Config.Baked.overworldDefaultTemperature;
 	}

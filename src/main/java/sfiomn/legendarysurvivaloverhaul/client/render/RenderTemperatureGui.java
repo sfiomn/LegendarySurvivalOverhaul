@@ -1,24 +1,20 @@
 package sfiomn.legendarysurvivaloverhaul.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
-import sfiomn.legendarysurvivaloverhaul.util.RenderUtil;
 
 import java.util.Random;
 
@@ -51,7 +47,7 @@ public class RenderTemperatureGui
 
 	private static boolean shakeSide = false;
 	
-	public static void render(MatrixStack matrix, PlayerEntity player, int width, int height)
+	public static void render(GuiGraphics gui, Player player, int width, int height)
 	{
 		rand.setSeed(updateCounter * 445L);
 
@@ -64,31 +60,29 @@ public class RenderTemperatureGui
 		switch (Config.Baked.temperatureDisplayMode)
 		{
 		case SYMBOL:
-			drawTemperatureAsSymbol(matrix, tempCap, width, height);
+			drawTemperatureAsSymbol(gui, tempCap, width, height);
 			break;
 		default:
 			break;
 		}
 		
 		if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
-			drawWetness(matrix, wetCap, width, height);
+			drawWetness(gui, wetCap, width, height);
 
 		RenderSystem.disableBlend();
-		bind(AbstractGui.GUI_ICONS_LOCATION);
 	}
 
-	public static void renderFoodBarEffect(MatrixStack matrix, PlayerEntity player, int width, int height) {
+	public static void renderFoodBarEffect(GuiGraphics gui, Player player, int width, int height) {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
 		if (Config.Baked.temperatureSecondaryEffects)
-			drawHungerSecondaryEffect(matrix, player, width, height);
+			drawHungerSecondaryEffect(gui, player, width, height);
 
 		RenderSystem.disableBlend();
-		bind(AbstractGui.GUI_ICONS_LOCATION);
 	}
 	
-	public static void drawTemperatureAsSymbol(MatrixStack matrix, TemperatureCapability cap, int width, int height)
+	public static void drawTemperatureAsSymbol(GuiGraphics gui, TemperatureCapability cap, int width, int height)
 	{
 		int x = width / 2 - (TEMPERATURE_TEXTURE_WIDTH / 2);
 		int y = height - 52;
@@ -181,12 +175,8 @@ public class RenderTemperatureGui
 			icon = icon.getFlashVariant();
 		}
 		
-		Matrix4f m4f = matrix.last().pose();
-
-		bind(ICONS);
-		
-		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT, TEMPERATURE_TEXTURE_WIDTH * icon.getIconIndex(), TEMPERATURE_TEXTURE_POS_Y, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT);
-		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT, TEMPERATURE_TEXTURE_WIDTH * icon.getIconHolder(), TEMPERATURE_TEXTURE_POS_Y, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT);
+		gui.blit(ICONS, x + xOffset, y + yOffset, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT, TEMPERATURE_TEXTURE_WIDTH * icon.getIconIndex(), TEMPERATURE_TEXTURE_POS_Y, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT);
+		gui.blit(ICONS, x + xOffset, y + yOffset, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT, TEMPERATURE_TEXTURE_WIDTH * icon.getIconHolder(), TEMPERATURE_TEXTURE_POS_Y, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT);
 
 		if (delay == 0) {
 			if ((int) targetTemperature != (int) temperature) {
@@ -201,12 +191,10 @@ public class RenderTemperatureGui
 		int ovrXOffset = TEMPERATURE_TEXTURE_WIDTH * ((frameCounter / 2) - 1);
 		int ovrYOffset = TEMPERATURE_TEXTURE_POS_Y + (TEMPERATURE_TEXTURE_HEIGHT * (risingTemperature ? 1 : 2));
 
-		bind(ICONS);
-
-		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT, ovrXOffset, ovrYOffset, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT);
+		gui.blit(ICONS, x + xOffset, y + yOffset, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT, ovrXOffset, ovrYOffset, TEMPERATURE_TEXTURE_WIDTH, TEMPERATURE_TEXTURE_HEIGHT);
 	}
 	
-	public static void drawWetness(MatrixStack matrix, WetnessCapability cap, int width, int height)
+	public static void drawWetness(GuiGraphics gui, WetnessCapability cap, int width, int height)
 	{
 		int wetness = cap.getWetness();
 		byte wetnessSymbol;
@@ -221,7 +209,7 @@ public class RenderTemperatureGui
 		if (wetness == 0)
 			return;
 		else
-			wetnessSymbol = (byte) (MathHelper.clamp(MathUtil.invLerp(0, WetnessCapability.WETNESS_LIMIT, wetness) * 4, 0, 3));
+			wetnessSymbol = (byte) (Mth.clamp(MathUtil.invLerp(0, WetnessCapability.WETNESS_LIMIT, wetness) * 4, 0, 3));
 		
 		if (lastWetnessSymbol != wetnessSymbol)
 		{
@@ -232,19 +220,11 @@ public class RenderTemperatureGui
 		int texPosX = wetnessSymbol * WETNESS_TEXTURE_WIDTH;
 		int texPosY = WETNESS_TEXTURE_POS_Y + (flashCounter >= 0 ? WETNESS_TEXTURE_HEIGHT : 0);
 		
-		Matrix4f m4f = matrix.last().pose();
-
-		bind(ICONS);
-		
-		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, WETNESS_TEXTURE_WIDTH, WETNESS_TEXTURE_HEIGHT, texPosX, texPosY, WETNESS_TEXTURE_WIDTH, WETNESS_TEXTURE_HEIGHT);
+		gui.blit(ICONS, x + xOffset, y + yOffset, WETNESS_TEXTURE_WIDTH, WETNESS_TEXTURE_HEIGHT, texPosX, texPosY, WETNESS_TEXTURE_WIDTH, WETNESS_TEXTURE_HEIGHT);
 	}
 
-	public static void drawHungerSecondaryEffect(MatrixStack matrix, PlayerEntity player, int width, int height) {
-		if (player.hasEffect(EffectRegistry.COLD_HUNGER.get())) {
-
-			Matrix4f m4f = matrix.last().pose();
-
-			bind(ICONS);
+	public static void drawHungerSecondaryEffect(GuiGraphics gui, Player player, int width, int height) {
+		if (player.hasEffect(MobEffectRegistry.COLD_HUNGER.get())) {
 
 			int foodLevel = player.getFoodData().getFoodLevel();
 			float saturationLevelInt = (int) player.getFoodData().getSaturationLevel();
@@ -270,16 +250,16 @@ public class RenderTemperatureGui
 				int xTextureOffset = HUNGER_TEXTURE_WIDTH * 6;
 				int yTextureOffset = HUNGER_TEXTURE_HEIGHT;
 
-				if (player.hasEffect(Effects.HUNGER)) {
+				if (player.hasEffect(MobEffects.HUNGER)) {
 					xTextureOffset += HUNGER_TEXTURE_WIDTH * 3;
 				}
 
 				if (halfIcon < foodLevel) // Full hunger icon
-					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset + HUNGER_TEXTURE_WIDTH, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
+					gui.blit(ICONS, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset + HUNGER_TEXTURE_WIDTH, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
 				else if (halfIcon == foodLevel) // Half hunger icon
-					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset + (HUNGER_TEXTURE_WIDTH * 2), yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
+					gui.blit(ICONS, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset + (HUNGER_TEXTURE_WIDTH * 2), yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
 				else
-					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
+					gui.blit(ICONS, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
 
 
 				// Reassign texture offset for saturation
@@ -287,10 +267,10 @@ public class RenderTemperatureGui
 				if(saturationLevelInt > 0 && Config.Baked.thirstSaturationDisplayed)
 				{
 					if (halfIcon < saturationLevelInt) { // Full saturation icon
-						RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
+						gui.blit(ICONS, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
 					}
 					else if (halfIcon == saturationLevelInt) { // Half saturation icon
-						RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset + HUNGER_TEXTURE_WIDTH, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
+						gui.blit(ICONS, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset + HUNGER_TEXTURE_WIDTH, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);
 					}
 				}
 			}
@@ -311,11 +291,6 @@ public class RenderTemperatureGui
 			frameCounter = 24;
 			startAnimation = false;
 		}
-	}
-	
-	private static void bind(ResourceLocation resource)
-	{
-		Minecraft.getInstance().getTextureManager().bind(resource);
 	}
 	
 	private enum IconPair

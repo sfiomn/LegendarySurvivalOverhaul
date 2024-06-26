@@ -1,9 +1,9 @@
 package sfiomn.legendarysurvivaloverhaul.api.config.json.temperature;
 
 import com.google.gson.annotations.SerializedName;
-import net.minecraft.block.BlockState;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.state.Property;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.FluidState;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 
 import java.util.ArrayList;

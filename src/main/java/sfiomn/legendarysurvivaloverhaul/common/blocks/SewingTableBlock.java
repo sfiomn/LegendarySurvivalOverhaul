@@ -1,67 +1,67 @@
 package sfiomn.legendarysurvivaloverhaul.common.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.SimpleNamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.containers.SewingTableContainer;
 
-public class SewingTableBlock extends HorizontalBlock
+public class SewingTableBlock extends HorizontalDirectionalBlock implements MenuProvider
 {
-	private static final ITextComponent CONTAINER_TITLE = new TranslationTextComponent("container." + LegendarySurvivalOverhaul.MOD_ID + ".sewing_table").withStyle();
+	private static final Component CONTAINER_TITLE = Component.translatable("container." + LegendarySurvivalOverhaul.MOD_ID + ".sewing_table").withStyle();
 
 
 	private static final VoxelShape BASE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
 	private static final VoxelShape X_TOP = Block.box(6.0D, 1.0D, 2.0D, 10.0D, 10.0D, 14.0D);
 	private static final VoxelShape Z_TOP = Block.box(2.0D, 1.0D, 6.0D, 14.0D, 10.0D, 10.0D);
 
-	private static final VoxelShape X_AXIS_AABB = VoxelShapes.or(BASE, X_TOP);
-	private static final VoxelShape Z_AXIS_AABB = VoxelShapes.or(BASE, Z_TOP);
+	private static final VoxelShape X_AXIS_AABB = Shapes.or(BASE, X_TOP);
+	private static final VoxelShape Z_AXIS_AABB = Shapes.or(BASE, Z_TOP);
 
 	public SewingTableBlock()
 	{
 		super(Properties
-				.of(Material.WOOD)
+				.of()
+				.mapColor(MapColor.WOOD)
 				.strength(4.0f, 10.0f)
-				.harvestTool(ToolType.AXE)
-				.harvestLevel(1)
 				.noOcclusion());
 		
 		this.registerDefaultState(this.getStateDefinition().any()
 				.setValue(FACING, Direction.NORTH));
 	}
 	
-	public BlockState getStateForPlacement(BlockItemUseContext context)
+	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
 		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
 	}
 	
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		builder.add(FACING);
 	}
 	
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 	{
 		Direction direction = state.getValue(FACING);
 		return direction.getAxis() == Direction.Axis.X ? X_AXIS_AABB : Z_AXIS_AABB;
@@ -69,17 +69,22 @@ public class SewingTableBlock extends HorizontalBlock
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTrace) {
-		if (world.isClientSide) {
-			return ActionResultType.SUCCESS;
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTrace) {
+		if (level.isClientSide) {
+			return InteractionResult.SUCCESS;
 		}
-		player.openMenu(state.getMenuProvider(world, pos));
-		return ActionResultType.CONSUME;
+		player.openMenu(state.getMenuProvider(level, pos));
+		return InteractionResult.CONSUME;
 	}
 
 	@Override
-	public INamedContainerProvider getMenuProvider(BlockState state, World world, BlockPos pos) {
-		return new SimpleNamedContainerProvider((windowId, playerInventory, packetBuffer) ->
-				new SewingTableContainer(windowId, playerInventory, IWorldPosCallable.create(world, pos)), CONTAINER_TITLE);
+	public @NotNull Component getDisplayName() {
+		return CONTAINER_TITLE;
+	}
+
+	@Nullable
+	@Override
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player) {
+		return new SewingTableContainer(windowId, playerInventory, ContainerLevelAccess.create(player.level(), player.blockPosition()));
 	}
 }

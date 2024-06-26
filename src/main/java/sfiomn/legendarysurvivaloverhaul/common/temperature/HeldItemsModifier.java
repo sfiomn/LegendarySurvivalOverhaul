@@ -1,9 +1,10 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
@@ -15,7 +16,7 @@ public class HeldItemsModifier extends ModifierBase {
     }
 
     @Override
-    public float getPlayerInfluence(PlayerEntity player)
+    public float getPlayerInfluence(Player player)
     {
         ItemStack mainHand = player.getMainHandItem();
         ItemStack offHand = player.getOffhandItem();
@@ -41,7 +42,7 @@ public class HeldItemsModifier extends ModifierBase {
         if (stack.getItem() instanceof ArmorItem)
             return 0.0f;
 
-        ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
+        ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
 
         JsonTemperature jsonTemperature = null;
         if (itemRegistryName != null)

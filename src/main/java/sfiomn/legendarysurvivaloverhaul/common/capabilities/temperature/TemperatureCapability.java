@@ -1,11 +1,12 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
@@ -15,8 +16,7 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
 import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
-import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 
 // Code adapted from 
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/capability/TemperatureCapability.java
@@ -99,7 +99,7 @@ public class TemperatureCapability implements ITemperatureCapability
 	}
 	
 	@Override
-	public void tickUpdate(PlayerEntity player, World world, Phase phase)
+	public void tickUpdate(Player player, Level level, Phase phase)
 	{
 		if(phase == TickEvent.Phase.START)
 		{
@@ -129,7 +129,7 @@ public class TemperatureCapability implements ITemperatureCapability
 
 			TemperatureEnum tempEnum = getTemperatureEnum();
 
-			if (player.getItemBySlot(EquipmentSlotType.MAINHAND).getItem() == Items.DEBUG_STICK)
+			if (player.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.DEBUG_STICK)
 				LegendarySurvivalOverhaul.LOGGER.info(tempEnum + ", " + getTemperatureLevel() + " -> " + destinationTemp);
 
 			if (Config.Baked.dangerousTemperature)
@@ -140,44 +140,44 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 	}
 
-	private void applyDangerousEffects(PlayerEntity player, TemperatureEnum tempEnum) {
+	private void applyDangerousEffects(Player player, TemperatureEnum tempEnum) {
 		if (tempEnum == TemperatureEnum.HEAT_STROKE) {
 			if (TemperatureEnum.HEAT_STROKE.getMiddle() <= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply hyperthermia
-				if (!player.hasEffect(EffectRegistry.HEAT_STROKE.get()))
-					player.addEffect(new EffectInstance(EffectRegistry.HEAT_STROKE.get(), 1000, 0, false, true));
+				if (!player.hasEffect(MobEffectRegistry.HEAT_STROKE.get()))
+					player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_STROKE.get(), 1000, 0, false, true));
 				return;
 			}
 		} else if (tempEnum == TemperatureEnum.FROSTBITE) {
 			if (TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
-				// Apply hypothermia
-				if (!player.hasEffect(EffectRegistry.FROSTBITE.get()))
-					player.addEffect(new EffectInstance(EffectRegistry.FROSTBITE.get(), 1000, 0, false, true));
+				// Apply hypothermia.json
+				if (!player.hasEffect(MobEffectRegistry.FROSTBITE.get()))
+					player.addEffect(new MobEffectInstance(MobEffectRegistry.FROSTBITE.get(), 1000, 0, false, true));
 				return;
 			}
 		}
-		player.removeEffect(EffectRegistry.HEAT_STROKE.get());
-		player.removeEffect(EffectRegistry.FROSTBITE.get());
+		player.removeEffect(MobEffectRegistry.HEAT_STROKE.get());
+		player.removeEffect(MobEffectRegistry.FROSTBITE.get());
 	}
 
-	private void applySecondaryEffects(PlayerEntity player, TemperatureEnum tempEnum) {
+	private void applySecondaryEffects(Player player, TemperatureEnum tempEnum) {
 		if (tempEnum == TemperatureEnum.HEAT_STROKE) {
 			if (!player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply secondary effect hyperthermia
-				player.removeEffect(EffectRegistry.COLD_HUNGER.get());
-				player.addEffect(new EffectInstance(EffectRegistry.HEAT_Thirst.get(), 300, 0, false, false));
+				player.removeEffect(MobEffectRegistry.COLD_HUNGER.get());
+				player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_Thirst.get(), 300, 0, false, false));
 				return;
 			}
 		} else if (tempEnum == TemperatureEnum.FROSTBITE) {
 			if (!player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
-				// Apply secondary effect hypothermia
-				player.removeEffect(EffectRegistry.HEAT_Thirst.get());
-				player.addEffect(new EffectInstance(EffectRegistry.COLD_HUNGER.get(), 300, 0, false, false));
+				// Apply secondary effect hypothermia.json
+				player.removeEffect(MobEffectRegistry.HEAT_Thirst.get());
+				player.addEffect(new MobEffectInstance(MobEffectRegistry.COLD_HUNGER.get(), 300, 0, false, false));
 				return;
 			}
 		}
-		player.removeEffect(EffectRegistry.HEAT_Thirst.get());
-		player.removeEffect(EffectRegistry.COLD_HUNGER.get());
+		player.removeEffect(MobEffectRegistry.HEAT_Thirst.get());
+		player.removeEffect(MobEffectRegistry.COLD_HUNGER.get());
 	}
 	
 	private void tickTemperature(float currentTemp, float destination)
@@ -223,9 +223,9 @@ public class TemperatureCapability implements ITemperatureCapability
 		return TemperatureEnum.get(temperature);
 	}
 	
-	public CompoundNBT writeNBT() 
+	public CompoundTag writeNBT() 
 	{
-		CompoundNBT compound = new CompoundNBT();
+		CompoundTag compound = new CompoundTag();
 		
 		compound.putFloat("temperature", this.temperature);
 		compound.putFloat("targettemperature", this.targetTemp);
@@ -234,7 +234,7 @@ public class TemperatureCapability implements ITemperatureCapability
 		return compound;
 	}
 	
-	public void readNBT(CompoundNBT compound)
+	public void readNBT(CompoundTag compound)
 	{
 		this.init();
 		if (compound.contains("temperature"))

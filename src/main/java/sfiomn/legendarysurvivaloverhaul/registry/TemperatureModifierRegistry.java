@@ -1,6 +1,7 @@
 package sfiomn.legendarysurvivaloverhaul.registry;
 
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.RegistryObject;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
@@ -8,7 +9,6 @@ import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosModifier
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier;
 import sfiomn.legendarysurvivaloverhaul.common.temperature.*;
 import sfiomn.legendarysurvivaloverhaul.common.temperature.dynamic.*;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 
 public class TemperatureModifierRegistry

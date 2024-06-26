@@ -1,35 +1,35 @@
 package sfiomn.legendarysurvivaloverhaul.network.packets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import net.minecraftforge.network.NetworkEvent;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessProvider;
 
 import java.util.function.Supplier;
 
 public class UpdateWetnessPacket
 {
-	private CompoundNBT compound;
+	private CompoundTag compound;
 	
-	public UpdateWetnessPacket(INBT compound)
+	public UpdateWetnessPacket(Tag compound)
 	{
-		this.compound = (CompoundNBT) compound;
+		this.compound = (CompoundTag) compound;
 	}
 	
 	public UpdateWetnessPacket() {}
 	
-	public static UpdateWetnessPacket decode(PacketBuffer buffer)
+	public static UpdateWetnessPacket decode(FriendlyByteBuf buffer)
 	{
 		return new UpdateWetnessPacket(buffer.readNbt());
 	}
 	
-	public static void encode(UpdateWetnessPacket message, PacketBuffer buffer)
+	public static void encode(UpdateWetnessPacket message, FriendlyByteBuf buffer)
 	{
 		buffer.writeNbt(message.compound);
 	}
@@ -42,7 +42,7 @@ public class UpdateWetnessPacket
 		supplier.get().setPacketHandled(true);
 	}
 	
-	public static DistExecutor.SafeRunnable syncWetness(CompoundNBT compound)
+	public static DistExecutor.SafeRunnable syncWetness(CompoundTag compound)
 	{
 		return new DistExecutor.SafeRunnable()
 		{
@@ -51,11 +51,13 @@ public class UpdateWetnessPacket
 			@Override
 			public void run()
 			{
-				ClientPlayerEntity player = Minecraft.getInstance().player;
-				
-				WetnessCapability wetness = player.getCapability(LegendarySurvivalOverhaul.WETNESS_CAP).orElse(new WetnessCapability());
-				
-				wetness.readNBT(compound);
+				LocalPlayer player = Minecraft.getInstance().player;
+
+				if (player != null) {
+					WetnessCapability wetness = player.getCapability(WetnessProvider.WETNESS_CAPABILITY).orElse(new WetnessCapability());
+
+					wetness.readNBT(compound);
+				}
 			}
 		};
 	}

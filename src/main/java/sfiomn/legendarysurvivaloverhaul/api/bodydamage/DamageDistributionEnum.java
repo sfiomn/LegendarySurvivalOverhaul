@@ -1,6 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.api.bodydamage;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 
 import java.util.Collections;
@@ -12,7 +12,7 @@ public enum DamageDistributionEnum {
 
     DamageDistributionEnum() {}
 
-    public List<BodyPartEnum> getBodyParts(PlayerEntity player, List<BodyPartEnum> bodyParts) {
+    public List<BodyPartEnum> getBodyParts(Player player, List<BodyPartEnum> bodyParts) {
         if (this == DamageDistributionEnum.ONE_OF) {
             return Collections.singletonList(bodyParts.get(player.getRandom().nextInt(bodyParts.size())));
         }

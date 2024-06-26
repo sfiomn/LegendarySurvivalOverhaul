@@ -1,11 +1,10 @@
 package sfiomn.legendarysurvivaloverhaul.data.recipes;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
@@ -14,7 +13,7 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 public class ModRecipeProvider extends RecipeProvider {
-    public ModRecipeProvider(DataGenerator generator) {
+    public ModRecipeProvider(PackOutput generator) {
         super(generator);
     }
 

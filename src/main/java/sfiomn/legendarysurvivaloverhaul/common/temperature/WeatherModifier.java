@@ -1,8 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.TemperatureModifierRegistry;
@@ -17,36 +17,36 @@ public class WeatherModifier extends ModifierBase
 	
 	// TODO: Try and get this also working with serene seasons
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(Level level, BlockPos pos)
 	{
 		// Apply shade effect in hot biomes if the player is either "hidden from sky" or time is raining
 		// Shade effect depends on Time, no shade effect at sunrise and sunset, max effect at noon
-		if (!world.isRaining() && world.canSeeSky(pos.above())) {
+		if (!level.isRaining() && level.canSeeSky(pos.above())) {
 			return 0.0f;
 		}
 
-		Biome biome = world.getBiome(pos);
+		Biome biome = level.getBiome(pos).get();
 		float weatherTemperature = 0.0f;
-		long time = world.getLevelData().getDayTime();
+		long time = level.getLevelData().getDayTime();
 
 		if(Config.Baked.shadeTimeModifier != 0 && time <= 12000)
 		{
-			if ((TemperatureModifierRegistry.BIOME.get().getWorldInfluence(world, pos) +
-					TemperatureModifierRegistry.SERENE_SEASONS.get().getWorldInfluence(world, pos)) > 15) {
+			if ((TemperatureModifierRegistry.BIOME.get().getWorldInfluence(level, pos) +
+					TemperatureModifierRegistry.SERENE_SEASONS.get().getWorldInfluence(level, pos)) > 15) {
 				float shadeTemperature = (float) Config.Baked.shadeTimeModifier * (float) Math.sin((time * Math.PI) / 12000.0f);
-				weatherTemperature += applyUndergroundEffect(shadeTemperature, world, pos);
+				weatherTemperature += applyUndergroundEffect(shadeTemperature, level, pos);
 				// LegendarySurvivalOverhaul.LOGGER.debug("Shade temp influence : " + weatherTemperature + "biome temp : " + TemperatureModifierRegistry.BIOME.get().getWorldInfluence(world, pos) +
 				// 		", season temp : " + TemperatureModifierRegistry.SERENE_SEASONS.get().getWorldInfluence(world, pos));
 			}
 		}
 
-		if(WorldUtil.isRainingOrSnowingAt(world, pos.above())) {
+		if(WorldUtil.isRainingOrSnowingAt(level, pos.above())) {
 			// LegendarySurvivalOverhaul.LOGGER.debug("Weather Biome temp : " + world.getBiome(pos).getTemperature(pos));
 
-			if (biome.getTemperature(pos) < 0.15f) {
+			if (biome.getBaseTemperature() < 0.15f) {
 				// LegendarySurvivalOverhaul.LOGGER.debug("Snow temp influence : " + (weatherTemperature + (float) Config.Baked.snowTemperatureModifier));
 				weatherTemperature += (float) Config.Baked.snowTemperatureModifier;
-			} else if (biome.getTemperature(pos) >= 0.15f) {
+			} else if (biome.getBaseTemperature() >= 0.15f) {
 				//LegendarySurvivalOverhaul.LOGGER.debug("Rain temp influence : " + (weatherTemperature + (float) Config.Baked.rainTemperatureModifier));
 				weatherTemperature += (float) Config.Baked.rainTemperatureModifier;
 			}

@@ -1,10 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.vector.Matrix4f;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 public final class RenderUtil
@@ -28,11 +29,11 @@ public final class RenderUtil
 		float f = 0.00390625f;
 		float f1 = 0.00390625f;
 		float z = 0.0f;
+
+		Tesselator tesselator = Tesselator.getInstance();
+		BufferBuilder bufferBuilder = tesselator.getBuilder();
 		
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferBuilder = tessellator.getBuilder();
-		
-		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		bufferBuilder.vertex(matrix, x, y + height, z)
 				.uv((texX * f), (texY + texHeight) * f1).color(255, 255, 255, 122).endVertex();
 		bufferBuilder.vertex(matrix, (x + width), y + height, z)
@@ -41,19 +42,19 @@ public final class RenderUtil
 				.uv((texX + texWidth) * f,(texY * f1)).color(255, 255, 255, 122).endVertex();
 		bufferBuilder.vertex(matrix, x, y, z)
 				.uv((texX * f), (texY * f1)).color(255, 255, 255, 255).endVertex();
-		tessellator.end();
+		tesselator.end();
 	}
 
 	public static void drawTexturedModelRectWithAlpha(Matrix4f matrix, float x, float y, int width, int height, int texX, int texY, int texWidth, int texHeight, float alpha)
 	{
 
-		RenderSystem.disableAlphaTest();
+		RenderSystem.disableColorLogicOp();
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, alpha);
+		RenderSystem.clearColor(1.0F, 1.0F, 1.0F, alpha);
 
 		RenderUtil.drawTexturedModelRect(matrix, x, y, width, height, texX, texY, texWidth, texHeight);
-		RenderSystem.color4f(1.0F,1.0F,1.0F,1.0F);
+		RenderSystem.clearColor(1.0F,1.0F,1.0F,1.0F);
 
-		RenderSystem.enableAlphaTest();
+		RenderSystem.enableColorLogicOp();
 	}
 }

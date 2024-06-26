@@ -1,14 +1,15 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
-import sfiomn.legendarysurvivaloverhaul.api.DamageSources;
+import sfiomn.legendarysurvivaloverhaul.api.ModDamageTypes;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
+import sfiomn.legendarysurvivaloverhaul.util.DamageSourceUtil;
 import sfiomn.legendarysurvivaloverhaul.util.DamageUtil;
 
 
@@ -24,7 +25,7 @@ public class ThirstCapability implements IThirstCapability
 	private int oldThirst;
 	private float oldThirstSaturation;
 	private boolean wasSprinting;
-	private Vector3d oldPos;
+	private Vec3 oldPos;
 	private int updateTimer; // Update immediately first time around
 	private int packetTimer;
 
@@ -49,7 +50,7 @@ public class ThirstCapability implements IThirstCapability
 	}
 
 	@Override
-	public void tickUpdate(PlayerEntity player, World world, TickEvent.Phase phase)
+	public void tickUpdate(Player player, Level level, TickEvent.Phase phase)
 	{
 		if(phase == TickEvent.Phase.START)
 		{
@@ -92,7 +93,7 @@ public class ThirstCapability implements IThirstCapability
 				// Exhaust from saturation
 				this.addSaturationLevel(-1.0f);
 			}
-			else if(DamageUtil.isModDangerous(world))
+			else if(DamageUtil.isModDangerous(level))
 			{
 				// Exhaust from thirst
 				this.addHydrationLevel(-1);
@@ -109,8 +110,8 @@ public class ThirstCapability implements IThirstCapability
 			{
 				this.setThirstTickTimer(0);
 
-				if(DamageUtil.isModDangerous(world) &&
-						DamageUtil.healthAboveDifficulty(world, player) &&
+				if(DamageUtil.isModDangerous(level) &&
+						DamageUtil.healthAboveDifficulty(level, player) &&
 						!player.isSpectator() && !player.isCreative() &&
 						Config.Baked.dangerousDehydration)
 				{
@@ -126,11 +127,11 @@ public class ThirstCapability implements IThirstCapability
 		}
 	}
 
-	private void applyDangerousEffect(PlayerEntity player) {
+	private void applyDangerousEffect(Player player) {
 		// Apply dehydration damages
 		this.addThirstDamageCounter(1);
 		float thirstDamageToApply = (float) (this.getThirstDamageCounter() * Config.Baked.dehydrationDamageScaling);
-		player.hurt(DamageSources.DEHYDRATION, thirstDamageToApply);
+		player.hurt(DamageSourceUtil.getDamageSource(player.level(), ModDamageTypes.DEHYDRATION), thirstDamageToApply);
 	}
 
 	@Override
@@ -188,14 +189,14 @@ public class ThirstCapability implements IThirstCapability
 	@Override
 	public void setHydrationLevel(int thirst)
 	{
-		this.thirst = MathHelper.clamp(thirst, 0, 20);
+		this.thirst = Mth.clamp(thirst, 0, 20);
 
 	}
 
 	@Override
 	public void setThirstSaturation(float saturation)
 	{
-		this.thirstSaturation = MathHelper.clamp(saturation, 0.0f, 20.0f);
+		this.thirstSaturation = Mth.clamp(saturation, 0.0f, 20.0f);
 
 		if(!Float.isFinite(this.thirstSaturation))
 			this.thirstSaturation = 0.0f;
@@ -256,9 +257,9 @@ public class ThirstCapability implements IThirstCapability
 		return packetTimer;
 	}
 
-	public CompoundNBT writeNBT()
+	public CompoundTag writeNBT()
 	{
-		CompoundNBT compound = new CompoundNBT();
+		CompoundTag compound = new CompoundTag();
 		compound.putFloat("thirstExhaustion", this.getThirstExhaustion());
 		compound.putInt("thirstLevel", this.getHydrationLevel());
 		compound.putFloat("thirstSaturation", this.getSaturationLevel());
@@ -267,7 +268,7 @@ public class ThirstCapability implements IThirstCapability
 		return compound;
 	}
 
-	public void readNBT(CompoundNBT nbt)
+	public void readNBT(CompoundTag nbt)
 	{
 		this.init();
 		if(nbt.contains("thirstExhaustion"))

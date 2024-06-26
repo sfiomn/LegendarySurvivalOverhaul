@@ -1,12 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.api.temperature;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
@@ -15,8 +14,7 @@ import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
  * Abstract class representing temperature modifiers.
  * @author Icey
  */
-public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
-{
+public abstract class ModifierBase {
 	private static final float COLDEST_BIOME_TEMP = -0.5f;
 	private static final float HOTTEST_BIOME_TEMP = 2.0f;
 	/**
@@ -62,15 +60,15 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 	 * player$getPosition, it's not recommended as this will not affect thermometer temperatures
 	 * or other items/blocks that depend on world influences
 	 */
-	public float getPlayerInfluence(PlayerEntity player) { return 0.0f; }
+	public float getPlayerInfluence(Player player) { return 0.0f; }
 	
 	/*
 	 * Returns temperature based on environmental factors, such as the biome at the given position,
 	 * proximity to hot/cold blocks, altitude, time, weather, etc.
 	 */
-	public float getWorldInfluence(World world, BlockPos pos) { return 0.0f; }
+	public float getWorldInfluence(Level world, BlockPos pos) { return 0.0f; }
 	
-	protected float applyUndergroundEffect(float temperature, World world, BlockPos pos)
+	protected float applyUndergroundEffect(float temperature, Level world, BlockPos pos)
 	{
 		// Code ripped and modified from 
 		// https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/temperature/ModifierBase.java
@@ -103,7 +101,7 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 		return temperature * (float)(pos.getY() - cutoff) / (64.0f - cutoff);
 	}
 	
-	protected float getNormalizedTempForBiome(World world, Biome biome)
+	protected float getNormalizedTempForBiome(Level world, Biome biome)
 	{
 		// Minecraft's temperatures is defined from -0.7 to 2.0, plains are at 0.8
 		// Get the biome's temperature, clamp it between -0.5 and 2.0 in case of extreme biomes from other mods,
@@ -123,7 +121,7 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 		return clampNormalizeTemperature(biome.getBaseTemperature());
 	}
 
-	protected float getHumidityForBiome(World world, Biome biome)
+	protected float getHumidityForBiome(Level world, Biome biome)
 	{
 		// Get the biome's humidity
 		// Dry biomes have humidity below 0.2
@@ -136,13 +134,13 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 			return identity.isDry ? 0.1f : 0.5f;
 		}
 
-		return biome.getDownfall();
+		return biome.getModifiedClimateSettings().downfall();
 	}
 
 	// Clamp and normalize the temperature
 	protected float clampNormalizeTemperature(float temp)
 	{
-		return ((MathHelper.clamp(temp, COLDEST_BIOME_TEMP, HOTTEST_BIOME_TEMP)) - COLDEST_BIOME_TEMP ) / (HOTTEST_BIOME_TEMP - COLDEST_BIOME_TEMP);
+		return ((Mth.clamp(temp, COLDEST_BIOME_TEMP, HOTTEST_BIOME_TEMP)) - COLDEST_BIOME_TEMP ) / (HOTTEST_BIOME_TEMP - COLDEST_BIOME_TEMP);
 	}
 
 	//  Assume input is between 0 and 1

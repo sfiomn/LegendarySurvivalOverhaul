@@ -1,32 +1,41 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods;
 
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.common.capabilities.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class HeartModifierProvider implements ICapabilitySerializable<INBT>
+public class HeartModifierProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag>
 {
-	private LazyOptional<HeartModifierCapability> instance = LazyOptional.of(LegendarySurvivalOverhaul.HEART_MOD_CAP::getDefaultInstance);
-	
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side)
-	{
-		return LegendarySurvivalOverhaul.HEART_MOD_CAP.orEmpty(cap, instance);
-	}
-	
-	@Override
-	public INBT serializeNBT()
-	{
-		return LegendarySurvivalOverhaul.HEART_MOD_CAP.getStorage().writeNBT(LegendarySurvivalOverhaul.HEART_MOD_CAP, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null);
-	}
-	
-	@Override
-	public void deserializeNBT(INBT nbt)
-	{
-		LegendarySurvivalOverhaul.HEART_MOD_CAP.getStorage().readNBT(LegendarySurvivalOverhaul.HEART_MOD_CAP, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null, nbt);
+	public static Capability<HeartModifierCapability> HEART_MODIFIER_CAPABILITY = CapabilityManager.get(new CapabilityToken<HeartModifierCapability>() { });
+	private final LazyOptional<HeartModifierCapability> instance = LazyOptional.of(this::getInstance);
+	private HeartModifierCapability heartModifierCapability = null;
+
+	private HeartModifierCapability getInstance() {
+		if (this.heartModifierCapability == null) {
+			this.heartModifierCapability = new HeartModifierCapability();
+		}
+		return this.heartModifierCapability;
 	}
 
+	@Override
+	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction direction)
+	{
+		if (capability == HEART_MODIFIER_CAPABILITY)
+			return instance.cast();
+		return LazyOptional.empty();
+	}
+
+	@Override
+	public CompoundTag serializeNBT()
+	{
+		return getInstance().writeNBT();
+	}
+
+	@Override
+	public void deserializeNBT(CompoundTag nbt) {
+		getInstance().readNBT(nbt);
+	}
 }

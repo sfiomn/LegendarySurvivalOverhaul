@@ -1,6 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
@@ -12,7 +12,7 @@ public class SprintModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getPlayerInfluence(PlayerEntity player)
+	public float getPlayerInfluence(Player player)
 	{
 		if (player.isSprinting())
 		{

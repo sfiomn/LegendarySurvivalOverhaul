@@ -1,10 +1,9 @@
 package sfiomn.legendarysurvivaloverhaul.client.screens;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 
@@ -14,8 +13,8 @@ public class BodyPartButton extends Button {
     public boolean isPressed;
     private float healthRatio;
 
-    public BodyPartButton(BodyPartEnum bodyPart, int x, int y, int width, int height, IPressable press) {
-        super(x, y, width, height, new StringTextComponent(""), press);
+    public BodyPartButton(BodyPartEnum bodyPart, int x, int y, int width, int height, OnPress press) {
+        super(x, y, width, height, Component.literal(""), press, DEFAULT_NARRATION);
         this.bodyPart = bodyPart;
     }
 
@@ -24,8 +23,7 @@ public class BodyPartButton extends Button {
     }
 
     @Override
-    public void renderButton(MatrixStack stack, int mouseX, int mouseY, float partial) {
-        Minecraft.getInstance().getTextureManager().bind(BODY_PARTS_SCREEN);
+    public void renderWidget(GuiGraphics gui, int mouseX, int mouseY, float partial) {
         BodyPartIcon bodyPartIcon = BodyPartIcon.getBodyPartIcon(this.bodyPart);
         BodyPartCondition bodyPartCondition = BodyPartCondition.get(this.healthRatio);
         if (bodyPartIcon == null)
@@ -36,8 +34,8 @@ public class BodyPartButton extends Button {
         if (this.isMouseOver(mouseX, mouseY))
             offsetTexX = 128;
 
-        blit(stack, this.x + bodyPartIcon.posBodyPartInButtonX,
-                this.y + bodyPartIcon.posBodyPartInButtonY,
+        gui.blit(BODY_PARTS_SCREEN, this.getX() + bodyPartIcon.posBodyPartInButtonX,
+                this.getY() + bodyPartIcon.posBodyPartInButtonY,
                 bodyPartIcon.posTexX + offsetTexX + bodyPartCondition.iconIndexX * bodyPartIcon.width,
                 bodyPartIcon.posTexY + bodyPartCondition.iconIndexY * bodyPartIcon.height,
                 bodyPartIcon.width, bodyPartIcon.height);

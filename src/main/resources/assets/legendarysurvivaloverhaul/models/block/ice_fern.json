@@ -6,6 +6,7 @@
 		"0": "legendarysurvivaloverhaul:block/ice_fern",
 		"particle": "legendarysurvivaloverhaul:block/ice_fern"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"from": [-10.65, 4.85, 0],

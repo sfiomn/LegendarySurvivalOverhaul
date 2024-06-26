@@ -1,16 +1,17 @@
 package sfiomn.legendarysurvivaloverhaul.client.sounds;
 
-import net.minecraft.client.audio.TickableSound;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 
-public class DynamicPositionSound extends TickableSound {
-    private final PlayerEntity player;
+public class DynamicPositionSound extends AbstractTickableSoundInstance {
+    private final Player player;
     private int time;
 
-    protected DynamicPositionSound(SoundEvent soundEvent, PlayerEntity player) {
-        super(soundEvent, SoundCategory.PLAYERS);
+    protected DynamicPositionSound(SoundEvent soundEvent, Player player) {
+        super(soundEvent, SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
         this.player = player;
         this.looping = false;
         this.volume = 1.0F;

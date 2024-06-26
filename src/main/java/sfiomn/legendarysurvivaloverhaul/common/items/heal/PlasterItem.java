@@ -1,13 +1,12 @@
 package sfiomn.legendarysurvivaloverhaul.common.items.heal;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
@@ -20,8 +19,8 @@ public class PlasterItem extends BodyHealingItem {
     }
 
     @Override
-    public void runSecondaryEffect(PlayerEntity player, ItemStack stack) {
-        player.addEffect(new EffectInstance(Effects.REGENERATION, 300, 1));
+    public void runSecondaryEffect(Player player, ItemStack stack) {
+        player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 300, 1));
         super.runSecondaryEffect(player, stack);
     }
 
@@ -46,9 +45,9 @@ public class PlasterItem extends BodyHealingItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag isAdvanced) {
-        tooltip.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.body_part", getHealingCharges()));
-        tooltip.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value", getHealingCapacity(), MathUtil.round(getHealingTicks() / 20.0f, 1)));
-        super.appendHoverText(stack, world, tooltip, isAdvanced);
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
+        tooltip.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.body_part", getHealingCharges()));
+        tooltip.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value", getHealingCapacity(), MathUtil.round(getHealingTicks() / 20.0f, 1)));
+        super.appendHoverText(stack, level, tooltip, isAdvanced);
     }
 }

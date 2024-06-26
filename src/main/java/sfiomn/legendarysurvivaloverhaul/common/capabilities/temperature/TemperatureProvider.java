@@ -1,31 +1,41 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature;
 
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.common.capabilities.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class TemperatureProvider implements ICapabilitySerializable<INBT>
+public class TemperatureProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag>
 {
-	private final LazyOptional<TemperatureCapability> instance = LazyOptional.of(LegendarySurvivalOverhaul.TEMPERATURE_CAP::getDefaultInstance);
-	
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side)
-	{
-		return LegendarySurvivalOverhaul.TEMPERATURE_CAP.orEmpty(cap, instance);
+	public static Capability<TemperatureCapability> TEMPERATURE_CAPABILITY = CapabilityManager.get(new CapabilityToken<TemperatureCapability>() { });
+	private final LazyOptional<TemperatureCapability> instance = LazyOptional.of(this::getInstance);
+	private TemperatureCapability temperatureCapability = null;
+
+	private TemperatureCapability getInstance() {
+		if (this.temperatureCapability == null) {
+			this.temperatureCapability = new TemperatureCapability();
+		}
+		return this.temperatureCapability;
 	}
-	
+
 	@Override
-	public INBT serializeNBT()
+	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction direction)
 	{
-		return LegendarySurvivalOverhaul.TEMPERATURE_CAP.getStorage().writeNBT(LegendarySurvivalOverhaul.TEMPERATURE_CAP, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null);
+		if (capability == TEMPERATURE_CAPABILITY)
+			return instance.cast();
+		return LazyOptional.empty();
 	}
-	
+
 	@Override
-	public void deserializeNBT(INBT nbt)
+	public CompoundTag serializeNBT()
 	{
-		LegendarySurvivalOverhaul.TEMPERATURE_CAP.getStorage().readNBT(LegendarySurvivalOverhaul.TEMPERATURE_CAP, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null, nbt);
+		return getInstance().writeNBT();
+	}
+
+	@Override
+	public void deserializeNBT(CompoundTag tag) {
+		getInstance().readNBT(tag);
 	}
 }

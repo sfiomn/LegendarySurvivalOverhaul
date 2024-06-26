@@ -4,6 +4,7 @@
 	"textures": {
 		"particle": "#stem"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"name": "root1",

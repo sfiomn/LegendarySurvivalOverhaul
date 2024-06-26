@@ -1,13 +1,14 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
@@ -27,17 +28,17 @@ public class WetModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos) {
+	public float getWorldInfluence(Level level, BlockPos pos) {
 		if (Config.Baked.wetnessMode != WetnessMode.SIMPLE)
 			return 0.0f;
 
-		FluidState state = world.getFluidState(pos);
+		FluidState state = level.getFluidState(pos);
 		Fluid fluid = state.getType();
 
 		if (!state.isEmpty()) {
-			ResourceLocation fluidRegistryName = fluid.getRegistryName();
+			ResourceLocation fluidRegistryName = ForgeRegistries.FLUID_TYPES.get().getKey(fluid.getFluidType());
 			if (fluidRegistryName != null) {
-				List<JsonPropertyTemperature> tempPropertyList = JsonConfig.blockTemperatures.get(fluid.getRegistryName().toString());
+				List<JsonPropertyTemperature> tempPropertyList = JsonConfig.blockTemperatures.get(fluidRegistryName.toString());
 
 				if (tempPropertyList == null) {
 					return 0.0f;
@@ -56,7 +57,7 @@ public class WetModifier extends ModifierBase
 
 		if (fluid.isSame(Fluids.WATER) || fluid.isSame(Fluids.FLOWING_WATER)) {
 			return (float) Config.Baked.wetMultiplier;
-		} else if (world.isRainingAt(pos)) {
+		} else if (level.isRainingAt(pos)) {
 			return (float) Config.Baked.wetMultiplier;
 		} else {
 			return 0.0f;
@@ -64,18 +65,18 @@ public class WetModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getPlayerInfluence(PlayerEntity player)
+	public float getPlayerInfluence(Player player)
 	{
 		switch (Config.Baked.wetnessMode)
 		{
 			case SIMPLE:
-				float worldInfluence = this.getWorldInfluence(player.level, player.blockPosition());
+				float worldInfluence = this.getWorldInfluence(player.level(), player.blockPosition());
 				
 				if (player.getVehicle() != null && worldInfluence != 0)
 				{
 					// If the player is in a boat, cancel out the effect
 					
-					if (player.getVehicle() instanceof BoatEntity)
+					if (player.getVehicle() instanceof Boat)
 					{
 						return (float) -worldInfluence;
 					}

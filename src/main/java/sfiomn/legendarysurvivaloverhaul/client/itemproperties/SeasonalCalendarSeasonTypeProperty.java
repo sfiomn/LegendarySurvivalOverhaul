@@ -1,17 +1,26 @@
 package sfiomn.legendarysurvivaloverhaul.client.itemproperties;
 
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.ServerConfig;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SSBiomeIdentity;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil;
@@ -20,21 +29,21 @@ import sfiomn.legendarysurvivaloverhaul.config.Config;
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier.biomeIdentities;
 
 
-public class SeasonalCalendarSeasonTypeProperty implements IItemPropertyGetter {
+public class SeasonalCalendarSeasonTypeProperty implements ClampedItemPropertyFunction {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public float call(ItemStack stack, ClientWorld clientWorld, LivingEntity entity)
+    public float unclampedCall(@NotNull ItemStack itemStack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity entity, int i)
     {
-        World world = clientWorld;
-        Entity holder = (entity != null ? entity : stack.getFrame());
+        Level level = clientLevel;
+        Entity holder = (entity != null ? entity : itemStack.getFrame());
 
-        if (world == null && holder != null)
+        if (level == null && holder != null)
         {
-            world = holder.level;
+            level = holder.level();
         }
 
-        if (world == null || holder == null)
+        if (level == null || holder == null)
         {
             return 2.0f;
         }
@@ -42,11 +51,11 @@ public class SeasonalCalendarSeasonTypeProperty implements IItemPropertyGetter {
         {
             try
             {
-                if (!SeasonsConfig.isDimensionWhitelisted(world.dimension()))
+                if (!ServerConfig.isDimensionWhitelisted(level.dimension()))
                     return 2.0f;
 
-                Biome biome = world.getBiome(new BlockPos(holder.position()));
-                int seasonType = SereneSeasonsUtil.getSeasonType(biome);
+                Biome biome = level.getBiome(holder.blockPosition()).get();
+                int seasonType = SereneSeasonsUtil.getSeasonType(level, biome);
 
                 if (seasonType == 2)
                     return 2.0f;

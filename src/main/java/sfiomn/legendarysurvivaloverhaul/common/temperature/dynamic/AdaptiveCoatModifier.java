@@ -1,8 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature.dynamic;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
@@ -17,14 +17,14 @@ public class AdaptiveCoatModifier extends DynamicModifierBase
 	}
 	
 	@Override
-	public float applyDynamicPlayerInfluence(PlayerEntity player, float currentTemperature)
+	public float applyDynamicPlayerInfluence(Player player, float currentTemperature)
 	{
 		float value = 0.0f;
 		
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlotType.HEAD), currentTemperature);
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlotType.CHEST), currentTemperature);
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlotType.LEGS), currentTemperature);
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlotType.FEET), currentTemperature);
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.HEAD), currentTemperature);
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.CHEST), currentTemperature);
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.LEGS), currentTemperature);
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.FEET), currentTemperature);
 		
 		return value;
 	}

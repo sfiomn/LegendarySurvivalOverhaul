@@ -1,7 +1,7 @@
 package sfiomn.legendarysurvivaloverhaul.api.config.json.temperature;
 
-import net.minecraft.potion.Effect;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraftforge.registries.RegistryObject;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 
 /**
@@ -16,8 +16,8 @@ public class JsonConsumableTemperature
 	public TemporaryModifierGroupEnum group;
 	public int temperatureLevel;
 	public int duration;
-	private RegistryObject<Effect> effect;
-	private RegistryObject<Effect> oppositeEffect;
+	private RegistryObject<MobEffect> effect;
+	private RegistryObject<MobEffect> oppositeEffect;
 	
 	public JsonConsumableTemperature(TemporaryModifierGroupEnum group, int temperatureLevel, int duration)
 	{
@@ -35,11 +35,11 @@ public class JsonConsumableTemperature
 		}
 	}
 
-	public Effect getEffect() {
+	public MobEffect getEffect() {
 		return this.effect.get();
 	}
 
-	public Effect getOppositeEffect() {
+	public MobEffect getOppositeEffect() {
 		return this.oppositeEffect.get();
 	}
 }

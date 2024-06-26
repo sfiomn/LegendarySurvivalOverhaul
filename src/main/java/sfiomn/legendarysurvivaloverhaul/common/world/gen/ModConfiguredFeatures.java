@@ -1,5 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.common.world.gen;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.gen.blockplacer.DoublePlantBlockPlacer;
 import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
@@ -9,9 +12,15 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.placement.NoiseDependant;
 import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
 
 public class ModConfiguredFeatures {
+
+    public static final ResourceKey<ConfiguredFeature<?, ?>> FERN_CONFIG = ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "fern"));
+
 
     public static final ConfiguredFeature<?, ?> SUN_FERN_CONFIG = Feature.FLOWER
             .configured((new BlockClusterFeatureConfig.Builder(

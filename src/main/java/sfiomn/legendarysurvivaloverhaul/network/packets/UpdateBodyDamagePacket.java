@@ -1,35 +1,35 @@
 package sfiomn.legendarysurvivaloverhaul.network.packets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import net.minecraftforge.network.NetworkEvent;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageProvider;
 
 import java.util.function.Supplier;
 
 public class UpdateBodyDamagePacket
 {
-	private CompoundNBT compound;
+	private CompoundTag compound;
 
-	public UpdateBodyDamagePacket(INBT compound)
+	public UpdateBodyDamagePacket(Tag compound)
 	{
-		this.compound = (CompoundNBT) compound;
+		this.compound = (CompoundTag) compound;
 	}
 
 	public UpdateBodyDamagePacket() {}
 	
-	public static UpdateBodyDamagePacket decode(PacketBuffer buffer)
+	public static UpdateBodyDamagePacket decode(FriendlyByteBuf buffer)
 	{
 		return new UpdateBodyDamagePacket(buffer.readNbt());
 	}
 	
-	public static void encode(UpdateBodyDamagePacket message, PacketBuffer buffer)
+	public static void encode(UpdateBodyDamagePacket message, FriendlyByteBuf buffer)
 	{
 		buffer.writeNbt(message.compound);
 	}
@@ -42,7 +42,7 @@ public class UpdateBodyDamagePacket
 		supplier.get().setPacketHandled(true);
 	}
 	
-	public static DistExecutor.SafeRunnable syncBodyDamage(CompoundNBT compound)
+	public static DistExecutor.SafeRunnable syncBodyDamage(CompoundTag compound)
 	{
 		return new DistExecutor.SafeRunnable()
 		{
@@ -51,11 +51,13 @@ public class UpdateBodyDamagePacket
 			@Override
 			public void run()
 			{
-				ClientPlayerEntity player = Minecraft.getInstance().player;
+				LocalPlayer player = Minecraft.getInstance().player;
 
-                BodyDamageCapability bodyDamageCapability = player.getCapability(LegendarySurvivalOverhaul.BODY_DAMAGE_CAP).orElse(new BodyDamageCapability());
-				
-				bodyDamageCapability.readNBT(compound);
+				if (player != null) {
+					BodyDamageCapability bodyDamageCapability = player.getCapability(BodyDamageProvider.BODY_DAMAGE_CAPABILITY).orElse(new BodyDamageCapability());
+
+					bodyDamageCapability.readNBT(compound);
+				}
 			}
 		};
 	}

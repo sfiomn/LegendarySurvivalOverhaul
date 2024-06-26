@@ -1,16 +1,15 @@
 package sfiomn.legendarysurvivaloverhaul.client.screens;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionHand;
 
 public class ClientHooks {
-    public static void openBodyHealthScreen(PlayerEntity player, Hand hand) {
+    public static void openBodyHealthScreen(Player player, InteractionHand hand) {
         Minecraft.getInstance().setScreen(new BodyHealthScreen(player, hand));
     }
 
-    public static void openBodyHealthScreen(PlayerEntity player) {
+    public static void openBodyHealthScreen(Player player) {
         Minecraft.getInstance().setScreen(new BodyHealthScreen(player));
     }
 }

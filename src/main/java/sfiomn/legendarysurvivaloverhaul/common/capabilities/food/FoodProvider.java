@@ -1,31 +1,40 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.food;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class FoodProvider implements ICapabilitySerializable<INBT>
+public class FoodProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag>
 {
-	private final LazyOptional<FoodCapability> instance = LazyOptional.of(LegendarySurvivalOverhaul.FOOD_CAP::getDefaultInstance);
-	
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side)
-	{
-		return LegendarySurvivalOverhaul.FOOD_CAP.orEmpty(cap, instance);
+	public static Capability<FoodCapability> FOOD_CAPABILITY = CapabilityManager.get(new CapabilityToken<FoodCapability>() { });
+	private final LazyOptional<FoodCapability> instance = LazyOptional.of(this::getInstance);
+	private FoodCapability foodCapability = null;
+
+	private FoodCapability getInstance() {
+		if (this.foodCapability == null) {
+			this.foodCapability = new FoodCapability();
+		}
+		return this.foodCapability;
 	}
-	
+
 	@Override
-	public INBT serializeNBT()
+	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction direction)
 	{
-		return LegendarySurvivalOverhaul.FOOD_CAP.getStorage().writeNBT(LegendarySurvivalOverhaul.FOOD_CAP, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null);
+		if (capability == FOOD_CAPABILITY)
+			return instance.cast();
+		return LazyOptional.empty();
 	}
-	
+
 	@Override
-	public void deserializeNBT(INBT nbt)
+	public CompoundTag serializeNBT()
 	{
-		LegendarySurvivalOverhaul.FOOD_CAP.getStorage().readNBT(LegendarySurvivalOverhaul.FOOD_CAP, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null, nbt);
+		return new CompoundTag();
+	}
+
+	@Override
+	public void deserializeNBT(CompoundTag nbt) {
 	}
 }

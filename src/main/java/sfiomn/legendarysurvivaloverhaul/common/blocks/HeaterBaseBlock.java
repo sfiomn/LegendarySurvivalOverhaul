@@ -1,27 +1,32 @@
 package sfiomn.legendarysurvivaloverhaul.common.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolType;
+import org.jetbrains.annotations.Nullable;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
+import sfiomn.legendarysurvivaloverhaul.common.blockentities.AbstractThermalBlockEntity;
+import sfiomn.legendarysurvivaloverhaul.registry.BlockEntityRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
-
-import java.util.Random;
 
 public class HeaterBaseBlock extends ThermalBlock {
 
@@ -30,34 +35,39 @@ public class HeaterBaseBlock extends ThermalBlock {
     private static final VoxelShape FEET = Block.box(0.0d, 0.0d, 0.0d, 16.0d, 6.0d, 16.0d);
     private static final VoxelShape BASE = Block.box(1.0d, 6.0d, 1.0d, 15.0d, 16.0d, 15.0d);
 
-    private static final VoxelShape XZ_AXIS_AABB = VoxelShapes.or(FEET, BASE);
+    private static final VoxelShape XZ_AXIS_AABB = Shapes.or(FEET, BASE);
 
     public HeaterBaseBlock(ThermalTypeEnum thermalType) {
         super(thermalType, properties);
     }
 
-    public static Properties getProperties()
+    public static BlockBehaviour.Properties getProperties()
     {
-        return Properties
-                .of(Material.METAL)
+        return BlockBehaviour.Properties
+                .of()
+                .mapColor(MapColor.METAL)
                 .sound(SoundType.METAL)
                 .strength(3f, 10f)
-                .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(1)
                 .noOcclusion()
                 .lightLevel((lightLevel) -> lightLevel.getValue(BlockStateProperties.LIT) ? 13 : 0);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
         return XZ_AXIS_AABB;
     }
 
+    @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState p_153213_, BlockEntityType<T> entityType) {
+        return level.isClientSide ? null : createTickerHelper(entityType, BlockEntityRegistry.HEATER_BLOCK_ENTITY.get(), AbstractThermalBlockEntity::serverTick);
+    }
 
-        World level = context.getLevel();
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+
+        Level level = context.getLevel();
         BlockPos topPos = context.getClickedPos().above();
         return level.getBlockState(topPos).canBeReplaced(context) && level.getWorldBorder().isWithinBounds(topPos)
                 ? this.defaultBlockState().setValue(FACING, context.getHorizontalDirection())
@@ -65,28 +75,26 @@ public class HeaterBaseBlock extends ThermalBlock {
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
     {
-        super.neighborChanged(state, world, pos, block, fromPos, isMoving);
-        if (world.getBlockState(pos.above()).getBlock() != BlockRegistry.HEATER_TOP.get())
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+        if (level.getBlockState(pos.above()).getBlock() != BlockRegistry.HEATER_TOP.get())
         {
-            world.destroyBlock(pos, true);
+            level.destroyBlock(pos, true);
         }
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onPlace(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
-    {
-        if (world.isEmptyBlock(pos.above()))
-        {
-            world.setBlock(pos.above(), BlockRegistry.HEATER_TOP.get().defaultBlockState().setValue(HeaterTopBlock.FACING, state.getValue(FACING)), 2);
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (level.isEmptyBlock(pos.above())) {
+            level.setBlock(pos.above(), BlockRegistry.HEATER_TOP.get().defaultBlockState().setValue(HeaterTopBlock.FACING, state.getValue(FACING)), 2);
         }
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource rand) {
         if (state.getValue(LIT)) {
             float chance = 0.5f;
             float chance_flame = 0.4f;
@@ -97,7 +105,7 @@ public class HeaterBaseBlock extends ThermalBlock {
             double posZ = pos.getZ();
 
             if (rand.nextFloat() < chance) {
-                worldIn.playLocalSound(posX + 0.5d, posY + 0.5d, posZ + 0.5d, SoundEvents.FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+                level.playLocalSound(posX + 0.5d, posY + 0.5d, posZ + 0.5d, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
             }
 
             if (rand.nextFloat() < chance) {
@@ -112,38 +120,38 @@ public class HeaterBaseBlock extends ThermalBlock {
                 //  Particles moves always up : [0.02 - 0.03]
                 float ym = rand.nextFloat() / 10 + 0.02f;
 
-                worldIn.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, false, posX + xr, pos.above().getY() + 0.8d, posZ + zr, xm, ym, zm);
+                level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, false, posX + xr, pos.above().getY() + 0.8d, posZ + zr, xm, ym, zm);
             }
 
             if (rand.nextFloat() < chance_flame) {
                 //  Particle spawns around the center of the block : [0.33 - 0.66]
                 float zr = rand.nextFloat() / 3 + 0.33f;
                 float yr = rand.nextFloat() / 6 + 0.5f;
-                worldIn.addParticle(ParticleTypes.SMOKE, false, posX + 0.05, posY + yr, posZ + zr, 0, 0, 0);
-                worldIn.addParticle(ParticleTypes.FLAME, false, posX + 0.05, posY + yr, posZ + zr, 0, 0, 0);
+                level.addParticle(ParticleTypes.SMOKE, false, posX + 0.05, posY + yr, posZ + zr, 0, 0, 0);
+                level.addParticle(ParticleTypes.FLAME, false, posX + 0.05, posY + yr, posZ + zr, 0, 0, 0);
             }
             if (rand.nextFloat() < chance_flame) {
                 //  Particle spawns around the center of the block : [0.33 - 0.66]
                 float zr = rand.nextFloat() / 3 + 0.33f;
                 float yr = rand.nextFloat() / 6 + 0.5f;
-                worldIn.addParticle(ParticleTypes.SMOKE, false, posX + 0.95, posY + yr, posZ + zr, 0, 0, 0);
-                worldIn.addParticle(ParticleTypes.FLAME, false, posX + 0.95, posY + yr, posZ + zr, 0, 0, 0);
+                level.addParticle(ParticleTypes.SMOKE, false, posX + 0.95, posY + yr, posZ + zr, 0, 0, 0);
+                level.addParticle(ParticleTypes.FLAME, false, posX + 0.95, posY + yr, posZ + zr, 0, 0, 0);
             }
             if (rand.nextFloat() < chance_flame) {
                 //  Particle spawns around the center of the block : [0.33 - 0.66]
                 float xr = rand.nextFloat() / 3 + 0.33f;
                 float yr = rand.nextFloat() / 6 + 0.5f;
-                worldIn.addParticle(ParticleTypes.SMOKE, false, posX + xr, posY + yr, posZ + 0.05, 0, 0, 0);
-                worldIn.addParticle(ParticleTypes.FLAME, false, posX + xr, posY + yr, posZ + 0.05, 0, 0, 0);
+                level.addParticle(ParticleTypes.SMOKE, false, posX + xr, posY + yr, posZ + 0.05, 0, 0, 0);
+                level.addParticle(ParticleTypes.FLAME, false, posX + xr, posY + yr, posZ + 0.05, 0, 0, 0);
             }
             if (rand.nextFloat() < chance_flame) {
                 //  Particle spawns around the center of the block : [0.33 - 0.66]
                 float xr = rand.nextFloat() / 3 + 0.33f;
                 float yr = rand.nextFloat() / 6 + 0.5f;
-                worldIn.addParticle(ParticleTypes.SMOKE, false, posX + xr, posY + yr, posZ + 0.95, 0, 0, 0);
-                worldIn.addParticle(ParticleTypes.FLAME, false, posX + xr, posY + yr, posZ + 0.95, 0, 0, 0);
+                level.addParticle(ParticleTypes.SMOKE, false, posX + xr, posY + yr, posZ + 0.95, 0, 0, 0);
+                level.addParticle(ParticleTypes.FLAME, false, posX + xr, posY + yr, posZ + 0.95, 0, 0, 0);
             }
         }
-        super.animateTick(state, worldIn, pos, rand);
+        super.animateTick(state, level, pos, rand);
     }
 }

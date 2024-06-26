@@ -1,9 +1,10 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
@@ -16,14 +17,14 @@ public class ArmorModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getPlayerInfluence(PlayerEntity player)
+	public float getPlayerInfluence(Player player)
 	{
 		float value = 0.0f;
 		
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlotType.HEAD));
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlotType.CHEST));
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlotType.LEGS));
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlotType.FEET));
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.HEAD));
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.CHEST));
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.LEGS));
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.FEET));
 		// LegendarySurvivalOverhaul.LOGGER.debug("Armor temp influence : " + value);
 		return value;
 	}
@@ -41,7 +42,7 @@ public class ArmorModifier extends ModifierBase
 	
 	private float processStackJson(ItemStack stack)
 	{
-		ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
+		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
 
 		JsonTemperature jsonTemperature = null;
 		if (itemRegistryName != null)

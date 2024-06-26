@@ -1,34 +1,34 @@
 package sfiomn.legendarysurvivaloverhaul.common.effects;
 
-import net.minecraft.potion.Effects;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.api.DamageSources;
-import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import sfiomn.legendarysurvivaloverhaul.api.ModDamageTypes;
+import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
+import sfiomn.legendarysurvivaloverhaul.util.DamageSourceUtil;
 import sfiomn.legendarysurvivaloverhaul.util.DamageUtil;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectType;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
 
 public class HeatStrokeEffect extends GenericEffect
 {
 
 	public HeatStrokeEffect()
 	{
-		super(16756041, EffectType.HARMFUL);
+		super(16756041, MobEffectCategory.HARMFUL);
 	}
 	
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier)
 	{
-		if(entity instanceof PlayerEntity && !entity.hasEffect(EffectRegistry.HEAT_RESISTANCE.get()))
+		if(entity instanceof Player && !entity.hasEffect(MobEffectRegistry.HEAT_RESISTANCE.get()))
 		{
-			World world = entity.getCommandSenderWorld();
-			PlayerEntity player = (PlayerEntity) entity;
+			Level level = entity.getCommandSenderWorld();
+			Player player = (Player) entity;
 			
-			if (DamageUtil.isModDangerous(world) && DamageUtil.healthAboveDifficulty(world, player) && !player.isSleeping())
+			if (DamageUtil.isModDangerous(level) && DamageUtil.healthAboveDifficulty(level, player) && !player.isSleeping())
 			{
-				player.hurt(DamageSources.HYPERTHERMIA, 1.0f);
+				player.hurt(DamageSourceUtil.getDamageSource(level, ModDamageTypes.HYPERTHERMIA), 1.0f);
 			}
 		}
 	}
@@ -40,8 +40,8 @@ public class HeatStrokeEffect extends GenericEffect
 		return time == 0 || duration % time == 0;
 	}
 
-	public static boolean playerIsImmuneToHeat(PlayerEntity player)
+	public static boolean playerIsImmuneToHeat(Player player)
 	{
-		return player.hasEffect(EffectRegistry.HEAT_RESISTANCE.get()) || player.hasEffect(Effects.FIRE_RESISTANCE);
+		return player.hasEffect(MobEffectRegistry.HEAT_RESISTANCE.get()) || player.hasEffect(MobEffects.FIRE_RESISTANCE);
 	}
 }

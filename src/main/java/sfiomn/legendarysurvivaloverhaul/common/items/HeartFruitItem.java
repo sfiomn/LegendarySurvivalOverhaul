@@ -1,61 +1,59 @@
 package sfiomn.legendarysurvivaloverhaul.common.items;
 
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.PacketDistributor;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.network.packets.UpdateHeartsPacket;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 public class HeartFruitItem extends Item
 {
-	public static final Food FOOD_STATS = (new Food.Builder()).nutrition(6).saturationMod(2.5f).alwaysEat().build();
+	public static final FoodProperties FOOD_STATS = (new FoodProperties.Builder()).nutrition(6).saturationMod(2.5f).alwaysEat().build();
 	
-	public HeartFruitItem(Properties properties)
+	public HeartFruitItem(Item.Properties properties)
 	{
 		super(properties.food(FOOD_STATS));
 	}
 	
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity)
+	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity)
 	{
-		if (entity instanceof PlayerEntity && Config.Baked.heartFruitsEnabled)
+		if (entity instanceof Player && Config.Baked.heartFruitsEnabled)
 		{
-			PlayerEntity player = (PlayerEntity) entity;
+			Player player = (Player) entity;
 			HeartModifierCapability cap = CapabilityUtil.getHeartModCapability(player);
 			
-			if (!world.isClientSide)
+			if (!level.isClientSide)
 			{
 				cap.addMaxHealth(Config.Baked.additionalHeartsPerFruit);
-				cap.updateMaxHealth(world, player);
+				cap.updateMaxHealth(level, player);
 				
 				if (Config.Baked.heartFruitsGiveRegen)
 				{
-					player.addEffect(new EffectInstance(Effects.REGENERATION, 200, 1));
+					player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
 				}
 			}
 			
-			if (player instanceof ServerPlayerEntity)
+			if (player instanceof ServerPlayer)
 			{			
-				UpdateHeartsPacket packet = new UpdateHeartsPacket(LegendarySurvivalOverhaul.HEART_MOD_CAP.getStorage().writeNBT(LegendarySurvivalOverhaul.HEART_MOD_CAP, cap, null));
+				UpdateHeartsPacket packet = new UpdateHeartsPacket(CapabilityUtil.getHeartModCapability(player).writeNBT());
 				
-				NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), packet);
+				NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), packet);
 			}
 		}
 		
-		return entity.eat(world, stack);
+		return entity.eat(level, stack);
 	}
 	
 }

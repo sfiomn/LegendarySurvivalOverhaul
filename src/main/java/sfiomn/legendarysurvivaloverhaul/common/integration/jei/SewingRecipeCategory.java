@@ -1,42 +1,42 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration.jei;
 
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.data.recipes.SewingRecipe;
+import sfiomn.legendarysurvivaloverhaul.common.recipe.SewingRecipe;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
 
 public class SewingRecipeCategory implements IRecipeCategory<SewingRecipe> {
     public final static ResourceLocation UID = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "sewing");
     public final static ResourceLocation TEXTURE = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/sewing_table_screen.png");
 
+    public final static RecipeType<SewingRecipe> SEWING_RECIPE_TYPE = new RecipeType<>(UID, SewingRecipe.class);
+
     private final IDrawable background;
     private final IDrawable icon;
 
     public SewingRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 10, 30, 156, 33);
-        this.icon = helper.createDrawableIngredient(new ItemStack(BlockRegistry.SEWING_TABLE.get()));
+        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BlockRegistry.SEWING_TABLE.get()));
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return UID;
+    public RecipeType<SewingRecipe> getRecipeType() {
+        return SEWING_RECIPE_TYPE;
     }
 
     @Override
-    public Class<? extends SewingRecipe> getRecipeClass() {
-        return SewingRecipe.class;
-    }
-
-    @Override
-    public String getTitle() {
-        return BlockRegistry.SEWING_TABLE.get().getName().getString();
+    public Component getTitle() {
+        return Component.translatable("block." + LegendarySurvivalOverhaul.MOD_ID + ".sewing_table");
     }
 
     @Override
@@ -50,17 +50,10 @@ public class SewingRecipeCategory implements IRecipeCategory<SewingRecipe> {
     }
 
     @Override
-    public void setIngredients(SewingRecipe recipe, IIngredients ingredients) {
-        ingredients.setInputIngredients(recipe.getIngredients());
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
-    }
+    public void setRecipe(IRecipeLayoutBuilder builder, SewingRecipe recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 7, 8).addIngredients(recipe.getBase());
+        builder.addSlot(RecipeIngredientRole.INPUT, 54, 8).addIngredients(recipe.getAddition());
 
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, SewingRecipe recipe, IIngredients ingredients) {
-        recipeLayout.getItemStacks().init(0, true, 7, 8);
-        recipeLayout.getItemStacks().init(1, true, 54, 8);
-
-        recipeLayout.getItemStacks().init(2, false, 123, 8);
-        recipeLayout.getItemStacks().set(ingredients);
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 123, 8).addItemStack(recipe.getResultItem(null));
     }
 }

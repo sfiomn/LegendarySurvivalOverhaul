@@ -1,10 +1,10 @@
 package sfiomn.legendarysurvivaloverhaul.common.items.drink;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 public abstract class BottledDrinkItem extends DrinkItem {
@@ -20,14 +20,14 @@ public abstract class BottledDrinkItem extends DrinkItem {
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity)
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity)
     {
-        if(world.isClientSide || !(entity instanceof PlayerEntity))
+        if(level.isClientSide || !(entity instanceof Player))
             return stack;
 
-        PlayerEntity player = (PlayerEntity)entity;
+        Player player = (Player)entity;
 
-        stack = super.finishUsingItem(stack, world, player);
+        stack = super.finishUsingItem(stack, level, player);
 
         if (Config.Baked.glassBottleLootAfterDrink) {
             ItemStack glassBottle = new ItemStack(Items.GLASS_BOTTLE);
@@ -35,11 +35,11 @@ public abstract class BottledDrinkItem extends DrinkItem {
             if (stack.isEmpty()) {
                 return glassBottle;
             } else {
-                int slot = player.inventory.findSlotMatchingUnusedItem(glassBottle);
+                int slot = player.getInventory().findSlotMatchingUnusedItem(glassBottle);
                 if (slot == -1)
-                    slot = player.inventory.getFreeSlot();
+                    slot = player.getInventory().getFreeSlot();
                 if (slot > -1)
-                    player.inventory.add(slot, glassBottle);
+                    player.getInventory().add(slot, glassBottle);
                 else
                     player.drop(glassBottle, false);
             }

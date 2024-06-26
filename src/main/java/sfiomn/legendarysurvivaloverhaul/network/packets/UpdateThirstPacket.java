@@ -1,35 +1,35 @@
 package sfiomn.legendarysurvivaloverhaul.network.packets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import net.minecraftforge.network.NetworkEvent;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstProvider;
 
 import java.util.function.Supplier;
 
 public class UpdateThirstPacket
 {
-	private CompoundNBT compound;
+	private CompoundTag compound;
 
-	public UpdateThirstPacket(INBT compound)
+	public UpdateThirstPacket(Tag compound)
 	{
-		this.compound = (CompoundNBT) compound;
+		this.compound = (CompoundTag) compound;
 	}
 
 	public UpdateThirstPacket() {}
 	
-	public static UpdateThirstPacket decode(PacketBuffer buffer)
+	public static UpdateThirstPacket decode(FriendlyByteBuf buffer)
 	{
 		return new UpdateThirstPacket(buffer.readNbt());
 	}
 	
-	public static void encode(UpdateThirstPacket message, PacketBuffer buffer)
+	public static void encode(UpdateThirstPacket message, FriendlyByteBuf buffer)
 	{
 		buffer.writeNbt(message.compound);
 	}
@@ -42,7 +42,7 @@ public class UpdateThirstPacket
 		supplier.get().setPacketHandled(true);
 	}
 	
-	public static DistExecutor.SafeRunnable syncThirst(CompoundNBT compound)
+	public static DistExecutor.SafeRunnable syncThirst(CompoundTag compound)
 	{
 		return new DistExecutor.SafeRunnable()
 		{
@@ -51,11 +51,13 @@ public class UpdateThirstPacket
 			@Override
 			public void run()
 			{
-				ClientPlayerEntity player = Minecraft.getInstance().player;
-				
-				ThirstCapability thirst = player.getCapability(LegendarySurvivalOverhaul.THIRST_CAP).orElse(new ThirstCapability());
-				
-				thirst.readNBT(compound);
+				LocalPlayer player = Minecraft.getInstance().player;
+
+				if (player != null) {
+					ThirstCapability thirst = player.getCapability(ThirstProvider.THIRST_CAPABILITY).orElse(new ThirstCapability());
+
+					thirst.readNBT(compound);
+				}
 			}
 		};
 	}

@@ -140,13 +140,15 @@ public class JsonConfigRegistration
 		JsonConfig.registerDamageSourceBodyParts("anvil", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.HEAD));
 		JsonConfig.registerDamageSourceBodyParts("lightningBolt", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.values()));
 		JsonConfig.registerDamageSourceBodyParts("onFire", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.values()));
+		JsonConfig.registerDamageSourceBodyParts("explosion", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.values()));
+		JsonConfig.registerDamageSourceBodyParts("bad_respawn_point", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.values()));
 		JsonConfig.registerDamageSourceBodyParts("dragonBreath", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.values()));
 		JsonConfig.registerDamageSourceBodyParts("inFire", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
 		JsonConfig.registerDamageSourceBodyParts("cactus", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
 		JsonConfig.registerDamageSourceBodyParts("sweetBerryBush", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
 		JsonConfig.registerDamageSourceBodyParts("drown", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.CHEST));
 		JsonConfig.registerDamageSourceBodyParts("starve", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.CHEST));
-		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".hypothermia", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.CHEST));
+		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".hypothermia.json", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.CHEST));
 		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".hyperthermia", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.CHEST));
 		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".dehydration", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.CHEST));
 

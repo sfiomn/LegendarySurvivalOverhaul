@@ -1,19 +1,18 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import org.apache.commons.lang3.tuple.Triple;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.*;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
@@ -31,7 +30,7 @@ public class BodyDamageCapability implements IBodyDamageCapability
 	private float playerMaxHealth;
 	private boolean manualDirty;
 	private int packetTimer;
-	private List<Triple<MalusBodyPartEnum, Effect, Integer>> malus;
+	private List<Triple<MalusBodyPartEnum, MobEffect, Integer>> malus;
 
 	public BodyDamageCapability()
 	{
@@ -92,7 +91,7 @@ public class BodyDamageCapability implements IBodyDamageCapability
 	}
 
 	@Override
-	public void tickUpdate(PlayerEntity player, World world, TickEvent.Phase phase)
+	public void tickUpdate(Player player, Level world, TickEvent.Phase phase)
 	{
 		if(phase == TickEvent.Phase.START) {
 			this.packetTimer++;
@@ -107,22 +106,22 @@ public class BodyDamageCapability implements IBodyDamageCapability
 			}
 
 			// Refresh all the malus a player should have
-			List<Triple<MalusBodyPartEnum, Effect, Integer>> newMalus = new ArrayList<>();
+			List<Triple<MalusBodyPartEnum, MobEffect, Integer>> newMalus = new ArrayList<>();
 			for (MalusBodyPartEnum malusBodyPart: MalusBodyPartEnum.values()) {
-				List<Pair<Effect, Integer>> malusEffects = new ArrayList<>();
-				if (!player.hasEffect(EffectRegistry.PAINKILLER.get()))
+				List<Pair<MobEffect, Integer>> malusEffects = new ArrayList<>();
+				if (!player.hasEffect(MobEffectRegistry.PAINKILLER.get()))
 					malusEffects = BodyDamageUtil.getEffects(malusBodyPart, getHealthRatioForMalusBodyPart(malusBodyPart));
-				for (Triple<MalusBodyPartEnum, Effect, Integer> bodyPartMalusEffect: this.malus) {
+				for (Triple<MalusBodyPartEnum, MobEffect, Integer> bodyPartMalusEffect: this.malus) {
 					if (bodyPartMalusEffect.getLeft() == malusBodyPart) {
-						Pair<Effect, Integer> oldEffect = Pair.of(bodyPartMalusEffect.getMiddle(), bodyPartMalusEffect.getRight());
+						Pair<MobEffect, Integer> oldEffect = Pair.of(bodyPartMalusEffect.getMiddle(), bodyPartMalusEffect.getRight());
 						if (!malusEffects.contains(oldEffect)) {
 							player.removeEffect(oldEffect.getFirst());
-							if (oldEffect.getFirst() == EffectRegistry.HEADACHE.get())
-								player.removeEffect(Effects.BLINDNESS);
+							if (oldEffect.getFirst() == MobEffectRegistry.HEADACHE.get())
+								player.removeEffect(MobEffects.BLINDNESS);
 						}
 					}
 				}
-				for (Pair<Effect, Integer> malusEffect: malusEffects) {
+				for (Pair<MobEffect, Integer> malusEffect: malusEffects) {
 					newMalus.add(Triple.of(malusBodyPart, malusEffect.getFirst(), malusEffect.getSecond()));
 				}
 			}
@@ -130,8 +129,8 @@ public class BodyDamageCapability implements IBodyDamageCapability
 			this.malus = newMalus;
 
 			// Assign all malus effect to the player
-			for (Triple<MalusBodyPartEnum, Effect, Integer> malusEffect: this.malus) {
-				player.addEffect(new EffectInstance(malusEffect.getMiddle(), 200, malusEffect.getRight(), false, false, true));
+			for (Triple<MalusBodyPartEnum, MobEffect, Integer> malusEffect: this.malus) {
+				player.addEffect(new MobEffectInstance(malusEffect.getMiddle(), 200, malusEffect.getRight(), false, false, true));
 			}
 
 			// Heal each body limb of the player
@@ -148,20 +147,20 @@ public class BodyDamageCapability implements IBodyDamageCapability
 			}
 		}
 
-		if (player.hasEffect(EffectRegistry.HEADACHE.get())) {
+		if (player.hasEffect(MobEffectRegistry.HEADACHE.get())) {
 			if (this.headacheTimer-- < 0) {
-				player.level.playSound(null ,player, SoundRegistry.HEADACHE_HEARTBEAT.get(), SoundCategory.PLAYERS, 1.f, 1.0f);
-				applyHeadache(player, Objects.requireNonNull(player.getEffect(EffectRegistry.HEADACHE.get())).getAmplifier());
+				player.level().playSound(null ,player, SoundRegistry.HEADACHE_HEARTBEAT.get(), SoundSource.PLAYERS, 1.f, 1.0f);
+				applyHeadache(player, Objects.requireNonNull(player.getEffect(MobEffectRegistry.HEADACHE.get())).getAmplifier());
 			}
 		} else {
 			this.headacheTimer = 0;
 		}
 	}
 
-	private void applyHeadache(PlayerEntity player, int amplifier) {
+	private void applyHeadache(Player player, int amplifier) {
 		int blindnessTime = (40 + player.getRandom().nextInt(100)) * Math.min(amplifier + 1, 4);
 		this.headacheTimer = blindnessTime + Math.round((float) (200 + player.getRandom().nextInt(400)) / (float) Math.min(amplifier + 1, 4));
-		player.addEffect(new EffectInstance(Effects.BLINDNESS, blindnessTime, 0, false, false, true));
+		player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, blindnessTime, 0, false, false, true));
 	}
 
 	@Override
@@ -254,9 +253,9 @@ public class BodyDamageCapability implements IBodyDamageCapability
 		}
 	}
 
-	public CompoundNBT writeNBT()
+	public CompoundTag writeNBT()
 	{
-		CompoundNBT compound = new CompoundNBT();
+		CompoundTag compound = new CompoundTag();
 		for (BodyPart bodyPart: this.bodyParts.values()) {
 			compound = bodyPart.writeNbt(compound);
 		}
@@ -265,7 +264,7 @@ public class BodyDamageCapability implements IBodyDamageCapability
 		return compound;
 	}
 
-	public void readNBT(CompoundNBT compound)
+	public void readNBT(CompoundTag compound)
 	{
 		this.init();
 		for (BodyPart bodyPart: this.bodyParts.values()) {

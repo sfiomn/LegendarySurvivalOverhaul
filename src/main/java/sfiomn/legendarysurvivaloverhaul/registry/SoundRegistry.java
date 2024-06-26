@@ -1,12 +1,12 @@
 package sfiomn.legendarysurvivaloverhaul.registry;
 
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
 
 public class SoundRegistry
 {
@@ -28,7 +28,7 @@ public class SoundRegistry
 	public static final RegistryObject<SoundEvent> HEADACHE_HEARTBEAT = registerSoundEvent("headache_heartbeat");
 
 	private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
-		return SOUND_EVENTS.register(name, () -> new SoundEvent(
+		return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(
 				new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, name)
 		));
 	}

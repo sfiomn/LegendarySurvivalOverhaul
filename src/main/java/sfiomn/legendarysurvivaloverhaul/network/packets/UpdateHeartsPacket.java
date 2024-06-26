@@ -1,35 +1,35 @@
 package sfiomn.legendarysurvivaloverhaul.network.packets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import net.minecraftforge.network.NetworkEvent;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.heartmods.HeartModifierProvider;
 
 import java.util.function.Supplier;
 
 public class UpdateHeartsPacket
 {
-	private CompoundNBT compound;
+	private CompoundTag compound;
 	
-	public UpdateHeartsPacket(INBT compound)
+	public UpdateHeartsPacket(Tag compound)
 	{
-		this.compound = (CompoundNBT) compound;
+		this.compound = (CompoundTag) compound;
 	}
 	
 	public UpdateHeartsPacket() {}
 	
-	public static UpdateHeartsPacket decode(PacketBuffer buffer)
+	public static UpdateHeartsPacket decode(FriendlyByteBuf buffer)
 	{
 		return new UpdateHeartsPacket(buffer.readNbt());
 	}
 	
-	public static void encode(UpdateHeartsPacket message, PacketBuffer buffer)
+	public static void encode(UpdateHeartsPacket message, FriendlyByteBuf buffer)
 	{
 		buffer.writeNbt(message.compound);
 	}
@@ -42,7 +42,7 @@ public class UpdateHeartsPacket
 		supplier.get().setPacketHandled(true);
 	}
 	
-	public static DistExecutor.SafeRunnable syncHearts(CompoundNBT compound)
+	public static DistExecutor.SafeRunnable syncHearts(CompoundTag compound)
 	{
 		return new DistExecutor.SafeRunnable()
 		{
@@ -51,12 +51,14 @@ public class UpdateHeartsPacket
 			@Override
 			public void run()
 			{
-				ClientPlayerEntity player = Minecraft.getInstance().player;
-				
-				HeartModifierCapability hearts = player.getCapability(LegendarySurvivalOverhaul.HEART_MOD_CAP).orElse(new HeartModifierCapability());
-				
-				hearts.readNBT(compound);
-				hearts.updateMaxHealth(player.getCommandSenderWorld(), player);
+				LocalPlayer player = Minecraft.getInstance().player;
+
+				if (player != null) {
+					HeartModifierCapability hearts = player.getCapability(HeartModifierProvider.HEART_MODIFIER_CAPABILITY).orElse(new HeartModifierCapability());
+
+					hearts.readNBT(compound);
+					hearts.updateMaxHealth(player.getCommandSenderWorld(), player);
+				}
 			}
 		};
 	}

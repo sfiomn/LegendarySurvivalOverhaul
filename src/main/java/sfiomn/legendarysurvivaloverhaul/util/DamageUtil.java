@@ -1,10 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.util;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 
 import java.util.*;
@@ -16,17 +14,17 @@ public final class DamageUtil
 	
 	private DamageUtil() {}
 	
-	public static boolean isModDangerous(World world)
+	public static boolean isModDangerous(Level level)
 	{
 		// can the mod do damage?
-        return world.getDifficulty() != Difficulty.PEACEFUL;
+        return level.getDifficulty() != Difficulty.PEACEFUL;
     }
 	
-	public static boolean healthAboveDifficulty(World world, PlayerEntity player)
+	public static boolean healthAboveDifficulty(Level level, Player player)
 	{
 		// Kill the player in HARD mode, let him have 2 health in NORMAL mode
 		
-		Difficulty difficulty = world.getDifficulty();
+		Difficulty difficulty = level.getDifficulty();
         return difficulty == Difficulty.HARD ||
                 (difficulty == Difficulty.NORMAL && player.getHealth() > 2f) ||
                 ((difficulty == Difficulty.EASY || difficulty == Difficulty.PEACEFUL) && player.getHealth() > 10f);

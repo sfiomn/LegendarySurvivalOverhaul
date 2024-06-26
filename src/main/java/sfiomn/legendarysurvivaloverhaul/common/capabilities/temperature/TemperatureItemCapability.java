@@ -1,15 +1,13 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.Capability.IStorage;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ITemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
@@ -33,7 +31,7 @@ public class TemperatureItemCapability implements ITemperatureItemCapability {
     }
 
     @Override
-    public void updateWorldTemperature(World world, Entity holder, long currentTick) {
+    public void updateWorldTemperature(Level world, Entity holder, long currentTick) {
         this.updateTick = currentTick;
         this.temperature = WorldUtil.calculateClientWorldEntityTemperature(world, holder);
     }
@@ -48,48 +46,51 @@ public class TemperatureItemCapability implements ITemperatureItemCapability {
         this.temperature = temperature;
     }
 
-    public CompoundNBT writeNBT()
+    public CompoundTag writeNBT()
     {
-        CompoundNBT compound = new CompoundNBT();
+        CompoundTag compound = new CompoundTag();
 
         compound.putFloat("temperature", this.temperature);
 
         return compound;
     }
 
-    public void readNBT(CompoundNBT compound)
+    public void readNBT(CompoundTag compound)
     {
         this.init();
         if (compound.contains("temperature"))
             this.setWorldTemperatureLevel(compound.getFloat("temperature"));
     }
 
-    public static class TemperatureItemProvider implements ICapabilityProvider
+    public static class TemperatureItemProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag>
     {
-        private final LazyOptional<TemperatureItemCapability> instance = LazyOptional.of(LegendarySurvivalOverhaul.TEMPERATURE_ITEM_CAP::getDefaultInstance);
+        public static Capability<TemperatureItemCapability> TEMPERATURE_ITEM_CAPABILITY = CapabilityManager.get(new CapabilityToken<TemperatureItemCapability>() { });
+        private final LazyOptional<TemperatureItemCapability> instance = LazyOptional.of(this::getInstance);
+        private TemperatureItemCapability temperatureItemCapability = null;
 
-        @Override
-        public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side)
-        {
-            return LegendarySurvivalOverhaul.TEMPERATURE_ITEM_CAP.orEmpty(cap, instance);
-        }
-    }
-
-    public static class Storage implements IStorage<TemperatureItemCapability>
-    {
-        @Override
-        public INBT writeNBT(Capability<TemperatureItemCapability> capability, TemperatureItemCapability instance, Direction side)
-        {
-            return instance.writeNBT();
-        }
-
-        @Override
-        public void readNBT(Capability<TemperatureItemCapability> capability, TemperatureItemCapability instance, Direction side, INBT nbt)
-        {
-            if (nbt instanceof CompoundNBT)
-            {
-                instance.readNBT((CompoundNBT) nbt);
+        private TemperatureItemCapability getInstance() {
+            if (this.temperatureItemCapability == null) {
+                this.temperatureItemCapability = new TemperatureItemCapability();
             }
+            return this.temperatureItemCapability;
+        }
+
+        @Override
+        public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction direction)
+        {
+            if (capability == TEMPERATURE_ITEM_CAPABILITY)
+                return instance.cast();
+            return LazyOptional.empty();
+        }
+
+        @Override
+        public CompoundTag serializeNBT() {
+            return getInstance().writeNBT();
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag tag) {
+            getInstance().readNBT(tag);
         }
     }
 }

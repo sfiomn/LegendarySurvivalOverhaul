@@ -1,35 +1,35 @@
 package sfiomn.legendarysurvivaloverhaul.network.packets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import net.minecraftforge.network.NetworkEvent;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureProvider;
 
 import java.util.function.Supplier;
 
 public class UpdateTemperaturesPacket
 {
-	private CompoundNBT compound;
+	private CompoundTag compound;
 	
-	public UpdateTemperaturesPacket(INBT compound)
+	public UpdateTemperaturesPacket(Tag compound)
 	{
-		this.compound = (CompoundNBT) compound;
+		this.compound = (CompoundTag) compound;
 	}
 	
 	public UpdateTemperaturesPacket() {}
 	
-	public static UpdateTemperaturesPacket decode(PacketBuffer buffer)
+	public static UpdateTemperaturesPacket decode(FriendlyByteBuf buffer)
 	{
 		return new UpdateTemperaturesPacket(buffer.readNbt());
 	}
 	
-	public static void encode(UpdateTemperaturesPacket message, PacketBuffer buffer)
+	public static void encode(UpdateTemperaturesPacket message, FriendlyByteBuf buffer)
 	{
 		buffer.writeNbt(message.compound);
 	}
@@ -42,7 +42,7 @@ public class UpdateTemperaturesPacket
 		supplier.get().setPacketHandled(true);
 	}
 	
-	public static DistExecutor.SafeRunnable syncTemperature(CompoundNBT compound)
+	public static DistExecutor.SafeRunnable syncTemperature(CompoundTag compound)
 	{
 		return new DistExecutor.SafeRunnable()
 		{
@@ -51,11 +51,13 @@ public class UpdateTemperaturesPacket
 			@Override
 			public void run()
 			{
-				ClientPlayerEntity player = Minecraft.getInstance().player;
-				
-				TemperatureCapability temperature = player.getCapability(LegendarySurvivalOverhaul.TEMPERATURE_CAP).orElse(new TemperatureCapability());
-				
-				temperature.readNBT(compound);
+				LocalPlayer player = Minecraft.getInstance().player;
+
+				if (player != null) {
+					TemperatureCapability temperature = player.getCapability(TemperatureProvider.TEMPERATURE_CAPABILITY).orElse(new TemperatureCapability());
+
+					temperature.readNBT(compound);
+				}
 			}
 		};
 	}

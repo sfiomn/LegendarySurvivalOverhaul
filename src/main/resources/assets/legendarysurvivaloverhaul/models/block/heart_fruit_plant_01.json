@@ -3,5 +3,6 @@
 	"textures": {
 		"stem": "legendarysurvivaloverhaul:block/heartfruit_stem_01",
 		"fruit": "legendarysurvivaloverhaul:block/heartfruit_fruit_00"
-	}
+	},
+	"render_type": "cutout"
 }

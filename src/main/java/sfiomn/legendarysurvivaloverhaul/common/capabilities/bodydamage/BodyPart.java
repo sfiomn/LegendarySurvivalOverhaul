@@ -1,7 +1,8 @@
-package sfiomn.legendarysurvivaloverhaul.api.bodydamage;
+package sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 
 public class BodyPart {
     // Unsaved Data
@@ -53,7 +54,7 @@ public class BodyPart {
     }
 
     public void setDamage(float value) {
-        this.damage = MathHelper.clamp(value, 0, this.maxHealth);
+        this.damage = Mth.clamp(value, 0, this.maxHealth);
     }
 
     public float getDamage() {
@@ -89,7 +90,7 @@ public class BodyPart {
         this.healingPerTicks = healingValuePerTick;
     }
 
-    public CompoundNBT writeNbt(CompoundNBT nbt) {
+    public CompoundTag writeNbt(CompoundTag nbt) {
         nbt.putFloat(this.bodyPartEnum.name() + "_damage", this.damage);
         nbt.putFloat(this.bodyPartEnum.name() + "_maxHealth", this.maxHealth);
         nbt.putFloat(this.bodyPartEnum.name() + "_healingPerTicks", this.healingPerTicks);
@@ -97,7 +98,7 @@ public class BodyPart {
         return nbt;
     }
 
-    public void readNBT(CompoundNBT compound) {
+    public void readNBT(CompoundTag compound) {
         this.setMaxHealth(compound.getFloat(this.bodyPartEnum.name() + "_maxHealth"));
         this.setDamage(compound.getFloat(this.bodyPartEnum.name() + "_damage"));
         this.remainingHealingTicks = compound.getInt(this.bodyPartEnum.name() + "_remainingHealingTicks");

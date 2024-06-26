@@ -1,32 +1,41 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodCapability;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class BodyDamageProvider implements ICapabilitySerializable<INBT>
+public class BodyDamageProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag>
 {
-	private final LazyOptional<BodyDamageCapability> instance = LazyOptional.of(LegendarySurvivalOverhaul.BODY_DAMAGE_CAP::getDefaultInstance);
-	
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side)
-	{
-		return LegendarySurvivalOverhaul.BODY_DAMAGE_CAP.orEmpty(cap, instance);
+	public static Capability<BodyDamageCapability> BODY_DAMAGE_CAPABILITY = CapabilityManager.get(new CapabilityToken<BodyDamageCapability>() { });
+	private final LazyOptional<BodyDamageCapability> instance = LazyOptional.of(this::getInstance);
+	private BodyDamageCapability bodyDamageCapability = null;
+
+	private BodyDamageCapability getInstance() {
+		if (this.bodyDamageCapability == null) {
+			this.bodyDamageCapability = new BodyDamageCapability();
+		}
+		return this.bodyDamageCapability;
 	}
 	
 	@Override
-	public INBT serializeNBT()
+	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction direction)
 	{
-		return LegendarySurvivalOverhaul.BODY_DAMAGE_CAP.getStorage().writeNBT(LegendarySurvivalOverhaul.BODY_DAMAGE_CAP, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null);
+		if (capability == BODY_DAMAGE_CAPABILITY)
+			return instance.cast();
+		return LazyOptional.empty();
 	}
 	
 	@Override
-	public void deserializeNBT(INBT nbt)
+	public CompoundTag serializeNBT()
 	{
-		LegendarySurvivalOverhaul.BODY_DAMAGE_CAP.getStorage().readNBT(LegendarySurvivalOverhaul.BODY_DAMAGE_CAP, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null, nbt);
+		return getInstance().writeNBT();
+	}
+
+	@Override
+	public void deserializeNBT(CompoundTag nbt) {
+		getInstance().readNBT(nbt);
 	}
 }

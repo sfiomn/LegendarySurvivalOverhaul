@@ -1,19 +1,30 @@
 package sfiomn.legendarysurvivaloverhaul.common.containers;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
-import sfiomn.legendarysurvivaloverhaul.common.tileentities.AbstractThermalTileEntity;
+import sfiomn.legendarysurvivaloverhaul.common.blockentities.AbstractThermalBlockEntity;
+import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.ContainerRegistry;
 
 public class CoolerContainer extends AbstractThermalContainer {
 
-    public CoolerContainer(int windowId, PlayerInventory playerInventory, AbstractThermalTileEntity te) {
-        super(windowId, playerInventory, te, ContainerRegistry.COOLER_CONTAINER, ThermalTypeEnum.COOLING);
+    public CoolerContainer(int windowId, Inventory playerInventory, BlockEntity be, ContainerData dataAccess) {
+        super(windowId, playerInventory, (AbstractThermalBlockEntity) be, dataAccess, ContainerRegistry.COOLER_CONTAINER, ThermalTypeEnum.COOLING);
     }
 
-    public CoolerContainer(final int windowId, final PlayerInventory playerInv, final PacketBuffer data)
+    public CoolerContainer(final int windowId, final Inventory playerInv, final FriendlyByteBuf data)
     {
-        this(windowId, playerInv, getTileEntity(playerInv, data));
+        this(windowId, playerInv, playerInv.player.level().getBlockEntity(data.readBlockPos()), new SimpleContainerData(2));
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return stillValid(ContainerLevelAccess.create(this.level, this.blockEntity.getBlockPos()), player, BlockRegistry.COOLER.get());
     }
 }

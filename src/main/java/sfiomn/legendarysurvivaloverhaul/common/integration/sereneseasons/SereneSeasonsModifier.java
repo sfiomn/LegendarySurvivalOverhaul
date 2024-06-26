@@ -4,14 +4,13 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.ServerConfig;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -55,7 +54,7 @@ public class SereneSeasonsModifier extends ModifierBase
 	}
 
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(Level level, BlockPos pos)
 	{
 		if (!LegendarySurvivalOverhaul.sereneSeasonsLoaded)
 			return 0.0f;
@@ -68,7 +67,7 @@ public class SereneSeasonsModifier extends ModifierBase
 			// In theory, this should only ever run if Serene Seasons is installed
 			// However, just to be safe, we put this inside of a try/catch to make
 			// sure something weird hasn't happened with the API
-			return getUncaughtWorldInfluence(world, pos);
+			return getUncaughtWorldInfluence(level, pos);
 		}
 		catch (Exception e)
 		{
@@ -80,32 +79,32 @@ public class SereneSeasonsModifier extends ModifierBase
 		}
 	}
 	
-	public float getUncaughtWorldInfluence(World world, BlockPos pos)
+	public float getUncaughtWorldInfluence(Level level, BlockPos pos)
 	{
-		ISeasonState seasonState = SeasonHelper.getSeasonState(world);
+		ISeasonState seasonState = SeasonHelper.getSeasonState(level);
 		
-		if (seasonState == null || !SeasonsConfig.isDimensionWhitelisted(world.dimension()))
+		if (seasonState == null || !ServerConfig.isDimensionWhitelisted(level.dimension()))
 			return 0.0f;
 
-		Vector3i[] posOffsets;
+		Vec3i[] posOffsets;
 		if (Config.Baked.tropicalSeasonsEnabled)
-			posOffsets = new Vector3i[]{
-					new Vector3i(0, 0, 0),
-                    new Vector3i(10, 0, 0),
-                    new Vector3i(-10, 0, 0),
-                    new Vector3i(0, 0, 10),
-                    new Vector3i(0, 0, -10)
+			posOffsets = new Vec3i[]{
+					new Vec3i(0, 0, 0),
+                    new Vec3i(10, 0, 0),
+                    new Vec3i(-10, 0, 0),
+                    new Vec3i(0, 0, 10),
+                    new Vec3i(0, 0, -10)
 		};
 		else
-			posOffsets = new Vector3i[]{new Vector3i(0, 0, 0)};
+			posOffsets = new Vec3i[]{new Vec3i(0, 0, 0)};
 		
 		float value = 0.0f;
 		int validSpot = posOffsets.length;
 
-		for (Vector3i offset : posOffsets)
+		for (Vec3i offset : posOffsets)
 		{
-			Biome biome = world.getBiome(pos.offset(offset));
-			int seasonType = SereneSeasonsUtil.getSeasonType(biome);
+			Biome biome = level.getBiome(pos.offset(offset)).get();
+			int seasonType = SereneSeasonsUtil.getSeasonType(level, biome);
 
 			if (seasonType == 2) {
 				validSpot -= 1;
@@ -184,6 +183,6 @@ public class SereneSeasonsModifier extends ModifierBase
 		// LegendarySurvivalOverhaul.LOGGER.debug("Serene temp influence : " + value);
 		// float tempInfl = applyUndergroundEffect(value, world, pos);
 		// LegendarySurvivalOverhaul.LOGGER.debug("Serene temp influence after underground : " + tempInfl);
-		return applyUndergroundEffect(value, world, pos);
+		return applyUndergroundEffect(value, level, pos);
 	}
 }

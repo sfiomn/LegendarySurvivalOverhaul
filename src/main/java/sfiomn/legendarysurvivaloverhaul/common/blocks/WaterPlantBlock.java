@@ -1,25 +1,21 @@
 package sfiomn.legendarysurvivaloverhaul.common.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.TallFlowerBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.TallFlowerBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 public class WaterPlantBlock extends TallFlowerBlock implements IPlantable {
     protected static final VoxelShape SHAPE_BOTTOM = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
@@ -30,38 +26,30 @@ public class WaterPlantBlock extends TallFlowerBlock implements IPlantable {
     }
 
     @Override
-    protected boolean mayPlaceOn(BlockState blockState, IBlockReader blockReader, BlockPos blockPos) {
-        return blockState.getMaterial() == Material.SAND;
+    protected boolean mayPlaceOn(BlockState blockState, BlockGetter blockReader, BlockPos blockPos) {
+        return blockState.getMapColor(blockReader, blockPos) == MapColor.SAND;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-        Vector3d vector3d = state.getOffset(reader, pos);
+    public VoxelShape getShape(BlockState state, BlockGetter reader, BlockPos pos, CollisionContext context) {
+        Vec3 vector3d = state.getOffset(reader, pos);
         if (state.getValue(HALF) == DoubleBlockHalf.LOWER)
             return SHAPE_BOTTOM.move(vector3d.x, vector3d.y, vector3d.z);
         else
             return SHAPE_TOP.move(vector3d.x, vector3d.y, vector3d.z);
     }
-
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder context) {
-        if (state.getValue(HALF) == DoubleBlockHalf.LOWER)
-            return super.getDrops(state, context);
-        return Collections.emptyList();
-    }
-
-    @Override
-    public PlantType getPlantType(IBlockReader world, BlockPos pos) {
+    public PlantType getPlantType(BlockGetter world, BlockPos pos) {
         return PlantType.DESERT;
     }
 
     @Override
-    public BlockState getPlant(IBlockReader world, BlockPos pos) {
+    public BlockState getPlant(BlockGetter world, BlockPos pos) {
         return defaultBlockState();
     }
 
     @Override
-    public void performBonemeal(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
-        popResource(world, pos, new ItemStack(ItemRegistry.WATER_PLANT_BAG.get(), rand.nextFloat() < 0.5f ? 1 : 2));
+    public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
+        popResource(level, pos, new ItemStack(ItemRegistry.WATER_PLANT_BAG.get(), rand.nextFloat() < 0.5f ? 1 : 2));
     }
 }

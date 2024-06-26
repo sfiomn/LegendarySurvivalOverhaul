@@ -1,11 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.api.temperature;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
-public class DynamicModifierBase extends ForgeRegistryEntry<DynamicModifierBase>
+public class DynamicModifierBase extends Registry<DynamicModifierBase>
 {
 	protected final float middleTemperature;
 	
@@ -14,12 +14,12 @@ public class DynamicModifierBase extends ForgeRegistryEntry<DynamicModifierBase>
 		this.middleTemperature = (TemperatureEnum.NORMAL.getUpperBound() + (float) TemperatureEnum.COLD.getUpperBound()) / 2;
 	}
 	
-	public float applyDynamicPlayerInfluence(PlayerEntity player, float currentTemperature)
+	public float applyDynamicPlayerInfluence(Player player, float currentTemperature)
 	{
 		return 0.0f;
 	}
 	
-	public float applyDynamicWorldInfluence(World world, BlockPos pos, float currentTemperature)
+	public float applyDynamicWorldInfluence(Level world, BlockPos pos, float currentTemperature)
 	{
 		return 0.0f;
 	}

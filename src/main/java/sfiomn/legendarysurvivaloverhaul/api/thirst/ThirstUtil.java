@@ -1,9 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.api.thirst;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class ThirstUtil
 {
@@ -18,7 +17,7 @@ public class ThirstUtil
 	 *
 	 */
 	@Nullable
-	public static HydrationEnum traceWater(PlayerEntity player)
+	public static HydrationEnum traceWater(Player player)
 	{
 		return internal.traceWater(player);
 	}
@@ -30,7 +29,7 @@ public class ThirstUtil
 	 * @param saturation
 	 * @param dirtyChance 0.0f - 1.0f
 	 */
-	public static void takeDrink(PlayerEntity player, int hydration, float saturation, float dirtyChance)
+	public static void takeDrink(Player player, int hydration, float saturation, float dirtyChance)
 	{
 		internal.takeDrink(player, hydration, saturation, dirtyChance);
 	}
@@ -41,7 +40,7 @@ public class ThirstUtil
 	 * @param hydration
 	 * @param saturation
 	 */
-	public static void takeDrink(PlayerEntity player, int hydration, float saturation)
+	public static void takeDrink(Player player, int hydration, float saturation)
 	{
 		internal.takeDrink(player, hydration, saturation);
 	}
@@ -51,7 +50,7 @@ public class ThirstUtil
 	 * @param player
 	 * @param hydrationEnum
 	 */
-	public static void takeDrink(PlayerEntity player, HydrationEnum hydrationEnum)
+	public static void takeDrink(Player player, HydrationEnum hydrationEnum)
 	{
 		internal.takeDrink(player, hydrationEnum);
 	}
@@ -61,7 +60,7 @@ public class ThirstUtil
 	 * @param player
 	 * @param exhaustion
 	 */
-	public static void addExhaustion(PlayerEntity player, float exhaustion)
+	public static void addExhaustion(Player player, float exhaustion)
 	{
 		internal.addExhaustion(player, exhaustion);
 	}
@@ -72,7 +71,7 @@ public class ThirstUtil
 	 * @param finalDistance
 	 */
 
-	public HydrationEnum getHydrationEnumLookedAt(PlayerEntity player, double finalDistance) {
+	public HydrationEnum getHydrationEnumLookedAt(Player player, double finalDistance) {
 		return internal.getHydrationEnumLookedAt(player, finalDistance);
 	}
 

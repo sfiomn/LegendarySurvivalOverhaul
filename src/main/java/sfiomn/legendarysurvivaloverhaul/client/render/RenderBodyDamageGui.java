@@ -1,25 +1,18 @@
 package sfiomn.legendarysurvivaloverhaul.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
-import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
-import sfiomn.legendarysurvivaloverhaul.util.RenderUtil;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import static net.minecraft.client.gui.AbstractGui.blit;
 
 public class RenderBodyDamageGui
 {
@@ -31,26 +24,21 @@ public class RenderBodyDamageGui
 	private static final Map<BodyPartEnum, Integer> flashCounters = new HashMap<>();
 	private static final Map<BodyPartEnum, Float> bodyPartHealth = new HashMap<>();
 	
-	public static void render(MatrixStack matrix, PlayerEntity player, int width, int height) {
+	public static void render(GuiGraphics gui, Player player, int width, int height) {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		
 		BodyDamageCapability bodyDamageCap = CapabilityUtil.getBodyDamageCapability(player);
 
 		if (Config.Baked.alwaysShowBodyDamageIndicator || bodyDamageCap.isWounded())
-			drawBodyDamage(matrix, bodyDamageCap, width, height);
+			drawBodyDamage(gui, bodyDamageCap, width, height);
 
 		RenderSystem.disableBlend();
-		bind(AbstractGui.GUI_ICONS_LOCATION);
 	}
 	
-	public static void drawBodyDamage(MatrixStack matrix, BodyDamageCapability cap, int width, int height) {
+	public static void drawBodyDamage(GuiGraphics gui, BodyDamageCapability cap, int width, int height) {
 		int x = width / 2 + 92 + Config.Baked.bodyDamageIndicatorOffsetX;
 		int y = height - 34 + Config.Baked.bodyDamageIndicatorOffsetY;
-		
-		Matrix4f m4f = matrix.last().pose();
-
-		bind(ICONS);
 
 		for (BodyPartEnum bodyPart: BodyPartEnum.values()) {
 
@@ -72,7 +60,7 @@ public class RenderBodyDamageGui
 
             BodyPartCondition offset = BodyPartCondition.get(healthRatio, shouldFlash);
 
-			RenderUtil.drawTexturedModelRect(m4f, x + icon.x, y + icon.y, icon.width, icon.height,
+			gui.blit(ICONS, x + icon.x, y + icon.y, icon.width, icon.height,
 					BODY_MODEL_TEXTURE_WIDTH * offset.iconIndexX + icon.texX,
 					BODY_MODEL_TEXTURE_HEIGHT * offset.iconIndexY + icon.texY, icon.width, icon.height);
 		}
@@ -87,10 +75,6 @@ public class RenderBodyDamageGui
 			else
 				iter.remove();
 		}
-	}
-	
-	private static void bind(ResourceLocation resource) {
-		Minecraft.getInstance().getTextureManager().bind(resource);
 	}
 	
 	private enum BodyPartCondition {

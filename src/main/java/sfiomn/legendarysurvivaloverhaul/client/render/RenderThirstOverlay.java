@@ -2,8 +2,8 @@ package sfiomn.legendarysurvivaloverhaul.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.DeathScreen;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.gui.screens.DeathScreen;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import sfiomn.legendarysurvivaloverhaul.client.shaders.FocusShader;
@@ -24,29 +24,23 @@ public class RenderThirstOverlay {
     private static float shaderIntensity = 0;
     private static int updateTimer = 0;
 
-    public static void render(float partialTicks)
+    public static void render()
     {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        RenderSystem.enableTexture();
-
-        RenderSystem.pushMatrix();
-        RenderSystem.loadIdentity();
-        drawThirstEffect(partialTicks);
-        RenderSystem.popMatrix();
+        drawThirstEffect();
 
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         RenderSystem.disableBlend();
     }
 
-    public static void drawThirstEffect(float partialTicks) {
+    public static void drawThirstEffect() {
         if (!(Minecraft.getInstance().screen instanceof DeathScreen) && focusShader != null) {
-            focusShader.resize();
-            focusShader.render(partialTicks);
+            focusShader.render();
         }
     }
 
-    public static void updateThirstEffect(@Nullable PlayerEntity player) {
+    public static void updateThirstEffect(@Nullable Player player) {
         if (focusShader == null) {
             focusShader = new FocusShader();
         }

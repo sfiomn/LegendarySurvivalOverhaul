@@ -1,19 +1,14 @@
 package sfiomn.legendarysurvivaloverhaul.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
-import sfiomn.legendarysurvivaloverhaul.util.RenderUtil;
 
 import java.util.Random;
 
@@ -34,21 +29,19 @@ public class RenderThirstGui
 	private static final int THIRST_TEXTURE_HEIGHT = 9;
 
 	// Similar to net.minecraftforge.client.ForgeIngameGui.renderFood
-	public static void render(MatrixStack matrix, PlayerEntity player, int width, int height)
+	public static void render(GuiGraphics gui, Player player, int width, int height)
 	{
 		rand.setSeed(updateTimer * 445L);
 
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		bind(ICONS);
-		drawHydrationBar(matrix, player, width, height);
+		drawHydrationBar(gui, player, width, height);
 
 		RenderSystem.disableBlend();
-		bind(AbstractGui.GUI_ICONS_LOCATION);
 	}
 	
-	public static void drawHydrationBar(MatrixStack matrix, PlayerEntity player, int width, int height)
+	public static void drawHydrationBar(GuiGraphics gui, Player player, int width, int height)
 	{
 		ThirstCapability thirstCap = CapabilityUtil.getThirstCapability(player);
 
@@ -56,11 +49,10 @@ public class RenderThirstGui
 		int hydration = thirstCap.getHydrationLevel();
 		float saturation = thirstCap.getSaturationLevel();
 
-		Matrix4f m4f = matrix.last().pose();
-
+		int forgeGuiLeft = 39;
 		int left = width / 2 + 91; // Same x offset as the hunger bar
-		int top = height - ForgeIngameGui.right_height;
-		ForgeIngameGui.right_height += 10;
+		int top = height - forgeGuiLeft;
+		forgeGuiLeft += 10;
 
 		int saturationInt = (int)saturation;
 
@@ -80,35 +72,35 @@ public class RenderThirstGui
 
 			int xTextureOffset = THIRST_TEXTURE_POS_X;
 			int yTextureOffset = THIRST_TEXTURE_POS_Y;
-			if (player.hasEffect(EffectRegistry.THIRST.get()))
+			if (player.hasEffect(MobEffectRegistry.THIRST.get()))
 			{
 				xTextureOffset = THIRST_TEXTURE_WIDTH * 3;
 			}
-			if (player.hasEffect(EffectRegistry.HEAT_Thirst.get())) {
+			if (player.hasEffect(MobEffectRegistry.HEAT_Thirst.get())) {
 				yTextureOffset = THIRST_TEXTURE_HEIGHT;
 			}
 
 			if (halfIcon < hydration) // Full hydration icon
-				RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + THIRST_TEXTURE_WIDTH, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
+				gui.blit(ICONS, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + THIRST_TEXTURE_WIDTH, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 			else if (halfIcon == hydration) // Half hydration icon
-				RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + (THIRST_TEXTURE_WIDTH * 2), yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
+				gui.blit(ICONS, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + (THIRST_TEXTURE_WIDTH * 2), yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 			else
-				RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
+				gui.blit(ICONS, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 
 			// Reassign texture offset for saturation
 			yTextureOffset = 0;
 			xTextureOffset = THIRST_TEXTURE_WIDTH * 6;
-			if (player.hasEffect(EffectRegistry.THIRST.get()))
+			if (player.hasEffect(MobEffectRegistry.THIRST.get()))
 			{
 				xTextureOffset += THIRST_TEXTURE_WIDTH * 2;
 			}
 			if(saturationInt > 0 && Config.Baked.thirstSaturationDisplayed)
 			{
 				if (halfIcon < saturationInt) { // Full saturation icon
-					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
+					gui.blit(ICONS, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 				}
 				else if (halfIcon == saturationInt) { // Half saturation icon
-					RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + THIRST_TEXTURE_WIDTH, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
+					gui.blit(ICONS, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + THIRST_TEXTURE_WIDTH, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 				}
 			}
 		}
@@ -117,10 +109,5 @@ public class RenderThirstGui
 	public static void updateTimer()
 	{
 		updateTimer++;
-	}
-	
-	private static void bind(ResourceLocation resource)
-	{
-		Minecraft.getInstance().getTextureManager().bind(resource);
 	}
 }

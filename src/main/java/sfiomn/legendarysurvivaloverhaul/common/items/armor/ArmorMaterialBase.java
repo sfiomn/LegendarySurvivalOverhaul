@@ -1,17 +1,18 @@
 package sfiomn.legendarysurvivaloverhaul.common.items.armor;
 
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.LazyLoadedValue;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 
 import java.util.function.Supplier;
 
-public class ArmorMaterialBase implements IArmorMaterial
+public class ArmorMaterialBase implements ArmorMaterial
 {
 	private static final int[] MAX_DAMAGE_ARRAY = new int[] {13, 15, 16, 11};
 	private final String name;
@@ -21,7 +22,7 @@ public class ArmorMaterialBase implements IArmorMaterial
 	private final SoundEvent soundEvent;
 	private final float toughness;
 	private final float knockbackResistance;
-	private final LazyValue<Ingredient> repairMaterial;
+	private final LazyLoadedValue<Ingredient> repairMaterial;
 	
 	public ArmorMaterialBase(String name, float maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial)
 	{
@@ -32,19 +33,19 @@ public class ArmorMaterialBase implements IArmorMaterial
 		this.soundEvent = soundEvent;
 		this.toughness = toughness;
 		this.knockbackResistance = knockbackResistance;
-		this.repairMaterial = new LazyValue<Ingredient>(repairMaterial);
+		this.repairMaterial = new LazyLoadedValue<Ingredient>(repairMaterial);
 	}
 	
 	@Override
-	public int getDurabilityForSlot(EquipmentSlotType slotIn)
+	public int getDurabilityForType(ArmorItem.Type slotIn)
 	{
-		return (int) (MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor);
+		return (int) (MAX_DAMAGE_ARRAY[slotIn.getSlot().getIndex()] * this.maxDamageFactor);
 	}
 
 	@Override
-	public int getDefenseForSlot(EquipmentSlotType slotIn)
+	public int getDefenseForType(ArmorItem.Type slotIn)
 	{
-		return this.damageReductionAmountArray[slotIn.getIndex()];
+		return this.damageReductionAmountArray[slotIn.getSlot().getIndex()];
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class ArmorMaterialBase implements IArmorMaterial
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public String getName()
+	public @NotNull String getName()
 	{
 		return LegendarySurvivalOverhaul.MOD_ID + ":" + this.name;
 	}

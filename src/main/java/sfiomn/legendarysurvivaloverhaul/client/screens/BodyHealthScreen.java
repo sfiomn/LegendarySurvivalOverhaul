@@ -1,21 +1,20 @@
 package sfiomn.legendarysurvivaloverhaul.client.screens;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.common.items.heal.BodyHealingItem;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.network.packets.MessageBodyPartHealingItem;
-import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 import java.util.HashMap;
@@ -34,25 +33,22 @@ public class BodyHealthScreen extends Screen {
     private int leftPos;
     private int topPos;
 
-    private PlayerEntity player;
-    private Hand hand;
+    private Player player;
+    private InteractionHand hand;
     private int healingCharges;
     private BodyHealingItem healingItem;
     private boolean consumeItem;
 
-    public BodyHealthScreen(PlayerEntity player) {
-        super(new TranslationTextComponent("screen." + LegendarySurvivalOverhaul.MOD_ID + ".body_health_screen"));
-
-        this.player = player;
-        this.healingItem = null;
+    public BodyHealthScreen(Player player) {
+        this(player, null);
     }
 
-    public BodyHealthScreen(PlayerEntity player, Hand hand) {
-        super(new TranslationTextComponent("screen." + LegendarySurvivalOverhaul.MOD_ID + ".body_health_screen"));
+    public BodyHealthScreen(Player player, InteractionHand hand) {
+        super(Component.translatable("screen." + LegendarySurvivalOverhaul.MOD_ID + ".body_health_screen"));
 
         this.player = player;
         this.hand = hand;
-        if (player.getItemInHand(this.hand).getItem() instanceof BodyHealingItem) {
+        if (this.hand != null && player.getItemInHand(this.hand).getItem() instanceof BodyHealingItem) {
             this.healingItem = (BodyHealingItem) player.getItemInHand(this.hand).getItem();
             this.healingCharges = this.healingItem.getHealingCharges();
         } else {
@@ -70,19 +66,18 @@ public class BodyHealthScreen extends Screen {
         this.leftPos = (this.width - HEALTH_SCREEN_WIDTH) / 2;
         this.topPos = (this.height - HEALTH_SCREEN_HEIGHT) / 2;
 
-        addButton(new BodyPartButton(BodyPartEnum.HEAD, this.leftPos + 68, this.topPos + 46, 38, 34, button -> sendBodyPartHeal(BodyPartEnum.HEAD)));
-        addButton(new BodyPartButton(BodyPartEnum.RIGHT_ARM, this.leftPos + 101, this.topPos + 79, 50, 38, button -> sendBodyPartHeal(BodyPartEnum.RIGHT_ARM)));
-        addButton(new BodyPartButton(BodyPartEnum.LEFT_ARM, this.leftPos + 23, this.topPos + 79, 50, 38, button -> sendBodyPartHeal(BodyPartEnum.LEFT_ARM)));
-        addButton(new BodyPartButton(BodyPartEnum.CHEST, this.leftPos + 73, this.topPos + 79, 28, 38, button -> sendBodyPartHeal(BodyPartEnum.CHEST)));
-        addButton(new BodyPartButton(BodyPartEnum.RIGHT_LEG, this.leftPos + 87, this.topPos + 117, 49, 36, button -> sendBodyPartHeal(BodyPartEnum.RIGHT_LEG)));
-        addButton(new BodyPartButton(BodyPartEnum.RIGHT_FOOT, this.leftPos + 87, this.topPos + 153, 49, 10, button -> sendBodyPartHeal(BodyPartEnum.RIGHT_FOOT)));
-        addButton(new BodyPartButton(BodyPartEnum.LEFT_LEG, this.leftPos + 38, this.topPos + 117, 49, 36, button -> sendBodyPartHeal(BodyPartEnum.LEFT_LEG)));
-        addButton(new BodyPartButton(BodyPartEnum.LEFT_FOOT, this.leftPos + 38, this.topPos + 153, 49, 10, button -> sendBodyPartHeal(BodyPartEnum.LEFT_FOOT)));
+        addWidget(new BodyPartButton(BodyPartEnum.HEAD, this.leftPos + 68, this.topPos + 46, 38, 34, button -> sendBodyPartHeal(BodyPartEnum.HEAD)));
+        addWidget(new BodyPartButton(BodyPartEnum.RIGHT_ARM, this.leftPos + 101, this.topPos + 79, 50, 38, button -> sendBodyPartHeal(BodyPartEnum.RIGHT_ARM)));
+        addWidget(new BodyPartButton(BodyPartEnum.LEFT_ARM, this.leftPos + 23, this.topPos + 79, 50, 38, button -> sendBodyPartHeal(BodyPartEnum.LEFT_ARM)));
+        addWidget(new BodyPartButton(BodyPartEnum.CHEST, this.leftPos + 73, this.topPos + 79, 28, 38, button -> sendBodyPartHeal(BodyPartEnum.CHEST)));
+        addWidget(new BodyPartButton(BodyPartEnum.RIGHT_LEG, this.leftPos + 87, this.topPos + 117, 49, 36, button -> sendBodyPartHeal(BodyPartEnum.RIGHT_LEG)));
+        addWidget(new BodyPartButton(BodyPartEnum.RIGHT_FOOT, this.leftPos + 87, this.topPos + 153, 49, 10, button -> sendBodyPartHeal(BodyPartEnum.RIGHT_FOOT)));
+        addWidget(new BodyPartButton(BodyPartEnum.LEFT_LEG, this.leftPos + 38, this.topPos + 117, 49, 36, button -> sendBodyPartHeal(BodyPartEnum.LEFT_LEG)));
+        addWidget(new BodyPartButton(BodyPartEnum.LEFT_FOOT, this.leftPos + 38, this.topPos + 153, 49, 10, button -> sendBodyPartHeal(BodyPartEnum.LEFT_FOOT)));
 
         bodyPartButtons.clear();
-        for (Widget button : this.buttons) {
-            if (button instanceof BodyPartButton) {
-                BodyPartButton bodyPartButton = (BodyPartButton) button;
+        for (GuiEventListener button : this.children()) {
+            if (button instanceof BodyPartButton bodyPartButton) {
                 if (this.healingItem == null) {
                     bodyPartButton.active = false;
                 }
@@ -114,13 +109,13 @@ public class BodyHealthScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
         checkAutoCloseWhenHealing();
 
-        this.renderBackground(matrixStack);
+        this.renderBackground(gui);
 
         for (BodyPartEnum bodyPart: BodyPartEnum.values())
-            renderBodyPartHealth(matrixStack, bodyPart, mouseX, mouseY, partialTicks);
+            renderBodyPartHealth(gui, bodyPart, mouseX, mouseY, partialTicks);
     }
 
     public void checkAutoCloseWhenHealing() {
@@ -131,18 +126,18 @@ public class BodyHealthScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(MatrixStack matrixStack) {
+    public void renderBackground(GuiGraphics gui) {
         if (minecraft == null) {
             return;
         }
 
-        RenderSystem.color4f(1, 1, 1, 1);
-        minecraft.getTextureManager().bind(BODY_HEALTH_SCREEN);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
 
-        blit(matrixStack, leftPos, topPos, 0, 0, HEALTH_SCREEN_WIDTH, HEALTH_SCREEN_HEIGHT);
+        gui.blit(BODY_HEALTH_SCREEN, leftPos, topPos, 0, 0, HEALTH_SCREEN_WIDTH, HEALTH_SCREEN_HEIGHT);
     }
 
-    private void renderBodyPartHealth(MatrixStack matrixStack, BodyPartEnum bodyPart, int mouseX, int mouseY, float partialTicks) {
+    private void renderBodyPartHealth(GuiGraphics gui, BodyPartEnum bodyPart, int mouseX, int mouseY, float partialTicks) {
         if (minecraft == null) {
             return;
         }
@@ -168,25 +163,25 @@ public class BodyHealthScreen extends Screen {
             bodyPartButton.active = true;
         }
 
-        bodyPartButton.render(matrixStack, mouseX, mouseY, partialTicks);
+        bodyPartButton.render(gui, mouseX, mouseY, partialTicks);
 
         if (bodyPartButton.isMouseOver(mouseX, mouseY) && totalRemainingHealing == 0 && this.healingItem != null) {
             totalRemainingHealing = this.healingItem.getHealingCapacity();
         }
 
-        RenderSystem.color4f(1, 1, 1, 1);
-        minecraft.getTextureManager().bind(BODY_HEALTH_SCREEN);
-        drawHealthBar(matrixStack, bodyPart, healthRatio,  MathUtil.round(totalRemainingHealing / maxHealth, 2));
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+        drawHealthBar(gui, bodyPart, healthRatio,  MathUtil.round(totalRemainingHealing / maxHealth, 2));
     }
 
-    private void drawHealthBar(MatrixStack matrixStack, BodyPartEnum bodyPart, float healthRatio, float totalRemainingHealingRatio) {
+    private void drawHealthBar(GuiGraphics gui, BodyPartEnum bodyPart, float healthRatio, float totalRemainingHealingRatio) {
         HealthBarIcon healthBarIcon = HealthBarIcon.get(bodyPart);
         HealthBarCondition healthBarCondition = HealthBarCondition.get(healthRatio);
         if (healthBarIcon == null)
             return;
 
         // Draw empty health bar
-        blit(matrixStack, this.leftPos + healthBarIcon.x, this.topPos + healthBarIcon.y,
+        gui.blit(BODY_HEALTH_SCREEN, this.leftPos + healthBarIcon.x, this.topPos + healthBarIcon.y,
                 TEX_HEALTH_BAR_X + HEALTH_BAR_WIDTH * HealthBarCondition.DEAD.iconIndexX,
                 TEX_HEALTH_BAR_Y + HEALTH_BAR_HEIGHT * HealthBarCondition.DEAD.iconIndexY,
                 HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT);
@@ -196,14 +191,14 @@ public class BodyHealthScreen extends Screen {
 
         // Draw current health bar
         if (healthBarWidth > 0)
-            blit(matrixStack, this.leftPos + healthBarIcon.x, this.topPos + healthBarIcon.y,
+            gui.blit(BODY_HEALTH_SCREEN, this.leftPos + healthBarIcon.x, this.topPos + healthBarIcon.y,
                     TEX_HEALTH_BAR_X + HEALTH_BAR_WIDTH * healthBarCondition.iconIndexX,
                     TEX_HEALTH_BAR_Y + HEALTH_BAR_HEIGHT * healthBarCondition.iconIndexY,
                     healthBarWidth, HEALTH_BAR_HEIGHT);
 
         // Draw healing bar
         if (healthBarPreviewWidth > 0)
-            blit(matrixStack, this.leftPos + healthBarIcon.x + healthBarWidth, this.topPos + healthBarIcon.y,
+            gui.blit(BODY_HEALTH_SCREEN, this.leftPos + healthBarIcon.x + healthBarWidth, this.topPos + healthBarIcon.y,
                     TEX_HEALTH_BAR_X + healthBarWidth + HEALTH_BAR_WIDTH * healthBarCondition.getPreviewVariant().iconIndexX,
                     TEX_HEALTH_BAR_Y + HEALTH_BAR_HEIGHT * healthBarCondition.getPreviewVariant().iconIndexY,
                     healthBarPreviewWidth, HEALTH_BAR_HEIGHT);

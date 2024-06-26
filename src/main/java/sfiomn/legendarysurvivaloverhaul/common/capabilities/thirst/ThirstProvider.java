@@ -1,31 +1,40 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import org.jetbrains.annotations.NotNull;
 
-public class ThirstProvider implements ICapabilitySerializable<INBT>
+public class ThirstProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag>
 {
-	private final LazyOptional<ThirstCapability> instance = LazyOptional.of(LegendarySurvivalOverhaul.THIRST_CAP::getDefaultInstance);
-	
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side)
-	{
-		return LegendarySurvivalOverhaul.THIRST_CAP.orEmpty(cap, instance);
+	public static Capability<ThirstCapability> THIRST_CAPABILITY = CapabilityManager.get(new CapabilityToken<ThirstCapability>() { });
+	private final LazyOptional<ThirstCapability> instance = LazyOptional.of(this::getInstance);
+	private ThirstCapability thirstCapability = null;
+
+	private ThirstCapability getInstance() {
+		if (this.thirstCapability == null) {
+			this.thirstCapability = new ThirstCapability();
+		}
+		return this.thirstCapability;
 	}
 	
 	@Override
-	public INBT serializeNBT()
+	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, Direction side)
 	{
-		return LegendarySurvivalOverhaul.THIRST_CAP.getStorage().writeNBT(LegendarySurvivalOverhaul.THIRST_CAP, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null);
+		if (capability == THIRST_CAPABILITY)
+			return instance.cast();
+		return LazyOptional.empty();
 	}
-	
+
 	@Override
-	public void deserializeNBT(INBT nbt)
+	public CompoundTag serializeNBT()
 	{
-		LegendarySurvivalOverhaul.THIRST_CAP.getStorage().readNBT(LegendarySurvivalOverhaul.THIRST_CAP, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null, nbt);
+		return getInstance().writeNBT();
+	}
+
+	@Override
+	public void deserializeNBT(CompoundTag tag) {
+		getInstance().readNBT(tag);
 	}
 }

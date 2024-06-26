@@ -1,8 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.food;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import sfiomn.legendarysurvivaloverhaul.api.food.IFoodCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -10,9 +10,8 @@ import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 public class FoodCapability implements IFoodCapability
 {
-
 	//Unsaved data
-	private Vector3d oldPos;
+	private Vec3 oldPos;
 	private int updateTickTimer; // Update immediately first time around
 
 	public FoodCapability()
@@ -26,7 +25,7 @@ public class FoodCapability implements IFoodCapability
 		this.updateTickTimer = 0;
 	}
 
-	public void tickUpdate(PlayerEntity player, World world, TickEvent.Phase phase)
+	public void tickUpdate(Player player, Level world, TickEvent.Phase phase)
 	{
 		if(phase == TickEvent.Phase.START) return;
 

@@ -1,19 +1,23 @@
 package sfiomn.legendarysurvivaloverhaul.common.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolType;
+import org.jetbrains.annotations.Nullable;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
+import sfiomn.legendarysurvivaloverhaul.common.blockentities.AbstractThermalBlockEntity;
+import sfiomn.legendarysurvivaloverhaul.registry.BlockEntityRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
-
-import java.util.Random;
 
 public class CoolerBlock extends ThermalBlock {
 
@@ -26,17 +30,22 @@ public class CoolerBlock extends ThermalBlock {
     public static Properties getProperties()
     {
         return Properties
-                .of(Material.WOOD)
+                .of()
+                .mapColor(MapColor.WOOD)
                 .sound(SoundType.WOOD)
                 .strength(2f, 10f)
-                .harvestTool(ToolType.AXE)
-                .harvestLevel(1)
                 .noOcclusion();
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState p_153213_, BlockEntityType<T> entityType) {
+        return level.isClientSide ? null : createTickerHelper(entityType, BlockEntityRegistry.COOLER_BLOCK_ENTITY.get(), AbstractThermalBlockEntity::serverTick);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource rand) {
         if (state.getValue(LIT)) {
             float chanceSound = 0.1f;
             float chanceParticle = 0.25f;
@@ -44,7 +53,7 @@ public class CoolerBlock extends ThermalBlock {
             double posY = pos.getY();
             double posZ = pos.getZ();
             if (rand.nextFloat() < chanceSound) {
-                worldIn.playLocalSound(posX + 0.5d, posY + 0.5d, posZ + 0.5d, SoundRegistry.COOLER_BLOCK.get(), SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+                level.playLocalSound(posX + 0.5d, posY + 0.5d, posZ + 0.5d, SoundRegistry.COOLER_BLOCK.get(), SoundSource.BLOCKS, 1.0F, 1.0F, false);
             }
 
             if (rand.nextFloat() < chanceParticle) {
@@ -53,9 +62,9 @@ public class CoolerBlock extends ThermalBlock {
                 float xr = rand.nextFloat();
                 float zr = rand.nextFloat();
 
-                worldIn.addParticle(ParticleTypes.ITEM_SNOWBALL, false, posX + xr, posY + 1.0d, posZ + zr, 0, 0, 0);
+                level.addParticle(ParticleTypes.ITEM_SNOWBALL, false, posX + xr, posY + 1.0d, posZ + zr, 0, 0, 0);
             }
         }
-        super.animateTick(state, worldIn, pos, rand);
+        super.animateTick(state, level, pos, rand);
     }
 }

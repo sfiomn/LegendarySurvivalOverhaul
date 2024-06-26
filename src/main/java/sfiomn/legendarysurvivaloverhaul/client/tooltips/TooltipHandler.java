@@ -1,21 +1,28 @@
 package sfiomn.legendarysurvivaloverhaul.client.tooltips;
 
+import com.mojang.datafixers.util.Either;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.*;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.*;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectUtil;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
@@ -28,8 +35,8 @@ import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 import sfiomn.legendarysurvivaloverhaul.common.items.drink.DrinkItem;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
-import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
-import sfiomn.legendarysurvivaloverhaul.registry.KeybindingRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.KeyMappingRegistry;
 
 import java.util.List;
 
@@ -43,11 +50,11 @@ public class TooltipHandler
 	{
 		ItemStack stack = event.getItemStack();
 
-		if (!stack.isEmpty() && stack.getItem().getRegistryName() != null)
+		if (!stack.isEmpty() && ForgeRegistries.ITEMS.getKey(stack.getItem()) != null)
 		{
-			List<ITextComponent> tooltip = event.getToolTip();
+			List<Component> tooltip = event.getToolTip();
 
-			ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
+			ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
 
 			if (stack.getItem() instanceof ArmorItem && Config.Baked.temperatureEnabled) {
 				addArmorBaseTemperatureText(itemRegistryName, tooltip);
@@ -61,15 +68,12 @@ public class TooltipHandler
 
 			if (Config.Baked.temperatureEnabled)
 				addFoodEffectText(stack, tooltip);
-
-			if (Config.Baked.thirstEnabled && Config.Baked.showHydrationTooltip)
-				addHydrationText(stack, tooltip);
 		}
 	}
 
 
 	@SubscribeEvent
-	public static void onTooltipPostText(RenderTooltipEvent.PostText event) {
+	public static void onRenderTooltip(RenderTooltipEvent.GatherComponents event) {
 		if (event.isCanceled())
 			return;
 
@@ -78,136 +82,11 @@ public class TooltipHandler
 		if (gui == null)
 			return;
 
-		int toolTipY = event.getY();
-		int toolTipX = event.getX();
-		int toolTipZ = 400; // tooltip text zLevel is 400, hardcode in GuiUtils.
+		if (Config.Baked.thirstEnabled && Config.Baked.showHydrationTooltip)
+			addHydrationTooltip(event.getItemStack(), event.getTooltipElements());
 
-		// Find thirst font of text lines.
-		HydrationTooltip hydrationTooltip = null;
-		List<? extends ITextProperties> lines = event.getLines();
-		for (int i = 0; i < lines.size(); ++i)
-		{
-			hydrationTooltip = HydrationTooltip.ThirstFont.getHydrationTooltip(lines.get(i));
-			if (hydrationTooltip != null)
-			{
-				toolTipY += i * 10;
-				break;
-			}
-		}
-
-		if (hydrationTooltip == null)
-			return;
-
-
-		hydrationTooltip.renderTooltipIcons(event.getMatrixStack(), toolTipX, toolTipY, toolTipZ);
-	}
-
-	private static void addArmorBaseTemperatureText(ResourceLocation itemRegistryName, List<ITextComponent> tooltip) {
-		float temperature = 0.0f;
-
-		JsonTemperature jsonTemperature = JsonConfig.itemTemperatures.get(itemRegistryName.toString());
-
-		if (jsonTemperature != null)
-		{
-			temperature = jsonTemperature.temperature;
-		}
-
-		ITextComponent text;
-
-		if (temperature > 0.0f)
-			text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.heating");
-		else if (temperature < 0.0f)
-			text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.cooling");
-		else
-			return;
-
-		String tempTxt = (temperature % 1.0f == 0f ? (int) Math.abs(temperature) : Math.abs(temperature)) + " ";
-
-		text = new StringTextComponent("+")
-				.withStyle(TextFormatting.BLUE)
-				.append(tempTxt)
-				.append(text);
-
-		tooltip.add(text);
-	}
-
-	private static void addArmorCoatTemperatureText(ItemStack stack, List<ITextComponent> tooltip) {
-		String coatId = TemperatureUtil.getArmorCoatTag(stack);
-		CoatEnum coat = CoatEnum.getFromId(coatId);
-
-		ITextComponent text;
-
-		if (coat != null && coat.modifier() > 0) {
-			text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor_coat." + coatId);
-		}
-		else if (coat != null && coat.modifier() == 0)
-			text = new StringTextComponent("Error");
-		else {
-			return;
-		}
-
-		text = new StringTextComponent("")
-				.withStyle(TextFormatting.BLUE)
-				.append(text);
-
-		tooltip.add(text);
-	}
-
-	private static void addCoatItemDescText(CoatItem coatItem, List<ITextComponent> tooltip) {
-
-		CoatEnum coat = coatItem.coat;
-
-		ITextComponent text;
-		if (InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), KeybindingRegistry.showAddedDesc.getKey().getValue())) {
-			if (coat != null && coat.modifier() > 0) {
-				text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".coat_item." + coat.type() + ".desc")
-						.append(" " + coat.modifier() + "\u00B0C");
-			} else if (coat != null && coat.modifier() == 0)
-				text = new StringTextComponent("Error");
-			else {
-				return;
-			}
-
-			text = new StringTextComponent("")
-					.withStyle(TextFormatting.DARK_GRAY)
-					.append(text);
-		} else {
-			text = new StringTextComponent(TextFormatting.GRAY + I18n.get("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".added_desc.activate", TextFormatting.LIGHT_PURPLE, I18n.get(KeybindingRegistry.showAddedDesc.getTranslatedKeyMessage().getString()), TextFormatting.GRAY));
-		}
-
-		tooltip.add(text);
-	}
-
-	private static void addFoodEffectText(ItemStack stack, List<ITextComponent> tooltip) {
-		ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
-		assert itemRegistryName != null;
-		List<JsonConsumableTemperature> jcts = JsonConfig.consumableTemperature.get(itemRegistryName.toString());
-
-		if (jcts != null) {
-			for (JsonConsumableTemperature jct: jcts) {
-				EffectInstance effectInstance = new EffectInstance(jct.getEffect(), jct.duration, Math.abs(jct.temperatureLevel));
-				IFormattableTextComponent iformattabletextcomponent = new TranslationTextComponent(effectInstance.getDescriptionId());
-
-				if (Math.abs(jct.temperatureLevel) > 1) {
-					iformattabletextcomponent = new TranslationTextComponent("potion.withAmplifier", iformattabletextcomponent, new TranslationTextComponent("potion.potency." + (Math.abs(jct.temperatureLevel) - 1)));
-				}
-
-				if (jct.duration > 20) {
-					iformattabletextcomponent = new TranslationTextComponent("potion.withDuration", iformattabletextcomponent, EffectUtils.formatDuration(effectInstance, 1.0f));
-				}
-
-				if (jct.getEffect() == EffectRegistry.COLD_FOOD.get() || jct.getEffect() == EffectRegistry.COLD_DRINK.get())
-					tooltip.add(iformattabletextcomponent.withStyle(Style.EMPTY.withColor(Color.fromRgb(6466303))));
-
-				if (jct.getEffect() == EffectRegistry.HOT_FOOD.get() || jct.getEffect() == EffectRegistry.HOT_DRINk.get())
-					tooltip.add(iformattabletextcomponent.withStyle(Style.EMPTY.withColor(Color.fromRgb(16420407))));
-
-			}
-		}
-	}
-
-	private static void addHydrationText(ItemStack stack, List<ITextComponent> tooltip) {
-		ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
+		ItemStack stack = event.getItemStack();
+		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
 		assert itemRegistryName != null;
 		JsonThirst jsonThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
 
@@ -234,14 +113,140 @@ public class TooltipHandler
 			return;
 		}
 
-		Style thirstStyle = Style.EMPTY.withFont(new HydrationTooltip.ThirstFont(hydrationTooltip));
-		StringTextComponent placeholder = new StringTextComponent(hydrationTooltip.getPlaceholderTooltip());
-		if (hydrationTooltip.hydrationIconNumber > 0)
-			tooltip.add(placeholder.setStyle(thirstStyle));
-		if ((hydrationTooltip.saturationIconNumber > 0 && !Config.Baked.mergeHydrationAndSaturationTooltip) ||
-				(hydrationTooltip.hydrationIconNumber <= 0 && hydrationTooltip.saturationIconNumber > 0) )
-			tooltip.add(placeholder.setStyle(thirstStyle));
-		if (hydrationTooltip.dirtyIconNumber > 0)
-			tooltip.add(placeholder.setStyle(thirstStyle));
+
+	}
+
+	private static void addArmorBaseTemperatureText(ResourceLocation itemRegistryName, List<Component> tooltip) {
+		float temperature = 0.0f;
+
+		JsonTemperature jsonTemperature = JsonConfig.itemTemperatures.get(itemRegistryName.toString());
+
+		if (jsonTemperature != null)
+		{
+			temperature = jsonTemperature.temperature;
+		}
+
+		Component text;
+
+		if (temperature > 0.0f)
+			text = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.heating");
+		else if (temperature < 0.0f)
+			text = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.cooling");
+		else
+			return;
+
+		String tempTxt = (temperature % 1.0f == 0f ? (int) Math.abs(temperature) : Math.abs(temperature)) + " ";
+
+		text = Component.literal("+")
+				.withStyle(ChatFormatting.BLUE)
+				.append(tempTxt)
+				.append(text);
+
+		tooltip.add(text);
+	}
+
+	private static void addArmorCoatTemperatureText(ItemStack stack, List<Component> tooltip) {
+		String coatId = TemperatureUtil.getArmorCoatTag(stack);
+		CoatEnum coat = CoatEnum.getFromId(coatId);
+
+		Component text;
+
+		if (coat != null && coat.modifier() > 0) {
+			text = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor_coat." + coatId);
+		}
+		else if (coat != null && coat.modifier() == 0)
+			text = Component.literal("Error");
+		else {
+			return;
+		}
+
+		text = Component.literal("")
+				.withStyle(ChatFormatting.BLUE)
+				.append(text);
+
+		tooltip.add(text);
+	}
+
+	private static void addCoatItemDescText(CoatItem coatItem, List<Component> tooltip) {
+
+		CoatEnum coat = coatItem.coat;
+
+		Component text;
+		if (KeyMappingRegistry.showAddedDesc.isDown()) {
+			if (coat != null && coat.modifier() > 0) {
+				text = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".coat_item." + coat.type() + ".desc")
+						.append(" " + coat.modifier() + "\u00B0C");
+			} else if (coat != null && coat.modifier() == 0)
+				text = Component.literal("Error");
+			else {
+				return;
+			}
+
+			text = Component.literal("")
+					.withStyle(ChatFormatting.DARK_GRAY)
+					.append(text);
+		} else {
+			text = Component.literal(ChatFormatting.GRAY + I18n.get("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".added_desc.activate", ChatFormatting.LIGHT_PURPLE, I18n.get(KeyMappingRegistry.showAddedDesc.getTranslatedKeyMessage().getString()), ChatFormatting.GRAY));
+		}
+
+		tooltip.add(text);
+	}
+
+	private static void addFoodEffectText(ItemStack stack, List<Component> tooltip) {
+		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
+		assert itemRegistryName != null;
+		List<JsonConsumableTemperature> jcts = JsonConfig.consumableTemperature.get(itemRegistryName.toString());
+
+		if (jcts != null) {
+			for (JsonConsumableTemperature jct: jcts) {
+				MobEffectInstance effectInstance = new MobEffectInstance(jct.getEffect(), jct.duration, Math.abs(jct.temperatureLevel));
+				MutableComponent mutableComponent = Component.translatable(effectInstance.getDescriptionId());
+
+				if (Math.abs(jct.temperatureLevel) > 1) {
+					mutableComponent = Component.translatable("potion.withAmplifier", mutableComponent, Component.translatable("potion.potency." + (Math.abs(jct.temperatureLevel) - 1)));
+				}
+
+				if (jct.duration > 20) {
+					mutableComponent = Component.translatable("potion.withDuration", mutableComponent, MobEffectUtil.formatDuration(effectInstance, 1.0f));
+				}
+
+				if (jct.getEffect() == MobEffectRegistry.COLD_FOOD.get() || jct.getEffect() == MobEffectRegistry.COLD_DRINK.get())
+					tooltip.add(mutableComponent.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(6466303))));
+
+				if (jct.getEffect() == MobEffectRegistry.HOT_FOOD.get() || jct.getEffect() == MobEffectRegistry.HOT_DRINk.get())
+					tooltip.add(mutableComponent.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16420407))));
+
+			}
+		}
+	}
+
+	private static void addHydrationTooltip(ItemStack stack, List<Either<FormattedText, TooltipComponent>> tooltips) {
+
+		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
+		assert itemRegistryName != null;
+		JsonThirst jsonThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
+
+		HydrationTooltip hydrationTooltip = null;
+		if (jsonThirst != null) {
+			hydrationTooltip = new HydrationTooltip(jsonThirst.hydration, jsonThirst.saturation, jsonThirst.dirty);
+		} else if (stack.getItem() == Items.POTION) {
+			Potion potion = PotionUtils.getPotion(stack);
+			if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
+			{
+				hydrationTooltip = new HydrationTooltip(HydrationEnum.NORMAL);
+			}
+			else if (potion != Potions.EMPTY)
+			{
+				hydrationTooltip = new HydrationTooltip(HydrationEnum.POTION);
+			}
+		} else if (stack.getItem() instanceof DrinkItem) {
+			HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
+			if (hydrationEnum != null)
+				hydrationTooltip = new HydrationTooltip(hydrationEnum);
+		}
+
+		if (hydrationTooltip != null) {
+			tooltips.add(Either.right(hydrationTooltip));
+		}
 	}
 }

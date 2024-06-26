@@ -1,13 +1,14 @@
 package sfiomn.legendarysurvivaloverhaul.common.items.drink;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
@@ -16,7 +17,7 @@ import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 public class CanteenItem extends DrinkItem {
 
-    public CanteenItem(Properties properties){
+    public CanteenItem(Item.Properties properties){
         super(properties.stacksTo(1));
     }
 
@@ -46,25 +47,25 @@ public class CanteenItem extends DrinkItem {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         HydrationEnum hydrationEnum = ThirstUtil.traceWater(player);
         ItemStack itemstack = player.getItemInHand(hand);
         if (canFill(itemstack) && hydrationEnum == HydrationEnum.NORMAL) {
-            world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
             this.fill(itemstack);
-            return ActionResult.success(itemstack);
+            return InteractionResultHolder.success(itemstack);
         }
         if (canDrink(itemstack) && !CapabilityUtil.getThirstCapability(player).isHydrationLevelAtMax()) {
             player.startUsingItem(hand);
-            return ActionResult.success(itemstack);
+            return InteractionResultHolder.success(itemstack);
         }
-        return ActionResult.fail(itemstack);
+        return InteractionResultHolder.fail(itemstack);
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity) {
-        if (entity instanceof PlayerEntity && canDrink(stack) && !world.isClientSide && Config.Baked.thirstEnabled) {
-            ThirstUtil.takeDrink((PlayerEntity) entity, ThirstUtil.getHydrationEnumTag(stack));
+    public ItemStack finishUsingItem(ItemStack stack, net.minecraft.world.level.Level world, LivingEntity entity) {
+        if (entity instanceof Player && canDrink(stack) && !world.isClientSide && Config.Baked.thirstEnabled) {
+            ThirstUtil.takeDrink((Player) entity, ThirstUtil.getHydrationEnumTag(stack));
             ThirstUtil.setCapacityTag(stack, ThirstUtil.getCapacityTag(stack) - 1);
         }
         return stack;
@@ -82,19 +83,18 @@ public class CanteenItem extends DrinkItem {
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack)
-    {
+    public boolean isBarVisible(ItemStack stack) {
         return ThirstUtil.getCapacityTag(stack) > 0;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack)
+    public int getBarWidth(ItemStack stack)
     {
-        double max = getMaxCapacity();
-        if(max == 0.0d)
-            return 1.0d;
+        float max = getMaxCapacity();
+        if(max == 0.0f)
+            return 1;
 
 
-        return (max - (double)ThirstUtil.getCapacityTag(stack)) / max;
+        return Math.round((max - ThirstUtil.getCapacityTag(stack)) / max);
     }
 }

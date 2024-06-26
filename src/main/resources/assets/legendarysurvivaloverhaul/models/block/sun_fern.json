@@ -6,6 +6,7 @@
 		"3": "legendarysurvivaloverhaul:block/sun_fern",
 		"particle": "legendarysurvivaloverhaul:block/sun_fern"
 	},
+	"render_type": "cutout",
 	"elements": [
 		{
 			"from": [-4.04408, 3.59572, 0],

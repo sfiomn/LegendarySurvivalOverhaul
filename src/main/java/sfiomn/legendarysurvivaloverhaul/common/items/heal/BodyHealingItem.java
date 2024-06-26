@@ -1,20 +1,15 @@
 package sfiomn.legendarysurvivaloverhaul.common.items.heal;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.IBodyDamageCapability;
@@ -22,10 +17,6 @@ import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
-import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class BodyHealingItem extends Item {
 
@@ -33,7 +24,7 @@ public class BodyHealingItem extends Item {
         super(properties);
     }
 
-    public void runSecondaryEffect(PlayerEntity player, ItemStack stack)
+    public void runSecondaryEffect(Player player, ItemStack stack)
     {
         //Can be overridden to run a special task
     }
@@ -54,9 +45,9 @@ public class BodyHealingItem extends Item {
     }
 
     @Override
-    public UseAction getUseAnimation(ItemStack stack)
+    public UseAnim getUseAnimation(ItemStack stack)
     {
-        return UseAction.BOW;
+        return UseAnim.BOW;
     }
 
     @Override
@@ -66,7 +57,7 @@ public class BodyHealingItem extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand)
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand)
     {
         ItemStack stack = player.getItemInHand(hand);
 
@@ -74,7 +65,7 @@ public class BodyHealingItem extends Item {
         {
             // Don't restrict use item if localized Body Damage is disabled
             player.startUsingItem(hand);
-            return ActionResult.success(stack);
+            return InteractionResultHolder.success(stack);
         }
 
         IBodyDamageCapability capability = CapabilityUtil.getBodyDamageCapability(player);
@@ -83,27 +74,27 @@ public class BodyHealingItem extends Item {
             if (capability.getBodyPartDamage(bodyPart) > 0 &&
                     (getHealingCharges() != 0 || capability.getRemainingHealingTicks(bodyPart) == 0)) {
                 player.startUsingItem(hand);
-                return ActionResult.success(stack);
+                return InteractionResultHolder.success(stack);
             }
         }
 
-        return ActionResult.fail(stack);
+        return InteractionResultHolder.fail(stack);
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity)
+    public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity entity)
     {
-        if(!(entity instanceof PlayerEntity) || !Config.Baked.localizedBodyDamageEnabled)
+        if(!(entity instanceof Player) || !Config.Baked.localizedBodyDamageEnabled)
             return stack;
 
         if (world.isClientSide && Minecraft.getInstance().screen == null && getHealingCharges() > 0) {
-            ClientHooks.openBodyHealthScreen((PlayerEntity) entity, entity.getUsedItemHand());
+            ClientHooks.openBodyHealthScreen((Player) entity, entity.getUsedItemHand());
         } else if (getHealingCharges() == 0) {
             for (BodyPartEnum bodyPart: BodyPartEnum.values()) {
-                BodyDamageUtil.applyHealingItem((PlayerEntity) entity, bodyPart, (BodyHealingItem) stack.getItem());
+                BodyDamageUtil.applyHealingItem((Player) entity, bodyPart, (BodyHealingItem) stack.getItem());
             }
-            world.playSound(null, entity, SoundRegistry.HEAL_BODY_PART.get(), SoundCategory.PLAYERS, 1.0f, 1.0f);
-            if (!((PlayerEntity) entity).isCreative())
+            world.playSound(null, entity, SoundRegistry.HEAL_BODY_PART.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            if (!((Player) entity).isCreative())
                 stack.shrink(1);
         }
 
