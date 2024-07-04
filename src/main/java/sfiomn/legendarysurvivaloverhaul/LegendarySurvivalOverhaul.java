@@ -117,6 +117,7 @@ public class LegendarySurvivalOverhaul
 		BlockRegistry.register(modBus);
 		ContainerRegistry.register(modBus);
 		EffectRegistry.register(modBus);
+		FeatureRegistry.register(modBus);
 		ItemRegistry.register(modBus);
 		ParticleTypeRegistry.register(modBus);
 		RecipeRegistry.register(modBus);

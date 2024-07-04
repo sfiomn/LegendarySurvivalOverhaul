@@ -17,32 +17,26 @@ public class RenderThirstOverlay {
 
     private static FocusShader focusShader;
     private static final float DEFAULT_SHADER_INTENSITY = 0;
-    private static final float MAX_SHADER_INTENSITY = 3;
+    private static final float MAX_SHADER_INTENSITY = 4;
     private static final float SHADER_INTENSITY_STEP = 0.05f;
     private static final int HYDRATION_LEVEL_MIN_EFFECT = 6;
     private static final int HYDRATION_LEVEL_MAX_EFFECT = 2;
     private static float shaderIntensity = 0;
     private static int updateTimer = 0;
 
-    public static void render(float partialTicks)
+    public static void render()
     {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        RenderSystem.enableTexture();
-
-        RenderSystem.pushMatrix();
-        RenderSystem.loadIdentity();
-        drawThirstEffect(partialTicks);
-        RenderSystem.popMatrix();
+        drawThirstEffect();
 
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         RenderSystem.disableBlend();
     }
 
-    public static void drawThirstEffect(float partialTicks) {
+    public static void drawThirstEffect() {
         if (!(Minecraft.getInstance().screen instanceof DeathScreen) && focusShader != null) {
-            focusShader.resize();
-            focusShader.render(partialTicks);
+            focusShader.render();
         }
     }
 

@@ -154,10 +154,13 @@ public class Config
 
 		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeNames;
 		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeCategories;
+		public final ForgeConfigSpec.ConfigValue<Integer> sunFernSpawnChance;
 		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeNames;
 		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeCategories;
+		public final ForgeConfigSpec.ConfigValue<Integer> iceFernSpawnChance;
 		public final ForgeConfigSpec.ConfigValue<List<String>> waterPlantBiomeNames;
 		public final ForgeConfigSpec.ConfigValue<List<String>> waterPlantBiomeCategories;
+		public final ForgeConfigSpec.ConfigValue<Integer> waterPlantSpawnChance;
 
 		// Thirst
 		public final ForgeConfigSpec.ConfigValue<Boolean> thirstEnabled;
@@ -543,14 +546,20 @@ public class Config
 					.define("Sun Fern Biome Names Spawn List", new ArrayList<>());
 			sunFernBiomeCategories = builder.comment(" In which biome categories the Sun Fern will spawn.")
 					.define("Sun Fern Biome Categories Spawn List", Arrays.asList("DESERT", "SAVANNA"));
+			sunFernSpawnChance = builder.comment(" 1/X chance to spawn a Sun Fern patch per chunk. Increasing this number reduces the spawn chance.")
+					.defineInRange("Sun Fern Spawn Chance", 50, 1, Integer.MAX_VALUE);
 			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn.")
 					.define("Ice Fern Biome Names Spawn List", new ArrayList<>());
 			iceFernBiomeCategories = builder.comment(" In which biome categories the Ice Fern will spawn.")
 					.define("Ice Fern Biome Categories Spawn List", Arrays.asList("TAIGA", "ICY"));
+			iceFernSpawnChance = builder.comment(" 1/X chance to spawn a Ice Fern patch per chunk. Increasing this number reduces the spawn chance.")
+					.defineInRange("Ice Fern Spawn Chance", 50, 1, Integer.MAX_VALUE);
 			waterPlantBiomeNames = builder.comment(" In which biome names the Water Plant will spawn.")
 					.define("Water Plant Biome Names Spawn List", new ArrayList<>());
 			waterPlantBiomeCategories = builder.comment(" In which biome categories the Water Plant will spawn.")
 					.define("Water Plant Biome Categories Spawn List", Collections.singletonList("DESERT"));
+			waterPlantSpawnChance = builder.comment(" 1/X chance to spawn a Water Plant patch per chunk. Increasing this number reduces the spawn chance.")
+					.defineInRange("Water Plant Spawn Chance", 50, 1, Integer.MAX_VALUE);
 			builder.pop();
 
 			builder.pop();
@@ -1033,10 +1042,13 @@ public class Config
 		// Environment
 		public static List<String> sunFernBiomeNames;
 		public static List<String> sunFernBiomeCategories;
+		public static int sunFernSpawnChance;
 		public static List<String> iceFernBiomeNames;
 		public static List<String> iceFernBiomeCategories;
+		public static int iceFernSpawnChance;
 		public static List<String> waterPlantBiomeNames;
 		public static List<String> waterPlantBiomeCategories;
+		public static int waterPlantSpawnChance;
 
 		// Thirst
 		public static boolean thirstEnabled;
@@ -1257,10 +1269,13 @@ public class Config
 
 				sunFernBiomeNames = COMMON.sunFernBiomeNames.get();
 				sunFernBiomeCategories = COMMON.sunFernBiomeCategories.get();
+				sunFernSpawnChance = COMMON.sunFernSpawnChance.get();
 				iceFernBiomeNames = COMMON.iceFernBiomeNames.get();
 				iceFernBiomeCategories = COMMON.iceFernBiomeCategories.get();
+				iceFernSpawnChance = COMMON.iceFernSpawnChance.get();
 				waterPlantBiomeNames = COMMON.waterPlantBiomeNames.get();
 				waterPlantBiomeCategories = COMMON.waterPlantBiomeCategories.get();
+				waterPlantSpawnChance = COMMON.waterPlantSpawnChance.get();
 
 				thirstEnabled = COMMON.thirstEnabled.get();
 				dangerousDehydration = COMMON.dangerousDehydration.get();

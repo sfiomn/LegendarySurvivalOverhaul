@@ -3,44 +3,41 @@ package sfiomn.legendarysurvivaloverhaul.common.world.gen;
 import net.minecraft.world.gen.blockplacer.DoublePlantBlockPlacer;
 import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
-import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.Features;
+import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.NoiseDependant;
 import net.minecraft.world.gen.placement.Placement;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.FeatureRegistry;
 
 public class ModConfiguredFeatures {
 
-    public static final ConfiguredFeature<?, ?> SUN_FERN_CONFIG = Feature.FLOWER
+    public static final ConfiguredFeature<?, ?> SUN_FERN_CONFIG = FeatureRegistry.FERN.get()
             .configured((new BlockClusterFeatureConfig.Builder(
                     new SimpleBlockStateProvider(BlockRegistry.SUN_FERN.get().defaultBlockState()), SimpleBlockPlacer.INSTANCE))
-                    .tries(48)
+                    .tries(1)
+                    .canReplace()
                     .build())
-            .decorated(Features.Placements.ADD_32)
-            .decorated(Features.Placements.HEIGHTMAP)
-            .squared()
-            .decorated(Placement.COUNT_NOISE.configured(new NoiseDependant(-0.8D, 15, 3)));
+            .count(FeatureSpread.of(5, 3))
+            .decorated(Placement.CHANCE.configured(new ChanceConfig(Config.Baked.sunFernSpawnChance)));
 
-    public static final ConfiguredFeature<?, ?> ICE_FERN_CONFIG = Feature.FLOWER
+    public static final ConfiguredFeature<?, ?> ICE_FERN_CONFIG = FeatureRegistry.FERN.get()
             .configured((new BlockClusterFeatureConfig.Builder(
                     new SimpleBlockStateProvider(BlockRegistry.ICE_FERN.get().defaultBlockState()), SimpleBlockPlacer.INSTANCE))
-                    .tries(48)
+                    .tries(1)
+                    .canReplace()
                     .build())
-            .decorated(Features.Placements.ADD_32)
-            .decorated(Features.Placements.HEIGHTMAP)
-            .squared()
-            .decorated(Placement.COUNT_NOISE.configured(new NoiseDependant(-0.8D, 15, 3)));
+            .count(FeatureSpread.of(5, 3))
+            .decorated(Placement.CHANCE.configured(new ChanceConfig(Config.Baked.iceFernSpawnChance)));
 
 
-    public static final ConfiguredFeature<?, ?> WATER_PLANT_CONFIG = Feature.RANDOM_PATCH
+    public static final ConfiguredFeature<?, ?> WATER_PLANT_CONFIG = FeatureRegistry.WATER_PLANT.get()
             .configured((new BlockClusterFeatureConfig.Builder(
                     new SimpleBlockStateProvider(BlockRegistry.WATER_PLANT.get().defaultBlockState()), DoublePlantBlockPlacer.INSTANCE))
-                    .tries(2)
+                    .tries(1)
+                    .canReplace()
                     .build())
-            .decorated(Features.Placements.ADD_32)
-            .decorated(Features.Placements.HEIGHTMAP)
-            .squared()
-            .decorated(Placement.COUNT_NOISE.configured(new NoiseDependant(-0.8D, 3, 1)));
+            .count(FeatureSpread.of(3, 5))
+            .decorated(Placement.CHANCE.configured(new ChanceConfig(Config.Baked.waterPlantSpawnChance)));
 }

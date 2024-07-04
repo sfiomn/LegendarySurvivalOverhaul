@@ -126,23 +126,23 @@ public class ModClientEvents {
 
     @SubscribeEvent
     public static void onRenderGameOverlayEffects(RenderGameOverlayEvent.Post event) {
-        if (minecraft.gameMode == null || !minecraft.gameMode.hasExperience()) return;
+        if (event.isCanceled() || minecraft.gameMode == null || !minecraft.gameMode.hasExperience()) return;
 
         int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
         int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
 
-        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD) {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD && !minecraft.options.hideGui) {
 
             if (Config.Baked.thirstEnabled) {
-                if (!minecraft.options.hideGui) {
-                    RenderThirstGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
-                }
+                RenderThirstGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
 
             if (Config.Baked.localizedBodyDamageEnabled) {
-                if (!minecraft.options.hideGui) {
-                    RenderBodyDamageGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
-                }
+                RenderBodyDamageGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+            }
+
+            if (Config.Baked.temperatureEnabled) {
+                RenderTemperatureGui.renderFoodBarEffect(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
         }
 
@@ -154,31 +154,11 @@ public class ModClientEvents {
             }
             RenderTemperatureOverlay.render(event.getMatrixStack(), scaledWidth, scaledHeight);
         }
-    }
-
-    @SubscribeEvent
-    public static void onRenderTickThirst(TickEvent.RenderTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || minecraft.gameMode == null || !minecraft.gameMode.hasExperience() || minecraft.player == null) return;
 
         if (Config.Baked.thirstEnabled) {
-            RenderThirstOverlay.render(event.renderTickTime);
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onRenderGameOverlayColdHungerEffect(RenderGameOverlayEvent.Post event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.FOOD || minecraft.gameMode == null || !minecraft.gameMode.hasExperience())
-            return;
-
-        if (event.isCanceled() || !Config.Baked.temperatureEnabled)
-            return;
-
-        int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
-        int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
-
-        if (!minecraft.options.hideGui) {
-            assert minecraft.player != null;
-            RenderTemperatureGui.renderFoodBarEffect(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+            try {
+                RenderThirstOverlay.render();
+            } catch (Exception ignored) {}
         }
     }
 
