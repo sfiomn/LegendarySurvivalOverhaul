@@ -35,25 +35,25 @@ public class SereneSeasonsUtil {
         int seasonType = getSeasonType(world.getBiome(blockPos));
         int subSeasonDuration = (int) ((double) season.getSubSeasonDuration() / (double) season.getDayDuration());
 
-        String subSeasonName = "";
+        StringBuilder subSeasonName = new StringBuilder();
         TranslationTextComponent seasonTextTranslate;
         if (seasonType == 2) {
             return new StringTextComponent(new TranslationTextComponent("message.legendarysurvivaloverhaul.sereneseasons.no_season_info").getString());
         } else if (seasonType == 1 && Config.Baked.tropicalSeasonsEnabled) {
             for(String word : season.getTropicalSeason().toString().split("_", 0)) {
-                subSeasonName = word.charAt(0) + word.substring(1).toLowerCase();
+                subSeasonName.append(word.charAt(0)).append(word.substring(1).toLowerCase()).append(" ");
             }
             seasonTextTranslate = new TranslationTextComponent("message.legendarysurvivaloverhaul.sereneseasons.season_info",
-                    subSeasonName,
-                    (season.getDay() + subSeasonDuration) % (subSeasonDuration * 2),
+                    subSeasonName.toString(),
+                    ((season.getDay() + subSeasonDuration) % (subSeasonDuration * 2)) + 1,
                     subSeasonDuration * 2);
         } else {
             for(String word : season.getSubSeason().toString().split("_", 0)) {
-                subSeasonName = word.charAt(0) + word.substring(1).toLowerCase();
+                subSeasonName.append(word.charAt(0)).append(word.substring(1).toLowerCase()).append(" ");
             }
             seasonTextTranslate = new TranslationTextComponent("message.legendarysurvivaloverhaul.sereneseasons.season_info",
-                    subSeasonName,
-                    season.getDay() % subSeasonDuration,
+                    subSeasonName.toString(),
+                    (season.getDay() % subSeasonDuration) + 1,
                     subSeasonDuration);
         }
         return new StringTextComponent(seasonTextTranslate.getString());

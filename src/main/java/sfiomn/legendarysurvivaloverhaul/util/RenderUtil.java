@@ -23,8 +23,7 @@ public final class RenderUtil
 	 */
 	public static void drawTexturedModelRect(Matrix4f matrix, float x, float y, int width, int height, int texX, int texY, int texWidth, int texHeight)
 	{
-		// These are some weirdly specific constants but I'm too scared to change them
-		
+		// f & f1 means 1/256 as we assume the image size to be 256x256
 		float f = 0.00390625f;
 		float f1 = 0.00390625f;
 		float z = 0.0f;
