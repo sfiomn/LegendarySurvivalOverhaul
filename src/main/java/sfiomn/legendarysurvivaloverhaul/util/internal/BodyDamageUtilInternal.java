@@ -46,7 +46,7 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
                 try {
                     malusThreshold = MathHelper.clamp(malus.thresholds.get(i), 0.0f, 1.0f);
                 } catch (IndexOutOfBoundsException e) {
-                    LegendarySurvivalOverhaul.LOGGER.debug("No threshold defined for effect {} in {}", Config.Baked.headPartEffects.get(i), malus.name());
+                    LegendarySurvivalOverhaul.LOGGER.debug("No threshold defined for effect {} in {}", malus.thresholds.get(i), malus.name());
                     continue;
                 }
                 malusEffects.put(malusThreshold, Pair.of(malusEffect, malusAmplifier));

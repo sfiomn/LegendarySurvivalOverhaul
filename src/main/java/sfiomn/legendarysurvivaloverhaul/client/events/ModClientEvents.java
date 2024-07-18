@@ -144,14 +144,16 @@ public class ModClientEvents {
             if (Config.Baked.temperatureEnabled) {
                 RenderTemperatureGui.renderFoodBarEffect(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
+
+            if (Config.Baked.temperatureEnabled) {
+                RenderTemperatureGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
+            }
         }
 
         //  Render overlay after all rendering
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
+
         if (Config.Baked.temperatureEnabled) {
-            if (!minecraft.options.hideGui) {
-                RenderTemperatureGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
-            }
             RenderTemperatureOverlay.render(event.getMatrixStack(), scaledWidth, scaledHeight);
         }
 

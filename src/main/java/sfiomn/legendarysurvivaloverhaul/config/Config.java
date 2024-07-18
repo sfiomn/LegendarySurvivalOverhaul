@@ -495,7 +495,9 @@ public class Config
 							" If disabled, when serene season defines no season effects, no season temperature will be applied.")
 					.define("Default Season Enabled", true);
 
-			builder.comment(" Temperature modifiers per season in temperate biomes.").push("temperate");
+			builder.comment(" Temperature modifiers per season in temperate biomes." +
+					" The value is reached at the middle of the sub season, and smoothly transition from one to another.")
+					.push("temperate");
 			builder.push("spring");
 			earlySpringModifier = builder.define("Early Spring Modifier", -3);
 			midSpringModifier = builder.define("Mid Spring Modifier", 0);
