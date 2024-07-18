@@ -13,6 +13,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 import javax.annotation.Nullable;
@@ -67,7 +68,9 @@ public class MorphineItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag isAdvanced) {
-        tooltip.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.morphine"));
+        if(Config.Baked.localizedBodyDamageEnabled) {
+            tooltip.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.morphine"));
+        }
         super.appendHoverText(stack, world, tooltip, isAdvanced);
     }
 }
