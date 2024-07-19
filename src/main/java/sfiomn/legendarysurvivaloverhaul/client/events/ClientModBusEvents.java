@@ -23,7 +23,7 @@ import static sfiomn.legendarysurvivaloverhaul.client.render.RenderThirstOverlay
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientModBusEvents {
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent
     public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
         event.registerBelow(VanillaGuiOverlay.FOOD_LEVEL.id(), "cold_hunger", FOOD_BAR_COLD_EFFECT_GUI);
 
