@@ -4,6 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.ParticleDescriptionProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,6 +31,7 @@ public final class DataGenerators
 
 		gen.addProvider(event.includeClient(), new ModBlockStateProvider(packOutput, existingFileHelper));
 		gen.addProvider(event.includeClient(), new ModItemModelProvider(packOutput, existingFileHelper));
+		gen.addProvider(event.includeClient(), new ModParticleProvider(packOutput, existingFileHelper));
 
 		ModBlockTagProvider blockTagProvider = gen.addProvider(event.includeServer(),
 				new ModBlockTagProvider(packOutput, lookupProvider, existingFileHelper));
