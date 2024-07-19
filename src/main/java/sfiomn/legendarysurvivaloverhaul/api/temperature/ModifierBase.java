@@ -1,11 +1,15 @@
 package sfiomn.legendarysurvivaloverhaul.api.temperature;
 
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryBuilder;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
@@ -32,14 +36,13 @@ public abstract class ModifierBase {
 	 * 
 	 * Blocks
 	 * Tile Entities
-	 * Player Huddling?
+	 * Player Huddling
 	 * --
 	 * Unique Player Modifiers
 	 * 
 	 * Armor
 	 * Sprinting
 	 * Temporary
-	 * Windchill?
 	 */
 	
 	/**
@@ -148,11 +151,5 @@ public abstract class ModifierBase {
 	protected float normalizeToPositiveNegative(float value)
 	{
 		return (value * 2.0f) - 1.0f;
-	}
-	
-	@Override
-	public String toString()
-	{
-		return this.getRegistryName().toString();
 	}
 }

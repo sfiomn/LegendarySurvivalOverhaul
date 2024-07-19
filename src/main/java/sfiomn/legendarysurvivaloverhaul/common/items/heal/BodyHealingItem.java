@@ -84,15 +84,22 @@ public class BodyHealingItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity entity)
     {
-        if(!(entity instanceof Player) || !Config.Baked.localizedBodyDamageEnabled)
+        if(!(entity instanceof Player player))
             return stack;
 
+        if (!Config.Baked.localizedBodyDamageEnabled) {
+            runSecondaryEffect(player, stack);
+            stack.shrink(1);
+            return stack;
+        }
+
         if (world.isClientSide && Minecraft.getInstance().screen == null && getHealingCharges() > 0) {
-            ClientHooks.openBodyHealthScreen((Player) entity, entity.getUsedItemHand());
+            ClientHooks.openBodyHealthScreen(player, entity.getUsedItemHand());
         } else if (getHealingCharges() == 0) {
             for (BodyPartEnum bodyPart: BodyPartEnum.values()) {
-                BodyDamageUtil.applyHealingItem((Player) entity, bodyPart, (BodyHealingItem) stack.getItem());
+                BodyDamageUtil.applyHealingItem(player, bodyPart, (BodyHealingItem) stack.getItem());
             }
+            runSecondaryEffect(player, stack);
             world.playSound(null, entity, SoundRegistry.HEAL_BODY_PART.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
             if (!((Player) entity).isCreative())
                 stack.shrink(1);

@@ -1,9 +1,0 @@
-{
-	"variants":
-	{
-		"facing=south": { "model": "legendarysurvivaloverhaul:block/heater_top", "x": 0, "y": 0 },
-		"facing=west": { "model": "legendarysurvivaloverhaul:block/heater_top", "x": 0, "y": 90 },
-		"facing=north": { "model": "legendarysurvivaloverhaul:block/heater_top", "x": 0, "y": 180 },
-		"facing=east": { "model": "legendarysurvivaloverhaul:block/heater_top", "x": 0, "y": 270 }
-	}
-}

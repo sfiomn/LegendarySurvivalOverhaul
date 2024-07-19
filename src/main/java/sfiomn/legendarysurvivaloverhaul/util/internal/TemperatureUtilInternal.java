@@ -1,22 +1,12 @@
 package sfiomn.legendarysurvivaloverhaul.util.internal;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.item.DebugStickItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ITemperatureUtil;
@@ -24,6 +14,8 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
+
+import static sfiomn.legendarysurvivaloverhaul.registry.TemperatureModifierRegistry.*;
 
 
 public class TemperatureUtilInternal implements ITemperatureUtil
@@ -37,23 +29,23 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 		Level world = player.getCommandSenderWorld();
 		BlockPos pos = WorldUtil.getSidedBlockPos(world, player);
 		
-		for(ModifierBase modifier : RegistryAccess.fromRegistryOfRegistries(ModifierBase.class).getValues())
+		for(ModifierBase modifier : MODIFIERS_REGISTRY.get().getValues())
 		{
 			float worldInfluence = modifier.getWorldInfluence(world, pos);
 			float playerInfluence = modifier.getPlayerInfluence(player);
 			if (player.getMainHandItem().getItem() == Items.DEBUG_STICK) {
-				LegendarySurvivalOverhaul.LOGGER.debug(modifier.getRegistryName() + " : world influence=" + worldInfluence + ", player influence=" + playerInfluence);
+				LegendarySurvivalOverhaul.LOGGER.debug(MODIFIERS_REGISTRY.get().getKey(modifier) + " : world influence=" + worldInfluence + ", player influence=" + playerInfluence);
 			}
 
 			sum += worldInfluence + playerInfluence;
 		}
 		
-		for (DynamicModifierBase dynamicModifier : GameRegistry.findRegistry(DynamicModifierBase.class).getValues())
+		for (DynamicModifierBase dynamicModifier : DYNAMIC_MODIFIERS_REGISTRY.get().getValues())
 		{
 			float worldInfluence = dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);
 			float playerInfluence = dynamicModifier.applyDynamicPlayerInfluence(player, sum);
 			if (player.getMainHandItem().getItem() == Items.DEBUG_STICK) {
-				LegendarySurvivalOverhaul.LOGGER.debug(dynamicModifier.getRegistryName() + " : world influence=" + worldInfluence + ", player influence=" + playerInfluence);
+				LegendarySurvivalOverhaul.LOGGER.debug(DYNAMIC_MODIFIERS_REGISTRY.get().getKey(dynamicModifier) + " : world influence=" + worldInfluence + ", player influence=" + playerInfluence);
 			}
 
 			sum += worldInfluence + playerInfluence;
@@ -66,12 +58,12 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	{
 		float sum = 0.0f;
 
-		for(ModifierBase modifier : GameRegistry.findRegistry(ModifierBase.class).getValues())
+		for(ModifierBase modifier : MODIFIERS_REGISTRY.get().getValues())
 		{
 			// LegendarySurvivalOverhaul.LOGGER.debug("tmp influence : " + modifier.getRegistryName() + ", " + modifier.getWorldInfluence(world, pos));
 			sum += modifier.getWorldInfluence(world, pos);
 		}
-		for (DynamicModifierBase dynamicModifier : GameRegistry.findRegistry(DynamicModifierBase.class).getValues())
+		for (DynamicModifierBase dynamicModifier : DYNAMIC_MODIFIERS_REGISTRY.get().getValues())
 		{
 			// LegendarySurvivalOverhaul.LOGGER.debug("tmp influence : " + dynamicModifier.getRegistryName() + ", " + dynamicModifier.applyDynamicWorldInfluence(world, pos, sum));
 			sum += dynamicModifier.applyDynamicWorldInfluence(world, pos, sum);

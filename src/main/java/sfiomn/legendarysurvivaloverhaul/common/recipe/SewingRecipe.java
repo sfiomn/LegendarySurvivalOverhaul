@@ -39,7 +39,7 @@ public class SewingRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public boolean matches(SimpleContainer simpleContainer, Level level) {
+    public boolean matches(@NotNull SimpleContainer simpleContainer, Level level) {
         if (level.isClientSide)
             return false;
 
@@ -48,10 +48,10 @@ public class SewingRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public ItemStack assemble(SimpleContainer simpleContainer, RegistryAccess registryAccess) {
+    public @NotNull ItemStack assemble(@NotNull SimpleContainer simpleContainer, @NotNull RegistryAccess registryAccess) {
         ItemStack itemstack = this.result.copy();
 
-        if (itemstack.getItem() instanceof ArmorItem && simpleContainer.getItem(1).getItem() instanceof CoatItem) {
+        if (itemstack.getItem() instanceof ArmorItem && simpleContainer.getItem(1).getItem() instanceof CoatItem coatItem) {
             if (simpleContainer.getItem(0).getItem() instanceof ArmorItem) {
                 CompoundTag CompoundTag = simpleContainer.getItem(0).getTag();
                 if (CompoundTag != null) {
@@ -59,7 +59,6 @@ public class SewingRecipe implements Recipe<SimpleContainer> {
                 }
             }
 
-            CoatItem coatItem = (CoatItem) simpleContainer.getItem(1).getItem();
             TemperatureUtil.setArmorCoatTag(itemstack, coatItem.coat.id());
         }
 
@@ -72,17 +71,16 @@ public class SewingRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
+    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
         ItemStack itemstack = result.copy();
 
-        if (itemstack.getItem() instanceof ArmorItem && this.addition.getItems()[0].getItem() instanceof CoatItem) {
+        if (itemstack.getItem() instanceof ArmorItem && this.addition.getItems()[0].getItem() instanceof CoatItem coatItem) {
             if (this.base.getItems()[0].getItem() instanceof ArmorItem) {
                 CompoundTag CompoundTag = this.base.getItems()[0].getTag();
                 if (CompoundTag != null) {
                     itemstack.setTag(CompoundTag.copy());
                 }
             }
-            CoatItem coatItem = (CoatItem) this.addition.getItems()[0].getItem();
             TemperatureUtil.setArmorCoatTag(itemstack, coatItem.coat.id());
         }
         return itemstack;

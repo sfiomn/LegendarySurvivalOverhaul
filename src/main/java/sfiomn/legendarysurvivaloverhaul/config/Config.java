@@ -5,15 +5,13 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.client.render.TemperatureDisplayEnum;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureDisplayEnum;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,8 +48,8 @@ public class Config
 			e.printStackTrace();
 		}
 		
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_SPEC, "legendarysurvivaloverhaul/legendarysurvivaloverhaul-client.toml");
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_SPEC, "legendarysurvivaloverhaul/legendarysurvivaloverhaul-common.toml");
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_SPEC, LegendarySurvivalOverhaul.MOD_ID + "/" + LegendarySurvivalOverhaul.MOD_ID +"-client.toml");
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_SPEC, LegendarySurvivalOverhaul.MOD_ID + "/" + LegendarySurvivalOverhaul.MOD_ID +"-common.toml");
 		
 		JsonConfigRegistration.init(LegendarySurvivalOverhaul.modConfigJsons.toFile());
 	}
@@ -59,7 +57,6 @@ public class Config
 	public static class Common
 	{
 		// Core/Advanced
-		// public final ForgeConfigSpec.ConfigValue<Boolean> forceDisableFlightKick;
 		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
 		public final ForgeConfigSpec.ConfigValue<Boolean> hideInfoFromDebug;
 		public final ForgeConfigSpec.ConfigValue<Double> baseFoodExhaustion;
@@ -151,13 +148,6 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> earlyDrySeasonModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> midDrySeasonModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> lateDrySeasonModifier;
-
-		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeNames;
-		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeCategories;
-		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeNames;
-		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeCategories;
-		public final ForgeConfigSpec.ConfigValue<List<String>> waterPlantBiomeNames;
-		public final ForgeConfigSpec.ConfigValue<List<String>> waterPlantBiomeCategories;
 
 		// Thirst
 		public final ForgeConfigSpec.ConfigValue<Boolean> thirstEnabled;
@@ -492,7 +482,9 @@ public class Config
 							" If disabled, when serene season defines no season effects, no season temperature will be applied.")
 					.define("Default Season Enabled", true);
 
-			builder.comment(" Temperature modifiers per season in temperate biomes.").push("temperate");
+			builder.comment(" Temperature modifiers per season in temperate biomes." +
+					" The value is reached at the middle of the sub season, and smoothly transition from one to another.")
+					.push("temperate");
 			builder.push("spring");
 			earlySpringModifier = builder.define("Early Spring Modifier", -3);
 			midSpringModifier = builder.define("Mid Spring Modifier", 0);
@@ -534,25 +526,6 @@ public class Config
 
 			builder.pop();
 			builder.pop();
-			builder.pop();
-
-			builder.push("environment");
-
-			builder.push("flowers");
-			sunFernBiomeNames = builder.comment(" In which biome names the Sun Fern will spawn.")
-					.define("Sun Fern Biome Names Spawn List", new ArrayList<>());
-			sunFernBiomeCategories = builder.comment(" In which biome categories the Sun Fern will spawn.")
-					.define("Sun Fern Biome Categories Spawn List", Arrays.asList("DESERT", "SAVANNA"));
-			iceFernBiomeNames = builder.comment(" In which biome names the Ice Fern will spawn.")
-					.define("Ice Fern Biome Names Spawn List", new ArrayList<>());
-			iceFernBiomeCategories = builder.comment(" In which biome categories the Ice Fern will spawn.")
-					.define("Ice Fern Biome Categories Spawn List", Arrays.asList("TAIGA", "ICY"));
-			waterPlantBiomeNames = builder.comment(" In which biome names the Water Plant will spawn.")
-					.define("Water Plant Biome Names Spawn List", new ArrayList<>());
-			waterPlantBiomeCategories = builder.comment(" In which biome categories the Water Plant will spawn.")
-					.define("Water Plant Biome Categories Spawn List", Collections.singletonList("DESERT"));
-			builder.pop();
-
 			builder.pop();
 
 			builder.comment(" Options related to thirst").push("thirst");
@@ -768,39 +741,39 @@ public class Config
 					.push("head");
 			headPartEffects = builder
 					.comment(" The list of effects that will be triggered when the head is damaged by the percentage of remaining head health defined in the thresholds.")
-					.define("Head Part Effects", Collections.singletonList(LegendarySurvivalOverhaul.MOD_ID + ":headache"));
+					.define("Head Part Effects", List.of(LegendarySurvivalOverhaul.MOD_ID + ":headache"));
 			headPartEffectAmplifiers = builder
 					.comment(" The list of amplifiers the effect will have.",
 							" 0 means the basic effect, 1 means the effect is amplified once.")
-					.define(" Head Part Effect Amplifiers", Collections.singletonList(0));
+					.define("Head Part Effect Amplifiers", List.of(0));
 			headPartEffectThresholds = builder
 					.comment(" The list of thresholds for which each effect will be triggered. A threshold is a percentage of remaining head health.",
 							" 0 means the head is fully damaged.")
-					.define(" Head Part Effect Thresholds", Collections.singletonList(0.2f));
+					.define("Head Part Effect Thresholds", List.of(0.2f));
 			builder.pop();
 			builder.push("arms");
-			armsPartEffects = builder.define("Arms Part Effects", Collections.singletonList("minecraft:mining_fatigue"));
-			armsPartEffectAmplifiers = builder.define("Arms Part Effect Amplifiers", Collections.singletonList(0));
-			armsPartEffectThresholds = builder.define("Arms Part Effect Thresholds", Collections.singletonList(0.2f));
+			armsPartEffects = builder.define("Arms Part Effects", List.of("minecraft:mining_fatigue"));
+			armsPartEffectAmplifiers = builder.define("Arms Part Effect Amplifiers", List.of(0));
+			armsPartEffectThresholds = builder.define("Arms Part Effect Thresholds", List.of(0.2f));
 			bothArmsPartEffects = builder
 					.comment(" These effects will be triggered when both arms reach the thresholds.",
 							" If a same effect is used with a higher amplifier, the higher prevails (normal Minecraft behaviour).")
-					.define("Both Arms Part Effects", Collections.singletonList("minecraft:weakness"));
-			bothArmsPartEffectAmplifiers = builder.define("Both Arms Part Effect Amplifiers", Collections.singletonList(0));
-			bothArmsPartEffectThresholds = builder.define("Both Arms Part Effect Thresholds", Collections.singletonList(0.2f));
+					.define("Both Arms Part Effects", List.of("minecraft:weakness"));
+			bothArmsPartEffectAmplifiers = builder.define("Both Arms Part Effect Amplifiers", List.of(0));
+			bothArmsPartEffectThresholds = builder.define("Both Arms Part Effect Thresholds", List.of(0.2f));
 			builder.pop();
 			builder.push("chest");
-			chestPartEffects = builder.define(" Chest Part Effects", Collections.singletonList(LegendarySurvivalOverhaul.MOD_ID + ":vulnerability"));
-			chestPartEffectAmplifiers = builder.define(" Chest Part Effect Amplifier", Collections.singletonList(0));
-			chestPartEffectThresholds = builder.define(" Chest Part Effect Thresholds", Collections.singletonList(0.2f));
+			chestPartEffects = builder.define("Chest Part Effects", List.of(LegendarySurvivalOverhaul.MOD_ID + ":vulnerability"));
+			chestPartEffectAmplifiers = builder.define("Chest Part Effect Amplifier", List.of(0));
+			chestPartEffectThresholds = builder.define("Chest Part Effect Thresholds", List.of(0.2f));
 			builder.pop();
 			builder.push("legs");
-			legsPartEffects = builder.define("Legs Part Effects", Collections.singletonList(LegendarySurvivalOverhaul.MOD_ID + ":hard_falling"));
-			legsPartEffectAmplifiers = builder.define("Legs Part Effect Amplifiers", Collections.singletonList(0));
-			legsPartEffectThresholds = builder.define("Legs Part Effect Thresholds", Collections.singletonList(0.2f));
-			bothLegsPartEffects = builder.define("Both Legs Part Effects", Collections.singletonList(LegendarySurvivalOverhaul.MOD_ID + ":hard_falling"));
-			bothLegsPartEffectAmplifiers = builder.define("Both Legs Part Effect Amplifiers", Collections.singletonList(1));
-			bothLegsPartEffectThresholds = builder.define("Both Legs Part Effect Thresholds", Collections.singletonList(0.2f));
+			legsPartEffects = builder.define("Legs Part Effects", List.of(LegendarySurvivalOverhaul.MOD_ID + ":hard_falling"));
+			legsPartEffectAmplifiers = builder.define("Legs Part Effect Amplifiers", List.of(0));
+			legsPartEffectThresholds = builder.define("Legs Part Effect Thresholds", List.of(0.2f));
+			bothLegsPartEffects = builder.define("Both Legs Part Effects", List.of(LegendarySurvivalOverhaul.MOD_ID + ":hard_falling"));
+			bothLegsPartEffectAmplifiers = builder.define("Both Legs Part Effect Amplifiers", List.of(1));
+			bothLegsPartEffectThresholds = builder.define("Both Legs Part Effect Thresholds", List.of(0.2f));
 			builder.pop();
 			builder.push("feet");
 			feetPartEffects = builder.define("Feet Part Effects", Collections.singletonList("minecraft:slowness"));
@@ -900,7 +873,7 @@ public class Config
 					.define("Season Cards Y Offset", 0);
 			seasonCardsSpawnDimensionDelayInTicks = builder
 					.comment(" The delay before rendering the season card at first player spawn or player dimension change.")
-					.defineInRange("Season Cards Delay In Ticks", 40, 0, Integer.MAX_VALUE);
+					.defineInRange("Season Cards Delay In Ticks", 80, 0, Integer.MAX_VALUE);
 			seasonCardsDisplayTimeInTicks = builder
 					.comment(" The display time in ticks that the season card will be fully rendered.")
 					.defineInRange("Season Cards Display Time In Ticks", 40, 0, Integer.MAX_VALUE);
@@ -1029,14 +1002,6 @@ public class Config
 		public static int earlyDrySeasonModifier;
 		public static int midDrySeasonModifier;
 		public static int lateDrySeasonModifier;
-
-		// Environment
-		public static List<String> sunFernBiomeNames;
-		public static List<String> sunFernBiomeCategories;
-		public static List<String> iceFernBiomeNames;
-		public static List<String> iceFernBiomeCategories;
-		public static List<String> waterPlantBiomeNames;
-		public static List<String> waterPlantBiomeCategories;
 
 		// Thirst
 		public static boolean thirstEnabled;
@@ -1254,13 +1219,6 @@ public class Config
 				earlyDrySeasonModifier = COMMON.earlyDrySeasonModifier.get();
 				midDrySeasonModifier = COMMON.midDrySeasonModifier.get();
 				lateDrySeasonModifier = COMMON.lateDrySeasonModifier.get();
-
-				sunFernBiomeNames = COMMON.sunFernBiomeNames.get();
-				sunFernBiomeCategories = COMMON.sunFernBiomeCategories.get();
-				iceFernBiomeNames = COMMON.iceFernBiomeNames.get();
-				iceFernBiomeCategories = COMMON.iceFernBiomeCategories.get();
-				waterPlantBiomeNames = COMMON.waterPlantBiomeNames.get();
-				waterPlantBiomeCategories = COMMON.waterPlantBiomeCategories.get();
 
 				thirstEnabled = COMMON.thirstEnabled.get();
 				dangerousDehydration = COMMON.dangerousDehydration.get();

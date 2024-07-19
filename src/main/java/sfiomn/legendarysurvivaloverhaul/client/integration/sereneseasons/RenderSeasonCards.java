@@ -1,7 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -9,12 +10,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.ServerConfig;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
+import sfiomn.legendarysurvivaloverhaul.util.RenderUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderSeasonCards {
@@ -24,8 +27,6 @@ public class RenderSeasonCards {
     private static final ResourceLocation WINTER_CARD = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/cards/winter.png");
     private static final ResourceLocation DRY_CARD = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/cards/dry.png");
     private static final ResourceLocation WET_CARD = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/cards/wet.png");
-    private static final int CARD_TEXT_WIDTH = 256;
-    private	static final int CARD_TEXT_HEIGHT = 256;
     private static final int CARD_WIDTH = 128;
     private	static final int CARD_HEIGHT = 128;
     private static ResourceLocation seasonCard = null;
@@ -34,36 +35,28 @@ public class RenderSeasonCards {
     private static ResourceKey<Level> lastDimension = null;
     private static boolean isDimensionSeasonal;
     private static float fadeLevel = 0;
-    private static final int delayTimeTicks = Config.Baked.seasonCardsSpawnDimensionDelayInTicks;
-    private static int delayTimer = delayTimeTicks;
+    private static int delayTimer = 0;
     private static int cardTimer = 0;
 
-    public static void render(GuiGraphics gui, int width, int height)
-    {
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.disableColorLogicOp();
-        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, fadeLevel);
-
-        drawSeasonCard(gui, width, height);
-
-        RenderSystem.clearColor(1.0F,1.0F,1.0F,1.0F);
-        RenderSystem.enableColorLogicOp();
-        RenderSystem.disableBlend();
-    }
-
-    public static void drawSeasonCard(GuiGraphics gui, int width, int height) {
-        if (seasonCard != null) {
+    public static IGuiOverlay SEASON_CARD_GUI = (forgeGui, guiGraphics, partialTicks, width, height) -> {
+        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && Config.Baked.seasonCardsEnabled && seasonCard != null) {
             int x = Mth.floor(width / 2.0f - CARD_WIDTH / 2.0f);
             int y = Mth.floor(height / 4.0f - CARD_HEIGHT / 2.0f);
-            gui.blit(seasonCard, x + Config.Baked.seasonCardsOffsetX, y + Config.Baked.seasonCardsOffsetY, CARD_WIDTH, CARD_HEIGHT, 0, 0, CARD_TEXT_WIDTH, CARD_TEXT_HEIGHT);
+
+            forgeGui.setupOverlayRenderState(true, false);
+
+            Minecraft.getInstance().getProfiler().push("season_card");
+            RenderSystem.setShaderTexture(0, seasonCard);
+            RenderUtil.drawTexturedModelRectWithAlpha(guiGraphics.pose().last().pose(), x + Config.Baked.seasonCardsOffsetX, y + Config.Baked.seasonCardsOffsetY, 128, 128, 0, 0, 256, 256, fadeLevel);
+            Minecraft.getInstance().getProfiler().pop();
         }
-    }
+    };
 
     public static void updateSeasonCardFading(Player player) {
         if (player != null && player.isAlive()) {
             Level level = player.level();
             if (lastDimension == null || lastDimension != level.dimension()) {
+                delayTimer = Config.Baked.seasonCardsSpawnDimensionDelayInTicks;
                 isDimensionSeasonal = ServerConfig.isDimensionWhitelisted(level.dimension());
                 lastDimension = level.dimension();
             }
@@ -81,11 +74,11 @@ public class RenderSeasonCards {
 
             Season currentSeason = null;
             SereneSeasonsUtil.TropicalSeason currentTropicalSeason = null;
-            int seasonType = SereneSeasonsUtil.getSeasonType(level, level.getBiome(player.blockPosition()).get());
+            SereneSeasonsUtil.SeasonType seasonType = SereneSeasonsUtil.getSeasonType(level.getBiome(player.blockPosition()));
 
-            if (seasonType == 0 || (seasonType == 1 && !Config.Baked.tropicalSeasonsEnabled))
+            if (seasonType == SereneSeasonsUtil.SeasonType.NORMAL_SEASON)
                 currentSeason = SeasonHelper.getSeasonState(level).getSeason();
-            else if (seasonType == 1)
+            else if (seasonType == SereneSeasonsUtil.SeasonType.TROPICAL_SEASON)
                 currentTropicalSeason = SereneSeasonsUtil.TropicalSeason.getTropicalSeason(SeasonHelper.getSeasonState(level).getTropicalSeason());
 
             float targetFadeLevel = 0;
@@ -133,7 +126,6 @@ public class RenderSeasonCards {
     public static void reset() {
         lastSeason = null;
         lastTropicalSeason = null;
-        delayTimer = delayTimeTicks;
         fadeLevel = 0;
     }
 }

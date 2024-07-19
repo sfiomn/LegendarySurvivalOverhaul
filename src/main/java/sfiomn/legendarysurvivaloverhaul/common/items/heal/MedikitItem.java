@@ -6,11 +6,14 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
+import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 
 public class MedikitItem extends BodyHealingItem {
@@ -45,9 +48,13 @@ public class MedikitItem extends BodyHealingItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
-        tooltip.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.whole_body"));
-        tooltip.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value", getHealingCapacity(), MathUtil.round(getHealingTicks() / 20.0f, 1)));
-        super.appendHoverText(stack, level, tooltip, isAdvanced);
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag isAdvanced) {
+        if (Config.Baked.localizedBodyDamageEnabled) {
+            tooltips.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.whole_body"));
+            tooltips.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value", getHealingCapacity(), MathUtil.round(getHealingTicks() / 20.0f, 1)));
+        }
+        ItemStack potionEquivalent = PotionUtils.setCustomEffects(new ItemStack(ItemRegistry.MEDIKIT.get()), Collections.singletonList(new MobEffectInstance(MobEffects.REGENERATION, 400, 2)));
+        PotionUtils.addPotionTooltip(potionEquivalent, tooltips, 1.0f);
+        super.appendHoverText(stack, level, tooltips, isAdvanced);
     }
 }

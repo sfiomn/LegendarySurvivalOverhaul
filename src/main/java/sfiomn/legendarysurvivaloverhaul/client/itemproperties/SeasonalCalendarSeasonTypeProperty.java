@@ -2,31 +2,18 @@ package sfiomn.legendarysurvivaloverhaul.client.itemproperties;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SSBiomeIdentity;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-
-import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier.biomeIdentities;
 
 
 public class SeasonalCalendarSeasonTypeProperty implements ClampedItemPropertyFunction {
@@ -54,12 +41,11 @@ public class SeasonalCalendarSeasonTypeProperty implements ClampedItemPropertyFu
                 if (!ServerConfig.isDimensionWhitelisted(level.dimension()))
                     return 2.0f;
 
-                Biome biome = level.getBiome(holder.blockPosition()).get();
-                int seasonType = SereneSeasonsUtil.getSeasonType(level, biome);
+                SereneSeasonsUtil.SeasonType seasonType = SereneSeasonsUtil.getSeasonType(level.getBiome(holder.blockPosition()));
 
-                if (seasonType == 2)
+                if (seasonType == SereneSeasonsUtil.SeasonType.NO_SEASON)
                     return 2.0f;
-                else if (seasonType == 1 && Config.Baked.tropicalSeasonsEnabled)
+                else if (seasonType == SereneSeasonsUtil.SeasonType.TROPICAL_SEASON)
                     return 1.0f;
                 else
                     return 0;

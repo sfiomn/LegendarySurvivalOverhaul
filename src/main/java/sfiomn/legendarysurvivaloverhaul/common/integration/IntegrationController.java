@@ -1,6 +1,7 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration;
 
 import net.minecraftforge.fml.ModList;
+import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.DamageDistributionEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
@@ -62,8 +63,12 @@ public final class IntegrationController
 			initSupplementaries();
 		if (mods.isLoaded("crockpot"))
 			initCrockpot();
+		if (mods.isLoaded("quark"))
+			initQuark();
+		if ((mods.isLoaded("beachparty")))
+			initBeachParty();
 	}
-	
+
 	private static void initCreate()
 	{
 		JsonConfig.registerBlockTemperature("create:blaze_burner", 2.5f, new JsonPropertyValue("blaze", "smouldering"));
@@ -192,6 +197,8 @@ public final class IntegrationController
 	private static void initBetterEndForge() {
 		JsonConfig.registerBiomeOverride("betterendforge:sulphur_springs", 1.1f);
 		JsonConfig.registerBiomeOverride("betterendforge:ice_starfield", 0.1f);
+		JsonConfig.registerFuelItems("betterendforge:coal_block", ThermalTypeEnum.HEATING, 270);
+		JsonConfig.registerFuelItems("betterendforge:charcoal_block", ThermalTypeEnum.HEATING, 270);
 	}
 
 	private static void initAtmospheric() {
@@ -228,5 +235,50 @@ public final class IntegrationController
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:turkey_dinner", 2, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:veg_stinger", -1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:watermelon_icle", -4, 1800);
+	}
+
+	private static void initQuark() {
+		JsonConfig.registerFuelItems("quark:coal_block", ThermalTypeEnum.HEATING, 270);
+		JsonConfig.registerFuelItems("quark:charcoal_block", ThermalTypeEnum.HEATING, 270);
+	}
+
+	private static void initBeachParty() {
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:sweetberry_icecream", -2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:coconut_icecream", -2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:chocolate_icecream", -3, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_coconut", -2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_cactus", -2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_chocolate", -2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_sweetberries", -2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_melon", -2, 2400);
+
+		JsonConfig.registerConsumableThirst("beachparty:coconut_open", 3, 0.0f);
+
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:coconut_cocktail", -1, 1800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:sweetberries_cocktail", -1, 1800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:cocoa_cocktail", -2, 1800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:pumpkin_cocktail", -1, 1800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:melon_cocktail", -1, 1800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:honey_cocktail", -1, 1800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:refreshing_drink", -1, 1800);
+		JsonConfig.registerConsumableThirst("beachparty:coconut_cocktail", 5, 3.0f);
+		JsonConfig.registerConsumableThirst("beachparty:sweetberries_cocktail", 6, 3.0f);
+		JsonConfig.registerConsumableThirst("beachparty:cocoa_cocktail", 8, 4.0f);
+		JsonConfig.registerConsumableThirst("beachparty:pumpkin_cocktail", 8, 4.0f);
+		JsonConfig.registerConsumableThirst("beachparty:melon_cocktail", 9, 5.0f);
+		JsonConfig.registerConsumableThirst("beachparty:honey_cocktail", 12, 7.0f);
+		JsonConfig.registerConsumableThirst("beachparty:refreshing_drink", 9, 3.0f);
+
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:sweetberry_milkshake", -3, 3000);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:coconut_milkshake", -3, 3000);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:chocolate_milkshake", -3, 3000);
+		JsonConfig.registerConsumableThirst("beachparty:sweetberry_milkshake", 8, 5.0f);
+		JsonConfig.registerConsumableThirst("beachparty:coconut_milkshake", 7, 4.0f);
+		JsonConfig.registerConsumableThirst("beachparty:chocolate_milkshake", 10, 6.0f);
+
+		JsonConfig.registerItemTemperature("beachparty:beach_hat", -2.5f);
+		JsonConfig.registerItemTemperature("beachparty:trunks", -3.0f);
+		JsonConfig.registerItemTemperature("beachparty:bikine", -3.0f);
+		JsonConfig.registerItemTemperature("beachparty:crocs", -0.5f);
 	}
 }

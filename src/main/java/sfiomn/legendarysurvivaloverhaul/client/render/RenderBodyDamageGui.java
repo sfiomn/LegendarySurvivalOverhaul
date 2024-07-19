@@ -1,9 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageCapability;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 public class RenderBodyDamageGui
 {
+	private static BodyDamageCapability BODY_DAMAGE_CAP = null;
 	private static final ResourceLocation ICONS = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/overlay.png");
 
 	private static final int BODY_MODEL_TEXTURE_WIDTH = 16;
@@ -24,17 +27,28 @@ public class RenderBodyDamageGui
 	private static final Map<BodyPartEnum, Integer> flashCounters = new HashMap<>();
 	private static final Map<BodyPartEnum, Float> bodyPartHealth = new HashMap<>();
 	
-	public static void render(GuiGraphics gui, Player player, int width, int height) {
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-		
-		BodyDamageCapability bodyDamageCap = CapabilityUtil.getBodyDamageCapability(player);
+	public static IGuiOverlay BODY_DAMAGE_GUI = (forgeGui, guiGraphics, partialTicks, width, height) -> {
 
-		if (Config.Baked.alwaysShowBodyDamageIndicator || bodyDamageCap.isWounded())
-			drawBodyDamage(gui, bodyDamageCap, width, height);
+		if (Config.Baked.localizedBodyDamageEnabled
+				&& !Minecraft.getInstance().options.hideGui
+				&& forgeGui.shouldDrawSurvivalElements()) {
 
-		RenderSystem.disableBlend();
-	}
+			Player player = forgeGui.getMinecraft().player;
+
+			if (player != null) {
+				forgeGui.setupOverlayRenderState(true, false);
+
+				if (BODY_DAMAGE_CAP == null || player.tickCount % 20 == 0)
+					BODY_DAMAGE_CAP = CapabilityUtil.getBodyDamageCapability(player);
+
+				if (Config.Baked.alwaysShowBodyDamageIndicator || BODY_DAMAGE_CAP.isWounded()) {
+					Minecraft.getInstance().getProfiler().push("body_damage_gui");
+					drawBodyDamage(guiGraphics, BODY_DAMAGE_CAP, width, height);
+					Minecraft.getInstance().getProfiler().pop();
+				}
+			}
+		}
+	};
 	
 	public static void drawBodyDamage(GuiGraphics gui, BodyDamageCapability cap, int width, int height) {
 		int x = width / 2 + 92 + Config.Baked.bodyDamageIndicatorOffsetX;
@@ -60,13 +74,13 @@ public class RenderBodyDamageGui
 
             BodyPartCondition offset = BodyPartCondition.get(healthRatio, shouldFlash);
 
-			gui.blit(ICONS, x + icon.x, y + icon.y, icon.width, icon.height,
+			gui.blit(ICONS, x + icon.x, y + icon.y,
 					BODY_MODEL_TEXTURE_WIDTH * offset.iconIndexX + icon.texX,
 					BODY_MODEL_TEXTURE_HEIGHT * offset.iconIndexY + icon.texY, icon.width, icon.height);
 		}
 	}
 
-	public static void updateTimer() {
+	public static void updateFlashingTimer() {
 		Iterator<Map.Entry<BodyPartEnum, Integer>> iter = flashCounters.entrySet().iterator();
 		while (iter.hasNext()) {
 			Map.Entry<BodyPartEnum, Integer> flashBodyPart = iter.next();

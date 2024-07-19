@@ -5,23 +5,21 @@ import sfiomn.legendarysurvivaloverhaul.config.Config;
 import java.util.Objects;
 
 public enum CoatEnum {
-    THERMAL_1("thermal1", "thermal", Config.Baked.thermalCoat1Modifier),
-    THERMAL_2("thermal2", "thermal", Config.Baked.thermalCoat2Modifier),
-    THERMAL_3("thermal3", "thermal", Config.Baked.thermalCoat3Modifier),
-    COOLING_1("cooling1", "cooling", Config.Baked.coolingCoat1Modifier),
-    COOLING_2("cooling2", "cooling", Config.Baked.coolingCoat2Modifier),
-    COOLING_3("cooling3", "cooling", Config.Baked.coolingCoat3Modifier),
-    HEATING_1("heating1", "heating", Config.Baked.heatingCoat1Modifier),
-    HEATING_2("heating2", "heating", Config.Baked.heatingCoat2Modifier),
-    HEATING_3("heating3", "heating", Config.Baked.heatingCoat3Modifier);
+    THERMAL_1("thermal1", "thermal"),
+    THERMAL_2("thermal2", "thermal"),
+    THERMAL_3("thermal3", "thermal"),
+    COOLING_1("cooling1", "cooling"),
+    COOLING_2("cooling2", "cooling"),
+    COOLING_3("cooling3", "cooling"),
+    HEATING_1("heating1", "heating"),
+    HEATING_2("heating2", "heating"),
+    HEATING_3("heating3", "heating");
 
     private final String coatId;
     private final String coatType;
-    private final double modifier;
-    CoatEnum(String coatId, String coatType, double modifier) {
+    CoatEnum(String coatId, String coatType) {
         this.coatId = coatId;
         this.coatType = coatType;
-        this.modifier = modifier;
     }
 
     public String id() {
@@ -33,7 +31,17 @@ public enum CoatEnum {
     }
 
     public double modifier() {
-        return this.modifier;
+        return switch (this) {
+            case THERMAL_1 -> Config.Baked.thermalCoat1Modifier;
+            case THERMAL_2 -> Config.Baked.thermalCoat2Modifier;
+            case THERMAL_3 -> Config.Baked.thermalCoat3Modifier;
+            case COOLING_1 -> Config.Baked.coolingCoat1Modifier;
+            case COOLING_2 -> Config.Baked.coolingCoat2Modifier;
+            case COOLING_3 -> Config.Baked.coolingCoat3Modifier;
+            case HEATING_1 -> Config.Baked.heatingCoat1Modifier;
+            case HEATING_2 -> Config.Baked.heatingCoat2Modifier;
+            case HEATING_3 -> Config.Baked.heatingCoat3Modifier;
+        };
     }
 
     public static CoatEnum getFromId(String id) {

@@ -1,13 +1,20 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.IReverseTag;
+import net.minecraftforge.registries.tags.ITagManager;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
@@ -18,82 +25,57 @@ import sereneseasons.init.ModTags;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
-import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier.biomeIdentities;
+import java.util.Objects;
+
+import static sereneseasons.init.ModTags.Biomes.BLACKLISTED_BIOMES;
+import static sereneseasons.init.ModTags.Biomes.TROPICAL_BIOMES;
 
 public class SereneSeasonsUtil {
-    public static Component formatSeasonName(BlockPos blockPos, Level level) {
+    public static Component seasonTooltip(BlockPos blockPos, Level level) {
         if (!LegendarySurvivalOverhaul.sereneSeasonsLoaded)
             return Component.translatable("message.legendarysurvivaloverhaul.sereneseasons.no_serene_season_loaded");
 
-        ISeasonState season = SeasonHelper.getSeasonState(level);
 
         if (!ServerConfig.isDimensionWhitelisted(level.dimension()))
             return Component.translatable("message.legendarysurvivaloverhaul.sereneseasons.no_season_dimension");
 
-        int seasonType = getSeasonType(level, level.getBiome(blockPos).get());
+        SeasonType seasonType = getSeasonType(level.getBiome(blockPos));
+        ISeasonState season = SeasonHelper.getSeasonState(level);
         int subSeasonDuration = (int) ((double) season.getSubSeasonDuration() / (double) season.getDayDuration());
 
-        String subSeasonName = "";
-        if (seasonType == 2) {
+        StringBuilder subSeasonName = new StringBuilder();
+        if (seasonType == SeasonType.NO_SEASON) {
             return Component.translatable("message.legendarysurvivaloverhaul.sereneseasons.no_season_info");
 
-        } else if (seasonType == 1 && Config.Baked.tropicalSeasonsEnabled) {
+        } else if (seasonType == SeasonType.TROPICAL_SEASON) {
             for(String word : season.getTropicalSeason().toString().split("_", 0)) {
-                subSeasonName = word.charAt(0) + word.substring(1).toLowerCase();
+                subSeasonName.append(word.charAt(0)).append(word.substring(1).toLowerCase()).append(" ");
             }
             return Component.translatable("message.legendarysurvivaloverhaul.sereneseasons.season_info",
-                    subSeasonName,
-                    (season.getDay() + subSeasonDuration) % (subSeasonDuration * 2),
+                    subSeasonName.toString(),
+                    ((season.getDay() + subSeasonDuration) % (subSeasonDuration * 2)) + 1,
                     subSeasonDuration * 2);
 
         } else {
             for(String word : season.getSubSeason().toString().split("_", 0)) {
-                subSeasonName = word.charAt(0) + word.substring(1).toLowerCase();
+                subSeasonName.append(word.charAt(0)).append(word.substring(1).toLowerCase()).append(" ");
             }
             return Component.translatable("message.legendarysurvivaloverhaul.sereneseasons.season_info",
-                    subSeasonName,
-                    season.getDay() % subSeasonDuration,
+                    subSeasonName.toString(),
+                    (season.getDay() % subSeasonDuration) + 1,
                     subSeasonDuration);
         }
     }
 
-    //  Season type 0 = normal, Season type 1 = tropical, Season type 2 = no season
-    public static int getSeasonType(Level level, Biome biome) {
-        ResourceLocation biomeName = level.registryAccess().registryOrThrow(Registries.BIOME).getKey(biome);
-        float temperature = biome.getBaseTemperature();
-        boolean isBiomeTropical;
-
-        if (biomeName != null && biomeIdentities.containsKey(biomeName.toString()))
-        {
-            SSBiomeIdentity identity = biomeIdentities.get(biomeName.toString());
-            if (!identity.seasonEffects)
-                return Config.Baked.defaultSeasonEnabled ? temperature > 0.8f ? 1 : 0 : 2;
-            isBiomeTropical = identity.isTropical;
-        }
-        else
-        {
-            isBiomeTropical = temperature > 0.8f;
-        }
-        if (isBiomeTropical)
-            return 1;
-        return 0;
+    public static SeasonType getSeasonType(Holder<Biome> biome) {
+        if (Config.Baked.tropicalSeasonsEnabled && biome.is(TROPICAL_BIOMES))
+            return SeasonType.TROPICAL_SEASON;
+        else if (!Config.Baked.defaultSeasonEnabled && biome.is(BLACKLISTED_BIOMES))
+            return SeasonType.NO_SEASON;
+        return SeasonType.NORMAL_SEASON;
     }
 
-    public static boolean plantCanGrow(Level world, BlockPos pos, Block plant) {
-        ResourceLocation resourceLocation = ForgeRegistries.BLOCKS.getKey(plant);
-        if (resourceLocation != null) {
-            boolean isFertile = ModFertility.isCropFertile(resourceLocation.getPath(), world, pos);
-            if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(world, pos)) {
-                if (FertilityConfig.outOfSeasonCropBehavior.get() == 1 || FertilityConfig.outOfSeasonCropBehavior.get() == 2) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private static boolean isGlassAboveBlock(Level world, BlockPos cropPos)
-    {
+    public static boolean isGlassAboveBlock(Level world, BlockPos cropPos) {
         for(int i = 0; i < 16; ++i) {
             if (world.getBlockState(cropPos.offset(0, i + 1, 0)).is(ModTags.Blocks.GREENHOUSE_GLASS)) {
                 return true;
@@ -101,6 +83,17 @@ public class SereneSeasonsUtil {
         }
 
         return false;
+    }
+
+    public static boolean plantCanGrow(Level world, BlockPos pos, Block plant) {
+        ResourceLocation resourceLocation = ForgeRegistries.BLOCKS.getKey(plant);
+        if (resourceLocation != null) {
+            boolean isFertile = ModFertility.isCropFertile(resourceLocation.getPath(), world, pos);
+            if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(world, pos)) {
+                return FertilityConfig.outOfSeasonCropBehavior.get() != 1 && FertilityConfig.outOfSeasonCropBehavior.get() != 2;
+            }
+        }
+        return true;
     }
 
     public enum TropicalSeason {
@@ -127,5 +120,13 @@ public class SereneSeasonsUtil {
             }
             return null;
         }
+    }
+
+    public enum SeasonType {
+        NO_SEASON,
+        TROPICAL_SEASON,
+        NORMAL_SEASON;
+
+        SeasonType() {}
     }
 }

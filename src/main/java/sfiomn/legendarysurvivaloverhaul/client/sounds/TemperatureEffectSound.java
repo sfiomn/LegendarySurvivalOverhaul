@@ -12,7 +12,7 @@ public class TemperatureEffectSound {
     private static boolean reset;
 
     public static void tickPlay(Player player) {
-        if (player == null || !player.isAlive() || player.isSpectator() || player.isSpectator()) {
+        if (player == null || !player.isAlive() || player.isSpectator() || player.isCreative()) {
             return;
         }
 

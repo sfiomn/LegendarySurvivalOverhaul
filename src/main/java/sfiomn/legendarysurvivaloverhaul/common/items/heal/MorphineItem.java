@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -64,7 +65,8 @@ public class MorphineItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
-        tooltip.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.morphine"));
+        if (Config.Baked.localizedBodyDamageEnabled)
+            tooltip.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.morphine"));
         super.appendHoverText(stack, level, tooltip, isAdvanced);
     }
 }

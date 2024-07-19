@@ -1,6 +1,12 @@
 package sfiomn.legendarysurvivaloverhaul.registry;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
@@ -11,11 +17,19 @@ import sfiomn.legendarysurvivaloverhaul.common.temperature.*;
 import sfiomn.legendarysurvivaloverhaul.common.temperature.dynamic.*;
 import net.minecraftforge.registries.DeferredRegister;
 
+import java.util.function.Supplier;
+
 public class TemperatureModifierRegistry
 {
-	public static final DeferredRegister<ModifierBase> MODIFIERS = DeferredRegister.create(ModifierBase.class, LegendarySurvivalOverhaul.MOD_ID);
-	public static final DeferredRegister<DynamicModifierBase> DYNAMIC_MODIFIERS = DeferredRegister.create(DynamicModifierBase.class, LegendarySurvivalOverhaul.MOD_ID);
-	
+	public static final ResourceLocation MODIFIERS_RESOURCE = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "temperature_modifiers");
+	public static final ResourceLocation DYNAMIC_MODIFIERS_RESOURCE = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "dynamic_temperature_modifiers");
+
+	public static final DeferredRegister<ModifierBase> MODIFIERS = DeferredRegister.create(MODIFIERS_RESOURCE, LegendarySurvivalOverhaul.MOD_ID);
+	public static final DeferredRegister<DynamicModifierBase> DYNAMIC_MODIFIERS = DeferredRegister.create(DYNAMIC_MODIFIERS_RESOURCE, LegendarySurvivalOverhaul.MOD_ID);
+
+	public static final Supplier<IForgeRegistry<ModifierBase>> MODIFIERS_REGISTRY = MODIFIERS.makeRegistry(RegistryBuilder::new);
+	public static final Supplier<IForgeRegistry<DynamicModifierBase>> DYNAMIC_MODIFIERS_REGISTRY = DYNAMIC_MODIFIERS.makeRegistry(RegistryBuilder::new);
+
 	// Base Modifiers
 	public static final RegistryObject<ModifierBase> DEFAULT = MODIFIERS.register("default", DefaultModifier::new);
 	public static final RegistryObject<ModifierBase> BIOME = MODIFIERS.register("biome", BiomeModifier::new);

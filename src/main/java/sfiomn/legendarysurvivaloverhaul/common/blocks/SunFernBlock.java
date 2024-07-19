@@ -13,10 +13,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.PlantType;
 import sfiomn.legendarysurvivaloverhaul.registry.ParticleTypeRegistry;
 
-import java.util.Random;
+import java.util.function.Supplier;
 
 public class SunFernBlock extends FlowerBlock {
-    public SunFernBlock(MobEffect p_i49984_1_, int duration, Properties properties) {
+    public SunFernBlock(Supplier<MobEffect> p_i49984_1_, int duration, Properties properties) {
         super(p_i49984_1_, duration, properties);
     }
 

@@ -1,5 +1,7 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature;
 
+import com.elenai.feathers.effect.FeathersEffects;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -7,6 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
@@ -17,6 +20,10 @@ import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
 import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
+
+import java.util.Objects;
+
+import static sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul.feathersLoaded;
 
 // Code adapted from 
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/capability/TemperatureCapability.java
@@ -133,22 +140,22 @@ public class TemperatureCapability implements ITemperatureCapability
 				LegendarySurvivalOverhaul.LOGGER.info(tempEnum + ", " + getTemperatureLevel() + " -> " + destinationTemp);
 
 			if (Config.Baked.dangerousTemperature)
-				applyDangerousEffects(player, tempEnum);
+				applyDangerousEffects(player);
 
 			if (Config.Baked.temperatureSecondaryEffects)
-				applySecondaryEffects(player, tempEnum);
+				applySecondaryEffects(player);
 		}
 	}
 
-	private void applyDangerousEffects(Player player, TemperatureEnum tempEnum) {
-		if (tempEnum == TemperatureEnum.HEAT_STROKE) {
+	private void applyDangerousEffects(Player player) {
+		if (getTemperatureEnum() == TemperatureEnum.HEAT_STROKE) {
 			if (TemperatureEnum.HEAT_STROKE.getMiddle() <= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply hyperthermia
 				if (!player.hasEffect(MobEffectRegistry.HEAT_STROKE.get()))
 					player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_STROKE.get(), 1000, 0, false, true));
 				return;
 			}
-		} else if (tempEnum == TemperatureEnum.FROSTBITE) {
+		} else if (getTemperatureEnum() == TemperatureEnum.FROSTBITE) {
 			if (TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply hypothermia.json
 				if (!player.hasEffect(MobEffectRegistry.FROSTBITE.get()))
@@ -160,24 +167,39 @@ public class TemperatureCapability implements ITemperatureCapability
 		player.removeEffect(MobEffectRegistry.FROSTBITE.get());
 	}
 
-	private void applySecondaryEffects(Player player, TemperatureEnum tempEnum) {
-		if (tempEnum == TemperatureEnum.HEAT_STROKE) {
+	private void applySecondaryEffects(Player player) {
+		if (getTemperatureEnum() == TemperatureEnum.HEAT_STROKE) {
 			if (!player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply secondary effect hyperthermia
 				player.removeEffect(MobEffectRegistry.COLD_HUNGER.get());
 				player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_Thirst.get(), 300, 0, false, false));
 				return;
 			}
-		} else if (tempEnum == TemperatureEnum.FROSTBITE) {
+		} else if (getTemperatureEnum() == TemperatureEnum.FROSTBITE) {
 			if (!player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
-				// Apply secondary effect hypothermia.json
+				// Apply secondary effect hypothermia
 				player.removeEffect(MobEffectRegistry.HEAT_Thirst.get());
 				player.addEffect(new MobEffectInstance(MobEffectRegistry.COLD_HUNGER.get(), 300, 0, false, false));
+
+				//  Waiting a fix from Feathers to remove the sound triggered when the Cold effect is applied
+				//  Current workaround is to directly use the effect update method, but doesn't refresh the client side
+				if (feathersLoaded)
+					if (player.hasEffect(FeathersEffects.COLD.get())) {
+						Objects.requireNonNull(player.getEffect(FeathersEffects.COLD.get())).update(new MobEffectInstance(FeathersEffects.COLD.get(), 300, 0, false, true));
+					} else
+						player.addEffect(new MobEffectInstance(FeathersEffects.COLD.get(), 300, 0, false, true));
 				return;
 			}
 		}
 		player.removeEffect(MobEffectRegistry.HEAT_Thirst.get());
 		player.removeEffect(MobEffectRegistry.COLD_HUNGER.get());
+	}
+
+	public void shakePlayer(Player player) {
+		if (getTemperatureEnum() == TemperatureEnum.FROSTBITE)
+			if (!player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
+				player.setYBodyRot(player.getYRot() + (float) (Math.cos((double) player.tickCount * 3.25D) * Math.PI * (double) 0.4F));
+			}
 	}
 	
 	private void tickTemperature(float currentTemp, float destination)

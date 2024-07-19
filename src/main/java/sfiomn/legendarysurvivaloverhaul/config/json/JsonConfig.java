@@ -23,7 +23,7 @@ public class JsonConfig
 	public static Map<String, JsonFuelItemIdentity> fuelItems = Maps.newHashMap();
 	public static Map<String, JsonBodyPartsDamageSource> damageSourceBodyParts = Maps.newHashMap();
 	
-	public static boolean registerBlockTemperature(String registryName, float temperature, JsonPropertyValue... properties)
+	public static void registerBlockTemperature(String registryName, float temperature, JsonPropertyValue... properties)
 	{
 		if (!blockTemperatures.containsKey(registryName))
 			blockTemperatures.put(registryName, new ArrayList<>());
@@ -40,7 +40,7 @@ public class JsonConfig
 				if (jpt.matchesDescribedProperties(properties))
 				{
 					currentList.set(i, result);
-					return true;
+					return;
 				}
 			}
 
@@ -48,23 +48,22 @@ public class JsonConfig
 		else 
 		{
 			for (JsonPropertyTemperature jpt : currentList) {
-				if (jpt.properties.keySet().size() > 0) {
-					return false;
+				if (!jpt.properties.keySet().isEmpty()) {
+					return;
 				}
 			}
 			for (int i = 0; i < currentList.size(); i++)
 			{
 				JsonPropertyTemperature jpt = currentList.get(i);
-				if (jpt.properties.keySet().size() == 0)
+				if (jpt.properties.keySet().isEmpty())
 				{
 					currentList.set(i, result);
-					return true;
+					return;
 				}
 			}
 
 		}
 		currentList.add(result);
-		return true;
 	}
 	public static void registerItemTemperature(String registryName, float temperature)
 	{
@@ -72,7 +71,7 @@ public class JsonConfig
 			itemTemperatures.put(registryName, new JsonTemperature(temperature));
 	}
 	
-	public static boolean registerConsumableTemperature(TemporaryModifierGroupEnum group, String registryName, int temperatureLevel, int duration)
+	public static void registerConsumableTemperature(TemporaryModifierGroupEnum group, String registryName, int temperatureLevel, int duration)
 	{
 		if (!consumableTemperature.containsKey(registryName)) {
 			consumableTemperature.put(registryName, new ArrayList<>());
@@ -82,18 +81,22 @@ public class JsonConfig
 
 		JsonConsumableTemperature jsonConsumableTemperature = new JsonConsumableTemperature(group, temperatureLevel, duration);
 
+		if (temperatureLevel == 0) {
+			LegendarySurvivalOverhaul.LOGGER.debug("Error with consumable " + registryName + " : temperature can't be 0");
+			return;
+		}
+
 		for (int i = 0; i < currentList.size(); i++)
 		{
 			JsonConsumableTemperature jct = currentList.get(i);
 			if (Objects.equals(jct.group, jsonConsumableTemperature.group))
 			{
 				currentList.set(i, jsonConsumableTemperature);
-				return true;
+				return;
 			}
 		}
 
 		currentList.add(jsonConsumableTemperature);
-		return true;
 	}
 
 	public static void registerConsumableThirst(String registryName, int hydration, float saturation) {

@@ -16,8 +16,8 @@ import sfiomn.legendarysurvivaloverhaul.registry.ParticleTypeRegistry;
 import java.util.function.Supplier;
 
 public class IceFernBlock extends FlowerBlock {
-    public IceFernBlock(Supplier<MobEffect> p_i49984_1_, int duration, Properties properties) {
-        super(p_i49984_1_, duration, properties);
+    public IceFernBlock(Supplier<MobEffect> mobEffectSupplier, int duration, Properties properties) {
+        super(mobEffectSupplier, duration, properties);
     }
 
     @Override

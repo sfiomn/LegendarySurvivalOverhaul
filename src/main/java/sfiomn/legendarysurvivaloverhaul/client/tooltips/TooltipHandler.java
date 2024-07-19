@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.client.tooltips;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -52,26 +53,26 @@ public class TooltipHandler
 
 		if (!stack.isEmpty() && ForgeRegistries.ITEMS.getKey(stack.getItem()) != null)
 		{
-			List<Component> tooltip = event.getToolTip();
+			List<Component> tooltips = event.getToolTip();
 
 			ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
 
-			if (stack.getItem() instanceof ArmorItem && Config.Baked.temperatureEnabled) {
-				addArmorBaseTemperatureText(itemRegistryName, tooltip);
+			if (stack.getItem() instanceof ArmorItem && Config.Baked.temperatureEnabled && itemRegistryName != null) {
+				addArmorBaseTemperatureText(itemRegistryName, tooltips);
 
-				addArmorCoatTemperatureText(stack, tooltip);
+				addArmorCoatTemperatureText(stack, tooltips);
 			}
 
 			// Added Description for coat items.
 			if (stack.getItem() instanceof CoatItem && Config.Baked.temperatureEnabled)
-				addCoatItemDescText((CoatItem) stack.getItem(), tooltip);
+				addCoatItemDescText((CoatItem) stack.getItem(), tooltips);
 
 			if (Config.Baked.temperatureEnabled)
-				addFoodEffectText(stack, tooltip);
+				addFoodEffectText(stack, tooltips);
 		}
 	}
 
-
+	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public static void onRenderTooltip(RenderTooltipEvent.GatherComponents event) {
 		if (event.isCanceled())
@@ -84,39 +85,9 @@ public class TooltipHandler
 
 		if (Config.Baked.thirstEnabled && Config.Baked.showHydrationTooltip)
 			addHydrationTooltip(event.getItemStack(), event.getTooltipElements());
-
-		ItemStack stack = event.getItemStack();
-		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
-		assert itemRegistryName != null;
-		JsonThirst jsonThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
-
-		HydrationTooltip hydrationTooltip = null;
-		if (jsonThirst != null) {
-			hydrationTooltip = new HydrationTooltip(jsonThirst.hydration, jsonThirst.saturation, jsonThirst.dirty);
-		} else if (stack.getItem() == Items.POTION) {
-			Potion potion = PotionUtils.getPotion(stack);
-			if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
-			{
-				hydrationTooltip = new HydrationTooltip(HydrationEnum.NORMAL);
-			}
-			else if (potion != Potions.EMPTY)
-			{
-				hydrationTooltip = new HydrationTooltip(HydrationEnum.POTION);
-			}
-		} else if (stack.getItem() instanceof DrinkItem) {
-			HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
-			if (hydrationEnum != null)
-				hydrationTooltip = new HydrationTooltip(hydrationEnum);
-		}
-
-		if (hydrationTooltip == null) {
-			return;
-		}
-
-
 	}
 
-	private static void addArmorBaseTemperatureText(ResourceLocation itemRegistryName, List<Component> tooltip) {
+	private static void addArmorBaseTemperatureText(ResourceLocation itemRegistryName, List<Component> tooltips) {
 		float temperature = 0.0f;
 
 		JsonTemperature jsonTemperature = JsonConfig.itemTemperatures.get(itemRegistryName.toString());
@@ -135,28 +106,25 @@ public class TooltipHandler
 		else
 			return;
 
-		String tempTxt = (temperature % 1.0f == 0f ? (int) Math.abs(temperature) : Math.abs(temperature)) + " ";
+		String tempTxt = (int) Math.abs(temperature) + " ";
 
 		text = Component.literal("+")
 				.withStyle(ChatFormatting.BLUE)
 				.append(tempTxt)
 				.append(text);
 
-		tooltip.add(text);
+		tooltips.add(text);
 	}
 
-	private static void addArmorCoatTemperatureText(ItemStack stack, List<Component> tooltip) {
+	private static void addArmorCoatTemperatureText(ItemStack stack, List<Component> tooltips) {
 		String coatId = TemperatureUtil.getArmorCoatTag(stack);
 		CoatEnum coat = CoatEnum.getFromId(coatId);
 
 		Component text;
 
-		if (coat != null && coat.modifier() > 0) {
+		if (coat != null) {
 			text = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor_coat." + coatId);
-		}
-		else if (coat != null && coat.modifier() == 0)
-			text = Component.literal("Error");
-		else {
+		} else {
 			return;
 		}
 
@@ -164,21 +132,20 @@ public class TooltipHandler
 				.withStyle(ChatFormatting.BLUE)
 				.append(text);
 
-		tooltip.add(text);
+		tooltips.add(text);
 	}
 
-	private static void addCoatItemDescText(CoatItem coatItem, List<Component> tooltip) {
+	private static void addCoatItemDescText(CoatItem coatItem, List<Component> tooltips) {
 
 		CoatEnum coat = coatItem.coat;
 
 		Component text;
-		if (KeyMappingRegistry.showAddedDesc.isDown()) {
-			if (coat != null && coat.modifier() > 0) {
+
+		if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), KeyMappingRegistry.showAddedDesc.getKey().getValue())) {
+			if (coat != null) {
 				text = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".coat_item." + coat.type() + ".desc")
 						.append(" " + coat.modifier() + "\u00B0C");
-			} else if (coat != null && coat.modifier() == 0)
-				text = Component.literal("Error");
-			else {
+			} else {
 				return;
 			}
 
@@ -189,10 +156,10 @@ public class TooltipHandler
 			text = Component.literal(ChatFormatting.GRAY + I18n.get("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".added_desc.activate", ChatFormatting.LIGHT_PURPLE, I18n.get(KeyMappingRegistry.showAddedDesc.getTranslatedKeyMessage().getString()), ChatFormatting.GRAY));
 		}
 
-		tooltip.add(text);
+		tooltips.add(text);
 	}
 
-	private static void addFoodEffectText(ItemStack stack, List<Component> tooltip) {
+	private static void addFoodEffectText(ItemStack stack, List<Component> tooltips) {
 		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
 		assert itemRegistryName != null;
 		List<JsonConsumableTemperature> jcts = JsonConfig.consumableTemperature.get(itemRegistryName.toString());
@@ -211,10 +178,10 @@ public class TooltipHandler
 				}
 
 				if (jct.getEffect() == MobEffectRegistry.COLD_FOOD.get() || jct.getEffect() == MobEffectRegistry.COLD_DRINK.get())
-					tooltip.add(mutableComponent.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(6466303))));
+					tooltips.add(mutableComponent.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(6466303))));
 
 				if (jct.getEffect() == MobEffectRegistry.HOT_FOOD.get() || jct.getEffect() == MobEffectRegistry.HOT_DRINk.get())
-					tooltip.add(mutableComponent.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16420407))));
+					tooltips.add(mutableComponent.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16420407))));
 
 			}
 		}
@@ -226,27 +193,27 @@ public class TooltipHandler
 		assert itemRegistryName != null;
 		JsonThirst jsonThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
 
-		HydrationTooltip hydrationTooltip = null;
+		HydrationTooltipComponent hydrationTooltipComponent = null;
 		if (jsonThirst != null) {
-			hydrationTooltip = new HydrationTooltip(jsonThirst.hydration, jsonThirst.saturation, jsonThirst.dirty);
+			hydrationTooltipComponent = new HydrationTooltipComponent(jsonThirst.hydration, jsonThirst.saturation, jsonThirst.dirty);
 		} else if (stack.getItem() == Items.POTION) {
 			Potion potion = PotionUtils.getPotion(stack);
 			if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
 			{
-				hydrationTooltip = new HydrationTooltip(HydrationEnum.NORMAL);
+				hydrationTooltipComponent = new HydrationTooltipComponent(HydrationEnum.NORMAL);
 			}
 			else if (potion != Potions.EMPTY)
 			{
-				hydrationTooltip = new HydrationTooltip(HydrationEnum.POTION);
+				hydrationTooltipComponent = new HydrationTooltipComponent(HydrationEnum.POTION);
 			}
 		} else if (stack.getItem() instanceof DrinkItem) {
 			HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
 			if (hydrationEnum != null)
-				hydrationTooltip = new HydrationTooltip(hydrationEnum);
+				hydrationTooltipComponent = new HydrationTooltipComponent(hydrationEnum);
 		}
 
-		if (hydrationTooltip != null) {
-			tooltips.add(Either.right(hydrationTooltip));
+		if (hydrationTooltipComponent != null) {
+			tooltips.add(Either.right(hydrationTooltipComponent));
 		}
 	}
 }

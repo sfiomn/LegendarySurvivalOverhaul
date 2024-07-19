@@ -18,8 +18,8 @@ import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.effects.*;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
-public class MobEffectRegistry
-{
+public class MobEffectRegistry {
+
 	public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, LegendarySurvivalOverhaul.MOD_ID);
 	public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, LegendarySurvivalOverhaul.MOD_ID);
 

@@ -130,7 +130,7 @@ public class BodyDamageCapability implements IBodyDamageCapability
 
 			// Assign all malus effect to the player
 			for (Triple<MalusBodyPartEnum, MobEffect, Integer> malusEffect: this.malus) {
-				player.addEffect(new MobEffectInstance(malusEffect.getMiddle(), 200, malusEffect.getRight(), false, false, true));
+				player.addEffect(new MobEffectInstance(malusEffect.getMiddle(), 300, malusEffect.getRight(), false, false, true));
 			}
 
 			// Heal each body limb of the player

@@ -1,8 +1,0 @@
-{
-	"parent": "block/cross",
-	"textures": {
-		"cross": "legendarysurvivaloverhaul:block/water_plant_top",
-		"particle": "legendarysurvivaloverhaul:block/water_plant_top"
-	},
-	"render_type": "cutout"
-}

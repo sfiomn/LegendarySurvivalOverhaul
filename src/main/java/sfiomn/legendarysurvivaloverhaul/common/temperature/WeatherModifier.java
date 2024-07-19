@@ -14,12 +14,11 @@ public class WeatherModifier extends ModifierBase
 	{
 		super();
 	}
-	
-	// TODO: Try and get this also working with serene seasons
+
 	@Override
 	public float getWorldInfluence(Level level, BlockPos pos)
 	{
-		// Apply shade effect in hot biomes if the player is either "hidden from sky" or time is raining
+		// Apply weather / shade effect in hot biomes if the player is either "hidden from sky" or time is raining
 		// Shade effect depends on Time, no shade effect at sunrise and sunset, max effect at noon
 		if (!level.isRaining() && level.canSeeSky(pos.above())) {
 			return 0.0f;

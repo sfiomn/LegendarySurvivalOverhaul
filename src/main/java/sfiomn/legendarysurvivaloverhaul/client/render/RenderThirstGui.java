@@ -1,9 +1,13 @@
 package sfiomn.legendarysurvivaloverhaul.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -14,8 +18,7 @@ import java.util.Random;
 
 public class RenderThirstGui
 {
-	private static int updateTimer = 0;
-
+	private static ThirstCapability THIRST_CAP = null;
 	private static final Random rand = new Random();
 
 	public static final ResourceLocation ICONS = new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "textures/gui/overlay.png");
@@ -28,31 +31,35 @@ public class RenderThirstGui
 	private static final int THIRST_TEXTURE_WIDTH = 9;
 	private static final int THIRST_TEXTURE_HEIGHT = 9;
 
-	// Similar to net.minecraftforge.client.ForgeIngameGui.renderFood
-	public static void render(GuiGraphics gui, Player player, int width, int height)
-	{
-		rand.setSeed(updateTimer * 445L);
+	public static final IGuiOverlay THIRST_GUI = (forgeGui, guiGraphics, partialTicks, width, height) -> {
+		if (Config.Baked.thirstEnabled
+				&& !Minecraft.getInstance().options.hideGui
+				&& forgeGui.shouldDrawSurvivalElements()) {
+			Player player = forgeGui.getMinecraft().player;
 
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
+			if (player != null) {
+				rand.setSeed(player.tickCount * 445L);
+				forgeGui.setupOverlayRenderState(true, false);
 
-		drawHydrationBar(gui, player, width, height);
+				Minecraft.getInstance().getProfiler().push("thirst_gui");
+				drawHydrationBar(forgeGui, guiGraphics, player, width, height);
+				Minecraft.getInstance().getProfiler().pop();
 
-		RenderSystem.disableBlend();
-	}
+				forgeGui.rightHeight += 10;
+			}
+		}
+	};
 	
-	public static void drawHydrationBar(GuiGraphics gui, Player player, int width, int height)
-	{
-		ThirstCapability thirstCap = CapabilityUtil.getThirstCapability(player);
+	public static void drawHydrationBar(ForgeGui forgeGui, GuiGraphics gui, Player player, int width, int height) {
+		if (THIRST_CAP == null || player.tickCount % 20 == 0)
+			THIRST_CAP = CapabilityUtil.getThirstCapability(player);
 
 		// hydration is 0 - 20
-		int hydration = thirstCap.getHydrationLevel();
-		float saturation = thirstCap.getSaturationLevel();
+		int hydration = THIRST_CAP.getHydrationLevel();
+		float saturation = THIRST_CAP.getSaturationLevel();
 
-		int forgeGuiLeft = 39;
 		int left = width / 2 + 91; // Same x offset as the hunger bar
-		int top = height - forgeGuiLeft;
-		forgeGuiLeft += 10;
+		int top = height - forgeGui.rightHeight;
 
 		int saturationInt = (int)saturation;
 
@@ -65,7 +72,7 @@ public class RenderThirstGui
 
 			// Shake based on hydration level and saturation level
 			int yOffset = 0;
-			if (Config.Baked.showVanillaAnimationOverlay && saturation <= 0.0f && updateTimer % (hydration * 3 + 1) == 0)
+			if (Config.Baked.showVanillaAnimationOverlay && saturation <= 0.0f && player.tickCount % (hydration * 3 + 1) == 0)
 			{
 				yOffset = (rand.nextInt(3) - 1);
 			}
@@ -81,11 +88,11 @@ public class RenderThirstGui
 			}
 
 			if (halfIcon < hydration) // Full hydration icon
-				gui.blit(ICONS, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + THIRST_TEXTURE_WIDTH, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
+				gui.blit(ICONS, x, y + yOffset, xTextureOffset + THIRST_TEXTURE_WIDTH, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 			else if (halfIcon == hydration) // Half hydration icon
-				gui.blit(ICONS, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + (THIRST_TEXTURE_WIDTH * 2), yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
+				gui.blit(ICONS, x, y + yOffset, xTextureOffset + (THIRST_TEXTURE_WIDTH * 2), yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 			else
-				gui.blit(ICONS, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
+				gui.blit(ICONS, x, y + yOffset, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 
 			// Reassign texture offset for saturation
 			yTextureOffset = 0;
@@ -97,17 +104,12 @@ public class RenderThirstGui
 			if(saturationInt > 0 && Config.Baked.thirstSaturationDisplayed)
 			{
 				if (halfIcon < saturationInt) { // Full saturation icon
-					gui.blit(ICONS, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
+					gui.blit(ICONS, x, y + yOffset, xTextureOffset, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 				}
 				else if (halfIcon == saturationInt) { // Half saturation icon
-					gui.blit(ICONS, x, y + yOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xTextureOffset + THIRST_TEXTURE_WIDTH, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
+					gui.blit(ICONS, x, y + yOffset, xTextureOffset + THIRST_TEXTURE_WIDTH, yTextureOffset, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
 				}
 			}
 		}
-	}
-
-	public static void updateTimer()
-	{
-		updateTimer++;
 	}
 }

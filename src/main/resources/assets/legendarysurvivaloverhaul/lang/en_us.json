@@ -186,7 +186,7 @@
 
 	"message.legendarysurvivaloverhaul.bonemeal.not_correct_season": "This crop can't grow during this season",
 	"message.legendarysurvivaloverhaul.sereneseasons.no_season_info": "No season in this biome",
-	"message.legendarysurvivaloverhaul.sereneseasons.season_info": "%s Season, Day %s/%s",
+	"message.legendarysurvivaloverhaul.sereneseasons.season_info": "%sSeason, Day %s/%s",
 	"message.legendarysurvivaloverhaul.sereneseasons.no_season_dimension": "No season in this dimension",
-	"message.legendarysurvivaloverhaul.sereneseasons.no_serene_season_loaded": "Serene Seasons mods not loaded"
+	"message.legendarysurvivaloverhaul.sereneseasons.no_serene_season_loaded": "Serene Seasons mod not loaded"
 }

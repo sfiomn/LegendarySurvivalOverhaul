@@ -46,12 +46,19 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
                 try {
                     malusThreshold = Mth.clamp(malus.thresholds.get(i), 0.0f, 1.0f);
                 } catch (IndexOutOfBoundsException e) {
-                    LegendarySurvivalOverhaul.LOGGER.debug("No threshold defined for effect {} in {}", Config.Baked.headPartEffects.get(i), malus.name());
+                    LegendarySurvivalOverhaul.LOGGER.debug("No threshold defined for effect {} in {}", malus.thresholds.get(i), malus.name());
                     continue;
                 }
                 malusEffects.put(malusThreshold, Pair.of(malusEffect, malusAmplifier));
             }
             bodyPartMalusEffects.put(malus, malusEffects);
+            for (Map.Entry<MalusBodyPartEnum, Map<Float, Pair<MobEffect, Integer>>> bodyPartMalusEffect: bodyPartMalusEffects.entrySet()) {
+                LegendarySurvivalOverhaul.LOGGER.debug(bodyPartMalusEffect.getKey());
+                for (Map.Entry<Float, Pair<MobEffect, Integer>> jjj: bodyPartMalusEffect.getValue().entrySet()) {
+                    LegendarySurvivalOverhaul.LOGGER.debug(jjj.getKey());
+                    LegendarySurvivalOverhaul.LOGGER.debug(jjj.getValue());
+                }
+            }
         }
     }
 

@@ -22,9 +22,9 @@ public class ArmorMaterialBase implements ArmorMaterial
 	private final SoundEvent soundEvent;
 	private final float toughness;
 	private final float knockbackResistance;
-	private final LazyLoadedValue<Ingredient> repairMaterial;
+	private final LazyLoadedValue<Ingredient> repairIngredient;
 	
-	public ArmorMaterialBase(String name, float maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial)
+	public ArmorMaterialBase(String name, float maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient)
 	{
 		this.name = name;
 		this.maxDamageFactor = maxDamageFactor;
@@ -33,7 +33,7 @@ public class ArmorMaterialBase implements ArmorMaterial
 		this.soundEvent = soundEvent;
 		this.toughness = toughness;
 		this.knockbackResistance = knockbackResistance;
-		this.repairMaterial = new LazyLoadedValue<Ingredient>(repairMaterial);
+		this.repairIngredient = new LazyLoadedValue(repairIngredient);
 	}
 	
 	@Override
@@ -55,15 +55,15 @@ public class ArmorMaterialBase implements ArmorMaterial
 	}
 
 	@Override
-	public SoundEvent getEquipSound()
+	public @NotNull SoundEvent getEquipSound()
 	{
 		return this.soundEvent;
 	}
 
 	@Override
-	public Ingredient getRepairIngredient()
+	public @NotNull Ingredient getRepairIngredient()
 	{
-		return this.repairMaterial.get();
+		return this.repairIngredient.get();
 	}
 
 	@Override

@@ -68,6 +68,14 @@ public class ModCapabilities
 		if (event.player.level().isClientSide)
 		{
 			// Client Side
+			Player player = event.player;
+
+			if (shouldSkipTick(player)) return;
+
+			if (Config.Baked.temperatureEnabled) {
+				TemperatureCapability tempCap = CapabilityUtil.getTempCapability(player);
+				tempCap.shakePlayer(player);
+			}
 		}
 		else
 		{

@@ -2,6 +2,9 @@ package sfiomn.legendarysurvivaloverhaul;
 
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -11,19 +14,15 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.event.server.ServerLifecycleEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.registries.ForgeRegistry;
-import net.minecraftforge.registries.NewRegistryEvent;
-import net.minecraftforge.registries.RegistryBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
-import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
-import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.CanteenProperty;
@@ -60,9 +59,8 @@ public class LegendarySurvivalOverhaul
 	public static final String MOD_ID = "legendarysurvivaloverhaul";
 	
 	/** Serene Seasons and Better Weather both add their own seasons system,
-	 *  so we'll probably want to integrate those with the temperature/climbing
-	 *  system, i.e. making it so that winter is colder, summer is hotter,
-	 *  and perhaps you're more prone to slipping while climbing in the winter.
+	 *  so we'll probably want to integrate those with the temperature,
+	 *  i.e. making it so that winter is colder, summer is hotter.
 	 */ 
 	public static boolean betterWeatherLoaded = false;
 	public static boolean sereneSeasonsLoaded = false;
@@ -75,19 +73,12 @@ public class LegendarySurvivalOverhaul
 	 * annoy the player if they decide to go through with it.
 	 */
 	public static boolean surviveLoaded = false;
-
 	public static boolean curiosLoaded = false;
-
-	public static boolean toughAsNailsLoaded = false;
+	public static boolean feathersLoaded = false;
 	
 	public static Path configPath = FMLPaths.CONFIGDIR.get();
 	public static Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "legendarysurvivaloverhaul");
 	public static Path modConfigJsons = Paths.get(modConfigPath.toString(), "json");
-	public static Path ssConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "sereneseasons");
-	
-	public static ForgeRegistry<ModifierBase> MODIFIERS;
-	public static ForgeRegistry<DynamicModifierBase> DYNAMIC_MODIFIERS;
-
 	
 	public LegendarySurvivalOverhaul()
 	{
@@ -95,32 +86,28 @@ public class LegendarySurvivalOverhaul
 		IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 		
 		modBus.addListener(this::setup);
-		modBus.addListener(this::onModConfigEvent);
-		modBus.addListener(this::buildRegistries);
+		modBus.addListener(this::onModConfigLoadEvent);
+		modBus.addListener(this::onModConfigReloadEvent);
 		modBus.addListener(this::clientEvents);
-		modBus.addListener(KeyMappingRegistry::registerKeyMappingEvent);
 
+		ItemRegistry.register(modBus);
 		BlockRegistry.register(modBus);
 		ContainerRegistry.register(modBus);
 		MobEffectRegistry.register(modBus);
-		ItemRegistry.register(modBus);
 		ParticleTypeRegistry.register(modBus);
 		RecipeRegistry.register(modBus);
 		SoundRegistry.register(modBus);
 		TemperatureModifierRegistry.register(modBus);
 		BlockEntityRegistry.register(modBus);
 		ItemGroupRegistry.register(modBus);
-		
-		forgeBus.addListener(this::serverStarted);
+
+		forgeBus.addListener(CommandRegistry::registerCommandsEvent);
 		forgeBus.addListener(this::reloadListener);
-		forgeBus.addListener(this::registerCaps);
+		forgeBus.addListener(this::registerCapabilities);
 
 		forgeBus.register(this);
 		
 		Config.register();
-		
-		Config.Baked.bakeClient();
-		Config.Baked.bakeCommon();
 		
 		TemperatureUtil.internal = new TemperatureUtilInternal();
 		ThirstUtil.internal = new ThirstUtilInternal();
@@ -133,6 +120,7 @@ public class LegendarySurvivalOverhaul
 		sereneSeasonsLoaded = ModList.get().isLoaded("sereneseasons");
 		curiosLoaded = ModList.get().isLoaded("curios");
 		surviveLoaded = ModList.get().isLoaded("survive");
+		feathersLoaded = ModList.get().isLoaded("feathers");
 		
 		if (sereneSeasonsLoaded)
 			LOGGER.debug("Serene Seasons is loaded, enabling compatibility");
@@ -140,12 +128,16 @@ public class LegendarySurvivalOverhaul
 			LOGGER.debug("Curios is loaded, enabling compatibility");
 		if (surviveLoaded)
 			LOGGER.debug("Survive is loaded, I hope you know what you're doing");
+		if (feathersLoaded)
+			LOGGER.debug("Feathers is loaded, enabling compatibility");
 	}
 	
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		NetworkHandler.register();
-		
+
+		Config.Baked.bakeCommon();
+
 		event.enqueueWork(MobEffectRegistry::registerBrewingRecipes);
 
 		BodyDamageUtilInternal.initMalusConfig();
@@ -153,17 +145,12 @@ public class LegendarySurvivalOverhaul
 	
 	private void clientEvents(final FMLClientSetupEvent event)
 	{
+		Config.Baked.bakeClient();
+
 		DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientItemPropertiesSetup);
-		DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientKeyBindingSetup);
-	}
-	
-	private void serverStarted(final ServerLifecycleEvent event)
-	{
-		if (sereneSeasonsLoaded)
-			SereneSeasonsModifier.prepareBiomeIdentities();
 	}
 
-	private void registerCaps(RegisterCapabilitiesEvent event) {
+	private void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.register(TemperatureCapability.class);
 		event.register(WetnessCapability.class);
 		event.register(ThirstCapability.class);
@@ -192,66 +179,40 @@ public class LegendarySurvivalOverhaul
 			}
 		};
 	}
-
-	private static DistExecutor.SafeRunnable clientKeyBindingSetup()
-	{
-		return new DistExecutor.SafeRunnable()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void run()
-			{
-				KeyMappingRegistry.register();
-			}
-		};
-	}
 	
-	private void reloadListener(final AddReloadListenerEvent event)
+	private void reloadListener(AddReloadListenerEvent event)
 	{
-		event.addListener(new ReloadListener<Void>() 
-				{
-            		@Nonnull
-            		@ParametersAreNonnullByDefault
-					@Override
-					protected Void prepare(IResourceManager manager, IProfiler profiler)
-					{
-						JsonConfigRegistration.clearContainers();
-						return null;
-					}
-            		
-            		@ParametersAreNonnullByDefault
-					@Override
-					protected void apply(Void objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn)
-					{
-						JsonConfigRegistration.init(modConfigJsons.toFile());
-						Config.Baked.bakeCommon();
-						Config.Baked.bakeClient();
-					}
-				}
+		event.addListener(new SimplePreparableReloadListener<>() {
+                              @Override
+                              protected Object prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+                                  JsonConfigRegistration.clearContainers();
+                                  return null;
+                              }
+
+                              @Override
+                              protected void apply(Object o, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+                                  JsonConfigRegistration.init(modConfigJsons.toFile());
+                                  Config.Baked.bakeCommon();
+                                  Config.Baked.bakeClient();
+                              }
+                          }
 		);
 	}
 
-	private void onModConfigEvent(final ModConfig.ModConfigEvent event)
+	private void onModConfigLoadEvent(ModConfigEvent.Loading event)
 	{
 		final ModConfig config = event.getConfig();
-		
-		// Since client config is not shared, we want it to update instantly whenever it's saved
+
 		if (config.getSpec() == Config.CLIENT_SPEC)
 			Config.Baked.bakeClient();
 	}
-	
-	// Create registries for modifiers and dynamic modifiers
-	private void buildRegistries(final NewRegistryEvent event)
+
+	private void onModConfigReloadEvent(ModConfigEvent.Reloading event)
 	{
-		RegistryBuilder<ModifierBase> modifierBuilder = new RegistryBuilder<>();
-		modifierBuilder.setName(new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "modifiers"));
-		modifierBuilder.setType(ModifierBase.class);
-		MODIFIERS = (ForgeRegistry<ModifierBase>) modifierBuilder.create();
-		
-		RegistryBuilder<DynamicModifierBase> dynamicModifierBuilder = new RegistryBuilder<>();
-		dynamicModifierBuilder.setName(new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "dynamic_modifiers"));
-		dynamicModifierBuilder.setType(DynamicModifierBase.class);
-		DYNAMIC_MODIFIERS = (ForgeRegistry<DynamicModifierBase>) dynamicModifierBuilder.create();
+		final ModConfig config = event.getConfig();
+
+		// Since client config is not shared, we want it to update instantly whenever it's saved
+		if (config.getSpec() == Config.CLIENT_SPEC)
+			Config.Baked.bakeClient();
 	}
 }

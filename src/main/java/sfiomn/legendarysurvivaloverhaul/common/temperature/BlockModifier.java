@@ -14,16 +14,12 @@ import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 import sfiomn.legendarysurvivaloverhaul.util.SpreadPoint;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.getOppositeVector;
 
 public class BlockModifier extends ModifierBase
 {
-	private final int tempInfluenceMaximumDist = Config.Baked.tempInfluenceMaximumDist - 1;
 	private float coldestValue = 0.0f;
 	private float hottestValue = 0.0f;
 	private float hotTotal = 0.0f;
@@ -32,6 +28,10 @@ public class BlockModifier extends ModifierBase
 	public BlockModifier()
 	{
 		super();
+	}
+
+	public int tempInfluenceMaximumDist() {
+		return Config.Baked.tempInfluenceMaximumDist - 1;
 	}
 	
 	@Override
@@ -78,7 +78,7 @@ public class BlockModifier extends ModifierBase
 		HashMap<BlockPos, SpreadPoint> spreadBlockPos = new HashMap<>();
 		ArrayList<SpreadPoint> spreadPointToProcess = new ArrayList<>();
 
-		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, null, tempInfluenceMaximumDist + 1, 0, level);
+		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, null, tempInfluenceMaximumDist() + 1, 0, level);
 		spreadPointToProcess.add(spreadPointFeetPlayer);
 		spreadBlockPos.put(spreadPointFeetPlayer.position(), spreadPointFeetPlayer);
 
@@ -189,6 +189,7 @@ public class BlockModifier extends ModifierBase
 		BlockState blockState = level.getBlockState(spreadPoint.position());
 		float temperature = 0.0f;
 		ResourceLocation registryName = ForgeRegistries.BLOCKS.getKey(blockState.getBlock());
+
 		if (registryName == null) {
 			return 0.0f;
 		}
@@ -238,7 +239,7 @@ public class BlockModifier extends ModifierBase
 		// I use the sqrt(x) graph to convert how much the block temp should be decreased vs the distance to the block
 		// [1] max spread - spread capacity = spread consumed to reach the point
 		//     divided by max spread capacity to know the % of spread capacity consumed
-		float capacityConsumed = MathUtil.round((float) (tempInfluenceMaximumDist - spreadPoint.spreadCapacity()) / tempInfluenceMaximumDist, 2);
+		float capacityConsumed = MathUtil.round((float) (tempInfluenceMaximumDist() - spreadPoint.spreadCapacity()) / tempInfluenceMaximumDist(), 2);
 		// [2] sqrt([1]) = % of temperature the block influence has lost
 		// [3] (1 - [2]) * block temp = block influence based on distance of the player
 		return MathUtil.round((float) Math.sqrt(1 - capacityConsumed) * tempIn, 2);

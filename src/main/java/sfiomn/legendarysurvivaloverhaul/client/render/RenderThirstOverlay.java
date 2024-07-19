@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import sfiomn.legendarysurvivaloverhaul.client.shaders.FocusShader;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
@@ -17,22 +18,19 @@ public class RenderThirstOverlay {
 
     private static FocusShader focusShader;
     private static final float DEFAULT_SHADER_INTENSITY = 0;
-    private static final float MAX_SHADER_INTENSITY = 3;
+    private static final float MAX_SHADER_INTENSITY = 4;
     private static final float SHADER_INTENSITY_STEP = 0.05f;
     private static final int HYDRATION_LEVEL_MIN_EFFECT = 6;
     private static final int HYDRATION_LEVEL_MAX_EFFECT = 2;
     private static float shaderIntensity = 0;
     private static int updateTimer = 0;
 
-    public static void render()
-    {
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+    public static IGuiOverlay THIRST_OVERLAY = (forgeGui, guiGraphics, partialTicks, width, height) -> {
+        forgeGui.setupOverlayRenderState(true, false);
         drawThirstEffect();
 
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        RenderSystem.disableBlend();
-    }
+    };
 
     public static void drawThirstEffect() {
         if (!(Minecraft.getInstance().screen instanceof DeathScreen) && focusShader != null) {

@@ -3,15 +3,18 @@ package sfiomn.legendarysurvivaloverhaul.common.recipe;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.items.drink.CanteenItem;
@@ -28,11 +31,13 @@ public class CanteenFurnaceRecipe extends SmeltingRecipe {
         return true;
     }
 
-    public boolean matches(Inventory inventory, Level level) {
+    @Override
+    public boolean matches(Container inventory, Level level) {
         return this.ingredient.test(inventory.getItem(0)) && ThirstUtil.getCapacityTag(inventory.getItem(0)) > 0;
     }
 
-    public ItemStack assemble(Inventory inventory) {
+    @Override
+    public ItemStack assemble(Container inventory, @NotNull RegistryAccess access) {
         int hydrationCapacity = ThirstUtil.getCapacityTag(inventory.getItem(0));
         ItemStack result = this.result.copy();
         ThirstUtil.setHydrationEnumTag(result, HydrationEnum.PURIFIED);
@@ -40,11 +45,11 @@ public class CanteenFurnaceRecipe extends SmeltingRecipe {
         return result;
     }
 
-    public ItemStack getResultItem() {
+    @Override
+    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess access) {
         ItemStack result = this.result.copy();
         int maxHydrationCapacity = 0;
-        if (this.result.getItem() instanceof CanteenItem) {
-            CanteenItem resultItem = (CanteenItem) this.result.getItem();
+        if (this.result.getItem() instanceof CanteenItem resultItem) {
             maxHydrationCapacity = resultItem.getMaxCapacity();
         }
         ThirstUtil.setHydrationEnumTag(result, HydrationEnum.PURIFIED);
@@ -53,7 +58,7 @@ public class CanteenFurnaceRecipe extends SmeltingRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return RecipeRegistry.CANTEEN_SMELTING_SERIALIZER.get();
     }
 
@@ -64,7 +69,7 @@ public class CanteenFurnaceRecipe extends SmeltingRecipe {
             this.defaultCookingTime = cookingTime;
         }
 
-        public CanteenFurnaceRecipe fromJson(ResourceLocation id, JsonObject jsonRecipe) {
+        public @NotNull CanteenFurnaceRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject jsonRecipe) {
             String s = GsonHelper.getAsString(jsonRecipe, "group", "");
             JsonElement jsonelement = (JsonElement)(GsonHelper.isArrayNode(jsonRecipe, "ingredient") ? GsonHelper.getAsJsonArray(jsonRecipe, "ingredient") : GsonHelper.getAsJsonObject(jsonRecipe, "ingredient"));
             Ingredient ingredient = Ingredient.fromJson(jsonelement);

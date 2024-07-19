@@ -161,6 +161,7 @@ dependencies {
     // These are REQUIRED for the mod to compile correctly and should not be removed.
     implementation fg.deobf("curse.maven:curios-309927:5367946")
     implementation fg.deobf("curse.maven:serene-seasons-291874:4761604")
+    implementation fg.deobf("curse.maven:feathers-699933:4814309")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

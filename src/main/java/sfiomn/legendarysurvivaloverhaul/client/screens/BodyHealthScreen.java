@@ -29,14 +29,14 @@ public class BodyHealthScreen extends Screen {
     public static final int TEX_HEALTH_BAR_X = 176;
     public static final int TEX_HEALTH_BAR_Y = 0;
 
-    private Map<BodyPartEnum, BodyPartButton> bodyPartButtons = new HashMap<>();
+    private final Map<BodyPartEnum, BodyPartButton> bodyPartButtons = new HashMap<>();
     private int leftPos;
     private int topPos;
 
-    private Player player;
-    private InteractionHand hand;
+    private final Player player;
+    private final InteractionHand hand;
     private int healingCharges;
-    private BodyHealingItem healingItem;
+    private final BodyHealingItem healingItem;
     private boolean consumeItem;
 
     public BodyHealthScreen(Player player) {
