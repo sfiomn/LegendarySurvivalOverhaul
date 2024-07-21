@@ -177,14 +177,6 @@ public class TemperatureCapability implements ITemperatureCapability
 				// Apply secondary effect hypothermia
 				player.removeEffect(MobEffectRegistry.HEAT_THIRST.get());
 				player.addEffect(new MobEffectInstance(MobEffectRegistry.COLD_HUNGER.get(), 300, 0, false, false));
-
-				//  Waiting a fix from Feathers to remove the sound triggered when the Cold effect is applied
-				//  Current workaround is to directly use the effect update method, but doesn't refresh the client side
-				if (feathersLoaded)
-					if (player.hasEffect(FeathersEffects.COLD.get())) {
-						Objects.requireNonNull(player.getEffect(FeathersEffects.COLD.get())).update(new MobEffectInstance(FeathersEffects.COLD.get(), 300, 0, false, true));
-					} else
-						player.addEffect(new MobEffectInstance(FeathersEffects.COLD.get(), 300, 0, false, true));
 				return;
 			}
 		}

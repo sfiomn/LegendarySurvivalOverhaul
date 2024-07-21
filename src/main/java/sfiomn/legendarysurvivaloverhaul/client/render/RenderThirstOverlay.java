@@ -34,7 +34,7 @@ public class RenderThirstOverlay {
 
     public static void drawThirstEffect() {
         if (!(Minecraft.getInstance().screen instanceof DeathScreen) && focusShader != null) {
-            focusShader.render();
+            focusShader.render(shaderIntensity);
         }
     }
 
@@ -60,8 +60,6 @@ public class RenderThirstOverlay {
                 } else if (targetShaderIntensity < shaderIntensity) {
                     shaderIntensity = Math.max(shaderIntensity - SHADER_INTENSITY_STEP, targetShaderIntensity);
                 }
-                if (focusShader.intensity != shaderIntensity)
-                    focusShader.updateIntensity(shaderIntensity);
             }
         }
     }

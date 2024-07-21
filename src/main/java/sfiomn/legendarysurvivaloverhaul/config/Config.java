@@ -21,21 +21,21 @@ public class Config
 {
 	public static final ForgeConfigSpec COMMON_SPEC;
 	public static final Config.Common COMMON;
-	
+
 	public static final ForgeConfigSpec CLIENT_SPEC;
 	public static final Config.Client CLIENT;
-	
+
 	static
 	{
 		final Pair<Common, ForgeConfigSpec> common = new ForgeConfigSpec.Builder().configure(Config.Common::new);
 		COMMON_SPEC = common.getRight();
 		COMMON = common.getLeft();
-		
+
 		final Pair<Client, ForgeConfigSpec> client = new ForgeConfigSpec.Builder().configure(Config.Client::new);
 		CLIENT_SPEC = client.getRight();
 		CLIENT = client.getLeft();
 	}
-	
+
 	public static void register()
 	{
 		try
@@ -49,20 +49,20 @@ public class Config
 			LegendarySurvivalOverhaul.LOGGER.error("Failed to create Legendary Survival Overhaul config directories");
 			e.printStackTrace();
 		}
-		
+
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_SPEC, LegendarySurvivalOverhaul.MOD_ID + "/" + LegendarySurvivalOverhaul.MOD_ID +"-client.toml");
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_SPEC, LegendarySurvivalOverhaul.MOD_ID + "/" + LegendarySurvivalOverhaul.MOD_ID +"-common.toml");
-		
+
 		JsonConfigRegistration.init(LegendarySurvivalOverhaul.modConfigJsons.toFile());
 	}
-	
+
 	public static class Common
 	{
 		// Core/Advanced
 		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
 		public final ForgeConfigSpec.ConfigValue<Boolean> hideInfoFromDebug;
 		public final ForgeConfigSpec.ConfigValue<Double> baseFoodExhaustion;
-		
+
 		// Temperature
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureEnabled;
 		public final ForgeConfigSpec.ConfigValue<Integer> tickRate;
@@ -76,7 +76,7 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureSecondaryEffects;
 		public final ForgeConfigSpec.ConfigValue<Double> heatThirstEffectModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> coldHungerEffectModifier;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Boolean> biomeEffectsEnabled;
 		public final ForgeConfigSpec.ConfigValue<Boolean> biomeDrynessEffectEnabled;
 		public final ForgeConfigSpec.ConfigValue<Double> biomeTemperatureMultiplier;
@@ -84,7 +84,7 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Double> overworldDefaultTemperature;
 		public final ForgeConfigSpec.ConfigValue<Double> netherDefaultTemperature;
 		public final ForgeConfigSpec.ConfigValue<Double> endDefaultTemperature;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Double> timeModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> biomeTimeMultiplier;
 		public final ForgeConfigSpec.ConfigValue<Integer> shadeTimeModifier;
@@ -93,7 +93,7 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Double> sprintModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> onFireModifier;
 		public final ForgeConfigSpec.ConfigValue<Double> enchantmentMultiplier;
-		
+
 		public final ForgeConfigSpec.ConfigValue<String> wetnessMode;
 		public final ForgeConfigSpec.ConfigValue<Double> wetMultiplier;
 		public final ForgeConfigSpec.ConfigValue<Integer> wetnessDecrease;
@@ -121,32 +121,32 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Double> thermalCoat1Modifier;
 		public final ForgeConfigSpec.ConfigValue<Double> thermalCoat2Modifier;
 		public final ForgeConfigSpec.ConfigValue<Double> thermalCoat3Modifier;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Boolean> seasonTemperatureEffects;
 		public final ForgeConfigSpec.ConfigValue<Boolean> tropicalSeasonsEnabled;
 		public final ForgeConfigSpec.ConfigValue<Boolean> seasonCardsEnabled;
 		public final ForgeConfigSpec.ConfigValue<Boolean> defaultSeasonEnabled;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Integer> earlySpringModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> midSpringModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> lateSpringModifier;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Integer> earlySummerModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> midSummerModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> lateSummerModifier;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Integer> earlyAutumnModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> midAutumnModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> lateAutumnModifier;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Integer> earlyWinterModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> midWinterModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> lateWinterModifier;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Integer> earlyWetSeasonModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> midWetSeasonModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> lateWetSeasonModifier;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Integer> earlyDrySeasonModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> midDrySeasonModifier;
 		public final ForgeConfigSpec.ConfigValue<Integer> lateDrySeasonModifier;
@@ -182,10 +182,10 @@ public class Config
 
 		// Heart Fruits
 		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsEnabled;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Integer> heartsLostOnDeath;
 		public final ForgeConfigSpec.ConfigValue<Integer> maxAdditionalHearts;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Integer> additionalHeartsPerFruit;
 		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsGiveRegen;
 
@@ -250,13 +250,13 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Double> medikitHealingValue;
 		public final ForgeConfigSpec.ConfigValue<Integer> medikitHealingTime;
 		public final ForgeConfigSpec.ConfigValue<Integer> medikitUseTime;
-		
+
 		Common(ForgeConfigSpec.Builder builder)
 		{
 			builder.comment(new String [] {
-						" Options related to enabling/disabling specific features",
-						" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc."
-					}).push("core");
+					" Options related to enabling/disabling specific features",
+					" See the jsons folder to customize the temperature of specific blocks, liquids, armors, etc."
+			}).push("core");
 			temperatureEnabled = builder
 					.comment(" Whether the temperature system is enabled.")
 					.define("Temperature Enabled", true);
@@ -287,7 +287,7 @@ public class Config
 					.comment(" Food exhausted every 10 ticks. Increase the base minecraft food exhaustion.")
 					.defineInRange("Base Food Exhaustion", 0.03d, 0, 1000.0D);
 			builder.pop();
-			
+
 			builder.comment(" Options related to the temperature system").push("temperature");
 			dangerousTemperature = builder
 					.comment(" If enabled, players will take damage from the effects of temperature.")
@@ -333,7 +333,7 @@ public class Config
 					.comment(" If enabled, players will see particles on them when temperature resistance effect active.",
 							" If disabled, players won't see particles but the potion color will turn black due to forge weird behavior.")
 					.define("Show Temperature Potion Effect Particles", true);
-			
+
 			builder.push("wetness");
 			wetnessMode = builder
 					.comment(" How a player's \"wetness\" is determined. Accepted values are as follows:",
@@ -342,7 +342,7 @@ public class Config
 							"   DYNAMIC - Wetness can change dynamically based on various conditions, and does not instantly go away when moving out of water.",
 							" Any other value will default to DISABLE.")
 					.define("Wetness Mode", "DYNAMIC");
-			
+
 			wetMultiplier = builder
 					.comment(" How much being wet influences the player's temperature.")
 					.define("Wetness Modifier", -10.0d);
@@ -365,7 +365,7 @@ public class Config
 			netherDefaultTemperature = builder.define( "Default Nether Modifier", 30.0d);
 			endDefaultTemperature = builder.define( "Default The End Modifier", 5.0d);
 			builder.pop();
-			
+
 			builder.push("huddling");
 			playerHuddlingModifier = builder
 					.comment(" How much nearby players increase the ambient temperature by.", " Note that this value stacks!")
@@ -386,7 +386,7 @@ public class Config
 					.comment(" Whether hot biome's dryness will make days really hot and nights really cold.")
 					.define("Biome's dryness affects Temperature", false);
 			builder.pop();
-			
+
 			builder.push("weather");
 			rainTemperatureModifier = builder
 					.comment(" How much of an effect rain has on temperature.")
@@ -395,7 +395,7 @@ public class Config
 					.comment(" How much of an effect snow has on temperature.")
 					.define("Snow Temperature Modifier", -6.0d);
 			builder.pop();
-			
+
 			builder.push("time");
 			timeModifier = builder
 					.comment(" How much Time has effect on Temperature.",
@@ -412,7 +412,7 @@ public class Config
 			builder.pop();
 
 			builder.comment(" Temperature coat adds temperature effects on armors by using the sewing table.",
-					" Adaptive means the coating will maintain the player's temperature temperate.")
+							" Adaptive means the coating will maintain the player's temperature temperate.")
 					.push("coat");
 
 			builder.comment(" Add an adaptive heating effect on armors.").push("heating");
@@ -434,7 +434,7 @@ public class Config
 			thermalCoat3Modifier = builder.defineInRange("Thermal Coat III", 3.0d, 0, 1000.0d);
 			builder.pop();
 			builder.pop();
-			
+
 			builder.push("advanced");
 			tempInfluenceMaximumDist = builder
 					.comment(" Maximum distance, in blocks, where thermal sources will have an effect on temperature.")
@@ -465,9 +465,9 @@ public class Config
 					.defineInRange("Minimum Temperature Modification", 0.2, 0.1, Integer.MAX_VALUE);
 			builder.pop();
 			builder.pop();
-			
+
 			builder.push("integration");
-			
+
 			builder.push("seasons");
 			seasonTemperatureEffects = builder
 					.comment(" If Serene Seasons is installed, then seasons will have an effect on the player's temperature.")
@@ -485,40 +485,40 @@ public class Config
 					.define("Default Season Enabled", true);
 
 			builder.comment(" Temperature modifiers per season in temperate biomes." +
-					" The value is reached at the middle of the sub season, and smoothly transition from one to another.")
+							" The value is reached at the middle of the sub season, and smoothly transition from one to another.")
 					.push("temperate");
 			builder.push("spring");
 			earlySpringModifier = builder.define("Early Spring Modifier", -3);
 			midSpringModifier = builder.define("Mid Spring Modifier", 0);
 			lateSpringModifier = builder.define("Late Spring Modifier", 3);
 			builder.pop();
-			
+
 			builder.push("summer");
 			earlySummerModifier = builder.define("Early Summer Modifier", 5);
 			midSummerModifier = builder.define("Mid Summer Modifier", 8);
 			lateSummerModifier = builder.define("Late Summer Modifier", 5);
 			builder.pop();
-			
+
 			builder.push("autumn");
 			earlyAutumnModifier = builder.define("Early Autumn Modifier", 3);
 			midAutumnModifier = builder.define("Mid Autumn Modifier", 0);
 			lateAutumnModifier = builder.define("Late Autumn Modifier", -3);
 			builder.pop();
-			
+
 			builder.push("winter");
 			earlyWinterModifier = builder.define("Early Winter Modifier", -7);
 			midWinterModifier = builder.define("Mid Winter Modifier", -12);
 			lateWinterModifier = builder.define("Late Winter Modifier", -7);
 			builder.pop();
 			builder.pop();
-			
+
 			builder.comment(" Temperature modifiers per season in tropical biomes.").push("tropical");
 			builder.push("wet-season");
 			earlyWetSeasonModifier = builder.define("Early Wet Season Modifier", -1);
 			midWetSeasonModifier = builder.define("Mid Wet Season Modifier", -5);
 			lateWetSeasonModifier = builder.define("Late Wet Season Modifier", -1);
 			builder.pop();
-			
+
 			builder.push("dry-season");
 			earlyDrySeasonModifier = builder.define("Early Dry Season Modifier", 3);
 			midDrySeasonModifier = builder.define("Mid Dry Season Modifier", 7);
@@ -625,7 +625,7 @@ public class Config
 					.define("Glass Bottle Loot After Drinking A Juice", true);
 			builder.pop();
 			builder.pop();
-			
+
 			builder.comment(" Options related to heart fruits").push("heart-fruits");
 			maxAdditionalHearts = builder
 					.comment(" Maximum number of additional hearts that can be given by Heart Fruits.")
@@ -635,7 +635,7 @@ public class Config
 							" Set to -1 to force loss of all additional hearts on death.",
 							" Set to 0 to make additional hearts permanent.")
 					.defineInRange("Hearts Lost On Death", -1, -1, Integer.MAX_VALUE);
-			
+
 			builder.push("effects");
 			additionalHeartsPerFruit = builder
 					.comment(" Amount of hearts gained from eating a Heart Fruit.")
@@ -739,7 +739,7 @@ public class Config
 
 			builder.push("body-parts-effects");
 			builder.comment(" Each effect, threshold and amplifier lists must have the same number of items.",
-					" The first effect will be triggered with the first amplifier value when the first threshold is reach.")
+							" The first effect will be triggered with the first amplifier value when the first threshold is reach.")
 					.push("head");
 			headPartEffects = builder
 					.comment(" The list of effects that will be triggered when the head is damaged by the percentage of remaining head health defined in the thresholds.")
@@ -747,43 +747,43 @@ public class Config
 			headPartEffectAmplifiers = builder
 					.comment(" The list of amplifiers the effect will have.",
 							" 0 means the basic effect, 1 means the effect is amplified once.")
-					.defineList("Head Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
+					.defineListAllowEmpty("Head Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
 			headPartEffectThresholds = builder
 					.comment(" The list of thresholds for which each effect will be triggered. A threshold is a percentage of remaining head health.",
 							" 0 means the head is fully damaged.")
-					.defineList("Head Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
+					.defineListAllowEmpty("Head Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			builder.pop();
 			builder.push("arms");
 			armsPartEffects = builder.define("Arms Part Effects", List.of("minecraft:mining_fatigue"));
-			armsPartEffectAmplifiers = builder.defineList("Arms Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
-			armsPartEffectThresholds = builder.defineList("Arms Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
+			armsPartEffectAmplifiers = builder.defineListAllowEmpty("Arms Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
+			armsPartEffectThresholds = builder.defineListAllowEmpty("Arms Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			bothArmsPartEffects = builder
 					.comment(" These effects will be triggered when both arms reach the thresholds.",
 							" If a same effect is used with a higher amplifier, the higher prevails (normal Minecraft behaviour).")
 					.define("Both Arms Part Effects", List.of("minecraft:weakness"));
-			bothArmsPartEffectAmplifiers = builder.defineList("Both Arms Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
-			bothArmsPartEffectThresholds = builder.defineList("Both Arms Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
+			bothArmsPartEffectAmplifiers = builder.defineListAllowEmpty("Both Arms Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
+			bothArmsPartEffectThresholds = builder.defineListAllowEmpty("Both Arms Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			builder.pop();
 			builder.push("chest");
 			chestPartEffects = builder.define("Chest Part Effects", List.of(LegendarySurvivalOverhaul.MOD_ID + ":vulnerability"));
-			chestPartEffectAmplifiers = builder.defineList("Chest Part Effect Amplifier", List.of(0), Config::validatePositiveInt);
-			chestPartEffectThresholds = builder.defineList("Chest Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
+			chestPartEffectAmplifiers = builder.defineListAllowEmpty("Chest Part Effect Amplifier", List.of(0), Config::validatePositiveInt);
+			chestPartEffectThresholds = builder.defineListAllowEmpty("Chest Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			builder.pop();
 			builder.push("legs");
 			legsPartEffects = builder.define("Legs Part Effects", List.of(LegendarySurvivalOverhaul.MOD_ID + ":hard_falling"));
-			legsPartEffectAmplifiers = builder.defineList("Legs Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
-			legsPartEffectThresholds = builder.defineList("Legs Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
+			legsPartEffectAmplifiers = builder.defineListAllowEmpty("Legs Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
+			legsPartEffectThresholds = builder.defineListAllowEmpty("Legs Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			bothLegsPartEffects = builder.define("Both Legs Part Effects", List.of(LegendarySurvivalOverhaul.MOD_ID + ":hard_falling"));
-			bothLegsPartEffectAmplifiers = builder.defineList("Both Legs Part Effect Amplifiers", List.of(1), Config::validatePositiveInt);
-			bothLegsPartEffectThresholds = builder.defineList("Both Legs Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
+			bothLegsPartEffectAmplifiers = builder.defineListAllowEmpty("Both Legs Part Effect Amplifiers", List.of(1), Config::validatePositiveInt);
+			bothLegsPartEffectThresholds = builder.defineListAllowEmpty("Both Legs Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			builder.pop();
 			builder.push("feet");
 			feetPartEffects = builder.define("Feet Part Effects", Collections.singletonList("minecraft:slowness"));
-			feetPartEffectAmplifiers = builder.defineList("Feet Part Effect Amplifiers", Collections.singletonList(0), Config::validatePositiveInt);
-			feetPartEffectThresholds = builder.defineList("Feet Part Effect Thresholds", Collections.singletonList(0.2f), Config::validatePercentFloat);
+			feetPartEffectAmplifiers = builder.defineListAllowEmpty("Feet Part Effect Amplifiers", Collections.singletonList(0), Config::validatePositiveInt);
+			feetPartEffectThresholds = builder.defineListAllowEmpty("Feet Part Effect Thresholds", Collections.singletonList(0.2f), Config::validatePercentFloat);
 			bothFeetPartEffects = builder.define("Both Feet Part Effects", Collections.singletonList("minecraft:slowness"));
-			bothFeetPartEffectAmplifiers = builder.defineList("Both Feet Part Effect Amplifiers", Collections.singletonList(1), Config::validatePositiveInt);
-			bothFeetPartEffectThresholds = builder.defineList("Both Feet Part Effect Thresholds", Collections.singletonList(0.2f), Config::validatePercentFloat);
+			bothFeetPartEffectAmplifiers = builder.defineListAllowEmpty("Both Feet Part Effect Amplifiers", Collections.singletonList(1), Config::validatePositiveInt);
+			bothFeetPartEffectThresholds = builder.defineListAllowEmpty("Both Feet Part Effect Thresholds", Collections.singletonList(0.2f), Config::validatePercentFloat);
 			builder.pop();
 
 			builder.pop();
@@ -800,7 +800,7 @@ public class Config
 	{
 		return obj instanceof final Float floatValue && floatValue >= 0 && floatValue <= 1;
 	}
-	
+
 	public static class Client
 	{
 		public final ForgeConfigSpec.ConfigValue<Boolean> showVanillaAnimationOverlay;
@@ -808,7 +808,7 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetY;
 		public final ForgeConfigSpec.ConfigValue<Boolean> foodSaturationDisplayed;
-		
+
 		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetX;
 		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetY;
 
@@ -829,10 +829,10 @@ public class Config
 
 		Client(ForgeConfigSpec.Builder builder)
 		{
-			
+
 			builder.comment(new String[] {" Options related to the heads up display.",
 					" These options will automatically update upon being saved."
-					}).push("hud");
+			}).push("hud");
 			builder.push("general");
 
 			showVanillaAnimationOverlay = builder
@@ -841,7 +841,7 @@ public class Config
 							" Disable this animation if the temperature secondary effect is enabled to allow a compatibility with other mods rendering the food bar (by example Appleskin).")
 					.define("Show Vanilla Animation Overlay", true);
 			builder.pop();
-			
+
 			builder.push("temperature");
 			temperatureDisplayMode = builder
 					.comment(" How temperature is displayed. Accepted values are as follows:",
@@ -910,15 +910,15 @@ public class Config
 			builder.pop();
 		}
 	}
-	
+
 	public static class Server
 	{
 		Server(ForgeConfigSpec.Builder builder)
 		{
-			
+
 		}
 	}
-	
+
 	public static class Baked
 	{
 		// Core
@@ -941,7 +941,7 @@ public class Config
 		public static double coldHungerEffectModifier;
 		public static boolean foodSaturationDisplayed;
 		public static boolean showVanillaAnimationOverlay;
-		
+
 		public static boolean biomeEffectsEnabled;
 		public static boolean biomeDrynessEffectEnabled;
 		public static double biomeTemperatureMultiplier;
@@ -949,12 +949,12 @@ public class Config
 		public static double overworldDefaultTemperature;
 		public static double netherDefaultTemperature;
 		public static double endDefaultTemperature;
-		
+
 		public static double rainTemperatureModifier;
 		public static double snowTemperatureModifier;
-		
+
 		public static double altitudeModifier;
-		
+
 		public static double timeModifier;
 		public static double biomeTimeMultiplier;
 		public static int shadeTimeModifier;
@@ -964,10 +964,10 @@ public class Config
 		public static double sprintModifier;
 		public static double onFireModifier;
 		public static double enchantmentMultiplier;
-		
+
 		public static double playerHuddlingModifier;
 		public static int playerHuddlingRadius;
-		
+
 		public static WetnessMode wetnessMode;
 		public static double wetMultiplier;
 		public static int wetnessDecrease;
@@ -990,7 +990,7 @@ public class Config
 		public static boolean tropicalSeasonsEnabled;
 		public static boolean seasonCardsEnabled;
 		public static boolean defaultSeasonEnabled;
-		
+
 		public static int earlySpringModifier;
 		public static int midSpringModifier;
 		public static int lateSpringModifier;
@@ -1124,7 +1124,7 @@ public class Config
 		public static int seasonCardsDisplayTimeInTicks;
 		public static int seasonCardsFadeInInTicks;
 		public static int seasonCardsFadeOutInTicks;
-		
+
 		public static int wetnessIndicatorOffsetX;
 		public static int wetnessIndicatorOffsetY;
 
@@ -1153,7 +1153,7 @@ public class Config
 
 				temperatureResistanceOnDeathEnabled = COMMON.temperatureResistanceOnDeathEnabled.get();
 				temperatureResistanceOnDeathTime = COMMON.temperatureResistanceOnDeathTime.get();
-				
+
 				dangerousTemperature = COMMON.dangerousTemperature.get();
 				temperatureSecondaryEffects = COMMON.temperatureSecondaryEffects.get();
 				heatThirstEffectModifier = COMMON.heatThirstEffectModifier.get();
@@ -1177,17 +1177,17 @@ public class Config
 				tempInfluenceMaximumDist = COMMON.tempInfluenceMaximumDist.get();
 				tempInfluenceUpDistMultiplier = COMMON.tempInfluenceUpDistMultiplier.get();
 				tempInfluenceOutsideDistMultiplier = COMMON.tempInfluenceOutsideDistMultiplier.get();
-				
+
 				onFireModifier = COMMON.onFireModifier.get();
 				sprintModifier = COMMON.sprintModifier.get();
 				enchantmentMultiplier = COMMON.enchantmentMultiplier.get();
-				
+
 				wetnessMode = WetnessMode.getDisplayFromString(COMMON.wetnessMode.get());
 				wetMultiplier = COMMON.wetMultiplier.get();
 				wetnessDecrease = COMMON.wetnessDecrease.get();
 				wetnessRainIncrease = COMMON.wetnessRainIncrease.get();
 				wetnessFluidIncrease = COMMON.wetnessFluidIncrease.get();
-				
+
 				playerHuddlingModifier = COMMON.playerHuddlingModifier.get();
 				playerHuddlingRadius = COMMON.playerHuddlingRadius.get();
 
@@ -1207,7 +1207,7 @@ public class Config
 				tropicalSeasonsEnabled = COMMON.tropicalSeasonsEnabled.get();
 				seasonCardsEnabled = COMMON.seasonCardsEnabled.get();
 				defaultSeasonEnabled = COMMON.defaultSeasonEnabled.get();
-				
+
 				earlySpringModifier = COMMON.earlySpringModifier.get();
 				midSpringModifier = COMMON.midSpringModifier.get();
 				lateSpringModifier = COMMON.lateSpringModifier.get();
@@ -1332,7 +1332,7 @@ public class Config
 				e.printStackTrace();
 			}
 		}
-		
+
 		public static void bakeClient()
 		{
 			LegendarySurvivalOverhaul.LOGGER.debug("Load Client configuration from file");
@@ -1349,7 +1349,7 @@ public class Config
 				seasonCardsDisplayTimeInTicks = CLIENT.seasonCardsDisplayTimeInTicks.get();
 				seasonCardsFadeInInTicks = CLIENT.seasonCardsFadeInInTicks.get();
 				seasonCardsFadeOutInTicks = CLIENT.seasonCardsFadeOutInTicks.get();
-				
+
 				wetnessIndicatorOffsetX = CLIENT.wetnessIndicatorOffsetX.get();
 				wetnessIndicatorOffsetY = CLIENT.wetnessIndicatorOffsetY.get();
 

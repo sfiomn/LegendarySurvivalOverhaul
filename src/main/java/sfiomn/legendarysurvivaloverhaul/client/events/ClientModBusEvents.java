@@ -3,6 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.client.events;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -10,6 +11,8 @@ import net.minecraftforge.fml.common.Mod;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.client.tooltips.HydrationClientTooltipComponent;
 import sfiomn.legendarysurvivaloverhaul.client.tooltips.HydrationTooltipComponent;
+import sfiomn.legendarysurvivaloverhaul.common.particles.FernBlossomParticle;
+import sfiomn.legendarysurvivaloverhaul.registry.ParticleTypeRegistry;
 
 import static sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons.RenderSeasonCards.SEASON_CARD_GUI;
 import static sfiomn.legendarysurvivaloverhaul.client.render.RenderBodyDamageGui.BODY_DAMAGE_GUI;
@@ -45,5 +48,11 @@ public class ClientModBusEvents {
     @SubscribeEvent
     public static void onTooltipRegistration(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(HydrationTooltipComponent.class, component -> new HydrationClientTooltipComponent(component.hydration, component.saturation, component.dirty));
+    }
+
+    @SubscribeEvent
+    public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(ParticleTypeRegistry.SUN_FERN_BLOSSOM.get(), FernBlossomParticle.Factory::new);
+        event.registerSpriteSet(ParticleTypeRegistry.ICE_FERN_BLOSSOM.get(), FernBlossomParticle.Factory::new);
     }
 }

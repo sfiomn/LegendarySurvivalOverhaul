@@ -17,7 +17,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.event.server.ServerLifecycleEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
@@ -36,7 +35,6 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.Temperat
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
-import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
@@ -45,8 +43,6 @@ import sfiomn.legendarysurvivaloverhaul.util.internal.BodyDamageUtilInternal;
 import sfiomn.legendarysurvivaloverhaul.util.internal.TemperatureUtilInternal;
 import sfiomn.legendarysurvivaloverhaul.util.internal.ThirstUtilInternal;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -99,7 +95,7 @@ public class LegendarySurvivalOverhaul
 		SoundRegistry.register(modBus);
 		TemperatureModifierRegistry.register(modBus);
 		BlockEntityRegistry.register(modBus);
-		ItemGroupRegistry.register(modBus);
+		CreativeTabRegistry.register(modBus);
 
 		forgeBus.addListener(CommandRegistry::registerCommandsEvent);
 		forgeBus.addListener(this::reloadListener);
@@ -193,7 +189,6 @@ public class LegendarySurvivalOverhaul
                               protected void apply(Object o, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
                                   JsonConfigRegistration.init(modConfigJsons.toFile());
                                   Config.Baked.bakeCommon();
-                                  Config.Baked.bakeClient();
                               }
                           }
 		);

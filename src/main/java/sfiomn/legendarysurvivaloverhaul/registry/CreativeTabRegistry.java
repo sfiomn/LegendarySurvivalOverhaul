@@ -10,7 +10,7 @@ import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 
 import java.util.List;
 
-public class ItemGroupRegistry {
+public class CreativeTabRegistry {
     public static final DeferredRegister<CreativeModeTab> ITEM_GROUPS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, LegendarySurvivalOverhaul.MOD_ID);
 
     public static final RegistryObject<CreativeModeTab> LEGENDARY_CREATURES_TAB = ITEM_GROUPS.register("legendary_creatures", () -> CreativeModeTab.builder()

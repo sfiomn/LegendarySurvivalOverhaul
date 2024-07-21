@@ -52,13 +52,6 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
                 malusEffects.put(malusThreshold, Pair.of(malusEffect, malusAmplifier));
             }
             bodyPartMalusEffects.put(malus, malusEffects);
-            for (Map.Entry<MalusBodyPartEnum, Map<Float, Pair<MobEffect, Integer>>> bodyPartMalusEffect: bodyPartMalusEffects.entrySet()) {
-                LegendarySurvivalOverhaul.LOGGER.debug(bodyPartMalusEffect.getKey());
-                for (Map.Entry<Float, Pair<MobEffect, Integer>> jjj: bodyPartMalusEffect.getValue().entrySet()) {
-                    LegendarySurvivalOverhaul.LOGGER.debug(jjj.getKey());
-                    LegendarySurvivalOverhaul.LOGGER.debug(jjj.getValue());
-                }
-            }
         }
     }
 
