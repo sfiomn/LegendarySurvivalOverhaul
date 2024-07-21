@@ -1,8 +1,10 @@
 package sfiomn.legendarysurvivaloverhaul.config;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureDisplayEnum;
@@ -202,33 +204,33 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<Double> feetPartHealth;
 
 		public final ForgeConfigSpec.ConfigValue<List<String>> headPartEffects;
-		public final ForgeConfigSpec.ConfigValue<List<Integer>> headPartEffectAmplifiers;
-		public final ForgeConfigSpec.ConfigValue<List<Float>> headPartEffectThresholds;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> headPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Float>> headPartEffectThresholds;
 
 		public final ForgeConfigSpec.ConfigValue<List<String>> armsPartEffects;
-		public final ForgeConfigSpec.ConfigValue<List<Integer>> armsPartEffectAmplifiers;
-		public final ForgeConfigSpec.ConfigValue<List<Float>> armsPartEffectThresholds;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> armsPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Float>> armsPartEffectThresholds;
 		public final ForgeConfigSpec.ConfigValue<List<String>> bothArmsPartEffects;
-		public final ForgeConfigSpec.ConfigValue<List<Integer>> bothArmsPartEffectAmplifiers;
-		public final ForgeConfigSpec.ConfigValue<List<Float>> bothArmsPartEffectThresholds;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> bothArmsPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Float>> bothArmsPartEffectThresholds;
 
 		public final ForgeConfigSpec.ConfigValue<List<String>> chestPartEffects;
-		public final ForgeConfigSpec.ConfigValue<List<Integer>> chestPartEffectAmplifiers;
-		public final ForgeConfigSpec.ConfigValue<List<Float>> chestPartEffectThresholds;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> chestPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Float>> chestPartEffectThresholds;
 
 		public final ForgeConfigSpec.ConfigValue<List<String>> legsPartEffects;
-		public final ForgeConfigSpec.ConfigValue<List<Integer>> legsPartEffectAmplifiers;
-		public final ForgeConfigSpec.ConfigValue<List<Float>> legsPartEffectThresholds;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> legsPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Float>> legsPartEffectThresholds;
 		public final ForgeConfigSpec.ConfigValue<List<String>> bothLegsPartEffects;
-		public final ForgeConfigSpec.ConfigValue<List<Integer>> bothLegsPartEffectAmplifiers;
-		public final ForgeConfigSpec.ConfigValue<List<Float>> bothLegsPartEffectThresholds;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> bothLegsPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Float>> bothLegsPartEffectThresholds;
 
 		public final ForgeConfigSpec.ConfigValue<List<String>> feetPartEffects;
-		public final ForgeConfigSpec.ConfigValue<List<Integer>> feetPartEffectAmplifiers;
-		public final ForgeConfigSpec.ConfigValue<List<Float>> feetPartEffectThresholds;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> feetPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Float>> feetPartEffectThresholds;
 		public final ForgeConfigSpec.ConfigValue<List<String>> bothFeetPartEffects;
-		public final ForgeConfigSpec.ConfigValue<List<Integer>> bothFeetPartEffectAmplifiers;
-		public final ForgeConfigSpec.ConfigValue<List<Float>> bothFeetPartEffectThresholds;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> bothFeetPartEffectAmplifiers;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Float>> bothFeetPartEffectThresholds;
 
 		public final ForgeConfigSpec.ConfigValue<Double> healingHerbsHealingValue;
 		public final ForgeConfigSpec.ConfigValue<Integer> healingHerbsHealingTime;
@@ -745,48 +747,58 @@ public class Config
 			headPartEffectAmplifiers = builder
 					.comment(" The list of amplifiers the effect will have.",
 							" 0 means the basic effect, 1 means the effect is amplified once.")
-					.define("Head Part Effect Amplifiers", List.of(0));
+					.defineList("Head Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
 			headPartEffectThresholds = builder
 					.comment(" The list of thresholds for which each effect will be triggered. A threshold is a percentage of remaining head health.",
 							" 0 means the head is fully damaged.")
-					.define("Head Part Effect Thresholds", List.of(0.2f));
+					.defineList("Head Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			builder.pop();
 			builder.push("arms");
 			armsPartEffects = builder.define("Arms Part Effects", List.of("minecraft:mining_fatigue"));
-			armsPartEffectAmplifiers = builder.define("Arms Part Effect Amplifiers", List.of(0));
-			armsPartEffectThresholds = builder.define("Arms Part Effect Thresholds", List.of(0.2f));
+			armsPartEffectAmplifiers = builder.defineList("Arms Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
+			armsPartEffectThresholds = builder.defineList("Arms Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			bothArmsPartEffects = builder
 					.comment(" These effects will be triggered when both arms reach the thresholds.",
 							" If a same effect is used with a higher amplifier, the higher prevails (normal Minecraft behaviour).")
 					.define("Both Arms Part Effects", List.of("minecraft:weakness"));
-			bothArmsPartEffectAmplifiers = builder.define("Both Arms Part Effect Amplifiers", List.of(0));
-			bothArmsPartEffectThresholds = builder.define("Both Arms Part Effect Thresholds", List.of(0.2f));
+			bothArmsPartEffectAmplifiers = builder.defineList("Both Arms Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
+			bothArmsPartEffectThresholds = builder.defineList("Both Arms Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			builder.pop();
 			builder.push("chest");
 			chestPartEffects = builder.define("Chest Part Effects", List.of(LegendarySurvivalOverhaul.MOD_ID + ":vulnerability"));
-			chestPartEffectAmplifiers = builder.define("Chest Part Effect Amplifier", List.of(0));
-			chestPartEffectThresholds = builder.define("Chest Part Effect Thresholds", List.of(0.2f));
+			chestPartEffectAmplifiers = builder.defineList("Chest Part Effect Amplifier", List.of(0), Config::validatePositiveInt);
+			chestPartEffectThresholds = builder.defineList("Chest Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			builder.pop();
 			builder.push("legs");
 			legsPartEffects = builder.define("Legs Part Effects", List.of(LegendarySurvivalOverhaul.MOD_ID + ":hard_falling"));
-			legsPartEffectAmplifiers = builder.define("Legs Part Effect Amplifiers", List.of(0));
-			legsPartEffectThresholds = builder.define("Legs Part Effect Thresholds", List.of(0.2f));
+			legsPartEffectAmplifiers = builder.defineList("Legs Part Effect Amplifiers", List.of(0), Config::validatePositiveInt);
+			legsPartEffectThresholds = builder.defineList("Legs Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			bothLegsPartEffects = builder.define("Both Legs Part Effects", List.of(LegendarySurvivalOverhaul.MOD_ID + ":hard_falling"));
-			bothLegsPartEffectAmplifiers = builder.define("Both Legs Part Effect Amplifiers", List.of(1));
-			bothLegsPartEffectThresholds = builder.define("Both Legs Part Effect Thresholds", List.of(0.2f));
+			bothLegsPartEffectAmplifiers = builder.defineList("Both Legs Part Effect Amplifiers", List.of(1), Config::validatePositiveInt);
+			bothLegsPartEffectThresholds = builder.defineList("Both Legs Part Effect Thresholds", List.of(0.2f), Config::validatePercentFloat);
 			builder.pop();
 			builder.push("feet");
 			feetPartEffects = builder.define("Feet Part Effects", Collections.singletonList("minecraft:slowness"));
-			feetPartEffectAmplifiers = builder.define("Feet Part Effect Amplifiers", Collections.singletonList(0));
-			feetPartEffectThresholds = builder.define("Feet Part Effect Thresholds", Collections.singletonList(0.2f));
+			feetPartEffectAmplifiers = builder.defineList("Feet Part Effect Amplifiers", Collections.singletonList(0), Config::validatePositiveInt);
+			feetPartEffectThresholds = builder.defineList("Feet Part Effect Thresholds", Collections.singletonList(0.2f), Config::validatePercentFloat);
 			bothFeetPartEffects = builder.define("Both Feet Part Effects", Collections.singletonList("minecraft:slowness"));
-			bothFeetPartEffectAmplifiers = builder.define("Both Feet Part Effect Amplifiers", Collections.singletonList(1));
-			bothFeetPartEffectThresholds = builder.define("Both Feet Part Effect Thresholds", Collections.singletonList(0.2f));
+			bothFeetPartEffectAmplifiers = builder.defineList("Both Feet Part Effect Amplifiers", Collections.singletonList(1), Config::validatePositiveInt);
+			bothFeetPartEffectThresholds = builder.defineList("Both Feet Part Effect Thresholds", Collections.singletonList(0.2f), Config::validatePercentFloat);
 			builder.pop();
 
 			builder.pop();
 			builder.pop();
 		}
+	}
+
+	private static boolean validatePositiveInt(final Object obj)
+	{
+		return obj instanceof final Integer intValue && intValue >= 0;
+	}
+
+	private static boolean validatePercentFloat(final Object obj)
+	{
+		return obj instanceof final Float floatValue && floatValue >= 0 && floatValue <= 1;
 	}
 	
 	public static class Client
@@ -1073,33 +1085,33 @@ public class Config
 		public static int medikitUseTime;
 
 		public static List<String> headPartEffects;
-		public static List<Integer> headPartEffectAmplifiers;
-		public static List<Float> headPartEffectThresholds;
+		public static List<? extends Integer> headPartEffectAmplifiers;
+		public static List<? extends Float> headPartEffectThresholds;
 
 		public static List<String> armsPartEffects;
-		public static List<Integer> armsPartEffectAmplifiers;
-		public static List<Float> armsPartEffectThresholds;
+		public static List<? extends Integer> armsPartEffectAmplifiers;
+		public static List<? extends Float> armsPartEffectThresholds;
 		public static List<String> bothArmsPartEffects;
-		public static List<Integer> bothArmsPartEffectAmplifiers;
-		public static List<Float> bothArmsPartEffectThresholds;
+		public static List<? extends Integer> bothArmsPartEffectAmplifiers;
+		public static List<? extends Float> bothArmsPartEffectThresholds;
 
 		public static List<String> chestPartEffects;
-		public static List<Integer> chestPartEffectAmplifiers;
-		public static List<Float> chestPartEffectThresholds;
+		public static List<? extends Integer> chestPartEffectAmplifiers;
+		public static List<? extends Float> chestPartEffectThresholds;
 
 		public static List<String> legsPartEffects;
-		public static List<Integer> legsPartEffectAmplifiers;
-		public static List<Float> legsPartEffectThresholds;
+		public static List<? extends Integer> legsPartEffectAmplifiers;
+		public static List<? extends Float> legsPartEffectThresholds;
 		public static List<String> bothLegsPartEffects;
-		public static List<Integer> bothLegsPartEffectAmplifiers;
-		public static List<Float> bothLegsPartEffectThresholds;
+		public static List<? extends Integer> bothLegsPartEffectAmplifiers;
+		public static List<? extends Float> bothLegsPartEffectThresholds;
 
 		public static List<String> feetPartEffects;
-		public static List<Integer> feetPartEffectAmplifiers;
-		public static List<Float> feetPartEffectThresholds;
+		public static List<? extends Integer> feetPartEffectAmplifiers;
+		public static List<? extends Float> feetPartEffectThresholds;
 		public static List<String> bothFeetPartEffects;
-		public static List<Integer> bothFeetPartEffectAmplifiers;
-		public static List<Float> bothFeetPartEffectThresholds;
+		public static List<? extends Integer> bothFeetPartEffectAmplifiers;
+		public static List<? extends Float> bothFeetPartEffectThresholds;
 
 		// Client Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
