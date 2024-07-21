@@ -16,7 +16,6 @@ import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
 import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
-import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 
 // Code adapted from 
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/capability/TemperatureCapability.java
@@ -165,18 +164,18 @@ public class TemperatureCapability implements ITemperatureCapability
 			if (!player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply secondary effect hyperthermia
 				player.removeEffect(EffectRegistry.COLD_HUNGER.get());
-				player.addEffect(new EffectInstance(EffectRegistry.HEAT_Thirst.get(), 300, 0, false, false));
+				player.addEffect(new EffectInstance(EffectRegistry.HEAT_THIRST.get(), 300, 0, false, false));
 				return;
 			}
 		} else if (tempEnum == TemperatureEnum.FROSTBITE) {
 			if (!player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply secondary effect hypothermia
-				player.removeEffect(EffectRegistry.HEAT_Thirst.get());
+				player.removeEffect(EffectRegistry.HEAT_THIRST.get());
 				player.addEffect(new EffectInstance(EffectRegistry.COLD_HUNGER.get(), 300, 0, false, false));
 				return;
 			}
 		}
-		player.removeEffect(EffectRegistry.HEAT_Thirst.get());
+		player.removeEffect(EffectRegistry.HEAT_THIRST.get());
 		player.removeEffect(EffectRegistry.COLD_HUNGER.get());
 	}
 	

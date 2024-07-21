@@ -144,7 +144,7 @@ public class HydrationTooltip {
 
         if (this.saturation >= 0) {
             xOffsetTexture = THIRST_TEXTURE_WIDTH * 6;
-            // Show the thirst bar dirty if dirty chance 100%
+            // Show the thirst bar dirty if dirty chance 100% -> align saturation color with thirst bar
             if (dirty >= 1.0f)
                 xOffsetTexture += THIRST_TEXTURE_WIDTH * 2;
         } else

@@ -98,7 +98,6 @@ public class TooltipHandler
 		if (hydrationTooltip == null)
 			return;
 
-
 		hydrationTooltip.renderTooltipIcons(event.getMatrixStack(), toolTipX, toolTipY, toolTipZ);
 	}
 

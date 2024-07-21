@@ -84,7 +84,7 @@ public class RenderThirstGui
 			{
 				xTextureOffset = THIRST_TEXTURE_WIDTH * 3;
 			}
-			if (player.hasEffect(EffectRegistry.HEAT_Thirst.get())) {
+			if (player.hasEffect(EffectRegistry.HEAT_THIRST.get())) {
 				yTextureOffset = THIRST_TEXTURE_HEIGHT;
 			}
 
@@ -98,10 +98,12 @@ public class RenderThirstGui
 			// Reassign texture offset for saturation
 			yTextureOffset = 0;
 			xTextureOffset = THIRST_TEXTURE_WIDTH * 6;
-			if (player.hasEffect(EffectRegistry.THIRST.get()))
-			{
+			if (player.hasEffect(EffectRegistry.THIRST.get())) {
 				xTextureOffset += THIRST_TEXTURE_WIDTH * 2;
+			} else if (player.hasEffect(EffectRegistry.HEAT_THIRST.get())) {
+				xTextureOffset += THIRST_TEXTURE_WIDTH * 8;
 			}
+
 			if(saturationInt > 0 && Config.Baked.thirstSaturationDisplayed)
 			{
 				if (halfIcon < saturationInt) { // Full saturation icon
