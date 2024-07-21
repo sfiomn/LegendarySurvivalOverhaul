@@ -213,6 +213,7 @@ public class CommonForgeEvents {
         if (source.is(DamageTypeTags.IS_PROJECTILE) && hitBodyParts.contains(BodyPartEnum.HEAD) && Config.Baked.headCriticalShotMultiplier > 1) {
             event.setAmount(event.getAmount() * (float) Config.Baked.headCriticalShotMultiplier);
             player.level().playSound(null, player, SoundRegistry.HEADSHOT.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
+
         }
     }
 

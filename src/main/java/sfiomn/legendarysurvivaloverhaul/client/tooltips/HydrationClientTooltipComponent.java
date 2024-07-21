@@ -42,16 +42,16 @@ public class HydrationClientTooltipComponent implements ClientTooltipComponent {
 
     @Override
     public int getHeight() {
-        int height = THIRST_TEXTURE_HEIGHT + 1;
+        int height = 12;
         // Saturation bar
         // If merge thirst and saturation, left is kept from thirst alignment to align both the saturation bar and the thirst bar
         if (saturationIconNumber > 0 && Config.Baked.thirstSaturationDisplayed) {
             if (hydrationIconNumber > 0 && !Config.Baked.mergeHydrationAndSaturationTooltip)
-                height += THIRST_TEXTURE_HEIGHT + 1;
+                height += 10;
         }
         // Dirty bar
         if (dirtyIconNumber > 0) {
-            height += THIRST_TEXTURE_HEIGHT + 1;
+            height += 10;
         }
         return height;
     }
@@ -162,7 +162,6 @@ public class HydrationClientTooltipComponent implements ClientTooltipComponent {
         }
 
         RenderSystem.disableBlend();
-        RenderSystem.setShaderColor(1, 1, 1, 1);
 
         // reset to drawHoveringText state
         RenderSystem.disableDepthTest();

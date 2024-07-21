@@ -1,10 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.registry;
 
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -12,31 +8,28 @@ import net.minecraftforge.registries.RegistryObject;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.common.items.*;
-import sfiomn.legendarysurvivaloverhaul.common.items.armor.ArmorMaterialBase;
-import sfiomn.legendarysurvivaloverhaul.common.items.armor.DesertArmorItem;
-import sfiomn.legendarysurvivaloverhaul.common.items.armor.SnowArmorItem;
 import sfiomn.legendarysurvivaloverhaul.common.items.drink.*;
 import sfiomn.legendarysurvivaloverhaul.common.items.heal.*;
+
+import static sfiomn.legendarysurvivaloverhaul.common.items.armor.ArmorMaterialBase.DESERT;
+import static sfiomn.legendarysurvivaloverhaul.common.items.armor.ArmorMaterialBase.SNOW;
 
 public class ItemRegistry {
 
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, LegendarySurvivalOverhaul.MOD_ID);
-	
-	public static final ArmorMaterialBase SNOW_ARMOR_MATERIAL = new ArmorMaterialBase("snow", 5.75f, new int[] { 1, 1, 2, 1}, 17, SoundEvents.ARMOR_EQUIP_LEATHER, 0, 0.0f, () -> Ingredient.of(ItemTags.WOOL));
-	public static final ArmorMaterialBase DESERT_ARMOR_MATERIAL = new ArmorMaterialBase("desert", 5.75f, new int[] { 1, 1, 2, 1}, 19, SoundEvents.ARMOR_EQUIP_LEATHER, 0, 0.0f, () -> Ingredient.of(Items.LEATHER));
 
 	public static final RegistryObject<Item> THERMOMETER = ITEMS.register("thermometer", () -> new ThermometerItem(new Item.Properties()));
 	public static final RegistryObject<Item> SEASONAL_CALENDAR = ITEMS.register("seasonal_calendar", () -> new SeasonalCalendarItem(new Item.Properties()));
 
-	public static final RegistryObject<Item> SNOW_HELMET = ITEMS.register("snow_helmet", () -> new SnowArmorItem(SNOW_ARMOR_MATERIAL, ArmorItem.Type.HELMET));
-	public static final RegistryObject<Item> SNOW_CHEST = ITEMS.register("snow_chestplate", () -> new SnowArmorItem(SNOW_ARMOR_MATERIAL, ArmorItem.Type.CHESTPLATE));
-	public static final RegistryObject<Item> SNOW_LEGGINGS = ITEMS.register("snow_leggings", () -> new SnowArmorItem(SNOW_ARMOR_MATERIAL, ArmorItem.Type.LEGGINGS));
-	public static final RegistryObject<Item> SNOW_BOOTS = ITEMS.register("snow_boots", () -> new SnowArmorItem(SNOW_ARMOR_MATERIAL, ArmorItem.Type.BOOTS));
+	public static final RegistryObject<Item> SNOW_HELMET = ITEMS.register("snow_helmet", () -> new ArmorItem(SNOW, ArmorItem.Type.HELMET, new Item.Properties()));
+	public static final RegistryObject<Item> SNOW_CHEST = ITEMS.register("snow_chestplate", () -> new ArmorItem(SNOW, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+	public static final RegistryObject<Item> SNOW_LEGGINGS = ITEMS.register("snow_leggings", () -> new ArmorItem(SNOW, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+	public static final RegistryObject<Item> SNOW_BOOTS = ITEMS.register("snow_boots", () -> new ArmorItem(SNOW, ArmorItem.Type.BOOTS, new Item.Properties()));
 
-	public static final RegistryObject<Item> DESERT_HELMET = ITEMS.register("desert_helmet", () -> new DesertArmorItem(DESERT_ARMOR_MATERIAL, ArmorItem.Type.HELMET));
-	public static final RegistryObject<Item> DESERT_CHEST = ITEMS.register("desert_chestplate", () -> new DesertArmorItem(DESERT_ARMOR_MATERIAL, ArmorItem.Type.CHESTPLATE));
-	public static final RegistryObject<Item> DESERT_LEGGINGS = ITEMS.register("desert_leggings", () -> new DesertArmorItem(DESERT_ARMOR_MATERIAL, ArmorItem.Type.LEGGINGS));
-	public static final RegistryObject<Item> DESERT_BOOTS = ITEMS.register("desert_boots", () -> new DesertArmorItem(DESERT_ARMOR_MATERIAL, ArmorItem.Type.BOOTS));
+	public static final RegistryObject<Item> DESERT_HELMET = ITEMS.register("desert_helmet", () -> new ArmorItem(DESERT, ArmorItem.Type.HELMET, new Item.Properties()));
+	public static final RegistryObject<Item> DESERT_CHEST = ITEMS.register("desert_chestplate", () -> new ArmorItem(DESERT, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+	public static final RegistryObject<Item> DESERT_LEGGINGS = ITEMS.register("desert_leggings", () -> new ArmorItem(DESERT, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+	public static final RegistryObject<Item> DESERT_BOOTS = ITEMS.register("desert_boots", () -> new ArmorItem(DESERT, ArmorItem.Type.BOOTS, new Item.Properties()));
 
 	public static final RegistryObject<Item> COOLING_COAT_1 = ITEMS.register("cooling_coat_1", () -> new CoatItem(CoatEnum.COOLING_1, new Item.Properties().rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> COOLING_COAT_2 = ITEMS.register("cooling_coat_2", () -> new CoatItem(CoatEnum.COOLING_2, new Item.Properties().rarity(Rarity.RARE)));

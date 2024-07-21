@@ -1,9 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.common.items.armor;
 
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.LazyLoadedValue;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -12,34 +14,37 @@ import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 
 import java.util.function.Supplier;
 
-public class ArmorMaterialBase implements ArmorMaterial
+public enum ArmorMaterialBase implements ArmorMaterial
 {
-	private static final int[] MAX_DAMAGE_ARRAY = new int[] {13, 15, 16, 11};
+	SNOW("snow", 5.75f, new int[] { 1, 1, 2, 1}, 17, SoundEvents.ARMOR_EQUIP_LEATHER, 0, 0.0f, () -> Ingredient.of(ItemTags.WOOL)),
+	DESERT("desert", 5.75f, new int[] { 1, 1, 2, 1}, 19, SoundEvents.ARMOR_EQUIP_LEATHER, 0, 0.0f, () -> Ingredient.of(Items.LEATHER));
+
+	private static final int[] BASE_DURABILITY = new int[] {13, 15, 16, 11};
 	private final String name;
 	private final float maxDamageFactor;
 	private final int[] damageReductionAmountArray;
-	private final int enchantability;
+	private final int enchantmentValue;
 	private final SoundEvent soundEvent;
 	private final float toughness;
 	private final float knockbackResistance;
-	private final LazyLoadedValue<Ingredient> repairIngredient;
+	private final Supplier<Ingredient> repairIngredient;
 	
-	public ArmorMaterialBase(String name, float maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient)
+	ArmorMaterialBase(String name, float durabilityMultiplier, int[] protectionAmounts, int enchantmentValue, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient)
 	{
 		this.name = name;
-		this.maxDamageFactor = maxDamageFactor;
-		this.damageReductionAmountArray = damageReductionAmountArray;
-		this.enchantability = enchantability;
+		this.maxDamageFactor = durabilityMultiplier;
+		this.damageReductionAmountArray = protectionAmounts;
+		this.enchantmentValue = enchantmentValue;
 		this.soundEvent = soundEvent;
 		this.toughness = toughness;
 		this.knockbackResistance = knockbackResistance;
-		this.repairIngredient = new LazyLoadedValue(repairIngredient);
+		this.repairIngredient = repairIngredient;
 	}
 	
 	@Override
 	public int getDurabilityForType(ArmorItem.Type slotIn)
 	{
-		return (int) (MAX_DAMAGE_ARRAY[slotIn.getSlot().getIndex()] * this.maxDamageFactor);
+		return (int) (BASE_DURABILITY[slotIn.getSlot().getIndex()] * this.maxDamageFactor);
 	}
 
 	@Override
@@ -51,7 +56,7 @@ public class ArmorMaterialBase implements ArmorMaterial
 	@Override
 	public int getEnchantmentValue()
 	{
-		return this.enchantability;
+		return this.enchantmentValue;
 	}
 
 	@Override
@@ -67,7 +72,6 @@ public class ArmorMaterialBase implements ArmorMaterial
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
 	public @NotNull String getName()
 	{
 		return LegendarySurvivalOverhaul.MOD_ID + ":" + this.name;

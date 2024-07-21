@@ -4,6 +4,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.damagesource.DamageType;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 
@@ -21,8 +22,8 @@ public class ModDamageTypes
 	}
 
 	public static void bootstrap(BootstapContext<DamageType> context) {
-		context.register(HYPOTHERMIA, new DamageType("hypothermia", 0.1f, FREEZING));
-		context.register(HYPERTHERMIA, new DamageType("hyperthermia", 0.1f, BURNING));
-		context.register(DEHYDRATION, new DamageType("dehydration", 0.1f, POKING));
+		context.register(HYPOTHERMIA, new DamageType(LegendarySurvivalOverhaul.MOD_ID + ".hypothermia", DamageScaling.NEVER,0.1f, FREEZING));
+		context.register(HYPERTHERMIA, new DamageType(LegendarySurvivalOverhaul.MOD_ID + ".hyperthermia", DamageScaling.NEVER,0.1f, BURNING));
+		context.register(DEHYDRATION, new DamageType(LegendarySurvivalOverhaul.MOD_ID + ".dehydration", DamageScaling.NEVER,0.1f, POKING));
 	}
 }

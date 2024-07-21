@@ -114,12 +114,13 @@ public class JsonConfigRegistration
 		JsonConfig.registerFuelItems("minecraft:packed_ice", ThermalTypeEnum.COOLING, 30);
 
 		JsonConfig.registerConsumableThirst("minecraft:melon_slice", 2, 1.0f, 0);
+		JsonConfig.registerConsumableThirst("minecraft:apple", 2, 0.5f, 0);
 		JsonConfig.registerConsumableThirst("minecraft:rotten_flesh", -1, 0.0f, 1.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":apple_juice",6,3.0f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":beetroot_juice",10,8.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":beetroot_juice",9,4.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":cactus_juice",9,3.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":carrot_juice",4,2.0f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":chorus_fruit_juice",12,10.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":chorus_fruit_juice",12,8.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":golden_apple_juice",20,20.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":golden_carrot_juice",12,12.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":glistering_melon_juice",16,16.0f);

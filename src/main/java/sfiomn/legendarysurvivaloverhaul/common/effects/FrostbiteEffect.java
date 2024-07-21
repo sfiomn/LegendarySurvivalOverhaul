@@ -20,11 +20,10 @@ public class FrostbiteEffect extends GenericEffect
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier)
 	{
-		if(entity instanceof Player && !entity.hasEffect(MobEffectRegistry.COLD_RESISTANCE.get()))
+		if(entity instanceof Player player && !entity.hasEffect(MobEffectRegistry.COLD_RESISTANCE.get()))
 		{
 			Level level = entity.getCommandSenderWorld();
-			Player player = (Player) entity;
-			if (DamageUtil.isModDangerous(level) && DamageUtil.healthAboveDifficulty(level, player) && !player.isSleeping())
+            if (DamageUtil.isModDangerous(level) && DamageUtil.healthAboveDifficulty(level, player) && !player.isSleeping())
 			{
 				player.hurt(DamageSourceUtil.getDamageSource(level, ModDamageTypes.HYPOTHERMIA), 1.0f);
 			}

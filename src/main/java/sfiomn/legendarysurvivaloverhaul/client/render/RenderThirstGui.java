@@ -1,13 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.client.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -83,7 +81,7 @@ public class RenderThirstGui
 			{
 				xTextureOffset = THIRST_TEXTURE_WIDTH * 3;
 			}
-			if (player.hasEffect(MobEffectRegistry.HEAT_Thirst.get())) {
+			if (player.hasEffect(MobEffectRegistry.HEAT_THIRST.get())) {
 				yTextureOffset = THIRST_TEXTURE_HEIGHT;
 			}
 
@@ -97,10 +95,12 @@ public class RenderThirstGui
 			// Reassign texture offset for saturation
 			yTextureOffset = 0;
 			xTextureOffset = THIRST_TEXTURE_WIDTH * 6;
-			if (player.hasEffect(MobEffectRegistry.THIRST.get()))
-			{
+			if (player.hasEffect(MobEffectRegistry.THIRST.get())) {
 				xTextureOffset += THIRST_TEXTURE_WIDTH * 2;
+			} else if (player.hasEffect(MobEffectRegistry.HEAT_THIRST.get())) {
+				xTextureOffset += THIRST_TEXTURE_WIDTH * 8;
 			}
+
 			if(saturationInt > 0 && Config.Baked.thirstSaturationDisplayed)
 			{
 				if (halfIcon < saturationInt) { // Full saturation icon

@@ -72,7 +72,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleArmorItem(ItemRegistry.SNOW_HELMET);
         simpleArmorItem(ItemRegistry.SNOW_LEGGINGS);
 
-        for (int i=0; i<29; i++) {
+        for (int i=0; i<30; i++) {
             String jsonName = String.format("%02d", i);
             singleTexture("item/thermometer/thermometer_" + jsonName, new ResourceLocation("item/generated"),
                     "layer0", new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "item/thermometer/thermometer_" + jsonName));

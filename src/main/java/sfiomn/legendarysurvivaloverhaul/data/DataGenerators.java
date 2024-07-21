@@ -33,11 +33,12 @@ public final class DataGenerators
 		gen.addProvider(event.includeClient(), new ModItemModelProvider(packOutput, existingFileHelper));
 		gen.addProvider(event.includeClient(), new ModParticleProvider(packOutput, existingFileHelper));
 
+		gen.addProvider(event.includeServer(), new ModDatapackBuiltinEntriesProvider(packOutput, lookupProvider));
+
 		ModBlockTagProvider blockTagProvider = gen.addProvider(event.includeServer(),
 				new ModBlockTagProvider(packOutput, lookupProvider, existingFileHelper));
 		gen.addProvider(event.includeServer(), new ModItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter(), existingFileHelper));
 		gen.addProvider(event.includeServer(), new ModEntityTypesTagProvider(packOutput, lookupProvider, existingFileHelper));
-
-		gen.addProvider(event.includeServer(), new ModDatapackBuiltinEntriesProvider(packOutput, lookupProvider));
+		gen.addProvider(event.includeServer(), new ModDamageTypeTags(packOutput, lookupProvider, existingFileHelper));
 	}
 }

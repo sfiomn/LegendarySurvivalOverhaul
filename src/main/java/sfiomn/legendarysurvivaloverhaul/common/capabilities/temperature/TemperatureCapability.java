@@ -1,15 +1,12 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature;
 
 import com.elenai.feathers.effect.FeathersEffects;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
@@ -172,13 +169,13 @@ public class TemperatureCapability implements ITemperatureCapability
 			if (!player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply secondary effect hyperthermia
 				player.removeEffect(MobEffectRegistry.COLD_HUNGER.get());
-				player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_Thirst.get(), 300, 0, false, false));
+				player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_THIRST.get(), 300, 0, false, false));
 				return;
 			}
 		} else if (getTemperatureEnum() == TemperatureEnum.FROSTBITE) {
 			if (!player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply secondary effect hypothermia
-				player.removeEffect(MobEffectRegistry.HEAT_Thirst.get());
+				player.removeEffect(MobEffectRegistry.HEAT_THIRST.get());
 				player.addEffect(new MobEffectInstance(MobEffectRegistry.COLD_HUNGER.get(), 300, 0, false, false));
 
 				//  Waiting a fix from Feathers to remove the sound triggered when the Cold effect is applied
@@ -191,7 +188,7 @@ public class TemperatureCapability implements ITemperatureCapability
 				return;
 			}
 		}
-		player.removeEffect(MobEffectRegistry.HEAT_Thirst.get());
+		player.removeEffect(MobEffectRegistry.HEAT_THIRST.get());
 		player.removeEffect(MobEffectRegistry.COLD_HUNGER.get());
 	}
 

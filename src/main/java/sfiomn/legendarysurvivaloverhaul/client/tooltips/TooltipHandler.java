@@ -106,7 +106,7 @@ public class TooltipHandler
 		else
 			return;
 
-		String tempTxt = (int) Math.abs(temperature) + " ";
+		String tempTxt = (temperature % 1.0f == 0f ? (int) Math.abs(temperature) : Math.abs(temperature)) + " ";
 
 		text = Component.literal("+")
 				.withStyle(ChatFormatting.BLUE)
