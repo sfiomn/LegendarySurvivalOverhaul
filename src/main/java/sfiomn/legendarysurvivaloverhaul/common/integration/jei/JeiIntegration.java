@@ -62,7 +62,6 @@ public class JeiIntegration implements IModPlugin {
             registration.addRecipes(RecipeTypes.BLASTING, transferToBlastingRecipe(rm.getAllRecipesFor(BLASTING).stream()
                     .filter(r -> r instanceof PurificationBlastingRecipe).collect(Collectors.toList())));
 
-
             registration.addRecipes(SewingRecipeCategory.SEWING_RECIPE_TYPE, customSewingRecipes());
         }
     }

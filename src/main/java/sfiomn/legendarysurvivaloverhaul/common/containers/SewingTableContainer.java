@@ -8,7 +8,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
@@ -16,7 +15,6 @@ import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 import sfiomn.legendarysurvivaloverhaul.common.recipe.SewingRecipe;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.ContainerRegistry;
-import sfiomn.legendarysurvivaloverhaul.registry.RecipeRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 
 import javax.annotation.Nullable;
@@ -54,7 +52,7 @@ public class SewingTableContainer extends ItemCombinerMenu {
         for (int i=0; i<this.inputSlots.getContainerSize(); i++) {
             inputSlots.addItem(this.inputSlots.getItem(i));
         }
-        return this.player.level().getRecipeManager().getRecipesFor(RecipeRegistry.SEWING_RECIPE.get(), inputSlots, this.player.level());
+        return this.player.level().getRecipeManager().getRecipesFor(SewingRecipe.Type.INSTANCE, inputSlots, this.player.level());
     }
 
     @Override
@@ -65,7 +63,7 @@ public class SewingTableContainer extends ItemCombinerMenu {
         //  Proceed to the found recipe
         if (!sewingRecipes.isEmpty()) {
             this.selectedRecipe = sewingRecipes.get(0);
-            itemStack = this.selectedRecipe.getResultItem(null);
+            itemStack = this.selectedRecipe.getResultItem(this.player.level().registryAccess());
             this.resultSlots.setRecipeUsed(this.selectedRecipe);
 
         //  Check a coat is possible

@@ -78,9 +78,9 @@
 	"item.minecraft.potion.effect.heat_resistance":"Potion of Heat Resistance",
 	"item.minecraft.potion.effect.cold_resistance":"Potion of Cold Resistance",
 	"item.minecraft.potion.effect.thirst":"Potion of Thirst",
-	"item.minecraft.potion.effect.heat_resistance_long":"Potion of Heat Resistance",
-	"item.minecraft.potion.effect.cold_resistance_long":"Potion of Cold Resistance",
-	"item.minecraft.potion.effect.thirst_long":"Potion of Thirst",
+	"item.minecraft.potion.effect.heat_resistance_long":"Long Potion of Heat Resistance",
+	"item.minecraft.potion.effect.cold_resistance_long":"Long Potion of Cold Resistance",
+	"item.minecraft.potion.effect.thirst_long":"Long Potion of Thirst",
 	
 	"item.minecraft.splash_potion.effect.heat_resistance":"Splash Potion of Heat Resistance",
 	"item.minecraft.splash_potion.effect.cold_resistance":"Splash Potion of Cold Resistance",

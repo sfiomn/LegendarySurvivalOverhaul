@@ -129,9 +129,12 @@ public class PurificationRecipeBuilder {
                 pJson.addProperty("group", this.group);
             }
 
+            ResourceLocation resultRegistryName = ForgeRegistries.ITEMS.getKey(this.result);
+
             pJson.addProperty("category", this.category.getSerializedName());
             pJson.add("ingredient", this.ingredient.toJson());
-            pJson.addProperty("result", BuiltInRegistries.ITEM.getKey(this.result).toString());
+            if (resultRegistryName != null)
+                pJson.addProperty("result", resultRegistryName.toString());
             pJson.addProperty("experience", this.experience);
             pJson.addProperty("cookingtime", this.cookingTime);
         }

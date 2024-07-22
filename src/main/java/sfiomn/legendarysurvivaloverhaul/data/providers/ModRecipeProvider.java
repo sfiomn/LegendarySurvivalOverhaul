@@ -18,8 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
-import sfiomn.legendarysurvivaloverhaul.common.recipe.PurificationBlastingRecipe;
-import sfiomn.legendarysurvivaloverhaul.common.recipe.PurificationSmeltingRecipe;
 import sfiomn.legendarysurvivaloverhaul.data.recipes.PurificationRecipeBuilder;
 import sfiomn.legendarysurvivaloverhaul.data.recipes.SewingRecipeBuilder;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
@@ -374,19 +372,19 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         purification_blasting(consumer, PartialNBTIngredient.of(nbt, ItemRegistry.LARGE_CANTEEN.get()), ItemRegistry.LARGE_CANTEEN.get(), 1.0f, 80, "purified_large_canteen");
 
         nbt = new CompoundTag();
-        nbt.putString("Potion", "legendarysurvivaloverhaul:cold_resistance");
+        nbt.putString("Potion", LegendarySurvivalOverhaul.MOD_ID + ":cold_resistance");
         sewing(consumer, Ingredient.of(Items.STRING), PartialNBTIngredient.of(nbt, Items.POTION), ItemRegistry.COLD_STRING.get(), "cold_string");
 
         nbt = new CompoundTag();
-        nbt.putString("Potion", "legendarysurvivaloverhaul:cold_resistance_long");
+        nbt.putString("Potion", LegendarySurvivalOverhaul.MOD_ID + ":cold_resistance_long");
         sewing(consumer, Ingredient.of(Items.STRING), PartialNBTIngredient.of(nbt, Items.POTION), ItemRegistry.COLD_STRING.get(), "cold_string");
 
         nbt = new CompoundTag();
-        nbt.putString("Potion", "legendarysurvivaloverhaul:heat_resistance");
+        nbt.putString("Potion", LegendarySurvivalOverhaul.MOD_ID + ":heat_resistance");
         sewing(consumer, Ingredient.of(Items.STRING), PartialNBTIngredient.of(nbt, Items.POTION), ItemRegistry.WARM_STRING.get(), "warm_string");
 
         nbt = new CompoundTag();
-        nbt.putString("Potion", "legendarysurvivaloverhaul:heat_resistance_long");
+        nbt.putString("Potion", LegendarySurvivalOverhaul.MOD_ID + ":heat_resistance_long");
         sewing(consumer, Ingredient.of(Items.STRING), PartialNBTIngredient.of(nbt, Items.POTION), ItemRegistry.WARM_STRING.get(), "warm_string");
 
         buildAllCoatingRecipes(consumer);

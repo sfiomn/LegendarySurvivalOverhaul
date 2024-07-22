@@ -63,12 +63,13 @@ public class SewingRecipeBuilder {
     public record Result(ResourceLocation id, RecipeSerializer<?> type, Ingredient base, Ingredient addition, Item result, Advancement.Builder advancement, ResourceLocation advancementId) implements FinishedRecipe {
 
         public void serializeRecipeData(@NotNull JsonObject json) {
-            ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(this.result);
-            if (itemRegistryName != null) {
-                json.add("base", this.base.toJson());
-                json.add("addition", this.addition.toJson());
+            json.add("base", this.base.toJson());
+            json.add("addition", this.addition.toJson());
+
+            ResourceLocation resultRegistryName = ForgeRegistries.ITEMS.getKey(this.result);
+            if (resultRegistryName != null) {
                 JsonObject jsonobject = new JsonObject();
-                jsonobject.addProperty("item", itemRegistryName.toString());
+                jsonobject.addProperty("item", resultRegistryName.toString());
                 json.add("result", jsonobject);
             }
         }

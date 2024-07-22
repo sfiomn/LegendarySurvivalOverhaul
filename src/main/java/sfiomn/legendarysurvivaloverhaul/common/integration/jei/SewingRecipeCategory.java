@@ -51,9 +51,9 @@ public class SewingRecipeCategory implements IRecipeCategory<SewingRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, SewingRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 7, 8).addIngredients(recipe.getBase());
-        builder.addSlot(RecipeIngredientRole.INPUT, 54, 8).addIngredients(recipe.getAddition());
+        builder.addSlot(RecipeIngredientRole.INPUT, 8, 9).addIngredients(recipe.getBase());
+        builder.addSlot(RecipeIngredientRole.INPUT, 55, 9).addIngredients(recipe.getAddition());
 
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 123, 8).addItemStack(recipe.getResultItem(null));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 124, 9).addItemStack(recipe.getResultItem(null));
     }
 }
