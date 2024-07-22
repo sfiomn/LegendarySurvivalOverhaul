@@ -6,22 +6,16 @@ import sfiomn.legendarysurvivaloverhaul.config.Config;
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/api/thirst/ThirstEnum.java
 public enum HydrationEnum
 {
-	NORMAL	("normal", Config.Baked.hydrationWater, Config.Baked.saturationWater, Config.Baked.dirtyWater),
-	RAIN	("rain", Config.Baked.hydrationRain,	Config.Baked.saturationRain, Config.Baked.dirtyRain),
-	POTION	("potion", Config.Baked.hydrationPotion, Config.Baked.saturationPotion, Config.Baked.dirtyPotion),
-	PURIFIED("purified", Config.Baked.hydrationPurified, Config.Baked.saturationPurified,Config.Baked.dirtyPurified);
+	NORMAL	("normal"),
+	RAIN	("rain"),
+	POTION	("potion"),
+	PURIFIED("purified");
 
 	private final String name;
-	private final int hydration;
-	private final double saturation;
-	private final double dirty;
 
-	private HydrationEnum(String name, int hydration, double saturation, double dirty)
+	private HydrationEnum(String name)
 	{
 		this.name = name;
-		this.hydration = hydration;
-		this.saturation=saturation;
-		this.dirty=dirty;
 	}
 
 	public String getName()
@@ -31,17 +25,32 @@ public enum HydrationEnum
 
 	public int getHydration()
 	{
-		return hydration;
+		return switch (this) {
+			case NORMAL -> Config.Baked.hydrationWater;
+			case RAIN -> Config.Baked.hydrationRain;
+            case POTION -> Config.Baked.hydrationPotion;
+            case PURIFIED -> Config.Baked.hydrationPurified;
+        };
 	}
 
 	public double getSaturation()
 	{
-		return saturation;
+		return switch (this) {
+			case NORMAL -> Config.Baked.saturationWater;
+			case RAIN -> Config.Baked.saturationRain;
+			case POTION -> Config.Baked.saturationPotion;
+			case PURIFIED -> Config.Baked.saturationPurified;
+		};
 	}
 
 	public double getDirtiness()
 	{
-		return dirty;
+		return switch (this) {
+			case NORMAL -> Config.Baked.dirtyWater;
+			case RAIN -> Config.Baked.dirtyRain;
+			case POTION -> Config.Baked.dirtyPotion;
+			case PURIFIED -> Config.Baked.dirtyPurified;
+		};
 	}
 
 	public String toString()

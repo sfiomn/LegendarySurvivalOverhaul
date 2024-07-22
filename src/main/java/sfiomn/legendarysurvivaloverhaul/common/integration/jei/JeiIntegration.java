@@ -20,8 +20,8 @@ import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.client.screens.SewingTableScreen;
 import sfiomn.legendarysurvivaloverhaul.common.items.drink.CanteenItem;
-import sfiomn.legendarysurvivaloverhaul.common.recipe.CanteenBlastingRecipe;
-import sfiomn.legendarysurvivaloverhaul.common.recipe.CanteenFurnaceRecipe;
+import sfiomn.legendarysurvivaloverhaul.common.recipe.PurificationBlastingRecipe;
+import sfiomn.legendarysurvivaloverhaul.common.recipe.PurificationSmeltingRecipe;
 import sfiomn.legendarysurvivaloverhaul.common.recipe.SewingRecipe;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
@@ -57,10 +57,10 @@ public class JeiIntegration implements IModPlugin {
                     .filter(Objects::nonNull).collect(Collectors.toList()));
 
             registration.addRecipes(RecipeTypes.SMELTING, transferToSmeltingRecipe(rm.getAllRecipesFor(SMELTING).stream()
-                    .filter(r -> r instanceof CanteenFurnaceRecipe).collect(Collectors.toList())));
+                    .filter(r -> r instanceof PurificationSmeltingRecipe).collect(Collectors.toList())));
 
             registration.addRecipes(RecipeTypes.BLASTING, transferToBlastingRecipe(rm.getAllRecipesFor(BLASTING).stream()
-                    .filter(r -> r instanceof CanteenBlastingRecipe).collect(Collectors.toList())));
+                    .filter(r -> r instanceof PurificationBlastingRecipe).collect(Collectors.toList())));
 
 
             registration.addRecipes(SewingRecipeCategory.SEWING_RECIPE_TYPE, customSewingRecipes());
@@ -69,8 +69,7 @@ public class JeiIntegration implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(SewingTableScreen.class, 18, 39, 20, 20, SewingRecipeCategory.SEWING_RECIPE_TYPE);
-        registration.addRecipeClickArea(SewingTableScreen.class, 65, 39, 20, 20, SewingRecipeCategory.SEWING_RECIPE_TYPE);
+        registration.addRecipeClickArea(SewingTableScreen.class, 90, 36, 20, 20, SewingRecipeCategory.SEWING_RECIPE_TYPE);
     }
 
     @Override

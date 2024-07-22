@@ -41,12 +41,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .forAllStates(state -> {
                     if (state.getValue(BlockStateProperties.LIT))
                         return ConfiguredModel.builder()
-                                .modelFile(new ModelFile.UncheckedModelFile(COOLER_OFF))
+                                .modelFile(new ModelFile.UncheckedModelFile(COOLER_ON))
                                 .rotationY((int) state.getValue(FACING).toYRot())
                                 .build();
                     else
                         return ConfiguredModel.builder()
-                                .modelFile(new ModelFile.UncheckedModelFile(COOLER_ON))
+                                .modelFile(new ModelFile.UncheckedModelFile(COOLER_OFF))
                                 .rotationY((int) state.getValue(FACING).toYRot())
                                 .build();
                 });
@@ -56,12 +56,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .forAllStates(state -> {
                     if (state.getValue(BlockStateProperties.LIT))
                         return ConfiguredModel.builder()
-                                .modelFile(new ModelFile.UncheckedModelFile(HEATER_BASE_OFF))
+                                .modelFile(new ModelFile.UncheckedModelFile(HEATER_BASE_ON))
                                 .rotationY((int) state.getValue(FACING).toYRot())
                                 .build();
                     else
                         return ConfiguredModel.builder()
-                                .modelFile(new ModelFile.UncheckedModelFile(HEATER_BASE_ON))
+                                .modelFile(new ModelFile.UncheckedModelFile(HEATER_BASE_OFF))
                                 .rotationY((int) state.getValue(FACING).toYRot())
                                 .build();
                 });

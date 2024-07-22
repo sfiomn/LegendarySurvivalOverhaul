@@ -1,6 +1,7 @@
 package sfiomn.legendarysurvivaloverhaul.common.items.drink;
 
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
@@ -18,7 +19,7 @@ public class LargeCanteenItem extends CanteenItem {
     }
 
     @Override
-    public String getDescriptionId(ItemStack stack) {
+    public @NotNull String getDescriptionId(ItemStack stack) {
         if(ThirstUtil.getCapacityTag(stack) == 0)
             return "item."+ LegendarySurvivalOverhaul.MOD_ID+"."+"large_canteen_empty";
 

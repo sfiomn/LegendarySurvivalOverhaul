@@ -67,7 +67,11 @@ public class CreativeTabRegistry {
 
                         ItemRegistry.SEASONAL_CALENDAR.get().getDefaultInstance(),
                         ItemRegistry.HEART_FRUIT.get().getDefaultInstance(),
-                        ItemRegistry.THERMOMETER.get().getDefaultInstance()
+                        ItemRegistry.THERMOMETER.get().getDefaultInstance(),
+
+                        BlockRegistry.COOLER.get().asItem().getDefaultInstance(),
+                        BlockRegistry.HEATER.get().asItem().getDefaultInstance(),
+                        BlockRegistry.SEWING_TABLE.get().asItem().getDefaultInstance()
                 ));
             })
             .title(Component.translatable("itemGroup.legendarysurvivaloverhaul"))

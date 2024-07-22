@@ -2,6 +2,7 @@ package sfiomn.legendarysurvivaloverhaul.common.items.drink;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
@@ -42,7 +44,7 @@ public class CanteenItem extends DrinkItem {
     }
 
     public void fill(ItemStack stack) {
-        ThirstUtil.setCapacityTag(stack, ThirstUtil.getCapacityTag(stack) + 1);
+        ThirstUtil.setCapacityTag(stack,  Math.min(getMaxCapacity(), ThirstUtil.getCapacityTag(stack) + 1));
         ThirstUtil.setHydrationEnumTag(stack, HydrationEnum.NORMAL);
     }
 
@@ -72,7 +74,7 @@ public class CanteenItem extends DrinkItem {
     }
 
     @Override
-    public String getDescriptionId(ItemStack stack) {
+    public @NotNull String getDescriptionId(ItemStack stack) {
         if(ThirstUtil.getCapacityTag(stack) == 0)
             return "item." + LegendarySurvivalOverhaul.MOD_ID + ".canteen_empty";
 
@@ -83,18 +85,23 @@ public class CanteenItem extends DrinkItem {
     }
 
     @Override
-    public boolean isBarVisible(ItemStack stack) {
+    public boolean isBarVisible(@NotNull ItemStack stack) {
         return ThirstUtil.getCapacityTag(stack) > 0;
     }
 
     @Override
-    public int getBarWidth(ItemStack stack)
+    public int getBarWidth(@NotNull ItemStack stack)
     {
         float max = getMaxCapacity();
         if(max == 0.0f)
-            return 1;
+            return 0;
 
+        return Math.round(ThirstUtil.getCapacityTag(stack) / max * 13);
+    }
 
-        return Math.round((max - ThirstUtil.getCapacityTag(stack)) / max);
+    @Override
+    public int getBarColor(@NotNull ItemStack stack) {
+        float f = Math.max(0.0F, ThirstUtil.getCapacityTag(stack) / (float)this.getMaxCapacity());
+        return Mth.hsvToRgb(f / 3.0F, 1.0F, 1.0F);
     }
 }

@@ -7,8 +7,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.common.recipe.CanteenBlastingRecipe;
-import sfiomn.legendarysurvivaloverhaul.common.recipe.CanteenFurnaceRecipe;
+import sfiomn.legendarysurvivaloverhaul.common.recipe.PurificationBlastingRecipe;
+import sfiomn.legendarysurvivaloverhaul.common.recipe.PurificationSmeltingRecipe;
 import sfiomn.legendarysurvivaloverhaul.common.recipe.SewingRecipe;
 
 public class RecipeRegistry {
@@ -16,8 +16,8 @@ public class RecipeRegistry {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, LegendarySurvivalOverhaul.MOD_ID);
 
     public static final RegistryObject<RecipeSerializer<SewingRecipe>> SEWING_SERIALIZER = RECIPE_SERIALIZERS.register("sewing", () -> SewingRecipe.Serializer.INSTANCE);
-    public static final RegistryObject<CanteenFurnaceRecipe.CanteenRecipeSerializer> CANTEEN_SMELTING_SERIALIZER = RECIPE_SERIALIZERS.register("canteen_smelting", () -> new CanteenFurnaceRecipe.CanteenRecipeSerializer(100));
-    public static final RegistryObject<CanteenBlastingRecipe.CanteenRecipeSerializer> CANTEEN_BLASTING_SERIALIZER = RECIPE_SERIALIZERS.register("canteen_blasting", () -> new CanteenBlastingRecipe.CanteenRecipeSerializer(100));
+    public static final RegistryObject<RecipeSerializer<PurificationSmeltingRecipe>> PURIFICATION_SMELTING_SERIALIZER = RECIPE_SERIALIZERS.register("purification_smelting", () -> new PurificationSmeltingRecipe.Serializer(200));
+    public static final RegistryObject<RecipeSerializer<PurificationBlastingRecipe>> PURIFICATION_BLASTING_SERIALIZER = RECIPE_SERIALIZERS.register("purification_blasting", () -> new PurificationBlastingRecipe.Serializer(100));
 
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPE = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, LegendarySurvivalOverhaul.MOD_ID);
 

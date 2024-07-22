@@ -39,7 +39,7 @@ public class SewingRecipeBuilder {
         return new SewingRecipeBuilder(RecipeRegistry.SEWING_SERIALIZER.get(), category, base, addition, result);
     }
 
-    public SewingRecipeBuilder unlocks(String name, CriterionTriggerInstance advancement) {
+    public SewingRecipeBuilder unlockedBy(String name, CriterionTriggerInstance advancement) {
         this.advancement.addCriterion(name, advancement);
         return this;
     }

@@ -8,11 +8,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 import sfiomn.legendarysurvivaloverhaul.common.recipe.SewingRecipe;
+import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.ContainerRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.RecipeRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
@@ -42,9 +44,9 @@ public class SewingTableContainer extends ItemCombinerMenu {
     @Override
     protected @NotNull ItemCombinerMenuSlotDefinition createInputSlotDefinitions() {
         return ItemCombinerMenuSlotDefinition.create()
-                .withSlot(0, 18, 39, (itemStack) -> true)
-                .withSlot(1, 65, 39, (itemStack) -> true)
-                .withResultSlot(2, 134, 39).build();
+                .withSlot(INPUT_SLOT, 18, 39, (itemStack) -> true)
+                .withSlot(ADDITIONAL_SLOT, 65, 39, (itemStack) -> true)
+                .withResultSlot(RESULT_SLOT, 134, 39).build();
     }
 
     private List<SewingRecipe> getCurrentRecipe() {
@@ -102,7 +104,7 @@ public class SewingTableContainer extends ItemCombinerMenu {
 
     @Override
     protected boolean isValidBlock(BlockState blockState) {
-        return false;
+        return blockState.is(BlockRegistry.SEWING_TABLE.get());
     }
 
     public static boolean isItemArmor(ItemStack itemStack) {

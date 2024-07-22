@@ -18,12 +18,10 @@ public class CanteenProperty implements ClampedItemPropertyFunction {
     @Override
     public float unclampedCall(@NotNull ItemStack itemStack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity entity, int i)
     {
-        int capacity = ThirstUtil.getCapacityTag(itemStack);
-        itemStack.setDamageValue(capacity);
-
         HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(itemStack);
+
         if (hydrationEnum != null) {
-            return hydrationEnum.ordinal();
+            return hydrationEnum.ordinal() / 10.0f;
         }
 
         return 0.0f;

@@ -14,8 +14,8 @@ import sfiomn.legendarysurvivaloverhaul.registry.ContainerRegistry;
 
 public class HeaterContainer extends AbstractThermalContainer {
 
-    public HeaterContainer(int windowId, Inventory inventory, BlockEntity be, ContainerData dataAccess) {
-        super(windowId, inventory, (AbstractThermalBlockEntity) be, dataAccess, ContainerRegistry.HEATER_CONTAINER, ThermalTypeEnum.HEATING);
+    public HeaterContainer(int windowId, Inventory playerInventory, BlockEntity be, ContainerData dataAccess) {
+        super(windowId, playerInventory, (AbstractThermalBlockEntity) be, dataAccess, ContainerRegistry.HEATER_CONTAINER, ThermalTypeEnum.HEATING);
     }
 
     public HeaterContainer(final int windowId, final Inventory playerInv, final FriendlyByteBuf data)

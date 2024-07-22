@@ -5,11 +5,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -75,6 +77,12 @@ public class SewingTableBlock extends HorizontalDirectionalBlock implements Menu
 		}
 		player.openMenu(state.getMenuProvider(level, pos));
 		return InteractionResult.CONSUME;
+	}
+
+	@Override
+	public MenuProvider getMenuProvider(BlockState pState, Level pLevel, BlockPos pPos) {
+		return new SimpleMenuProvider((windowIs, inventory, player) ->
+				new SewingTableContainer(windowIs, inventory, ContainerLevelAccess.create(pLevel, pPos)), CONTAINER_TITLE);
 	}
 
 	@Override

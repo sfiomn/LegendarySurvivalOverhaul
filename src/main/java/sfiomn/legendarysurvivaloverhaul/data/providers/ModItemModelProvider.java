@@ -130,7 +130,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(canteenItem.getId().getPath(), new ResourceLocation("item/generated"))
                 .texture("layer0", new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "item/" + canteenItem.getId().getPath()))
                 .override()
-                .predicate(new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirst_enum"), 3)
+                .predicate(new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirstenum"), 0.3f)
                 .model(new ModelFile.UncheckedModelFile(new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "item/" + canteenItem.getId().getPath() + "_purified")))
                 .end();
 

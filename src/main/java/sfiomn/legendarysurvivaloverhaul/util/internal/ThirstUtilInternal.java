@@ -12,6 +12,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.Nullable;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstUtil;
@@ -24,8 +25,8 @@ import static net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL;
 
 public class ThirstUtilInternal implements IThirstUtil {
 
-    private final String HYDRATION_ENUM_TAG = "HydrationEnum";
-    private final String CAPACITY_TAG = "HydrationCapacity";
+    public static final String HYDRATION_ENUM_TAG = "HydrationEnum";
+    public static final String CAPACITY_TAG = "HydrationCapacity";
 
     @Override
     public void setThirstEnumTag(ItemStack stack, HydrationEnum hydrationEnum)
