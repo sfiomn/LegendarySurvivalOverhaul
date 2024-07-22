@@ -3,14 +3,11 @@ package sfiomn.legendarysurvivaloverhaul;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -18,6 +15,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
@@ -39,7 +37,6 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.Temperat
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.registry.*;
 import sfiomn.legendarysurvivaloverhaul.util.internal.BodyDamageUtilInternal;
@@ -51,7 +48,6 @@ import java.nio.file.Paths;
 
 @SuppressWarnings("unused")
 @Mod(LegendarySurvivalOverhaul.MOD_ID)
-@Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID)
 public class LegendarySurvivalOverhaul
 {
 	public static final Logger LOGGER = LogManager.getLogger();
@@ -73,7 +69,6 @@ public class LegendarySurvivalOverhaul
 	 */
 	public static boolean surviveLoaded = false;
 	public static boolean curiosLoaded = false;
-	public static boolean feathersLoaded = false;
 	
 	public static Path configPath = FMLPaths.CONFIGDIR.get();
 	public static Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "legendarysurvivaloverhaul");
@@ -84,10 +79,12 @@ public class LegendarySurvivalOverhaul
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 		
-		modBus.addListener(this::setup);
+		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::onModConfigLoadEvent);
 		modBus.addListener(this::onModConfigReloadEvent);
-		modBus.addListener(this::clientEvents);
+		modBus.addListener(this::onLoadComplete);
+
+		Config.register();
 
 		ItemRegistry.register(modBus);
 		BlockRegistry.register(modBus);
@@ -101,16 +98,10 @@ public class LegendarySurvivalOverhaul
 		CreativeTabRegistry.register(modBus);
 
 		forgeBus.addListener(CommandRegistry::registerCommandsEvent);
-		forgeBus.addListener(this::reloadListener);
 		forgeBus.addListener(this::registerCapabilities);
 
 		forgeBus.register(this);
-		
-		Config.register();
-		
-		TemperatureUtil.internal = new TemperatureUtilInternal();
-		ThirstUtil.internal = new ThirstUtilInternal();
-		BodyDamageUtil.internal = new BodyDamageUtilInternal();
+
 		modIntegration();
 	}
 	
@@ -119,7 +110,6 @@ public class LegendarySurvivalOverhaul
 		sereneSeasonsLoaded = ModList.get().isLoaded("sereneseasons");
 		curiosLoaded = ModList.get().isLoaded("curios");
 		surviveLoaded = ModList.get().isLoaded("survive");
-		feathersLoaded = ModList.get().isLoaded("feathers");
 		
 		if (sereneSeasonsLoaded)
 			LOGGER.debug("Serene Seasons is loaded, enabling compatibility");
@@ -127,30 +117,27 @@ public class LegendarySurvivalOverhaul
 			LOGGER.debug("Curios is loaded, enabling compatibility");
 		if (surviveLoaded)
 			LOGGER.debug("Survive is loaded, I hope you know what you're doing");
-		if (feathersLoaded)
-			LOGGER.debug("Feathers is loaded, enabling compatibility");
 	}
 	
-	private void setup(final FMLCommonSetupEvent event)
+	private void commonSetup(final FMLCommonSetupEvent event)
 	{
-		NetworkHandler.register();
+		event.enqueueWork(() -> {
+			NetworkHandler.register();
 
-		Config.Baked.bakeCommon();
-
-		event.enqueueWork(MobEffectRegistry::registerBrewingRecipes);
-
-		BodyDamageUtilInternal.initMalusConfig();
+			TemperatureUtil.internal = new TemperatureUtilInternal();
+			ThirstUtil.internal = new ThirstUtilInternal();
+			BodyDamageUtil.internal = new BodyDamageUtilInternal();
+		});
 	}
-	
-	private void clientEvents(final FMLClientSetupEvent event)
+
+	private void onLoadComplete(final FMLLoadCompleteEvent event)
 	{
-		Config.Baked.bakeClient();
+		event.enqueueWork(() ->
+		{
+			BodyDamageUtilInternal.initMalusConfig();
 
-		DistExecutor.safeRunWhenOn(Dist.CLIENT, LegendarySurvivalOverhaul::clientItemPropertiesSetup);
-
-		MenuScreens.register(ContainerRegistry.COOLER_CONTAINER.get(), ThermalScreen::new);
-		MenuScreens.register(ContainerRegistry.HEATER_CONTAINER.get(), ThermalScreen::new);
-		MenuScreens.register(ContainerRegistry.SEWING_TABLE_CONTAINER.get(), SewingTableScreen::new);
+			MobEffectRegistry.registerBrewingRecipes();
+		});
 	}
 
 	private void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -162,44 +149,6 @@ public class LegendarySurvivalOverhaul
 		event.register(FoodCapability.class);
 		event.register(BodyDamageCapability.class);
 	}
-	
-	private static DistExecutor.SafeRunnable clientItemPropertiesSetup()
-	{
-		return new DistExecutor.SafeRunnable()
-		{
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public void run()
-			{
-				ItemProperties.register(ItemRegistry.THERMOMETER.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "temperature"), new ThermometerProperty());
-				ItemProperties.register(ItemRegistry.CANTEEN.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirstenum"), new CanteenProperty());
-				ItemProperties.register(ItemRegistry.LARGE_CANTEEN.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirstenum"), new CanteenProperty());
-				if (sereneSeasonsLoaded) {
-					ItemProperties.register(ItemRegistry.SEASONAL_CALENDAR.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "time"), new SeasonalCalendarTimeProperty());
-					ItemProperties.register(ItemRegistry.SEASONAL_CALENDAR.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "seasontype"), new SeasonalCalendarSeasonTypeProperty());
-				}
-			}
-		};
-	}
-	
-	private void reloadListener(AddReloadListenerEvent event)
-	{
-		event.addListener(new SimplePreparableReloadListener<>() {
-                              @Override
-                              protected Object prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-                                  JsonConfigRegistration.clearContainers();
-                                  return null;
-                              }
-
-                              @Override
-                              protected void apply(Object o, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-                                  JsonConfigRegistration.init(modConfigJsons.toFile());
-                                  Config.Baked.bakeCommon();
-                              }
-                          }
-		);
-	}
 
 	private void onModConfigLoadEvent(ModConfigEvent.Loading event)
 	{
@@ -207,6 +156,9 @@ public class LegendarySurvivalOverhaul
 
 		if (config.getSpec() == Config.CLIENT_SPEC)
 			Config.Baked.bakeClient();
+
+		if (config.getSpec() == Config.COMMON_SPEC)
+			Config.Baked.bakeCommon();
 	}
 
 	private void onModConfigReloadEvent(ModConfigEvent.Reloading event)
@@ -216,5 +168,25 @@ public class LegendarySurvivalOverhaul
 		// Since client config is not shared, we want it to update instantly whenever it's saved
 		if (config.getSpec() == Config.CLIENT_SPEC)
 			Config.Baked.bakeClient();
+	}
+
+	@Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+	public static class ClientModEvents {
+		@SubscribeEvent
+		public static void onClientSetup(FMLClientSetupEvent event) {
+			Config.Baked.bakeClient();
+
+			MenuScreens.register(ContainerRegistry.COOLER_CONTAINER.get(), ThermalScreen::new);
+			MenuScreens.register(ContainerRegistry.HEATER_CONTAINER.get(), ThermalScreen::new);
+			MenuScreens.register(ContainerRegistry.SEWING_TABLE_CONTAINER.get(), SewingTableScreen::new);
+
+			ItemProperties.register(ItemRegistry.THERMOMETER.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "temperature"), new ThermometerProperty());
+			ItemProperties.register(ItemRegistry.CANTEEN.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirstenum"), new CanteenProperty());
+			ItemProperties.register(ItemRegistry.LARGE_CANTEEN.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "thirstenum"), new CanteenProperty());
+			if (LegendarySurvivalOverhaul.sereneSeasonsLoaded) {
+				ItemProperties.register(ItemRegistry.SEASONAL_CALENDAR.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "time"), new SeasonalCalendarTimeProperty());
+				ItemProperties.register(ItemRegistry.SEASONAL_CALENDAR.get(), new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "seasontype"), new SeasonalCalendarSeasonTypeProperty());
+			}
+		}
 	}
 }

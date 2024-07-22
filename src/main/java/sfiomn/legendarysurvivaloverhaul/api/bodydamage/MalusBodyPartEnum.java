@@ -20,9 +20,9 @@ public enum MalusBodyPartEnum {
 
     public final List<? extends String> effects;
     public final List<? extends Integer> amplifiers;
-    public final List<? extends Float> thresholds;
+    public final List<? extends Double> thresholds;
 
-    MalusBodyPartEnum(List<? extends String> effects, List<? extends Integer> amplifiers, List<? extends Float> thresholds) {
+    MalusBodyPartEnum(List<? extends String> effects, List<? extends Integer> amplifiers, List<? extends Double> thresholds) {
         this.effects = effects;
         this.amplifiers = amplifiers;
         this.thresholds = thresholds;

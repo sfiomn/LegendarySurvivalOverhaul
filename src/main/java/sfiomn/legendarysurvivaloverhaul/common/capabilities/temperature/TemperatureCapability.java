@@ -1,6 +1,5 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature;
 
-import com.elenai.feathers.effect.FeathersEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -19,8 +18,6 @@ import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 
 import java.util.Objects;
-
-import static sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul.feathersLoaded;
 
 // Code adapted from 
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/capability/TemperatureCapability.java

@@ -37,7 +37,7 @@ public class UpdateThirstPacket
 	public static void handle(UpdateThirstPacket message, Supplier<NetworkEvent.Context> supplier)
 	{
 		final NetworkEvent.Context context = supplier.get();
-		context.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> syncThirst(message.compound)));
+		context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> syncThirst(message.compound)));
 		
 		supplier.get().setPacketHandled(true);
 	}

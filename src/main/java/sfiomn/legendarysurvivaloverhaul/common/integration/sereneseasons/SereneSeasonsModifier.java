@@ -154,15 +154,15 @@ public class SereneSeasonsModifier extends ModifierBase
 		return applyUndergroundEffect(value, level, pos);
 	}
 
-	private float getSeasonModifier(float previousSeasonModifier, float currentSeasonModifier, float nextSeasonModifier, int time, int subSeasonDuration) {
+	private float getSeasonModifier(double previousSeasonModifier, double currentSeasonModifier, double nextSeasonModifier, int time, int subSeasonDuration) {
 		return time < subSeasonDuration / 2 ?
 				calculateSinusoidalBetweenSeasons(previousSeasonModifier, currentSeasonModifier, time + (subSeasonDuration / 2), subSeasonDuration):
 				calculateSinusoidalBetweenSeasons(currentSeasonModifier, nextSeasonModifier, time - (subSeasonDuration / 2), subSeasonDuration);
 	}
 
-	private float calculateSinusoidalBetweenSeasons(float previousSeasonModifier, float nextSeasonModifier, int time, int subSeasonDuration) {
-		float tempDiff = nextSeasonModifier - previousSeasonModifier;
-		float seasonModifier = (float) (Math.sin(((time * Math.PI) / subSeasonDuration) - (Math.PI / 2)) + 1) * (tempDiff / 2) + previousSeasonModifier;
-		return MathUtil.round(seasonModifier, 2);
+	private float calculateSinusoidalBetweenSeasons(double previousSeasonModifier, double nextSeasonModifier, int time, int subSeasonDuration) {
+		double tempDiff = nextSeasonModifier - previousSeasonModifier;
+		double seasonModifier = (Math.sin(((time * Math.PI) / subSeasonDuration) - (Math.PI / 2)) + 1) * (tempDiff / 2) + previousSeasonModifier;
+		return MathUtil.round((float) seasonModifier, 2);
 	}
 }

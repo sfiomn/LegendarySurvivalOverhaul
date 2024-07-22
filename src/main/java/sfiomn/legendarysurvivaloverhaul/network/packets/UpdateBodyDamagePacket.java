@@ -37,7 +37,7 @@ public class UpdateBodyDamagePacket
 	public static void handle(UpdateBodyDamagePacket message, Supplier<NetworkEvent.Context> supplier)
 	{
 		final NetworkEvent.Context context = supplier.get();
-		context.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> syncBodyDamage(message.compound)));
+		context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> syncBodyDamage(message.compound)));
 		
 		supplier.get().setPacketHandled(true);
 	}

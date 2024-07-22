@@ -4,6 +4,7 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 version = mod_version
@@ -144,6 +145,10 @@ repositories {
     }
 }
 
+mixin {
+    // MixinGradle Settings
+}
+
 dependencies {
     // Specify the version of Minecraft to use.
     // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
@@ -152,17 +157,20 @@ dependencies {
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
 
+    // Apply Mixin AP
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
     // External libraries.
     // compile against the JEI API but do not include it at runtime
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
+    runtimeOnly fg.deobf("org.embeddedt:embeddium-1.20.1:0.3.9-git.f603a93+mc1.20.1")
 
     // These are REQUIRED for the mod to compile correctly and should not be removed.
     implementation fg.deobf("curse.maven:curios-309927:5367946")
     implementation fg.deobf("curse.maven:serene-seasons-291874:4761604")
-    implementation fg.deobf("curse.maven:feathers-699933:4814309")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

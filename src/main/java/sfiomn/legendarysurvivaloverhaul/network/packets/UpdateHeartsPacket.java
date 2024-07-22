@@ -37,7 +37,7 @@ public class UpdateHeartsPacket
 	public static void handle(UpdateHeartsPacket message, Supplier<NetworkEvent.Context> supplier)
 	{
 		final NetworkEvent.Context context = supplier.get();
-		context.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> syncHearts(message.compound)));
+		context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> syncHearts(message.compound)));
 		
 		supplier.get().setPacketHandled(true);
 	}
