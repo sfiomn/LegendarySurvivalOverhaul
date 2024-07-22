@@ -32,27 +32,27 @@ public class SeasonalCalendarSeasonTypeProperty implements ClampedItemPropertyFu
 
         if (level == null || holder == null)
         {
-            return 2.0f;
+            return 0.2f;
         }
         else
         {
             try
             {
                 if (!ServerConfig.isDimensionWhitelisted(level.dimension()))
-                    return 2.0f;
+                    return 0.2f;
 
                 SereneSeasonsUtil.SeasonType seasonType = SereneSeasonsUtil.getSeasonType(level.getBiome(holder.blockPosition()));
 
                 if (seasonType == SereneSeasonsUtil.SeasonType.NO_SEASON)
-                    return 2.0f;
+                    return 0.2f;
                 else if (seasonType == SereneSeasonsUtil.SeasonType.TROPICAL_SEASON)
-                    return 1.0f;
+                    return 0.1f;
                 else
                     return 0;
             }
             catch (NullPointerException e)
             {
-                return 2.0f;
+                return 0.2f;
             }
 
         }
