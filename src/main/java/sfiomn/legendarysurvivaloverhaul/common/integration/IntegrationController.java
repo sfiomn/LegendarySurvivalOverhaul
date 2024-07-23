@@ -7,10 +7,8 @@ import sfiomn.legendarysurvivaloverhaul.api.bodydamage.DamageDistributionEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
-import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * This class is specifically for implementing default configuration values
@@ -65,8 +63,10 @@ public final class IntegrationController
 			initCrockpot();
 		if (mods.isLoaded("quark"))
 			initQuark();
-		if ((mods.isLoaded("beachparty")))
+		if (mods.isLoaded("beachparty"))
 			initBeachParty();
+		if (mods.isLoaded("create_confectionery"))
+			initCreateConfectionery();
 	}
 
 	private static void initCreate()
@@ -280,5 +280,9 @@ public final class IntegrationController
 		JsonConfig.registerItemTemperature("beachparty:trunks", -3.0f);
 		JsonConfig.registerItemTemperature("beachparty:bikine", -3.0f);
 		JsonConfig.registerItemTemperature("beachparty:crocs", -0.5f);
+	}
+
+	private static void initCreateConfectionery() {
+		JsonConfig.registerConsumableThirst("create_confectionery:hot_chocolate_bottle", 3, 2.0f);
 	}
 }

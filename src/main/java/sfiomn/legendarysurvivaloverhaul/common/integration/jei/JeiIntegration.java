@@ -53,7 +53,7 @@ public class JeiIntegration implements IModPlugin {
         Level world = Minecraft.getInstance().level;
         if (world != null) {
             RecipeManager rm = world.getRecipeManager();
-            registration.addRecipes(SewingRecipeCategory.SEWING_RECIPE_TYPE, rm.getAllRecipesFor(RecipeRegistry.SEWING_RECIPE.get()).stream()
+            registration.addRecipes(SewingRecipeCategory.SEWING_RECIPE_TYPE, rm.getAllRecipesFor(SewingRecipe.Type.INSTANCE).stream()
                     .filter(Objects::nonNull).collect(Collectors.toList()));
 
             registration.addRecipes(RecipeTypes.SMELTING, transferToSmeltingRecipe(rm.getAllRecipesFor(SMELTING).stream()
