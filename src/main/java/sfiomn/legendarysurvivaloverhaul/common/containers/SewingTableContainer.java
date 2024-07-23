@@ -10,6 +10,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 import sfiomn.legendarysurvivaloverhaul.common.recipe.SewingRecipe;
@@ -47,33 +48,48 @@ public class SewingTableContainer extends ItemCombinerMenu {
                 .withResultSlot(RESULT_SLOT, 134, 39).build();
     }
 
-    private List<SewingRecipe> getCurrentRecipe() {
-        SimpleContainer inputSlots = new SimpleContainer(this.inputSlots.getContainerSize());
-        for (int i=0; i<this.inputSlots.getContainerSize(); i++) {
-            inputSlots.addItem(this.inputSlots.getItem(i));
-        }
-        return this.player.level().getRecipeManager().getRecipesFor(SewingRecipe.Type.INSTANCE, inputSlots, this.player.level());
-    }
-
     @Override
     public void createResult() {
-        List<SewingRecipe> sewingRecipes = getCurrentRecipe();
+        SimpleContainer simpleContainerInputSlots = new SimpleContainer(this.inputSlots.getContainerSize());
+        for (int i=0; i<this.inputSlots.getContainerSize(); i++) {
+            simpleContainerInputSlots.addItem(this.inputSlots.getItem(i));
+        }
+        List<SewingRecipe> sewingRecipes = this.player.level().getRecipeManager().getRecipesFor(SewingRecipe.Type.INSTANCE, simpleContainerInputSlots, this.player.level());
         ItemStack itemStack = ItemStack.EMPTY;
 
-        //  Proceed to the found recipe
-        if (!sewingRecipes.isEmpty()) {
-            this.selectedRecipe = sewingRecipes.get(0);
-            itemStack = this.selectedRecipe.getResultItem(this.player.level().registryAccess());
-            this.resultSlots.setRecipeUsed(this.selectedRecipe);
+        LegendarySurvivalOverhaul.LOGGER.debug("create sewing recip result");
+        LegendarySurvivalOverhaul.LOGGER.debug("input slot is armor ?" + (isItemArmor(inputSlots.getItem(INPUT_SLOT))));
+        LegendarySurvivalOverhaul.LOGGER.debug("additional slot is coat ?" + (isItemCoat(inputSlots.getItem(ADDITIONAL_SLOT))));
 
-        //  Check a coat is possible
-        } else if (isItemArmor(inputSlots.getItem(INPUT_SLOT)) && isItemCoat(inputSlots.getItem(1))) {
+        //  Check if we should proceed to a coat application
+        if (!isItemArmor(inputSlots.getItem(INPUT_SLOT)) || !isItemCoat(inputSlots.getItem(ADDITIONAL_SLOT))) {
+            LegendarySurvivalOverhaul.LOGGER.debug("items are not armor & coat");
+            //  Proceed with the found recipe
+            if (!sewingRecipes.isEmpty()) {
+                LegendarySurvivalOverhaul.LOGGER.debug("recipe is not empty");
+                this.selectedRecipe = sewingRecipes.get(0);
+                itemStack = this.selectedRecipe.assemble(simpleContainerInputSlots, this.player.level().registryAccess());
+                this.resultSlots.setRecipeUsed(this.selectedRecipe);
+            }
+        } else {
+            LegendarySurvivalOverhaul.LOGGER.debug("items are armor & coat");
             //  Check coat effect not already applied on amor
-            if (!Objects.equals(TemperatureUtil.getArmorCoatTag(inputSlots.getItem(0)),
+            if (!Objects.equals(TemperatureUtil.getArmorCoatTag(inputSlots.getItem(INPUT_SLOT)),
                     ((CoatItem) (inputSlots.getItem(ADDITIONAL_SLOT).getItem())).coat.id())) {
-                itemStack = this.inputSlots.getItem(INPUT_SLOT).copy();
-                CoatItem coatItem = (CoatItem) inputSlots.getItem(ADDITIONAL_SLOT).getItem();
-                TemperatureUtil.setArmorCoatTag(itemStack, coatItem.coat.id());
+                LegendarySurvivalOverhaul.LOGGER.debug("not the same coat as the one already applied");
+                //  Proceed with the found recipe
+                if (!sewingRecipes.isEmpty()) {
+                    LegendarySurvivalOverhaul.LOGGER.debug("recipe is not empty");
+                    this.selectedRecipe = sewingRecipes.get(0);
+                    itemStack = this.selectedRecipe.assemble(simpleContainerInputSlots, this.player.level().registryAccess());
+                    this.resultSlots.setRecipeUsed(this.selectedRecipe);
+                //  Use fallback coat application
+                } else {
+                    LegendarySurvivalOverhaul.LOGGER.debug("recipe is empty, so fallback");
+                    itemStack = this.inputSlots.getItem(INPUT_SLOT).copy();
+                    CoatItem coatItem = (CoatItem) inputSlots.getItem(ADDITIONAL_SLOT).getItem();
+                    TemperatureUtil.setArmorCoatTag(itemStack, coatItem.coat.id());
+                }
             }
         }
 
