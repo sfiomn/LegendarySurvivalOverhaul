@@ -13,6 +13,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 import sfiomn.legendarysurvivaloverhaul.data.recipes.SewingRecipe;
@@ -31,7 +32,6 @@ public class SewingTableContainer extends Container {
     private final int SLOT_COUNT;
     @Nullable
     private SewingRecipe selectedRecipe;
-    private final List<SewingRecipe> sewingRecipes;
     protected final CraftResultInventory resultSlot = new CraftResultInventory();
     protected final IInventory inputSlots = new Inventory(2) {
         public void setChanged() {
@@ -50,7 +50,6 @@ public class SewingTableContainer extends Container {
         super(ContainerRegistry.SEWING_TABLE_CONTAINER.get(), windowId);
         this.world = playerInventory.player.level;
         this.access = pos;
-        this.sewingRecipes = this.world.getRecipeManager().getAllRecipesFor(RecipeRegistry.SEWING_RECIPE);
 
         addSlot(new Slot(inputSlots, 0, 18, 39));
         addSlot(new Slot(inputSlots, 1, 65, 39));
@@ -81,20 +80,34 @@ public class SewingTableContainer extends Container {
         List<SewingRecipe> sewingRecipes = this.world.getRecipeManager().getRecipesFor(RecipeRegistry.SEWING_RECIPE, this.inputSlots, this.world);
         ItemStack itemStack = ItemStack.EMPTY;
 
-        //  Proceed to the found recipe
         if (!sewingRecipes.isEmpty()) {
-            this.selectedRecipe = sewingRecipes.get(0);
-            itemStack = this.selectedRecipe.assemble(this.inputSlots);
-            this.resultSlot.setRecipeUsed(this.selectedRecipe);
+            LegendarySurvivalOverhaul.LOGGER.debug("recipe found");
+        }
 
-            //  Check a coat is possible
-        } else if (isItemArmor(inputSlots.getItem(0)) && isItemCoat(inputSlots.getItem(1))) {
+        //  Check if we should proceed to a coat application
+        if (!isItemArmor(inputSlots.getItem(0)) || !isItemCoat(inputSlots.getItem(1))) {
+            //  Proceed to the found recipe
+            if (!sewingRecipes.isEmpty()) {
+                this.selectedRecipe = sewingRecipes.get(0);
+                itemStack = this.selectedRecipe.assemble(this.inputSlots);
+                this.resultSlot.setRecipeUsed(this.selectedRecipe);
+            }
+        } else {
             //  Check coat effect not already applied on amor
             if (!Objects.equals(TemperatureUtil.getArmorCoatTag(inputSlots.getItem(0)),
                     ((CoatItem) (inputSlots.getItem(1).getItem())).coat.id())) {
-                itemStack = this.inputSlots.getItem(0).copy();
-                CoatItem coatItem = (CoatItem) inputSlots.getItem(1).getItem();
-                TemperatureUtil.setArmorCoatTag(itemStack, coatItem.coat.id());
+                //  Proceed to the found recipe
+                if (!sewingRecipes.isEmpty()) {
+                    this.selectedRecipe = sewingRecipes.get(0);
+                    itemStack = this.selectedRecipe.assemble(this.inputSlots);
+                    this.resultSlot.setRecipeUsed(this.selectedRecipe);
+
+                //  Use fallback coat application
+                } else {
+                    itemStack = this.inputSlots.getItem(0).copy();
+                    CoatItem coatItem = (CoatItem) inputSlots.getItem(1).getItem();
+                    TemperatureUtil.setArmorCoatTag(itemStack, coatItem.coat.id());
+                }
             }
         }
 
