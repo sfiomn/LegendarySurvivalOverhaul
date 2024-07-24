@@ -68,7 +68,7 @@ public class JeiIntegration implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(SewingTableScreen.class, 90, 36, 20, 20, SewingRecipeCategory.SEWING_RECIPE_TYPE);
+        registration.addRecipeClickArea(SewingTableScreen.class, 40, 37, 20, 20, SewingRecipeCategory.SEWING_RECIPE_TYPE);
     }
 
     @Override

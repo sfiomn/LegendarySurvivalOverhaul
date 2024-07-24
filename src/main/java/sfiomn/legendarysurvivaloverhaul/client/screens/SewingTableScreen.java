@@ -72,8 +72,7 @@ public class SewingTableScreen extends AbstractContainerScreen<SewingTableContai
                     !this.menu.getSlot(2).hasItem()) {
 
                 Component tooltipText = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".sewing_table_disabled");
-
-                gui.drawCenteredString(Minecraft.getInstance().font, tooltipText, mouseX, mouseY, Color.BLACK.getRGB());
+                gui.renderTooltip(Minecraft.getInstance().font, tooltipText, mouseX, mouseY);
             }
         }
     }
