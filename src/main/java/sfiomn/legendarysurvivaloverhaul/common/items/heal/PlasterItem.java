@@ -53,8 +53,7 @@ public class PlasterItem extends BodyHealingItem {
             tooltips.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.body_part", getHealingCharges()));
             tooltips.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value", getHealingCapacity(), MathUtil.round(getHealingTicks() / 20.0f, 1)));
         }
-        ItemStack potionEquivalent = PotionUtils.setCustomEffects(new ItemStack(ItemRegistry.PLASTER.get()), Collections.singletonList(new MobEffectInstance(MobEffects.REGENERATION, 400, 0)));
-        PotionUtils.addPotionTooltip(potionEquivalent, tooltips, 1.0f);
+        addSecondaryEffectTooltip(tooltips, new MobEffectInstance(MobEffects.REGENERATION, 400, 0));
         super.appendHoverText(stack, level, tooltips, isAdvanced);
     }
 }

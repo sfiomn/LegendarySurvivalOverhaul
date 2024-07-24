@@ -23,19 +23,20 @@ public class ThirstUtil
 	}
 
 	/**
-	 * Player takes a drink with the specified values and a chance to make them thirsty
+	 * Player takes a drink with the specified values and a chance to trigger side effects
 	 * @param player
 	 * @param hydration
 	 * @param saturation
-	 * @param dirtyChance 0.0f - 1.0f
+	 * @param effectChance 0.0f - 1.0f
+	 * @param effect
 	 */
-	public static void takeDrink(Player player, int hydration, float saturation, float dirtyChance)
+	public static void takeDrink(Player player, int hydration, float saturation, float effectChance, String effect)
 	{
-		internal.takeDrink(player, hydration, saturation, dirtyChance);
+		internal.takeDrink(player, hydration, saturation, effectChance, effect);
 	}
 
 	/**
-	 * Player takes a drink with the specified values and no chance to make them thirsty
+	 * Player takes a drink with the specified values and no chance to trigger side effects
 	 * @param player
 	 * @param hydration
 	 * @param saturation

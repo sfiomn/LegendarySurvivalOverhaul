@@ -77,7 +77,7 @@ public class DrinkItem extends Item {
             jsonThirst = JsonConfig.consumableThirst.get(registryName.toString());
 
         if(jsonThirst != null)
-            ThirstUtil.takeDrink(player, jsonThirst.hydration, jsonThirst.saturation, jsonThirst.dirty);
+            ThirstUtil.takeDrink(player, jsonThirst.hydration, jsonThirst.saturation, jsonThirst.effectChance, jsonThirst.effect);
 
         runSecondaryEffect(player, stack);
 

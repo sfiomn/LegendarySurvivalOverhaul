@@ -54,7 +54,7 @@ public class BandageItem extends BodyHealingItem {
             tooltips.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.body_part", getHealingCharges()));
             tooltips.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value", getHealingCapacity(), MathUtil.round(getHealingTicks() / 20.0f, 1)));
         }
-        ItemStack potionEquivalent = PotionUtils.setCustomEffects(new ItemStack(ItemRegistry.BANDAGE.get()), Collections.singletonList(new MobEffectInstance(MobEffects.REGENERATION, 300, 1)));
-        PotionUtils.addPotionTooltip(potionEquivalent, tooltips, 1.0f);
+        addSecondaryEffectTooltip(tooltips, new MobEffectInstance(MobEffects.REGENERATION, 300, 1));
+        super.appendHoverText(stack, level, tooltips, isAdvanced);
     }
 }

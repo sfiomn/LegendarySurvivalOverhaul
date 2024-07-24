@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -40,6 +41,7 @@ import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.KeyMappingRegistry;
 
 import java.util.List;
+import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.FORGE)
 public class TooltipHandler
@@ -182,7 +184,6 @@ public class TooltipHandler
 
 				if (jct.getEffect() == MobEffectRegistry.HOT_FOOD.get() || jct.getEffect() == MobEffectRegistry.HOT_DRINk.get())
 					tooltips.add(mutableComponent.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16420407))));
-
 			}
 		}
 	}
@@ -194,26 +195,52 @@ public class TooltipHandler
 		JsonThirst jsonThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
 
 		HydrationTooltipComponent hydrationTooltipComponent = null;
+		MobEffect hydrationEffect = null;
 		if (jsonThirst != null) {
-			hydrationTooltipComponent = new HydrationTooltipComponent(jsonThirst.hydration, jsonThirst.saturation, jsonThirst.dirty);
+			hydrationTooltipComponent = new HydrationTooltipComponent(jsonThirst.hydration, jsonThirst.saturation, jsonThirst.effectChance, jsonThirst.effect);
+			if (jsonThirst.effectChance > 0 && !Objects.equals(jsonThirst.effect, "")) {
+				hydrationEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(jsonThirst.effect));
+			}
 		} else if (stack.getItem() == Items.POTION) {
 			Potion potion = PotionUtils.getPotion(stack);
 			if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
 			{
 				hydrationTooltipComponent = new HydrationTooltipComponent(HydrationEnum.NORMAL);
+				hydrationEffect = HydrationEnum.NORMAL.getMobEffectIfApplicable();
 			}
 			else if (potion != Potions.EMPTY)
 			{
 				hydrationTooltipComponent = new HydrationTooltipComponent(HydrationEnum.POTION);
+				hydrationEffect = HydrationEnum.POTION.getMobEffectIfApplicable();
 			}
 		} else if (stack.getItem() instanceof DrinkItem) {
 			HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
-			if (hydrationEnum != null)
+			if (hydrationEnum != null) {
 				hydrationTooltipComponent = new HydrationTooltipComponent(hydrationEnum);
+				hydrationEffect = hydrationEnum.getMobEffectIfApplicable();
+			}
 		}
 
 		if (hydrationTooltipComponent != null) {
 			tooltips.add(Either.right(hydrationTooltipComponent));
 		}
+
+		if (hydrationEffect != null)
+			tooltips.add(Either.left(getHydrationEffectTooltip(hydrationEffect)));
+	}
+
+	private static MutableComponent getHydrationEffectTooltip(MobEffect effect) {
+		MobEffectInstance effectInstance = new MobEffectInstance(effect, 600, 0, false, true);
+		MutableComponent mutableComponent = Component.translatable(effectInstance.getDescriptionId());
+
+		if (effectInstance.getAmplifier() > 1) {
+			mutableComponent = Component.translatable("potion.withAmplifier", mutableComponent, Component.translatable("potion.potency." + effectInstance.getAmplifier()));
+		}
+
+		if (effectInstance.getDuration() > 20) {
+			mutableComponent = Component.translatable("potion.withDuration", mutableComponent, MobEffectUtil.formatDuration(effectInstance, 1.0f));
+		}
+
+		return mutableComponent.withStyle(Style.EMPTY.withColor(ChatFormatting.BLUE));
 	}
 }

@@ -103,7 +103,7 @@ public class ClientForgeEvents {
                     RenderTemperatureOverlay.updateTemperatureEffect(Minecraft.getInstance().player);
                     TemperatureEffectSound.tickPlay(Minecraft.getInstance().player);
                 }
-                if (Config.Baked.thirstEnabled) {
+                if (Config.Baked.thirstEnabled && Config.Baked.lowHydrationEffect) {
                     RenderThirstOverlay.updateThirstEffect(Minecraft.getInstance().player);
                 }
                 if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && Config.Baked.seasonCardsEnabled) {
@@ -116,6 +116,13 @@ public class ClientForgeEvents {
                         ClientHooks.openBodyHealthScreen(Minecraft.getInstance().player);
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRenderLevelStage(RenderLevelStageEvent event) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER && Config.Baked.lowHydrationEffect) {
+            RenderThirstOverlay.render();
         }
     }
 }

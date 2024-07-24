@@ -68,7 +68,6 @@ public class Config
 		public final ForgeConfigSpec.IntValue tickRate;
 		public final ForgeConfigSpec.DoubleValue minTemperatureModification;
 		public final ForgeConfigSpec.DoubleValue maxTemperatureModification;
-		public final ForgeConfigSpec.BooleanValue showPotionEffectParticles;
 		public final ForgeConfigSpec.BooleanValue dangerousTemperature;
 		public final ForgeConfigSpec.BooleanValue temperatureResistanceOnDeathEnabled;
 		public final ForgeConfigSpec.IntValue temperatureResistanceOnDeathTime;
@@ -154,6 +153,7 @@ public class Config
 		// Thirst
 		public final ForgeConfigSpec.BooleanValue thirstEnabled;
 		public final ForgeConfigSpec.BooleanValue dangerousDehydration;
+		public final ForgeConfigSpec.BooleanValue lowHydrationEffect;
 		public final ForgeConfigSpec.DoubleValue dehydrationDamageScaling;
 		public final ForgeConfigSpec.DoubleValue thirstEffectModifier;
 		public final ForgeConfigSpec.DoubleValue baseThirstExhaustion;
@@ -167,17 +167,21 @@ public class Config
 		public final ForgeConfigSpec.BooleanValue drinkFromRain;
 		public final ForgeConfigSpec.IntValue hydrationRain;
 		public final ForgeConfigSpec.DoubleValue saturationRain;
-		public final ForgeConfigSpec.DoubleValue dirtyRain;
+		public final ForgeConfigSpec.DoubleValue effectChanceRain;
+		public final ForgeConfigSpec.ConfigValue<String> effectRain;
 		public final ForgeConfigSpec.BooleanValue drinkFromWater;
 		public final ForgeConfigSpec.IntValue hydrationWater;
 		public final ForgeConfigSpec.DoubleValue saturationWater;
-		public final ForgeConfigSpec.DoubleValue dirtyWater;
+		public final ForgeConfigSpec.DoubleValue effectChanceWater;
+		public final ForgeConfigSpec.ConfigValue<String> effectWater;
 		public final ForgeConfigSpec.IntValue hydrationPotion;
 		public final ForgeConfigSpec.DoubleValue saturationPotion;
-		public final ForgeConfigSpec.DoubleValue dirtyPotion;
+		public final ForgeConfigSpec.DoubleValue effectChancePotion;
+		public final ForgeConfigSpec.ConfigValue<String> effectPotion;
 		public final ForgeConfigSpec.IntValue hydrationPurified;
 		public final ForgeConfigSpec.DoubleValue saturationPurified;
-		public final ForgeConfigSpec.DoubleValue dirtyPurified;
+		public final ForgeConfigSpec.DoubleValue effectChancePurified;
+		public final ForgeConfigSpec.ConfigValue<String> effectPurified;
 		public final ForgeConfigSpec.BooleanValue glassBottleLootAfterDrink;
 
 		// Heart Fruits
@@ -329,10 +333,6 @@ public class Config
 			enchantmentMultiplier = builder
 					.comment(" Increases/decreases the effect that cooling/heating enchantments have on a player's temperature.")
 					.defineInRange("Enchantment Modifier", 1.0, -1000, 1000);
-			showPotionEffectParticles = builder
-					.comment(" If enabled, players will see particles on them when temperature resistance effect active.",
-							" If disabled, players won't see particles but the potion color will turn black due to forge weird behavior.")
-					.define("Show Temperature Potion Effect Particles", true);
 
 			builder.push("wetness");
 			wetnessMode = builder
@@ -534,6 +534,9 @@ public class Config
 			dangerousDehydration = builder
 					.comment(" If enabled, players will take damage from the complete dehydration.")
 					.define("Dangerous Dehydration", true);
+			lowHydrationEffect = builder
+					.comment(" If enabled, player's vision will become blurry when running low on hydration.")
+					.define("Low Thirst Effect", true);
 			builder.push("exhaustion");
 			baseThirstExhaustion = builder
 					.comment(" Thirst exhausted every 10 ticks.")
@@ -579,9 +582,12 @@ public class Config
 			saturationRain = builder
 					.comment(" Amount of saturation recovered when drinking from the rain.")
 					.defineInRange("Saturation", 0, 0, 20.0d);
-			dirtyRain = builder
-					.comment(" Chance of getting a thirst effect while drinking from the rain.")
-					.defineInRange("Dirty", 0, 0, 1.0d);
+			effectChanceRain = builder
+					.comment(" Chance of getting an effect while drinking from the rain.")
+					.defineInRange("Effect Chance", 0, 0, 1.0d);
+			effectRain = builder
+					.comment(" Possible effect given while drinking from the rain.")
+					.define("Effect", "");
 			builder.pop();
 			builder.push("water");
 			drinkFromWater = builder
@@ -593,9 +599,12 @@ public class Config
 			saturationWater = builder
 					.comment(" Amount of saturation recovered while drinking water.")
 					.defineInRange("Saturation", 0, 0, 20.0d);
-			dirtyWater = builder
-					.comment(" Chance of getting a thirst effect while drinking water.")
-					.defineInRange("Dirty", 0.75d, 0, 1.0d);
+			effectChanceWater = builder
+					.comment(" Chance of getting an effect while drinking water.")
+					.defineInRange("Effect Chance", 0.75d, 0, 1.0d);
+			effectWater = builder
+					.comment(" Possible effect given while drinking water.")
+					.define("Effect", LegendarySurvivalOverhaul.MOD_ID + ":thirst");
 			builder.pop();
 			builder.comment(" Amount recovered by potions with effects").push("potion");
 			hydrationPotion = builder
@@ -604,9 +613,12 @@ public class Config
 			saturationPotion = builder
 					.comment(" Amount of saturation recovered while drinking a potion.")
 					.defineInRange("Saturation", 0.3d, 0, 20.0d);
-			dirtyPotion = builder
-					.comment(" Chance of getting a thirst effect while drinking a potion.")
-					.defineInRange("Dirty", 0, 0, 1.0d);
+			effectChancePotion = builder
+					.comment(" Chance of getting an effect while drinking a potion.")
+					.defineInRange("Effect Chance", 0, 0, 1.0d);
+			effectPotion = builder
+					.comment(" Possible effect given while drinking a potion.")
+					.define("Effect", "");
 			builder.pop();
 			builder.push("purified-water");
 			hydrationPurified = builder
@@ -615,9 +627,12 @@ public class Config
 			saturationPurified = builder
 					.comment(" Amount of saturation recovered while drinking purified water.")
 					.defineInRange("Saturation", 1.5d, 0, 20.0d);
-			dirtyPurified = builder
-					.comment(" Chance of getting a thirst effect while drinking purified water.")
-					.defineInRange("Dirty", 0, 0, 1.0d);
+			effectChancePurified = builder
+					.comment(" Chance of getting an effect while drinking purified water.")
+					.defineInRange("Effect Chance", 0, 0, 1.0d);
+			effectPurified = builder
+					.comment(" Possible effect given while drinking purified water.")
+					.define("Effect", "");
 			builder.pop();
 			builder.push("juices");
 			glassBottleLootAfterDrink = builder
@@ -809,7 +824,7 @@ public class Config
 	public static class Client
 	{
 		public final ForgeConfigSpec.BooleanValue showVanillaAnimationOverlay;
-		public final ForgeConfigSpec.ConfigValue<String> temperatureDisplayMode;
+		public final ForgeConfigSpec.EnumValue<TemperatureDisplayEnum> temperatureDisplayMode;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetY;
 		public final ForgeConfigSpec.BooleanValue foodSaturationDisplayed;
@@ -852,7 +867,7 @@ public class Config
 					.comment(" How temperature is displayed. Accepted values are as follows:",
 							"    SYMBOL - Display the player's current temperature as a symbol above the hotbar.",
 							"    NONE - Disable the temperature indicator.")
-					.define("Temperature Display Mode", "SYMBOL");
+					.defineEnum("Temperature Display Mode", TemperatureDisplayEnum.SYMBOL);
 			temperatureDisplayOffsetX = builder
 					.comment(" The X and Y offset of the temperature indicator. Set both to 0 for no offset.")
 					.defineInRange("Temperature Display X Offset", 0, -10000, 10000);
@@ -936,7 +951,6 @@ public class Config
 		public static int tickRate;
 		public static double minTemperatureModification;
 		public static double maxTemperatureModification;
-		public static boolean showPotionEffectParticles;
 		public static boolean temperatureResistanceOnDeathEnabled;
 		public static int temperatureResistanceOnDeathTime;
 
@@ -1023,6 +1037,7 @@ public class Config
 		// Thirst
 		public static boolean thirstEnabled;
 		public static boolean dangerousDehydration;
+		public static boolean lowHydrationEffect;
 		public static double dehydrationDamageScaling;
 		public static double thirstEffectModifier;
 		public static double baseThirstExhaustion;
@@ -1036,17 +1051,21 @@ public class Config
 		public static boolean drinkFromRain;
 		public static int hydrationRain;
 		public static double saturationRain;
-		public static double dirtyRain;
+		public static double effectChanceRain;
+		public static String effectRain;
 		public static boolean drinkFromWater;
 		public static int hydrationWater;
 		public static double saturationWater;
-		public static double dirtyWater;
+		public static double effectChanceWater;
+		public static String effectWater;
 		public static int hydrationPotion;
 		public static double saturationPotion;
-		public static double dirtyPotion;
+		public static double effectChancePotion;
+		public static String effectPotion;
 		public static int hydrationPurified;
 		public static double saturationPurified;
-		public static double dirtyPurified;
+		public static double effectChancePurified;
+		public static String effectPurified;
 		public static boolean glassBottleLootAfterDrink;
 
 		// Heart fruit
@@ -1154,7 +1173,6 @@ public class Config
 				baseFoodExhaustion = COMMON.baseFoodExhaustion.get();
 
 				temperatureEnabled = COMMON.temperatureEnabled.get();
-				showPotionEffectParticles = COMMON.showPotionEffectParticles.get();
 
 				temperatureResistanceOnDeathEnabled = COMMON.temperatureResistanceOnDeathEnabled.get();
 				temperatureResistanceOnDeathTime = COMMON.temperatureResistanceOnDeathTime.get();
@@ -1239,6 +1257,7 @@ public class Config
 
 				thirstEnabled = COMMON.thirstEnabled.get();
 				dangerousDehydration = COMMON.dangerousDehydration.get();
+				lowHydrationEffect = COMMON.lowHydrationEffect.get();
 				dehydrationDamageScaling = COMMON.dehydrationDamageScaling.get();
 				thirstEffectModifier = COMMON.thirstEffectModifier.get();
 
@@ -1255,17 +1274,21 @@ public class Config
 				drinkFromRain = COMMON.drinkFromRain.get();
 				hydrationRain = COMMON.hydrationRain.get();
 				saturationRain = COMMON.saturationRain.get();
-				dirtyRain = COMMON.dirtyRain.get();
+				effectChanceRain = COMMON.effectChanceRain.get();
+				effectRain = COMMON.effectRain.get();
 				drinkFromWater = COMMON.drinkFromWater.get();
 				hydrationWater = COMMON.hydrationWater.get();
 				saturationWater = COMMON.saturationWater.get();
-				dirtyWater = COMMON.dirtyWater.get();
+				effectChanceWater = COMMON.effectChanceWater.get();
+				effectWater = COMMON.effectWater.get();
 				hydrationPotion = COMMON.hydrationPotion.get();
 				saturationPotion = COMMON.saturationPotion.get();
-				dirtyPotion = COMMON.dirtyPotion.get();
+				effectChancePotion = COMMON.effectChancePotion.get();
+				effectPotion = COMMON.effectPotion.get();
 				hydrationPurified = COMMON.hydrationPurified.get();
 				saturationPurified = COMMON.saturationPurified.get();
-				dirtyPurified = COMMON.dirtyPurified.get();
+				effectChancePurified = COMMON.effectChancePurified.get();
+				effectPurified = COMMON.effectPurified.get();
 				glassBottleLootAfterDrink = COMMON.glassBottleLootAfterDrink.get();
 
 				heartFruitsEnabled = COMMON.heartFruitsEnabled.get();
@@ -1343,7 +1366,7 @@ public class Config
 			LegendarySurvivalOverhaul.LOGGER.debug("Load Client configuration from file");
 			try
 			{
-				temperatureDisplayMode = TemperatureDisplayEnum.getDisplayFromString(CLIENT.temperatureDisplayMode.get());
+				temperatureDisplayMode = CLIENT.temperatureDisplayMode.get();
 				temperatureDisplayOffsetX = CLIENT.temperatureDisplayOffsetX.get();
 				temperatureDisplayOffsetY = CLIENT.temperatureDisplayOffsetY.get();
 				showVanillaAnimationOverlay = CLIENT.showVanillaAnimationOverlay.get();

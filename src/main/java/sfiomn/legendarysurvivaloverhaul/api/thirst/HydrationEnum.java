@@ -1,6 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.api.thirst;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
+
+import java.util.Objects;
 
 // Stolen shamelessly from Charles445's SimpleDifficulty mod
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/api/thirst/ThirstEnum.java
@@ -43,14 +48,30 @@ public enum HydrationEnum
 		};
 	}
 
-	public double getDirtiness()
+	public double getEffectChance()
 	{
 		return switch (this) {
-			case NORMAL -> Config.Baked.dirtyWater;
-			case RAIN -> Config.Baked.dirtyRain;
-			case POTION -> Config.Baked.dirtyPotion;
-			case PURIFIED -> Config.Baked.dirtyPurified;
+			case NORMAL -> Config.Baked.effectChanceWater;
+			case RAIN -> Config.Baked.effectChanceRain;
+			case POTION -> Config.Baked.effectChancePotion;
+			case PURIFIED -> Config.Baked.effectChancePurified;
 		};
+	}
+
+	public String getEffect()
+	{
+		return switch (this) {
+			case NORMAL -> Config.Baked.effectWater;
+			case RAIN -> Config.Baked.effectRain;
+			case POTION -> Config.Baked.effectPotion;
+			case PURIFIED -> Config.Baked.effectPurified;
+		};
+	}
+
+	public MobEffect getMobEffectIfApplicable() {
+		if (this.getEffectChance() > 0 && !Objects.equals(this.getEffect(), ""))
+			return ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(this.getEffect()));
+		return null;
 	}
 
 	public String toString()

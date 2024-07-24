@@ -25,7 +25,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import sereneseasons.api.season.SeasonChangedEvent;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
@@ -35,7 +34,6 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonConsumab
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
-import sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons.RenderSeasonCards;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.items.drink.DrinkItem;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -84,7 +82,7 @@ public class CommonForgeEvents {
                 jsonConsumableThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
 
             if (jsonConsumableThirst != null && (jsonConsumableThirst.hydration != 0 || jsonConsumableThirst.saturation != 0)) {
-                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.dirty);
+                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
             } else if (event.getItem().getItem() == Items.POTION){
                 Potion potion = PotionUtils.getPotion(event.getItem());
                 if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
@@ -244,8 +242,8 @@ public class CommonForgeEvents {
 
         Player player = event.getEntity();
         if (Config.Baked.temperatureResistanceOnDeathEnabled) {
-            player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime));
-            player.addEffect(new MobEffectInstance(MobEffectRegistry.COLD_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime));
+            player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime, 0, false, false, true));
+            player.addEffect(new MobEffectInstance(MobEffectRegistry.COLD_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime, 0, false, false, true));
         }
     }
 

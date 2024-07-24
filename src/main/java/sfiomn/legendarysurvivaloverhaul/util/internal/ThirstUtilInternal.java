@@ -1,6 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.util.internal;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -11,8 +13,8 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstUtil;
@@ -20,6 +22,8 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapabil
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
+
+import java.util.Objects;
 
 import static net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL;
 
@@ -137,7 +141,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     }
 
     @Override
-    public void takeDrink(Player player, int hydration, float saturation, float dirtyChance)
+    public void takeDrink(Player player, int hydration, float saturation, float effectChance, String effectName)
     {
         if(!Config.Baked.thirstEnabled)
             return;
@@ -148,10 +152,12 @@ public class ThirstUtilInternal implements IThirstUtil {
 
         capability.addSaturationLevel(saturation);
 
-        // Check for dirtiness
-        if(dirtyChance != 0.0f && player.level().random.nextFloat() < dirtyChance)
+        // Check for effect chance
+        if(effectChance != 0.0f && !Objects.equals(effectName, "") && player.level().random.nextFloat() < effectChance)
         {
-            player.addEffect(new MobEffectInstance(MobEffectRegistry.THIRST.get(),600, 0, false, true));
+            MobEffect mobEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effectName));
+            if (mobEffect != null)
+                player.addEffect(new MobEffectInstance(mobEffect,600, 0, false, true, true));
         }
     }
 
@@ -159,13 +165,13 @@ public class ThirstUtilInternal implements IThirstUtil {
     public void takeDrink(Player player, int hydration, float saturation)
     {
         // Clean water
-        takeDrink(player, hydration, saturation, 0.0f);
+        takeDrink(player, hydration, saturation, 0.0f, "");
     }
 
     @Override
     public void takeDrink(Player player, HydrationEnum type)
     {
-        takeDrink(player, type.getHydration(), (float) type.getSaturation(), (float) type.getDirtiness());
+        takeDrink(player, type.getHydration(), (float) type.getSaturation(), (float) type.getEffectChance(), type.getEffect());
     }
 
     @Override
@@ -189,7 +195,7 @@ public class ThirstUtilInternal implements IThirstUtil {
         if (positionLookedAt.getType() == HitResult.Type.BLOCK) {
             BlockState blockState = player.level().getBlockState(((BlockHitResult) positionLookedAt).getBlockPos());
             Fluid fluidState = player.level().getFluidState(((BlockHitResult) positionLookedAt).getBlockPos()).getType();
-            if (blockState.getBlock() == Blocks.CAULDRON) {
+            if (blockState.getBlock() == Blocks.WATER_CAULDRON) {
                 int level = blockState.getValue(LEVEL);
                 if(level > 0) {
                     return HydrationEnum.NORMAL;

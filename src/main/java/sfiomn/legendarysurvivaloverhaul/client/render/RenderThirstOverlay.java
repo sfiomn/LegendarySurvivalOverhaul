@@ -1,12 +1,10 @@
 package sfiomn.legendarysurvivaloverhaul.client.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import sfiomn.legendarysurvivaloverhaul.client.shaders.FocusShader;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
@@ -25,14 +23,7 @@ public class RenderThirstOverlay {
     private static float shaderIntensity = 0;
     private static int updateTimer = 0;
 
-    public static IGuiOverlay THIRST_OVERLAY = (forgeGui, guiGraphics, partialTicks, width, height) -> {
-        forgeGui.setupOverlayRenderState(true, false);
-        drawThirstEffect();
-
-        Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-    };
-
-    public static void drawThirstEffect() {
+    public static void render() {
         if (!(Minecraft.getInstance().screen instanceof DeathScreen) && focusShader != null) {
             focusShader.render(shaderIntensity);
         }

@@ -75,14 +75,15 @@ public class HeaterBaseBlock extends ThermalBlock {
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
-        if (level.getBlockState(pos.above()).getBlock() != BlockRegistry.HEATER_TOP.get())
+        super.onRemove(state, level, pos, newState, isMoving);
+        if(!state.is(newState.getBlock()) && level.getBlockState(pos.above()).getBlock() instanceof HeaterTopBlock)
         {
-            level.destroyBlock(pos, true);
+            level.removeBlock(pos.above(), false);
         }
     }
+
 
     @SuppressWarnings("deprecation")
     @Override

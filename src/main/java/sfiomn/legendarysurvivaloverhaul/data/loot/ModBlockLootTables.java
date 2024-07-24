@@ -23,6 +23,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     @Override
     protected void generate() {
         this.dropSelf(BlockRegistry.HEATER.get());
+        this.dropSelf(BlockRegistry.HEATER_TOP.get());
         this.dropSelf(BlockRegistry.COOLER.get());
         this.dropSelf(BlockRegistry.ICE_FERN.get());
         this.dropSelf(BlockRegistry.SUN_FERN.get());

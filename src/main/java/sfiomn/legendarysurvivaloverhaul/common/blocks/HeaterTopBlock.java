@@ -71,14 +71,13 @@ public class HeaterTopBlock extends HorizontalDirectionalBlock {
         return InteractionResult.SUCCESS;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
-        if (!level.getBlockState(pos.below()).is(BlockRegistry.HEATER.get()))
+        super.onRemove(state, level, pos, newState, isMoving);
+        if(!state.is(newState.getBlock()) && level.getBlockState(pos.below()).getBlock() instanceof HeaterBaseBlock)
         {
-            level.removeBlock(pos, false);
+            level.removeBlock(pos.below(), false);
         }
     }
 

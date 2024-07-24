@@ -100,12 +100,12 @@ public class JsonConfig
 	}
 
 	public static void registerConsumableThirst(String registryName, int hydration, float saturation) {
-		registerConsumableThirst(registryName, hydration, saturation, 0);
+		registerConsumableThirst(registryName, hydration, saturation, 0, "");
 	}
 
-	public static void registerConsumableThirst(String registryName, int hydration, float saturation, float dirtiness) {
+	public static void registerConsumableThirst(String registryName, int hydration, float saturation, float effectChance, String effect) {
 		if (!consumableThirst.containsKey(registryName)) {
-			consumableThirst.put(registryName, new JsonThirst(hydration, saturation, dirtiness));
+			consumableThirst.put(registryName, new JsonThirst(hydration, saturation, effectChance, effect));
 		}
 	}
 	

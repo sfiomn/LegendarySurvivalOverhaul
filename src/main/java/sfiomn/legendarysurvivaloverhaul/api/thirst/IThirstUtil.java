@@ -9,7 +9,7 @@ public interface IThirstUtil
 	@Nullable
 	public HydrationEnum traceWater(Player player);
 
-	public void takeDrink(Player player, int thirst, float saturation, float dirtyChance);
+	public void takeDrink(Player player, int thirst, float saturation, float effectChance, String effect);
 
 	public void takeDrink(Player player, int thirst, float saturation);
 

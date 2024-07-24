@@ -1,9 +1,15 @@
 package sfiomn.legendarysurvivaloverhaul.common.items.heal;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -17,6 +23,8 @@ import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
+
+import java.util.List;
 
 public class BodyHealingItem extends Item {
 
@@ -112,5 +120,19 @@ public class BodyHealingItem extends Item {
     public boolean isEnchantable(ItemStack stack)
     {
         return false;
+    }
+
+    public static void addSecondaryEffectTooltip(List<Component> tooltips, MobEffectInstance mobEffect) {
+        MutableComponent mutableComponent = Component.translatable(mobEffect.getDescriptionId());
+
+        if (mobEffect.getAmplifier() > 0) {
+            mutableComponent = Component.translatable("potion.withAmplifier", mutableComponent, Component.translatable("potion.potency." + mobEffect.getAmplifier()));
+        }
+
+        if (mobEffect.getDuration() > 20) {
+            mutableComponent = Component.translatable("potion.withDuration", mutableComponent, MobEffectUtil.formatDuration(mobEffect, 1.0f));
+        }
+
+        tooltips.add(mutableComponent.withStyle(Style.EMPTY.withColor(ChatFormatting.BLUE)));
     }
 }

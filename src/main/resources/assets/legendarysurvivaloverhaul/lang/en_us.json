@@ -63,6 +63,7 @@
 	"item.legendarysurvivaloverhaul.morphine": "Morphine",
 	
 	"block.legendarysurvivaloverhaul.heater":"Boiler",
+	"block.legendarysurvivaloverhaul.heater_top":"Boiler",
 	"block.legendarysurvivaloverhaul.cooler":"Ice Box",
 	"block.legendarysurvivaloverhaul.sewing_table":"Sewing Table",
 	"block.legendarysurvivaloverhaul.sun_fern": "Sun Fern",

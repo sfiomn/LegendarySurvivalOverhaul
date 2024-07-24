@@ -113,9 +113,9 @@ public class JsonConfigRegistration
 		JsonConfig.registerFuelItems("minecraft:blue_ice", ThermalTypeEnum.COOLING, 30);
 		JsonConfig.registerFuelItems("minecraft:packed_ice", ThermalTypeEnum.COOLING, 30);
 
-		JsonConfig.registerConsumableThirst("minecraft:melon_slice", 2, 1.0f, 0);
-		JsonConfig.registerConsumableThirst("minecraft:apple", 2, 0.5f, 0);
-		JsonConfig.registerConsumableThirst("minecraft:rotten_flesh", -1, 0.0f, 1.0f);
+		JsonConfig.registerConsumableThirst("minecraft:melon_slice", 2, 1.0f, 0, "");
+		JsonConfig.registerConsumableThirst("minecraft:apple", 2, 0.5f, 0, "");
+		JsonConfig.registerConsumableThirst("minecraft:rotten_flesh", -1, 0.0f, 1.0f, LegendarySurvivalOverhaul.MOD_ID + ":thirst");
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":apple_juice",6,3.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":beetroot_juice",9,4.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":cactus_juice",9,3.0f);
@@ -257,7 +257,7 @@ public class JsonConfigRegistration
 			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonConsumableThirst.size() + " consumable thirst values from JSON");
 			for (Map.Entry<String, JsonThirst> entry : jsonConsumableThirst.entrySet())
 			{
-				JsonConfig.registerConsumableThirst(entry.getKey(), entry.getValue().hydration, entry.getValue().saturation, entry.getValue().dirty);
+				JsonConfig.registerConsumableThirst(entry.getKey(), entry.getValue().hydration, entry.getValue().saturation, entry.getValue().effectChance, entry.getValue().effect);
 			}
 		}
 
