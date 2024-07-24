@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.GameType;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -65,12 +66,11 @@ public class HeaterBaseBlock extends ThermalBlock {
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        super.neighborChanged(state, world, pos, block, fromPos, isMoving);
-        if (world.getBlockState(pos.above()).getBlock() != BlockRegistry.HEATER_TOP.get())
-        {
-            world.destroyBlock(pos, true);
+        super.onRemove(state, world, pos, newState, isMoving);
+        if(!state.is(newState.getBlock()) && world.getBlockState(pos.above()).getBlock() instanceof HeaterTopBlock) {
+            world.removeBlock(pos.above(), false);
         }
     }
 
