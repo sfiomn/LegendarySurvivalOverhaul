@@ -74,6 +74,7 @@ public class SewingRecipe implements Recipe<SimpleContainer> {
     public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
         ItemStack itemstack = result.copy();
 
+        // For JEI integration purpose
         if (itemstack.getItem() instanceof ArmorItem && this.addition.getItems()[0].getItem() instanceof CoatItem coatItem) {
             if (this.base.getItems()[0].getItem() instanceof ArmorItem) {
                 CompoundTag CompoundTag = this.base.getItems()[0].getTag();
