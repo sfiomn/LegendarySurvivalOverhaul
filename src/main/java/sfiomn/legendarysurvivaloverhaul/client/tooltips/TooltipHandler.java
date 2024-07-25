@@ -26,9 +26,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumableHeal;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
@@ -39,6 +40,7 @@ import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.KeyMappingRegistry;
+import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 import java.util.List;
 import java.util.Objects;
@@ -71,6 +73,9 @@ public class TooltipHandler
 
 			if (Config.Baked.temperatureEnabled)
 				addFoodEffectText(stack, tooltips);
+
+			if (Config.Baked.localizedBodyDamageEnabled)
+				addHealingText(stack, tooltips);
 		}
 	}
 
@@ -188,18 +193,34 @@ public class TooltipHandler
 		}
 	}
 
+	private static void addHealingText(ItemStack stack, List<Component> tooltips) {
+
+		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
+		assert itemRegistryName != null;
+		JsonConsumableHeal jsonConsumableHeal = JsonConfig.consumableHeal.get(itemRegistryName.toString());
+
+		if (jsonConsumableHeal != null) {
+			if (jsonConsumableHeal.healingCharges > 0) {
+				tooltips.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.body_part", jsonConsumableHeal.healingCharges));
+			} else if (jsonConsumableHeal.healingCharges == 0) {
+				tooltips.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.whole_body"));
+			}
+			tooltips.add(Component.translatable("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value", jsonConsumableHeal.healingValue, MathUtil.round(jsonConsumableHeal.healingTime / 20.0f, 1)));
+		}
+	}
+
 	private static void addHydrationTooltip(ItemStack stack, List<Either<FormattedText, TooltipComponent>> tooltips) {
 
 		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
 		assert itemRegistryName != null;
-		JsonThirst jsonThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
+		JsonConsumableThirst jsonConsumableThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
 
 		HydrationTooltipComponent hydrationTooltipComponent = null;
 		MobEffect hydrationEffect = null;
-		if (jsonThirst != null) {
-			hydrationTooltipComponent = new HydrationTooltipComponent(jsonThirst.hydration, jsonThirst.saturation, jsonThirst.effectChance, jsonThirst.effect);
-			if (jsonThirst.effectChance > 0 && !Objects.equals(jsonThirst.effect, "")) {
-				hydrationEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(jsonThirst.effect));
+		if (jsonConsumableThirst != null) {
+			hydrationTooltipComponent = new HydrationTooltipComponent(jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
+			if (jsonConsumableThirst.effectChance > 0 && !Objects.equals(jsonConsumableThirst.effect, "")) {
+				hydrationEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(jsonConsumableThirst.effect));
 			}
 		} else if (stack.getItem() == Items.POTION) {
 			Potion potion = PotionUtils.getPotion(stack);

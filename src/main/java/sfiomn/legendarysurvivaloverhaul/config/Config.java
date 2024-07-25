@@ -236,23 +236,10 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> bothFeetPartEffectAmplifiers;
 		public final ForgeConfigSpec.ConfigValue<List<? extends Double>> bothFeetPartEffectThresholds;
 
-		public final ForgeConfigSpec.DoubleValue healingHerbsHealingValue;
-		public final ForgeConfigSpec.IntValue healingHerbsHealingTime;
 		public final ForgeConfigSpec.IntValue healingHerbsUseTime;
-		public final ForgeConfigSpec.IntValue healingHerbsHealingCharges;
-		public final ForgeConfigSpec.DoubleValue plasterHealingValue;
-		public final ForgeConfigSpec.IntValue plasterHealingTime;
 		public final ForgeConfigSpec.IntValue plasterUseTime;
-		public final ForgeConfigSpec.IntValue plasterHealingCharges;
-		public final ForgeConfigSpec.DoubleValue bandageHealingValue;
-		public final ForgeConfigSpec.IntValue bandageHealingTime;
 		public final ForgeConfigSpec.IntValue bandageUseTime;
-		public final ForgeConfigSpec.IntValue bandageHealingCharges;
-		public final ForgeConfigSpec.DoubleValue tonicHealingValue;
-		public final ForgeConfigSpec.IntValue tonicHealingTime;
 		public final ForgeConfigSpec.IntValue tonicUseTime;
-		public final ForgeConfigSpec.DoubleValue medikitHealingValue;
-		public final ForgeConfigSpec.IntValue medikitHealingTime;
 		public final ForgeConfigSpec.IntValue medikitUseTime;
 
 		Common(ForgeConfigSpec.Builder builder)
@@ -678,58 +665,17 @@ public class Config
 					.defineInRange("Health Ratio Recovered", 0.3d, 0.0d, 1.0d);
 
 			builder.push("healing-items");
-
-			builder.push("healing-herbs");
-			healingHerbsHealingValue = builder
-					.comment(" Total Healing Value recovered during the healing time.")
-					.defineInRange("Healing Herbs Healing Value", 2.0d, 0.0d, 1000.0d);
-			healingHerbsHealingTime = builder
-					.comment(" Healing Time in ticks along which the body part recovers its health.")
-					.defineInRange("Healing Herbs Healing Time", 600, 0, 1000);
 			healingHerbsUseTime = builder
 					.comment(" Item use time is ticks.")
 					.defineInRange("Healing Herbs Use Time", 20, 0, 1000);
-			healingHerbsHealingCharges = builder
-					.comment(" Healing Charges, each charge used when selecting a body part to heal.")
-					.defineInRange("Healing Herbs Healing Charges", 1, 0, 1000);
-			builder.pop();
-			builder.push("plaster");
-			plasterHealingValue = builder
-					.defineInRange("Plaster Healing Value", 3.0d, 0.0d, 1000.0d);
-			plasterHealingTime = builder
-					.defineInRange("Plaster Healing Time", 400, 0, 1000);
 			plasterUseTime = builder
 					.defineInRange("Plaster Use Time", 20, 0, 1000);
-			plasterHealingCharges = builder
-					.defineInRange("Plaster Healing Charges", 1, 0, 1000);
-			builder.pop();
-			builder.push("bandage");
-			bandageHealingValue = builder
-					.defineInRange("Bandage Healing Value", 3.0d, 0.0d, 1000.0d);
-			bandageHealingTime = builder
-					.defineInRange("Bandage Healing Time", 300, 0, 1000);
 			bandageUseTime = builder
 					.defineInRange("Bandage Use Time", 30, 0, 1000);
-			bandageHealingCharges = builder
-					.defineInRange("Bandage Healing Charges", 3, 0, 1000);
-			builder.pop();
-			builder.comment(" Tonic heals all body parts.").push("tonic");
-			tonicHealingValue = builder
-					.defineInRange("Tonic Healing Value", 5.0d, 0.0d, 1000.0d);
-			tonicHealingTime = builder
-					.defineInRange("Tonic Healing Time", 600, 0, 1000);
 			tonicUseTime = builder
 					.defineInRange("Tonic Use Time", 50, 0, 1000);
-			builder.pop();
-			builder.comment(" Medikit heals all body parts.").push("medikit");
-			medikitHealingValue = builder
-					.defineInRange("Medikit Healing Value", 8.0d, 0.0d, 1000.0d);
-			medikitHealingTime = builder
-					.defineInRange("Medikit Healing Time", 400, 0, 1000);
 			medikitUseTime = builder
 					.defineInRange("Medikit Use Time", 50, 0, 1000);
-			builder.pop();
-
 			builder.pop();
 
 			builder.push("body-parts-health");
@@ -1089,23 +1035,10 @@ public class Config
 		public static double legsPartHealth;
 		public static double feetPartHealth;
 
-		public static double healingHerbsHealingValue;
-		public static int healingHerbsHealingTime;
 		public static int healingHerbsUseTime;
-		public static int healingHerbsHealingCharges;
-		public static double plasterHealingValue;
-		public static int plasterHealingTime;
 		public static int plasterUseTime;
-		public static int plasterHealingCharges;
-		public static double bandageHealingValue;
-		public static int bandageHealingTime;
 		public static int bandageUseTime;
-		public static int bandageHealingCharges;
-		public static double tonicHealingValue;
-		public static int tonicHealingTime;
 		public static int tonicUseTime;
-		public static double medikitHealingValue;
-		public static int medikitHealingTime;
 		public static int medikitUseTime;
 
 		public static List<? extends String> headPartEffects;
@@ -1310,23 +1243,10 @@ public class Config
 				legsPartHealth = COMMON.legsPartHealth.get();
 				feetPartHealth = COMMON.feetPartHealth.get();
 
-				healingHerbsHealingValue = COMMON.healingHerbsHealingValue.get();
-				healingHerbsHealingTime = COMMON.healingHerbsHealingTime.get();
 				healingHerbsUseTime = COMMON.healingHerbsUseTime.get();
-				healingHerbsHealingCharges = COMMON.healingHerbsHealingCharges.get();
-				plasterHealingValue = COMMON.plasterHealingValue.get();
-				plasterHealingTime = COMMON.plasterHealingTime.get();
 				plasterUseTime = COMMON.plasterUseTime.get();
-				plasterHealingCharges = COMMON.plasterHealingCharges.get();
-				bandageHealingValue = COMMON.bandageHealingValue.get();
-				bandageHealingTime = COMMON.bandageHealingTime.get();
 				bandageUseTime = COMMON.bandageUseTime.get();
-				bandageHealingCharges = COMMON.bandageHealingCharges.get();
-				tonicHealingValue = COMMON.tonicHealingValue.get();
-				tonicHealingTime = COMMON.tonicHealingTime.get();
 				tonicUseTime = COMMON.tonicUseTime.get();
-				medikitHealingValue = COMMON.medikitHealingValue.get();
-				medikitHealingTime = COMMON.medikitHealingTime.get();
 				medikitUseTime = COMMON.medikitUseTime.get();
 
 				headPartEffects = COMMON.headPartEffects.get();

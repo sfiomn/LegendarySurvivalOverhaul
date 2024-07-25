@@ -2,7 +2,7 @@ package sfiomn.legendarysurvivaloverhaul.api.config.json.thirst;
 
 import com.google.gson.annotations.SerializedName;
 
-public class JsonThirst
+public class JsonConsumableThirst
 {
 	@SerializedName("hydration")
 	public int hydration;
@@ -13,7 +13,7 @@ public class JsonThirst
 	@SerializedName("effect")
 	public String effect;
 
-	public JsonThirst(int hydration, float saturation, float effectChance, String effect) {
+	public JsonConsumableThirst(int hydration, float saturation, float effectChance, String effect) {
 		this.hydration = hydration;
 		this.saturation = saturation;
 		this.effectChance = effectChance;

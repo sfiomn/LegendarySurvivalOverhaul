@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -16,11 +17,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.IBodyDamageCapability;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumableHeal;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
+import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
@@ -35,21 +39,6 @@ public class BodyHealingItem extends Item {
     public void runSecondaryEffect(Player player, ItemStack stack)
     {
         //Can be overridden to run a special task
-    }
-
-    public float getHealingCapacity()
-    {
-        return 2.0f;
-    }
-
-    public int getHealingTicks()
-    {
-        return 40;
-    }
-
-    public int getHealingCharges()
-    {
-        return 1;
     }
 
     @Override
@@ -76,11 +65,23 @@ public class BodyHealingItem extends Item {
             return InteractionResultHolder.success(stack);
         }
 
-        IBodyDamageCapability capability = CapabilityUtil.getBodyDamageCapability(player);
-        for (BodyPartEnum bodyPart: BodyPartEnum.values()) {
-            // 0 healing charge = heal all body parts => only allow healing if one wounded is not yet healing
-            if (capability.getBodyPartDamage(bodyPart) > 0 &&
-                    (getHealingCharges() != 0 || capability.getRemainingHealingTicks(bodyPart) == 0)) {
+        JsonConsumableHeal  jsonConsumableHeal = null;
+
+        ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(this);
+        if (registryName != null)
+            jsonConsumableHeal = JsonConfig.consumableHeal.get(registryName.toString());
+
+        if(jsonConsumableHeal != null) {
+            IBodyDamageCapability capability = CapabilityUtil.getBodyDamageCapability(player);
+            // 0 healing charge = heal all body parts => only allow healing if one wounded limb is not yet healing
+            if (jsonConsumableHeal.healingCharges == 0) {
+                for (BodyPartEnum bodyPart : BodyPartEnum.values()) {
+                    if (capability.getBodyPartDamage(bodyPart) > 0 && capability.getRemainingHealingTicks(bodyPart) == 0) {
+                        player.startUsingItem(hand);
+                        return InteractionResultHolder.success(stack);
+                    }
+                }
+            } else if (jsonConsumableHeal.healingCharges > 0 && capability.isWounded()) {
                 player.startUsingItem(hand);
                 return InteractionResultHolder.success(stack);
             }
@@ -101,16 +102,26 @@ public class BodyHealingItem extends Item {
             return stack;
         }
 
-        if (world.isClientSide && Minecraft.getInstance().screen == null && getHealingCharges() > 0) {
-            ClientHooks.openBodyHealthScreen(player, entity.getUsedItemHand());
-        } else if (getHealingCharges() == 0) {
-            for (BodyPartEnum bodyPart: BodyPartEnum.values()) {
-                BodyDamageUtil.applyHealingItem(player, bodyPart, (BodyHealingItem) stack.getItem());
+        JsonConsumableHeal  jsonConsumableHeal = null;
+
+        ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(this);
+        if (registryName != null)
+            jsonConsumableHeal = JsonConfig.consumableHeal.get(registryName.toString());
+
+        if (jsonConsumableHeal != null) {
+            if (jsonConsumableHeal.healingCharges > 0) {
+                if (world.isClientSide && Minecraft.getInstance().screen == null)
+                    ClientHooks.openBodyHealthScreen(player, entity.getUsedItemHand(), false,
+                            jsonConsumableHeal.healingCharges, jsonConsumableHeal.healingValue, jsonConsumableHeal.healingTime);
+            } else if (jsonConsumableHeal.healingCharges == 0) {
+                for (BodyPartEnum bodyPart : BodyPartEnum.values()) {
+                    BodyDamageUtil.applyHealingTimeBodyPart(player, bodyPart, jsonConsumableHeal.healingValue, jsonConsumableHeal.healingTime);
+                }
+                runSecondaryEffect(player, stack);
+                world.playSound(null, entity, SoundRegistry.HEAL_BODY_PART.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                if (!((Player) entity).isCreative())
+                    stack.shrink(1);
             }
-            runSecondaryEffect(player, stack);
-            world.playSound(null, entity, SoundRegistry.HEAL_BODY_PART.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
-            if (!((Player) entity).isCreative())
-                stack.shrink(1);
         }
 
         return stack;

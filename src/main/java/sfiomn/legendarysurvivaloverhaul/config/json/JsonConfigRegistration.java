@@ -9,8 +9,9 @@ import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.DamageDistributionEnum;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonBodyPartsDamageSource;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumableHeal;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 import sfiomn.legendarysurvivaloverhaul.common.integration.IntegrationController;
 import sfiomn.legendarysurvivaloverhaul.config.JsonFileName;
@@ -130,6 +131,12 @@ public class JsonConfigRegistration
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":water_plant_bag", 2, 0.0f);
 
 		// Body Damage
+		JsonConfig.registerConsumableHeal(LegendarySurvivalOverhaul.MOD_ID + ":healing_herbs", 1, 2, 600);
+		JsonConfig.registerConsumableHeal(LegendarySurvivalOverhaul.MOD_ID + ":plaster", 1, 3, 400);
+		JsonConfig.registerConsumableHeal(LegendarySurvivalOverhaul.MOD_ID + ":bandage", 3, 3, 300);
+		JsonConfig.registerConsumableHeal(LegendarySurvivalOverhaul.MOD_ID + ":tonic", 0, 5, 600);
+		JsonConfig.registerConsumableHeal(LegendarySurvivalOverhaul.MOD_ID + ":medikit", 0, 8, 400);
+
 		JsonConfig.registerDamageSourceBodyParts("fall", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT));
 		JsonConfig.registerDamageSourceBodyParts("hotFloor", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT));
 		JsonConfig.registerDamageSourceBodyParts("fallingBlock", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.HEAD));
@@ -155,28 +162,43 @@ public class JsonConfigRegistration
 	
 	public static void clearContainers()
 	{
+		JsonConfig.biomeOverrides.clear();
 		JsonConfig.itemTemperatures.clear();
 		JsonConfig.blockTemperatures.clear();
-		JsonConfig.biomeOverrides.clear();
-		JsonConfig.consumableTemperature.clear();
 		JsonConfig.fuelItems.clear();
+		JsonConfig.consumableTemperature.clear();
 		JsonConfig.consumableThirst.clear();
+		JsonConfig.consumableHeal.clear();
 		JsonConfig.damageSourceBodyParts.clear();
 	}
 
 	public static void writeAllToJson(File jsonDir) {
+		manuallyWriteToJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir);
 		manuallyWriteToJson(JsonFileName.ITEM, JsonConfig.itemTemperatures, jsonDir);
 		manuallyWriteToJson(JsonFileName.BLOCK, JsonConfig.blockTemperatures, jsonDir);
-		manuallyWriteToJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir);
-		manuallyWriteToJson(JsonFileName.CONSUMABLE_TEMP, JsonConfig.consumableTemperature, jsonDir);
 		manuallyWriteToJson(JsonFileName.FUEL, JsonConfig.fuelItems, jsonDir);
+		manuallyWriteToJson(JsonFileName.CONSUMABLE_TEMP, JsonConfig.consumableTemperature, jsonDir);
 		manuallyWriteToJson(JsonFileName.CONSUMABLE_THIRST, JsonConfig.consumableThirst, jsonDir);
+		manuallyWriteToJson(JsonFileName.CONSUMABLE_HEAL, JsonConfig.consumableHeal, jsonDir);
 		manuallyWriteToJson(JsonFileName.DAMAGE_SOURCE_BODY_PARTS, JsonConfig.damageSourceBodyParts, jsonDir);
 	}
 	
 	public static void processAllJson(File jsonDir)
 	{
 		// Temperature
+		Map<String, JsonBiomeIdentity> jsonBiomeIdentities = processJson(JsonFileName.BIOME, jsonDir);
+
+		if (jsonBiomeIdentities != null)
+		{
+			// remove default biome config
+			JsonConfig.biomeOverrides.clear();
+			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonBiomeIdentities.size() + " biome temperature overrides from JSON");
+			for (Map.Entry<String, JsonBiomeIdentity> entry : jsonBiomeIdentities.entrySet())
+			{
+				JsonConfig.registerBiomeOverride(entry.getKey(), entry.getValue().temperature, entry.getValue().isDry);
+			}
+		}
+
 		Map<String, JsonTemperature> jsonArmorTemperatures = processJson(JsonFileName.ITEM, jsonDir);
 
 		if (jsonArmorTemperatures != null)
@@ -205,17 +227,17 @@ public class JsonConfigRegistration
 				}
 			}
 		}
-		
-		Map<String, JsonBiomeIdentity> jsonBiomeIdentities = processJson(JsonFileName.BIOME, jsonDir);
-		
-		if (jsonBiomeIdentities != null)
+
+		Map<String, JsonFuelItemIdentity> jsonFuelItemIdentities = processJson(JsonFileName.FUEL, jsonDir);
+
+		if (jsonFuelItemIdentities != null)
 		{
-			// remove default biome config
-			JsonConfig.biomeOverrides.clear();
-			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonBiomeIdentities.size() + " biome temperature overrides from JSON");
-			for (Map.Entry<String, JsonBiomeIdentity> entry : jsonBiomeIdentities.entrySet())
+			// remove default fuel config
+			JsonConfig.fuelItems.clear();
+			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonFuelItemIdentities.size() + " fuel item values from JSON");
+			for (Map.Entry<String, JsonFuelItemIdentity> entry : jsonFuelItemIdentities.entrySet())
 			{
-				JsonConfig.registerBiomeOverride(entry.getKey(), entry.getValue().temperature, entry.getValue().isDry);
+				JsonConfig.registerFuelItems(entry.getKey(), entry.getValue().thermalType, entry.getValue().fuelValue);
 			}
 		}
 		
@@ -234,34 +256,34 @@ public class JsonConfigRegistration
 			}
 		}
 
-		Map<String, JsonFuelItemIdentity> jsonFuelItemIdentities = processJson(JsonFileName.FUEL, jsonDir);
-
-		if (jsonFuelItemIdentities != null)
-		{
-			// remove default fuel config
-			JsonConfig.fuelItems.clear();
-			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonFuelItemIdentities.size() + " fuel item values from JSON");
-			for (Map.Entry<String, JsonFuelItemIdentity> entry : jsonFuelItemIdentities.entrySet())
-			{
-				JsonConfig.registerFuelItems(entry.getKey(), entry.getValue().thermalType, entry.getValue().fuelValue);
-			}
-		}
-
 		// Thirst
-		Map<String, JsonThirst> jsonConsumableThirst = processJson(JsonFileName.CONSUMABLE_THIRST, jsonDir);
+		Map<String, JsonConsumableThirst> jsonConsumableThirst = processJson(JsonFileName.CONSUMABLE_THIRST, jsonDir);
 
 		if (jsonConsumableThirst != null)
 		{
 			// remove default consumables config
 			JsonConfig.consumableThirst.clear();
 			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonConsumableThirst.size() + " consumable thirst values from JSON");
-			for (Map.Entry<String, JsonThirst> entry : jsonConsumableThirst.entrySet())
+			for (Map.Entry<String, JsonConsumableThirst> entry : jsonConsumableThirst.entrySet())
 			{
 				JsonConfig.registerConsumableThirst(entry.getKey(), entry.getValue().hydration, entry.getValue().saturation, entry.getValue().effectChance, entry.getValue().effect);
 			}
 		}
 
 		// Damage Sources Body Parts
+		Map<String, JsonConsumableHeal> jsonConsumableHeal = processJson(JsonFileName.CONSUMABLE_HEAL, jsonDir);
+
+		if (jsonConsumableHeal != null)
+		{
+			// remove default consumables config
+			JsonConfig.consumableHeal.clear();
+			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonConsumableHeal.size() + " consumable heal values from JSON");
+			for (Map.Entry<String, JsonConsumableHeal> entry : jsonConsumableHeal.entrySet())
+			{
+				JsonConfig.registerConsumableHeal(entry.getKey(), entry.getValue().healingCharges, entry.getValue().healingValue, entry.getValue().healingTime);
+			}
+		}
+
 		Map<String, JsonBodyPartsDamageSource> jsonDamageSourceBodyParts = processJson(JsonFileName.DAMAGE_SOURCE_BODY_PARTS, jsonDir);
 
 		if (jsonDamageSourceBodyParts != null)

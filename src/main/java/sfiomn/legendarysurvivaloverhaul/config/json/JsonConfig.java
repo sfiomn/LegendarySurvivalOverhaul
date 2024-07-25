@@ -7,22 +7,36 @@ import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.DamageDistributionEnum;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonBodyPartsDamageSource;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumableHeal;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 
 import java.util.*;
 
 public class JsonConfig
 {
+	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
 	public static Map<String, JsonTemperature> itemTemperatures = Maps.newHashMap();
 	public static Map<String, List<JsonPropertyTemperature>> blockTemperatures = Maps.newHashMap();
-	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
-	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = Maps.newHashMap();
-	public static Map<String, JsonThirst> consumableThirst = Maps.newHashMap();
 	public static Map<String, JsonFuelItemIdentity> fuelItems = Maps.newHashMap();
+	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = Maps.newHashMap();
+	public static Map<String, JsonConsumableThirst> consumableThirst = Maps.newHashMap();
+	public static Map<String, JsonConsumableHeal> consumableHeal = Maps.newHashMap();
 	public static Map<String, JsonBodyPartsDamageSource> damageSourceBodyParts = Maps.newHashMap();
-	
+
+
+	public static void registerBiomeOverride(String registryName, float temperature)
+	{
+		registerBiomeOverride(registryName, temperature, false);
+	}
+
+	public static void registerBiomeOverride(String registryName, float temperature, boolean isDry)
+	{
+		if(!biomeOverrides.containsKey(registryName))
+			biomeOverrides.put(registryName, new JsonBiomeIdentity(temperature, isDry));
+	}
+
 	public static void registerBlockTemperature(String registryName, float temperature, JsonPropertyValue... properties)
 	{
 		if (!blockTemperatures.containsKey(registryName))
@@ -65,6 +79,12 @@ public class JsonConfig
 		}
 		currentList.add(result);
 	}
+
+	public static void registerFuelItems(String registryName, ThermalTypeEnum thermalType, int fuelValue) {
+		if(!fuelItems.containsKey(registryName))
+			fuelItems.put(registryName, new JsonFuelItemIdentity(thermalType, fuelValue));
+	}
+
 	public static void registerItemTemperature(String registryName, float temperature)
 	{
 		if(!itemTemperatures.containsKey(registryName))
@@ -105,24 +125,16 @@ public class JsonConfig
 
 	public static void registerConsumableThirst(String registryName, int hydration, float saturation, float effectChance, String effect) {
 		if (!consumableThirst.containsKey(registryName)) {
-			consumableThirst.put(registryName, new JsonThirst(hydration, saturation, effectChance, effect));
+			consumableThirst.put(registryName, new JsonConsumableThirst(hydration, saturation, effectChance, effect));
 		}
 	}
-	
-	public static void registerBiomeOverride(String registryName, float temperature)
-	{
-		registerBiomeOverride(registryName, temperature, false);
-	}
-	
-	public static void registerBiomeOverride(String registryName, float temperature, boolean isDry)
-	{
-		if(!biomeOverrides.containsKey(registryName))
-			biomeOverrides.put(registryName, new JsonBiomeIdentity(temperature, isDry));
-	}
 
-	public static void registerFuelItems(String registryName, ThermalTypeEnum thermalType, int fuelValue) {
-		if(!fuelItems.containsKey(registryName))
-			fuelItems.put(registryName, new JsonFuelItemIdentity(thermalType, fuelValue));
+	public static void registerConsumableHeal(String registryName, int healingCharges, float healingValue, int healingTime) {
+		if (!consumableHeal.containsKey(registryName))
+			if (healingCharges < 0)
+				LegendarySurvivalOverhaul.LOGGER.debug("Error with consumable " + registryName + " : healing charges can't be negative");
+			else
+				consumableHeal.put(registryName, new JsonConsumableHeal(healingCharges, healingValue, healingTime));
 	}
 
 	public static void registerDamageSourceBodyParts(String damageSource, DamageDistributionEnum damageDistribution, List<BodyPartEnum> bodyParts) {
