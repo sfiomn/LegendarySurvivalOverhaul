@@ -121,7 +121,8 @@ public class ClientForgeEvents {
 
     @SubscribeEvent
     public static void onRenderLevelStage(RenderLevelStageEvent event) {
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER && Config.Baked.lowHydrationEffect) {
+        Player player = Minecraft.getInstance().player;
+        if (player != null && !(player.isSpectator() || player.isCreative()) && event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER && Config.Baked.lowHydrationEffect) {
             RenderThirstOverlay.render();
         }
     }
