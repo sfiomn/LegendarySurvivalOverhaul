@@ -18,7 +18,7 @@ import java.util.Map;
  * @author Icey
  */
 
-public class JsonPropertyTemperature
+public class JsonBlockFluidTemperature
 {
 	@SerializedName("properties")
 	public Map<String,String> properties;
@@ -26,18 +26,18 @@ public class JsonPropertyTemperature
 	@SerializedName("temperature")
 	public float temperature;
 	
-	public JsonPropertyTemperature(float temperature, JsonPropertyValue... props)
+	public JsonBlockFluidTemperature(float temperature, JsonPropertyValue... props)
 	{
 		this.temperature = temperature;
-		this.properties = new HashMap<String, String>();
+		this.properties = new HashMap<>();
 		
 		for (JsonPropertyValue prop : props)
 		{
-			properties.put(prop.property, prop.value);
+			properties.put(prop.name, prop.value);
 		}
 	}
 	
-	public JsonPropertyValue[] getAsPropertyArray()
+	public JsonPropertyValue[] getPropertyArray()
 	{
 		List<JsonPropertyValue> jpvList = new ArrayList<>();
 		for(Map.Entry<String, String> entry : properties.entrySet())
@@ -88,7 +88,7 @@ public class JsonPropertyTemperature
 		return true;
 	}
 	
-	public boolean matchesDescribedProperties(JsonPropertyValue... props)
+	public boolean matchesProperties(JsonPropertyValue... props)
 	{
 		if(props.length != properties.keySet().size())
 		{
@@ -97,13 +97,13 @@ public class JsonPropertyTemperature
 		
 		for(JsonPropertyValue prop : props)
 		{
-			if(!properties.containsKey(prop.property))
+			if(!properties.containsKey(prop.name))
 			{
 				return false;
 			}
 			else
 			{
-				if(!prop.value.equals(properties.get(prop.property)))
+				if(!prop.value.equals(properties.get(prop.name)))
 				{
 					return false;
 				}

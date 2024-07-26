@@ -80,11 +80,9 @@ public class CommonForgeEvents {
         }
 
         if (Config.Baked.thirstEnabled && !entity.level().isClientSide && !(event.getItem().getItem() instanceof DrinkItem)) {
-            JsonConsumableThirst jsonConsumableThirst = null;
-            if (itemRegistryName != null)
-                jsonConsumableThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
+            JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstConfig(itemRegistryName, event.getItem());
 
-            if (jsonConsumableThirst != null && (jsonConsumableThirst.hydration != 0 || jsonConsumableThirst.saturation != 0)) {
+            if (jsonConsumableThirst != null) {
                 ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
             } else if (event.getItem().getItem() == Items.POTION){
                 Potion potion = PotionUtils.getPotion(event.getItem());
@@ -95,6 +93,11 @@ public class CommonForgeEvents {
                 else if (potion != Potions.EMPTY)
                 {
                     ThirstUtil.takeDrink(player, HydrationEnum.POTION);
+                }
+            } else {
+                HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(event.getItem());
+                if (hydrationEnum != null) {
+                    ThirstUtil.takeDrink(player, hydrationEnum);
                 }
             }
         }

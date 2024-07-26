@@ -49,8 +49,7 @@ public class HeaterTopBlock extends HorizontalDirectionalBlock {
                 .mapColor(MapColor.METAL)
                 .sound(SoundType.METAL)
                 .strength(3f, 10f)
-                .noOcclusion()
-                .noLootTable();
+                .noOcclusion();
     }
 
     @Override

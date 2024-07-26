@@ -1,8 +1,10 @@
 package sfiomn.legendarysurvivaloverhaul.api.thirst;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 
 public class ThirstUtil
 {
@@ -134,4 +136,14 @@ public class ThirstUtil
 	{
 		internal.removeCapacityTag(stack);
 	}
+
+    /**
+     * Gets tje JsonConsumableThirst from the jsonThirstConsumable json file
+     *
+     * @param itemRegistryName Item stack registry name
+     * @param itemStack        Item stack to compare with
+     */
+    public static JsonConsumableThirst getThirstConfig(ResourceLocation itemRegistryName, ItemStack itemStack) {
+        return internal.getThirstConfig(itemRegistryName, itemStack);
+    }
 }

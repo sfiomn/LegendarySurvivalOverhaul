@@ -9,7 +9,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.ForgeRegistries;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBlockFluidTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
@@ -38,13 +38,13 @@ public class WetModifier extends ModifierBase
 		if (!state.isEmpty()) {
 			ResourceLocation fluidRegistryName = ForgeRegistries.FLUID_TYPES.get().getKey(fluid.getFluidType());
 			if (fluidRegistryName != null) {
-				List<JsonPropertyTemperature> tempPropertyList = JsonConfig.blockTemperatures.get(fluidRegistryName.toString());
+				List<JsonBlockFluidTemperature> tempPropertyList = JsonConfig.blockFluidTemperatures.get(fluidRegistryName.toString());
 
 				if (tempPropertyList == null) {
 					return 0.0f;
 				}
 
-				for (JsonPropertyTemperature tempInfo : tempPropertyList) {
+				for (JsonBlockFluidTemperature tempInfo : tempPropertyList) {
 					if (tempInfo == null)
 						continue;
 

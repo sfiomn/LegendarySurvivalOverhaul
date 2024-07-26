@@ -42,7 +42,7 @@ public class HydrationClientTooltipComponent implements ClientTooltipComponent {
         this.chanceIconNumber = 0;
         //  show chance Effect bar only if chance is > 0 + effect not null
         //  If chance = 100%, instead change hydration color bar (if hydration > 0)
-        if (effectChance > 0.0f && !Objects.equals(effectName, "")) {
+        if (effectChance > 0.0f && !effectName.isEmpty()) {
             effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effectName));
             if ((hydrationIconNumber == 0 || effectChance < 1.0f) && effect != null)
                 chanceIconNumber = 5;

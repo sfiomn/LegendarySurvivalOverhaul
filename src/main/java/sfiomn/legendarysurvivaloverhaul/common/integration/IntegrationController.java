@@ -71,15 +71,15 @@ public final class IntegrationController
 
 	private static void initCreate()
 	{
-		JsonConfig.registerBlockTemperature("create:blaze_burner", 2.5f, new JsonPropertyValue("blaze", "smouldering"));
-		JsonConfig.registerBlockTemperature("create:blaze_burner", 5.0f, new JsonPropertyValue("blaze", "kindled"));
-		JsonConfig.registerBlockTemperature("create:blaze_burner", 7.5f, new JsonPropertyValue("blaze", "seething"));
+		JsonConfig.registerBlockFluidTemperature("create:blaze_burner", 2.5f, new JsonPropertyValue("blaze", "smouldering"));
+		JsonConfig.registerBlockFluidTemperature("create:blaze_burner", 5.0f, new JsonPropertyValue("blaze", "kindled"));
+		JsonConfig.registerBlockFluidTemperature("create:blaze_burner", 7.5f, new JsonPropertyValue("blaze", "seething"));
 	}
 	
 	private static void initFarmersDelight()
 	{
-		JsonConfig.registerBlockTemperature("farmersdelight:stove", 7.5f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("farmersdelight:stove", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("farmersdelight:stove", 7.5f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("farmersdelight:stove", 0.0f, new JsonPropertyValue("lit", "false"));
 		
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:beef_stew", 2, 2400);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:chicken_soup", 2, 2400);
@@ -97,24 +97,24 @@ public final class IntegrationController
 	
 	private static void initRealisticTorches()
 	{  
-		JsonConfig.registerBlockTemperature("realistictorches:torch", 1.5f, new JsonPropertyValue("litstate", "2"));
-		JsonConfig.registerBlockTemperature("realistictorches:torch", 0.75f, new JsonPropertyValue("litstate", "1"));
-		JsonConfig.registerBlockTemperature("realistictorches:torch", 0.0f, new JsonPropertyValue("litstate", "0"));
+		JsonConfig.registerBlockFluidTemperature("realistictorches:torch", 1.5f, new JsonPropertyValue("litstate", "2"));
+		JsonConfig.registerBlockFluidTemperature("realistictorches:torch", 0.75f, new JsonPropertyValue("litstate", "1"));
+		JsonConfig.registerBlockFluidTemperature("realistictorches:torch", 0.0f, new JsonPropertyValue("litstate", "0"));
 		
-		JsonConfig.registerBlockTemperature("realistictorches:torch_wall", 1.5f, new JsonPropertyValue("litstate", "2"));
-		JsonConfig.registerBlockTemperature("realistictorches:torch_wall", 0.75f, new JsonPropertyValue("litstate", "1"));
-		JsonConfig.registerBlockTemperature("realistictorches:torch_wall", 0.0f, new JsonPropertyValue("litstate", "0"));
+		JsonConfig.registerBlockFluidTemperature("realistictorches:torch_wall", 1.5f, new JsonPropertyValue("litstate", "2"));
+		JsonConfig.registerBlockFluidTemperature("realistictorches:torch_wall", 0.75f, new JsonPropertyValue("litstate", "1"));
+		JsonConfig.registerBlockFluidTemperature("realistictorches:torch_wall", 0.0f, new JsonPropertyValue("litstate", "0"));
 	}
 	
 	private static void initBYG()
 	{
-		JsonConfig.registerBlockTemperature("byg:boric_fire", 5.0f);
-		JsonConfig.registerBlockTemperature("byg:boric_campfire", 10.0f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("byg:boric_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("byg:boric_fire", 5.0f);
+		JsonConfig.registerBlockFluidTemperature("byg:boric_campfire", 10.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("byg:boric_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
 
-		JsonConfig.registerBlockTemperature("byg:cryptic_fire", 5.0f);
-		JsonConfig.registerBlockTemperature("byg:cryptic_campfire", 7.5f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("byg:cryptic_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("byg:cryptic_fire", 5.0f);
+		JsonConfig.registerBlockFluidTemperature("byg:cryptic_campfire", 7.5f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("byg:cryptic_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
 	}
 	
 	private static void initArtifacts()
@@ -126,18 +126,18 @@ public final class IntegrationController
 	
 	private static void initEndergeticExpansion() 
 	{
-		JsonConfig.registerBlockTemperature("endergetic:ender_fire", -7.0f);
-		JsonConfig.registerBlockTemperature("endergetic:ender_campfire", -10.0f);
-		JsonConfig.registerBlockTemperature("endergetic:ender_torch", -1.5f);
-		JsonConfig.registerBlockTemperature("endergetic:ender_wall_torch", -1.5f);
+		JsonConfig.registerBlockFluidTemperature("endergetic:ender_fire", -7.0f);
+		JsonConfig.registerBlockFluidTemperature("endergetic:ender_campfire", -10.0f);
+		JsonConfig.registerBlockFluidTemperature("endergetic:ender_torch", -1.5f);
+		JsonConfig.registerBlockFluidTemperature("endergetic:ender_wall_torch", -1.5f);
 	}
 	
 	private static void initInfernalExpansion()
 	{
-		JsonConfig.registerBlockTemperature("infernalexp:fire_glow", 7.0f);
-		JsonConfig.registerBlockTemperature("infernalexp:campfire_glow", 10.0f);
-		JsonConfig.registerBlockTemperature("infernalexp:torch_glow", 1.5f);
-		JsonConfig.registerBlockTemperature("infernalexp:torch_glow_wall", 1.5f);
+		JsonConfig.registerBlockFluidTemperature("infernalexp:fire_glow", 7.0f);
+		JsonConfig.registerBlockFluidTemperature("infernalexp:campfire_glow", 10.0f);
+		JsonConfig.registerBlockFluidTemperature("infernalexp:torch_glow", 1.5f);
+		JsonConfig.registerBlockFluidTemperature("infernalexp:torch_glow_wall", 1.5f);
 	}
 	
 	private static void initBiomesOPlenty()

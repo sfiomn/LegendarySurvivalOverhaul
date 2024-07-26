@@ -13,6 +13,7 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumabl
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.common.integration.IntegrationController;
 import sfiomn.legendarysurvivaloverhaul.config.JsonFileName;
 import sfiomn.legendarysurvivaloverhaul.config.JsonTypeToken;
@@ -23,6 +24,8 @@ import java.io.FileReader;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.*;
+
+import static sfiomn.legendarysurvivaloverhaul.util.internal.ThirstUtilInternal.HYDRATION_ENUM_TAG;
 
 public class JsonConfigRegistration
 {
@@ -37,40 +40,40 @@ public class JsonConfigRegistration
 	
 	public static void registerDefaults(File configDir)
 	{
-		JsonConfig.registerBlockTemperature("minecraft:campfire", 10f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("minecraft:soul_campfire", -8f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("minecraft:campfire", 0.0f, new JsonPropertyValue("lit", "false"));
-		JsonConfig.registerBlockTemperature("minecraft:soul_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:campfire", 10f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:soul_campfire", -8f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:campfire", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:soul_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
 
-		JsonConfig.registerBlockTemperature("minecraft:torch", 1.5f);
-		JsonConfig.registerBlockTemperature("minecraft:soul_torch", 0.75f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:torch", 1.5f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:soul_torch", 0.75f);
 
-		JsonConfig.registerBlockTemperature("minecraft:wall_torch", 1.5f);
-		JsonConfig.registerBlockTemperature("minecraft:soul_wall_torch", 0.75f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:wall_torch", 1.5f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:soul_wall_torch", 0.75f);
 
-		JsonConfig.registerBlockTemperature("minecraft:fire", 7.0f);
-		JsonConfig.registerBlockTemperature("minecraft:soul_fire", 2.5f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:fire", 7.0f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:soul_fire", 2.5f);
 
-		JsonConfig.registerBlockTemperature("minecraft:furnace", 6.0f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("minecraft:blast_furnace", 6.0f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("minecraft:smoker", 6.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:furnace", 6.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:blast_furnace", 6.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:smoker", 6.0f, new JsonPropertyValue("lit", "true"));
 
-		JsonConfig.registerBlockTemperature("minecraft:furnace", 0.0f, new JsonPropertyValue("lit", "false"));
-		JsonConfig.registerBlockTemperature("minecraft:blast_furnace", 0.0f, new JsonPropertyValue("lit", "false"));
-		JsonConfig.registerBlockTemperature("minecraft:smoker", 0.0f, new JsonPropertyValue("false", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:furnace", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:blast_furnace", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:smoker", 0.0f, new JsonPropertyValue("false", "true"));
 
-		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", -15f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 15f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", -15f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 15f, new JsonPropertyValue("lit", "true"));
 
-		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", 0.0f, new JsonPropertyValue("lit", "false"));
-		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 0.0f, new JsonPropertyValue("lit", "false"));
 
-		JsonConfig.registerBlockTemperature("minecraft:magma_block", 12.0f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:magma_block", 12.0f);
 
-		JsonConfig.registerBlockTemperature("minecraft:jack_o_lantern", 3.0f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:jack_o_lantern", 3.0f);
 
-		JsonConfig.registerBlockTemperature("minecraft:lava", 12.5f);
-		JsonConfig.registerBlockTemperature("minecraft:flowing_lava", 12.5f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:lava", 12.5f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:flowing_lava", 12.5f);
 
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_boots", 0.5f);
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_leggings", 2.5f);
@@ -129,6 +132,10 @@ public class JsonConfigRegistration
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":pumpkin_juice",7,4.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":purified_water_bottle", 6, 1.5f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":water_plant_bag", 2, 0.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":canteen", 3, 0.0f, 0.75f, LegendarySurvivalOverhaul.MOD_ID + ":thirst", new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.NORMAL.getName()));
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":canteen", 6, 1.5f, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.PURIFIED.getName()));
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":large_canteen", 3, 0.0f, 0.75f, LegendarySurvivalOverhaul.MOD_ID + ":thirst", new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.NORMAL.getName()));
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":large_canteen", 6, 1.5f, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.PURIFIED.getName()));
 
 		// Body Damage
 		JsonConfig.registerConsumableHeal(LegendarySurvivalOverhaul.MOD_ID + ":healing_herbs", 1, 2, 600);
@@ -159,23 +166,10 @@ public class JsonConfigRegistration
 		IntegrationController.initCompat();
 	}
 
-	
-	public static void clearContainers()
-	{
-		JsonConfig.biomeOverrides.clear();
-		JsonConfig.itemTemperatures.clear();
-		JsonConfig.blockTemperatures.clear();
-		JsonConfig.fuelItems.clear();
-		JsonConfig.consumableTemperature.clear();
-		JsonConfig.consumableThirst.clear();
-		JsonConfig.consumableHeal.clear();
-		JsonConfig.damageSourceBodyParts.clear();
-	}
-
 	public static void writeAllToJson(File jsonDir) {
 		manuallyWriteToJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir);
 		manuallyWriteToJson(JsonFileName.ITEM, JsonConfig.itemTemperatures, jsonDir);
-		manuallyWriteToJson(JsonFileName.BLOCK, JsonConfig.blockTemperatures, jsonDir);
+		manuallyWriteToJson(JsonFileName.BLOCK, JsonConfig.blockFluidTemperatures, jsonDir);
 		manuallyWriteToJson(JsonFileName.FUEL, JsonConfig.fuelItems, jsonDir);
 		manuallyWriteToJson(JsonFileName.CONSUMABLE_TEMP, JsonConfig.consumableTemperature, jsonDir);
 		manuallyWriteToJson(JsonFileName.CONSUMABLE_THIRST, JsonConfig.consumableThirst, jsonDir);
@@ -212,30 +206,30 @@ public class JsonConfigRegistration
 			}
 		}
 		
-		Map<String, List<JsonPropertyTemperature>> jsonBlockTemperatures = processJson(JsonFileName.BLOCK, jsonDir);
+		Map<String, List<JsonBlockFluidTemperature>> jsonBlockFluidTemperatures = processJson(JsonFileName.BLOCK, jsonDir);
 		
-		if (jsonBlockTemperatures != null)
+		if (jsonBlockFluidTemperatures != null)
 		{
 			// remove default block config
-			JsonConfig.blockTemperatures.clear();
-			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonBlockTemperatures.size() + " block temperature values from JSON");
-			for (Map.Entry<String, List<JsonPropertyTemperature>> entry : jsonBlockTemperatures.entrySet())
+			JsonConfig.blockFluidTemperatures.clear();
+			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonBlockFluidTemperatures.size() + " block/fluid temperature values from JSON");
+			for (Map.Entry<String, List<JsonBlockFluidTemperature>> entry : jsonBlockFluidTemperatures.entrySet())
 			{
-				for (JsonPropertyTemperature propTemp : entry.getValue())
+				for (JsonBlockFluidTemperature propTemp : entry.getValue())
 				{
-					JsonConfig.registerBlockTemperature(entry.getKey(), propTemp.temperature, propTemp.getAsPropertyArray());
+					JsonConfig.registerBlockFluidTemperature(entry.getKey(), propTemp.temperature, propTemp.getPropertyArray());
 				}
 			}
 		}
 
-		Map<String, JsonFuelItemIdentity> jsonFuelItemIdentities = processJson(JsonFileName.FUEL, jsonDir);
+		Map<String, JsonFuelItem> jsonFuelItemIdentities = processJson(JsonFileName.FUEL, jsonDir);
 
 		if (jsonFuelItemIdentities != null)
 		{
 			// remove default fuel config
 			JsonConfig.fuelItems.clear();
 			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonFuelItemIdentities.size() + " fuel item values from JSON");
-			for (Map.Entry<String, JsonFuelItemIdentity> entry : jsonFuelItemIdentities.entrySet())
+			for (Map.Entry<String, JsonFuelItem> entry : jsonFuelItemIdentities.entrySet())
 			{
 				JsonConfig.registerFuelItems(entry.getKey(), entry.getValue().thermalType, entry.getValue().fuelValue);
 			}
@@ -257,16 +251,16 @@ public class JsonConfigRegistration
 		}
 
 		// Thirst
-		Map<String, JsonConsumableThirst> jsonConsumableThirst = processJson(JsonFileName.CONSUMABLE_THIRST, jsonDir);
+		Map<String, List<JsonConsumableThirst>> jsonConsumableThirsts = processJson(JsonFileName.CONSUMABLE_THIRST, jsonDir);
 
-		if (jsonConsumableThirst != null)
+		if (jsonConsumableThirsts != null)
 		{
 			// remove default consumables config
 			JsonConfig.consumableThirst.clear();
-			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonConsumableThirst.size() + " consumable thirst values from JSON");
-			for (Map.Entry<String, JsonConsumableThirst> entry : jsonConsumableThirst.entrySet())
-			{
-				JsonConfig.registerConsumableThirst(entry.getKey(), entry.getValue().hydration, entry.getValue().saturation, entry.getValue().effectChance, entry.getValue().effect);
+			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonConsumableThirsts.size() + " consumable thirst values from JSON");
+			for (Map.Entry<String, List<JsonConsumableThirst>> entry : jsonConsumableThirsts.entrySet()) {
+				for (JsonConsumableThirst jct: entry.getValue())
+					JsonConfig.registerConsumableThirst(entry.getKey(), jct.hydration, jct.saturation, jct.effectChance, jct.effect, jct.getNbtArray());
 			}
 		}
 

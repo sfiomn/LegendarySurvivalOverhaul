@@ -64,9 +64,9 @@ public class CuriosModifier extends ModifierBase
 					CoatEnum coat = CoatEnum.getFromId(coatId);
 					if (coat == null)
 						continue;
-					if (Objects.equals(coat.type(), "cooling")) {
+					if (coat.type().equals("cooling")) {
 						sum -= (float) coat.modifier();
-					} else if (Objects.equals(coat.type(), "heating")) {
+					} else if (coat.type().equals("heating")) {
 						sum += (float) coat.modifier();
 					}
 				}

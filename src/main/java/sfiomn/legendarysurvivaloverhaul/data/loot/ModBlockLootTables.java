@@ -10,6 +10,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 
@@ -23,7 +24,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     @Override
     protected void generate() {
         this.dropSelf(BlockRegistry.HEATER.get());
-        this.dropSelf(BlockRegistry.HEATER_TOP.get());
+        this.dropOther(BlockRegistry.HEATER_TOP.get(), BlockRegistry.HEATER.get());
         this.dropSelf(BlockRegistry.COOLER.get());
         this.dropSelf(BlockRegistry.ICE_FERN.get());
         this.dropSelf(BlockRegistry.SUN_FERN.get());

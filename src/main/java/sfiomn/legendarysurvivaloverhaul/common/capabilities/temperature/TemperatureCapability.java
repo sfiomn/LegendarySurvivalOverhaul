@@ -17,8 +17,6 @@ import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 
-import java.util.Objects;
-
 // Code adapted from 
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/capability/TemperatureCapability.java
 
@@ -119,7 +117,7 @@ public class TemperatureCapability implements ITemperatureCapability
 		if (this.soundTriggerTick > 0)
 			this.soundTriggerTick--;
 		
-		if (getTemperatureTickTimer() >= Config.Baked.tickRate) {
+		if (getTemperatureTickTimer() >= Config.Baked.tempTickTime) {
 			setTemperatureTickTimer(0);
 
 			float destinationTemp = targetTemp;

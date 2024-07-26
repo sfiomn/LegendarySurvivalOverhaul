@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonFuelItemIdentity;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonFuelItem;
 import sfiomn.legendarysurvivaloverhaul.common.blocks.ThermalBlock;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 
@@ -147,7 +147,7 @@ public abstract class AbstractThermalBlockEntity extends BaseContainerBlockEntit
     public boolean isItemValid(Item item) {
         ResourceLocation registryNameItem = ForgeRegistries.ITEMS.getKey(item);
         if (registryNameItem != null) {
-            JsonFuelItemIdentity fuelInfo = JsonConfig.fuelItems.get(registryNameItem.toString());
+            JsonFuelItem fuelInfo = JsonConfig.fuelItems.get(registryNameItem.toString());
             return fuelInfo != null && fuelInfo.thermalType == thermalType && fuelInfo.fuelValue > 0;
         }
         return false;
@@ -156,7 +156,7 @@ public abstract class AbstractThermalBlockEntity extends BaseContainerBlockEntit
     public int getFuelValue(ItemStack item) {
         ResourceLocation registryNameItem = ForgeRegistries.ITEMS.getKey(item.getItem());
         if (registryNameItem != null) {
-            JsonFuelItemIdentity fuelInfo = JsonConfig.fuelItems.get(registryNameItem.toString());
+            JsonFuelItem fuelInfo = JsonConfig.fuelItems.get(registryNameItem.toString());
             if (fuelInfo != null) {
                 return fuelInfo.fuelValue;
             }

@@ -35,7 +35,6 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
-import sfiomn.legendarysurvivaloverhaul.common.items.drink.DrinkItem;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
@@ -43,7 +42,6 @@ import sfiomn.legendarysurvivaloverhaul.registry.KeyMappingRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 import java.util.List;
-import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.FORGE)
 public class TooltipHandler
@@ -213,13 +211,14 @@ public class TooltipHandler
 
 		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
 		assert itemRegistryName != null;
-		JsonConsumableThirst jsonConsumableThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
+		JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstConfig(itemRegistryName, stack);
 
 		HydrationTooltipComponent hydrationTooltipComponent = null;
 		MobEffect hydrationEffect = null;
+
 		if (jsonConsumableThirst != null) {
 			hydrationTooltipComponent = new HydrationTooltipComponent(jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
-			if (jsonConsumableThirst.effectChance > 0 && !Objects.equals(jsonConsumableThirst.effect, "")) {
+			if (jsonConsumableThirst.effectChance > 0 && !jsonConsumableThirst.effect.isEmpty()) {
 				hydrationEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(jsonConsumableThirst.effect));
 			}
 		} else if (stack.getItem() == Items.POTION) {
@@ -234,7 +233,7 @@ public class TooltipHandler
 				hydrationTooltipComponent = new HydrationTooltipComponent(HydrationEnum.POTION);
 				hydrationEffect = HydrationEnum.POTION.getMobEffectIfApplicable();
 			}
-		} else if (stack.getItem() instanceof DrinkItem) {
+		} else {
 			HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
 			if (hydrationEnum != null) {
 				hydrationTooltipComponent = new HydrationTooltipComponent(hydrationEnum);

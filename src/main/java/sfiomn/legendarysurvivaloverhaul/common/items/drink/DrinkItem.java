@@ -14,7 +14,6 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThi
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 public class DrinkItem extends Item {
@@ -65,16 +64,14 @@ public class DrinkItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity)
     {
-        if(level.isClientSide || !(entity instanceof Player))
+        if(level.isClientSide || !(entity instanceof Player player))
             return stack;
-
-        Player player = (Player) entity;
 
         JsonConsumableThirst jsonConsumableThirst = null;
         // Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over
         ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(this);
         if (registryName != null)
-            jsonConsumableThirst = JsonConfig.consumableThirst.get(registryName.toString());
+            jsonConsumableThirst = ThirstUtil.getThirstConfig(registryName, stack);
 
         if(jsonConsumableThirst != null)
             ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);

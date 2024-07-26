@@ -9,12 +9,12 @@ package sfiomn.legendarysurvivaloverhaul.api.config.json;
 
 public class JsonPropertyValue
 {
-	public String property;
+	public String name;
 	public String value;
 	
-	public JsonPropertyValue(String property, String value)
+	public JsonPropertyValue(String name, String value)
 	{
-		this.property = property;
+		this.name = name;
 		this.value = value;
 	}
 }

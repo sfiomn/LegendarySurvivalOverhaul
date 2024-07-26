@@ -69,8 +69,16 @@ public enum HydrationEnum
 	}
 
 	public MobEffect getMobEffectIfApplicable() {
-		if (this.getEffectChance() > 0 && !Objects.equals(this.getEffect(), ""))
+		if (this.getEffectChance() > 0 && this.getEffect().isEmpty())
 			return ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(this.getEffect()));
+		return null;
+	}
+
+	public static HydrationEnum getByName(String name) {
+		for (HydrationEnum hydrationEnum: HydrationEnum.values()) {
+			if (hydrationEnum.getName().equals(name))
+				return hydrationEnum;
+		}
 		return null;
 	}
 

@@ -46,7 +46,7 @@ public enum CoatEnum {
 
     public static CoatEnum getFromId(String id) {
         for (CoatEnum coat : CoatEnum.values()) {
-            if (Objects.equals(coat.coatId, id)) {
+            if (coat.coatId.equals(id)) {
                 return coat;
             }
         }

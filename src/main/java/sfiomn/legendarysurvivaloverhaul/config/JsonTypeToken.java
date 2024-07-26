@@ -18,10 +18,10 @@ public class JsonTypeToken
 		{
 			case BIOME: 			return new TypeToken<Map<String, JsonBiomeIdentity>>(){}.getType();
 			case ITEM:				return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
-			case BLOCK:				return new TypeToken<Map<String, List<JsonPropertyTemperature>>>(){}.getType();
-			case FUEL:				return new TypeToken<Map<String, JsonFuelItemIdentity>>(){}.getType();
+			case BLOCK:				return new TypeToken<Map<String, List<JsonBlockFluidTemperature>>>(){}.getType();
+			case FUEL:				return new TypeToken<Map<String, JsonFuelItem>>(){}.getType();
 			case CONSUMABLE_TEMP: 		return new TypeToken<Map<String, List<JsonConsumableTemperature>>>(){}.getType();
-			case CONSUMABLE_THIRST: 		return new TypeToken<Map<String, JsonConsumableThirst>>(){}.getType();
+			case CONSUMABLE_THIRST: 		return new TypeToken<Map<String, List<JsonConsumableThirst>>>(){}.getType();
 			case CONSUMABLE_HEAL: 		return new TypeToken<Map<String, JsonConsumableHeal>>(){}.getType();
 			case DAMAGE_SOURCE_BODY_PARTS:				return new TypeToken<Map<String, JsonBodyPartsDamageSource>>(){}.getType();
 			default: 		return null;

@@ -15,22 +15,26 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
+import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
+import java.util.List;
 import java.util.Objects;
 
 import static net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL;
 
 public class ThirstUtilInternal implements IThirstUtil {
 
-    public static final String HYDRATION_ENUM_TAG = "HydrationEnum";
-    public static final String CAPACITY_TAG = "HydrationCapacity";
+    public static final String HYDRATION_ENUM_TAG = LegendarySurvivalOverhaul.MOD_ID + ":HydrationPurity";
+    public static final String CAPACITY_TAG = LegendarySurvivalOverhaul.MOD_ID + ":HydrationCapacity";
 
     @Override
     public void setThirstEnumTag(ItemStack stack, HydrationEnum hydrationEnum)
@@ -43,7 +47,7 @@ public class ThirstUtilInternal implements IThirstUtil {
         final CompoundTag compound = stack.getTag();
 
         if (compound != null) {
-            compound.putInt(HYDRATION_ENUM_TAG, hydrationEnum.ordinal());
+            compound.putString(HYDRATION_ENUM_TAG, hydrationEnum.getName());
         }
     }
 
@@ -56,9 +60,9 @@ public class ThirstUtilInternal implements IThirstUtil {
 
             if (compound != null && compound.contains(HYDRATION_ENUM_TAG))
             {
-                int hydrationEnumOrdinal = compound.getInt(HYDRATION_ENUM_TAG);
+                String hydrationEnumName = compound.getString(HYDRATION_ENUM_TAG);
 
-                return HydrationEnum.values()[hydrationEnumOrdinal];
+                return HydrationEnum.getByName(hydrationEnumName);
             }
         }
         return null;
@@ -153,7 +157,7 @@ public class ThirstUtilInternal implements IThirstUtil {
         capability.addSaturationLevel(saturation);
 
         // Check for effect chance
-        if(effectChance != 0.0f && !Objects.equals(effectName, "") && player.level().random.nextFloat() < effectChance)
+        if(effectChance != 0.0f && !effectName.isEmpty() && player.level().random.nextFloat() < effectChance)
         {
             MobEffect mobEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effectName));
             if (mobEffect != null)
@@ -207,5 +211,22 @@ public class ThirstUtilInternal implements IThirstUtil {
             }
         }
         return null;
+    }
+
+    public JsonConsumableThirst getThirstConfig(ResourceLocation itemRegistryName, ItemStack itemStack) {
+        List<JsonConsumableThirst> jsonConsumableThirsts = null;
+        JsonConsumableThirst defaultJct = null;
+        if (itemRegistryName != null)
+            jsonConsumableThirsts = JsonConfig.consumableThirst.get(itemRegistryName.toString());
+
+        if (jsonConsumableThirsts != null)
+            for (JsonConsumableThirst jct: jsonConsumableThirsts) {
+                if (jct.matchesNbt(itemStack))
+                    return jct;
+                if (jct.isDefault())
+                    defaultJct = jct;
+            }
+
+        return defaultJct;
     }
 }

@@ -65,7 +65,7 @@ public class Config
 
 		// Temperature
 		public final ForgeConfigSpec.BooleanValue temperatureEnabled;
-		public final ForgeConfigSpec.IntValue tickRate;
+		public final ForgeConfigSpec.IntValue tempTickTime;
 		public final ForgeConfigSpec.DoubleValue minTemperatureModification;
 		public final ForgeConfigSpec.DoubleValue maxTemperatureModification;
 		public final ForgeConfigSpec.BooleanValue dangerousTemperature;
@@ -436,18 +436,18 @@ public class Config
 							" The outside maximum distance is defined as the maximum distance * this value")
 					.defineInRange("Temperature Influence Outside Distance Multiplier", 0.5, 0.0, 1.0);
 			builder
-					.comment(" The player's temperature will be adjusted at each temperature tick rate," ,
+					.comment(" The player's temperature will be adjusted at each temperature tick time," ,
 							" by an amount of temperature defined between the minimum and the maximum temperature modification adjusted linearly.")
 					.push("temperature-modification");
-			tickRate = builder
-					.comment(" Amount of time in ticks between 2 player temperature modification.")
-					.defineInRange("Temperature Tick Rate", 10, 5, Integer.MAX_VALUE);
+			tempTickTime = builder
+					.comment(" Amount of time in ticks between 2 player temperature modification. The bigger is this value, the more time it takes between temperature adjustments.")
+					.defineInRange("Temperature Tick Time", 20, 5, Integer.MAX_VALUE);
 			maxTemperatureModification = builder
-					.comment(" Maximum amount of temperature the player's temperature can be modified at each temperature tick rate.",
+					.comment(" Maximum amount of temperature the player's temperature can be modified at each temperature tick time.",
 							" Correspond to the amount of temperature given when temperature difference is maximum.")
-					.defineInRange("Maximum Temperature Modification", 2, 0.1, Integer.MAX_VALUE);
+					.defineInRange("Maximum Temperature Modification", 1, 0.1, Integer.MAX_VALUE);
 			minTemperatureModification = builder
-					.comment(" Minimum amount of temperature the player's temperature can be modified at each temperature tick rate.",
+					.comment(" Minimum amount of temperature the player's temperature can be modified at each temperature tick time.",
 							" Correspond to the amount of temperature given when there is no temperature difference")
 					.defineInRange("Minimum Temperature Modification", 0.2, 0.1, Integer.MAX_VALUE);
 			builder.pop();
@@ -607,7 +607,7 @@ public class Config
 					.comment(" Possible effect given while drinking a potion.")
 					.define("Effect", "");
 			builder.pop();
-			builder.push("purified-water");
+			builder.comment(" Default value for purified water").push("purified-water");
 			hydrationPurified = builder
 					.comment(" Amount of hydration recovered while drinking purified water.")
 					.defineInRange("Hydration", 6, 0, 20);
@@ -796,9 +796,9 @@ public class Config
 		Client(ForgeConfigSpec.Builder builder)
 		{
 
-			builder.comment(new String[] {" Options related to the heads up display.",
-					" These options will automatically update upon being saved."
-			}).push("hud");
+			builder.comment(" Options related to the heads up display.",
+					" These options will automatically update upon being saved.")
+					.push("hud");
 			builder.push("general");
 
 			showVanillaAnimationOverlay = builder
@@ -894,7 +894,7 @@ public class Config
 
 		// Temperature
 		public static boolean temperatureEnabled;
-		public static int tickRate;
+		public static int tempTickTime;
 		public static double minTemperatureModification;
 		public static double maxTemperatureModification;
 		public static boolean temperatureResistanceOnDeathEnabled;
@@ -1099,7 +1099,7 @@ public class Config
 			try
 			{
 				hideInfoFromDebug = COMMON.hideInfoFromDebug.get();
-				tickRate = COMMON.tickRate.get();
+				tempTickTime = COMMON.tempTickTime.get();
 				minTemperatureModification = COMMON.minTemperatureModification.get();
 				maxTemperatureModification = COMMON.maxTemperatureModification.get();
 				routinePacketSync = COMMON.routinePacketSync.get();

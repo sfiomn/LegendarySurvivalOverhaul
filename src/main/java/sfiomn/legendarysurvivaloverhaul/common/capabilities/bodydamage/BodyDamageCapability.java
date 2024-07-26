@@ -56,7 +56,7 @@ public class BodyDamageCapability implements IBodyDamageCapability
 		this.bodyParts.put(BodyPartEnum.LEFT_LEG, new BodyPart(BodyPartEnum.LEFT_LEG, (float) Config.Baked.legsPartHealth));
 		this.bodyParts.put(BodyPartEnum.LEFT_FOOT, new BodyPart(BodyPartEnum.LEFT_FOOT, (float) Config.Baked.feetPartHealth));
 
-		if (!Objects.equals(Config.Baked.bodyPartHealthMode, "DYNAMIC")) {
+		if (!Config.Baked.bodyPartHealthMode.equals("DYNAMIC")) {
 			for (BodyPart part: this.bodyParts.values()) {
 				part.setMaxHealth(part.getHealthMultiplier());
 			}
@@ -100,7 +100,7 @@ public class BodyDamageCapability implements IBodyDamageCapability
 
 		if (updateTickTimer++ >= 20) {
 			updateTickTimer = 0;
-			if (Objects.equals(Config.Baked.bodyPartHealthMode, "DYNAMIC") && playerMaxHealth != player.getMaxHealth()) {
+			if (Config.Baked.bodyPartHealthMode.equals("DYNAMIC") && playerMaxHealth != player.getMaxHealth()) {
 				playerMaxHealth = player.getMaxHealth();
 				updateDynamicMaxHealth(playerMaxHealth);
 			}

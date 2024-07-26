@@ -365,7 +365,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         blasting(consumer, PartialNBTIngredient.of(nbt, Items.POTION), ItemRegistry.PURIFIED_WATER_BOTTLE.get(), 1.0f, 60, "purified_water_bottle");
 
         nbt = new CompoundTag();
-        nbt.putInt(HYDRATION_ENUM_TAG, HydrationEnum.NORMAL.ordinal());
+        nbt.putString(HYDRATION_ENUM_TAG, HydrationEnum.NORMAL.getName());
         purification_smelting(consumer, PartialNBTIngredient.of(nbt, ItemRegistry.CANTEEN.get()), ItemRegistry.CANTEEN.get(), 1.0f, 240, "purified_canteen");
         purification_smelting(consumer, PartialNBTIngredient.of(nbt, ItemRegistry.LARGE_CANTEEN.get()), ItemRegistry.LARGE_CANTEEN.get(), 1.0f, 240, "purified_large_canteen");
         purification_blasting(consumer, PartialNBTIngredient.of(nbt, ItemRegistry.CANTEEN.get()), ItemRegistry.CANTEEN.get(), 1.0f, 80, "purified_canteen");
