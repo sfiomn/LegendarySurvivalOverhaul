@@ -23,7 +23,11 @@ public class RenderThirstOverlay {
     private static float shaderIntensity = 0;
     private static int updateTimer = 0;
 
-    public static void render() {
+    public static void render(Player player) {
+        if ((player.isSpectator() || player.isSpectator()) && focusShader != null) {
+            focusShader.stopRender();
+        }
+
         if (!(Minecraft.getInstance().screen instanceof DeathScreen) && focusShader != null) {
             focusShader.render(shaderIntensity);
         }

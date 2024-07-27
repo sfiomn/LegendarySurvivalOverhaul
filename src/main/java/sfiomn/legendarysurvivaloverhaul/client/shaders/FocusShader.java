@@ -21,12 +21,23 @@ public class FocusShader {
 
     public void render(float intensity) {
         PostChain currentEffect = Minecraft.getInstance().gameRenderer.currentEffect();
-        if (currentEffect == null ||
-                !currentEffect.getName().equals("minecraft:shaders/post/blobs2.json")) {
-            Minecraft.getInstance().gameRenderer.loadEffect(BLUR_SHADER);
+        if (intensity > 0) {
+            if (currentEffect == null ||
+                    !currentEffect.getName().equals("minecraft:shaders/post/blobs2.json")) {
+                Minecraft.getInstance().gameRenderer.loadEffect(BLUR_SHADER);
+            }
+            updateIntensity(intensity);
+        } else if (intensity == 0) {
+            stopRender();
         }
+    }
 
-        updateIntensity(intensity);
+    public void stopRender() {
+        PostChain currentEffect = Minecraft.getInstance().gameRenderer.currentEffect();
+        if (currentEffect != null &&
+                currentEffect.getName().equals("minecraft:shaders/post/blobs2.json")) {
+            Minecraft.getInstance().gameRenderer.shutdownEffect();
+        }
     }
 
     @OnlyIn(value = Dist.CLIENT)
