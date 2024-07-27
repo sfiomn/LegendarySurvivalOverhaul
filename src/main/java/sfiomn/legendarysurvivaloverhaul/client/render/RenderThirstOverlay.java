@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.client.shaders.FocusShader;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
@@ -24,11 +25,12 @@ public class RenderThirstOverlay {
     private static int updateTimer = 0;
 
     public static void render(Player player) {
-        if ((player.isSpectator() || player.isSpectator()) && focusShader != null) {
-            focusShader.stopRender();
-        }
+        if (focusShader == null)
+            return;
 
-        if (!(Minecraft.getInstance().screen instanceof DeathScreen) && focusShader != null) {
+        if (player.isSpectator() || player.isCreative()) {
+            focusShader.stopRender();
+        } else if (!(Minecraft.getInstance().screen instanceof DeathScreen)) {
             focusShader.render(shaderIntensity);
         }
     }
