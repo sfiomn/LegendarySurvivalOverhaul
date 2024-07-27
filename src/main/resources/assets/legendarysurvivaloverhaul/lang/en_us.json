@@ -171,6 +171,8 @@
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value": "Regenerates %s health over %ss",
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.morphine": "Blocks all effects from wounded limbs",
 
+	"tooltip.legendarysurvivaloverhaul.potion_with_effectChance": "%s%% %s",
+
 	"sounds.legendarysurvivaloverhaul.heat_stroke_early": "Heat starts stroking",
 	"sounds.legendarysurvivaloverhaul.heat_stroke": "Heat is stroking",
 	"sounds.legendarysurvivaloverhaul.panting": "Player suffocates",

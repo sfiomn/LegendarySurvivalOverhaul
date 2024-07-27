@@ -27,6 +27,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.ModDamageTypes;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.DamageDistributionEnum;
@@ -188,7 +189,11 @@ public class CommonForgeEvents {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onEntityHurt(LivingHurtEvent event) {
-        if (!event.getSource().is(DamageTypes.FALL) && event.getEntity().hasEffect(MobEffectRegistry.VULNERABILITY.get()))
+        if (!event.getSource().is(DamageTypes.FALL) &&
+            !event.getSource().is(DamageTypes.DROWN) &&
+            !event.getSource().is(ModDamageTypes.DEHYDRATION) &&
+            !event.getSource().is(ModDamageTypes.HYPOTHERMIA) &&
+            !event.getSource().is(ModDamageTypes.HYPERTHERMIA) && event.getEntity().hasEffect(MobEffectRegistry.VULNERABILITY.get()))
             event.setAmount(event.getAmount() * (1 + 0.2f * Objects.requireNonNull(event.getEntity().getEffect(MobEffectRegistry.VULNERABILITY.get())).getAmplifier() + 1));
 
         else if (event.getSource().is(DamageTypes.FALL) && event.getEntity().hasEffect(MobEffectRegistry.HARD_FALLING.get())) {

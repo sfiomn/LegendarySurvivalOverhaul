@@ -31,7 +31,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(BlockRegistry.SEWING_TABLE.get());
 
         this.add(BlockRegistry.WATER_PLANT.get(),
-                block -> createSimpleDropCount(BlockRegistry.WATER_PLANT.get(), ItemRegistry.WATER_PLANT_BAG.get(), 2.0f, 4.0f));
+                block -> createSimpleDropCount(BlockRegistry.WATER_PLANT.get(), ItemRegistry.WATER_PLANT_BAG.get(), 1.0f, 2.0f));
     }
 
     protected LootTable.Builder createSimpleDropCount(Block block, Item item, float min, float max) {

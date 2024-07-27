@@ -43,7 +43,7 @@ public class ClientModBusEvents {
 
     @SubscribeEvent
     public static void onTooltipRegistration(RegisterClientTooltipComponentFactoriesEvent event) {
-        event.register(HydrationTooltipComponent.class, component -> new HydrationClientTooltipComponent(component.hydration, component.saturation, component.effectChance, component.effect));
+        event.register(HydrationTooltipComponent.class, component -> new HydrationClientTooltipComponent(component.hydration, component.saturation));
     }
 
     @SubscribeEvent
