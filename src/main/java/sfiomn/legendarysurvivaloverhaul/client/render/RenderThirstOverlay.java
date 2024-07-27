@@ -38,11 +38,12 @@ public class RenderThirstOverlay {
     }
 
     public static void drawThirstEffect(PlayerEntity player) {
-        if ((player.isSpectator() || player.isSpectator()) && focusShader != null) {
-            focusShader.stopRender();
-        }
+        if (focusShader == null)
+            return;
 
-        if (!(Minecraft.getInstance().screen instanceof DeathScreen) && focusShader != null) {
+        if ((player.isSpectator() || player.isCreative())) {
+            focusShader.stopRender();
+        } else if (!(Minecraft.getInstance().screen instanceof DeathScreen)) {
             focusShader.render();
         }
     }
