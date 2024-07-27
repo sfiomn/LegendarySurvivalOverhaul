@@ -27,17 +27,13 @@ public class HydrationTooltip {
 
     public final int hydration;
     public final float saturation;
-    public final float effectChance;
     public int hydrationIconNumber;
     public int saturationIconNumber;
-    public int chanceIconNumber;
     private String placeholderTooltip;
 
-    public HydrationTooltip(int hydration, float saturation, float effectChance, String effectName) {
+    public HydrationTooltip(int hydration, float saturation) {
         this.hydration = hydration;
         this.saturation = saturation;
-        this.effectChance = effectChance;
-        Effect effect;
 
         this.hydrationIconNumber = Math.min((int) Math.ceil(Math.abs(hydration) / 2f), 10);
 
@@ -46,19 +42,10 @@ public class HydrationTooltip {
         } else {
             this.saturationIconNumber = 0;
         }
-
-        this.chanceIconNumber = 0;
-        //  show chance Effect bar only if chance is > 0 + effect not null
-        //  If chance = 100%, instead change hydration color bar (if hydration > 0)
-        if (effectChance > 0.0f && !effectName.isEmpty()) {
-            effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectName));
-            if ((hydrationIconNumber == 0 || effectChance < 1.0f) && effect != null)
-                chanceIconNumber = 5;
-        }
     }
 
     public HydrationTooltip(HydrationEnum hydrationEnum) {
-        this(hydrationEnum.getHydration(), (float) hydrationEnum.getSaturation(), (float) hydrationEnum.getEffectChance(), hydrationEnum.getEffectName());
+        this(hydrationEnum.getHydration(), (float) hydrationEnum.getSaturation());
     }
 
     public String getPlaceholderTooltip() {
@@ -75,9 +62,8 @@ public class HydrationTooltip {
         if (Config.Baked.thirstSaturationDisplayed) {
             saturationBarLength = saturationIconNumber * scale;
         }
-        float dirtyBarLength = chanceIconNumber * scale;
 
-        int length = (int) Math.ceil(Math.max(thirstBarLength, Math.max(saturationBarLength, dirtyBarLength)));
+        int length = (int) Math.ceil(Math.max(thirstBarLength, saturationBarLength));
         StringBuilder placeholder = new StringBuilder(" ");
         for (int i=0; i< length; i++) {
             placeholder.append(" ");
@@ -114,16 +100,9 @@ public class HydrationTooltip {
         int xOffsetTexture = 0;
         if (this.hydration >= 0) {
             xOffsetTexture = THIRST_TEXTURE_WIDTH;
-            // Show the thirst bar dirty if dirty chance 100%
-            if (effectChance >= 1.0f) {
-                xOffsetTexture += THIRST_TEXTURE_WIDTH * 3;
-            }
         } else {
-            xOffsetTexture = THIRST_TEXTURE_WIDTH * 10;
-            // Show the thirst bar dirty if dirty chance 100%
-            if (effectChance >= 1.0f) {
-                xOffsetTexture += THIRST_TEXTURE_WIDTH * 2;
-            }
+            // Show the thirst bar dirty if hydration negative
+            xOffsetTexture = THIRST_TEXTURE_WIDTH + THIRST_TEXTURE_WIDTH * 3;
         }
 
         // Draw the hydration bubbles
@@ -151,9 +130,6 @@ public class HydrationTooltip {
 
         if (this.saturation >= 0) {
             xOffsetTexture = THIRST_TEXTURE_WIDTH * 6;
-            // Show the thirst bar dirty if dirty chance 100% -> align saturation color with thirst bar
-            if (effectChance >= 1.0f)
-                xOffsetTexture += THIRST_TEXTURE_WIDTH * 2;
         } else
             xOffsetTexture = THIRST_TEXTURE_WIDTH * 14;
 
@@ -167,28 +143,6 @@ public class HydrationTooltip {
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
             else if (halfIcon == (int) Math.ceil(Math.abs(saturation))) // Half saturation icon
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture + THIRST_TEXTURE_WIDTH, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-        }
-
-        // Dirty bar
-        if (chanceIconNumber > 0) {
-            top += 10;
-        }
-        left = tooltipX + (chanceIconNumber - 1) * THIRST_TEXTURE_WIDTH;
-
-        xOffsetTexture = THIRST_TEXTURE_WIDTH * 3;
-        // Draw the dirty bubbles
-        for (int i = 0; i < chanceIconNumber; i++) {
-            int halfIcon = i * 2 + 1;
-            int x = left - i * THIRST_TEXTURE_WIDTH;
-            int y = top;
-
-            if (halfIcon < (int) (effectChance * 10)) { // Full dirty icon
-                RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture + THIRST_TEXTURE_WIDTH, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-            } else if (halfIcon == (int) (effectChance * 10)) { // Half dirty icon
-                RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture + (THIRST_TEXTURE_WIDTH * 2), 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-            } else {
-                RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-            }
         }
 
         matrixStack.popPose();

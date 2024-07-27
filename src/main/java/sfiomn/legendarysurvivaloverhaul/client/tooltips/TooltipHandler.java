@@ -233,30 +233,28 @@ public class TooltipHandler
 		JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstConfig(itemRegistryName, stack);
 
 		HydrationTooltip hydrationTooltip = null;
-		Effect hydrationEffect = null;
+		IFormattableTextComponent hydrationEffectComponent = null;
 
 		if (jsonConsumableThirst != null) {
-			hydrationTooltip = new HydrationTooltip(jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
+			hydrationTooltip = new HydrationTooltip(jsonConsumableThirst.hydration, jsonConsumableThirst.saturation);
 			if (jsonConsumableThirst.effectChance > 0 && !jsonConsumableThirst.effect.isEmpty()) {
-				hydrationEffect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(jsonConsumableThirst.effect));
+				hydrationEffectComponent = getHydrationEffectTooltip(jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
 			}
 		} else if (stack.getItem() == Items.POTION) {
 			Potion potion = PotionUtils.getPotion(stack);
-			if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
-			{
+			if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK) {
 				hydrationTooltip = new HydrationTooltip(HydrationEnum.NORMAL);
-				hydrationEffect = HydrationEnum.NORMAL.getEffectIfApplicable();
+				hydrationEffectComponent = getHydrationEffectTooltip(HydrationEnum.NORMAL);
 			}
-			else if (potion != Potions.EMPTY)
-			{
+			else if (potion != Potions.EMPTY) {
 				hydrationTooltip = new HydrationTooltip(HydrationEnum.POTION);
-				hydrationEffect = HydrationEnum.POTION.getEffectIfApplicable();
+				hydrationEffectComponent = getHydrationEffectTooltip(HydrationEnum.POTION);
 			}
 		} else {
 			HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
 			if (hydrationEnum != null) {
 				hydrationTooltip = new HydrationTooltip(hydrationEnum);
-				hydrationEffect = hydrationEnum.getEffectIfApplicable();
+				hydrationEffectComponent = getHydrationEffectTooltip(hydrationEnum);
 			}
 		}
 
@@ -271,14 +269,23 @@ public class TooltipHandler
 		if ((hydrationTooltip.saturationIconNumber > 0 && !Config.Baked.mergeHydrationAndSaturationTooltip) ||
 				(hydrationTooltip.hydrationIconNumber <= 0 && hydrationTooltip.saturationIconNumber > 0) )
 			tooltip.add(placeholder.setStyle(thirstStyle));
-		if (hydrationTooltip.chanceIconNumber > 0)
-			tooltip.add(placeholder.setStyle(thirstStyle));
 
-		if (hydrationEffect != null)
-			tooltip.add(getHydrationEffectTooltip(hydrationEffect));
+		if (hydrationEffectComponent != null)
+			tooltip.add(hydrationEffectComponent);
 	}
 
-	private static IFormattableTextComponent getHydrationEffectTooltip(Effect effect) {
+	private static IFormattableTextComponent getHydrationEffectTooltip(HydrationEnum hydrationEnum) {
+		return getHydrationEffectTooltip(hydrationEnum.getEffectChance(), hydrationEnum.getEffectName());
+	}
+
+	private static IFormattableTextComponent getHydrationEffectTooltip(double effectChance, String effectName) {
+		Effect effect = null;
+		if (effectName != null && !effectName.isEmpty() && effectChance > 0)
+			effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectName));
+
+		if (effect == null)
+			return null;
+
 		EffectInstance effectInstance = new EffectInstance(effect, 600, 0, false, true);
 		IFormattableTextComponent iformattabletextcomponent = new TranslationTextComponent(effectInstance.getDescriptionId());
 
@@ -289,6 +296,10 @@ public class TooltipHandler
 		if (effectInstance.getDuration() > 20) {
 			iformattabletextcomponent = new TranslationTextComponent("potion.withDuration", iformattabletextcomponent, EffectUtils.formatDuration(effectInstance, 1.0f));
 		}
+
+		if (effectChance < 1)
+			iformattabletextcomponent = new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.potion_with_effectChance", (int) (effectChance*100), iformattabletextcomponent);
+
 
 		return iformattabletextcomponent.withStyle(Style.EMPTY.withColor(TextFormatting.BLUE));
 	}

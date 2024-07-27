@@ -27,9 +27,9 @@
 	"item.legendarysurvivaloverhaul.heating_coat_2" : "中级炽线针线包",
 	"item.legendarysurvivaloverhaul.heating_coat_3" : "高级炽线针线包",
 	"tooltip.legendarysurvivaloverhaul.coat_item.heating.desc": "使用缝纫机应用到盔甲上时，最高可升温",
-	"item.legendarysurvivaloverhaul.thermal_coat_1" : "初级保温针线包",
-	"item.legendarysurvivaloverhaul.thermal_coat_2" : "中级保温针线包",
-	"item.legendarysurvivaloverhaul.thermal_coat_3" : "高级保温针线包",
+	"item.legendarysurvivaloverhaul.thermal_coat_1" : "初级恒温针线包",
+	"item.legendarysurvivaloverhaul.thermal_coat_2" : "中级恒温针线包",
+	"item.legendarysurvivaloverhaul.thermal_coat_3" : "高级恒温针线包",
 	"tooltip.legendarysurvivaloverhaul.coat_item.thermal.desc": "使用缝纫机应用到盔甲上时，最高可保温",
 
 	"item.legendarysurvivaloverhaul.thermometer": "温度计",
@@ -152,17 +152,17 @@
 
 	"tooltip.legendarysurvivaloverhaul.armor.heating": "加热",
 	"tooltip.legendarysurvivaloverhaul.armor.cooling": "冷却",
-	"tooltip.legendarysurvivaloverhaul.armor.insulation": "保温",
+	"tooltip.legendarysurvivaloverhaul.armor.insulation": "恒温",
 
-	"tooltip.legendarysurvivaloverhaul.armor_coat.heating1": "控温保温 I",
-	"tooltip.legendarysurvivaloverhaul.armor_coat.heating2": "控温保温 II",
-	"tooltip.legendarysurvivaloverhaul.armor_coat.heating3": "控温保温 III",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.heating1": "控温加热 I",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.heating2": "控温加热 II",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.heating3": "控温加热 III",
 	"tooltip.legendarysurvivaloverhaul.armor_coat.cooling1": "控温冷却 I",
 	"tooltip.legendarysurvivaloverhaul.armor_coat.cooling2": "控温冷却 II",
 	"tooltip.legendarysurvivaloverhaul.armor_coat.cooling3": "控温冷却 III",
-	"tooltip.legendarysurvivaloverhaul.armor_coat.thermal1": "控温加热 I",
-	"tooltip.legendarysurvivaloverhaul.armor_coat.thermal2": "控温加热 II",
-	"tooltip.legendarysurvivaloverhaul.armor_coat.thermal3": "控温加热 III",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.thermal1": "控温恒温 I",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.thermal2": "控温恒温 II",
+	"tooltip.legendarysurvivaloverhaul.armor_coat.thermal3": "控温恒温 III",
 
 	"tooltip.legendarysurvivaloverhaul.sewing_table_disabled": "已缝合针线包",
 
