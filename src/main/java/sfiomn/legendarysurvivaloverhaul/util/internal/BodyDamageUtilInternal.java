@@ -8,10 +8,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.*;
-import sfiomn.legendarysurvivaloverhaul.common.items.heal.BodyHealingItem;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
-import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -68,17 +66,16 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
         return effects;
     }
 
-    public void applyHealingItem(PlayerEntity player, BodyPartEnum bodyPartEnum, BodyHealingItem healingItem) {
+    public void applyHealingTimeBodyPart(PlayerEntity player, BodyPartEnum bodyPartEnum, float healingValue, int healingTime) {
 
-        if(!Config.Baked.localizedBodyDamageEnabled || bodyPartEnum == null || healingItem == null)
+        if(!Config.Baked.localizedBodyDamageEnabled || bodyPartEnum == null)
             return;
 
-        int healingTicks = healingItem.getHealingTicks();
-        float healingValuePerTick = healingItem.getHealingCapacity() / (float) healingTicks;
+        float healingValuePerTick = healingValue / (float) healingTime;
 
         IBodyDamageCapability capability = CapabilityUtil.getBodyDamageCapability(player);
 
-        capability.applyHealingItem(bodyPartEnum, healingTicks, healingValuePerTick);
+        capability.applyHealingTime(bodyPartEnum, healingTime, healingValuePerTick);
     }
 
     @Override

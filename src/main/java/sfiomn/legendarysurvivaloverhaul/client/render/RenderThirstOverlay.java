@@ -26,15 +26,22 @@ public class RenderThirstOverlay {
 
     public static void render()
     {
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        drawThirstEffect();
+        PlayerEntity player = Minecraft.getInstance().player;
+        if (player != null) {
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            drawThirstEffect(player);
 
-        Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        RenderSystem.disableBlend();
+            Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
+            RenderSystem.disableBlend();
+        }
     }
 
-    public static void drawThirstEffect() {
+    public static void drawThirstEffect(PlayerEntity player) {
+        if ((player.isSpectator() || player.isSpectator()) && focusShader != null) {
+            focusShader.stopRender();
+        }
+
         if (!(Minecraft.getInstance().screen instanceof DeathScreen) && focusShader != null) {
             focusShader.render();
         }

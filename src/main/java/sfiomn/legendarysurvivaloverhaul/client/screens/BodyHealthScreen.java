@@ -7,15 +7,12 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TranslationTextComponent;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
-import sfiomn.legendarysurvivaloverhaul.common.items.heal.BodyHealingItem;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
-import sfiomn.legendarysurvivaloverhaul.network.packets.MessageBodyPartHealingItem;
-import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
+import sfiomn.legendarysurvivaloverhaul.network.packets.MessageBodyPartHealingTime;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 import java.util.HashMap;
@@ -34,32 +31,22 @@ public class BodyHealthScreen extends Screen {
     private int leftPos;
     private int topPos;
 
-    private PlayerEntity player;
-    private Hand hand;
+    private final PlayerEntity player;
+    private final Hand hand;
     private int healingCharges;
-    private BodyHealingItem healingItem;
+    private final float healingValue;
+    private final int healingTime;
     private boolean consumeItem;
 
-    public BodyHealthScreen(PlayerEntity player) {
-        super(new TranslationTextComponent("screen." + LegendarySurvivalOverhaul.MOD_ID + ".body_health_screen"));
-
-        this.player = player;
-        this.healingItem = null;
-    }
-
-    public BodyHealthScreen(PlayerEntity player, Hand hand) {
+    public BodyHealthScreen(PlayerEntity player, Hand hand, boolean alreadyConsumed, int healingCharges, float healingValue, int healingTime) {
         super(new TranslationTextComponent("screen." + LegendarySurvivalOverhaul.MOD_ID + ".body_health_screen"));
 
         this.player = player;
         this.hand = hand;
-        if (player.getItemInHand(this.hand).getItem() instanceof BodyHealingItem) {
-            this.healingItem = (BodyHealingItem) player.getItemInHand(this.hand).getItem();
-            this.healingCharges = this.healingItem.getHealingCharges();
-        } else {
-            this.healingItem = null;
-            this.healingCharges = 0;
-        }
-        this.consumeItem = true;
+        this.healingCharges = healingCharges;
+        this.healingValue = healingValue;
+        this.healingTime = healingTime;
+        this.consumeItem = !alreadyConsumed;
     }
 
     @Override
@@ -83,7 +70,7 @@ public class BodyHealthScreen extends Screen {
         for (Widget button : this.buttons) {
             if (button instanceof BodyPartButton) {
                 BodyPartButton bodyPartButton = (BodyPartButton) button;
-                if (this.healingItem == null) {
+                if (this.hand == null) {
                     bodyPartButton.active = false;
                 }
                 bodyPartButtons.put(bodyPartButton.bodyPart, bodyPartButton);
@@ -93,10 +80,9 @@ public class BodyHealthScreen extends Screen {
 
     public void sendBodyPartHeal(BodyPartEnum bodyPart) {
         if (healingCharges > 0) {
-            MessageBodyPartHealingItem messageBodyPartHealingItemToServer = new MessageBodyPartHealingItem(bodyPart, this.hand, this.consumeItem);
-            NetworkHandler.INSTANCE.sendToServer(messageBodyPartHealingItemToServer);
-            if (player.getItemInHand(this.hand).getItem() instanceof BodyHealingItem)
-                BodyDamageUtil.applyHealingItem(player, bodyPart, (BodyHealingItem) player.getItemInHand(this.hand).getItem());
+            MessageBodyPartHealingTime messageBodyPartHealingTimeToServer = new MessageBodyPartHealingTime(bodyPart, this.hand, this.consumeItem, this.healingValue, this.healingTime);
+            NetworkHandler.INSTANCE.sendToServer(messageBodyPartHealingTimeToServer);
+            BodyDamageUtil.applyHealingTimeBodyPart(player, bodyPart, this.healingValue, this.healingTime);
             if (this.consumeItem)
                 this.consumeItem = false;
             this.healingCharges--;
@@ -124,7 +110,7 @@ public class BodyHealthScreen extends Screen {
     }
 
     public void checkAutoCloseWhenHealing() {
-        if (healingItem != null && healingCharges == 0) {
+        if (hand != null && healingCharges == 0) {
             assert this.minecraft != null;
             this.minecraft.setScreen(null);
         }
@@ -157,7 +143,7 @@ public class BodyHealthScreen extends Screen {
         bodyPartButton.setHealthRatio(healthRatio);
 
         // Define button inactive if healing
-        if (totalRemainingHealing > 0.0f || healthRatio >= 1 || bodyPartButton.isPressed || this.healingItem == null) {
+        if (totalRemainingHealing > 0.0f || healthRatio >= 1 || bodyPartButton.isPressed || this.hand == null) {
             if (bodyPartButton.active) {
                 bodyPartButton.active = false;
             }
@@ -170,8 +156,8 @@ public class BodyHealthScreen extends Screen {
 
         bodyPartButton.render(matrixStack, mouseX, mouseY, partialTicks);
 
-        if (bodyPartButton.isMouseOver(mouseX, mouseY) && totalRemainingHealing == 0 && this.healingItem != null) {
-            totalRemainingHealing = this.healingItem.getHealingCapacity();
+        if (bodyPartButton.isMouseOver(mouseX, mouseY) && totalRemainingHealing == 0 && this.hand != null) {
+            totalRemainingHealing = this.healingValue;
         }
 
         RenderSystem.color4f(1, 1, 1, 1);

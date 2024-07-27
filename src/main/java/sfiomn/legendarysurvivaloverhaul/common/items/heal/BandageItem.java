@@ -20,15 +20,13 @@ import java.util.List;
 
 public class BandageItem extends BodyHealingItem {
 
-    public final ItemStack potionEquivalent = PotionUtils.setCustomEffects(new PotionItem(new Properties()).getDefaultInstance(), Collections.singletonList(new EffectInstance(Effects.REGENERATION, 400, 1)));
-
     public BandageItem(Properties properties) {
         super(properties);
     }
 
     @Override
     public void runSecondaryEffect(PlayerEntity player, ItemStack stack) {
-        player.addEffect(new EffectInstance(Effects.REGENERATION, 400, 1));
+        player.addEffect(new EffectInstance(Effects.REGENERATION, 300, 1));
         super.runSecondaryEffect(player, stack);
     }
 
@@ -38,27 +36,8 @@ public class BandageItem extends BodyHealingItem {
     }
 
     @Override
-    public float getHealingCapacity() {
-        return (float) Config.Baked.bandageHealingValue;
-    }
-
-    @Override
-    public int getHealingTicks() {
-        return Config.Baked.bandageHealingTime;
-    }
-
-    @Override
-    public int getHealingCharges() {
-        return Config.Baked.bandageHealingCharges;
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltips, ITooltipFlag isAdvanced) {
-        if(Config.Baked.localizedBodyDamageEnabled) {
-            tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.body_part", getHealingCharges()));
-            tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value", getHealingCapacity(), MathUtil.round(getHealingTicks() / 20.0f, 1)));
-        }
-        PotionUtils.addPotionTooltip(potionEquivalent, tooltips, 1.0f);
         super.appendHoverText(stack, world, tooltips, isAdvanced);
+        addSecondaryEffectTooltip(tooltips, new EffectInstance(Effects.REGENERATION, 300, 1));
     }
 }

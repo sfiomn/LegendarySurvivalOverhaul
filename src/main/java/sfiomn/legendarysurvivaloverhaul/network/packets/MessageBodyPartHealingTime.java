@@ -1,8 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.network.packets;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -10,7 +8,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.common.items.heal.BodyHealingItem;
@@ -18,36 +15,38 @@ import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 
 import java.util.function.Supplier;
 
-public class MessageBodyPartHealingItem
+public class MessageBodyPartHealingTime
 {
     private CompoundNBT compound;
     // SERVER side message
 
-    public MessageBodyPartHealingItem(BodyPartEnum bodyPart, Hand hand, boolean consumeItem)
+    public MessageBodyPartHealingTime(BodyPartEnum bodyPart, Hand hand, boolean consumeItem, float healingValue, int healingTime)
     {
         CompoundNBT bodyPartHealNbt = new CompoundNBT();
         bodyPartHealNbt.putString("bodyPartEnum", bodyPart.name());
         bodyPartHealNbt.putBoolean("mainHand", hand == Hand.MAIN_HAND);
         bodyPartHealNbt.putBoolean("consumeItem", consumeItem);
+        bodyPartHealNbt.putFloat("healingValue", healingValue);
+        bodyPartHealNbt.putInt("healingTime", healingTime);
         this.compound = bodyPartHealNbt;
     }
 
-    public MessageBodyPartHealingItem(CompoundNBT nbt) {
+    public MessageBodyPartHealingTime(CompoundNBT nbt) {
         this.compound = nbt;
     }
 
-    public MessageBodyPartHealingItem() {}
+    public MessageBodyPartHealingTime() {}
 
-    public static MessageBodyPartHealingItem decode(PacketBuffer buffer)
+    public static MessageBodyPartHealingTime decode(PacketBuffer buffer)
     {
-        return new MessageBodyPartHealingItem(buffer.readNbt());
+        return new MessageBodyPartHealingTime(buffer.readNbt());
     }
 
-    public static void encode(MessageBodyPartHealingItem message, PacketBuffer buffer) {
+    public static void encode(MessageBodyPartHealingTime message, PacketBuffer buffer) {
         buffer.writeNbt(message.compound);
     }
 
-    public static void handle(MessageBodyPartHealingItem message, Supplier<NetworkEvent.Context> supplier)
+    public static void handle(MessageBodyPartHealingTime message, Supplier<NetworkEvent.Context> supplier)
     {
         final NetworkEvent.Context context = supplier.get();
         if (context.getDirection() == NetworkDirection.PLAY_TO_SERVER) {
@@ -65,15 +64,16 @@ public class MessageBodyPartHealingItem
 
         ItemStack itemStack = player.getItemInHand(hand);
 
-        if (itemStack.getItem() instanceof BodyHealingItem) {
-            player.level.playSound(null, player, SoundRegistry.HEAL_BODY_PART.get(), SoundCategory.PLAYERS, 1.0f, 1.0f);
-            BodyDamageUtil.applyHealingItem(player, bodyPartEnum, (BodyHealingItem) itemStack.getItem());
+        player.level.playSound(null, player, SoundRegistry.HEAL_BODY_PART.get(), SoundCategory.PLAYERS, 1.0f, 1.0f);
 
-            if (nbt.getBoolean("consumeItem")) {
+        if (nbt.getBoolean("consumeItem")) {
+            if (itemStack.getItem() instanceof BodyHealingItem) {
                 ((BodyHealingItem) itemStack.getItem()).runSecondaryEffect(player, itemStack);
-                if (!player.isCreative())
-                    itemStack.shrink(1);
             }
+            if (!player.isCreative())
+                itemStack.shrink(1);
         }
+
+        BodyDamageUtil.applyHealingTimeBodyPart(player, bodyPartEnum, nbt.getFloat("healingValue"), nbt.getInt("healingTime"));
     }
 }

@@ -57,6 +57,9 @@ public class MorphineItem extends Item {
         PlayerEntity player = (PlayerEntity) entity;
         player.addEffect(new EffectInstance(PAINKILLER.get(), 3600, 0, false, false, true));
 
+        if (!player.isCreative())
+            stack.shrink(1);
+
         return stack;
     }
 
@@ -68,9 +71,9 @@ public class MorphineItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag isAdvanced) {
-        if(Config.Baked.localizedBodyDamageEnabled) {
+        if(Config.Baked.localizedBodyDamageEnabled)
             tooltip.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.morphine"));
-        }
+
         super.appendHoverText(stack, world, tooltip, isAdvanced);
     }
 }

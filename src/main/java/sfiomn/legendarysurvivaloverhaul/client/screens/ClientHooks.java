@@ -6,11 +6,11 @@ import net.minecraft.util.Hand;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 
 public class ClientHooks {
-    public static void openBodyHealthScreen(PlayerEntity player, Hand hand) {
-        Minecraft.getInstance().setScreen(new BodyHealthScreen(player, hand));
+    public static void openBodyHealthScreen(PlayerEntity player, Hand hand, boolean alreadyConsumed, int healingCharges, float healingValue, int healingTime) {
+        Minecraft.getInstance().setScreen(new BodyHealthScreen(player, hand, alreadyConsumed, healingCharges, healingValue, healingTime));
     }
 
     public static void openBodyHealthScreen(PlayerEntity player) {
-        Minecraft.getInstance().setScreen(new BodyHealthScreen(player));
+        openBodyHealthScreen(player, null, false, 0, 0, 0);
     }
 }

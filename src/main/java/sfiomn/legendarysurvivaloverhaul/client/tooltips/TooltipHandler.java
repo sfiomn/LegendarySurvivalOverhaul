@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.client.tooltips;
 
+import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
@@ -16,20 +17,22 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumableHeal;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
-import sfiomn.legendarysurvivaloverhaul.common.items.drink.DrinkItem;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.KeybindingRegistry;
+import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 import java.util.List;
 
@@ -61,6 +64,9 @@ public class TooltipHandler
 
 			if (Config.Baked.temperatureEnabled)
 				addFoodEffectText(stack, tooltip);
+
+			if (Config.Baked.localizedBodyDamageEnabled)
+				addHealingText(stack, tooltip);
 
 			if (Config.Baked.thirstEnabled && Config.Baked.showHydrationTooltip)
 				addHydrationText(stack, tooltip);
@@ -205,28 +211,53 @@ public class TooltipHandler
 		}
 	}
 
+	private static void addHealingText(ItemStack stack, List<ITextComponent> tooltips) {
+
+		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
+		assert itemRegistryName != null;
+		JsonConsumableHeal jsonConsumableHeal = JsonConfig.consumableHeal.get(itemRegistryName.toString());
+
+		if (jsonConsumableHeal != null) {
+			if (jsonConsumableHeal.healingCharges > 0) {
+				tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.body_part", jsonConsumableHeal.healingCharges));
+			} else if (jsonConsumableHeal.healingCharges == 0) {
+				tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.whole_body"));
+			}
+			tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value", jsonConsumableHeal.healingValue, MathUtil.round(jsonConsumableHeal.healingTime / 20.0f, 1)));
+		}
+	}
+
 	private static void addHydrationText(ItemStack stack, List<ITextComponent> tooltip) {
 		ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
 		assert itemRegistryName != null;
-		JsonThirst jsonThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
+		JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstConfig(itemRegistryName, stack);
 
 		HydrationTooltip hydrationTooltip = null;
-		if (jsonThirst != null) {
-			hydrationTooltip = new HydrationTooltip(jsonThirst.hydration, jsonThirst.saturation, jsonThirst.dirty);
+		Effect hydrationEffect = null;
+
+		if (jsonConsumableThirst != null) {
+			hydrationTooltip = new HydrationTooltip(jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
+			if (jsonConsumableThirst.effectChance > 0 && !jsonConsumableThirst.effect.isEmpty()) {
+				hydrationEffect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(jsonConsumableThirst.effect));
+			}
 		} else if (stack.getItem() == Items.POTION) {
 			Potion potion = PotionUtils.getPotion(stack);
 			if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
 			{
 				hydrationTooltip = new HydrationTooltip(HydrationEnum.NORMAL);
+				hydrationEffect = HydrationEnum.NORMAL.getEffectIfApplicable();
 			}
 			else if (potion != Potions.EMPTY)
 			{
 				hydrationTooltip = new HydrationTooltip(HydrationEnum.POTION);
+				hydrationEffect = HydrationEnum.POTION.getEffectIfApplicable();
 			}
-		} else if (stack.getItem() instanceof DrinkItem) {
+		} else {
 			HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
-			if (hydrationEnum != null)
+			if (hydrationEnum != null) {
 				hydrationTooltip = new HydrationTooltip(hydrationEnum);
+				hydrationEffect = hydrationEnum.getEffectIfApplicable();
+			}
 		}
 
 		if (hydrationTooltip == null) {
@@ -240,7 +271,25 @@ public class TooltipHandler
 		if ((hydrationTooltip.saturationIconNumber > 0 && !Config.Baked.mergeHydrationAndSaturationTooltip) ||
 				(hydrationTooltip.hydrationIconNumber <= 0 && hydrationTooltip.saturationIconNumber > 0) )
 			tooltip.add(placeholder.setStyle(thirstStyle));
-		if (hydrationTooltip.dirtyIconNumber > 0)
+		if (hydrationTooltip.chanceIconNumber > 0)
 			tooltip.add(placeholder.setStyle(thirstStyle));
+
+		if (hydrationEffect != null)
+			tooltip.add(getHydrationEffectTooltip(hydrationEffect));
+	}
+
+	private static IFormattableTextComponent getHydrationEffectTooltip(Effect effect) {
+		EffectInstance effectInstance = new EffectInstance(effect, 600, 0, false, true);
+		IFormattableTextComponent iformattabletextcomponent = new TranslationTextComponent(effectInstance.getDescriptionId());
+
+		if (effectInstance.getAmplifier() > 1) {
+			iformattabletextcomponent = new TranslationTextComponent("potion.withAmplifier", iformattabletextcomponent, new TranslationTextComponent("potion.potency." + effectInstance.getAmplifier()));
+		}
+
+		if (effectInstance.getDuration() > 20) {
+			iformattabletextcomponent = new TranslationTextComponent("potion.withDuration", iformattabletextcomponent, EffectUtils.formatDuration(effectInstance, 1.0f));
+		}
+
+		return iformattabletextcomponent.withStyle(Style.EMPTY.withColor(TextFormatting.BLUE));
 	}
 }

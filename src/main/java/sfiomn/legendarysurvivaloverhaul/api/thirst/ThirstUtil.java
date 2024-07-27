@@ -2,6 +2,8 @@ package sfiomn.legendarysurvivaloverhaul.api.thirst;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 
 import javax.annotation.Nullable;
 
@@ -28,11 +30,12 @@ public class ThirstUtil
 	 * @param player
 	 * @param hydration
 	 * @param saturation
-	 * @param dirtyChance 0.0f - 1.0f
+	 * @param effectChance 0.0f - 1.0f
+	 * @param effect
 	 */
-	public static void takeDrink(PlayerEntity player, int hydration, float saturation, float dirtyChance)
+	public static void takeDrink(PlayerEntity player, int hydration, float saturation, float effectChance, String effect)
 	{
-		internal.takeDrink(player, hydration, saturation, dirtyChance);
+		internal.takeDrink(player, hydration, saturation, effectChance, effect);
 	}
 
 	/**
@@ -133,5 +136,15 @@ public class ThirstUtil
 	public static void removeCapacityTag(final ItemStack stack)
 	{
 		internal.removeCapacityTag(stack);
+	}
+
+	/**
+	 * Gets tje JsonConsumableThirst from the jsonThirstConsumable json file
+	 *
+	 * @param itemRegistryName Item stack registry name
+	 * @param itemStack        Item stack to compare with
+	 */
+	public static JsonConsumableThirst getThirstConfig(ResourceLocation itemRegistryName, ItemStack itemStack) {
+		return internal.getThirstConfig(itemRegistryName, itemStack);
 	}
 }

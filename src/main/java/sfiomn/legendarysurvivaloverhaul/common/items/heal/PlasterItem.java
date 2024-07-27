@@ -37,28 +37,8 @@ public class PlasterItem extends BodyHealingItem {
     }
 
     @Override
-    public float getHealingCapacity() {
-        return (float) Config.Baked.plasterHealingValue;
-    }
-
-    @Override
-    public int getHealingTicks() {
-        return Config.Baked.plasterHealingTime;
-    }
-
-    @Override
-    public int getHealingCharges() {
-        return Config.Baked.plasterHealingCharges;
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltips, ITooltipFlag isAdvanced) {
-        if(Config.Baked.localizedBodyDamageEnabled) {
-            tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.body_part", getHealingCharges()));
-            tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value",
-                    getHealingCapacity(), MathUtil.round(getHealingTicks() / 20.0f, 1)));
-        }
-        PotionUtils.addPotionTooltip(potionEquivalent, tooltips, 1.0f);
         super.appendHoverText(stack, world, tooltips, isAdvanced);
+        addSecondaryEffectTooltip(tooltips, new EffectInstance(Effects.REGENERATION, 400, 0));
     }
 }

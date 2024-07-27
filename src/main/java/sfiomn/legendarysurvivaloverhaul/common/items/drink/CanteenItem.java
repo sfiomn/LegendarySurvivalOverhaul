@@ -3,12 +3,11 @@ package sfiomn.legendarysurvivaloverhaul.common.items.drink;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -63,9 +62,25 @@ public class CanteenItem extends DrinkItem {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity) {
-        if (entity instanceof PlayerEntity && canDrink(stack) && !world.isClientSide && Config.Baked.thirstEnabled) {
-            ThirstUtil.takeDrink((PlayerEntity) entity, ThirstUtil.getHydrationEnumTag(stack));
+        if (entity instanceof PlayerEntity && canDrink(stack) && !world.isClientSide) {
+            PlayerEntity player = (PlayerEntity) entity;
             ThirstUtil.setCapacityTag(stack, ThirstUtil.getCapacityTag(stack) - 1);
+
+            JsonConsumableThirst jsonConsumableThirst = null;
+            // Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over
+            ResourceLocation registryName = stack.getItem().getRegistryName();
+            if (registryName != null)
+                jsonConsumableThirst = ThirstUtil.getThirstConfig(registryName, stack);
+
+            if (jsonConsumableThirst != null)
+                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
+            else {
+                HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
+                if (hydrationEnum != null)
+                    ThirstUtil.takeDrink(player, hydrationEnum);
+            }
+
+            runSecondaryEffect(player, stack);
         }
         return stack;
     }

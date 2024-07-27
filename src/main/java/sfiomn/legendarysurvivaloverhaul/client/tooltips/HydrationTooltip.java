@@ -5,11 +5,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.Style;
+import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -23,18 +25,19 @@ public class HydrationTooltip {
     public static final int THIRST_TEXTURE_WIDTH = 9;
     public static final int THIRST_TEXTURE_HEIGHT = 9;
 
-    public int hydration;
-    public float saturation;
-    public float dirty;
+    public final int hydration;
+    public final float saturation;
+    public final float effectChance;
     public int hydrationIconNumber;
     public int saturationIconNumber;
-    public int dirtyIconNumber;
+    public int chanceIconNumber;
     private String placeholderTooltip;
 
-    public HydrationTooltip(int hydration, float saturation, float dirty) {
+    public HydrationTooltip(int hydration, float saturation, float effectChance, String effectName) {
         this.hydration = hydration;
         this.saturation = saturation;
-        this.dirty = dirty;
+        this.effectChance = effectChance;
+        Effect effect;
 
         this.hydrationIconNumber = Math.min((int) Math.ceil(Math.abs(hydration) / 2f), 10);
 
@@ -44,14 +47,18 @@ public class HydrationTooltip {
             this.saturationIconNumber = 0;
         }
 
-        this.dirtyIconNumber = 0;
-        if (dirty > 0.0f && dirty < 1.0f && (hydrationIconNumber > 0 || saturationIconNumber > 0)) {
-            dirtyIconNumber = 5;
+        this.chanceIconNumber = 0;
+        //  show chance Effect bar only if chance is > 0 + effect not null
+        //  If chance = 100%, instead change hydration color bar (if hydration > 0)
+        if (effectChance > 0.0f && !effectName.isEmpty()) {
+            effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectName));
+            if ((hydrationIconNumber == 0 || effectChance < 1.0f) && effect != null)
+                chanceIconNumber = 5;
         }
     }
 
     public HydrationTooltip(HydrationEnum hydrationEnum) {
-        this(hydrationEnum.getHydration(), (float) hydrationEnum.getSaturation(), (float) hydrationEnum.getDirtiness());
+        this(hydrationEnum.getHydration(), (float) hydrationEnum.getSaturation(), (float) hydrationEnum.getEffectChance(), hydrationEnum.getEffectName());
     }
 
     public String getPlaceholderTooltip() {
@@ -68,7 +75,7 @@ public class HydrationTooltip {
         if (Config.Baked.thirstSaturationDisplayed) {
             saturationBarLength = saturationIconNumber * scale;
         }
-        float dirtyBarLength = dirtyIconNumber * scale;
+        float dirtyBarLength = chanceIconNumber * scale;
 
         int length = (int) Math.ceil(Math.max(thirstBarLength, Math.max(saturationBarLength, dirtyBarLength)));
         StringBuilder placeholder = new StringBuilder(" ");
@@ -108,13 +115,13 @@ public class HydrationTooltip {
         if (this.hydration >= 0) {
             xOffsetTexture = THIRST_TEXTURE_WIDTH;
             // Show the thirst bar dirty if dirty chance 100%
-            if (dirty >= 1.0f) {
+            if (effectChance >= 1.0f) {
                 xOffsetTexture += THIRST_TEXTURE_WIDTH * 3;
             }
         } else {
             xOffsetTexture = THIRST_TEXTURE_WIDTH * 10;
             // Show the thirst bar dirty if dirty chance 100%
-            if (dirty >= 1.0f) {
+            if (effectChance >= 1.0f) {
                 xOffsetTexture += THIRST_TEXTURE_WIDTH * 2;
             }
         }
@@ -145,7 +152,7 @@ public class HydrationTooltip {
         if (this.saturation >= 0) {
             xOffsetTexture = THIRST_TEXTURE_WIDTH * 6;
             // Show the thirst bar dirty if dirty chance 100% -> align saturation color with thirst bar
-            if (dirty >= 1.0f)
+            if (effectChance >= 1.0f)
                 xOffsetTexture += THIRST_TEXTURE_WIDTH * 2;
         } else
             xOffsetTexture = THIRST_TEXTURE_WIDTH * 14;
@@ -163,21 +170,21 @@ public class HydrationTooltip {
         }
 
         // Dirty bar
-        if (dirtyIconNumber > 0) {
+        if (chanceIconNumber > 0) {
             top += 10;
         }
-        left = tooltipX + (dirtyIconNumber - 1) * THIRST_TEXTURE_WIDTH;
+        left = tooltipX + (chanceIconNumber - 1) * THIRST_TEXTURE_WIDTH;
 
         xOffsetTexture = THIRST_TEXTURE_WIDTH * 3;
         // Draw the dirty bubbles
-        for (int i = 0; i < dirtyIconNumber; i++) {
+        for (int i = 0; i < chanceIconNumber; i++) {
             int halfIcon = i * 2 + 1;
             int x = left - i * THIRST_TEXTURE_WIDTH;
             int y = top;
 
-            if (halfIcon < (int) (dirty * 10)) { // Full dirty icon
+            if (halfIcon < (int) (effectChance * 10)) { // Full dirty icon
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture + THIRST_TEXTURE_WIDTH, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
-            } else if (halfIcon == (int) (dirty * 10)) { // Half dirty icon
+            } else if (halfIcon == (int) (effectChance * 10)) { // Half dirty icon
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture + (THIRST_TEXTURE_WIDTH * 2), 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);
             } else {
                 RenderUtil.drawTexturedModelRect(m4f, x, y, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT, xOffsetTexture, 0, THIRST_TEXTURE_WIDTH, THIRST_TEXTURE_HEIGHT);

@@ -1,14 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.core.pattern.NotANumber;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonPropertyTemperature;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBlockFluidTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
@@ -195,13 +192,13 @@ public class BlockModifier extends ModifierBase
 		}
 
 		//  List of combination of a temperature and a list of properties a block must have in order to generate this temperature
-		List<JsonPropertyTemperature> tempPropertyList = JsonConfig.blockTemperatures.get(blockState.getBlock().getRegistryName().toString());
+		List<JsonBlockFluidTemperature> tempPropertyList = JsonConfig.blockFluidTemperatures.get(blockState.getBlock().getRegistryName().toString());
 
 		if (tempPropertyList == null) {
 			return 0.0f;
 		}
 
-		for (JsonPropertyTemperature tempInfo : tempPropertyList) {
+		for (JsonBlockFluidTemperature tempInfo : tempPropertyList) {
 			if (tempInfo == null)
 				continue;
 

@@ -2,6 +2,8 @@ package sfiomn.legendarysurvivaloverhaul.api.thirst;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 
 import javax.annotation.Nullable;
 
@@ -10,7 +12,7 @@ public interface IThirstUtil
 	@Nullable
 	public HydrationEnum traceWater(PlayerEntity player);
 
-	public void takeDrink(PlayerEntity player, int thirst, float saturation, float dirtyChance);
+	public void takeDrink(PlayerEntity player, int thirst, float saturation, float effectChance, String effect);
 
 	public void takeDrink(PlayerEntity player, int thirst, float saturation);
 
@@ -31,4 +33,6 @@ public interface IThirstUtil
 	public int getCapacityTag(final ItemStack stack);
 
 	public void removeCapacityTag(final ItemStack stack);
+
+	public JsonConsumableThirst getThirstConfig(ResourceLocation itemRegistryName, ItemStack itemStack);
 }

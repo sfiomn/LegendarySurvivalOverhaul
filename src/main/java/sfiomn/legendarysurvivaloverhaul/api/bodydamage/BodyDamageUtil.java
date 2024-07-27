@@ -27,11 +27,12 @@ public class BodyDamageUtil
 	 * Apply healing item on player's body limb, defined in its body damage capability. <br>
 	 * @param player player to heal
 	 * @param bodyPart bodyPart enum where healing item is applied
-	 * @param healingItem healing item used
+	 * @param healingValue healing value to be healed over healingTime
+	 * @param healingTime healing time taken to heal healingValue
 	 */
-	public static void applyHealingItem(PlayerEntity player, BodyPartEnum bodyPart, BodyHealingItem healingItem)
+	public static void applyHealingTimeBodyPart(PlayerEntity player, BodyPartEnum bodyPart, float healingValue, int healingTime)
 	{
-		internal.applyHealingItem(player, bodyPart, healingItem);
+		internal.applyHealingTimeBodyPart(player, bodyPart, healingValue, healingTime);
 	}
 
 	/**

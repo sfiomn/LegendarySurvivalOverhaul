@@ -7,8 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
+import net.minecraftforge.registries.ForgeRegistries;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -68,13 +70,14 @@ public class DrinkItem extends Item {
 
         PlayerEntity player = (PlayerEntity) entity;
 
-        JsonThirst jsonThirst = null;
+        JsonConsumableThirst jsonConsumableThirst = null;
         // Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over
+        ResourceLocation registryName = stack.getItem().getRegistryName();
         if (this.getRegistryName() != null)
-            jsonThirst = JsonConfig.consumableThirst.get(this.getRegistryName().toString());
+            jsonConsumableThirst = ThirstUtil.getThirstConfig(registryName, stack);
 
-        if(jsonThirst != null)
-            ThirstUtil.takeDrink(player, jsonThirst.hydration, jsonThirst.saturation, jsonThirst.dirty);
+        if(jsonConsumableThirst != null)
+            ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
 
         runSecondaryEffect(player, stack);
 

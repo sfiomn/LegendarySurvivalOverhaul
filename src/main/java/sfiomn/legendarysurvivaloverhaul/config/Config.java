@@ -59,160 +59,164 @@ public class Config
 	public static class Common
 	{
 		// Core/Advanced
-		// public final ForgeConfigSpec.ConfigValue<Boolean> forceDisableFlightKick;
-		public final ForgeConfigSpec.ConfigValue<Integer> routinePacketSync;
-		public final ForgeConfigSpec.ConfigValue<Boolean> hideInfoFromDebug;
-		public final ForgeConfigSpec.ConfigValue<Double> baseFoodExhaustion;
+		// public final ForgeConfigSpec.BooleanValue forceDisableFlightKick;
+		public final ForgeConfigSpec.IntValue routinePacketSync;
+		public final ForgeConfigSpec.BooleanValue hideInfoFromDebug;
+		public final ForgeConfigSpec.DoubleValue baseFoodExhaustion;
 		
 		// Temperature
-		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureEnabled;
-		public final ForgeConfigSpec.ConfigValue<Integer> tickRate;
-		public final ForgeConfigSpec.ConfigValue<Double> minTemperatureModification;
-		public final ForgeConfigSpec.ConfigValue<Double> maxTemperatureModification;
-		public final ForgeConfigSpec.ConfigValue<Boolean> showPotionEffectParticles;
-		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousTemperature;
-		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureResistanceOnDeathEnabled;
-		public final ForgeConfigSpec.ConfigValue<Integer> temperatureResistanceOnDeathTime;
+		public final ForgeConfigSpec.BooleanValue temperatureEnabled;
+		public final ForgeConfigSpec.IntValue tempTickTime;
+		public final ForgeConfigSpec.DoubleValue minTemperatureModification;
+		public final ForgeConfigSpec.DoubleValue maxTemperatureModification;
+		public final ForgeConfigSpec.BooleanValue showPotionEffectParticles;
+		public final ForgeConfigSpec.BooleanValue dangerousTemperature;
+		public final ForgeConfigSpec.BooleanValue temperatureResistanceOnDeathEnabled;
+		public final ForgeConfigSpec.IntValue temperatureResistanceOnDeathTime;
 
-		public final ForgeConfigSpec.ConfigValue<Boolean> temperatureSecondaryEffects;
-		public final ForgeConfigSpec.ConfigValue<Double> heatThirstEffectModifier;
-		public final ForgeConfigSpec.ConfigValue<Double> coldHungerEffectModifier;
+		public final ForgeConfigSpec.BooleanValue temperatureSecondaryEffects;
+		public final ForgeConfigSpec.DoubleValue heatThirstEffectModifier;
+		public final ForgeConfigSpec.DoubleValue coldHungerEffectModifier;
 		
-		public final ForgeConfigSpec.ConfigValue<Boolean> biomeEffectsEnabled;
-		public final ForgeConfigSpec.ConfigValue<Boolean> biomeDrynessEffectEnabled;
-		public final ForgeConfigSpec.ConfigValue<Double> biomeTemperatureMultiplier;
+		public final ForgeConfigSpec.BooleanValue biomeEffectsEnabled;
+		public final ForgeConfigSpec.BooleanValue biomeDrynessEffectEnabled;
+		public final ForgeConfigSpec.DoubleValue biomeTemperatureMultiplier;
 
-		public final ForgeConfigSpec.ConfigValue<Double> overworldDefaultTemperature;
-		public final ForgeConfigSpec.ConfigValue<Double> netherDefaultTemperature;
-		public final ForgeConfigSpec.ConfigValue<Double> endDefaultTemperature;
+		public final ForgeConfigSpec.DoubleValue overworldDefaultTemperature;
+		public final ForgeConfigSpec.DoubleValue netherDefaultTemperature;
+		public final ForgeConfigSpec.DoubleValue endDefaultTemperature;
 		
-		public final ForgeConfigSpec.ConfigValue<Double> timeModifier;
-		public final ForgeConfigSpec.ConfigValue<Double> biomeTimeMultiplier;
-		public final ForgeConfigSpec.ConfigValue<Integer> shadeTimeModifier;
+		public final ForgeConfigSpec.DoubleValue timeModifier;
+		public final ForgeConfigSpec.DoubleValue biomeTimeMultiplier;
+		public final ForgeConfigSpec.DoubleValue shadeTimeModifier;
 
-		public final ForgeConfigSpec.ConfigValue<Double> altitudeModifier;
-		public final ForgeConfigSpec.ConfigValue<Double> sprintModifier;
-		public final ForgeConfigSpec.ConfigValue<Double> onFireModifier;
-		public final ForgeConfigSpec.ConfigValue<Double> enchantmentMultiplier;
+		public final ForgeConfigSpec.DoubleValue altitudeModifier;
+		public final ForgeConfigSpec.DoubleValue sprintModifier;
+		public final ForgeConfigSpec.DoubleValue onFireModifier;
+		public final ForgeConfigSpec.DoubleValue enchantmentMultiplier;
 		
 		public final ForgeConfigSpec.ConfigValue<String> wetnessMode;
-		public final ForgeConfigSpec.ConfigValue<Double> wetMultiplier;
-		public final ForgeConfigSpec.ConfigValue<Integer> wetnessDecrease;
-		public final ForgeConfigSpec.ConfigValue<Integer> wetnessRainIncrease;
-		public final ForgeConfigSpec.ConfigValue<Integer> wetnessFluidIncrease;
+		public final ForgeConfigSpec.DoubleValue wetMultiplier;
+		public final ForgeConfigSpec.IntValue wetnessDecrease;
+		public final ForgeConfigSpec.IntValue wetnessRainIncrease;
+		public final ForgeConfigSpec.IntValue wetnessFluidIncrease;
 
-		public final ForgeConfigSpec.ConfigValue<Integer> tempInfluenceMaximumDist;
-		public final ForgeConfigSpec.ConfigValue<Double> tempInfluenceUpDistMultiplier;
-		public final ForgeConfigSpec.ConfigValue<Double> tempInfluenceOutsideDistMultiplier;
+		public final ForgeConfigSpec.IntValue tempInfluenceMaximumDist;
+		public final ForgeConfigSpec.DoubleValue tempInfluenceUpDistMultiplier;
+		public final ForgeConfigSpec.DoubleValue tempInfluenceOutsideDistMultiplier;
 
-		public final ForgeConfigSpec.ConfigValue<Double> rainTemperatureModifier;
-		public final ForgeConfigSpec.ConfigValue<Double> snowTemperatureModifier;
+		public final ForgeConfigSpec.DoubleValue rainTemperatureModifier;
+		public final ForgeConfigSpec.DoubleValue snowTemperatureModifier;
 
-		public final ForgeConfigSpec.ConfigValue<Double> playerHuddlingModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> playerHuddlingRadius;
+		public final ForgeConfigSpec.DoubleValue playerHuddlingModifier;
+		public final ForgeConfigSpec.IntValue playerHuddlingRadius;
 
-		public final ForgeConfigSpec.ConfigValue<Double> heatingCoat1Modifier;
-		public final ForgeConfigSpec.ConfigValue<Double> heatingCoat2Modifier;
-		public final ForgeConfigSpec.ConfigValue<Double> heatingCoat3Modifier;
+		public final ForgeConfigSpec.DoubleValue heatingCoat1Modifier;
+		public final ForgeConfigSpec.DoubleValue heatingCoat2Modifier;
+		public final ForgeConfigSpec.DoubleValue heatingCoat3Modifier;
 
-		public final ForgeConfigSpec.ConfigValue<Double> coolingCoat1Modifier;
-		public final ForgeConfigSpec.ConfigValue<Double> coolingCoat2Modifier;
-		public final ForgeConfigSpec.ConfigValue<Double> coolingCoat3Modifier;
+		public final ForgeConfigSpec.DoubleValue coolingCoat1Modifier;
+		public final ForgeConfigSpec.DoubleValue coolingCoat2Modifier;
+		public final ForgeConfigSpec.DoubleValue coolingCoat3Modifier;
 
-		public final ForgeConfigSpec.ConfigValue<Double> thermalCoat1Modifier;
-		public final ForgeConfigSpec.ConfigValue<Double> thermalCoat2Modifier;
-		public final ForgeConfigSpec.ConfigValue<Double> thermalCoat3Modifier;
+		public final ForgeConfigSpec.DoubleValue thermalCoat1Modifier;
+		public final ForgeConfigSpec.DoubleValue thermalCoat2Modifier;
+		public final ForgeConfigSpec.DoubleValue thermalCoat3Modifier;
 		
-		public final ForgeConfigSpec.ConfigValue<Boolean> seasonTemperatureEffects;
-		public final ForgeConfigSpec.ConfigValue<Boolean> tropicalSeasonsEnabled;
-		public final ForgeConfigSpec.ConfigValue<Boolean> seasonCardsEnabled;
-		public final ForgeConfigSpec.ConfigValue<Boolean> defaultSeasonEnabled;
+		public final ForgeConfigSpec.BooleanValue seasonTemperatureEffects;
+		public final ForgeConfigSpec.BooleanValue tropicalSeasonsEnabled;
+		public final ForgeConfigSpec.BooleanValue seasonCardsEnabled;
+		public final ForgeConfigSpec.BooleanValue defaultSeasonEnabled;
 		
-		public final ForgeConfigSpec.ConfigValue<Integer> earlySpringModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> midSpringModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> lateSpringModifier;
+		public final ForgeConfigSpec.DoubleValue earlySpringModifier;
+		public final ForgeConfigSpec.DoubleValue midSpringModifier;
+		public final ForgeConfigSpec.DoubleValue lateSpringModifier;
 		
-		public final ForgeConfigSpec.ConfigValue<Integer> earlySummerModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> midSummerModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> lateSummerModifier;
+		public final ForgeConfigSpec.DoubleValue earlySummerModifier;
+		public final ForgeConfigSpec.DoubleValue midSummerModifier;
+		public final ForgeConfigSpec.DoubleValue lateSummerModifier;
 		
-		public final ForgeConfigSpec.ConfigValue<Integer> earlyAutumnModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> midAutumnModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> lateAutumnModifier;
+		public final ForgeConfigSpec.DoubleValue earlyAutumnModifier;
+		public final ForgeConfigSpec.DoubleValue midAutumnModifier;
+		public final ForgeConfigSpec.DoubleValue lateAutumnModifier;
 		
-		public final ForgeConfigSpec.ConfigValue<Integer> earlyWinterModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> midWinterModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> lateWinterModifier;
+		public final ForgeConfigSpec.DoubleValue earlyWinterModifier;
+		public final ForgeConfigSpec.DoubleValue midWinterModifier;
+		public final ForgeConfigSpec.DoubleValue lateWinterModifier;
 		
-		public final ForgeConfigSpec.ConfigValue<Integer> earlyWetSeasonModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> midWetSeasonModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> lateWetSeasonModifier;
+		public final ForgeConfigSpec.DoubleValue earlyWetSeasonModifier;
+		public final ForgeConfigSpec.DoubleValue midWetSeasonModifier;
+		public final ForgeConfigSpec.DoubleValue lateWetSeasonModifier;
 		
-		public final ForgeConfigSpec.ConfigValue<Integer> earlyDrySeasonModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> midDrySeasonModifier;
-		public final ForgeConfigSpec.ConfigValue<Integer> lateDrySeasonModifier;
+		public final ForgeConfigSpec.DoubleValue earlyDrySeasonModifier;
+		public final ForgeConfigSpec.DoubleValue midDrySeasonModifier;
+		public final ForgeConfigSpec.DoubleValue lateDrySeasonModifier;
 
 		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeNames;
 		public final ForgeConfigSpec.ConfigValue<List<String>> sunFernBiomeCategories;
-		public final ForgeConfigSpec.ConfigValue<Integer> sunFernSpawnChance;
+		public final ForgeConfigSpec.IntValue sunFernSpawnChance;
 		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeNames;
 		public final ForgeConfigSpec.ConfigValue<List<String>> iceFernBiomeCategories;
-		public final ForgeConfigSpec.ConfigValue<Integer> iceFernSpawnChance;
+		public final ForgeConfigSpec.IntValue iceFernSpawnChance;
 		public final ForgeConfigSpec.ConfigValue<List<String>> waterPlantBiomeNames;
 		public final ForgeConfigSpec.ConfigValue<List<String>> waterPlantBiomeCategories;
-		public final ForgeConfigSpec.ConfigValue<Integer> waterPlantSpawnChance;
+		public final ForgeConfigSpec.IntValue waterPlantSpawnChance;
 
 		// Thirst
-		public final ForgeConfigSpec.ConfigValue<Boolean> thirstEnabled;
-		public final ForgeConfigSpec.ConfigValue<Boolean> dangerousDehydration;
-		public final ForgeConfigSpec.ConfigValue<Double> dehydrationDamageScaling;
-		public final ForgeConfigSpec.ConfigValue<Double> thirstEffectModifier;
-		public final ForgeConfigSpec.ConfigValue<Double> baseThirstExhaustion;
-		public final ForgeConfigSpec.ConfigValue<Double> sprintingThirstExhaustion;
-		public final ForgeConfigSpec.ConfigValue<Double> onJumpThirstExhaustion;
-		public final ForgeConfigSpec.ConfigValue<Double> onBlockBreakThirstExhaustion;
-		public final ForgeConfigSpec.ConfigValue<Double> onAttackThirstExhaustion;
-		public final ForgeConfigSpec.ConfigValue<Integer> canteenCapacity;
-		public final ForgeConfigSpec.ConfigValue<Integer> largeCanteenCapacity;
-		public final ForgeConfigSpec.ConfigValue<Boolean> allowOverridePurifiedWater;
-		public final ForgeConfigSpec.ConfigValue<Boolean> drinkFromRain;
-		public final ForgeConfigSpec.ConfigValue<Integer> hydrationRain;
-		public final ForgeConfigSpec.ConfigValue<Double> saturationRain;
-		public final ForgeConfigSpec.ConfigValue<Double> dirtyRain;
-		public final ForgeConfigSpec.ConfigValue<Boolean> drinkFromWater;
-		public final ForgeConfigSpec.ConfigValue<Integer> hydrationWater;
-		public final ForgeConfigSpec.ConfigValue<Double> saturationWater;
-		public final ForgeConfigSpec.ConfigValue<Double> dirtyWater;
-		public final ForgeConfigSpec.ConfigValue<Integer> hydrationPotion;
-		public final ForgeConfigSpec.ConfigValue<Double> saturationPotion;
-		public final ForgeConfigSpec.ConfigValue<Double> dirtyPotion;
-		public final ForgeConfigSpec.ConfigValue<Integer> hydrationPurified;
-		public final ForgeConfigSpec.ConfigValue<Double> saturationPurified;
-		public final ForgeConfigSpec.ConfigValue<Double> dirtyPurified;
-		public final ForgeConfigSpec.ConfigValue<Boolean> glassBottleLootAfterDrink;
+		public final ForgeConfigSpec.BooleanValue thirstEnabled;
+		public final ForgeConfigSpec.BooleanValue dangerousDehydration;
+		public final ForgeConfigSpec.DoubleValue dehydrationDamageScaling;
+		public final ForgeConfigSpec.DoubleValue thirstEffectModifier;
+		public final ForgeConfigSpec.DoubleValue baseThirstExhaustion;
+		public final ForgeConfigSpec.DoubleValue sprintingThirstExhaustion;
+		public final ForgeConfigSpec.DoubleValue onJumpThirstExhaustion;
+		public final ForgeConfigSpec.DoubleValue onBlockBreakThirstExhaustion;
+		public final ForgeConfigSpec.DoubleValue onAttackThirstExhaustion;
+		public final ForgeConfigSpec.IntValue canteenCapacity;
+		public final ForgeConfigSpec.IntValue largeCanteenCapacity;
+		public final ForgeConfigSpec.BooleanValue allowOverridePurifiedWater;
+		public final ForgeConfigSpec.BooleanValue drinkFromRain;
+		public final ForgeConfigSpec.IntValue hydrationRain;
+		public final ForgeConfigSpec.DoubleValue saturationRain;
+		public final ForgeConfigSpec.DoubleValue effectChanceRain;
+		public final ForgeConfigSpec.ConfigValue<String> effectRain;
+		public final ForgeConfigSpec.BooleanValue drinkFromWater;
+		public final ForgeConfigSpec.IntValue hydrationWater;
+		public final ForgeConfigSpec.DoubleValue saturationWater;
+		public final ForgeConfigSpec.DoubleValue effectChanceWater;
+		public final ForgeConfigSpec.ConfigValue<String> effectWater;
+		public final ForgeConfigSpec.IntValue hydrationPotion;
+		public final ForgeConfigSpec.DoubleValue saturationPotion;
+		public final ForgeConfigSpec.DoubleValue effectChancePotion;
+		public final ForgeConfigSpec.ConfigValue<String> effectPotion;
+		public final ForgeConfigSpec.IntValue hydrationPurified;
+		public final ForgeConfigSpec.DoubleValue saturationPurified;
+		public final ForgeConfigSpec.DoubleValue effectChancePurified;
+		public final ForgeConfigSpec.ConfigValue<String> effectPurified;
+		public final ForgeConfigSpec.BooleanValue glassBottleLootAfterDrink;
 
 		// Heart Fruits
-		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsEnabled;
+		public final ForgeConfigSpec.BooleanValue heartFruitsEnabled;
 		
-		public final ForgeConfigSpec.ConfigValue<Integer> heartsLostOnDeath;
-		public final ForgeConfigSpec.ConfigValue<Integer> maxAdditionalHearts;
+		public final ForgeConfigSpec.IntValue heartsLostOnDeath;
+		public final ForgeConfigSpec.IntValue maxAdditionalHearts;
 		
-		public final ForgeConfigSpec.ConfigValue<Integer> additionalHeartsPerFruit;
-		public final ForgeConfigSpec.ConfigValue<Boolean> heartFruitsGiveRegen;
+		public final ForgeConfigSpec.IntValue additionalHeartsPerFruit;
+		public final ForgeConfigSpec.BooleanValue heartFruitsGiveRegen;
 
 		// Localized Body Damage
-		public final ForgeConfigSpec.ConfigValue<Boolean> localizedBodyDamageEnabled;
-		public final ForgeConfigSpec.ConfigValue<Double> headCriticalShotMultiplier;
-		public final ForgeConfigSpec.ConfigValue<Double> bodyDamageMultiplier;
-		public final ForgeConfigSpec.ConfigValue<Double> bodyHealthRatioRecoveredFromSleep;
-		public final ForgeConfigSpec.ConfigValue<Double> healthRatioRecoveredFromSleep;
+		public final ForgeConfigSpec.BooleanValue localizedBodyDamageEnabled;
+		public final ForgeConfigSpec.DoubleValue headCriticalShotMultiplier;
+		public final ForgeConfigSpec.DoubleValue bodyDamageMultiplier;
+		public final ForgeConfigSpec.DoubleValue bodyHealthRatioRecoveredFromSleep;
+		public final ForgeConfigSpec.DoubleValue healthRatioRecoveredFromSleep;
 
 		public final ForgeConfigSpec.ConfigValue<String> bodyPartHealthMode;
-		public final ForgeConfigSpec.ConfigValue<Double> headPartHealth;
-		public final ForgeConfigSpec.ConfigValue<Double> armsPartHealth;
-		public final ForgeConfigSpec.ConfigValue<Double> chestPartHealth;
-		public final ForgeConfigSpec.ConfigValue<Double> legsPartHealth;
-		public final ForgeConfigSpec.ConfigValue<Double> feetPartHealth;
+		public final ForgeConfigSpec.DoubleValue headPartHealth;
+		public final ForgeConfigSpec.DoubleValue armsPartHealth;
+		public final ForgeConfigSpec.DoubleValue chestPartHealth;
+		public final ForgeConfigSpec.DoubleValue legsPartHealth;
+		public final ForgeConfigSpec.DoubleValue feetPartHealth;
 
 		public final ForgeConfigSpec.ConfigValue<List<String>> headPartEffects;
 		public final ForgeConfigSpec.ConfigValue<List<Integer>> headPartEffectAmplifiers;
@@ -243,24 +247,11 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<List<Integer>> bothFeetPartEffectAmplifiers;
 		public final ForgeConfigSpec.ConfigValue<List<Float>> bothFeetPartEffectThresholds;
 
-		public final ForgeConfigSpec.ConfigValue<Double> healingHerbsHealingValue;
-		public final ForgeConfigSpec.ConfigValue<Integer> healingHerbsHealingTime;
-		public final ForgeConfigSpec.ConfigValue<Integer> healingHerbsUseTime;
-		public final ForgeConfigSpec.ConfigValue<Integer> healingHerbsHealingCharges;
-		public final ForgeConfigSpec.ConfigValue<Double> plasterHealingValue;
-		public final ForgeConfigSpec.ConfigValue<Integer> plasterHealingTime;
-		public final ForgeConfigSpec.ConfigValue<Integer> plasterUseTime;
-		public final ForgeConfigSpec.ConfigValue<Integer> plasterHealingCharges;
-		public final ForgeConfigSpec.ConfigValue<Double> bandageHealingValue;
-		public final ForgeConfigSpec.ConfigValue<Integer> bandageHealingTime;
-		public final ForgeConfigSpec.ConfigValue<Integer> bandageUseTime;
-		public final ForgeConfigSpec.ConfigValue<Integer> bandageHealingCharges;
-		public final ForgeConfigSpec.ConfigValue<Double> tonicHealingValue;
-		public final ForgeConfigSpec.ConfigValue<Integer> tonicHealingTime;
-		public final ForgeConfigSpec.ConfigValue<Integer> tonicUseTime;
-		public final ForgeConfigSpec.ConfigValue<Double> medikitHealingValue;
-		public final ForgeConfigSpec.ConfigValue<Integer> medikitHealingTime;
-		public final ForgeConfigSpec.ConfigValue<Integer> medikitUseTime;
+		public final ForgeConfigSpec.IntValue healingHerbsUseTime;
+		public final ForgeConfigSpec.IntValue plasterUseTime;
+		public final ForgeConfigSpec.IntValue bandageUseTime;
+		public final ForgeConfigSpec.IntValue tonicUseTime;
+		public final ForgeConfigSpec.IntValue medikitUseTime;
 		
 		Common(ForgeConfigSpec.Builder builder)
 		{
@@ -329,17 +320,17 @@ public class Config
 
 			onFireModifier = builder
 					.comment(" How much of an effect being on fire has on a player's temperature.")
-					.define("Player On Fire Modifier", 12.5d);
+					.defineInRange("Player On Fire Modifier", 12.5d, -1000, 1000);
 			sprintModifier = builder
 					.comment(" How much of an effect sprinting has on a player's temperature.")
-					.define("Player Sprint Modifier", 1.5d);
+					.defineInRange("Player Sprint Modifier", 1.5d, -1000, 1000);
 			altitudeModifier = builder
 					.comment(" How much the effects of the player's altitude on temperature are multiplied starting at Y 64.",
 							" Each 64 blocks further from Y 64 will reduce player's temperature by this value.")
-					.define("Altitude Modifier", -3.0d);
+					.defineInRange("Altitude Modifier", -3.0d, -1000, 1000);
 			enchantmentMultiplier = builder
 					.comment(" Increases/decreases the effect that cooling/heating enchantments have on a player's temperature.")
-					.define("Enchantment Modifier", 1.0d);
+					.defineInRange("Enchantment Modifier", 1.0d, -1000, 1000);
 			showPotionEffectParticles = builder
 					.comment(" If enabled, players will see particles on them when temperature resistance effect active.",
 							" If disabled, players won't see particles but the potion color will turn black due to forge weird behavior.")
@@ -356,7 +347,7 @@ public class Config
 			
 			wetMultiplier = builder
 					.comment(" How much being wet influences the player's temperature.")
-					.define("Wetness Modifier", -10.0d);
+					.defineInRange("Wetness Modifier", -10.0d, -1000, 1000);
 
 			wetnessDecrease = builder
 					.comment(" How much the wetness decrease when out of water, in case of dynamic wetness.")
@@ -372,15 +363,15 @@ public class Config
 
 			builder.comment(" Default temperature added to the player, based on the dimension.")
 					.push("dimension-default");
-			overworldDefaultTemperature = builder.define( "Default Overworld Modifier", 20.0d);
-			netherDefaultTemperature = builder.define( "Default Nether Modifier", 30.0d);
-			endDefaultTemperature = builder.define( "Default The End Modifier", 5.0d);
+			overworldDefaultTemperature = builder.defineInRange( "Default Overworld Modifier", 20.0d, -1000, 1000);
+			netherDefaultTemperature = builder.defineInRange( "Default Nether Modifier", 30.0d, -1000, 1000);
+			endDefaultTemperature = builder.defineInRange( "Default The End Modifier", 5.0d, -1000, 1000);
 			builder.pop();
 			
 			builder.push("huddling");
 			playerHuddlingModifier = builder
 					.comment(" How much nearby players increase the ambient temperature by.", " Note that this value stacks!")
-					.define("Player Huddling Modifier", 0.5d);
+					.defineInRange("Player Huddling Modifier", 0.5d, -1000, 1000);
 			playerHuddlingRadius = builder
 					.comment(" The radius, in blocks, around which players will add to each other's temperature.")
 					.defineInRange("Player Huddling Radius", 1, 0, 10);
@@ -401,10 +392,10 @@ public class Config
 			builder.push("weather");
 			rainTemperatureModifier = builder
 					.comment(" How much of an effect rain has on temperature.")
-					.define("Rain Temperature Modifier", -2.0d);
+					.defineInRange("Rain Temperature Modifier", -2.0d, -1000, 1000);
 			snowTemperatureModifier = builder
 					.comment(" How much of an effect snow has on temperature.")
-					.define("Snow Temperature Modifier", -6.0d);
+					.defineInRange("Snow Temperature Modifier", -6.0d, -1000, 1000);
 			builder.pop();
 			
 			builder.push("time");
@@ -419,7 +410,7 @@ public class Config
 			shadeTimeModifier = builder
 					.comment(" Staying in the shade or during cloudy weather will reduce player's temperature by this amount based on time of the day (maximum effect at noon, following sinusoidal).",
 							" Only effective in hot biomes and during day time!")
-					.define("Shade Time Modifier", -6);
+					.defineInRange("Shade Time Modifier", -6.0d, -1000, 1000);
 			builder.pop();
 
 			builder.comment(" Temperature coat adds temperature effects on armors by using the sewing table.",
@@ -460,18 +451,18 @@ public class Config
 							" The outside maximum distance is defined as the maximum distance * this value")
 					.defineInRange("Temperature Influence Outside Distance Multiplier", 0.5, 0.0, 1.0);
 			builder
-					.comment(" The player's temperature will be adjusted at each temperature tick rate," ,
+					.comment(" The player's temperature will be adjusted at each temperature tick time," ,
 							" by an amount of temperature defined between the minimum and the maximum temperature modification adjusted linearly.")
 					.push("temperature-modification");
-			tickRate = builder
-					.comment(" Amount of time in ticks between 2 player temperature modification.")
-					.defineInRange("Temperature Tick Rate", 10, 5, Integer.MAX_VALUE);
+			tempTickTime = builder
+					.comment(" Amount of time in ticks between 2 player temperature modification. The bigger, the slower the temperature adjustments will occur.")
+					.defineInRange("Temperature Tick Time", 10, 5, Integer.MAX_VALUE);
 			maxTemperatureModification = builder
-					.comment(" Maximum amount of temperature the player's temperature can be modified at each temperature tick rate.",
+					.comment(" Maximum amount of temperature the player's temperature can be modified at each temperature tick time.",
 							" Correspond to the amount of temperature given when temperature difference is maximum.")
 					.defineInRange("Maximum Temperature Modification", 2, 0.1, Integer.MAX_VALUE);
 			minTemperatureModification = builder
-					.comment(" Minimum amount of temperature the player's temperature can be modified at each temperature tick rate.",
+					.comment(" Minimum amount of temperature the player's temperature can be modified at each temperature tick time.",
 							" Correspond to the amount of temperature given when there is no temperature difference")
 					.defineInRange("Minimum Temperature Modification", 0.2, 0.1, Integer.MAX_VALUE);
 			builder.pop();
@@ -499,41 +490,41 @@ public class Config
 					" The value is reached at the middle of the sub season, and smoothly transition from one to another.")
 					.push("temperate");
 			builder.push("spring");
-			earlySpringModifier = builder.define("Early Spring Modifier", -3);
-			midSpringModifier = builder.define("Mid Spring Modifier", 0);
-			lateSpringModifier = builder.define("Late Spring Modifier", 3);
+			earlySpringModifier = builder.defineInRange("Early Spring Modifier", -3.0d, -1000, 1000);
+			midSpringModifier = builder.defineInRange("Mid Spring Modifier", 0.0d, -1000, 1000);
+			lateSpringModifier = builder.defineInRange("Late Spring Modifier", 3.0d, -1000, 1000);
 			builder.pop();
 			
 			builder.push("summer");
-			earlySummerModifier = builder.define("Early Summer Modifier", 5);
-			midSummerModifier = builder.define("Mid Summer Modifier", 8);
-			lateSummerModifier = builder.define("Late Summer Modifier", 5);
+			earlySummerModifier = builder.defineInRange("Early Summer Modifier", 5.0d, -1000, 1000);
+			midSummerModifier = builder.defineInRange("Mid Summer Modifier", 8.0d, -1000, 1000);
+			lateSummerModifier = builder.defineInRange("Late Summer Modifier", 5.0d, -1000, 1000);
 			builder.pop();
 			
 			builder.push("autumn");
-			earlyAutumnModifier = builder.define("Early Autumn Modifier", 3);
-			midAutumnModifier = builder.define("Mid Autumn Modifier", 0);
-			lateAutumnModifier = builder.define("Late Autumn Modifier", -3);
+			earlyAutumnModifier = builder.defineInRange("Early Autumn Modifier", 3.0d, -1000, 1000);
+			midAutumnModifier = builder.defineInRange("Mid Autumn Modifier", 0.0d, -1000, 1000);
+			lateAutumnModifier = builder.defineInRange("Late Autumn Modifier", -3.0d, -1000, 1000);
 			builder.pop();
 			
 			builder.push("winter");
-			earlyWinterModifier = builder.define("Early Winter Modifier", -7);
-			midWinterModifier = builder.define("Mid Winter Modifier", -12);
-			lateWinterModifier = builder.define("Late Winter Modifier", -7);
+			earlyWinterModifier = builder.defineInRange("Early Winter Modifier", -7.0d, -1000, 1000);
+			midWinterModifier = builder.defineInRange("Mid Winter Modifier", -12.0d, -1000, 1000);
+			lateWinterModifier = builder.defineInRange("Late Winter Modifier", -7.0d, -1000, 1000);
 			builder.pop();
 			builder.pop();
 			
 			builder.comment(" Temperature modifiers per season in tropical biomes.").push("tropical");
 			builder.push("wet-season");
-			earlyWetSeasonModifier = builder.define("Early Wet Season Modifier", -1);
-			midWetSeasonModifier = builder.define("Mid Wet Season Modifier", -5);
-			lateWetSeasonModifier = builder.define("Late Wet Season Modifier", -1);
+			earlyWetSeasonModifier = builder.defineInRange("Early Wet Season Modifier", -1.0d, -1000, 1000);
+			midWetSeasonModifier = builder.defineInRange("Mid Wet Season Modifier", -5.0d, -1000, 1000);
+			lateWetSeasonModifier = builder.defineInRange("Late Wet Season Modifier", -1.0d, -1000, 1000);
 			builder.pop();
 			
 			builder.push("dry-season");
-			earlyDrySeasonModifier = builder.define("Early Dry Season Modifier", 3);
-			midDrySeasonModifier = builder.define("Mid Dry Season Modifier", 7);
-			lateDrySeasonModifier = builder.define("Late Dry Season Modifier", 3);
+			earlyDrySeasonModifier = builder.defineInRange("Early Dry Season Modifier", 3.0d, -1000, 1000);
+			midDrySeasonModifier = builder.defineInRange("Mid Dry Season Modifier", 7.0d, -1000, 1000);
+			lateDrySeasonModifier = builder.defineInRange("Late Dry Season Modifier", 3.0d, -1000, 1000);
 			builder.pop();
 			builder.pop();
 
@@ -615,9 +606,12 @@ public class Config
 			saturationRain = builder
 					.comment(" Amount of saturation recovered when drinking from the rain.")
 					.defineInRange("Saturation", 0, 0, 20.0d);
-			dirtyRain = builder
-					.comment(" Chance of getting a thirst effect while drinking from the rain.")
-					.defineInRange("Dirty", 0, 0, 1.0d);
+			effectChanceRain = builder
+					.comment(" Chance of getting an effect while drinking from the rain.")
+					.defineInRange("Effect Chance", 0, 0, 1.0d);
+			effectRain = builder
+					.comment(" Possible effect given while drinking from the rain.")
+					.define("Effect", "");
 			builder.pop();
 			builder.push("water");
 			drinkFromWater = builder
@@ -629,9 +623,12 @@ public class Config
 			saturationWater = builder
 					.comment(" Amount of saturation recovered while drinking water.")
 					.defineInRange("Saturation", 0, 0, 20.0d);
-			dirtyWater = builder
-					.comment(" Chance of getting a thirst effect while drinking water.")
-					.defineInRange("Dirty", 0.75d, 0, 1.0d);
+			effectChanceWater = builder
+					.comment(" Chance of getting an effect while drinking water.")
+					.defineInRange("Effect Chance", 0.75d, 0, 1.0d);
+			effectWater = builder
+					.comment(" Possible effect given while drinking water.")
+					.define("Effect", LegendarySurvivalOverhaul.MOD_ID + ":thirst");
 			builder.pop();
 			builder.comment(" Amount recovered by potions with effects").push("potion");
 			hydrationPotion = builder
@@ -640,9 +637,12 @@ public class Config
 			saturationPotion = builder
 					.comment(" Amount of saturation recovered while drinking a potion.")
 					.defineInRange("Saturation", 0.3d, 0, 20.0d);
-			dirtyPotion = builder
-					.comment(" Chance of getting a thirst effect while drinking a potion.")
-					.defineInRange("Dirty", 0, 0, 1.0d);
+			effectChancePotion = builder
+					.comment(" Chance of getting an effect while drinking a potion.")
+					.defineInRange("Effect Chance", 0, 0, 1.0d);
+			effectPotion = builder
+					.comment(" Possible effect given while drinking a potion.")
+					.define("Effect", "");
 			builder.pop();
 			builder.push("purified-water");
 			hydrationPurified = builder
@@ -651,9 +651,12 @@ public class Config
 			saturationPurified = builder
 					.comment(" Amount of saturation recovered while drinking purified water.")
 					.defineInRange("Saturation", 1.5d, 0, 20.0d);
-			dirtyPurified = builder
-					.comment(" Chance of getting a thirst effect while drinking purified water.")
-					.defineInRange("Dirty", 0, 0, 1.0d);
+			effectChancePurified = builder
+					.comment(" Chance of getting an effect while drinking purified water.")
+					.defineInRange("Effect Chance", 0, 0, 1.0d);
+			effectPurified = builder
+					.comment(" Possible effect given while drinking purified water.")
+					.define("Effect", "");
 			builder.pop();
 			builder.push("juices");
 			glassBottleLootAfterDrink = builder
@@ -701,52 +704,23 @@ public class Config
 			builder.push("healing-items");
 
 			builder.push("healing-herbs");
-			healingHerbsHealingValue = builder
-					.comment(" Total Healing Value recovered during the healing time.")
-					.defineInRange("Healing Herbs Healing Value", 2.0d, 0.0d, 1000.0d);
-			healingHerbsHealingTime = builder
-					.comment(" Healing Time in ticks along which the body part recovers its health.")
-					.defineInRange("Healing Herbs Healing Time", 600, 0, 1000);
 			healingHerbsUseTime = builder
 					.comment(" Item use time is ticks.")
 					.defineInRange("Healing Herbs Use Time", 20, 0, 1000);
-			healingHerbsHealingCharges = builder
-					.comment(" Healing Charges, each charge used when selecting a body part to heal.")
-					.defineInRange("Healing Herbs Healing Charges", 1, 0, 1000);
 			builder.pop();
 			builder.push("plaster");
-			plasterHealingValue = builder
-					.defineInRange("Plaster Healing Value", 3.0d, 0.0d, 1000.0d);
-			plasterHealingTime = builder
-					.defineInRange("Plaster Healing Time", 400, 0, 1000);
 			plasterUseTime = builder
 					.defineInRange("Plaster Use Time", 20, 0, 1000);
-			plasterHealingCharges = builder
-					.defineInRange("Plaster Healing Charges", 1, 0, 1000);
 			builder.pop();
 			builder.push("bandage");
-			bandageHealingValue = builder
-					.defineInRange("Bandage Healing Value", 3.0d, 0.0d, 1000.0d);
-			bandageHealingTime = builder
-					.defineInRange("Bandage Healing Time", 300, 0, 1000);
 			bandageUseTime = builder
 					.defineInRange("Bandage Use Time", 30, 0, 1000);
-			bandageHealingCharges = builder
-					.defineInRange("Bandage Healing Charges", 3, 0, 1000);
 			builder.pop();
 			builder.comment(" Tonic heals all body parts.").push("tonic");
-			tonicHealingValue = builder
-					.defineInRange("Tonic Healing Value", 5.0d, 0.0d, 1000.0d);
-			tonicHealingTime = builder
-					.defineInRange("Tonic Healing Time", 600, 0, 1000);
 			tonicUseTime = builder
 					.defineInRange("Tonic Use Time", 50, 0, 1000);
 			builder.pop();
 			builder.comment(" Medikit heals all body parts.").push("medikit");
-			medikitHealingValue = builder
-					.defineInRange("Medikit Healing Value", 8.0d, 0.0d, 1000.0d);
-			medikitHealingTime = builder
-					.defineInRange("Medikit Healing Time", 400, 0, 1000);
 			medikitUseTime = builder
 					.defineInRange("Medikit Use Time", 50, 0, 1000);
 			builder.pop();
@@ -829,29 +803,29 @@ public class Config
 	
 	public static class Client
 	{
-		public final ForgeConfigSpec.ConfigValue<Boolean> showVanillaAnimationOverlay;
+		public final ForgeConfigSpec.BooleanValue showVanillaAnimationOverlay;
 		public final ForgeConfigSpec.ConfigValue<String> temperatureDisplayMode;
-		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetX;
-		public final ForgeConfigSpec.ConfigValue<Integer> temperatureDisplayOffsetY;
-		public final ForgeConfigSpec.ConfigValue<Boolean> foodSaturationDisplayed;
+		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetX;
+		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetY;
+		public final ForgeConfigSpec.BooleanValue foodSaturationDisplayed;
 		
-		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetX;
-		public final ForgeConfigSpec.ConfigValue<Integer> wetnessIndicatorOffsetY;
+		public final ForgeConfigSpec.IntValue wetnessIndicatorOffsetX;
+		public final ForgeConfigSpec.IntValue wetnessIndicatorOffsetY;
 
-		public final ForgeConfigSpec.ConfigValue<Integer> bodyDamageIndicatorOffsetX;
-		public final ForgeConfigSpec.ConfigValue<Integer> bodyDamageIndicatorOffsetY;
-		public final ForgeConfigSpec.ConfigValue<Boolean> alwaysShowBodyDamageIndicator;
+		public final ForgeConfigSpec.IntValue bodyDamageIndicatorOffsetX;
+		public final ForgeConfigSpec.IntValue bodyDamageIndicatorOffsetY;
+		public final ForgeConfigSpec.BooleanValue alwaysShowBodyDamageIndicator;
 
-		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsOffsetX;
-		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsOffsetY;
-		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsSpawnDimensionDelayInTicks;
-		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsDisplayTimeInTicks;
-		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsFadeInInTicks;
-		public final ForgeConfigSpec.ConfigValue<Integer> seasonCardsFadeOutInTicks;
+		public final ForgeConfigSpec.IntValue seasonCardsOffsetX;
+		public final ForgeConfigSpec.IntValue seasonCardsOffsetY;
+		public final ForgeConfigSpec.IntValue seasonCardsSpawnDimensionDelayInTicks;
+		public final ForgeConfigSpec.IntValue seasonCardsDisplayTimeInTicks;
+		public final ForgeConfigSpec.IntValue seasonCardsFadeInInTicks;
+		public final ForgeConfigSpec.IntValue seasonCardsFadeOutInTicks;
 
-		public final ForgeConfigSpec.ConfigValue<Boolean> showHydrationTooltip;
-		public final ForgeConfigSpec.ConfigValue<Boolean> mergeHydrationAndSaturationTooltip;
-		public final ForgeConfigSpec.ConfigValue<Boolean> thirstSaturationDisplayed;
+		public final ForgeConfigSpec.BooleanValue showHydrationTooltip;
+		public final ForgeConfigSpec.BooleanValue mergeHydrationAndSaturationTooltip;
+		public final ForgeConfigSpec.BooleanValue thirstSaturationDisplayed;
 
 		Client(ForgeConfigSpec.Builder builder)
 		{
@@ -876,18 +850,18 @@ public class Config
 					.define("Temperature Display Mode", "SYMBOL");
 			temperatureDisplayOffsetX = builder
 					.comment(" The X and Y offset of the temperature indicator. Set both to 0 for no offset.")
-					.define("Temperature Display X Offset", 0);
+					.defineInRange("Temperature Display X Offset", 0, -1000, 1000);
 			temperatureDisplayOffsetY = builder
-					.define("Temperature Display Y Offset", 0);
+					.defineInRange("Temperature Display Y Offset", 0, -1000, 1000);
 			foodSaturationDisplayed = builder
 					.comment(" If enabled, the food saturation will be rendered on the Food Bar while the player suffers Cold Hunger Effect (secondary temperature effect).")
 					.define("Show Food Saturation Bar", true);
 			builder.push("wetness");
 			wetnessIndicatorOffsetX = builder
 					.comment(" The X and Y offset of the wetness indicator. Set both to 0 for no offset.")
-					.define("Wetness Indicator X Offset", 0);
+					.defineInRange("Wetness Indicator X Offset", 0, -1000, 1000);
 			wetnessIndicatorOffsetY = builder
-					.define("Wetness Indicator Y Offset", 0);
+					.defineInRange("Wetness Indicator Y Offset", 0, -1000, 1000);
 			builder.pop();
 			builder.pop();
 
@@ -896,8 +870,9 @@ public class Config
 			builder.push("body-damage");
 			bodyDamageIndicatorOffsetX = builder
 					.comment(" The X and Y offset of the body damage indicator. Set both to 0 for no offset.", " By default, render next to the inventory bar.")
-					.define("Body Damage Indicator X Offset", 0);
-			bodyDamageIndicatorOffsetY = builder.define("Body Damage Indicator Y Offset", 0);
+					.defineInRange("Body Damage Indicator X Offset", 0, -1000, 1000);
+			bodyDamageIndicatorOffsetY = builder
+					.defineInRange("Body Damage Indicator Y Offset", 0, -1000, 1000);
 			alwaysShowBodyDamageIndicator = builder
 					.comment(" If true, the body damage indicator will always be rendered", " By default, the body damage indicator disappears when no wounded body limbs.")
 					.define("Body Damage indicator Always Rendered", false);
@@ -906,9 +881,9 @@ public class Config
 			builder.push("season-cards");
 			seasonCardsOffsetX = builder
 					.comment(" The X and Y offset of the season cards. Set both to 0 for no offset.", " By default, render first top quarter vertically and centered horizontally.")
-					.define("Season Cards X Offset", 0);
+					.defineInRange("Season Cards X Offset", 0, -1000, 1000);
 			seasonCardsOffsetY = builder
-					.define("Season Cards Y Offset", 0);
+					.defineInRange("Season Cards Y Offset", 0, -1000, 1000);
 			seasonCardsSpawnDimensionDelayInTicks = builder
 					.comment(" The delay before rendering the season card at first player spawn or player dimension change.")
 					.defineInRange("Season Cards Delay In Ticks", 40, 0, Integer.MAX_VALUE);
@@ -983,13 +958,12 @@ public class Config
 		
 		public static double timeModifier;
 		public static double biomeTimeMultiplier;
-		public static int shadeTimeModifier;
+		public static double shadeTimeModifier;
 		public static int tempInfluenceMaximumDist;
 		public static double tempInfluenceUpDistMultiplier;
 		public static double tempInfluenceOutsideDistMultiplier;
 		public static double sprintModifier;
 		public static double onFireModifier;
-		public static double enchantmentMultiplier;
 		
 		public static double playerHuddlingModifier;
 		public static int playerHuddlingRadius;
@@ -1017,29 +991,29 @@ public class Config
 		public static boolean seasonCardsEnabled;
 		public static boolean defaultSeasonEnabled;
 		
-		public static int earlySpringModifier;
-		public static int midSpringModifier;
-		public static int lateSpringModifier;
+		public static double earlySpringModifier;
+		public static double midSpringModifier;
+		public static double lateSpringModifier;
 
-		public static int earlySummerModifier;
-		public static int midSummerModifier;
-		public static int lateSummerModifier;
+		public static double earlySummerModifier;
+		public static double midSummerModifier;
+		public static double lateSummerModifier;
 
-		public static int earlyAutumnModifier;
-		public static int midAutumnModifier;
-		public static int lateAutumnModifier;
+		public static double earlyAutumnModifier;
+		public static double midAutumnModifier;
+		public static double lateAutumnModifier;
 
-		public static int earlyWinterModifier;
-		public static int midWinterModifier;
-		public static int lateWinterModifier;
+		public static double earlyWinterModifier;
+		public static double midWinterModifier;
+		public static double lateWinterModifier;
 
-		public static int earlyWetSeasonModifier;
-		public static int midWetSeasonModifier;
-		public static int lateWetSeasonModifier;
+		public static double earlyWetSeasonModifier;
+		public static double midWetSeasonModifier;
+		public static double lateWetSeasonModifier;
 
-		public static int earlyDrySeasonModifier;
-		public static int midDrySeasonModifier;
-		public static int lateDrySeasonModifier;
+		public static double earlyDrySeasonModifier;
+		public static double midDrySeasonModifier;
+		public static double lateDrySeasonModifier;
 
 		// Environment
 		public static List<String> sunFernBiomeNames;
@@ -1068,17 +1042,21 @@ public class Config
 		public static boolean drinkFromRain;
 		public static int hydrationRain;
 		public static double saturationRain;
-		public static double dirtyRain;
+		public static double effectChanceRain;
+		public static String effectRain;
 		public static boolean drinkFromWater;
 		public static int hydrationWater;
 		public static double saturationWater;
-		public static double dirtyWater;
+		public static double effectChanceWater;
+		public static String effectWater;
 		public static int hydrationPotion;
 		public static double saturationPotion;
-		public static double dirtyPotion;
+		public static double effectChancePotion;
+		public static String effectPotion;
 		public static int hydrationPurified;
 		public static double saturationPurified;
-		public static double dirtyPurified;
+		public static double effectChancePurified;
+		public static String effectPurified;
 		public static boolean glassBottleLootAfterDrink;
 
 		// Heart fruit
@@ -1102,23 +1080,10 @@ public class Config
 		public static double legsPartHealth;
 		public static double feetPartHealth;
 
-		public static double healingHerbsHealingValue;
-		public static int healingHerbsHealingTime;
 		public static int healingHerbsUseTime;
-		public static int healingHerbsHealingCharges;
-		public static double plasterHealingValue;
-		public static int plasterHealingTime;
 		public static int plasterUseTime;
-		public static int plasterHealingCharges;
-		public static double bandageHealingValue;
-		public static int bandageHealingTime;
 		public static int bandageUseTime;
-		public static int bandageHealingCharges;
-		public static double tonicHealingValue;
-		public static int tonicHealingTime;
 		public static int tonicUseTime;
-		public static double medikitHealingValue;
-		public static int medikitHealingTime;
 		public static int medikitUseTime;
 
 		public static List<String> headPartEffects;
@@ -1179,7 +1144,7 @@ public class Config
 			try
 			{
 				hideInfoFromDebug = COMMON.hideInfoFromDebug.get();
-				tickRate = COMMON.tickRate.get();
+				tickRate = COMMON.tempTickTime.get();
 				minTemperatureModification = COMMON.minTemperatureModification.get();
 				maxTemperatureModification = COMMON.maxTemperatureModification.get();
 				routinePacketSync = COMMON.routinePacketSync.get();
@@ -1217,7 +1182,6 @@ public class Config
 				
 				onFireModifier = COMMON.onFireModifier.get();
 				sprintModifier = COMMON.sprintModifier.get();
-				enchantmentMultiplier = COMMON.enchantmentMultiplier.get();
 				
 				wetnessMode = WetnessMode.getDisplayFromString(COMMON.wetnessMode.get());
 				wetMultiplier = COMMON.wetMultiplier.get();
@@ -1297,17 +1261,21 @@ public class Config
 				drinkFromRain = COMMON.drinkFromRain.get();
 				hydrationRain = COMMON.hydrationRain.get();
 				saturationRain = COMMON.saturationRain.get();
-				dirtyRain = COMMON.dirtyRain.get();
+				effectChanceRain = COMMON.effectChanceRain.get();
+				effectRain = COMMON.effectRain.get();
 				drinkFromWater = COMMON.drinkFromWater.get();
 				hydrationWater = COMMON.hydrationWater.get();
 				saturationWater = COMMON.saturationWater.get();
-				dirtyWater = COMMON.dirtyWater.get();
+				effectChanceWater = COMMON.effectChanceWater.get();
+				effectWater = COMMON.effectWater.get();
 				hydrationPotion = COMMON.hydrationPotion.get();
 				saturationPotion = COMMON.saturationPotion.get();
-				dirtyPotion = COMMON.dirtyPotion.get();
+				effectChancePotion = COMMON.effectChancePotion.get();
+				effectPotion = COMMON.effectPotion.get();
 				hydrationPurified = COMMON.hydrationPurified.get();
 				saturationPurified = COMMON.saturationPurified.get();
-				dirtyPurified = COMMON.dirtyPurified.get();
+				effectChancePurified = COMMON.effectChancePurified.get();
+				effectPurified = COMMON.effectPurified.get();
 				glassBottleLootAfterDrink = COMMON.glassBottleLootAfterDrink.get();
 
 				heartFruitsEnabled = COMMON.heartFruitsEnabled.get();
@@ -1329,23 +1297,10 @@ public class Config
 				legsPartHealth = COMMON.legsPartHealth.get();
 				feetPartHealth = COMMON.feetPartHealth.get();
 
-				healingHerbsHealingValue = COMMON.healingHerbsHealingValue.get();
-				healingHerbsHealingTime = COMMON.healingHerbsHealingTime.get();
 				healingHerbsUseTime = COMMON.healingHerbsUseTime.get();
-				healingHerbsHealingCharges = COMMON.healingHerbsHealingCharges.get();
-				plasterHealingValue = COMMON.plasterHealingValue.get();
-				plasterHealingTime = COMMON.plasterHealingTime.get();
 				plasterUseTime = COMMON.plasterUseTime.get();
-				plasterHealingCharges = COMMON.plasterHealingCharges.get();
-				bandageHealingValue = COMMON.bandageHealingValue.get();
-				bandageHealingTime = COMMON.bandageHealingTime.get();
 				bandageUseTime = COMMON.bandageUseTime.get();
-				bandageHealingCharges = COMMON.bandageHealingCharges.get();
-				tonicHealingValue = COMMON.tonicHealingValue.get();
-				tonicHealingTime = COMMON.tonicHealingTime.get();
 				tonicUseTime = COMMON.tonicUseTime.get();
-				medikitHealingValue = COMMON.medikitHealingValue.get();
-				medikitHealingTime = COMMON.medikitHealingTime.get();
 				medikitUseTime = COMMON.medikitUseTime.get();
 
 				headPartEffects = COMMON.headPartEffects.get();

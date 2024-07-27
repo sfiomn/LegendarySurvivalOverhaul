@@ -8,6 +8,7 @@ public enum JsonFileName
 	CONSUMABLE_TEMP("temperatureConsumables.json"),
 	FUEL("fuelItems.json"),
 	CONSUMABLE_THIRST("thirstConsumables.json"),
+	CONSUMABLE_HEAL("healingConsumables.json"),
 	DAMAGE_SOURCE_BODY_PARTS("damageSourceBodyParts.json");;
 	
 	private String fileName;

@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.events;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
@@ -22,12 +23,15 @@ import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.DamageDistributionEnum;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonBodyPartsDamageSource;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumableHeal;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonThirst;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
+import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.items.drink.DrinkItem;
+import sfiomn.legendarysurvivaloverhaul.common.items.heal.BodyHealingItem;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
@@ -67,13 +71,11 @@ public class ModCommonEvents {
             }
         }
 
-        if (shouldApplyThirst((PlayerEntity) entity) && !(event.getItem().getItem() instanceof DrinkItem)) {
-            JsonThirst jsonConsumableThirst = null;
-            if (itemRegistryName != null)
-                jsonConsumableThirst = JsonConfig.consumableThirst.get(itemRegistryName.toString());
+        if (Config.Baked.thirstEnabled && !entity.level.isClientSide && !(event.getItem().getItem() instanceof DrinkItem)) {
+            JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstConfig(itemRegistryName, event.getItem());
 
-            if (jsonConsumableThirst != null && (jsonConsumableThirst.hydration != 0 || jsonConsumableThirst.saturation != 0)) {
-                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.dirty);
+            if (jsonConsumableThirst != null) {
+                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
             } else if (event.getItem().getItem() == Items.POTION){
                 Potion potion = PotionUtils.getPotion(event.getItem());
                 if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
@@ -83,6 +85,30 @@ public class ModCommonEvents {
                 else if (potion != Potions.EMPTY)
                 {
                     ThirstUtil.takeDrink(player, HydrationEnum.POTION);
+                }
+            } else {
+                HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(event.getItem());
+                if (hydrationEnum != null) {
+                    ThirstUtil.takeDrink(player, hydrationEnum);
+                }
+            }
+        }
+
+        if (Config.Baked.localizedBodyDamageEnabled && !(event.getItem().getItem() instanceof BodyHealingItem)) {
+            JsonConsumableHeal jsonConsumableHeal = null;
+            if (itemRegistryName != null)
+                jsonConsumableHeal = JsonConfig.consumableHeal.get(itemRegistryName.toString());
+
+            if (jsonConsumableHeal != null) {
+                if (jsonConsumableHeal.healingCharges > 0) {
+                    if (player.level.isClientSide && Minecraft.getInstance().screen == null)
+                        ClientHooks.openBodyHealthScreen(player, ((PlayerEntity) entity).getUsedItemHand(), true,
+                                jsonConsumableHeal.healingCharges, jsonConsumableHeal.healingValue, jsonConsumableHeal.healingTime);
+                } else if (jsonConsumableHeal.healingCharges == 0) {
+                    for (BodyPartEnum bodyPart : BodyPartEnum.values()) {
+                        BodyDamageUtil.applyHealingTimeBodyPart(player, bodyPart, jsonConsumableHeal.healingValue, jsonConsumableHeal.healingTime);
+                    }
+                    player.level.playSound(null, entity, SoundRegistry.HEAL_BODY_PART.get(), SoundCategory.PLAYERS, 1.0f, 1.0f);
                 }
             }
         }
@@ -235,8 +261,8 @@ public class ModCommonEvents {
 
         PlayerEntity player = event.getPlayer();
         if (Config.Baked.temperatureResistanceOnDeathEnabled) {
-            player.addEffect(new EffectInstance(EffectRegistry.HEAT_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime));
-            player.addEffect(new EffectInstance(EffectRegistry.COLD_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime));
+            player.addEffect(new EffectInstance(EffectRegistry.HEAT_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime, 0, false, false, true));
+            player.addEffect(new EffectInstance(EffectRegistry.COLD_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime, 0, false, false, true));
         }
     }
 

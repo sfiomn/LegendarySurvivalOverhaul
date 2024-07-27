@@ -11,7 +11,7 @@ public interface IBodyDamageUtil
 {
     public List<Pair<Effect, Integer>> getEffects(MalusBodyPartEnum bodyPart, float headHealthRatio);
 
-    public void applyHealingItem(PlayerEntity player, BodyPartEnum bodyPartEnum, BodyHealingItem item);
+    public void applyHealingTimeBodyPart(PlayerEntity player, BodyPartEnum bodyPartEnum, float healingValue, int heal);
 
     public void healBodyPart(PlayerEntity player, BodyPartEnum bodyPartEnum, float healingValue);
 
