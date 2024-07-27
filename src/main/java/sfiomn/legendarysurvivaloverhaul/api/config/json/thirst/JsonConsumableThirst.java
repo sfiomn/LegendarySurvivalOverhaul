@@ -65,17 +65,18 @@ public class JsonConsumableThirst
 
 			byte tagType = itemStackTag.getTagType(nbtEntry.getKey());
 			//  String type
-			if (tagType == 8 && !itemStackTag.getString(nbtEntry.getKey()).equals(nbtEntry.getValue()))
-				return false;
+			if (tagType == 8) {
+				if (!itemStackTag.getString(nbtEntry.getKey()).equals(nbtEntry.getValue()))
+					return false;
 
-			//  Numerical type
-			else if ((tagType == 1 || tagType == 2 || tagType == 3 || tagType == 4 || tagType == 5 || tagType == 6) &&
-					itemStackTag.getDouble(nbtEntry.getKey()) != Double.parseDouble(nbtEntry.getValue())) {
-				return false;
-			} else {
+				//  Numerical type
+			} else if (tagType == 1 || tagType == 2 || tagType == 3 || tagType == 4 || tagType == 5 || tagType == 6) {
+				if (itemStackTag.getDouble(nbtEntry.getKey()) != Double.parseDouble(nbtEntry.getValue()))
+					return false;
+			} else
                 LegendarySurvivalOverhaul.LOGGER.error("Error while matching nbt for {} : Tag type {} not taken into account.\n" +
 						"It can either be a String (tag type 8) or a numeric (tag type in [1-6])", itemStack.getDescriptionId(), tagType);
-			}
+
 		}
 
 		return true;

@@ -203,7 +203,7 @@ public class BodyDamageCapability implements IBodyDamageCapability
 	}
 
 	@Override
-	public void applyHealingItem(BodyPartEnum part, int healingTicks, float healingPerTick) {
+	public void applyHealingTime(BodyPartEnum part, int healingTicks, float healingPerTick) {
 		this.bodyParts.get(part).setHealing(healingTicks, healingPerTick);
 	}
 

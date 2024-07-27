@@ -20,7 +20,7 @@ public interface IBodyDamageCapability
 
 	public void hurt(BodyPartEnum part, float damageValue);
 
-	public void applyHealingItem(BodyPartEnum part, int healingTicks, float healingPerTick);
+	public void applyHealingTime(BodyPartEnum part, int healingTicks, float healingPerTick);
 
 	public float getRemainingHealingTicks(BodyPartEnum part);
 

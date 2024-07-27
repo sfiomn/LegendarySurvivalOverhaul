@@ -91,7 +91,6 @@ public class Config
 		public final ForgeConfigSpec.DoubleValue altitudeModifier;
 		public final ForgeConfigSpec.DoubleValue sprintModifier;
 		public final ForgeConfigSpec.DoubleValue onFireModifier;
-		public final ForgeConfigSpec.DoubleValue enchantmentMultiplier;
 
 		public final ForgeConfigSpec.ConfigValue<String> wetnessMode;
 		public final ForgeConfigSpec.DoubleValue wetMultiplier;
@@ -317,9 +316,6 @@ public class Config
 					.comment(" How much the effects of the player's altitude on temperature are multiplied starting at Y 64.",
 							" Each 64 blocks further from Y 64 will reduce player's temperature by this value.")
 					.defineInRange("Altitude Modifier", -3.0, -1000, 1000);
-			enchantmentMultiplier = builder
-					.comment(" Increases/decreases the effect that cooling/heating enchantments have on a player's temperature.")
-					.defineInRange("Enchantment Modifier", 1.0, -1000, 1000);
 
 			builder.push("wetness");
 			wetnessMode = builder
@@ -928,7 +924,6 @@ public class Config
 		public static double tempInfluenceOutsideDistMultiplier;
 		public static double sprintModifier;
 		public static double onFireModifier;
-		public static double enchantmentMultiplier;
 
 		public static double playerHuddlingModifier;
 		public static int playerHuddlingRadius;
@@ -1136,7 +1131,6 @@ public class Config
 
 				onFireModifier = COMMON.onFireModifier.get();
 				sprintModifier = COMMON.sprintModifier.get();
-				enchantmentMultiplier = COMMON.enchantmentMultiplier.get();
 
 				wetnessMode = WetnessMode.getDisplayFromString(COMMON.wetnessMode.get());
 				wetMultiplier = COMMON.wetMultiplier.get();

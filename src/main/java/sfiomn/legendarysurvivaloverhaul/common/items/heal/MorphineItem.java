@@ -48,13 +48,12 @@ public class MorphineItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity)
     {
-        if(level.isClientSide || !(entity instanceof Player))
+        if(level.isClientSide || !(entity instanceof Player player))
             return stack;
 
-        Player player = (Player) entity;
         player.addEffect(new MobEffectInstance(PAINKILLER.get(), 3600, 0, false, false, true));
 
-        if (!((Player) entity).isCreative())
+        if (!player.isCreative())
             stack.shrink(1);
 
         return stack;

@@ -119,7 +119,7 @@ public class BodyHealingItem extends Item {
                 }
                 runSecondaryEffect(player, stack);
                 world.playSound(null, entity, SoundRegistry.HEAL_BODY_PART.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
-                if (!((Player) entity).isCreative())
+                if (!player.isCreative())
                     stack.shrink(1);
             }
         }

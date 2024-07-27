@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
@@ -48,10 +49,7 @@ public class BodyHealthScreen extends Screen {
         this.healingCharges = healingCharges;
         this.healingValue = healingValue;
         this.healingTime = healingTime;
-        if (alreadyConsumed)
-            this.consumeItem = false;
-        else
-            this.consumeItem = true;
+        this.consumeItem = !alreadyConsumed;
     }
 
     @Override
@@ -104,7 +102,7 @@ public class BodyHealthScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
         checkAutoCloseWhenHealing();
 
         this.renderBackground(gui);
@@ -121,7 +119,7 @@ public class BodyHealthScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics gui) {
+    public void renderBackground(@NotNull GuiGraphics gui) {
         if (minecraft == null) {
             return;
         }
@@ -219,26 +217,17 @@ public class BodyHealthScreen extends Screen {
         }
 
         public static HealthBarIcon get(BodyPartEnum bodyPart) {
-            switch (bodyPart) {
-                case HEAD:
-                    return HEAD;
-                case RIGHT_ARM:
-                    return RIGHT_ARM;
-                case LEFT_ARM:
-                    return LEFT_ARM;
-                case CHEST:
-                    return CHEST;
-                case RIGHT_LEG:
-                    return RIGHT_LEG;
-                case RIGHT_FOOT:
-                    return RIGHT_FOOT;
-                case LEFT_LEG:
-                    return LEFT_LEG;
-                case LEFT_FOOT:
-                    return LEFT_FOOT;
-                default:
-                    return null;
-            }
+            return switch (bodyPart) {
+                case HEAD -> HEAD;
+                case RIGHT_ARM -> RIGHT_ARM;
+                case LEFT_ARM -> LEFT_ARM;
+                case CHEST -> CHEST;
+                case RIGHT_LEG -> RIGHT_LEG;
+                case RIGHT_FOOT -> RIGHT_FOOT;
+                case LEFT_LEG -> LEFT_LEG;
+                case LEFT_FOOT -> LEFT_FOOT;
+                default -> null;
+            };
         }
     }
 
@@ -274,18 +263,13 @@ public class BodyHealthScreen extends Screen {
         }
 
         public HealthBarCondition getPreviewVariant() {
-            switch (this) {
-                case HEALTHY:
-                    return HEALTHY_PREVIEW;
-                case WOUNDED:
-                    return WOUNDED_PREVIEW;
-                case HEAVILY_WOUNDED:
-                    return HEAVILY_WOUNDED_PREVIEW;
-                case DEAD:
-                    return DEAD_PREVIEW;
-                default:
-                    return this;
-            }
+            return switch (this) {
+                case HEALTHY -> HEALTHY_PREVIEW;
+                case WOUNDED -> WOUNDED_PREVIEW;
+                case HEAVILY_WOUNDED -> HEAVILY_WOUNDED_PREVIEW;
+                case DEAD -> DEAD_PREVIEW;
+                default -> this;
+            };
         }
     }
 }

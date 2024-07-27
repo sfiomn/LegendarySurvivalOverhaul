@@ -117,8 +117,8 @@ public class JsonConfigRegistration
 		JsonConfig.registerFuelItems("minecraft:blue_ice", ThermalTypeEnum.COOLING, 30);
 		JsonConfig.registerFuelItems("minecraft:packed_ice", ThermalTypeEnum.COOLING, 30);
 
-		JsonConfig.registerConsumableThirst("minecraft:melon_slice", 2, 1.0f, 0, "");
-		JsonConfig.registerConsumableThirst("minecraft:apple", 2, 0.5f, 0, "");
+		JsonConfig.registerConsumableThirst("minecraft:melon_slice", 2, 1.0f);
+		JsonConfig.registerConsumableThirst("minecraft:apple", 2, 0.5f);
 		JsonConfig.registerConsumableThirst("minecraft:rotten_flesh", -1, 0.0f, 1.0f, LegendarySurvivalOverhaul.MOD_ID + ":thirst");
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":apple_juice",6,3.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":beetroot_juice",9,4.0f);
@@ -264,7 +264,7 @@ public class JsonConfigRegistration
 			}
 		}
 
-		// Damage Sources Body Parts
+		// Healing items
 		Map<String, JsonConsumableHeal> jsonConsumableHeal = processJson(JsonFileName.CONSUMABLE_HEAL, jsonDir);
 
 		if (jsonConsumableHeal != null)
@@ -278,6 +278,7 @@ public class JsonConfigRegistration
 			}
 		}
 
+		// Damage Sources Body Parts
 		Map<String, JsonBodyPartsDamageSource> jsonDamageSourceBodyParts = processJson(JsonFileName.DAMAGE_SOURCE_BODY_PARTS, jsonDir);
 
 		if (jsonDamageSourceBodyParts != null)

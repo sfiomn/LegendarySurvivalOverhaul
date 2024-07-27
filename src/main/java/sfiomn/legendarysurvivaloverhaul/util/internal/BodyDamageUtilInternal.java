@@ -75,7 +75,7 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
 
         IBodyDamageCapability capability = CapabilityUtil.getBodyDamageCapability(player);
 
-        capability.applyHealingItem(bodyPartEnum, healingTime, healingValuePerTick);
+        capability.applyHealingTime(bodyPartEnum, healingTime, healingValuePerTick);
     }
 
     @Override
