@@ -166,6 +166,8 @@
 
 	"tooltip.legendarysurvivaloverhaul.sewing_table_disabled": "Coat Already Applied",
 
+	"tooltip.legendarysurvivaloverhaul.potion_with_effectChance": "%s%% %s",
+
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.body_part": "Heals up to %s body limbs",
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.whole_body": "Heals all body limbs",
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value": "Regenerates %s health over %ss",
