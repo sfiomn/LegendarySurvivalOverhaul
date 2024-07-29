@@ -25,12 +25,6 @@ public class PurificationSmeltingRecipe extends SmeltingRecipe {
     }
 
     @Override
-    public boolean isSpecial() {
-        //  Avoid the recipe to be displayed in recipe book because of unknown sewing recipe category
-        return true;
-    }
-
-    @Override
     public boolean matches(Container inventory, Level level) {
         return this.ingredient.test(inventory.getItem(0)) && ThirstUtil.getCapacityTag(inventory.getItem(0)) > 0;
     }
@@ -83,7 +77,6 @@ public class PurificationSmeltingRecipe extends SmeltingRecipe {
         public Serializer(int cookingTime) {
             this.defaultCookingTime = cookingTime;
         }
-
 
         public PurificationSmeltingRecipe fromJson(ResourceLocation pRecipeId, JsonObject pJson) {
             String s = GsonHelper.getAsString(pJson, "group", "");

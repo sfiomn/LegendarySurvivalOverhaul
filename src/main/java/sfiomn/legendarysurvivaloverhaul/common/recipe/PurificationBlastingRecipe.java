@@ -24,12 +24,6 @@ public class PurificationBlastingRecipe extends BlastingRecipe {
     }
 
     @Override
-    public boolean isSpecial() {
-        //  Avoid the recipe to be displayed in recipe book because of unknown sewing recipe category
-        return true;
-    }
-
-    @Override
     public boolean matches(Container inventory, @NotNull Level level) {
         return this.ingredient.test(inventory.getItem(0)) && ThirstUtil.getCapacityTag(inventory.getItem(0)) > 0;
     }

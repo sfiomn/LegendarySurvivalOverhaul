@@ -255,6 +255,7 @@ public abstract class AbstractThermalBlockEntity extends BaseContainerBlockEntit
         this.items.clear();
     }
 
+    @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
@@ -263,6 +264,7 @@ public abstract class AbstractThermalBlockEntity extends BaseContainerBlockEntit
         this.fuelDuration = tag.getInt("fuelDuration");
     }
 
+    @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.putInt("fuelTime", this.fuelTime);

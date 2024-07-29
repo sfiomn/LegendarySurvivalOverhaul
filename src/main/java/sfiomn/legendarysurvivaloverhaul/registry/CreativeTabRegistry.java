@@ -3,10 +3,14 @@ package sfiomn.legendarysurvivaloverhaul.registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 
 import java.util.List;
 
@@ -17,6 +21,13 @@ public class CreativeTabRegistry {
             .icon(() -> ItemRegistry.THERMOMETER.get().getDefaultInstance())
             .displayItems((parameters, list) ->
             {
+                ItemStack fullCanteen = ItemRegistry.CANTEEN.get().getDefaultInstance();
+                ItemStack fullLargeCanteen = ItemRegistry.LARGE_CANTEEN.get().getDefaultInstance();
+                ThirstUtil.setCapacityTag(fullCanteen, 5);
+                ThirstUtil.setHydrationEnumTag(fullCanteen, HydrationEnum.NORMAL);
+                ThirstUtil.setCapacityTag(fullLargeCanteen, 10);
+                ThirstUtil.setHydrationEnumTag(fullLargeCanteen, HydrationEnum.NORMAL);
+
                 list.acceptAll(List.of(
                         ItemRegistry.APPLE_JUICE.get().getDefaultInstance(),
                         ItemRegistry.BEETROOT_JUICE.get().getDefaultInstance(),
@@ -31,6 +42,8 @@ public class CreativeTabRegistry {
 
                         ItemRegistry.CANTEEN.get().getDefaultInstance(),
                         ItemRegistry.LARGE_CANTEEN.get().getDefaultInstance(),
+                        fullCanteen,
+                        fullLargeCanteen,
                         ItemRegistry.PURIFIED_WATER_BOTTLE.get().getDefaultInstance(),
                         ItemRegistry.WATER_PLANT_BAG.get().getDefaultInstance(),
 
