@@ -16,20 +16,16 @@ public class FocusShader {
     public static final ResourceLocation BLUR_SHADER = new ResourceLocation("shaders/post/blobs2.json");
     private static final Field shaders = ObfuscationReflectionHelper.findField(ShaderGroup.class, "field_148031_d");
 
-    public float intensity;
+    public FocusShader() {}
 
-    public FocusShader() {
-        this.intensity = 0;
-    }
-
-    public void render() {
+    public void render(float intensity) {
         ShaderGroup currentEffect = Minecraft.getInstance().gameRenderer.currentEffect();
-        if (this.intensity > 0) {
+        if (intensity > 0) {
             if (currentEffect == null ||
                     !currentEffect.getName().equals("minecraft:shaders/post/blobs2.json")) {
                 Minecraft.getInstance().gameRenderer.loadEffect(BLUR_SHADER);
             }
-            updateIntensity(this.intensity);
+            updateIntensity(intensity);
         } else if (intensity == 0) {
             stopRender();
         }
@@ -55,7 +51,6 @@ public class FocusShader {
 
         if (shaderRadius != null) {
             shaderRadius.set(intensity);
-            this.intensity = intensity;
         }
     }
 }

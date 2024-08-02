@@ -44,7 +44,7 @@ public class RenderThirstOverlay {
         if ((player.isSpectator() || player.isCreative())) {
             focusShader.stopRender();
         } else if (!(Minecraft.getInstance().screen instanceof DeathScreen)) {
-            focusShader.render();
+            focusShader.render(shaderIntensity);
         }
     }
 
@@ -70,8 +70,6 @@ public class RenderThirstOverlay {
                 } else if (targetShaderIntensity < shaderIntensity) {
                     shaderIntensity = Math.max(shaderIntensity - SHADER_INTENSITY_STEP, targetShaderIntensity);
                 }
-                if (focusShader.intensity != shaderIntensity)
-                    focusShader.updateIntensity(shaderIntensity);
             }
         }
     }
