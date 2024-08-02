@@ -166,10 +166,11 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
+    runtimeOnly fg.deobf("curse.maven:curios-309927:5367944")
     runtimeOnly(fg.deobf("curse.maven:appleskin-248787:4770828"))
 
     // These are REQUIRED for the mod to compile correctly and should not be removed.
-    implementation fg.deobf("curse.maven:curios-309927:5367946")
+    implementation fg.deobf("curse.maven:curios-309927:5367944")
     implementation fg.deobf("curse.maven:serene-seasons-291874:4761604")
 }
 

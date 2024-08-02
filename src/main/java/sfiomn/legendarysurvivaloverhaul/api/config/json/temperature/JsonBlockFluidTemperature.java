@@ -58,7 +58,7 @@ public class JsonBlockFluidTemperature
 			{
 				String stateValue = blockState.getValue(property).toString();
 				
-				if(!properties.get(name).equals(stateValue))
+				if(!properties.get(name).equalsIgnoreCase(stateValue))
 				{
 					return false;
 				}
@@ -78,7 +78,7 @@ public class JsonBlockFluidTemperature
 			{
 				String stateValue = fluidState.getValue(property).toString();
 
-				if(!properties.get(name).equals(stateValue))
+				if(!properties.get(name).equalsIgnoreCase(stateValue))
 				{
 					return false;
 				}
@@ -103,7 +103,7 @@ public class JsonBlockFluidTemperature
 			}
 			else
 			{
-				if(!prop.value.equals(properties.get(prop.name)))
+				if(!prop.value.equalsIgnoreCase(properties.get(prop.name)))
 				{
 					return false;
 				}

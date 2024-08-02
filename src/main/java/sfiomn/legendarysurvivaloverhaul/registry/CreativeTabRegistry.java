@@ -11,6 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 import java.util.List;
 
@@ -23,9 +24,9 @@ public class CreativeTabRegistry {
             {
                 ItemStack fullCanteen = ItemRegistry.CANTEEN.get().getDefaultInstance();
                 ItemStack fullLargeCanteen = ItemRegistry.LARGE_CANTEEN.get().getDefaultInstance();
-                ThirstUtil.setCapacityTag(fullCanteen, 5);
+                ThirstUtil.setCapacityTag(fullCanteen, Config.Baked.canteenCapacity);
                 ThirstUtil.setHydrationEnumTag(fullCanteen, HydrationEnum.NORMAL);
-                ThirstUtil.setCapacityTag(fullLargeCanteen, 10);
+                ThirstUtil.setCapacityTag(fullLargeCanteen, Config.Baked.largeCanteenCapacity);
                 ThirstUtil.setHydrationEnumTag(fullLargeCanteen, HydrationEnum.NORMAL);
 
                 list.acceptAll(List.of(
@@ -87,7 +88,7 @@ public class CreativeTabRegistry {
                         BlockRegistry.SEWING_TABLE.get().asItem().getDefaultInstance()
                 ));
             })
-            .title(Component.translatable("itemGroup.legendarysurvivaloverhaul"))
+            .title(Component.translatable("itemGroup." + LegendarySurvivalOverhaul.MOD_ID))
             .build());
 
     public static void register(IEventBus eventBus) {
