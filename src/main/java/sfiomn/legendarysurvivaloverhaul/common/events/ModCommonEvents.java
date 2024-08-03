@@ -209,8 +209,13 @@ public class ModCommonEvents {
 
         JsonBodyPartsDamageSource damageSourceBodyParts = JsonConfig.damageSourceBodyParts.get(source.msgId);
         List<BodyPartEnum> hitBodyParts = new ArrayList<>();
-        if (damageSourceBodyParts != null)
+        if (damageSourceBodyParts != null) {
+            if (damageSourceBodyParts.damageDistribution == DamageDistributionEnum.NONE)
+                return;
+
             hitBodyParts.addAll(damageSourceBodyParts.getBodyParts(player));
+        }
+
 
         if (hitBodyParts.isEmpty()) {
              if (source.isProjectile()) {
@@ -231,7 +236,8 @@ public class ModCommonEvents {
             hitBodyParts.addAll(DamageDistributionEnum.ONE_OF.getBodyParts(player, Arrays.asList(BodyPartEnum.values())));
         }
 
-        BodyDamageUtil.balancedHurtBodyParts(player, hitBodyParts, bodyPartDamageValue);
+        if (!hitBodyParts.isEmpty())
+            BodyDamageUtil.balancedHurtBodyParts(player, hitBodyParts, bodyPartDamageValue);
 
         if (source.isProjectile() && hitBodyParts.contains(BodyPartEnum.HEAD) && Config.Baked.headCriticalShotMultiplier > 1) {
             event.setAmount(event.getAmount() * (float) Config.Baked.headCriticalShotMultiplier);
