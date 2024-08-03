@@ -160,11 +160,11 @@ public class JsonConfigRegistration
 		JsonConfig.registerDamageSourceBodyParts("inFire", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
 		JsonConfig.registerDamageSourceBodyParts("cactus", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
 		JsonConfig.registerDamageSourceBodyParts("sweetBerryBush", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
-		JsonConfig.registerDamageSourceBodyParts("drown", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.CHEST));
-		JsonConfig.registerDamageSourceBodyParts("starve", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.CHEST));
-		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".hypothermia", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.CHEST));
-		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".hyperthermia", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.CHEST));
-		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".dehydration", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.CHEST));
+		JsonConfig.registerDamageSourceBodyParts("drown", DamageDistributionEnum.NONE, Collections.emptyList());
+		JsonConfig.registerDamageSourceBodyParts("starve", DamageDistributionEnum.NONE, Collections.emptyList());
+		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".hypothermia", DamageDistributionEnum.NONE, Collections.emptyList());
+		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".hyperthermia", DamageDistributionEnum.NONE, Collections.emptyList());
+		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".dehydration", DamageDistributionEnum.NONE, Collections.emptyList());
 
 		IntegrationController.initCompat();
 	}
