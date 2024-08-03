@@ -217,8 +217,12 @@ public class CommonForgeEvents {
 
         JsonBodyPartsDamageSource damageSourceBodyParts = JsonConfig.damageSourceBodyParts.get(source.getMsgId());
         List<BodyPartEnum> hitBodyParts = new ArrayList<>();
-        if (damageSourceBodyParts != null)
+        if (damageSourceBodyParts != null) {
+            if (damageSourceBodyParts.damageDistribution == DamageDistributionEnum.NONE)
+                return;
+
             hitBodyParts.addAll(damageSourceBodyParts.getBodyParts(player));
+        }
 
         if (hitBodyParts.isEmpty()) {
              if (source.is(DamageTypeTags.IS_PROJECTILE) && source.getDirectEntity() != null) {
@@ -236,12 +240,12 @@ public class CommonForgeEvents {
             hitBodyParts.addAll(DamageDistributionEnum.ONE_OF.getBodyParts(player, Arrays.asList(BodyPartEnum.values())));
         }
 
-        BodyDamageUtil.balancedHurtBodyParts(player, hitBodyParts, bodyPartDamageValue);
+        if (!hitBodyParts.isEmpty())
+            BodyDamageUtil.balancedHurtBodyParts(player, hitBodyParts, bodyPartDamageValue);
 
         if (source.is(DamageTypeTags.IS_PROJECTILE) && hitBodyParts.contains(BodyPartEnum.HEAD) && Config.Baked.headCriticalShotMultiplier > 1) {
             event.setAmount(event.getAmount() * (float) Config.Baked.headCriticalShotMultiplier);
             player.level().playSound(null, player, SoundRegistry.HEADSHOT.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
-
         }
     }
 

@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public enum DamageDistributionEnum {
+    NONE,
     ONE_OF(),
     ALL();
 

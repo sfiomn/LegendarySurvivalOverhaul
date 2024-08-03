@@ -144,6 +144,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerConsumableHeal(LegendarySurvivalOverhaul.MOD_ID + ":tonic", 0, 5, 600);
 		JsonConfig.registerConsumableHeal(LegendarySurvivalOverhaul.MOD_ID + ":medikit", 0, 8, 400);
 
+		JsonConfig.registerDamageSourceBodyParts("drown", DamageDistributionEnum.NONE, Collections.emptyList());
 		JsonConfig.registerDamageSourceBodyParts("fall", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT));
 		JsonConfig.registerDamageSourceBodyParts("hotFloor", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT));
 		JsonConfig.registerDamageSourceBodyParts("fallingBlock", DamageDistributionEnum.ALL, Collections.singletonList(BodyPartEnum.HEAD));
