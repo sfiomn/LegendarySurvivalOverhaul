@@ -3,6 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.common.temperature;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
+import sfiomn.legendarysurvivaloverhaul.common.integration.terrafirmacraft.TerraFirmaCraftUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 public class TimeModifier extends ModifierBase
@@ -17,7 +18,7 @@ public class TimeModifier extends ModifierBase
 	public float getWorldInfluence(Level level, BlockPos pos)
 	{
 		// This effect should only be provided in surface worlds
-		if(level.dimensionType().hasCeiling())
+		if(level.dimensionType().hasCeiling() || TerraFirmaCraftUtil.shouldUseTerraFirmaCraftTemp())
 		{
 			return 0.0f;
 		}
@@ -34,6 +35,6 @@ public class TimeModifier extends ModifierBase
 		// float tempInfl = applyUndergroundEffect(timeTemperature, world, pos);
 		// LegendarySurvivalOverhaul.LOGGER.debug("Time temp influence after underground : " + tempInfl);
 
-		return applyUndergroundEffect(timeTemperature, level, pos);
+		return timeTemperature;
 	}
 }

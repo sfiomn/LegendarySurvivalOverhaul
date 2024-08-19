@@ -71,38 +71,6 @@ public abstract class ModifierBase {
 	 */
 	public float getWorldInfluence(Level world, BlockPos pos) { return 0.0f; }
 	
-	protected float applyUndergroundEffect(float temperature, Level world, BlockPos pos)
-	{
-		// Code ripped and modified from 
-		// https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/temperature/ModifierBase.java
-		
-		//Y 64 - 256 is always unchanged temperature
-		if (pos.getY() > 64)
-		{
-			return temperature;
-		}
-		
-		// If we're in a dimension that has a ceiling,
-		// then just return the default value.
-		if(world.dimensionType().hasCeiling())
-		{
-			return temperature;
-		}
-
-		if(world.canSeeSky(pos))
-		{
-			return temperature;
-		}
-		
-		int cutoff = 48;
-		
-		if (pos.getY() <= cutoff || cutoff == 64)
-		{
-			return 0.0f;
-		}
-		
-		return temperature * (float)(pos.getY() - cutoff) / (64.0f - cutoff);
-	}
 	
 	protected float getNormalizedTempForBiome(Level world, Biome biome)
 	{

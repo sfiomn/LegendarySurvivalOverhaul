@@ -45,6 +45,12 @@ public interface IThirstCapability
 	public void setClean();
 
 	/**
+	 * Force the synchronization server - client
+	 * of the thirst capability
+	 */
+	public void setDirty();
+
+	/**
 	 * (Don't use this!) <br>
 	 * Runs a tick update for the player's thirst capability
 	 * @param player

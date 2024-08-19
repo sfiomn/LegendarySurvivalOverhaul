@@ -1,6 +1,5 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -9,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.*;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -115,14 +115,14 @@ public class BodyDamageCapability implements IBodyDamageCapability
 					if (bodyPartMalusEffect.getLeft() == malusBodyPart) {
 						Pair<MobEffect, Integer> oldEffect = Pair.of(bodyPartMalusEffect.getMiddle(), bodyPartMalusEffect.getRight());
 						if (!malusEffects.contains(oldEffect)) {
-							player.removeEffect(oldEffect.getFirst());
-							if (oldEffect.getFirst() == MobEffectRegistry.HEADACHE.get())
+							player.removeEffect(oldEffect.getLeft());
+							if (oldEffect.getLeft() == MobEffectRegistry.HEADACHE.get())
 								player.removeEffect(MobEffects.BLINDNESS);
 						}
 					}
 				}
 				for (Pair<MobEffect, Integer> malusEffect: malusEffects) {
-					newMalus.add(Triple.of(malusBodyPart, malusEffect.getFirst(), malusEffect.getSecond()));
+					newMalus.add(Triple.of(malusBodyPart, malusEffect.getLeft(), malusEffect.getRight()));
 				}
 			}
 
@@ -130,7 +130,8 @@ public class BodyDamageCapability implements IBodyDamageCapability
 
 			// Assign all malus effect to the player
 			for (Triple<MalusBodyPartEnum, MobEffect, Integer> malusEffect: this.malus) {
-				player.addEffect(new MobEffectInstance(malusEffect.getMiddle(), 300, malusEffect.getRight(), false, false, true));
+				if (!player.hasEffect(malusEffect.getMiddle()))
+					player.addEffect(new MobEffectInstance(malusEffect.getMiddle(), -1, malusEffect.getRight(), false, false, true));
 			}
 
 			// Heal each body limb of the player
@@ -225,26 +226,22 @@ public class BodyDamageCapability implements IBodyDamageCapability
 
 	@Override
 	public float getHealthRatioForMalusBodyPart(MalusBodyPartEnum part) {
-		switch (part) {
-			case HEAD:
-				return this.getBodyPartHealthRatio(BodyPartEnum.HEAD);
-			case ARMS:
-				return Math.min(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_ARM), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_ARM));
-			case BOTH_ARMS:
-				return Math.max(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_ARM), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_ARM));
-			case CHEST:
-				return this.getBodyPartHealthRatio(BodyPartEnum.CHEST);
-			case LEGS:
-				return Math.min(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_LEG), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_LEG));
-			case BOTH_LEGS:
-				return Math.max(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_LEG), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_LEG));
-			case FEET:
-				return Math.min(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_FOOT), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_FOOT));
-			case BOTH_FEET:
-				return Math.max(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_FOOT), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_FOOT));
-			default:
-				return 0.0f;
-		}
+        return switch (part) {
+            case HEAD -> this.getBodyPartHealthRatio(BodyPartEnum.HEAD);
+            case ARMS ->
+                    Math.min(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_ARM), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_ARM));
+            case BOTH_ARMS ->
+                    Math.max(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_ARM), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_ARM));
+            case CHEST -> this.getBodyPartHealthRatio(BodyPartEnum.CHEST);
+            case LEGS ->
+                    Math.min(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_LEG), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_LEG));
+            case BOTH_LEGS ->
+                    Math.max(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_LEG), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_LEG));
+            case FEET ->
+                    Math.min(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_FOOT), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_FOOT));
+            case BOTH_FEET ->
+                    Math.max(this.getBodyPartHealthRatio(BodyPartEnum.RIGHT_FOOT), this.getBodyPartHealthRatio(BodyPartEnum.LEFT_FOOT));
+        };
 	}
 
 	private void updateDynamicMaxHealth(float maxHealth) {

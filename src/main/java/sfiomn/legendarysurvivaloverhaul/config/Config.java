@@ -77,7 +77,7 @@ public class Config
 		public final ForgeConfigSpec.DoubleValue coldHungerEffectModifier;
 
 		public final ForgeConfigSpec.BooleanValue biomeEffectsEnabled;
-		public final ForgeConfigSpec.BooleanValue biomeDrynessEffectEnabled;
+		public final ForgeConfigSpec.DoubleValue biomeDrynessMultiplier;
 		public final ForgeConfigSpec.DoubleValue biomeTemperatureMultiplier;
 
 		public final ForgeConfigSpec.DoubleValue overworldDefaultTemperature;
@@ -120,6 +120,9 @@ public class Config
 		public final ForgeConfigSpec.DoubleValue thermalCoat2Modifier;
 		public final ForgeConfigSpec.DoubleValue thermalCoat3Modifier;
 
+		public final ForgeConfigSpec.BooleanValue tfcTemperatureOverride;
+		public final ForgeConfigSpec.DoubleValue tfcTemperatureMultiplier;
+
 		public final ForgeConfigSpec.BooleanValue seasonTemperatureEffects;
 		public final ForgeConfigSpec.BooleanValue tropicalSeasonsEnabled;
 		public final ForgeConfigSpec.BooleanValue seasonCardsEnabled;
@@ -152,7 +155,6 @@ public class Config
 		// Thirst
 		public final ForgeConfigSpec.BooleanValue thirstEnabled;
 		public final ForgeConfigSpec.BooleanValue dangerousDehydration;
-		public final ForgeConfigSpec.BooleanValue lowHydrationEffect;
 		public final ForgeConfigSpec.DoubleValue dehydrationDamageScaling;
 		public final ForgeConfigSpec.DoubleValue thirstEffectModifier;
 		public final ForgeConfigSpec.DoubleValue baseThirstExhaustion;
@@ -168,20 +170,25 @@ public class Config
 		public final ForgeConfigSpec.DoubleValue saturationRain;
 		public final ForgeConfigSpec.DoubleValue effectChanceRain;
 		public final ForgeConfigSpec.ConfigValue<String> effectRain;
+		public final ForgeConfigSpec.IntValue effectDurationRain;
 		public final ForgeConfigSpec.BooleanValue drinkFromWater;
 		public final ForgeConfigSpec.IntValue hydrationWater;
 		public final ForgeConfigSpec.DoubleValue saturationWater;
 		public final ForgeConfigSpec.DoubleValue effectChanceWater;
 		public final ForgeConfigSpec.ConfigValue<String> effectWater;
+		public final ForgeConfigSpec.IntValue effectDurationWater;
 		public final ForgeConfigSpec.IntValue hydrationPotion;
 		public final ForgeConfigSpec.DoubleValue saturationPotion;
 		public final ForgeConfigSpec.DoubleValue effectChancePotion;
 		public final ForgeConfigSpec.ConfigValue<String> effectPotion;
+		public final ForgeConfigSpec.IntValue effectDurationPotion;
 		public final ForgeConfigSpec.IntValue hydrationPurified;
 		public final ForgeConfigSpec.DoubleValue saturationPurified;
 		public final ForgeConfigSpec.DoubleValue effectChancePurified;
 		public final ForgeConfigSpec.ConfigValue<String> effectPurified;
+		public final ForgeConfigSpec.IntValue effectDurationPurified;
 		public final ForgeConfigSpec.BooleanValue glassBottleLootAfterDrink;
+		public final ForgeConfigSpec.BooleanValue thirstEnabledIfVampire;
 
 		// Heart Fruits
 		public final ForgeConfigSpec.BooleanValue heartFruitsEnabled;
@@ -365,9 +372,11 @@ public class Config
 			biomeEffectsEnabled = builder
 					.comment(" Whether biomes will have an effect on a player's temperature.")
 					.define("Biomes affect Temperature", true);
-			biomeDrynessEffectEnabled = builder
-					.comment(" Whether hot biome's dryness will make days really hot and nights really cold.")
-					.define("Biome's dryness affects Temperature", false);
+			biomeDrynessMultiplier = builder
+					.comment(" How much hot biome's dryness will make nights really cold.",
+							" Affects only dry (minecraft down fall <0.2) and hot biome.",
+							" 0 means no dryness effect; 0.5 means the biome temp will be divided by 2 at the middle of the night.")
+					.defineInRange("Biome's Dryness Multiplier", 0.8d, 0, 1);
 			builder.pop();
 
 			builder.push("weather");
@@ -451,6 +460,16 @@ public class Config
 
 			builder.push("integration");
 
+			builder.push("terrafirmacraft");
+			tfcTemperatureOverride = builder
+					.comment(" If TerraFirmaCraft is installed, then biome, time, season (if serene seasons installed) and altitude modifiers will be disabled, and TerraFirmaCraft calculation used instead.",
+							" All other modifiers remain to calculate Player temperature.")
+					.define("TerraFirmaCraft Temperature Override Enabled", true);
+			tfcTemperatureMultiplier = builder
+					.comment(" How much the temperature given from TerraFirmaCraft is multiplied, to adjust with the other temperature effects.")
+					.defineInRange("TerraFirmaCraft Temperature Multiplier", 1.0d, 0, 1000);
+			builder.pop();
+
 			builder.push("seasons");
 			seasonTemperatureEffects = builder
 					.comment(" If Serene Seasons is installed, then seasons will have an effect on the player's temperature.")
@@ -517,9 +536,6 @@ public class Config
 			dangerousDehydration = builder
 					.comment(" If enabled, players will take damage from the complete dehydration.")
 					.define("Dangerous Dehydration", true);
-			lowHydrationEffect = builder
-					.comment(" If enabled, player's vision will become blurry when running low on hydration.")
-					.define("Low Thirst Effect", true);
 			builder.push("exhaustion");
 			baseThirstExhaustion = builder
 					.comment(" Thirst exhausted every 10 ticks.")
@@ -571,6 +587,9 @@ public class Config
 			effectRain = builder
 					.comment(" Possible effect given while drinking from the rain.")
 					.define("Effect", "");
+			effectDurationRain = builder
+					.comment(" Duration in ticks of the possible effect given while drinking from the rain.")
+					.defineInRange("Effect Duration", 0, 0, 100000);
 			builder.pop();
 			builder.push("water");
 			drinkFromWater = builder
@@ -588,6 +607,9 @@ public class Config
 			effectWater = builder
 					.comment(" Possible effect given while drinking water.")
 					.define("Effect", LegendarySurvivalOverhaul.MOD_ID + ":thirst");
+			effectDurationWater = builder
+					.comment(" Duration in ticks of the possible effect given while drinking water.")
+					.defineInRange("Effect Duration", 600, 0, 100000);
 			builder.pop();
 			builder.comment(" Amount recovered by potions with effects").push("potion");
 			hydrationPotion = builder
@@ -602,6 +624,9 @@ public class Config
 			effectPotion = builder
 					.comment(" Possible effect given while drinking a potion.")
 					.define("Effect", "");
+			effectDurationPotion = builder
+					.comment(" Duration in ticks of the possible effect given while drinking a potion.")
+					.defineInRange("Effect Duration", 0, 0, 100000);
 			builder.pop();
 			builder.comment(" Default value for purified water").push("purified-water");
 			hydrationPurified = builder
@@ -616,12 +641,26 @@ public class Config
 			effectPurified = builder
 					.comment(" Possible effect given while drinking purified water.")
 					.define("Effect", "");
+			effectDurationPurified = builder
+					.comment(" Duration in ticks of the possible effect given while drinking purified water.")
+					.defineInRange("Effect Duration", 0, 0, 100000);
 			builder.pop();
 			builder.push("juices");
 			glassBottleLootAfterDrink = builder
 					.comment(" Whether the player retrieves a glass bottle after drinking a juice.")
 					.define("Glass Bottle Loot After Drinking A Juice", true);
 			builder.pop();
+
+			builder.push("integration");
+
+			builder.push("vampirism");
+			thirstEnabledIfVampire = builder
+					.comment(" If Vampirism is installed and if thirst enabled while being a vampire, keep the thirst system in addition to the vampiric one.",
+							" If disabled, the thirst system will be disabled for vampires.")
+					.define("Thirst Enabled If Vampire", false);
+			builder.pop();
+			builder.pop();
+
 			builder.pop();
 
 			builder.comment(" Options related to heart fruits").push("heart-fruits");
@@ -769,6 +808,7 @@ public class Config
 		public final ForgeConfigSpec.EnumValue<TemperatureDisplayEnum> temperatureDisplayMode;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetY;
+		public final ForgeConfigSpec.BooleanValue breathingSoundEnabled;
 		public final ForgeConfigSpec.BooleanValue foodSaturationDisplayed;
 
 		public final ForgeConfigSpec.IntValue wetnessIndicatorOffsetX;
@@ -788,6 +828,7 @@ public class Config
 		public final ForgeConfigSpec.BooleanValue showHydrationTooltip;
 		public final ForgeConfigSpec.BooleanValue mergeHydrationAndSaturationTooltip;
 		public final ForgeConfigSpec.BooleanValue thirstSaturationDisplayed;
+		public final ForgeConfigSpec.BooleanValue lowHydrationEffect;
 
 		Client(ForgeConfigSpec.Builder builder)
 		{
@@ -815,6 +856,8 @@ public class Config
 					.defineInRange("Temperature Display X Offset", 0, -10000, 10000);
 			temperatureDisplayOffsetY = builder
 					.defineInRange("Temperature Display Y Offset", 0, -10000, 10000);
+			breathingSoundEnabled = builder
+					.define(" If enabled, breathing sound can be heard while player faces harsh temperatures", true);
 			foodSaturationDisplayed = builder
 					.comment(" If enabled, the food saturation will be rendered on the Food Bar while the player suffers Cold Hunger Effect (secondary temperature effect).")
 					.define("Show Food Saturation Bar", true);
@@ -869,6 +912,9 @@ public class Config
 			thirstSaturationDisplayed = builder
 					.comment(" Whether the Thirst Saturation is displayed or not.")
 					.define("Render the thirst saturation", true);
+			lowHydrationEffect = builder
+					.comment(" If enabled, player's vision will become blurry when running low on hydration.")
+					.define("Low Thirst Effect", true);
 			builder.pop();
 		}
 	}
@@ -904,7 +950,7 @@ public class Config
 		public static boolean showVanillaAnimationOverlay;
 
 		public static boolean biomeEffectsEnabled;
-		public static boolean biomeDrynessEffectEnabled;
+		public static double biomeDrynessMultiplier;
 		public static double biomeTemperatureMultiplier;
 
 		public static double overworldDefaultTemperature;
@@ -946,6 +992,9 @@ public class Config
 		public static double thermalCoat2Modifier;
 		public static double thermalCoat3Modifier;
 
+		public static boolean tfcTemperatureOverride;
+		public static double tfcTemperatureMultiplier;
+
 		public static boolean seasonTemperatureEffects;
 		public static boolean tropicalSeasonsEnabled;
 		public static boolean seasonCardsEnabled;
@@ -978,7 +1027,6 @@ public class Config
 		// Thirst
 		public static boolean thirstEnabled;
 		public static boolean dangerousDehydration;
-		public static boolean lowHydrationEffect;
 		public static double dehydrationDamageScaling;
 		public static double thirstEffectModifier;
 		public static double baseThirstExhaustion;
@@ -994,20 +1042,25 @@ public class Config
 		public static double saturationRain;
 		public static double effectChanceRain;
 		public static String effectRain;
+		public static int effectDurationRain;
 		public static boolean drinkFromWater;
 		public static int hydrationWater;
 		public static double saturationWater;
 		public static double effectChanceWater;
 		public static String effectWater;
+		public static int effectDurationWater;
 		public static int hydrationPotion;
 		public static double saturationPotion;
 		public static double effectChancePotion;
 		public static String effectPotion;
+		public static int effectDurationPotion;
 		public static int hydrationPurified;
 		public static double saturationPurified;
 		public static double effectChancePurified;
 		public static String effectPurified;
+		public static int effectDurationPurified;
 		public static boolean glassBottleLootAfterDrink;
+		public static boolean thirstEnabledIfVampire;
 
 		// Heart fruit
 		public static boolean heartFruitsEnabled;
@@ -1069,6 +1122,7 @@ public class Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
+		public static boolean breathingSoundEnabled;
 
 		public static int seasonCardsOffsetX;
 		public static int seasonCardsOffsetY;
@@ -1087,6 +1141,7 @@ public class Config
 		public static boolean showHydrationTooltip;
 		public static boolean mergeHydrationAndSaturationTooltip;
 		public static boolean thirstSaturationDisplayed;
+		public static boolean lowHydrationEffect;
 
 		public static void bakeCommon()
 		{
@@ -1119,7 +1174,7 @@ public class Config
 
 				altitudeModifier = COMMON.altitudeModifier.get();
 				biomeEffectsEnabled = COMMON.biomeEffectsEnabled.get();
-				biomeDrynessEffectEnabled = COMMON.biomeDrynessEffectEnabled.get();
+				biomeDrynessMultiplier = COMMON.biomeDrynessMultiplier.get();
 				biomeTemperatureMultiplier = COMMON.biomeTemperatureMultiplier.get();
 				timeModifier = COMMON.timeModifier.get();
 				biomeTimeMultiplier = COMMON.biomeTimeMultiplier.get();
@@ -1153,6 +1208,9 @@ public class Config
 				thermalCoat2Modifier = COMMON.thermalCoat2Modifier.get();
 				thermalCoat3Modifier = COMMON.thermalCoat3Modifier.get();
 
+				tfcTemperatureOverride = COMMON.tfcTemperatureOverride.get();
+				tfcTemperatureMultiplier = COMMON.tfcTemperatureMultiplier.get();
+
 				seasonTemperatureEffects = COMMON.seasonTemperatureEffects.get();
 				tropicalSeasonsEnabled = COMMON.tropicalSeasonsEnabled.get();
 				seasonCardsEnabled = COMMON.seasonCardsEnabled.get();
@@ -1184,7 +1242,6 @@ public class Config
 
 				thirstEnabled = COMMON.thirstEnabled.get();
 				dangerousDehydration = COMMON.dangerousDehydration.get();
-				lowHydrationEffect = COMMON.lowHydrationEffect.get();
 				dehydrationDamageScaling = COMMON.dehydrationDamageScaling.get();
 				thirstEffectModifier = COMMON.thirstEffectModifier.get();
 
@@ -1203,20 +1260,26 @@ public class Config
 				saturationRain = COMMON.saturationRain.get();
 				effectChanceRain = COMMON.effectChanceRain.get();
 				effectRain = COMMON.effectRain.get();
+				effectDurationRain = COMMON.effectDurationRain.get();
 				drinkFromWater = COMMON.drinkFromWater.get();
 				hydrationWater = COMMON.hydrationWater.get();
 				saturationWater = COMMON.saturationWater.get();
 				effectChanceWater = COMMON.effectChanceWater.get();
 				effectWater = COMMON.effectWater.get();
+				effectDurationWater = COMMON.effectDurationWater.get();
 				hydrationPotion = COMMON.hydrationPotion.get();
 				saturationPotion = COMMON.saturationPotion.get();
 				effectChancePotion = COMMON.effectChancePotion.get();
 				effectPotion = COMMON.effectPotion.get();
+				effectDurationPotion = COMMON.effectDurationPotion.get();
 				hydrationPurified = COMMON.hydrationPurified.get();
 				saturationPurified = COMMON.saturationPurified.get();
 				effectChancePurified = COMMON.effectChancePurified.get();
 				effectPurified = COMMON.effectPurified.get();
+				effectDurationPurified = COMMON.effectDurationPurified.get();
 				glassBottleLootAfterDrink = COMMON.glassBottleLootAfterDrink.get();
+
+				thirstEnabledIfVampire = COMMON.thirstEnabledIfVampire.get();
 
 				heartFruitsEnabled = COMMON.heartFruitsEnabled.get();
 				heartsLostOnDeath = COMMON.heartsLostOnDeath.get();
@@ -1283,6 +1346,7 @@ public class Config
 				temperatureDisplayMode = CLIENT.temperatureDisplayMode.get();
 				temperatureDisplayOffsetX = CLIENT.temperatureDisplayOffsetX.get();
 				temperatureDisplayOffsetY = CLIENT.temperatureDisplayOffsetY.get();
+				breathingSoundEnabled = CLIENT.breathingSoundEnabled.get();
 				showVanillaAnimationOverlay = CLIENT.showVanillaAnimationOverlay.get();
 
 				seasonCardsOffsetX = CLIENT.seasonCardsOffsetX.get();
@@ -1303,6 +1367,7 @@ public class Config
 				thirstSaturationDisplayed = CLIENT.thirstSaturationDisplayed.get();
 				showHydrationTooltip = CLIENT.showHydrationTooltip.get();
 				mergeHydrationAndSaturationTooltip = CLIENT.mergeHydrationAndSaturationTooltip.get();
+				lowHydrationEffect = CLIENT.lowHydrationEffect.get();
 			}
 			catch (Exception e)
 			{

@@ -76,10 +76,10 @@ public class CanteenItem extends DrinkItem {
             // Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over
             ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(this);
             if (registryName != null)
-                jsonConsumableThirst = ThirstUtil.getThirstConfig(registryName, stack);
+                jsonConsumableThirst = ThirstUtil.getThirstJsonConfig(registryName, stack);
 
             if (jsonConsumableThirst != null)
-                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
+                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effects);
             else {
                 HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
                 if (hydrationEnum != null)

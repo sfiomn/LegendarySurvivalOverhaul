@@ -12,10 +12,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -80,21 +76,11 @@ public class CommonForgeEvents {
             }
         }
 
-        if (Config.Baked.thirstEnabled && !entity.level().isClientSide && !(event.getItem().getItem() instanceof DrinkItem)) {
-            JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstConfig(itemRegistryName, event.getItem());
+        if (Config.Baked.thirstEnabled && ThirstUtil.isThirstActive(player) && !entity.level().isClientSide && !(event.getItem().getItem() instanceof DrinkItem)) {
+            JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstJsonConfig(itemRegistryName, event.getItem());
 
             if (jsonConsumableThirst != null) {
-                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
-            } else if (event.getItem().getItem() == Items.POTION){
-                Potion potion = PotionUtils.getPotion(event.getItem());
-                if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
-                {
-                    ThirstUtil.takeDrink(player, HydrationEnum.NORMAL);
-                }
-                else if (potion != Potions.EMPTY)
-                {
-                    ThirstUtil.takeDrink(player, HydrationEnum.POTION);
-                }
+                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effects);
             } else {
                 HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(event.getItem());
                 if (hydrationEnum != null) {
@@ -283,7 +269,7 @@ public class CommonForgeEvents {
 
     private static boolean shouldApplyThirst(Player player)
     {
-        return !player.isCreative() && !player.isSpectator() && Config.Baked.thirstEnabled;
+        return !player.isCreative() && !player.isSpectator() && Config.Baked.thirstEnabled && ThirstUtil.isThirstActive(player);
     }
 
     private static boolean shouldApplyTemperature(Player player)

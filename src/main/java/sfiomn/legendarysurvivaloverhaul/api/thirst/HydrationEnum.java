@@ -63,6 +63,15 @@ public enum HydrationEnum
 		};
 	}
 
+	public int getEffectDuration() {
+		return switch (this) {
+			case RAIN -> Config.Baked.effectDurationRain;
+			case POTION -> Config.Baked.effectDurationPotion;
+			case PURIFIED -> Config.Baked.effectDurationPurified;
+			default -> Config.Baked.effectDurationWater;
+		};
+	}
+
 	public static HydrationEnum getByName(String name) {
 		for (HydrationEnum hydrationEnum: HydrationEnum.values()) {
 			if (hydrationEnum.getName().equals(name))

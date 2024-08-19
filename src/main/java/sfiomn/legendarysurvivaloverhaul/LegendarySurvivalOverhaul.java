@@ -36,6 +36,7 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.Temperat
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
+import sfiomn.legendarysurvivaloverhaul.common.integration.vampirism.VampirismEvents;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.registry.*;
@@ -59,6 +60,13 @@ public class LegendarySurvivalOverhaul
 	 */ 
 	public static boolean betterWeatherLoaded = false;
 	public static boolean sereneSeasonsLoaded = false;
+
+	/**
+	 * TerraFirmaCraft temperature calculation already takes into account
+	 * Biome, Season, daily time & elevation. The TerraFirmaCraft modifier will
+	 * take directly this calculation, and all similar modifiers will be disabled
+	 */
+	public static boolean terraFirmaCraftLoaded = false;
 	
 	/**
 	 * Since my mod and Survive both do very similar things, it might be
@@ -69,6 +77,8 @@ public class LegendarySurvivalOverhaul
 	 */
 	public static boolean surviveLoaded = false;
 	public static boolean curiosLoaded = false;
+
+	public static boolean vampirismLoaded = false;
 	
 	public static Path configPath = FMLPaths.CONFIGDIR.get();
 	public static Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "legendarysurvivaloverhaul");
@@ -102,19 +112,27 @@ public class LegendarySurvivalOverhaul
 
 		forgeBus.register(this);
 
-		modIntegration();
+		modIntegration(forgeBus);
 	}
 	
-	private void modIntegration()
+	private void modIntegration(IEventBus forgeBus)
 	{
 		sereneSeasonsLoaded = ModList.get().isLoaded("sereneseasons");
 		curiosLoaded = ModList.get().isLoaded("curios");
 		surviveLoaded = ModList.get().isLoaded("survive");
-		
+		terraFirmaCraftLoaded = ModList.get().isLoaded("tfc");
+		vampirismLoaded = ModList.get().isLoaded("vampirism");
+
 		if (sereneSeasonsLoaded)
 			LOGGER.debug("Serene Seasons is loaded, enabling compatibility");
+		if (terraFirmaCraftLoaded)
+			LOGGER.debug("TerraFirmaCraft is loaded, enabling compatibility");
 		if (curiosLoaded)
 			LOGGER.debug("Curios is loaded, enabling compatibility");
+		if (vampirismLoaded) {
+			LOGGER.debug("Vampirism is loaded, enabling compatibility");
+			forgeBus.register(VampirismEvents.class);
+		}
 		if (surviveLoaded)
 			LOGGER.debug("Survive is loaded, I hope you know what you're doing");
 	}

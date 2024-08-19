@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBlockFluidTemperature;
@@ -190,7 +191,7 @@ public class BlockModifier extends ModifierBase
 		float temperature = 0.0f;
 		ResourceLocation registryName = ForgeRegistries.BLOCKS.getKey(blockState.getBlock());
 
-		if (registryName == null) {
+		if (registryName == null || blockState.isAir()) {
 			return 0.0f;
 		}
 

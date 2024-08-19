@@ -1,6 +1,5 @@
 package sfiomn.legendarysurvivaloverhaul.client.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +12,6 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.common.ForgeMod;
-import org.lwjgl.opengl.GL11;
 import sereneseasons.api.SSItems;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;

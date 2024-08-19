@@ -13,6 +13,7 @@ public class ParticleTypeRegistry {
 
     public static final RegistryObject<SimpleParticleType> SUN_FERN_BLOSSOM = PARTICLE_TYPES.register("sun_fern_blossom", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> ICE_FERN_BLOSSOM = PARTICLE_TYPES.register("ice_fern_blossom", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> COLD_BREATH = PARTICLE_TYPES.register("cold_breath", () -> new SimpleParticleType(true));
 
     public static void register(IEventBus eventBus) {
         PARTICLE_TYPES.register(eventBus);

@@ -83,7 +83,7 @@ public class SpreadPoint {
     }
 
     public void setCanSeeSky() {
-        this.canSeeSky = world.canSeeSky(pos);
+        this.canSeeSky = world.dimensionType().hasCeiling() || world.canSeeSky(pos);
     }
 
     private double consumptionMultiplier(SpreadPoint parentSpreadPoint, BlockPos posTo) {

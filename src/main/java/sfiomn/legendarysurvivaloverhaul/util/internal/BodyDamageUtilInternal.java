@@ -1,11 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.util.internal;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.tuple.Pair;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.*;
 import sfiomn.legendarysurvivaloverhaul.config.Config;

@@ -17,10 +17,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import sereneseasons.api.SSItems;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons.RenderSeasonCards;
 import sfiomn.legendarysurvivaloverhaul.client.render.*;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
-import sfiomn.legendarysurvivaloverhaul.client.sounds.TemperatureEffectSound;
+import sfiomn.legendarysurvivaloverhaul.client.effects.TemperatureBreathEffect;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.KeyMappingRegistry;
@@ -97,23 +98,25 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
-            if (!Minecraft.getInstance().isPaused()) {
+            Player player = Minecraft.getInstance().player;
+            if (!Minecraft.getInstance().isPaused() && player != null) {
                 if (Config.Baked.temperatureEnabled) {
                     RenderTemperatureGui.updateTimer();
-                    RenderTemperatureOverlay.updateTemperatureEffect(Minecraft.getInstance().player);
-                    TemperatureEffectSound.tickPlay(Minecraft.getInstance().player);
+                    RenderTemperatureOverlay.updateTemperatureEffect(player);
+                    if (Config.Baked.breathingSoundEnabled)
+                        TemperatureBreathEffect.tickPlay(player);
                 }
-                if (Config.Baked.thirstEnabled && Config.Baked.lowHydrationEffect) {
-                    RenderThirstOverlay.updateThirstEffect(Minecraft.getInstance().player);
+                if (shouldApplyThirst(player) && Config.Baked.lowHydrationEffect) {
+                    RenderThirstOverlay.updateThirstEffect(player);
                 }
                 if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && Config.Baked.seasonCardsEnabled) {
-                    RenderSeasonCards.updateSeasonCardFading(Minecraft.getInstance().player);
+                    RenderSeasonCards.updateSeasonCardFading(player);
                 }
                 if (Config.Baked.localizedBodyDamageEnabled) {
                     RenderBodyDamageGui.updateFlashingTimer();
 
                     if (KeyMappingRegistry.showBodyHealth.consumeClick())
-                        ClientHooks.openBodyHealthScreen(Minecraft.getInstance().player);
+                        ClientHooks.openBodyHealthScreen(player);
                 }
             }
         }
@@ -122,8 +125,14 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static void onRenderLevelStage(RenderLevelStageEvent event) {
         Player player = Minecraft.getInstance().player;
-        if (player != null && event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER && Config.Baked.lowHydrationEffect) {
+        if (player != null && event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER
+                && Config.Baked.lowHydrationEffect && shouldApplyThirst(player)) {
             RenderThirstOverlay.render(player);
         }
+    }
+
+    private static boolean shouldApplyThirst(Player player)
+    {
+        return Config.Baked.thirstEnabled && ThirstUtil.isThirstActive(player);
     }
 }

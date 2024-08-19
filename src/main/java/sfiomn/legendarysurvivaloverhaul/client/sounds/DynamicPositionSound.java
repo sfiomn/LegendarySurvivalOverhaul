@@ -10,7 +10,7 @@ public class DynamicPositionSound extends AbstractTickableSoundInstance {
     private final Player player;
     private int time;
 
-    protected DynamicPositionSound(SoundEvent soundEvent, Player player) {
+    public DynamicPositionSound(SoundEvent soundEvent, Player player) {
         super(soundEvent, SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
         this.player = player;
         this.looping = false;

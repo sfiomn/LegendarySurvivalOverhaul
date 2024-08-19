@@ -25,7 +25,11 @@ public class FocusShader {
         if (intensity > 0) {
             if (currentEffect == null ||
                     !currentEffect.getName().equals("minecraft:shaders/post/blobs2.json")) {
-                Minecraft.getInstance().gameRenderer.loadEffect(BLUR_SHADER);
+                try {
+                    Minecraft.getInstance().gameRenderer.loadEffect(BLUR_SHADER);
+                } catch (NullPointerException e) {
+                    return;
+                }
             }
             updateIntensity(intensity);
         } else if (intensity == 0) {

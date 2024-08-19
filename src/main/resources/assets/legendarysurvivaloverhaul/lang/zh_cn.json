@@ -1,7 +1,7 @@
 {
 	"key.legendarysurvivaloverhaul.title": "传说生存",
 	"key.legendarysurvivaloverhaul.added_desc": "显示描述",
-	"tooltip.legendarysurvivaloverhaul.added_desc.activate": "按 %s%s%s 查看衣物描述",
+	"tooltip.legendarysurvivaloverhaul.added_desc.activate": "按 %s%s%s 查看温度效果描述",
 	"key.legendarysurvivaloverhaul.body_health": "查看身体状态",
 
 	"itemGroup.legendarysurvivaloverhaul": "传说生存",
@@ -97,11 +97,11 @@
 	"item.minecraft.lingering_potion.effect.cold_resistance_long":"滞留型御寒药水",
 	"item.minecraft.lingering_potion.effect.thirst_long":"滞留型干渴药水",
 	
-	"item.minecraft.tipped_arrow.effect.heat_resistance":"抗暑箭",
-	"item.minecraft.tipped_arrow.effect.cold_resistance":"御寒箭",
+	"item.minecraft.tipped_arrow.effect.heat_resistance":"抗暑之箭",
+	"item.minecraft.tipped_arrow.effect.cold_resistance":"御寒之箭",
 	"item.minecraft.tipped_arrow.effect.thirst":"干渴箭",
-	"item.minecraft.tipped_arrow.effect.heat_resistance_long":"抗暑箭",
-	"item.minecraft.tipped_arrow.effect.cold_resistance_long":"御寒箭",
+	"item.minecraft.tipped_arrow.effect.heat_resistance_long":"抗暑之箭",
+	"item.minecraft.tipped_arrow.effect.cold_resistance_long":"御寒之箭",
 	"item.minecraft.tipped_arrow.effect.thirst_long":"干渴箭",
 	
 	"effect.legendarysurvivaloverhaul.heat_stroke": "中暑",
@@ -168,7 +168,7 @@
 
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.body_part": "最多治愈 %s 个肢体",
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.whole_body": "治愈所有肢体",
-	"tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value": "在 %s 范围内恢复 %ss 生命值",
+	"tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value": "恢复 %s 肢体生命值并持续 %s 秒",
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.morphine": "暂时性阻断受伤肢体的所有负面效果",
 
 	"sounds.legendarysurvivaloverhaul.heat_stroke_early": "热浪开始袭来",

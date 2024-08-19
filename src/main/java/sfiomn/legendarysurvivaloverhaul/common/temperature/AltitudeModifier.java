@@ -3,6 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.common.temperature;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
+import sfiomn.legendarysurvivaloverhaul.common.integration.terrafirmacraft.TerraFirmaCraftUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 public class AltitudeModifier extends ModifierBase
@@ -15,7 +16,7 @@ public class AltitudeModifier extends ModifierBase
 	@Override
 	public float getWorldInfluence(Level level, BlockPos pos)
 	{
-		if (level.dimensionType().hasCeiling())
+		if (level.dimensionType().hasCeiling() || TerraFirmaCraftUtil.shouldUseTerraFirmaCraftTemp())
 		{
 			return 0.0f;
 		}

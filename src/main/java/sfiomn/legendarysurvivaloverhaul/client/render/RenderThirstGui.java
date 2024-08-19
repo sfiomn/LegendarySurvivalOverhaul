@@ -7,7 +7,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
+import sfiomn.legendarysurvivaloverhaul.common.integration.vampirism.VampirismUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
@@ -36,6 +38,9 @@ public class RenderThirstGui
 			Player player = forgeGui.getMinecraft().player;
 
 			if (player != null) {
+				if (!ThirstUtil.isThirstActive(player))
+					return;
+
 				rand.setSeed(player.tickCount * 445L);
 				forgeGui.setupOverlayRenderState(true, false);
 

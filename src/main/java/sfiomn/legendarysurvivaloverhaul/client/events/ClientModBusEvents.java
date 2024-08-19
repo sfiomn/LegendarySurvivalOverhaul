@@ -8,6 +8,7 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.common.particles.BreathParticle;
 import sfiomn.legendarysurvivaloverhaul.client.tooltips.HydrationClientTooltipComponent;
 import sfiomn.legendarysurvivaloverhaul.client.tooltips.HydrationTooltipComponent;
 import sfiomn.legendarysurvivaloverhaul.common.particles.FernBlossomParticle;
@@ -50,5 +51,6 @@ public class ClientModBusEvents {
     public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ParticleTypeRegistry.SUN_FERN_BLOSSOM.get(), FernBlossomParticle.Factory::new);
         event.registerSpriteSet(ParticleTypeRegistry.ICE_FERN_BLOSSOM.get(), FernBlossomParticle.Factory::new);
+        event.registerSpriteSet(ParticleTypeRegistry.COLD_BREATH.get(), BreathParticle.Factory::new);
     }
 }

@@ -26,6 +26,7 @@ public class ThirstCapability implements IThirstCapability
 	private float oldThirstSaturation;
 	private boolean wasSprinting;
 	private Vec3 oldPos;
+	private boolean dirty;
 	private int updateTimer; // Update immediately first time around
 	private int packetTimer;
 
@@ -45,6 +46,7 @@ public class ThirstCapability implements IThirstCapability
 		this.oldThirstSaturation = 0.0f;
 		this.wasSprinting = false;
 		this.oldPos = null;
+		this.dirty = false;
 		this.updateTimer = 0;
 		this.packetTimer = 0;
 	}
@@ -60,6 +62,9 @@ public class ThirstCapability implements IThirstCapability
 
 		if (oldPos == null)
 			oldPos = player.position();
+
+		if (getThirstTickTimer() == -1)
+			return;
 
 		updateTimer++;
 		if(updateTimer >= 10)
@@ -137,7 +142,9 @@ public class ThirstCapability implements IThirstCapability
 	@Override
 	public boolean isDirty()
 	{
-		return (this.thirst!=this.oldThirst || this.thirstSaturation !=this.oldThirstSaturation);
+		return this.thirst!=this.oldThirst ||
+				this.thirstSaturation !=this.oldThirstSaturation ||
+				this.dirty;
 	}
 
 	@Override
@@ -145,6 +152,12 @@ public class ThirstCapability implements IThirstCapability
 	{
 		this.oldThirst =this.thirst;
 		this.oldThirstSaturation =this.thirstSaturation;
+		this.dirty = false;
+	}
+
+	@Override
+	public void setDirty() {
+		this.dirty = true;
 	}
 
 	@Override

@@ -31,14 +31,11 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(BlockRegistry.SEWING_TABLE.get());
 
         this.add(BlockRegistry.WATER_PLANT.get(),
-                block -> createSimpleDropCount(BlockRegistry.WATER_PLANT.get(), ItemRegistry.WATER_PLANT_BAG.get(), 1.0f, 2.0f));
+                block -> createSimpleDropCount(ItemRegistry.WATER_PLANT_BAG.get(), 1.0f, 2.0f));
     }
 
-    protected LootTable.Builder createSimpleDropCount(Block block, Item item, float min, float max) {
-        return createSilkTouchDispatchTable(block,
-                this.applyExplosionDecay(block,
-                        LootItem.lootTableItem(item)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max)))));
+    protected LootTable.Builder createSimpleDropCount(Item item, float min, float max) {
+        return createSingleItemTable(item, UniformGenerator.between(min, max));
     }
 
     @Override

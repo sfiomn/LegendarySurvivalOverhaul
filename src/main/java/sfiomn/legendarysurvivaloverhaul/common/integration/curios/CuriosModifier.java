@@ -14,7 +14,9 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class CuriosModifier extends ModifierBase
@@ -45,37 +47,34 @@ public class CuriosModifier extends ModifierBase
 	
 	public float getUncaughtPlayerInfluence(Player player)
 	{
-		LazyOptional<ICuriosItemHandler> lazyOptional = CuriosApi.getCuriosInventory(player);
-		
-		if (lazyOptional.isPresent() && lazyOptional.resolve().isPresent())
+		LazyOptional<ICuriosItemHandler> curiosInventory = CuriosApi.getCuriosInventory(player);
+
+		if (curiosInventory.isPresent() && curiosInventory.resolve().isPresent())
 		{
-			IItemHandlerModifiable itemHandler = lazyOptional.resolve().get().getEquippedCurios();
-			
 			float sum = 0.0f;
-			
-			for (int i = 0; i < itemHandler.getSlots(); i++)
-			{
-				ItemStack stack = itemHandler.getStackInSlot(i);
-				
-				if (!stack.isEmpty())
-				{
-					sum += processStackJson(stack);
-					String coatId = TemperatureUtil.getArmorCoatTag(stack);
-					CoatEnum coat = CoatEnum.getFromId(coatId);
-					if (coat == null)
-						continue;
-					if (coat.type().equals("cooling")) {
-						sum -= (float) coat.modifier();
-					} else if (coat.type().equals("heating")) {
-						sum += (float) coat.modifier();
+
+			for (ICurioStacksHandler slotInventory: curiosInventory.resolve().get().getCurios().values()) {
+				for (int i = 0; i < slotInventory.getStacks().getSlots(); i++) {
+					ItemStack stack = slotInventory.getStacks().getStackInSlot(i);
+					if (!stack.isEmpty()) {
+						sum += processStackJson(stack);
+						String coatId = TemperatureUtil.getArmorCoatTag(stack);
+						CoatEnum coat = CoatEnum.getFromId(coatId);
+						if (coat == null)
+							continue;
+						if (coat.type().equals("cooling")) {
+							sum -= (float) coat.modifier();
+						} else if (coat.type().equals("heating")) {
+							sum += (float) coat.modifier();
+						}
 					}
 				}
 			}
-			
+
 			return sum;
-		}
-		else
+		} else {
 			return 0.0f;
+		}
 	}
 	
 	private float processStackJson(ItemStack stack)

@@ -1,9 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.api.bodydamage;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.effect.MobEffect;
-import sfiomn.legendarysurvivaloverhaul.common.items.heal.BodyHealingItem;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 

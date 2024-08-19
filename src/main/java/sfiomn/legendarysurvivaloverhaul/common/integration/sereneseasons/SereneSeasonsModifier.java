@@ -13,6 +13,7 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.ServerConfig;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
+import sfiomn.legendarysurvivaloverhaul.common.integration.terrafirmacraft.TerraFirmaCraftUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
@@ -151,7 +152,7 @@ public class SereneSeasonsModifier extends ModifierBase
 		// LegendarySurvivalOverhaul.LOGGER.debug("Serene temp influence : " + value);
 		// float tempInfl = applyUndergroundEffect(value, world, pos);
 		// LegendarySurvivalOverhaul.LOGGER.debug("Serene temp influence after underground : " + tempInfl);
-		return applyUndergroundEffect(value, level, pos);
+		return value;
 	}
 
 	private float getSeasonModifier(double previousSeasonModifier, double currentSeasonModifier, double nextSeasonModifier, int time, int subSeasonDuration) {

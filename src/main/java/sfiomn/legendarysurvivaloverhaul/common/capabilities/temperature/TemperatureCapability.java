@@ -12,8 +12,10 @@ import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ITemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
 import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
+import sfiomn.legendarysurvivaloverhaul.common.integration.vampirism.VampirismUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 
@@ -134,7 +136,7 @@ public class TemperatureCapability implements ITemperatureCapability
 			if (Config.Baked.dangerousTemperature)
 				applyDangerousEffects(player);
 
-			if (Config.Baked.temperatureSecondaryEffects)
+			if (Config.Baked.temperatureSecondaryEffects && ThirstUtil.isThirstActive(player))
 				applySecondaryEffects(player);
 		}
 	}
@@ -144,14 +146,14 @@ public class TemperatureCapability implements ITemperatureCapability
 			if (TemperatureEnum.HEAT_STROKE.getMiddle() <= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply hyperthermia
 				if (!player.hasEffect(MobEffectRegistry.HEAT_STROKE.get()))
-					player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_STROKE.get(), 1000, 0, false, true));
+					player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_STROKE.get(), -1, 0, false, true));
 				return;
 			}
 		} else if (getTemperatureEnum() == TemperatureEnum.FROSTBITE) {
 			if (TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply hypothermia.json
 				if (!player.hasEffect(MobEffectRegistry.FROSTBITE.get()))
-					player.addEffect(new MobEffectInstance(MobEffectRegistry.FROSTBITE.get(), 1000, 0, false, true));
+					player.addEffect(new MobEffectInstance(MobEffectRegistry.FROSTBITE.get(), -1, 0, false, true));
 				return;
 			}
 		}
@@ -163,15 +165,15 @@ public class TemperatureCapability implements ITemperatureCapability
 		if (getTemperatureEnum() == TemperatureEnum.HEAT_STROKE) {
 			if (!player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply secondary effect hyperthermia
-				player.removeEffect(MobEffectRegistry.COLD_HUNGER.get());
-				player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_THIRST.get(), 300, 0, false, false));
+				if (!player.hasEffect(MobEffectRegistry.HEAT_THIRST.get()))
+					player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_THIRST.get(), -1, 0, false, false));
 				return;
 			}
 		} else if (getTemperatureEnum() == TemperatureEnum.FROSTBITE) {
 			if (!player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply secondary effect hypothermia
-				player.removeEffect(MobEffectRegistry.HEAT_THIRST.get());
-				player.addEffect(new MobEffectInstance(MobEffectRegistry.COLD_HUNGER.get(), 300, 0, false, false));
+				if (!player.hasEffect(MobEffectRegistry.COLD_HUNGER.get()))
+					player.addEffect(new MobEffectInstance(MobEffectRegistry.COLD_HUNGER.get(), -1, 0, false, false));
 				return;
 			}
 		}

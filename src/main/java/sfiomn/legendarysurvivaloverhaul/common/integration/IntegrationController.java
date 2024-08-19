@@ -8,6 +8,7 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEn
 import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 
+import javax.json.Json;
 import java.util.Arrays;
 
 /**
@@ -67,6 +68,10 @@ public final class IntegrationController
 			initBeachParty();
 		if (mods.isLoaded("create_confectionery"))
 			initCreateConfectionery();
+		if (mods.isLoaded("wardrobe"))
+			initWardrobe();
+		if (mods.isLoaded("iceandfire"))
+			initIceAndFire();
 	}
 
 	private static void initCreate()
@@ -284,5 +289,33 @@ public final class IntegrationController
 
 	private static void initCreateConfectionery() {
 		JsonConfig.registerConsumableThirst("create_confectionery:hot_chocolate_bottle", 3, 2.0f);
+	}
+
+	private static void initWardrobe() {
+		JsonConfig.registerItemTemperature("wardrobe:taiga_helmet", 2.0f);
+		JsonConfig.registerItemTemperature("wardrobe:taiga_chestplate", 3.5f);
+		JsonConfig.registerItemTemperature("wardrobe:taiga_leggings", 3.0f);
+		JsonConfig.registerItemTemperature("wardrobe:taiga_boots", 1.0f);
+		JsonConfig.registerItemTemperature("wardrobe:snowy_helmet", 2.0f);
+		JsonConfig.registerItemTemperature("wardrobe:snowy_chestplate", 3.5f);
+		JsonConfig.registerItemTemperature("wardrobe:snowy_leggings", 3.0f);
+		JsonConfig.registerItemTemperature("wardrobe:snowy_boots", 1.0f);
+		JsonConfig.registerItemTemperature("wardrobe:desert_helmet", -2.0f);
+		JsonConfig.registerItemTemperature("wardrobe:desert_chestplate", -3.0f);
+		JsonConfig.registerItemTemperature("wardrobe:desert_leggings", -2.0f);
+		JsonConfig.registerItemTemperature("wardrobe:desert_boots", -1.0f);
+		JsonConfig.registerItemTemperature("wardrobe:jungle_chestplate", -5.0f);
+		JsonConfig.registerItemTemperature("wardrobe:jungle_leggings", -3.0f);
+		JsonConfig.registerItemTemperature("wardrobe:jungle_boots", -2.0f);
+		JsonConfig.registerItemTemperature("wardrobe:savanna_chestplate", -4.0f);
+		JsonConfig.registerItemTemperature("wardrobe:savanna_leggings", -2.5f);
+		JsonConfig.registerItemTemperature("wardrobe:savanna_boots", -1.5f);
+		JsonConfig.registerItemTemperature("wardrobe:wool_vest_chestplate", 2.0f);
+		JsonConfig.registerItemTemperature("wardrobe:chiton", -2.0f);
+		JsonConfig.registerItemTemperature("wardrobe:farmers_hat_helmet", -3.5f);
+	}
+
+	private static void initIceAndFire() {
+		JsonConfig.registerEntityTemperature("iceandfire:hippocampus", 3.0f);
 	}
 }
