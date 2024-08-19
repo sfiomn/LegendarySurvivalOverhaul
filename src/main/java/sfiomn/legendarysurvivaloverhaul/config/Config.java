@@ -595,10 +595,10 @@ public class Config
 			builder.push("canteen");
 			canteenCapacity = builder
 					.comment(" Capacity of the canteen used to store water.")
-					.defineInRange("Canteen Capacity", 5, 0, 1000);
+					.defineInRange("Canteen Capacity", 10, 0, 1000);
 			largeCanteenCapacity = builder
 					.comment(" Capacity of the large canteen used to store water.")
-					.defineInRange("Large Canteen Capacity", 10, 0, 1000);
+					.defineInRange("Large Canteen Capacity", 20, 0, 1000);
 			allowOverridePurifiedWater = builder
 					.comment(" Allow override of purified water stored in canteen with normal water.")
 					.define("Allow Override Purified Water", true);
