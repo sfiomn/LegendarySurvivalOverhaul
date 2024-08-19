@@ -51,7 +51,7 @@ public class MorphineItem extends Item {
         if(level.isClientSide || !(entity instanceof Player player))
             return stack;
 
-        player.addEffect(new MobEffectInstance(PAINKILLER.get(), 3600, 0, false, false, true));
+        player.addEffect(new MobEffectInstance(PAINKILLER.get(), 1800, 0, false, false, true));
 
         if (!player.isCreative())
             stack.shrink(1);

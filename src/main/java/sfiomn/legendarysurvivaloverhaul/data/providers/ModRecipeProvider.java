@@ -288,7 +288,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .pattern(" n ")
                 .pattern("l l")
                 .pattern("lll")
-                .define('n', Items.NETHERITE_INGOT)
+                .define('n', Items.NETHERITE_SCRAP)
                 .define('l', Items.LEATHER)
                 .group("healing")
                 .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
@@ -328,10 +328,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.MORPHINE.get())
-                .pattern("  s")
+                .pattern("  n")
                 .pattern(" p ")
                 .pattern("g  ")
-                .define('s', Items.STICK)
+                .define('n', Items.IRON_NUGGET)
                 .define('p', ItemRegistry.PLASTER.get())
                 .define('g', Tags.Items.GLASS)
                 .group("healing")
