@@ -10,6 +10,7 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonBodyParts
 import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumableHeal;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonEffectParameter;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 
 import java.util.*;
@@ -18,6 +19,7 @@ public class JsonConfig
 {
 	public static Map<String, JsonTemperature> itemTemperatures = Maps.newHashMap();
 	public static Map<String, List<JsonBlockFluidTemperature>> blockFluidTemperatures = Maps.newHashMap();
+	public static Map<String, JsonTemperature> entityTemperatures = Maps.newHashMap();
 	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
 	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = Maps.newHashMap();
 	public static Map<String, List<JsonConsumableThirst>> consumableThirst = Maps.newHashMap();
@@ -74,6 +76,11 @@ public class JsonConfig
 		if(!itemTemperatures.containsKey(registryName))
 			itemTemperatures.put(registryName, new JsonTemperature(temperature));
 	}
+
+	public static void registerEntityTemperature(String registryName, float temperature) {
+		if (!entityTemperatures.containsKey(registryName))
+			entityTemperatures.put(registryName, new JsonTemperature(temperature));
+	}
 	
 	public static void registerConsumableTemperature(TemporaryModifierGroupEnum group, String registryName, int temperatureLevel, int duration)
 	{
@@ -101,25 +108,24 @@ public class JsonConfig
 		}
 
 		currentList.add(jsonConsumableTemperature);
-		return;
-	}
+    }
 
 	public static void registerConsumableThirst(String registryName, int hydration, float saturation) {
-		registerConsumableThirst(registryName, hydration, saturation, 0, "");
+		registerConsumableThirst(registryName, hydration, saturation, new JsonPropertyValue[]{});
 	}
 
 	public static void registerConsumableThirst(String registryName, int hydration, float saturation, JsonPropertyValue... nbt) {
-		registerConsumableThirst(registryName, hydration, saturation, 0, "", nbt);
+		registerConsumableThirst(registryName, hydration, saturation, new JsonEffectParameter[]{}, nbt);
 	}
 
-	public static void registerConsumableThirst(String registryName, int hydration, float saturation, float effectChance, String effect, JsonPropertyValue... nbt) {
+	public static void registerConsumableThirst(String registryName, int hydration, float saturation, JsonEffectParameter[] effects, JsonPropertyValue... nbt) {
 		if (!consumableThirst.containsKey(registryName)) {
 			consumableThirst.put(registryName, new ArrayList<>());
 		}
 
 		final List<JsonConsumableThirst> alreadyDefinedConfig = consumableThirst.get(registryName);
 
-		JsonConsumableThirst newThirstConfig = new JsonConsumableThirst(hydration, saturation, effectChance, effect, nbt);
+		JsonConsumableThirst newThirstConfig = new JsonConsumableThirst(hydration, saturation, effects, nbt);
 
 		if (nbt.length > 0) {
 			//  If the same set of nbt already exists, replace it

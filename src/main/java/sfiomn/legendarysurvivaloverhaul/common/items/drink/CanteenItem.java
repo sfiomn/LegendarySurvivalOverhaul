@@ -5,7 +5,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
@@ -70,10 +69,10 @@ public class CanteenItem extends DrinkItem {
             // Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over
             ResourceLocation registryName = stack.getItem().getRegistryName();
             if (registryName != null)
-                jsonConsumableThirst = ThirstUtil.getThirstConfig(registryName, stack);
+                jsonConsumableThirst = ThirstUtil.getThirstJsonConfig(registryName, stack);
 
             if (jsonConsumableThirst != null)
-                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
+                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effects);
             else {
                 HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
                 if (hydrationEnum != null)

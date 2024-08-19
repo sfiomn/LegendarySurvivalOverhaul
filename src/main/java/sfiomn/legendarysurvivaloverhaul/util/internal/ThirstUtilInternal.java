@@ -15,18 +15,20 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.registries.ForgeRegistries;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonEffectParameter;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
-import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 import javax.annotation.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 import static net.minecraft.block.CauldronBlock.LEVEL;
@@ -37,8 +39,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     public static final String CAPACITY_TAG = "HydrationCapacity";
 
     @Override
-    public void setThirstEnumTag(ItemStack stack, HydrationEnum hydrationEnum)
-    {
+    public void setThirstEnumTag(ItemStack stack, HydrationEnum hydrationEnum) {
         if (!stack.hasTag())
         {
             stack.setTag(new CompoundNBT());
@@ -52,8 +53,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     }
 
     @Override
-    public HydrationEnum getHydrationEnumTag(ItemStack stack)
-    {
+    public HydrationEnum getHydrationEnumTag(ItemStack stack) {
         if (stack.hasTag())
         {
             final CompoundNBT compound = stack.getTag();
@@ -69,8 +69,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     }
 
     @Override
-    public void removeHydrationEnumTag(ItemStack stack)
-    {
+    public void removeHydrationEnumTag(ItemStack stack) {
         if(stack.hasTag())
         {
             final CompoundNBT compound = stack.getTag();
@@ -82,8 +81,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     }
 
     @Override
-    public void setCapacityTag(ItemStack stack, int capacity)
-    {
+    public void setCapacityTag(ItemStack stack, int capacity) {
         if (!stack.hasTag())
         {
             stack.setTag(new CompoundNBT());
@@ -97,8 +95,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     }
 
     @Override
-    public int getCapacityTag(ItemStack stack)
-    {
+    public int getCapacityTag(ItemStack stack) {
         if (stack.hasTag())
         {
             final CompoundNBT compound = stack.getTag();
@@ -112,8 +109,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     }
 
     @Override
-    public void removeCapacityTag(ItemStack stack)
-    {
+    public void removeCapacityTag(ItemStack stack) {
         if(stack.hasTag())
         {
             final CompoundNBT compound = stack.getTag();
@@ -128,8 +124,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     // Returns a HydrationEnum based on what is being looked at
     @Nullable
     @Override
-    public HydrationEnum traceWater(PlayerEntity player)
-    {
+    public HydrationEnum traceWater(PlayerEntity player) {
         HydrationEnum hydrationEnum = getHydrationEnumLookedAt(player, player.getAttributeValue(ForgeMod.REACH_DISTANCE.get()) / 2);
 
         if(hydrationEnum == HydrationEnum.RAIN && !Config.Baked.drinkFromRain)
@@ -145,8 +140,7 @@ public class ThirstUtilInternal implements IThirstUtil {
     }
 
     @Override
-    public void takeDrink(PlayerEntity player, int hydration, float saturation, float effectChance, String effectName)
-    {
+    public void takeDrink(PlayerEntity player, int hydration, float saturation, List<JsonEffectParameter> effects) {
         if(!Config.Baked.thirstEnabled)
             return;
 
@@ -157,25 +151,24 @@ public class ThirstUtilInternal implements IThirstUtil {
         capability.addSaturationLevel(saturation);
 
         // Check for effect chance
-        if(effectChance != 0.0f && !effectName.isEmpty() && player.level.random.nextFloat() < effectChance)
-        {
-            Effect mobEffect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectName));
-            if (mobEffect != null)
-                player.addEffect(new EffectInstance(mobEffect,600, 0, false, true, true));
+        for (JsonEffectParameter effect: effects) {
+            if(effect.chance >= 0.0f && effect.duration > 0 && !effect.name.isEmpty() && player.level.random.nextFloat() < effect.chance) {
+                Effect mobEffect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effect.name));
+                if (mobEffect != null)
+                    player.addEffect(new EffectInstance(mobEffect, effect.duration, effect.amplifier, false, true, true));
+            }
         }
     }
 
     @Override
-    public void takeDrink(PlayerEntity player, int hydration, float saturation)
-    {
+    public void takeDrink(PlayerEntity player, int hydration, float saturation) {
         // Clean water
-        takeDrink(player, hydration, saturation, 0.0f, "");
+        takeDrink(player, hydration, saturation, Collections.emptyList());
     }
 
     @Override
-    public void takeDrink(PlayerEntity player, HydrationEnum type)
-    {
-        takeDrink(player, type.getHydration(), (float) type.getSaturation(), (float) type.getEffectChance(), type.getEffectName());
+    public void takeDrink(PlayerEntity player, HydrationEnum type) {
+        takeDrink(player, type.getHydration(), (float) type.getSaturation(), Collections.singletonList(new JsonEffectParameter(type.getEffectName(), (float) type.getEffectChance(), type.getEffectDuration(), 0)));
     }
 
     @Override
@@ -213,20 +206,49 @@ public class ThirstUtilInternal implements IThirstUtil {
         return null;
     }
 
-    public JsonConsumableThirst getThirstConfig(ResourceLocation itemRegistryName, ItemStack itemStack) {
+    @Override
+    public JsonConsumableThirst getThirstJsonConfig(ResourceLocation itemRegistryName, ItemStack itemStack) {
         List<JsonConsumableThirst> jsonConsumableThirsts = null;
         JsonConsumableThirst defaultJct = null;
         if (itemRegistryName != null)
             jsonConsumableThirsts = JsonConfig.consumableThirst.get(itemRegistryName.toString());
 
-        if (jsonConsumableThirsts != null)
-            for (JsonConsumableThirst jct: jsonConsumableThirsts) {
+        if (jsonConsumableThirsts != null) {
+            LegendarySurvivalOverhaul.LOGGER.debug("found thirst value for " + itemRegistryName);
+            for (JsonConsumableThirst jct : jsonConsumableThirsts) {
+                LegendarySurvivalOverhaul.LOGGER.debug("look for " + jct.nbt);
+                if (itemStack.hasTag()) {
+                    if (itemStack.getTag().contains("Potion")) {
+                        LegendarySurvivalOverhaul.LOGGER.debug("potion tag : " + itemStack.getTag().get("Potion"));
+                    }
+                }
                 if (jct.matchesNbt(itemStack))
                     return jct;
                 if (jct.isDefault())
                     defaultJct = jct;
             }
+        }
 
         return defaultJct;
+    }
+
+    @Override
+    public void deactivateThirst(PlayerEntity player) {
+        CapabilityUtil.getThirstCapability(player).setThirstTickTimer(-1);
+        CapabilityUtil.getThirstCapability(player).setDirty();
+    }
+
+    @Override
+    public void activateThirst(PlayerEntity player) {
+        ThirstCapability cap = CapabilityUtil.getThirstCapability(player);
+        if (cap.getThirstTickTimer() == -1) {
+            cap.setThirstTickTimer(0);
+            cap.setDirty();
+        }
+    }
+
+    @Override
+    public boolean isThirstActive(PlayerEntity player) {
+        return CapabilityUtil.getThirstCapability(player).getThirstTickTimer() != -1;
     }
 }

@@ -53,6 +53,7 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapabil
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstStorage;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier;
+import sfiomn.legendarysurvivaloverhaul.common.integration.vampirism.VampirismEvents;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
@@ -94,6 +95,8 @@ public class LegendarySurvivalOverhaul
 	public static boolean curiosLoaded = false;
 
 	public static boolean toughAsNailsLoaded = false;
+
+	public static boolean vampirismLoaded = false;
 	
 	public static Path configPath = FMLPaths.CONFIGDIR.get();
 	public static Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "legendarysurvivaloverhaul");
@@ -138,19 +141,24 @@ public class LegendarySurvivalOverhaul
 		TemperatureUtil.internal = new TemperatureUtilInternal();
 		ThirstUtil.internal = new ThirstUtilInternal();
 		BodyDamageUtil.internal = new BodyDamageUtilInternal();
-		modIntegration();
+		modIntegration(forgeBus);
 	}
 	
-	private void modIntegration()
+	private void modIntegration(IEventBus forgeBus)
 	{
 		sereneSeasonsLoaded = ModList.get().isLoaded("sereneseasons");
 		curiosLoaded = ModList.get().isLoaded("curios");
 		surviveLoaded = ModList.get().isLoaded("survive");
+		vampirismLoaded = ModList.get().isLoaded("vampirism");
 		
 		if (sereneSeasonsLoaded)
 			LOGGER.debug("Serene Seasons is loaded, enabling compatibility");
 		if (curiosLoaded)
 			LOGGER.debug("Curios is loaded, enabling compatibility");
+		if (vampirismLoaded) {
+			LOGGER.debug("Vampirism is loaded, enabling compatibility");
+			forgeBus.register(VampirismEvents.class);
+		}
 		if (surviveLoaded)
 			LOGGER.debug("Survive is loaded, I hope you know what you're doing");
 	}

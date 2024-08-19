@@ -9,12 +9,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 public class DrinkItem extends Item {
@@ -74,10 +72,10 @@ public class DrinkItem extends Item {
         // Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over
         ResourceLocation registryName = stack.getItem().getRegistryName();
         if (this.getRegistryName() != null)
-            jsonConsumableThirst = ThirstUtil.getThirstConfig(registryName, stack);
+            jsonConsumableThirst = ThirstUtil.getThirstJsonConfig(registryName, stack);
 
         if(jsonConsumableThirst != null)
-            ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
+            ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effects);
 
         runSecondaryEffect(player, stack);
 

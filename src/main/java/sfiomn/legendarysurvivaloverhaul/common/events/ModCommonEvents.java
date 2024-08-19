@@ -3,11 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.common.events;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
 import net.minecraft.util.*;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -57,7 +53,7 @@ public class ModCommonEvents {
         PlayerEntity player = (PlayerEntity) entity;
         ResourceLocation itemRegistryName = event.getItem().getItem().getRegistryName();
 
-        if (shouldApplyTemperature((PlayerEntity) entity)) {
+        if (Config.Baked.temperatureEnabled) {
             List<JsonConsumableTemperature> jsonConsumableTemperatures = null;
             if (itemRegistryName != null)
                 jsonConsumableTemperatures = JsonConfig.consumableTemperature.get(itemRegistryName.toString());
@@ -72,21 +68,11 @@ public class ModCommonEvents {
             }
         }
 
-        if (Config.Baked.thirstEnabled && !entity.level.isClientSide && !(event.getItem().getItem() instanceof DrinkItem)) {
-            JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstConfig(itemRegistryName, event.getItem());
+        if (Config.Baked.thirstEnabled && ThirstUtil.isThirstActive(player) && !entity.level.isClientSide && !(event.getItem().getItem() instanceof DrinkItem)) {
+            JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstJsonConfig(itemRegistryName, event.getItem());
 
             if (jsonConsumableThirst != null) {
-                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
-            } else if (event.getItem().getItem() == Items.POTION){
-                Potion potion = PotionUtils.getPotion(event.getItem());
-                if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK)
-                {
-                    ThirstUtil.takeDrink(player, HydrationEnum.NORMAL);
-                }
-                else if (potion != Potions.EMPTY)
-                {
-                    ThirstUtil.takeDrink(player, HydrationEnum.POTION);
-                }
+                ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effects);
             } else {
                 HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(event.getItem());
                 if (hydrationEnum != null) {
@@ -264,7 +250,6 @@ public class ModCommonEvents {
         }
     }
 
-
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (event.isEndConquered())
@@ -279,12 +264,7 @@ public class ModCommonEvents {
 
     private static boolean shouldApplyThirst(PlayerEntity player)
     {
-        return !player.isCreative() && !player.isSpectator() && Config.Baked.thirstEnabled;
-    }
-
-    private static boolean shouldApplyTemperature(PlayerEntity player)
-    {
-        return !player.isCreative() && !player.isSpectator() && Config.Baked.temperatureEnabled;
+        return !player.isCreative() && !player.isSpectator() && Config.Baked.thirstEnabled && ThirstUtil.isThirstActive(player);
     }
 
     private static boolean shouldApplyLocalizedBodyDamage(PlayerEntity player)

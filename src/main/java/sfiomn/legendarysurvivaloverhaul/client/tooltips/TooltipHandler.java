@@ -1,13 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.client.tooltips;
 
-import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.potion.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
@@ -23,6 +21,7 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumabl
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonEffectParameter;
 import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
@@ -34,6 +33,7 @@ import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.KeybindingRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.FORGE)
@@ -46,30 +46,30 @@ public class TooltipHandler
 	{
 		ItemStack stack = event.getItemStack();
 
-		if (!stack.isEmpty() && stack.getItem().getRegistryName() != null)
+		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
+
+		if (!stack.isEmpty() && itemRegistryName != null)
 		{
-			List<ITextComponent> tooltip = event.getToolTip();
+			List<ITextComponent> tooltips = event.getToolTip();
 
-			ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
+			if (Config.Baked.temperatureEnabled) {
+				addItemBaseTemperatureText(itemRegistryName, tooltips);
 
-			if (stack.getItem() instanceof ArmorItem && Config.Baked.temperatureEnabled) {
-				addArmorBaseTemperatureText(itemRegistryName, tooltip);
+				if (stack.getItem() instanceof ArmorItem) {
+					addCoatTemperatureText(stack, tooltips);
 
-				addArmorCoatTemperatureText(stack, tooltip);
+				} else if (stack.getItem() instanceof CoatItem) {
+					addCoatItemDescText((CoatItem) stack.getItem(), tooltips);
+				}
+
+				addFoodEffectText(stack, tooltips);
 			}
 
-			// Added Description for coat items.
-			if (stack.getItem() instanceof CoatItem && Config.Baked.temperatureEnabled)
-				addCoatItemDescText((CoatItem) stack.getItem(), tooltip);
-
-			if (Config.Baked.temperatureEnabled)
-				addFoodEffectText(stack, tooltip);
-
 			if (Config.Baked.localizedBodyDamageEnabled)
-				addHealingText(stack, tooltip);
+				addHealingText(stack, tooltips);
 
 			if (Config.Baked.thirstEnabled && Config.Baked.showHydrationTooltip)
-				addHydrationText(stack, tooltip);
+				addHydrationText(stack, tooltips);
 		}
 	}
 
@@ -107,7 +107,7 @@ public class TooltipHandler
 		hydrationTooltip.renderTooltipIcons(event.getMatrixStack(), toolTipX, toolTipY, toolTipZ);
 	}
 
-	private static void addArmorBaseTemperatureText(ResourceLocation itemRegistryName, List<ITextComponent> tooltip) {
+	private static void addItemBaseTemperatureText(ResourceLocation itemRegistryName, List<ITextComponent> tooltip) {
 		float temperature = 0.0f;
 
 		JsonTemperature jsonTemperature = JsonConfig.itemTemperatures.get(itemRegistryName.toString());
@@ -136,7 +136,7 @@ public class TooltipHandler
 		tooltip.add(text);
 	}
 
-	private static void addArmorCoatTemperatureText(ItemStack stack, List<ITextComponent> tooltip) {
+	private static void addCoatTemperatureText(ItemStack stack, List<ITextComponent> tooltip) {
 		String coatId = TemperatureUtil.getArmorCoatTag(stack);
 		CoatEnum coat = CoatEnum.getFromId(coatId);
 
@@ -230,31 +230,23 @@ public class TooltipHandler
 	private static void addHydrationText(ItemStack stack, List<ITextComponent> tooltip) {
 		ResourceLocation itemRegistryName = stack.getItem().getRegistryName();
 		assert itemRegistryName != null;
-		JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstConfig(itemRegistryName, stack);
+		JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstJsonConfig(itemRegistryName, stack);
 
 		HydrationTooltip hydrationTooltip = null;
-		IFormattableTextComponent hydrationEffectComponent = null;
+		List<IFormattableTextComponent> hydrationEffectComponents = new ArrayList<>();
 
 		if (jsonConsumableThirst != null) {
 			hydrationTooltip = new HydrationTooltip(jsonConsumableThirst.hydration, jsonConsumableThirst.saturation);
-			if (jsonConsumableThirst.effectChance > 0 && !jsonConsumableThirst.effect.isEmpty()) {
-				hydrationEffectComponent = getHydrationEffectTooltip(jsonConsumableThirst.effectChance, jsonConsumableThirst.effect);
-			}
-		} else if (stack.getItem() == Items.POTION) {
-			Potion potion = PotionUtils.getPotion(stack);
-			if(potion == Potions.WATER || potion == Potions.AWKWARD || potion == Potions.MUNDANE || potion == Potions.THICK) {
-				hydrationTooltip = new HydrationTooltip(HydrationEnum.NORMAL);
-				hydrationEffectComponent = getHydrationEffectTooltip(HydrationEnum.NORMAL);
-			}
-			else if (potion != Potions.EMPTY) {
-				hydrationTooltip = new HydrationTooltip(HydrationEnum.POTION);
-				hydrationEffectComponent = getHydrationEffectTooltip(HydrationEnum.POTION);
+			for (JsonEffectParameter effect: jsonConsumableThirst.effects) {
+				if (effect.chance > 0 && effect.duration > 0 && !effect.name.isEmpty()) {
+					hydrationEffectComponents.add(getHydrationEffectTooltip(effect.chance, effect.name, effect.amplifier, effect.duration));
+				}
 			}
 		} else {
 			HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
 			if (hydrationEnum != null) {
 				hydrationTooltip = new HydrationTooltip(hydrationEnum);
-				hydrationEffectComponent = getHydrationEffectTooltip(hydrationEnum);
+				hydrationEffectComponents.add(getHydrationEffectTooltip(hydrationEnum));
 			}
 		}
 
@@ -270,15 +262,17 @@ public class TooltipHandler
 				(hydrationTooltip.hydrationIconNumber <= 0 && hydrationTooltip.saturationIconNumber > 0) )
 			tooltip.add(placeholder.setStyle(thirstStyle));
 
-		if (hydrationEffectComponent != null)
-			tooltip.add(hydrationEffectComponent);
+		for (IFormattableTextComponent hydrationEffectComponent: hydrationEffectComponents) {
+			if (hydrationEffectComponent != null)
+				tooltip.add(hydrationEffectComponent);
+		}
 	}
 
 	private static IFormattableTextComponent getHydrationEffectTooltip(HydrationEnum hydrationEnum) {
-		return getHydrationEffectTooltip(hydrationEnum.getEffectChance(), hydrationEnum.getEffectName());
+		return getHydrationEffectTooltip(hydrationEnum.getEffectChance(), hydrationEnum.getEffectName(), 0, hydrationEnum.getEffectDuration());
 	}
 
-	private static IFormattableTextComponent getHydrationEffectTooltip(double effectChance, String effectName) {
+	private static IFormattableTextComponent getHydrationEffectTooltip(double effectChance, String effectName, int amplifier, int duration) {
 		Effect effect = null;
 		if (effectName != null && !effectName.isEmpty() && effectChance > 0)
 			effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectName));
@@ -286,7 +280,7 @@ public class TooltipHandler
 		if (effect == null)
 			return null;
 
-		EffectInstance effectInstance = new EffectInstance(effect, 600, 0, false, true);
+		EffectInstance effectInstance = new EffectInstance(effect, duration, amplifier, false, true);
 		IFormattableTextComponent iformattabletextcomponent = new TranslationTextComponent(effectInstance.getDescriptionId());
 
 		if (effectInstance.getAmplifier() > 1) {

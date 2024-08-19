@@ -1,7 +1,9 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
@@ -186,13 +188,14 @@ public class BlockModifier extends ModifierBase
 	private float getTemperatureFromSpreadPoint(World world, SpreadPoint spreadPoint) {
 		BlockState blockState = world.getBlockState(spreadPoint.position());
 		float temperature = 0.0f;
+		ResourceLocation registryName = blockState.getBlock().getRegistryName();
 
-		if (blockState.getBlock().getRegistryName() == null) {
+		if (registryName == null || blockState.is(Blocks.AIR) || blockState.is(Blocks.CAVE_AIR) || blockState.is(Blocks.VOID_AIR)) {
 			return 0.0f;
 		}
 
 		//  List of combination of a temperature and a list of properties a block must have in order to generate this temperature
-		List<JsonBlockFluidTemperature> tempPropertyList = JsonConfig.blockFluidTemperatures.get(blockState.getBlock().getRegistryName().toString());
+		List<JsonBlockFluidTemperature> tempPropertyList = JsonConfig.blockFluidTemperatures.get(registryName.toString());
 
 		if (tempPropertyList == null) {
 			return 0.0f;

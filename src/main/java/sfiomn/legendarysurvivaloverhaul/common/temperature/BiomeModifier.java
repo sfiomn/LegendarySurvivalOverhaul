@@ -33,21 +33,22 @@ public class BiomeModifier extends ModifierBase
 		float biomeAverage = 0f;
 		
 		long worldTime = world.getLevelData().getDayTime() % 24000;
-		
+		double drynessTimeMultiplier = 1;
+		if (worldTime > 12000 && !world.dimensionType().hasCeiling() && Config.Baked.biomeDrynessMultiplier > 0)
+			drynessTimeMultiplier = 1 + Math.sin(worldTime * Math.PI / 12000) * Config.Baked.biomeDrynessMultiplier;
+
 		for (Vector3i offset : posOffsets)
 		{
 			Biome biome = world.getBiome(pos.offset(offset));
 			float humidity = getHumidityForBiome(world, biome);
-			float addedTemperature = getNormalizedTempForBiome(world, biome);
+			float biomeTemperature = getNormalizedTempForBiome(world, biome);
 			
-			if (humidity < 0.2f && worldTime > 12000 && addedTemperature > 0.80f && !world.dimensionType().hasCeiling() && Config.Baked.biomeDrynessEffectEnabled)
-			{
+			if (drynessTimeMultiplier < 1 && humidity < 0.2f && biomeTemperature > 0.80f) {
 				// Deserts are cold at night since heat isn't kept by moisture in the air
-				biomeAverage += (addedTemperature / 5f);
-			}
-			else
-			{
-				biomeAverage += addedTemperature;
+				biomeAverage += (float) (drynessTimeMultiplier * biomeTemperature);
+
+			} else {
+				biomeAverage += biomeTemperature;
 			}
 		}
 		

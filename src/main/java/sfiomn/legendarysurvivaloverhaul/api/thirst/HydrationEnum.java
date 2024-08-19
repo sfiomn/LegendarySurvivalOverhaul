@@ -23,59 +23,68 @@ public enum HydrationEnum
 		return this.name;
 	}
 
-	public int getHydration()
-	{
-		switch (this) {
+	public int getHydration() {
+        switch (this) {
 			case RAIN:
 				return Config.Baked.hydrationRain;
-			case POTION:
+            case POTION:
 				return Config.Baked.hydrationPotion;
-			case PURIFIED:
+            case PURIFIED:
 				return Config.Baked.hydrationPurified;
-			default:
+            default:
 				return Config.Baked.hydrationWater;
-		}
+        }
 	}
 
-	public double getSaturation()
-	{
-		switch (this) {
-			case RAIN:
+	public double getSaturation() {
+        switch (this) {
+            case RAIN:
 				return Config.Baked.saturationRain;
-			case POTION:
+            case POTION:
 				return Config.Baked.saturationPotion;
-			case PURIFIED:
+            case PURIFIED:
 				return Config.Baked.saturationPurified;
-			default:
+            default:
 				return Config.Baked.saturationWater;
-		}
+        }
 	}
 
-	public double getEffectChance()
-	{
-		switch (this) {
-			case RAIN:
+	public double getEffectChance() {
+        switch (this) {
+            case RAIN:
 				return Config.Baked.effectChanceRain;
-			case POTION:
+            case POTION:
 				return Config.Baked.effectChancePotion;
-			case PURIFIED:
+            case PURIFIED:
 				return Config.Baked.effectChancePurified;
-			default:
+            default:
 				return Config.Baked.effectChanceWater;
-		}
+        }
 	}
 
-	public String getEffectName()
-	{
+	public String getEffectName() {
+        switch (this) {
+            case RAIN:
+				return Config.Baked.effectRain;
+            case POTION:
+				return Config.Baked.effectPotion;
+            case PURIFIED:
+				return Config.Baked.effectPurified;
+            default:
+				return Config.Baked.effectWater;
+        }
+	}
+
+	public int getEffectDuration() {
 		switch (this) {
 			case RAIN:
-				return Config.Baked.effectRain;
+				return Config.Baked.effectDurationRain;
 			case POTION:
-				return Config.Baked.effectPotion;
+				return Config.Baked.effectDurationPotion;
 			case PURIFIED:
-				return Config.Baked.effectPurified;
+				return Config.Baked.effectDurationPurified;
 			default:
-				return Config.Baked.effectWater;
+				return Config.Baked.effectDurationWater;
 		}
 	}
 

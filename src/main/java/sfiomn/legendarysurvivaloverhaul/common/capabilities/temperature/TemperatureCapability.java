@@ -12,6 +12,7 @@ import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ITemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
 import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -134,7 +135,7 @@ public class TemperatureCapability implements ITemperatureCapability
 			if (Config.Baked.dangerousTemperature)
 				applyDangerousEffects(player, tempEnum);
 
-			if (Config.Baked.temperatureSecondaryEffects)
+			if (Config.Baked.temperatureSecondaryEffects && ThirstUtil.isThirstActive(player))
 				applySecondaryEffects(player, tempEnum);
 		}
 	}

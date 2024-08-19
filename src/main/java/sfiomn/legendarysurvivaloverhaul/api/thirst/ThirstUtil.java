@@ -4,8 +4,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonEffectParameter;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ThirstUtil
 {
@@ -26,16 +28,15 @@ public class ThirstUtil
 	}
 
 	/**
-	 * Player takes a drink with the specified values and a chance to make them thirsty
+	 * Player takes a drink with the specified values and a list of possible effects
 	 * @param player
 	 * @param hydration
 	 * @param saturation
-	 * @param effectChance 0.0f - 1.0f
-	 * @param effect
+	 * @param effects
 	 */
-	public static void takeDrink(PlayerEntity player, int hydration, float saturation, float effectChance, String effect)
+	public static void takeDrink(PlayerEntity player, int hydration, float saturation, List<JsonEffectParameter> effects)
 	{
-		internal.takeDrink(player, hydration, saturation, effectChance, effect);
+		internal.takeDrink(player, hydration, saturation, effects);
 	}
 
 	/**
@@ -139,12 +140,39 @@ public class ThirstUtil
 	}
 
 	/**
-	 * Gets tje JsonConsumableThirst from the jsonThirstConsumable json file
+	 * Retrieves the JsonConsumableThirst from the jsonThirstConsumable json file for the given itemStack
 	 *
 	 * @param itemRegistryName Item stack registry name
-	 * @param itemStack        Item stack to compare with
+	 * @param itemStack        Item stack
 	 */
-	public static JsonConsumableThirst getThirstConfig(ResourceLocation itemRegistryName, ItemStack itemStack) {
-		return internal.getThirstConfig(itemRegistryName, itemStack);
+	public static JsonConsumableThirst getThirstJsonConfig(ResourceLocation itemRegistryName, ItemStack itemStack) {
+		return internal.getThirstJsonConfig(itemRegistryName, itemStack);
+	}
+
+	/**
+	 * Deactivate the thirst system for the given player
+	 *
+	 * @param player The player to which deactivate the thirst system
+	 */
+	public static void deactivateThirst(PlayerEntity player) {
+		internal.deactivateThirst(player);
+	}
+
+	/**
+	 * Activate the thirst system for the given player
+	 *
+	 * @param player The player to which activate the thirst system
+	 */
+	public static void activateThirst(PlayerEntity player) {
+		internal.activateThirst(player);
+	}
+
+	/**
+	 * Check if the thirst system is active for the given player
+	 *
+	 * @param player The player thirst system to be checked
+	 */
+	public static boolean isThirstActive(PlayerEntity player) {
+		return internal.isThirstActive(player);
 	}
 }

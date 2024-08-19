@@ -4,6 +4,7 @@ public enum JsonFileName
 {
 	ITEM("itemTemperatures.json"),
 	BLOCK("blockTemperatures.json"),
+	ENTITY("entityTemperatures.json"),
 	BIOME("biomeOverrides.json"),
 	CONSUMABLE_TEMP("temperatureConsumables.json"),
 	FUEL("fuelItems.json"),

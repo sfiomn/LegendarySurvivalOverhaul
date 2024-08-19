@@ -23,10 +23,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import sereneseasons.api.SSItems;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons.RenderSeasonCards;
 import sfiomn.legendarysurvivaloverhaul.client.render.*;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
-import sfiomn.legendarysurvivaloverhaul.client.sounds.TemperatureEffectSound;
+import sfiomn.legendarysurvivaloverhaul.client.effects.TemperatureBreathEffect;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
@@ -126,14 +127,14 @@ public class ModClientEvents {
 
     @SubscribeEvent
     public static void onRenderGameOverlayEffects(RenderGameOverlayEvent.Post event) {
-        if (event.isCanceled() || minecraft.gameMode == null || !minecraft.gameMode.hasExperience()) return;
+        if (event.isCanceled() || minecraft.gameMode == null || !minecraft.gameMode.hasExperience() || minecraft.player == null) return;
 
         int scaledWidth = minecraft.getWindow().getGuiScaledWidth();
         int scaledHeight = minecraft.getWindow().getGuiScaledHeight();
 
         if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD && !minecraft.options.hideGui) {
 
-            if (Config.Baked.thirstEnabled) {
+            if (shouldApplyThirst(minecraft.player)) {
                 RenderThirstGui.render(event.getMatrixStack(), minecraft.player, scaledWidth, scaledHeight);
             }
 
@@ -156,11 +157,19 @@ public class ModClientEvents {
         if (Config.Baked.temperatureEnabled) {
             RenderTemperatureOverlay.render(event.getMatrixStack(), scaledWidth, scaledHeight);
         }
+    }
 
-        if (Config.Baked.thirstEnabled) {
+    @SubscribeEvent
+    public static void onRenderTick(TickEvent.RenderTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || minecraft.player == null)
+            return;
+
+        if (shouldApplyThirst(minecraft.player) && Config.Baked.lowHydrationEffect) {
             try {
                 RenderThirstOverlay.render();
             } catch (Exception ignored) {}
+        } else {
+            RenderThirstOverlay.stopRender();
         }
     }
 
@@ -188,15 +197,17 @@ public class ModClientEvents {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
-            if (!minecraft.isPaused()) {
+            if (!minecraft.isPaused() && minecraft.player != null) {
                 if (Config.Baked.temperatureEnabled) {
                     RenderTemperatureGui.updateTimer();
                     RenderTemperatureOverlay.updateTemperatureEffect(minecraft.player);
-                    TemperatureEffectSound.tickPlay(minecraft.player);
+                    if (Config.Baked.breathingSoundEnabled)
+                        TemperatureBreathEffect.tickPlay(minecraft.player);
                 }
-                if (Config.Baked.thirstEnabled) {
+                if (shouldApplyThirst(minecraft.player)) {
                     RenderThirstGui.updateTimer();
-                    RenderThirstOverlay.updateThirstEffect(minecraft.player);
+                    if (Config.Baked.lowHydrationEffect)
+                        RenderThirstOverlay.updateThirstEffect(minecraft.player);
                 }
                 if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && Config.Baked.seasonCardsEnabled) {
                     RenderSeasonCards.updateSeasonCardFading(minecraft.player);
@@ -206,5 +217,10 @@ public class ModClientEvents {
                 }
             }
         }
+    }
+
+    private static boolean shouldApplyThirst(PlayerEntity player)
+    {
+        return Config.Baked.thirstEnabled && ThirstUtil.isThirstActive(player);
     }
 }

@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 public class HeldItemsModifier extends ModifierBase {
     public HeldItemsModifier()
@@ -38,7 +39,7 @@ public class HeldItemsModifier extends ModifierBase {
     private float processStack(ItemStack stack)
     {
         // If held item is armor, ignore it
-        if (stack.getItem() instanceof ArmorItem)
+        if (stack.getItem() instanceof ArmorItem || stack.getItem() instanceof ICurioItem)
             return 0.0f;
 
         ResourceLocation itemRegistryName = stack.getItem().getRegistryName();

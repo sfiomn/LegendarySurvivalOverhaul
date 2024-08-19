@@ -1,7 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.registry;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.*;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.common.crafting.NBTIngredient;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -43,10 +47,15 @@ public class EffectRegistry
 
 	public static void registerBrewingRecipes()
 	{
-		PotionBrewing.addMix(Potions.AWKWARD, ItemRegistry.SUN_FERN.get(), HEAT_RESISTANCE_POTION.get());
-		PotionBrewing.addMix(Potions.AWKWARD, ItemRegistry.ICE_FERN.get(), COLD_RESISTANCE_POTION.get());
-		PotionBrewing.addMix(HEAT_RESISTANCE_POTION.get(), Items.REDSTONE, HEAT_RESISTANCE_POTION_LONG.get());
-		PotionBrewing.addMix(COLD_RESISTANCE_POTION.get(), Items.REDSTONE, COLD_RESISTANCE_POTION_LONG.get());
+		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.SUN_FERN.get(), HEAT_RESISTANCE_POTION.get());
+		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.ICE_FERN.get(), COLD_RESISTANCE_POTION.get());
+		addBrewingRecipe(HEAT_RESISTANCE_POTION.get(), Items.REDSTONE, HEAT_RESISTANCE_POTION_LONG.get());
+		addBrewingRecipe(COLD_RESISTANCE_POTION.get(), Items.REDSTONE, COLD_RESISTANCE_POTION_LONG.get());
+	}
+
+	private static void addBrewingRecipe(Potion potionInput, Item ingredient, Potion potionResult)
+	{
+		BrewingRecipeRegistry.addRecipe(NBTIngredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), potionInput)), NBTIngredient.of(new ItemStack(ingredient)), PotionUtils.setPotion(new ItemStack(Items.POTION), potionResult));
 	}
 	
 	public static void register (IEventBus eventBus){

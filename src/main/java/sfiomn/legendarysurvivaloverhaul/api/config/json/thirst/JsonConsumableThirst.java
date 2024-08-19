@@ -6,10 +6,7 @@ import net.minecraft.nbt.CompoundNBT;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JsonConsumableThirst
 {
@@ -17,28 +14,26 @@ public class JsonConsumableThirst
 	public int hydration;
 	@SerializedName("saturation")
 	public float saturation;
-	@SerializedName("effectChance")
-	public float effectChance;
-	@SerializedName("effect")
-	public String effect;
+	@SerializedName("effects")
+	public List<JsonEffectParameter> effects;
 	@SerializedName("nbt")
 	public Map<String,String> nbt;
 
-	public JsonConsumableThirst(int hydration, float saturation, float effectChance, String effect, JsonPropertyValue... nbt) {
+	public JsonConsumableThirst(int hydration, float saturation, JsonEffectParameter[] effects, JsonPropertyValue... nbt) {
 		this.hydration = hydration;
 		this.saturation = saturation;
-		this.effectChance = effectChance;
-		this.effect = effect;
-		this.nbt = new HashMap<>();
 
+		this.effects = new ArrayList<>();
+        this.effects.addAll(Arrays.asList(effects));
+
+		this.nbt = new HashMap<>();
 		for (JsonPropertyValue prop : nbt)
 		{
 			this.nbt.put(prop.name, prop.value);
 		}
 	}
 
-	public JsonPropertyValue[] getNbtArray()
-	{
+	public JsonPropertyValue[] getNbtArray() {
 		List<JsonPropertyValue> jpvList = new ArrayList<>();
 		for(Map.Entry<String, String> entry : this.nbt.entrySet())
 		{

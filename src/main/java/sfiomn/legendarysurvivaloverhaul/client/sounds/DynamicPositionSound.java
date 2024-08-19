@@ -9,7 +9,7 @@ public class DynamicPositionSound extends TickableSound {
     private final PlayerEntity player;
     private int time;
 
-    protected DynamicPositionSound(SoundEvent soundEvent, PlayerEntity player) {
+    public DynamicPositionSound(SoundEvent soundEvent, PlayerEntity player) {
         super(soundEvent, SoundCategory.PLAYERS);
         this.player = player;
         this.looping = false;
