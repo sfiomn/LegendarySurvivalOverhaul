@@ -2,6 +2,8 @@ package sfiomn.legendarysurvivaloverhaul.config.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.FileUtils;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
@@ -30,10 +32,10 @@ import static sfiomn.legendarysurvivaloverhaul.util.internal.ThirstUtilInternal.
 
 public class JsonConfigRegistration
 {
-	public static void init(File configDir)
-	{
+	public static void init(File configDir) {
 		registerDefaults(configDir);
 
+		migrateThirstConsumablesJson(configDir);
 		processAllJson(configDir);
 
 		writeAllToJson(configDir);
@@ -385,5 +387,84 @@ public class JsonConfigRegistration
 	private static Gson buildNewGson()
 	{
 		return new GsonBuilder().setPrettyPrinting().excludeFieldsWithModifiers(Modifier.PRIVATE).create();
+	}
+
+	private static void migrateThirstConsumablesJson(File jsonDir) {
+
+		String jsonFileName = JsonFileName.CONSUMABLE_THIRST.get();
+		Type type = new TypeToken<Map<String, List<OldConsumableThirst>>>(){}.getType();
+
+		File jsonFile = new File(jsonDir, jsonFileName);
+
+		Map<String, List<OldConsumableThirst>> oldJsonConsumableThirsts = new HashMap<>();
+		Map<String, List<JsonConsumableThirst>> newJsonConsumableThirsts = new HashMap<>();
+		if (jsonFile.exists())
+		{
+			Gson gson = buildNewGson();
+			try {
+				newJsonConsumableThirsts = processJson(JsonFileName.CONSUMABLE_THIRST, jsonDir);
+				if (newJsonConsumableThirsts != null && !newJsonConsumableThirsts.isEmpty()) {
+					Map.Entry<String,List<JsonConsumableThirst>> entry1 = newJsonConsumableThirsts.entrySet().iterator().next();
+					if (!entry1.getValue().isEmpty() && entry1.getValue().get(0).effects == null)
+						oldJsonConsumableThirsts = gson.fromJson(new FileReader(jsonFile), type);
+				}
+			} catch (Exception e) {
+				return;
+			}
+		}
+		if (!oldJsonConsumableThirsts.isEmpty()) {
+			LegendarySurvivalOverhaul.LOGGER.debug("migrate " + oldJsonConsumableThirsts.size() + " consumable thirst values to new JSON");
+			for (Map.Entry<String, List<OldConsumableThirst>> entry : oldJsonConsumableThirsts.entrySet()) {
+				for (OldConsumableThirst ojct : entry.getValue()) {
+					List<JsonEffectParameter> effects = new ArrayList<>();
+					effects.add(new JsonEffectParameter(ojct.effect, ojct.effectChance, 600, 0));
+					JsonConfig.registerConsumableThirst(entry.getKey(), ojct.hydration, ojct.saturation, effects.toArray(new JsonEffectParameter[0]), ojct.getNbtArray());
+				}
+			}
+			try {
+				manuallyWriteToJson(JsonFileName.CONSUMABLE_THIRST, JsonConfig.consumableThirst, jsonDir, true);
+			} catch (Exception e) {
+				LegendarySurvivalOverhaul.LOGGER.debug("Exception while writing new json file during migration of jsonThirstConsumables : " + e);
+			}
+		}
+	}
+
+	class OldConsumableThirst {
+
+		@SerializedName("hydration")
+		public int hydration;
+		@SerializedName("saturation")
+		public float saturation;
+		@SerializedName("effectChance")
+		public float effectChance;
+		@SerializedName("effect")
+		public String effect;
+		@SerializedName("nbt")
+		public Map<String,String> nbt;
+
+		public OldConsumableThirst(int hydration, float saturation, float effectChance, String effect, JsonPropertyValue... nbt) {
+			this.hydration = hydration;
+			this.saturation = saturation;
+
+			this.effectChance = effectChance;
+			this.effect = effect;
+
+			this.nbt = new HashMap<>();
+			for (JsonPropertyValue prop : nbt)
+			{
+				this.nbt.put(prop.name, prop.value);
+			}
+		}
+
+		public JsonPropertyValue[] getNbtArray()
+		{
+			List<JsonPropertyValue> jpvList = new ArrayList<>();
+			for(Map.Entry<String, String> entry : this.nbt.entrySet())
+			{
+				jpvList.add(new JsonPropertyValue(entry.getKey(), entry.getValue()));
+			}
+
+			return jpvList.toArray(new JsonPropertyValue[0]);
+		}
 	}
 }
