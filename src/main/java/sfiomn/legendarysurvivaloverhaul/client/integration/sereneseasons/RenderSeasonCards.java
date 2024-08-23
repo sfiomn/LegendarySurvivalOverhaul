@@ -66,6 +66,7 @@ public class RenderSeasonCards {
     public static void updateSeasonCardFading(PlayerEntity player) {
         if (player != null && player.isAlive()) {
             if (lastDimension == null || lastDimension != player.level.dimension()) {
+                delayTimer = delayTimeTicks;
                 isDimensionSeasonal = SeasonsConfig.isDimensionWhitelisted(player.level.dimension());
                 lastDimension = player.level.dimension();
             }
@@ -133,9 +134,9 @@ public class RenderSeasonCards {
     }
 
     public static void reset() {
+        seasonCard = null;
         lastSeason = null;
         lastTropicalSeason = null;
-        delayTimer = delayTimeTicks;
         fadeLevel = 0;
     }
 

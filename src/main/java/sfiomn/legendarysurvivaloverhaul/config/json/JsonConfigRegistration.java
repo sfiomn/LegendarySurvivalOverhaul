@@ -94,12 +94,25 @@ public class JsonConfigRegistration
 		JsonConfig.registerItemTemperature("minecraft:leather_chestplate", 1.0f);
 		JsonConfig.registerItemTemperature("minecraft:leather_helmet", 0.5f);
 
-		JsonConfig.registerItemTemperature("minecraft:iron_boots", 0f);
-		JsonConfig.registerItemTemperature("minecraft:iron_leggings", 0f);
-		JsonConfig.registerItemTemperature("minecraft:iron_chestplate", 0f);
-		JsonConfig.registerItemTemperature("minecraft:iron_helmet", 0f);
+		JsonConfig.registerItemTemperature("minecraft:iron_boots", -0.5f);
+		JsonConfig.registerItemTemperature("minecraft:iron_leggings", -1.0f);
+		JsonConfig.registerItemTemperature("minecraft:iron_chestplate", -1.0f);
+		JsonConfig.registerItemTemperature("minecraft:iron_helmet", -0.5f);
+
+		JsonConfig.registerItemTemperature("minecraft:diamond_boots", -0.75f);
+		JsonConfig.registerItemTemperature("minecraft:diamond_leggings", -1.25f);
+		JsonConfig.registerItemTemperature("minecraft:diamond_chestplate", -1.5f);
+		JsonConfig.registerItemTemperature("minecraft:diamond_helmet", -0.5f);
+
+		JsonConfig.registerItemTemperature("minecraft:netherite_boots", 1.25f);
+		JsonConfig.registerItemTemperature("minecraft:netherite_leggings", 1.5f);
+		JsonConfig.registerItemTemperature("minecraft:netherite_chestplate", 2.25f);
+		JsonConfig.registerItemTemperature("minecraft:netherite_helmet", 1.0f);
 
 		JsonConfig.registerItemTemperature("minecraft:torch", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:ice", -1.0f);
+		JsonConfig.registerItemTemperature("minecraft:packed_ice", -2.0f);
+		JsonConfig.registerItemTemperature("minecraft:blue_ice", -3.0f);
 
 		JsonConfig.registerEntityTemperature("minecraft:strider", -2.0f);
 
@@ -107,6 +120,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "minecraft:mushroom_stew", 1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:rabbit_stew", 2, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:melon_slice", -1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, LegendarySurvivalOverhaul.MOD_ID + ":melon_juice", -1, 1200);
 
 		JsonConfig.registerBiomeOverride("minecraft:crimson_forest", 0.75f, false);
 		JsonConfig.registerBiomeOverride("minecraft:warped_forest", 0.75f, false);
