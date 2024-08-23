@@ -28,6 +28,7 @@ import sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons.RenderS
 import sfiomn.legendarysurvivaloverhaul.client.render.*;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.client.effects.TemperatureBreathEffect;
+import sfiomn.legendarysurvivaloverhaul.client.sounds.TemperatureBreathSound;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
@@ -201,8 +202,10 @@ public class ModClientEvents {
                 if (Config.Baked.temperatureEnabled) {
                     RenderTemperatureGui.updateTimer();
                     RenderTemperatureOverlay.updateTemperatureEffect(minecraft.player);
-                    if (Config.Baked.breathingSoundEnabled)
+                    if (Config.Baked.coldBreathEffectThreshold != -1000)
                         TemperatureBreathEffect.tickPlay(minecraft.player);
+                    if (Config.Baked.breathingSoundEnabled)
+                        TemperatureBreathSound.tickPlay(minecraft.player);
                 }
                 if (shouldApplyThirst(minecraft.player)) {
                     RenderThirstGui.updateTimer();

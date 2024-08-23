@@ -726,7 +726,7 @@ public class Config
 					.defineInRange("Body Damage Multiplier", 1.0d, 0.0d, 1000.0d);
 			bodyHealthRatioRecoveredFromSleep = builder
 					.comment(" How much health ratio are recovered in all body parts from bed sleeping.")
-					.defineInRange("Body Part Health Ratio Recovered", 0.3d, 0.0d, 1.0d);
+					.defineInRange("Body Part Health Ratio Recovered", 1.0d, 0.0d, 1.0d);
 			healthRatioRecoveredFromSleep = builder
 					.comment(" How much health ratio are recovered from bed sleeping.")
 					.defineInRange("Health Ratio Recovered", 0.3d, 0.0d, 1.0d);
@@ -838,6 +838,7 @@ public class Config
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetY;
 		public final ForgeConfigSpec.BooleanValue breathingSoundEnabled;
+		public final ForgeConfigSpec.DoubleValue coldBreathEffectThreshold;
 		public final ForgeConfigSpec.BooleanValue foodSaturationDisplayed;
 		
 		public final ForgeConfigSpec.IntValue wetnessIndicatorOffsetX;
@@ -886,7 +887,11 @@ public class Config
 			temperatureDisplayOffsetY = builder
 					.defineInRange("Temperature Display Y Offset", 0, -1000, 1000);
 			breathingSoundEnabled = builder
-					.define(" If enabled, breathing sound can be heard while player faces harsh temperatures", true);
+					.comment(" If enabled, breathing sound can be heard while player faces harsh temperatures.")
+					.define("Breathing Sound Enabled", true);
+			coldBreathEffectThreshold = builder
+					.comment(" Temperature threshold below which a cold breath effect is rendered by the player. -1000 disable the feature.")
+					.defineInRange("Cold Breath Temperature Threshold", 10.0, -1000, 1000);
 			foodSaturationDisplayed = builder
 					.comment(" If enabled, the food saturation will be rendered on the Food Bar while the player suffers Cold Hunger Effect (secondary temperature effect).")
 					.define("Show Food Saturation Bar", true);
@@ -1162,6 +1167,7 @@ public class Config
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
 		public static boolean breathingSoundEnabled;
+		public static double coldBreathEffectThreshold;
 
 		public static int seasonCardsOffsetX;
 		public static int seasonCardsOffsetY;
@@ -1394,6 +1400,7 @@ public class Config
 				temperatureDisplayOffsetX = CLIENT.temperatureDisplayOffsetX.get();
 				temperatureDisplayOffsetY = CLIENT.temperatureDisplayOffsetY.get();
 				breathingSoundEnabled = CLIENT.breathingSoundEnabled.get();
+				coldBreathEffectThreshold = CLIENT.coldBreathEffectThreshold.get();
 				showVanillaAnimationOverlay = CLIENT.showVanillaAnimationOverlay.get();
 
 				seasonCardsOffsetX = CLIENT.seasonCardsOffsetX.get();

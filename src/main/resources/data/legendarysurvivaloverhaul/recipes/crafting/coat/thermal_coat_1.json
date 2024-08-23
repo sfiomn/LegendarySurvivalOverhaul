@@ -4,8 +4,8 @@
 	"pattern":
 	[
 		" cs",
-		"csh",
-		"sh "
+		" sh",
+		"   "
 	],
 	"key": 
 	{

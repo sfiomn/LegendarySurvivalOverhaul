@@ -1,6 +1,7 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration;
 
 import net.minecraftforge.fml.ModList;
+import sfiomn.legendarysurvivaloverhaul.api.block.ThermalTypeEnum;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.DamageDistributionEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
@@ -62,8 +63,10 @@ public final class IntegrationController
 			initSupplementaries();
 		if (mods.isLoaded("crockpot"))
 			initCrockpot();
+		if (mods.isLoaded("quark"))
+			initQuark();
 	}
-	
+
 	private static void initCreate()
 	{
 		JsonConfig.registerBlockTemperature("create:blaze_burner", 2.5f, new JsonPropertyValue("blaze", "smouldering"));
@@ -84,9 +87,9 @@ public final class IntegrationController
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:baked_cod_stew", 2, 2400);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "farmersdelight:hot_cocoa", 3, 3600);
 
-		JsonConfig.registerConsumableThirst("farmersdelight:chicken_soup", 2, 1.0f);
-		JsonConfig.registerConsumableThirst("farmersdelight:vegetable_soup", 2, 1.0f);
-		JsonConfig.registerConsumableThirst("farmersdelight:pumpkin_soup", 2, 1.0f);
+		JsonConfig.registerConsumableThirst("farmersdelight:chicken_soup", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("farmersdelight:vegetable_soup", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("farmersdelight:pumpkin_soup", 4, 2.0f);
 		JsonConfig.registerConsumableThirst("farmersdelight:hot_cocoa", 4, 1.0f);
 	}
 	
@@ -192,6 +195,9 @@ public final class IntegrationController
 	private static void initBetterEndForge() {
 		JsonConfig.registerBiomeOverride("betterendforge:sulphur_springs", 1.1f);
 		JsonConfig.registerBiomeOverride("betterendforge:ice_starfield", 0.1f);
+
+		JsonConfig.registerFuelItems("betterendforge:coal_block", ThermalTypeEnum.HEATING, 270);
+		JsonConfig.registerFuelItems("betterendforge:charcoal_block", ThermalTypeEnum.HEATING, 270);
 	}
 
 	private static void initAtmospheric() {
@@ -228,5 +234,10 @@ public final class IntegrationController
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:turkey_dinner", 2, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:veg_stinger", -1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:watermelon_icle", -4, 1800);
+	}
+
+	private static void initQuark() {
+		JsonConfig.registerFuelItems("quark:coal_block", ThermalTypeEnum.HEATING, 270);
+		JsonConfig.registerFuelItems("quark:charcoal_block", ThermalTypeEnum.HEATING, 270);
 	}
 }

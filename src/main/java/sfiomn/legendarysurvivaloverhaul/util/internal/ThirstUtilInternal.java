@@ -24,12 +24,14 @@ import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
+import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 import javax.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static net.minecraft.block.CauldronBlock.LEVEL;
 
@@ -154,8 +156,13 @@ public class ThirstUtilInternal implements IThirstUtil {
         for (JsonEffectParameter effect: effects) {
             if(effect.chance >= 0.0f && effect.duration > 0 && !effect.name.isEmpty() && player.level.random.nextFloat() < effect.chance) {
                 Effect mobEffect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effect.name));
-                if (mobEffect != null)
-                    player.addEffect(new EffectInstance(mobEffect, effect.duration, effect.amplifier, false, true, true));
+                if (mobEffect != null) {
+                    int effectDuration = effect.duration;
+                    if (mobEffect == EffectRegistry.THIRST.get() && player.getEffect(EffectRegistry.THIRST.get()) != null) {
+                        effectDuration += Objects.requireNonNull(player.getEffect(EffectRegistry.THIRST.get())).getDuration();
+                    }
+                    player.addEffect(new EffectInstance(mobEffect, effectDuration, effect.amplifier, false, true, true));
+                }
             }
         }
     }
@@ -214,14 +221,7 @@ public class ThirstUtilInternal implements IThirstUtil {
             jsonConsumableThirsts = JsonConfig.consumableThirst.get(itemRegistryName.toString());
 
         if (jsonConsumableThirsts != null) {
-            LegendarySurvivalOverhaul.LOGGER.debug("found thirst value for " + itemRegistryName);
             for (JsonConsumableThirst jct : jsonConsumableThirsts) {
-                LegendarySurvivalOverhaul.LOGGER.debug("look for " + jct.nbt);
-                if (itemStack.hasTag()) {
-                    if (itemStack.getTag().contains("Potion")) {
-                        LegendarySurvivalOverhaul.LOGGER.debug("potion tag : " + itemStack.getTag().get("Potion"));
-                    }
-                }
                 if (jct.matchesNbt(itemStack))
                     return jct;
                 if (jct.isDefault())

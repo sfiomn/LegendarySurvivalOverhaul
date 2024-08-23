@@ -3,6 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.common.particles;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.BasicParticleType;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 
 import javax.annotation.Nullable;
 
@@ -16,7 +17,7 @@ public class BreathParticle extends SpriteTexturedParticle {
         this.setSpriteFromAge(animatedSprite);
         this.animatedSprite = animatedSprite;
 
-        this.lifetime = (int) (15.0D / (random.nextDouble() + 0.3D));
+        this.lifetime = (int) (10.0D / (random.nextDouble() + 0.3D));
 
         this.alpha = 0.4f;
         this.gravity = 0.2f;
@@ -26,7 +27,8 @@ public class BreathParticle extends SpriteTexturedParticle {
     @Override
     public void tick() {
         super.tick();
-        this.setSpriteFromAge(this.animatedSprite);
+        if (!this.removed)
+            this.setSpriteFromAge(this.animatedSprite);
     }
 
     @Override
