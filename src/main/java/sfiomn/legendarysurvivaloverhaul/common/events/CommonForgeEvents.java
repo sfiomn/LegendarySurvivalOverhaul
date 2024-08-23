@@ -272,11 +272,6 @@ public class CommonForgeEvents {
         return !player.isCreative() && !player.isSpectator() && Config.Baked.thirstEnabled && ThirstUtil.isThirstActive(player);
     }
 
-    private static boolean shouldApplyTemperature(Player player)
-    {
-        return !player.isCreative() && !player.isSpectator() && Config.Baked.temperatureEnabled;
-    }
-
     private static boolean shouldApplyLocalizedBodyDamage(Player player)
     {
         return !player.isCreative() && !player.isSpectator() && Config.Baked.localizedBodyDamageEnabled;

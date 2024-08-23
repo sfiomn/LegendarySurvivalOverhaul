@@ -108,6 +108,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:mushroom_stew", 1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "minecraft:mushroom_stew", 1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:rabbit_stew", 2, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:suspicious_stew", 1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:melon_slice", -1, 1200);
 
 		JsonConfig.registerBiomeOverride("minecraft:crimson_forest", 0.75f, false);
@@ -127,7 +128,11 @@ public class JsonConfigRegistration
 
 		JsonConfig.registerConsumableThirst("minecraft:melon_slice", 2, 1.0f);
 		JsonConfig.registerConsumableThirst("minecraft:apple", 2, 0.5f);
-		JsonConfig.registerConsumableThirst("minecraft:rotten_flesh", -1, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 1.0f, 600, 0)});
+		JsonConfig.registerConsumableThirst("minecraft:beetroot_soup", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("minecraft:rabbit_stew", 6, 2.0f);
+		JsonConfig.registerConsumableThirst("minecraft:mushroom_stew", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("minecraft:suspicious_stew", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("minecraft:rotten_flesh", -2, -1.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 1.0f, 600, 0)});
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":apple_juice",6,3.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":beetroot_juice",9,4.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":cactus_juice",9,3.0f);
@@ -172,6 +177,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerDamageSourceBodyParts("inFire", DamageDistributionEnum.ALL, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
 		JsonConfig.registerDamageSourceBodyParts("cactus", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
 		JsonConfig.registerDamageSourceBodyParts("sweetBerryBush", DamageDistributionEnum.ONE_OF, Arrays.asList(BodyPartEnum.LEFT_FOOT, BodyPartEnum.RIGHT_FOOT, BodyPartEnum.LEFT_LEG, BodyPartEnum.RIGHT_LEG));
+		JsonConfig.registerDamageSourceBodyParts("in_wall", DamageDistributionEnum.NONE, Collections.emptyList());
 		JsonConfig.registerDamageSourceBodyParts("drown", DamageDistributionEnum.NONE, Collections.emptyList());
 		JsonConfig.registerDamageSourceBodyParts("starve", DamageDistributionEnum.NONE, Collections.emptyList());
 		JsonConfig.registerDamageSourceBodyParts("magic", DamageDistributionEnum.NONE, Collections.emptyList());

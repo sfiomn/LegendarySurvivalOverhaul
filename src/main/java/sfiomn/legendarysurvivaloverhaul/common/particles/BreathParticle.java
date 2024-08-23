@@ -17,7 +17,7 @@ public class BreathParticle extends TextureSheetParticle {
         this.setSpriteFromAge(animatedSprite);
         this.animatedSprite = animatedSprite;
 
-        this.lifetime = (int) (15.0D / (random.nextDouble() + 0.3D));
+        this.lifetime = (int) (10.0D / (random.nextDouble() + 0.3D));
 
         this.alpha = 0.4f;
         this.gravity = 0.2f;

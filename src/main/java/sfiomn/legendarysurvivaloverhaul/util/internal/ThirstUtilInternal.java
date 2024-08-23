@@ -24,10 +24,12 @@ import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
+import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL;
 
@@ -160,8 +162,13 @@ public class ThirstUtilInternal implements IThirstUtil {
         for (JsonEffectParameter effect: effects) {
             if (effect.chance >= 0.0f && effect.duration > 0 && !effect.name.isEmpty() && player.level().random.nextFloat() < effect.chance) {
                 MobEffect mobEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effect.name));
-                if (mobEffect != null)
-                    player.addEffect(new MobEffectInstance(mobEffect, effect.duration, effect.amplifier, false, true, true));
+                if (mobEffect != null) {
+                    int effectDuration = effect.duration;
+                    if (mobEffect == MobEffectRegistry.THIRST.get() && player.getEffect(MobEffectRegistry.THIRST.get()) != null) {
+                        effectDuration += Objects.requireNonNull(player.getEffect(MobEffectRegistry.THIRST.get())).getDuration();
+                    }
+                    player.addEffect(new MobEffectInstance(mobEffect, effectDuration, effect.amplifier, false, true, true));
+                }
             }
         }
     }

@@ -94,9 +94,9 @@ public final class IntegrationController
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "farmersdelight:baked_cod_stew", 2, 2400);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "farmersdelight:hot_cocoa", 3, 3600);
 
-		JsonConfig.registerConsumableThirst("farmersdelight:chicken_soup", 2, 1.0f);
-		JsonConfig.registerConsumableThirst("farmersdelight:vegetable_soup", 2, 1.0f);
-		JsonConfig.registerConsumableThirst("farmersdelight:pumpkin_soup", 2, 1.0f);
+		JsonConfig.registerConsumableThirst("farmersdelight:chicken_soup", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("farmersdelight:vegetable_soup", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("farmersdelight:pumpkin_soup", 4, 2.0f);
 		JsonConfig.registerConsumableThirst("farmersdelight:hot_cocoa", 4, 1.0f);
 	}
 	
@@ -202,6 +202,7 @@ public final class IntegrationController
 	private static void initBetterEndForge() {
 		JsonConfig.registerBiomeOverride("betterendforge:sulphur_springs", 1.1f);
 		JsonConfig.registerBiomeOverride("betterendforge:ice_starfield", 0.1f);
+
 		JsonConfig.registerFuelItems("betterendforge:coal_block", ThermalTypeEnum.HEATING, 270);
 		JsonConfig.registerFuelItems("betterendforge:charcoal_block", ThermalTypeEnum.HEATING, 270);
 	}

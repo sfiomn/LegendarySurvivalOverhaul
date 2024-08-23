@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
+import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosUtil;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
@@ -41,7 +42,7 @@ public class HeldItemsModifier extends ModifierBase {
     private float processStackJson(ItemStack stack)
     {
         // If held item is armor, ignore it
-        if (stack.getItem() instanceof ArmorItem || stack.getItem() instanceof ICurioItem)
+        if (stack.getItem() instanceof ArmorItem || CuriosUtil.isCuriosItem(stack))
             return 0.0f;
 
         ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());

@@ -173,9 +173,13 @@ dependencies {
     // These are REQUIRED for the mod to compile correctly and should not be removed.
     implementation fg.deobf("curse.maven:curios-309927:5367944")
     implementation fg.deobf("curse.maven:serene-seasons-291874:4761604")
+    implementation fg.deobf("curse.maven:dummy-225738:5594972")
+    implementation fg.deobf("curse.maven:moonlight-499980:5651445")
+
     //implementation fg.deobf("curse.maven:create-328085:4835191")
     //implementation fg.deobf("curse.maven:simplehats-631990:5603815")
     //implementation fg.deobf("curse.maven:forgifiedfabricapi-889079:5387432")
+    //implementation fg.deobf("curse.maven:cosmeticarmor-237307:4600191")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

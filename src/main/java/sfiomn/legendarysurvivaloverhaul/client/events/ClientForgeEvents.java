@@ -22,6 +22,7 @@ import sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons.RenderS
 import sfiomn.legendarysurvivaloverhaul.client.render.*;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.client.effects.TemperatureBreathEffect;
+import sfiomn.legendarysurvivaloverhaul.client.sounds.TemperatureBreathSound;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.KeyMappingRegistry;
@@ -103,8 +104,10 @@ public class ClientForgeEvents {
                 if (Config.Baked.temperatureEnabled) {
                     RenderTemperatureGui.updateTimer();
                     RenderTemperatureOverlay.updateTemperatureEffect(player);
-                    if (Config.Baked.breathingSoundEnabled)
+                    if (Config.Baked.coldBreathEffectThreshold != -1000)
                         TemperatureBreathEffect.tickPlay(player);
+                    if (Config.Baked.breathingSoundEnabled)
+                        TemperatureBreathSound.tickPlay(player);
                 }
                 if (shouldApplyThirst(player) && Config.Baked.lowHydrationEffect) {
                     RenderThirstOverlay.updateThirstEffect(player);

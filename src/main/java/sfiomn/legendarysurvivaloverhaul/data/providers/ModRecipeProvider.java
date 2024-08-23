@@ -178,8 +178,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.THERMAL_COAT_1.get())
                 .pattern(" cs")
-                .pattern("csh")
-                .pattern("sh ")
+                .pattern(" sh")
+                .pattern("   ")
                 .define('c', ItemRegistry.COOLING_COAT_1.get())
                 .define('s', Items.STICK)
                 .define('h', ItemRegistry.HEATING_COAT_1.get())
@@ -190,8 +190,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.THERMAL_COAT_2.get())
                 .pattern(" cb")
-                .pattern("cbh")
-                .pattern("bh ")
+                .pattern(" bh")
+                .pattern("   ")
                 .define('c', ItemRegistry.COOLING_COAT_2.get())
                 .define('b', Items.BLAZE_ROD)
                 .define('h', ItemRegistry.HEATING_COAT_2.get())
@@ -202,8 +202,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.THERMAL_COAT_3.get())
                 .pattern(" ce")
-                .pattern("ceh")
-                .pattern("eh ")
+                .pattern(" eh")
+                .pattern("   ")
                 .define('c', ItemRegistry.COOLING_COAT_3.get())
                 .define('e', Items.END_ROD)
                 .define('h', ItemRegistry.HEATING_COAT_3.get())
