@@ -352,8 +352,8 @@ public class Config
 			builder.comment(" Default temperature added to the player, based on the dimension.")
 					.push("dimension-default");
 			overworldDefaultTemperature = builder.defineInRange( "Default Overworld Modifier", 20.0, -1000, 1000);
-			netherDefaultTemperature = builder.defineInRange( "Default Nether Modifier", 30.0, -1000, 1000);
-			endDefaultTemperature = builder.defineInRange( "Default The End Modifier", 5.0, -1000, 1000);
+			netherDefaultTemperature = builder.defineInRange( "Default Nether Modifier", 28.0, -1000, 1000);
+			endDefaultTemperature = builder.defineInRange( "Default The End Modifier", -15.0, -1000, 1000);
 			builder.pop();
 
 			builder.push("huddling");
@@ -408,22 +408,22 @@ public class Config
 					.push("coat");
 
 			builder.comment(" Add an adaptive heating effect on armors.").push("heating");
-			heatingCoat1Modifier = builder.defineInRange("Heating Coat I", 1.0d, 0, 1000.0d);
-			heatingCoat2Modifier = builder.defineInRange("Heating Coat II", 2.0d, 0, 1000.0d);
-			heatingCoat3Modifier = builder.defineInRange("Heating Coat III", 3.0d, 0, 1000.0d);
+			heatingCoat1Modifier = builder.defineInRange("Heating Coat I", 2.0d, 0, 1000.0d);
+			heatingCoat2Modifier = builder.defineInRange("Heating Coat II", 3.0d, 0, 1000.0d);
+			heatingCoat3Modifier = builder.defineInRange("Heating Coat III", 4.0d, 0, 1000.0d);
 			builder.pop();
 
 			builder.comment(" Add an adaptive cooling effect on armors.").push("cooling");
-			coolingCoat1Modifier = builder.defineInRange("Cooling Coat I", 1.0d, 0, 1000.0d);
-			coolingCoat2Modifier = builder.defineInRange("Cooling Coat II", 2.0d, 0, 1000.0d);
-			coolingCoat3Modifier = builder.defineInRange("Cooling Coat III", 3.0d, 0, 1000.0d);
+			coolingCoat1Modifier = builder.defineInRange("Cooling Coat I", 2.0d, 0, 1000.0d);
+			coolingCoat2Modifier = builder.defineInRange("Cooling Coat II", 3.0d, 0, 1000.0d);
+			coolingCoat3Modifier = builder.defineInRange("Cooling Coat III", 4.0d, 0, 1000.0d);
 			builder.pop();
 
 			builder.comment(" Add an adaptive temperature effect on armors that can both heat and cool the player.")
 					.push("thermal");
-			thermalCoat1Modifier = builder.defineInRange("Thermal Coat I", 1.0d, 0, 1000.0d);
-			thermalCoat2Modifier = builder.defineInRange("Thermal Coat II", 2.0d, 0, 1000.0d);
-			thermalCoat3Modifier = builder.defineInRange("Thermal Coat III", 3.0d, 0, 1000.0d);
+			thermalCoat1Modifier = builder.defineInRange("Thermal Coat I", 2.0d, 0, 1000.0d);
+			thermalCoat2Modifier = builder.defineInRange("Thermal Coat II", 3.0d, 0, 1000.0d);
+			thermalCoat3Modifier = builder.defineInRange("Thermal Coat III", 4.0d, 0, 1000.0d);
 			builder.pop();
 			builder.pop();
 

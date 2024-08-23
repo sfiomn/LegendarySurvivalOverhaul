@@ -39,7 +39,8 @@ public class RenderSeasonCards {
     private static int cardTimer = 0;
 
     public static IGuiOverlay SEASON_CARD_GUI = (forgeGui, guiGraphics, partialTicks, width, height) -> {
-        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && Config.Baked.seasonCardsEnabled && seasonCard != null) {
+        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && Config.Baked.seasonCardsEnabled &&
+                seasonCard != null) {
             int x = Mth.floor(width / 2.0f - CARD_WIDTH / 2.0f);
             int y = Mth.floor(height / 4.0f - CARD_HEIGHT / 2.0f);
 
@@ -126,6 +127,7 @@ public class RenderSeasonCards {
     public static void reset() {
         lastSeason = null;
         lastTropicalSeason = null;
+        seasonCard = null;
         fadeLevel = 0;
     }
 }

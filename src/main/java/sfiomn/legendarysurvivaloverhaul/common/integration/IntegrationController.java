@@ -249,38 +249,38 @@ public final class IntegrationController
 	}
 
 	private static void initBeachParty() {
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:sweetberry_icecream", -2, 2400);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:coconut_icecream", -2, 2400);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:chocolate_icecream", -3, 2400);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_coconut", -2, 2400);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_cactus", -2, 2400);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_chocolate", -2, 2400);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_sweetberries", -2, 2400);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_melon", -2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:sweetberry_icecream", -2, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:coconut_icecream", -2, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:chocolate_icecream", -3, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_coconut", -2, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_cactus", -2, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_chocolate", -2, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_sweetberries", -2, 3600);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "beachparty:icecream_melon", -2, 3600);
 
 		JsonConfig.registerConsumableThirst("beachparty:coconut_open", 3, 0.0f);
 
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:coconut_cocktail", -1, 1800);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:sweetberries_cocktail", -1, 1800);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:cocoa_cocktail", -2, 1800);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:pumpkin_cocktail", -1, 1800);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:melon_cocktail", -1, 1800);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:honey_cocktail", -1, 1800);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:refreshing_drink", -1, 1800);
-		JsonConfig.registerConsumableThirst("beachparty:coconut_cocktail", 5, 3.0f);
-		JsonConfig.registerConsumableThirst("beachparty:sweetberries_cocktail", 6, 3.0f);
-		JsonConfig.registerConsumableThirst("beachparty:cocoa_cocktail", 8, 4.0f);
-		JsonConfig.registerConsumableThirst("beachparty:pumpkin_cocktail", 8, 4.0f);
-		JsonConfig.registerConsumableThirst("beachparty:melon_cocktail", 9, 5.0f);
-		JsonConfig.registerConsumableThirst("beachparty:honey_cocktail", 12, 7.0f);
-		JsonConfig.registerConsumableThirst("beachparty:refreshing_drink", 9, 3.0f);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:coconut_cocktail", -1, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:sweetberries_cocktail", -1, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:cocoa_cocktail", -2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:pumpkin_cocktail", -1, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:melon_cocktail", -1, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:honey_cocktail", -1, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:refreshing_drink", -1, 2400);
+		JsonConfig.registerConsumableThirst("beachparty:coconut_cocktail", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("beachparty:sweetberries_cocktail", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("beachparty:cocoa_cocktail", 5, 2.0f);
+		JsonConfig.registerConsumableThirst("beachparty:pumpkin_cocktail", 5, 2.0f);
+		JsonConfig.registerConsumableThirst("beachparty:melon_cocktail", 5, 2.0f);
+		JsonConfig.registerConsumableThirst("beachparty:honey_cocktail", 7, 3.0f);
+		JsonConfig.registerConsumableThirst("beachparty:refreshing_drink", 7, 3.0f);
 
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:sweetberry_milkshake", -3, 3000);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:coconut_milkshake", -3, 3000);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:chocolate_milkshake", -3, 3000);
-		JsonConfig.registerConsumableThirst("beachparty:sweetberry_milkshake", 8, 5.0f);
-		JsonConfig.registerConsumableThirst("beachparty:coconut_milkshake", 7, 4.0f);
-		JsonConfig.registerConsumableThirst("beachparty:chocolate_milkshake", 10, 6.0f);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:sweetberry_milkshake", -3, 4800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:coconut_milkshake", -3, 4800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "beachparty:chocolate_milkshake", -3, 4800);
+		JsonConfig.registerConsumableThirst("beachparty:sweetberry_milkshake", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("beachparty:coconut_milkshake", 5, 3.0f);
+		JsonConfig.registerConsumableThirst("beachparty:chocolate_milkshake", 7, 4.0f);
 
 		JsonConfig.registerItemTemperature("beachparty:beach_hat", -2.5f);
 		JsonConfig.registerItemTemperature("beachparty:trunks", -3.0f);
