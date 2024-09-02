@@ -41,6 +41,8 @@ public final class IntegrationController
 			initBiomesOPlenty();
 		if (mods.isLoaded("betterendforge"))
 			initBetterEndForge();
+		if (mods.isLoaded("betterend"))
+			initBetterEnd();
 		if (mods.isLoaded("atmospheric"))
 			initAtmospheric();
 		if (mods.isLoaded("legendarycreatures"))
@@ -72,6 +74,20 @@ public final class IntegrationController
 			initWardrobe();
 		if (mods.isLoaded("iceandfire"))
 			initIceAndFire();
+		if (mods.isLoaded("alexsmobs"))
+			initAlexsMobs();
+		if (mods.isLoaded("aquamirae"))
+			initAquamirae();
+		if (mods.isLoaded("call_of_yucutan"))
+			initCallOfYucutan();
+		if (mods.isLoaded("cataclysm"))
+			initCataclysm();
+		if (mods.isLoaded("endermanoverhaul"))
+			initEndermanOverhaul();
+		if (mods.isLoaded("irons_spellbooks"))
+			initIronsSpellbooks();
+		if (mods.isLoaded("born_in_chaos_v1"))
+			initBornInChaos();
 	}
 
 	private static void initCreate()
@@ -198,6 +214,39 @@ public final class IntegrationController
 		JsonConfig.registerConsumableThirst("peculiars:aloe_milkshake", 6, 2.0f);
 		JsonConfig.registerConsumableThirst("peculiars:passionfruit_milkshake", 6, 2.0f);
 	}
+
+	private static void initBetterEnd() {
+		JsonConfig.registerFuelItems("betterend:charcoal_block", ThermalTypeEnum.HEATING, 270);
+
+		JsonConfig.registerItemTemperature("betterend:aeternium_helmet", -2.0f);
+		JsonConfig.registerItemTemperature("betterend:aeternium_chestplate", -3.0f);
+		JsonConfig.registerItemTemperature("betterend:aeternium_leggings", -2.5f);
+		JsonConfig.registerItemTemperature("betterend:aeternium_boots", -2.0f);
+		JsonConfig.registerItemTemperature("betterend:crystalite_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("betterend:crystalite_chestplate", -2.0f);
+		JsonConfig.registerItemTemperature("betterend:crystalite_leggings", -2.0f);
+		JsonConfig.registerItemTemperature("betterend:crystalite_boots", -1.0f);
+		JsonConfig.registerItemTemperature("betterend:terminite_helmet", -1.0f);
+		JsonConfig.registerItemTemperature("betterend:terminite_chestplate", -1.5f);
+		JsonConfig.registerItemTemperature("betterend:terminite_leggings", -1.0f);
+		JsonConfig.registerItemTemperature("betterend:terminite_boots", -1.0f);
+		JsonConfig.registerItemTemperature("betterend:thallasium_helmet", -0.5f);
+		JsonConfig.registerItemTemperature("betterend:thallasium_chestplate", -1.0f);
+		JsonConfig.registerItemTemperature("betterend:thallasium_leggings", -0.5f);
+		JsonConfig.registerItemTemperature("betterend:thallasium_boots", -0.5f);
+		JsonConfig.registerItemTemperature("betternether:cincinnasite_helmet", -1.0f);
+		JsonConfig.registerItemTemperature("betternether:cincinnasite_chestplate", -2.0f);
+		JsonConfig.registerItemTemperature("betternether:cincinnasite_leggings", -2.0f);
+		JsonConfig.registerItemTemperature("betternether:cincinnasite_boots", -1.0f);
+		JsonConfig.registerItemTemperature("betternether:nether_ruby_helmet", 1.0f);
+		JsonConfig.registerItemTemperature("betternether:nether_ruby_chestplate", 2.0f);
+		JsonConfig.registerItemTemperature("betternether:nether_ruby_leggings", 2.0f);
+		JsonConfig.registerItemTemperature("betternether:nether_ruby_boots", 1.0f);
+		JsonConfig.registerItemTemperature("betternether:flaming_ruby_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("betternether:flaming_ruby_chestplate", 2.5f);
+		JsonConfig.registerItemTemperature("betternether:flaming_ruby_leggings", 2.5f);
+		JsonConfig.registerItemTemperature("betternether:flaming_ruby_boots", 1.5f);
+	}
 	
 	private static void initBetterEndForge() {
 		JsonConfig.registerBiomeOverride("betterendforge:sulphur_springs", 1.1f);
@@ -225,22 +274,41 @@ public final class IntegrationController
 	}
 
 	private static void initCrockpot() {
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:iced_tea", -2, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "crockpot:asparagus_soup", 2, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "crockpot:iced_tea", -2, 4800);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:ice_cream", -3, 1200);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:tea", 3, 1200);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:bone_stew", 1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "crockpot:tea", 3, 4800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:bacon_eggs", 1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:bone_stew", 3, 2400);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:bunny_stew", 1, 1200);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:bone_soup", 2, 1200);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:gazpacho", -2, 1200);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:fruit_medley", -1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:bone_soup", 2, 1800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:california_roll", -1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:flower_salad", -3, 6000);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "crockpot:fruit_medley", -1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "crockpot:gazpacho", -2, 2400);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:hot_chili", 2, 2400);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:hot_cocoa", 3, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "crockpot:hot_cocoa", 3, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:kabobs", 1, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:meat_balls", 1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:moqueca", 1, 1800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:plain_omelette", 1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:pepper_popper", 3, 6000);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:salsa", -1, 2400);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:turkey_dinner", 2, 1200);
-		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:veg_stinger", -1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:pierogi", 2, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:ratatouille", 3, 6000);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:salmon_sushi", -1, 1800);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:salsa", -2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:turkey_dinner", 2, 2400);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "crockpot:veg_stinger", -1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "crockpot:watermelon_icle", -4, 1800);
+
+		JsonConfig.registerConsumableThirst("crockpot:asparagus_soup", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("crockpot:bone_soup", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("crockpot:iced_tea", 8, 5.0f);
+		JsonConfig.registerConsumableThirst("crockpot:tea", 5, 2.0f);
+		JsonConfig.registerConsumableThirst("crockpot:gazpacho", 4, 2.0f);
+		JsonConfig.registerConsumableThirst("crockpot:hot_cocoa", 2, 1.0f);
+		JsonConfig.registerConsumableThirst("crockpot:fruit_medley", 3, 1.0f);
+		JsonConfig.registerConsumableThirst("crockpot:veg_stinger", 5, 2.0f);
 	}
 
 	private static void initQuark() {
@@ -318,5 +386,176 @@ public final class IntegrationController
 
 	private static void initIceAndFire() {
 		JsonConfig.registerEntityTemperature("iceandfire:hippocampus", 3.0f);
+
+		JsonConfig.registerItemTemperature("iceandfire:armor_silver_metal_helmet", -0.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_silver_metal_chestplate", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_silver_metal_leggings", -1.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_silver_metal_boots", -1.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_copper_metal_helmet", -0.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_copper_metal_chestplate", -0.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_copper_metal_leggings", -0.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_copper_metal_boots", -0.5f);
+		JsonConfig.registerItemTemperature("iceandfire:sheep_helmet", 2.0f);
+		JsonConfig.registerItemTemperature("iceandfire:sheep_chestplate", 3.5f);
+		JsonConfig.registerItemTemperature("iceandfire:sheep_leggings", 3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:sheep_boots", 1.0f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_yellow_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_yellow_chestplate", -2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_yellow_leggings", -2.0f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_yellow_boots", -1.0f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_white_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_white_chestplate", -2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_white_leggings", -2.0f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_white_boots", -1.0f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_red_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_red_chestplate", -2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_red_leggings", -2.0f);
+		JsonConfig.registerItemTemperature("iceandfire:deathworm_red_boots", -1.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_red_helmet", 3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_red_chestplate", 5.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_red_leggings", 4.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_red_boots", 2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:dragonsteel_ice_helmet", -3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:dragonsteel_ice_chestplate", -5.0f);
+		JsonConfig.registerItemTemperature("iceandfire:dragonsteel_ice_leggings", -4.5f);
+		JsonConfig.registerItemTemperature("iceandfire:dragonsteel_ice_boots", -2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_bronze_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_bronze_chestplate", 3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_bronze_leggings", 2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_bronze_boots", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_green_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_green_chestplate", 3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_green_leggings", 2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_green_boots", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_gray_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_gray_chestplate", 3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_gray_leggings", 2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_gray_boots", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_blue_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_blue_chestplate", 3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_blue_leggings", 2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_blue_boots", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_silver_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_silver_chestplate", 3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_silver_leggings", 2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_silver_boots", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_amythest_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_amythest_chestplate", 3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_amythest_leggings", 2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_amythest_boots", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_copper_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_copper_chestplate", 3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_copper_leggings", 2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_copper_boots", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_black_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_black_chestplate", 3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_black_leggings", 2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:armor_black_boots", 1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_red_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_red_chestplate", -3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_red_leggings", -2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_red_boots", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_blue_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_blue_chestplate", -3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_blue_leggings", -2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_blue_boots", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_bronze_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_bronze_chestplate", -3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_bronze_leggings", -2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_bronze_boots", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_green_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_green_chestplate", -3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_green_leggings", -2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_green_boots", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_deepblue_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_deepblue_chestplate", -3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_deepblue_leggings", -2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_deepblue_boots", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_purple_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_purple_chestplate", -3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_purple_leggings", -2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_purple_boots", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_teal_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_teal_chestplate", -3.0f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_teal_leggings", -2.5f);
+		JsonConfig.registerItemTemperature("iceandfire:tide_teal_boots", -1.5f);
+	}
+
+	private static void initAlexsMobs() {
+		JsonConfig.registerItemTemperature("alexsmobs:roadrunner_boots", -1.0f);
+		JsonConfig.registerItemTemperature("alexsmobs:crocodile_chestplate", 1.0f);
+		JsonConfig.registerItemTemperature("alexsmobs:centipede_leggings", -1.0f);
+		JsonConfig.registerItemTemperature("alexsmobs:frontier_cap", 4.0f);
+		JsonConfig.registerItemTemperature("alexsmobs:sombrero", -4.0f);
+		JsonConfig.registerItemTemperature("alexsmobs:emu_leggings", -1.5f);
+		JsonConfig.registerItemTemperature("alexsmobs:froststalker_helmet", -3.0f);
+		JsonConfig.registerItemTemperature("alexsmobs:unsettling_kimono", -2.0f);
+	}
+
+	private static void initAquamirae() {
+		JsonConfig.registerItemTemperature("aquamirae:terrible_helmet", -1.0f);
+		JsonConfig.registerItemTemperature("aquamirae:terrible_chestplate", -1.5f);
+		JsonConfig.registerItemTemperature("aquamirae:terrible_leggings", -1.5f);
+		JsonConfig.registerItemTemperature("aquamirae:terrible_boots", -1.0f);
+		JsonConfig.registerItemTemperature("aquamirae:abyssal_heaume", 1.0f);
+		JsonConfig.registerItemTemperature("aquamirae:abyssal_brigantine", 2.0f);
+		JsonConfig.registerItemTemperature("aquamirae:abyssal_leggings", 1.0f);
+		JsonConfig.registerItemTemperature("aquamirae:abyssal_boots", 1.0f);
+		JsonConfig.registerItemTemperature("aquamirae:three_bolt_helmet", 1.0f);
+		JsonConfig.registerItemTemperature("aquamirae:three_bolt_suit", 1.0f);
+		JsonConfig.registerItemTemperature("aquamirae:three_bolt_leggings", 1.0f);
+		JsonConfig.registerItemTemperature("aquamirae:three_bolt_boots", 1.0f);
+	}
+
+	private static void initCallOfYucutan() {
+		JsonConfig.registerItemTemperature("call_of_yucutan:jades_helmet", -0.5f);
+		JsonConfig.registerItemTemperature("call_of_yucutan:jades_chestplate", -1.5f);
+		JsonConfig.registerItemTemperature("call_of_yucutan:jades_leggings", -1.5f);
+		JsonConfig.registerItemTemperature("call_of_yucutan:jades_boots", -0.5f);
+	}
+
+	private static void initCataclysm() {
+		JsonConfig.registerItemTemperature("cataclysm:bone_reptile_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("cataclysm:bone_reptile_chestplate", 2.0f);
+		JsonConfig.registerItemTemperature("cataclysm:ignitium_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("cataclysm:ignitium_chestplate", 3.0f);
+		JsonConfig.registerItemTemperature("cataclysm:ignitium_elytra_chestplate", 3.0f);
+		JsonConfig.registerItemTemperature("cataclysm:ignitium_leggings", 2.0f);
+		JsonConfig.registerItemTemperature("cataclysm:ignitium_boots", 1.5f);
+		JsonConfig.registerItemTemperature("cataclysm:monstrous_helm", 1.0f);
+		JsonConfig.registerItemTemperature("cataclysm:bloom_stone_pauldrons", -1.0f);
+	}
+
+	private static void initEndermanOverhaul() {
+		JsonConfig.registerItemTemperature("endermanoverhaul:badlands_hood", 2.5f);
+		JsonConfig.registerItemTemperature("endermanoverhaul:savanna_hood", 2.5f);
+		JsonConfig.registerItemTemperature("endermanoverhaul:snowy_hood", 2.5f);
+	}
+
+	private static void initIronsSpellbooks() {
+		JsonConfig.registerItemTemperature("irons_spellbooks:pyromancer_helmet", 1.5f);
+		JsonConfig.registerItemTemperature("irons_spellbooks:pyromancer_chestplate", 2.5f);
+		JsonConfig.registerItemTemperature("irons_spellbooks:pyromancer_leggings", 2.0f);
+		JsonConfig.registerItemTemperature("irons_spellbooks:pyromancer_boots", 1.5f);
+		JsonConfig.registerItemTemperature("irons_spellbooks:cryomancer_helmet", -1.5f);
+		JsonConfig.registerItemTemperature("irons_spellbooks:cryomancer_chestplate", -2.5f);
+		JsonConfig.registerItemTemperature("irons_spellbooks:cryomancer_leggings", -2.0f);
+		JsonConfig.registerItemTemperature("irons_spellbooks:cryomancer_boots", -1.5f);
+		JsonConfig.registerItemTemperature("irons_spellbooks:netherite_mage_helmet", -2.0f);
+		JsonConfig.registerItemTemperature("irons_spellbooks:netherite_mage_chestplate", -3.5f);
+		JsonConfig.registerItemTemperature("irons_spellbooks:netherite_mage_leggings", -2.5f);
+		JsonConfig.registerItemTemperature("irons_spellbooks:netherite_mage_boots", -2.0f);
+	}
+
+	private static void initBornInChaos() {
+		JsonConfig.registerItemTemperature("born_in_chaos_v1:dark_metal_armor_helmet", -1.0f);
+		JsonConfig.registerItemTemperature("born_in_chaos_v1:dark_metal_armor_chestplate", -2.0f);
+		JsonConfig.registerItemTemperature("born_in_chaos_v1:dark_metal_armor_leggings", -1.0f);
+		JsonConfig.registerItemTemperature("born_in_chaos_v1:dark_metal_armor_boots", -0.5f);
+		JsonConfig.registerItemTemperature("born_in_chaos_v1:spiritual_guide_sombrero_helmet", -3.5f);
+		JsonConfig.registerItemTemperature("born_in_chaos_v1:nightmare_mantleofthe_night_helmet", 1.0f);
+		JsonConfig.registerItemTemperature("born_in_chaos_v1:nightmare_mantleofthe_night_chestplate", 2.0f);
+		JsonConfig.registerItemTemperature("born_in_chaos_v1:nightmare_mantleofthe_night_leggings", 1.0f);
+		JsonConfig.registerItemTemperature("born_in_chaos_v1:nightmare_mantleofthe_night_boots", 0.5f);
 	}
 }

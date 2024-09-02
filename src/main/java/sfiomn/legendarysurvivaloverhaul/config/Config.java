@@ -477,7 +477,7 @@ public class Config
 			tropicalSeasonsEnabled = builder
 					.comment(" If the tropical seasons are disabled, the normal summer-autumn-winter-spring seasons are applied.",
 							" If disabled, dry and wet seasons are applied for hot biomes.")
-					.define("Tropical Seasons Enabled", true);
+					.define("Tropical Seasons Enabled", false);
 			seasonCardsEnabled = builder
 					.comment(" If season cards are enabled, season cards will appear at every season changes.")
 					.define("Season Cards Enabled", true);

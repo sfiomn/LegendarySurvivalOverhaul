@@ -40,7 +40,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .pattern("r#r")
                 .pattern("r r")
                 .define('#', Items.LEATHER)
-                .define('r', Items.RABBIT_HIDE)
+                .define('r', Items.STRING)
                 .group("desert_armor")
                 .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
                 .save(consumer);
@@ -49,7 +49,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .pattern("r r")
                 .pattern("# #")
                 .define('#', Items.LEATHER)
-                .define('r', Items.RABBIT_HIDE)
+                .define('r', Items.STRING)
                 .group("desert_armor")
                 .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
                 .save(consumer);
@@ -59,7 +59,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .pattern("#r#")
                 .pattern("###")
                 .define('#', Items.LEATHER)
-                .define('r', Items.RABBIT_HIDE)
+                .define('r', Items.STRING)
                 .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
                 .group("desert_armor")
                 .save(consumer);
@@ -69,7 +69,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .pattern("###")
                 .pattern("r r")
                 .define('#', Items.LEATHER)
-                .define('r', Items.RABBIT_HIDE)
+                .define('r', Items.STRING)
                 .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
                 .group("desert_armor")
                 .save(consumer);

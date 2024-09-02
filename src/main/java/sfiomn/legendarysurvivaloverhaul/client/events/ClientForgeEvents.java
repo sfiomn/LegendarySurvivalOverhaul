@@ -10,6 +10,7 @@ import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -132,6 +133,12 @@ public class ClientForgeEvents {
                 && Config.Baked.lowHydrationEffect && shouldApplyThirst(player)) {
             RenderThirstOverlay.render(player);
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity().level().isClientSide && LegendarySurvivalOverhaul.sereneSeasonsLoaded)
+            RenderSeasonCards.init();
     }
 
     private static boolean shouldApplyThirst(Player player)

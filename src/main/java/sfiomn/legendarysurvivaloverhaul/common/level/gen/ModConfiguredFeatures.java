@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.common.world.gen;
+package sfiomn.legendarysurvivaloverhaul.common.level.gen;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;

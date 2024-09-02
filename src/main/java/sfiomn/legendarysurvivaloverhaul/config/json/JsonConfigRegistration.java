@@ -88,24 +88,29 @@ public class JsonConfigRegistration
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_chestplate", -3.0f);
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_helmet", -1.5f);
 
-		JsonConfig.registerItemTemperature("minecraft:leather_boots", 0.25f);
-		JsonConfig.registerItemTemperature("minecraft:leather_leggings", 0.75f);
-		JsonConfig.registerItemTemperature("minecraft:leather_chestplate", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:leather_boots", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:leather_leggings", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:leather_chestplate", 1.5f);
 		JsonConfig.registerItemTemperature("minecraft:leather_helmet", 0.5f);
+
+		JsonConfig.registerItemTemperature("minecraft:golden_boots", 0.5f);
+		JsonConfig.registerItemTemperature("minecraft:golden_leggings", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:golden_chestplate", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:golden_helmet", 0.5f);
 
 		JsonConfig.registerItemTemperature("minecraft:iron_boots", -0.5f);
 		JsonConfig.registerItemTemperature("minecraft:iron_leggings", -1.0f);
 		JsonConfig.registerItemTemperature("minecraft:iron_chestplate", -1.0f);
 		JsonConfig.registerItemTemperature("minecraft:iron_helmet", -0.5f);
 
-		JsonConfig.registerItemTemperature("minecraft:diamond_boots", -0.75f);
-		JsonConfig.registerItemTemperature("minecraft:diamond_leggings", -1.25f);
+		JsonConfig.registerItemTemperature("minecraft:diamond_boots", -1.0f);
+		JsonConfig.registerItemTemperature("minecraft:diamond_leggings", -1.0f);
 		JsonConfig.registerItemTemperature("minecraft:diamond_chestplate", -1.5f);
 		JsonConfig.registerItemTemperature("minecraft:diamond_helmet", -0.5f);
 
-		JsonConfig.registerItemTemperature("minecraft:netherite_boots", 1.25f);
+		JsonConfig.registerItemTemperature("minecraft:netherite_boots", 1.5f);
 		JsonConfig.registerItemTemperature("minecraft:netherite_leggings", 1.5f);
-		JsonConfig.registerItemTemperature("minecraft:netherite_chestplate", 2.25f);
+		JsonConfig.registerItemTemperature("minecraft:netherite_chestplate", 2.0f);
 		JsonConfig.registerItemTemperature("minecraft:netherite_helmet", 1.0f);
 
 		JsonConfig.registerItemTemperature("minecraft:torch", 1.0f);

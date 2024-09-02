@@ -8,9 +8,9 @@ import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.ModDamageTypes;
-import sfiomn.legendarysurvivaloverhaul.common.world.gen.ModBiomeModifiers;
-import sfiomn.legendarysurvivaloverhaul.common.world.gen.ModConfiguredFeatures;
-import sfiomn.legendarysurvivaloverhaul.common.world.gen.ModPlacedFeatures;
+import sfiomn.legendarysurvivaloverhaul.common.level.gen.ModBiomeModifiers;
+import sfiomn.legendarysurvivaloverhaul.common.level.gen.ModConfiguredFeatures;
+import sfiomn.legendarysurvivaloverhaul.common.level.gen.ModPlacedFeatures;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;

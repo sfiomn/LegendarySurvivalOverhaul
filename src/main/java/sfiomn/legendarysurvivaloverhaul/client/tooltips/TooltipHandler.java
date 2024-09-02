@@ -101,18 +101,21 @@ public class TooltipHandler
 		}
 
 		Component text;
+		TextColor formattingColor;
 
-		if (temperature > 0.0f)
+		if (temperature > 0.0f) {
 			text = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.heating");
-		else if (temperature < 0.0f)
+			formattingColor = TextColor.fromRgb(16420407);
+		} else if (temperature < 0.0f) {
 			text = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.cooling");
-		else
+			formattingColor = TextColor.fromRgb(6466303);
+		} else
 			return;
 
 		String tempTxt = (temperature % 1.0f == 0f ? (int) Math.abs(temperature) : Math.abs(temperature)) + " ";
 
 		text = Component.literal("+")
-				.withStyle(ChatFormatting.BLUE)
+				.withStyle(Style.EMPTY.withColor(formattingColor))
 				.append(tempTxt)
 				.append(text);
 

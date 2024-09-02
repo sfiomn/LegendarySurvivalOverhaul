@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.common.particles;
+package sfiomn.legendarysurvivaloverhaul.client.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;

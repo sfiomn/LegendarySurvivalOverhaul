@@ -40,6 +40,6 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected @NotNull Iterable<Block> getKnownBlocks() {
-        return BlockRegistry.BLOCKS.getEntries().stream().map(RegistryObject::get)::iterator;
+        return BlockRegistry.BLOCKS.getEntries().stream().map(RegistryObject::get).toList();
     }
 }

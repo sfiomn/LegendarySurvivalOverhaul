@@ -1,4 +1,4 @@
-package sfiomn.legendarysurvivaloverhaul.common.world;
+package sfiomn.legendarysurvivaloverhaul.common.level;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootPool;

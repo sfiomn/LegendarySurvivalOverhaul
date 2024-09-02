@@ -8,10 +8,10 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.common.particles.BreathParticle;
+import sfiomn.legendarysurvivaloverhaul.client.particles.BreathParticle;
 import sfiomn.legendarysurvivaloverhaul.client.tooltips.HydrationClientTooltipComponent;
 import sfiomn.legendarysurvivaloverhaul.client.tooltips.HydrationTooltipComponent;
-import sfiomn.legendarysurvivaloverhaul.common.particles.FernBlossomParticle;
+import sfiomn.legendarysurvivaloverhaul.client.particles.FernBlossomParticle;
 import sfiomn.legendarysurvivaloverhaul.registry.ParticleTypeRegistry;
 
 import static sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons.RenderSeasonCards.SEASON_CARD_GUI;
