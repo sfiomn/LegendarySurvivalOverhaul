@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "desert_armor",
+  "key": {
+    "#": {
+      "item": "minecraft:leather"
+    },
+    "r": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    "r r",
+    "#r#",
+    "###"
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:desert_chestplate"
+  },
+  "show_notification": true
+}

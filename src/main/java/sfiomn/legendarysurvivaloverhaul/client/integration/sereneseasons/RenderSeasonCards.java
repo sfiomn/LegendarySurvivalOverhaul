@@ -40,6 +40,7 @@ public class RenderSeasonCards {
     private static float fadeLevel = 0;
     private static final int delayTimeTicks = Config.Baked.seasonCardsSpawnDimensionDelayInTicks;
     private static int delayTimer = delayTimeTicks;
+    private static boolean fadeIn;
     private static int cardTimer = 0;
 
     public static void render(MatrixStack matrix, int width, int height)
@@ -64,47 +65,36 @@ public class RenderSeasonCards {
     }
 
     public static void updateSeasonCardFading(PlayerEntity player) {
-        if (player != null && player.isAlive()) {
-            if (lastDimension == null || lastDimension != player.level.dimension()) {
-                delayTimer = delayTimeTicks;
-                isDimensionSeasonal = SeasonsConfig.isDimensionWhitelisted(player.level.dimension());
-                lastDimension = player.level.dimension();
-            }
+        if (player == null || !player.isAlive())
+            return;
+        if (lastDimension == null || lastDimension != player.level.dimension()) {
+            delayTimer = delayTimeTicks;
+            isDimensionSeasonal = SeasonsConfig.isDimensionWhitelisted(player.level.dimension());
+            lastDimension = player.level.dimension();
+        }
 
-            if (!isDimensionSeasonal) {
-                if (lastSeason != null || lastTropicalSeason != null)
-                    reset();
-                return;
-            }
+        if (!isDimensionSeasonal) {
+            if (lastSeason != null || lastTropicalSeason != null)
+                reset();
+            return;
+        }
 
-            if (delayTimer > 0) {
-                delayTimer--;
-                return;
-            }
+        if (delayTimer > 0) {
+            delayTimer--;
+            return;
+        }
 
-            Season currentSeason = null;
-            SereneSeasonsUtil.TropicalSeason currentTropicalSeason = null;
+        if (seasonCard == null) {
+            Season currentSeason;
+            SereneSeasonsUtil.TropicalSeason currentTropicalSeason;
             int seasonType = SereneSeasonsUtil.getSeasonType(player.level.getBiome(player.blockPosition()));
 
-            if (seasonType == 0 || (seasonType == 1 && !Config.Baked.tropicalSeasonsEnabled))
+            if (seasonType == 0 || (seasonType == 1 && !Config.Baked.tropicalSeasonsEnabled)) {
                 currentSeason = SeasonHelper.getSeasonState(player.level).getSeason();
-            else if (seasonType == 1)
-                currentTropicalSeason = SereneSeasonsUtil.TropicalSeason.getTropicalSeason(SeasonHelper.getSeasonState(player.level).getTropicalSeason());
-
-            float targetFadeLevel = 0;
-            if (((currentSeason != lastSeason && currentSeason != null) || (currentTropicalSeason != lastTropicalSeason && currentTropicalSeason != null)) && isDimensionSeasonal)
-                targetFadeLevel = 1.0f;
-
-            if (targetFadeLevel > fadeLevel) {
-                fadeLevel = Math.min(targetFadeLevel, fadeLevel + (Math.round(1.0f / Config.Baked.seasonCardsFadeInInTicks * 100) / 100.0f));
-            }
-            if (targetFadeLevel < fadeLevel) {
-                fadeLevel = Math.max(targetFadeLevel, fadeLevel - (Math.round(1.0f / Config.Baked.seasonCardsFadeOutInTicks * 100) / 100.0f));
-            }
-
-            if (fadeLevel > 0 && fadeLevel < 1.0f) {
-                cardTimer = 0;
-                if (currentSeason != null) {
+                if (currentSeason != lastSeason) {
+                    lastSeason = currentSeason;
+                    fadeIn = true;
+                    cardTimer = 0;
                     if (currentSeason == Season.AUTUMN)
                         seasonCard = AUTUMN_CARD;
                     else if (currentSeason == Season.SPRING)
@@ -113,22 +103,38 @@ public class RenderSeasonCards {
                         seasonCard = SUMMER_CARD;
                     else if (currentSeason == Season.WINTER)
                         seasonCard = WINTER_CARD;
-                } else if (currentTropicalSeason != null) {
+                }
+            } else if (seasonType == 1) {
+                currentTropicalSeason = SereneSeasonsUtil.TropicalSeason.getTropicalSeason(SeasonHelper.getSeasonState(player.level).getTropicalSeason());
+                if (currentTropicalSeason != lastTropicalSeason) {
+                    lastTropicalSeason = currentTropicalSeason;
+                    fadeIn = true;
+                    cardTimer = 0;
                     if (currentTropicalSeason == SereneSeasonsUtil.TropicalSeason.DRY)
                         seasonCard = DRY_CARD;
                     else if (currentTropicalSeason == SereneSeasonsUtil.TropicalSeason.WET)
                         seasonCard = WET_CARD;
                 }
-            } else if (fadeLevel == 1.0f) {
-                if (cardTimer++ >= Config.Baked.seasonCardsDisplayTimeInTicks) {
-                    if (currentSeason != null)
-                        lastSeason = currentSeason;
-                    else if (currentTropicalSeason != null) {
-                        lastTropicalSeason = currentTropicalSeason;
-                    }
+            }
+
+            if (seasonCard != null) {
+                float targetFadeLevel = 0.0f;
+                if (fadeIn)
+                    targetFadeLevel = 1.0f;
+
+                if (targetFadeLevel > fadeLevel) {
+                    fadeLevel = Math.min(targetFadeLevel, fadeLevel + (Math.round(1.0f / Config.Baked.seasonCardsFadeInInTicks * 100) / 100.0f));
                 }
-            } else {
-                seasonCard = null;
+                if (targetFadeLevel < fadeLevel) {
+                    fadeLevel = Math.max(targetFadeLevel, fadeLevel - (Math.round(1.0f / Config.Baked.seasonCardsFadeOutInTicks * 100) / 100.0f));
+                }
+
+                if (fadeLevel == 1.0f) {
+                    if (cardTimer++ >= Config.Baked.seasonCardsDisplayTimeInTicks)
+                        fadeIn = false;
+                } else if (fadeLevel == 0.0f) {
+                    seasonCard = null;
+                }
             }
         }
     }
@@ -138,6 +144,10 @@ public class RenderSeasonCards {
         lastSeason = null;
         lastTropicalSeason = null;
         fadeLevel = 0;
+    }
+
+    public static void init() {
+        lastDimension = null;
     }
 
     private static void bind(ResourceLocation resource)

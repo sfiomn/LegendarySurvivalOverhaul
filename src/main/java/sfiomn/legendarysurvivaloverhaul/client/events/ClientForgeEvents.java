@@ -17,6 +17,7 @@ import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,7 +45,7 @@ import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.
 import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.timeInGame;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class ModClientEvents {
+public class ClientForgeEvents {
     private static final Minecraft minecraft = Minecraft.getInstance();
 
     @SubscribeEvent
@@ -220,6 +221,12 @@ public class ModClientEvents {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getPlayer().level.isClientSide && LegendarySurvivalOverhaul.sereneSeasonsLoaded)
+            RenderSeasonCards.init();
     }
 
     private static boolean shouldApplyThirst(PlayerEntity player)

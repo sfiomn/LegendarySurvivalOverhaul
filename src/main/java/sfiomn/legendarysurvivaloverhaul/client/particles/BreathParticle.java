@@ -1,9 +1,8 @@
-package sfiomn.legendarysurvivaloverhaul.common.particles;
+package sfiomn.legendarysurvivaloverhaul.client.particles;
 
 import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.BasicParticleType;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 
 import javax.annotation.Nullable;
 

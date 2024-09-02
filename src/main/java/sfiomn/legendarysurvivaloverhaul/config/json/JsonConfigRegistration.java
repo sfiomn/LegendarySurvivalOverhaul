@@ -44,40 +44,40 @@ public class JsonConfigRegistration
 	
 	public static void registerDefaults(File configDir)
 	{
-		JsonConfig.registerBlockTemperature("minecraft:campfire", 10f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("minecraft:soul_campfire", -8f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("minecraft:campfire", 0.0f, new JsonPropertyValue("lit", "false"));
-		JsonConfig.registerBlockTemperature("minecraft:soul_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:campfire", 10f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:soul_campfire", -8f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:campfire", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:soul_campfire", 0.0f, new JsonPropertyValue("lit", "false"));
 
-		JsonConfig.registerBlockTemperature("minecraft:torch", 1.5f);
-		JsonConfig.registerBlockTemperature("minecraft:soul_torch", 0.75f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:torch", 1.5f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:soul_torch", 0.75f);
 
-		JsonConfig.registerBlockTemperature("minecraft:wall_torch", 1.5f);
-		JsonConfig.registerBlockTemperature("minecraft:soul_wall_torch", 0.75f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:wall_torch", 1.5f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:soul_wall_torch", 0.75f);
 
-		JsonConfig.registerBlockTemperature("minecraft:fire", 7.0f);
-		JsonConfig.registerBlockTemperature("minecraft:soul_fire", 2.5f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:fire", 7.0f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:soul_fire", 2.5f);
 
-		JsonConfig.registerBlockTemperature("minecraft:furnace", 6.0f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("minecraft:blast_furnace", 6.0f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature("minecraft:smoker", 6.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:furnace", 6.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:blast_furnace", 6.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:smoker", 6.0f, new JsonPropertyValue("lit", "true"));
 
-		JsonConfig.registerBlockTemperature("minecraft:furnace", 0.0f, new JsonPropertyValue("lit", "false"));
-		JsonConfig.registerBlockTemperature("minecraft:blast_furnace", 0.0f, new JsonPropertyValue("lit", "false"));
-		JsonConfig.registerBlockTemperature("minecraft:smoker", 0.0f, new JsonPropertyValue("false", "true"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:furnace", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:blast_furnace", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("minecraft:smoker", 0.0f, new JsonPropertyValue("false", "true"));
 
-		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", -15f, new JsonPropertyValue("lit", "true"));
-		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 15f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", -15f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 15f, new JsonPropertyValue("lit", "true"));
 
-		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", 0.0f, new JsonPropertyValue("lit", "false"));
-		JsonConfig.registerBlockTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 0.0f, new JsonPropertyValue("lit", "false"));
 
-		JsonConfig.registerBlockTemperature("minecraft:magma_block", 12.0f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:magma_block", 12.0f);
 
-		JsonConfig.registerBlockTemperature("minecraft:jack_o_lantern", 3.0f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:jack_o_lantern", 3.0f);
 
-		JsonConfig.registerBlockTemperature("minecraft:lava", 12.5f);
-		JsonConfig.registerBlockTemperature("minecraft:flowing_lava", 12.5f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:lava", 12.5f);
+		JsonConfig.registerBlockFluidTemperature("minecraft:flowing_lava", 12.5f);
 
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_boots", 0.5f);
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_leggings", 2.5f);
@@ -89,24 +89,29 @@ public class JsonConfigRegistration
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_chestplate", -3.0f);
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_helmet", -1.5f);
 
-		JsonConfig.registerItemTemperature("minecraft:leather_boots", 0.25f);
-		JsonConfig.registerItemTemperature("minecraft:leather_leggings", 0.75f);
-		JsonConfig.registerItemTemperature("minecraft:leather_chestplate", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:leather_boots", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:leather_leggings", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:leather_chestplate", 1.5f);
 		JsonConfig.registerItemTemperature("minecraft:leather_helmet", 0.5f);
+
+		JsonConfig.registerItemTemperature("minecraft:golden_boots", 0.5f);
+		JsonConfig.registerItemTemperature("minecraft:golden_leggings", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:golden_chestplate", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:golden_helmet", 0.5f);
 
 		JsonConfig.registerItemTemperature("minecraft:iron_boots", -0.5f);
 		JsonConfig.registerItemTemperature("minecraft:iron_leggings", -1.0f);
 		JsonConfig.registerItemTemperature("minecraft:iron_chestplate", -1.0f);
 		JsonConfig.registerItemTemperature("minecraft:iron_helmet", -0.5f);
 
-		JsonConfig.registerItemTemperature("minecraft:diamond_boots", -0.75f);
-		JsonConfig.registerItemTemperature("minecraft:diamond_leggings", -1.25f);
+		JsonConfig.registerItemTemperature("minecraft:diamond_boots", -1.0f);
+		JsonConfig.registerItemTemperature("minecraft:diamond_leggings", -1.0f);
 		JsonConfig.registerItemTemperature("minecraft:diamond_chestplate", -1.5f);
 		JsonConfig.registerItemTemperature("minecraft:diamond_helmet", -0.5f);
 
-		JsonConfig.registerItemTemperature("minecraft:netherite_boots", 1.25f);
+		JsonConfig.registerItemTemperature("minecraft:netherite_boots", 1.5f);
 		JsonConfig.registerItemTemperature("minecraft:netherite_leggings", 1.5f);
-		JsonConfig.registerItemTemperature("minecraft:netherite_chestplate", 2.25f);
+		JsonConfig.registerItemTemperature("minecraft:netherite_chestplate", 2.0f);
 		JsonConfig.registerItemTemperature("minecraft:netherite_helmet", 1.0f);
 
 		JsonConfig.registerItemTemperature("minecraft:torch", 1.0f);
@@ -114,13 +119,15 @@ public class JsonConfigRegistration
 		JsonConfig.registerItemTemperature("minecraft:packed_ice", -2.0f);
 		JsonConfig.registerItemTemperature("minecraft:blue_ice", -3.0f);
 
-		JsonConfig.registerEntityTemperature("minecraft:strider", -2.0f);
+		JsonConfig.registerEntityTemperature("minecraft:strider", -3.0f);
 
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:mushroom_stew", 1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, "minecraft:mushroom_stew", 1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:rabbit_stew", 2, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:suspicious_stew", 1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.FOOD, "minecraft:melon_slice", -1, 1200);
 		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, LegendarySurvivalOverhaul.MOD_ID + ":melon_juice", -1, 1200);
+		JsonConfig.registerConsumableTemperature(TemporaryModifierGroupEnum.DRINK, LegendarySurvivalOverhaul.MOD_ID + ":glistering_melon_juice", -2, 3600);
 
 		JsonConfig.registerBiomeOverride("minecraft:crimson_forest", 0.75f, false);
 		JsonConfig.registerBiomeOverride("minecraft:warped_forest", 0.75f, false);
@@ -145,21 +152,22 @@ public class JsonConfigRegistration
 		JsonConfig.registerConsumableThirst("minecraft:suspicious_stew", 4, 2.0f);
 		JsonConfig.registerConsumableThirst("minecraft:rotten_flesh", -2, -1.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 1.0f, 600, 0)});
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":apple_juice",6,3.0f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":beetroot_juice",10,8.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":beetroot_juice",9,4.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":cactus_juice",9,3.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":carrot_juice",4,2.0f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":chorus_fruit_juice",12,10.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":chorus_fruit_juice",12,8.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":golden_apple_juice",20,20.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":golden_carrot_juice",12,12.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":glistering_melon_juice",16,16.0f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":melon_juice",8,5.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":melon_juice",8,4.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":pumpkin_juice",7,4.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":purified_water_bottle", 6, 1.5f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":water_plant_bag", 2, 0.0f);
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":water_plant_bag", 3, 0.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":canteen", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 600, 0)}, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.NORMAL.getName()));
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":canteen", 6, 1.5f, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.PURIFIED.getName()));
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":large_canteen", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 600, 0)}, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.NORMAL.getName()));
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":large_canteen", 6, 1.5f, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.PURIFIED.getName()));
+
 		JsonConfig.registerConsumableThirst("minecraft:potion", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 600, 0)}, new JsonPropertyValue("Potion", "minecraft:water"));
 		JsonConfig.registerConsumableThirst("minecraft:potion", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 600, 0)}, new JsonPropertyValue("Potion", "minecraft:mundane"));
 		JsonConfig.registerConsumableThirst("minecraft:potion", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 600, 0)}, new JsonPropertyValue("Potion", "minecraft:thick"));
@@ -247,7 +255,7 @@ public class JsonConfigRegistration
 			{
 				for (JsonBlockFluidTemperature propTemp : entry.getValue())
 				{
-					JsonConfig.registerBlockTemperature(entry.getKey(), propTemp.temperature, propTemp.getAsPropertyArray());
+					JsonConfig.registerBlockFluidTemperature(entry.getKey(), propTemp.temperature, propTemp.getAsPropertyArray());
 				}
 			}
 		}

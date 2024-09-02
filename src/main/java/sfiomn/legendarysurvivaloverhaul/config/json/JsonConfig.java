@@ -27,7 +27,7 @@ public class JsonConfig
 	public static Map<String, JsonConsumableHeal> consumableHeal = Maps.newHashMap();
 	public static Map<String, JsonBodyPartsDamageSource> damageSourceBodyParts = Maps.newHashMap();
 	
-	public static void registerBlockTemperature(String registryName, float temperature, JsonPropertyValue... properties)
+	public static void registerBlockFluidTemperature(String registryName, float temperature, JsonPropertyValue... properties)
 	{
 		if (!blockFluidTemperatures.containsKey(registryName))
 			blockFluidTemperatures.put(registryName, new ArrayList<>());
