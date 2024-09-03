@@ -55,6 +55,10 @@
 	"item.legendarysurvivaloverhaul.pumpkin_juice": "南瓜汁",
 	"item.legendarysurvivaloverhaul.water_plant_bag": "水袋果",
 
+	"item.legendarysurvivaloverhaul.sun_fern_seeds": "灸炎蕨",
+	"item.legendarysurvivaloverhaul.ice_fern_seeds": "寒冰蕨",
+	"item.legendarysurvivaloverhaul.water_plant_seeds": "水袋草",
+
 	"item.legendarysurvivaloverhaul.healing_herbs": "治愈草药",
 	"item.legendarysurvivaloverhaul.plaster": "创可贴",
 	"item.legendarysurvivaloverhaul.bandage": "绷带",
@@ -66,9 +70,9 @@
 	"block.legendarysurvivaloverhaul.heater_top":"加热炉",
 	"block.legendarysurvivaloverhaul.cooler":"冰桶",
 	"block.legendarysurvivaloverhaul.sewing_table":"缝纫机",
-	"block.legendarysurvivaloverhaul.sun_fern": "灸炎蕨",
-	"block.legendarysurvivaloverhaul.ice_fern": "寒冰蕨",
-	"block.legendarysurvivaloverhaul.water_plant": "水袋草",
+	"block.legendarysurvivaloverhaul.sun_fern_crop": "灸炎蕨",
+	"block.legendarysurvivaloverhaul.ice_fern_crop": "寒冰蕨",
+	"block.legendarysurvivaloverhaul.water_plant_crop": "水袋草",
 
 	"screen.legendarysurvivaloverhaul.body_health_screen": "身体健康值",
 

@@ -12,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -51,6 +52,8 @@ import java.util.*;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonForgeEvents {
+
+
 
     @SubscribeEvent
     public static void onFoodEaten(LivingEntityUseItemEvent.Finish event)
@@ -106,6 +109,16 @@ public class CommonForgeEvents {
                     player.level().playSound(null, entity, SoundRegistry.HEAL_BODY_PART.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onAttributeModifier(ItemAttributeModifierEvent event) {
+        ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(event.getItemStack().getItem());
+        if (itemRegistryName != null && JsonConfig.itemTemperatures.containsKey(itemRegistryName.toString())) {
+            LegendarySurvivalOverhaul.LOGGER.debug("item attribute change for " + itemRegistryName);
+            //toRemove.forEach(event::removeModifier);
+            //toAdd.forEach(event::addModifier);
         }
     }
 
@@ -253,7 +266,6 @@ public class CommonForgeEvents {
             }
         }
     }
-
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {

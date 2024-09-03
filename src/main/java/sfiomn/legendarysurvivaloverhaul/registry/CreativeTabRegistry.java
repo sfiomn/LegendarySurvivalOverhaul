@@ -3,7 +3,6 @@ package sfiomn.legendarysurvivaloverhaul.registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -47,6 +46,7 @@ public class CreativeTabRegistry {
                         fullLargeCanteen,
                         ItemRegistry.PURIFIED_WATER_BOTTLE.get().getDefaultInstance(),
                         ItemRegistry.WATER_PLANT_BAG.get().getDefaultInstance(),
+                        ItemRegistry.WATER_PLANT_SEEDS.get().getDefaultInstance(),
 
                         ItemRegistry.BANDAGE.get().getDefaultInstance(),
                         ItemRegistry.HEALING_HERBS.get().getDefaultInstance(),
@@ -64,8 +64,8 @@ public class CreativeTabRegistry {
                         ItemRegistry.DESERT_HELMET.get().getDefaultInstance(),
                         ItemRegistry.DESERT_LEGGINGS.get().getDefaultInstance(),
 
-                        ItemRegistry.ICE_FERN.get().getDefaultInstance(),
-                        ItemRegistry.SUN_FERN.get().getDefaultInstance(),
+                        ItemRegistry.ICE_FERN_SEEDS.get().getDefaultInstance(),
+                        ItemRegistry.SUN_FERN_SEEDS.get().getDefaultInstance(),
                         ItemRegistry.COLD_STRING.get().getDefaultInstance(),
                         ItemRegistry.WARM_STRING.get().getDefaultInstance(),
 

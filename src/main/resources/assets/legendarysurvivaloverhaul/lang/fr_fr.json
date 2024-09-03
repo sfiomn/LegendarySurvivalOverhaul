@@ -55,6 +55,10 @@
 	"item.legendarysurvivaloverhaul.pumpkin_juice": "Jus De Citrouille",
 	"item.legendarysurvivaloverhaul.water_plant_bag": "Sac De Plante D'Eau",
 
+	"item.legendarysurvivaloverhaul.water_plant_seeds": "Graines De Plante D'Eau",
+	"item.legendarysurvivaloverhaul.sun_fern_seeds": "Graines De Fougère Du Désert",
+	"item.legendarysurvivaloverhaul.ice_fern_seeds": "Graines De Fougère De Glace",
+
 	"item.legendarysurvivaloverhaul.healing_herbs": "Herbes Curatives",
 	"item.legendarysurvivaloverhaul.plaster": "Pansement",
 	"item.legendarysurvivaloverhaul.bandage": "Bandage",
@@ -66,9 +70,9 @@
 	"block.legendarysurvivaloverhaul.heater_top":"Chaudière",
 	"block.legendarysurvivaloverhaul.cooler":"Glacière",
 	"block.legendarysurvivaloverhaul.sewing_table":"Table De Couture",
-	"block.legendarysurvivaloverhaul.sun_fern": "Fougère Du Désert",
-	"block.legendarysurvivaloverhaul.ice_fern": "Fougère De Glace",
-	"block.legendarysurvivaloverhaul.water_plant": "Plante D'Eau",
+	"block.legendarysurvivaloverhaul.sun_fern_crop": "Plantation De Fougère Du Désert",
+	"block.legendarysurvivaloverhaul.ice_fern_crop": "Plantation De Fougère De Glace",
+	"block.legendarysurvivaloverhaul.water_plant_crop": "Plantation De Plante D'Eau",
 
 	"screen.legendarysurvivaloverhaul.body_health_screen": "Etat De Santé",
 

@@ -44,8 +44,8 @@ public class ItemRegistry {
 	public static final RegistryObject<Item> COLD_STRING = ITEMS.register("cold_string", () -> new Item(new Item.Properties().rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> WARM_STRING = ITEMS.register("warm_string", () -> new Item(new Item.Properties().rarity(Rarity.COMMON)));
 
-	public static final RegistryObject<Item> SUN_FERN = ITEMS.register("sun_fern", () -> new BlockItem(BlockRegistry.SUN_FERN.get(), new Item.Properties()));
-	public static final RegistryObject<Item> ICE_FERN = ITEMS.register("ice_fern", () -> new BlockItem(BlockRegistry.ICE_FERN.get(), new Item.Properties()));
+	public static final RegistryObject<Item> SUN_FERN_SEEDS = ITEMS.register("sun_fern_seeds", () -> new ItemNameBlockItem(BlockRegistry.SUN_FERN_CROP.get(), new Item.Properties()));
+	public static final RegistryObject<Item> ICE_FERN_SEEDS = ITEMS.register("ice_fern_seeds", () -> new ItemNameBlockItem(BlockRegistry.ICE_FERN_CROP.get(), new Item.Properties()));
 
 	// Thirst
 	public static final RegistryObject<Item> CANTEEN = ITEMS.register("canteen", () -> new CanteenItem(new Item.Properties().rarity(Rarity.COMMON)));
@@ -63,6 +63,7 @@ public class ItemRegistry {
 	public static final RegistryObject<Item> PUMPKIN_JUICE = ITEMS.register("pumpkin_juice", () -> new JuiceItem(new Item.Properties()));
 	public static final RegistryObject<Item> PURIFIED_WATER_BOTTLE = ITEMS.register("purified_water_bottle", () -> new PurifiedWaterBottleItem(new Item.Properties()));
 	public static final RegistryObject<Item> WATER_PLANT_BAG = ITEMS.register("water_plant_bag", () -> new DrinkItem(new Item.Properties()));
+	public static final RegistryObject<Item> WATER_PLANT_SEEDS = ITEMS.register("water_plant_seeds", () -> new ItemNameBlockItem(BlockRegistry.WATER_PLANT_CROP.get(), new Item.Properties()));
 
 	// Heart fruit
 	public static final RegistryObject<Item> HEART_FRUIT = ITEMS.register("heart_fruit", () -> new HeartFruitItem(new Item.Properties().rarity(Rarity.RARE)));

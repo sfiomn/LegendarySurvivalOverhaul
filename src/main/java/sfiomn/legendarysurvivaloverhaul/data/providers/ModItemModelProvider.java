@@ -3,7 +3,6 @@ package sfiomn.legendarysurvivaloverhaul.data.providers;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -42,16 +41,14 @@ public class ModItemModelProvider extends ItemModelProvider {
         canteenItem(ItemRegistry.LARGE_CANTEEN);
 
         simpleItem(ItemRegistry.PURIFIED_WATER_BOTTLE);
-        simpleItem(ItemRegistry.ICE_FERN);
+        simpleItem(ItemRegistry.ICE_FERN_SEEDS);
         simpleItem(ItemRegistry.HEART_FRUIT);
-        simpleItem(ItemRegistry.SUN_FERN);
+        simpleItem(ItemRegistry.SUN_FERN_SEEDS);
         simpleItem(ItemRegistry.WATER_PLANT_BAG);
+        simpleItem(ItemRegistry.WATER_PLANT_SEEDS);
         simpleItem(ItemRegistry.COLD_STRING);
         simpleItem(ItemRegistry.HEART_FRUIT);
         simpleItem(ItemRegistry.WARM_STRING);
-
-        singleTexture("water_plant", new ResourceLocation("item/generated"),
-                "layer0", new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "block/water_plant_top"));
 
         simpleCoatItem(ItemRegistry.COOLING_COAT_1);
         simpleCoatItem(ItemRegistry.COOLING_COAT_2);

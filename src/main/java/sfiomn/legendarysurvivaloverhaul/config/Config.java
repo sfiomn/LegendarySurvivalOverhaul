@@ -449,7 +449,7 @@ public class Config
 					.defineInRange("Temperature Tick Time", 20, 5, Integer.MAX_VALUE);
 			maxTemperatureModification = builder
 					.comment(" Maximum amount of temperature the player's temperature can be modified at each temperature tick time.",
-							" Correspond to the amount of temperature given when temperature difference is maximum.")
+							" Correspond to the amount of temperature given when temperature difference is maximum, meaning 40.")
 					.defineInRange("Maximum Temperature Modification", 1, 0.1, Integer.MAX_VALUE);
 			minTemperatureModification = builder
 					.comment(" Minimum amount of temperature the player's temperature can be modified at each temperature tick time.",

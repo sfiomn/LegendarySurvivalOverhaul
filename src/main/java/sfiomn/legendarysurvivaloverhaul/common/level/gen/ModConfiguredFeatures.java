@@ -14,6 +14,9 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.common.blocks.IceFernBlock;
+import sfiomn.legendarysurvivaloverhaul.common.blocks.SunFernBlock;
+import sfiomn.legendarysurvivaloverhaul.common.blocks.WaterPlantBlock;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
 
 public class ModConfiguredFeatures {
@@ -49,8 +52,8 @@ public class ModConfiguredFeatures {
     }
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        registerSimpleRandomPatchConfig(context, ICE_FERN_CONFIG_KEY, BlockRegistry.ICE_FERN.get().defaultBlockState());
-        registerSimpleRandomPatchConfig(context, SUN_FERN_CONFIG_KEY, BlockRegistry.SUN_FERN.get().defaultBlockState());
-        registerSimpleRandomPatchConfig(context, WATER_PLANT_CONFIG_KEY, BlockRegistry.WATER_PLANT.get().defaultBlockState());
+        registerSimpleRandomPatchConfig(context, ICE_FERN_CONFIG_KEY, BlockRegistry.ICE_FERN_CROP.get().defaultBlockState().setValue(IceFernBlock.AGE, IceFernBlock.MAX_AGE));
+        registerSimpleRandomPatchConfig(context, SUN_FERN_CONFIG_KEY, BlockRegistry.SUN_FERN_CROP.get().defaultBlockState().setValue(SunFernBlock.AGE, SunFernBlock.MAX_AGE));
+        registerSimpleRandomPatchConfig(context, WATER_PLANT_CONFIG_KEY, BlockRegistry.WATER_PLANT_CROP.get().defaultBlockState().setValue(WaterPlantBlock.AGE, WaterPlantBlock.MAX_AGE));
     }
 }

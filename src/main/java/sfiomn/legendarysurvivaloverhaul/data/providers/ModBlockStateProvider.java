@@ -1,19 +1,25 @@
 package sfiomn.legendarysurvivaloverhaul.data.providers;
 
-import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.common.blocks.CoolerBlock;
+import sfiomn.legendarysurvivaloverhaul.common.blocks.IceFernBlock;
+import sfiomn.legendarysurvivaloverhaul.common.blocks.SunFernBlock;
+import sfiomn.legendarysurvivaloverhaul.common.blocks.WaterPlantBlock;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
+
+import java.util.function.Function;
 
 import static sfiomn.legendarysurvivaloverhaul.common.blocks.ThermalBlock.FACING;
 
@@ -79,20 +85,54 @@ public class ModBlockStateProvider extends BlockStateProvider {
                         .rotationY((int) state.getValue(FACING).toYRot())
                         .build());
 
-        simpleBlock(BlockRegistry.ICE_FERN.get(), new ModelFile.UncheckedModelFile(ICE_FERN));
-        simpleBlock(BlockRegistry.SUN_FERN.get(), new ModelFile.UncheckedModelFile(SUN_FERN));
+        VariantBlockStateBuilder iceFernBuilder = this.getVariantBuilder(BlockRegistry.ICE_FERN_CROP.get());
+        IceFernBlock.AGE.getPossibleValues().forEach((age) -> {
+            if (age < IceFernBlock.MAX_AGE) {
+                iceFernBuilder.partialState()
+                        .with(IceFernBlock.AGE, age)
+                        .modelForState()
+                        .modelFile(models().crop("ice_fern_" + age, this.modLoc("block/ice_fern_" + age)).texture("particle", this.modLoc("block/ice_fern_" + age)).renderType("cutout"))
+                        .addModel();
+            } else {
+                iceFernBuilder.partialState()
+                        .with(IceFernBlock.AGE, age)
+                        .modelForState()
+                        .modelFile(new ModelFile.UncheckedModelFile(this.modLoc("block/ice_fern_mature")))
+                        .addModel();
+            }
+        });
 
-        this.getVariantBuilder(BlockRegistry.WATER_PLANT.get())
-                .partialState()
-                    .with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER)
-                    .modelForState()
-                    .modelFile(models().cross("water_plant_bottom", WATER_PLANT_BOTTOM).texture("particle", WATER_PLANT_BOTTOM).renderType("cutout"))
-                    .addModel()
-                .partialState()
-                    .with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER)
-                    .modelForState()
-                    .modelFile(models().cross("water_plant_top", WATER_PLANT_TOP).texture("particle", WATER_PLANT_TOP).renderType("cutout"))
-                    .addModel();
+        VariantBlockStateBuilder sunFernBuilder = this.getVariantBuilder(BlockRegistry.SUN_FERN_CROP.get());
+        SunFernBlock.AGE.getPossibleValues().forEach((age) -> {
+            if (age < SunFernBlock.MAX_AGE) {
+                sunFernBuilder.partialState()
+                        .with(SunFernBlock.AGE, age)
+                        .modelForState()
+                        .modelFile(models().crop("sun_fern_" + age, this.modLoc("block/sun_fern_" + age)).texture("particle", this.modLoc("block/sun_fern_" + age)).renderType("cutout"))
+                        .addModel();
+            } else {
+                sunFernBuilder.partialState()
+                        .with(SunFernBlock.AGE, age)
+                        .modelForState()
+                        .modelFile(new ModelFile.UncheckedModelFile(this.modLoc("block/sun_fern_mature")))
+                        .addModel();
+            }
+        });
 
+        VariantBlockStateBuilder waterPlantBuilder = this.getVariantBuilder(BlockRegistry.WATER_PLANT_CROP.get());
+        WaterPlantBlock.AGE.getPossibleValues().forEach((age) -> {
+                waterPlantBuilder.partialState()
+                        .with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER)
+                        .with(WaterPlantBlock.AGE, age)
+                        .modelForState()
+                        .modelFile(models().cross("water_plant_bottom_" + age, this.modLoc("block/water_plant_bottom_" + age)).texture("particle", this.modLoc("block/water_plant_bottom_" + age)).renderType("cutout"))
+                        .addModel();
+                waterPlantBuilder.partialState()
+                        .with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER)
+                        .with(WaterPlantBlock.AGE, age)
+                        .modelForState()
+                        .modelFile(models().cross("water_plant_top_" + age, this.modLoc("block/water_plant_top_" + age)).texture("particle", this.modLoc("block/water_plant_top_" + age)).renderType("cutout"))
+                        .addModel();
+        });
     }
 }

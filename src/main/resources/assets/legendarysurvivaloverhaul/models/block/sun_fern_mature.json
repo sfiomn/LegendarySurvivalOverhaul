@@ -3,8 +3,8 @@
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
-		"3": "legendarysurvivaloverhaul:block/sun_fern",
-		"particle": "legendarysurvivaloverhaul:block/sun_fern"
+		"3": "legendarysurvivaloverhaul:block/sun_fern_3",
+		"particle": "legendarysurvivaloverhaul:block/sun_fern_3"
 	},
 	"render_type": "cutout",
 	"elements": [

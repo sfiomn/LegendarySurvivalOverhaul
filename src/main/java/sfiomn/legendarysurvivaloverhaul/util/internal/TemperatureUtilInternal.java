@@ -7,6 +7,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.event.ItemAttributeModifierEvent;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ITemperatureUtil;
@@ -15,12 +16,16 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
+import java.util.UUID;
+
 import static sfiomn.legendarysurvivaloverhaul.registry.TemperatureModifierRegistry.*;
 
 
 public class TemperatureUtilInternal implements ITemperatureUtil
 {
 	private final String COAT_TAG = "ArmorPadding";
+	private final UUID COOLING_ATTRIBUTE = UUID.fromString("f4585161-e3fb-4b08-a5d9-2c9a220ab784");
+	private final UUID HEATING_ATTRIBUTE = UUID.fromString("ae6baef0-d408-4660-bed2-d77ac68c9f6e");
 	
 	@Override
 	public float getPlayerTargetTemperature(Player player)
@@ -82,6 +87,10 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 	public TemperatureEnum getTemperatureEnum(float temperature)
 	{
 		return TemperatureEnum.get(temperature);
+	}
+
+	public void applyTemperatureModifier(ItemAttributeModifierEvent event, ItemStack stack) {
+		//event.addModifier();
 	}
 
 	@Override

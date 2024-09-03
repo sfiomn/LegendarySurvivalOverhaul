@@ -3,8 +3,8 @@
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "legendarysurvivaloverhaul:block/ice_fern",
-		"particle": "legendarysurvivaloverhaul:block/ice_fern"
+		"0": "legendarysurvivaloverhaul:block/ice_fern_3",
+		"particle": "legendarysurvivaloverhaul:block/ice_fern_3"
 	},
 	"render_type": "cutout",
 	"elements": [

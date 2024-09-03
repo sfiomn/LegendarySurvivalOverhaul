@@ -55,6 +55,10 @@
 	"item.legendarysurvivaloverhaul.pumpkin_juice": "Pumpkin Juice",
 	"item.legendarysurvivaloverhaul.water_plant_bag": "Water Plant Bag",
 
+	"item.legendarysurvivaloverhaul.water_plant_seeds": "Water Plant Seeds",
+	"item.legendarysurvivaloverhaul.sun_fern_seeds": "Sun Fern Seeds",
+	"item.legendarysurvivaloverhaul.ice_fern_seeds": "Ice Fern Seeds",
+
 	"item.legendarysurvivaloverhaul.healing_herbs": "Healing Herbs",
 	"item.legendarysurvivaloverhaul.plaster": "Plaster",
 	"item.legendarysurvivaloverhaul.bandage": "Bandage",
@@ -66,9 +70,9 @@
 	"block.legendarysurvivaloverhaul.heater_top":"Boiler",
 	"block.legendarysurvivaloverhaul.cooler":"Ice Box",
 	"block.legendarysurvivaloverhaul.sewing_table":"Sewing Table",
-	"block.legendarysurvivaloverhaul.sun_fern": "Sun Fern",
-	"block.legendarysurvivaloverhaul.ice_fern": "Ice Fern",
-	"block.legendarysurvivaloverhaul.water_plant": "Water Plant",
+	"block.legendarysurvivaloverhaul.sun_fern_crop": "Sun Fern Crop",
+	"block.legendarysurvivaloverhaul.ice_fern_crop": "Ice Fern Crop",
+	"block.legendarysurvivaloverhaul.water_plant_crop": "Water Plant Crop",
 
 	"screen.legendarysurvivaloverhaul.body_health_screen": "Body Health",
 

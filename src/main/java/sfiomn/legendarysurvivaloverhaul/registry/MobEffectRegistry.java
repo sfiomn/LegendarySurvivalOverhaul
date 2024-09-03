@@ -16,7 +16,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.effects.*;
-import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 public class MobEffectRegistry {
 
@@ -51,10 +50,10 @@ public class MobEffectRegistry {
 
 	public static void registerBrewingRecipes()
 	{
-		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.SUN_FERN.get(), HEAT_RESISTANCE_POTION.get());
+		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.SUN_FERN_SEEDS.get(), HEAT_RESISTANCE_POTION.get());
 		addBrewingRecipe(HEAT_RESISTANCE_POTION.get(), Items.REDSTONE, HEAT_RESISTANCE_POTION_LONG.get());
 
-		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.ICE_FERN.get(), COLD_RESISTANCE_POTION.get());
+		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.ICE_FERN_SEEDS.get(), COLD_RESISTANCE_POTION.get());
 		addBrewingRecipe(COLD_RESISTANCE_POTION.get(), Items.REDSTONE, COLD_RESISTANCE_POTION_LONG.get());
 	}
 
