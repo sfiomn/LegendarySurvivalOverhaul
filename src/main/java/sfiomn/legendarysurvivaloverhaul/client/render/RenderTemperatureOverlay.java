@@ -53,7 +53,7 @@ public class RenderTemperatureOverlay {
             boolean heatstrokeLimit = temperature >= TemperatureEnum.HEAT_STROKE.getMiddle() - 1;
 
             float targetFadeLevel;
-            if (tempEnum == TemperatureEnum.FROSTBITE && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
+            if (Config.Baked.coldTemperatureOverlay && tempEnum == TemperatureEnum.FROSTBITE && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
                 temperatureEffect = FROSTBITE_EFFECT;
                 if (frostbiteLimit) {
                     targetFadeLevel = 0.75f;
@@ -68,7 +68,7 @@ public class RenderTemperatureOverlay {
                         player.playSound(SoundRegistry.FROSTBITE_EARLY.get(), 1.0f, 1.0f);
                     }
                 }
-            } else if (tempEnum == TemperatureEnum.HEAT_STROKE && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
+            } else if (Config.Baked.heatTemperatureOverlay && tempEnum == TemperatureEnum.HEAT_STROKE && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
                 temperatureEffect = HEAT_STROKE_EFFECT;
 
                 if (heatstrokeLimit) {

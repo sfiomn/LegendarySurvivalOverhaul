@@ -1,6 +1,5 @@
 package sfiomn.legendarysurvivaloverhaul.client.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
@@ -73,8 +72,7 @@ public class RenderTemperatureGui
 	};
 
 	public static IGuiOverlay FOOD_BAR_COLD_EFFECT_GUI = (forgeGui, guiGraphics, partialTicks, width, height) -> {
-		if (Config.Baked.temperatureSecondaryEffects
-				&& !Minecraft.getInstance().options.hideGui
+		if (!Minecraft.getInstance().options.hideGui
 				&& forgeGui.shouldDrawSurvivalElements()) {
 			Player player = forgeGui.getMinecraft().player;
 

@@ -15,7 +15,6 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
 import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
-import sfiomn.legendarysurvivaloverhaul.common.integration.vampirism.VampirismUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 
@@ -133,23 +132,21 @@ public class TemperatureCapability implements ITemperatureCapability
 			if (player.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.DEBUG_STICK)
 				LegendarySurvivalOverhaul.LOGGER.info(tempEnum + ", " + getTemperatureLevel() + " -> " + destinationTemp);
 
-			if (Config.Baked.dangerousTemperature)
-				applyDangerousEffects(player);
+			applyDangerousEffects(player);
 
-			if (Config.Baked.temperatureSecondaryEffects && ThirstUtil.isThirstActive(player))
-				applySecondaryEffects(player);
+			applySecondaryEffects(player);
 		}
 	}
 
 	private void applyDangerousEffects(Player player) {
-		if (getTemperatureEnum() == TemperatureEnum.HEAT_STROKE) {
+		if (Config.Baked.dangerousHeatTemperature && ThirstUtil.isThirstActive(player) && getTemperatureEnum() == TemperatureEnum.HEAT_STROKE) {
 			if (TemperatureEnum.HEAT_STROKE.getMiddle() <= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply hyperthermia
 				if (!player.hasEffect(MobEffectRegistry.HEAT_STROKE.get()))
 					player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_STROKE.get(), -1, 0, false, true));
 				return;
 			}
-		} else if (getTemperatureEnum() == TemperatureEnum.FROSTBITE) {
+		} else if (Config.Baked.dangerousColdTemperature && getTemperatureEnum() == TemperatureEnum.FROSTBITE) {
 			if (TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply hypothermia.json
 				if (!player.hasEffect(MobEffectRegistry.FROSTBITE.get()))
@@ -157,19 +154,21 @@ public class TemperatureCapability implements ITemperatureCapability
 				return;
 			}
 		}
-		player.removeEffect(MobEffectRegistry.HEAT_STROKE.get());
-		player.removeEffect(MobEffectRegistry.FROSTBITE.get());
+		if (player.hasEffect(MobEffectRegistry.HEAT_STROKE.get()))
+			player.removeEffect(MobEffectRegistry.HEAT_STROKE.get());
+		if (player.hasEffect(MobEffectRegistry.FROSTBITE.get()))
+			player.removeEffect(MobEffectRegistry.FROSTBITE.get());
 	}
 
 	private void applySecondaryEffects(Player player) {
-		if (getTemperatureEnum() == TemperatureEnum.HEAT_STROKE) {
+		if (Config.Baked.heatTemperatureSecondaryEffects && getTemperatureEnum() == TemperatureEnum.HEAT_STROKE) {
 			if (!player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply secondary effect hyperthermia
 				if (!player.hasEffect(MobEffectRegistry.HEAT_THIRST.get()))
 					player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_THIRST.get(), -1, 0, false, false));
 				return;
 			}
-		} else if (getTemperatureEnum() == TemperatureEnum.FROSTBITE) {
+		} else if (Config.Baked.coldTemperatureSecondaryEffects && getTemperatureEnum() == TemperatureEnum.FROSTBITE) {
 			if (!player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply secondary effect hypothermia
 				if (!player.hasEffect(MobEffectRegistry.COLD_HUNGER.get()))
@@ -177,8 +176,10 @@ public class TemperatureCapability implements ITemperatureCapability
 				return;
 			}
 		}
-		player.removeEffect(MobEffectRegistry.HEAT_THIRST.get());
-		player.removeEffect(MobEffectRegistry.COLD_HUNGER.get());
+		if (player.hasEffect(MobEffectRegistry.HEAT_THIRST.get()))
+			player.removeEffect(MobEffectRegistry.HEAT_THIRST.get());
+		if (player.hasEffect(MobEffectRegistry.COLD_HUNGER.get()))
+			player.removeEffect(MobEffectRegistry.COLD_HUNGER.get());
 	}
 
 	public void shakePlayer(Player player) {
