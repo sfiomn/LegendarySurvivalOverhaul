@@ -64,6 +64,8 @@ public class CreativeTabRegistry {
                         ItemRegistry.DESERT_HELMET.get().getDefaultInstance(),
                         ItemRegistry.DESERT_LEGGINGS.get().getDefaultInstance(),
 
+                        ItemRegistry.ICE_FERN.get().getDefaultInstance(),
+                        ItemRegistry.SUN_FERN.get().getDefaultInstance(),
                         ItemRegistry.ICE_FERN_SEEDS.get().getDefaultInstance(),
                         ItemRegistry.SUN_FERN_SEEDS.get().getDefaultInstance(),
                         ItemRegistry.COLD_STRING.get().getDefaultInstance(),

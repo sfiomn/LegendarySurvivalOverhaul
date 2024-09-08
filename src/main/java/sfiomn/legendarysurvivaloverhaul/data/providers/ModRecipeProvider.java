@@ -371,21 +371,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         purification_blasting(consumer, PartialNBTIngredient.of(nbt, ItemRegistry.CANTEEN.get()), ItemRegistry.CANTEEN.get(), 1.0f, 80, "purified_canteen");
         purification_blasting(consumer, PartialNBTIngredient.of(nbt, ItemRegistry.LARGE_CANTEEN.get()), ItemRegistry.LARGE_CANTEEN.get(), 1.0f, 80, "purified_large_canteen");
 
-        nbt = new CompoundTag();
-        nbt.putString("Potion", LegendarySurvivalOverhaul.MOD_ID + ":cold_resistance");
-        sewing(consumer, Ingredient.of(Items.STRING), PartialNBTIngredient.of(nbt, Items.POTION), ItemRegistry.COLD_STRING.get(), "cold_string");
+        sewing(consumer, Ingredient.of(Items.STRING), Ingredient.of(ItemRegistry.ICE_FERN.get()), ItemRegistry.COLD_STRING.get(), "cold_string");
 
-        nbt = new CompoundTag();
-        nbt.putString("Potion", LegendarySurvivalOverhaul.MOD_ID + ":cold_resistance_long");
-        sewing(consumer, Ingredient.of(Items.STRING), PartialNBTIngredient.of(nbt, Items.POTION), ItemRegistry.COLD_STRING.get(), "cold_string");
-
-        nbt = new CompoundTag();
-        nbt.putString("Potion", LegendarySurvivalOverhaul.MOD_ID + ":heat_resistance");
-        sewing(consumer, Ingredient.of(Items.STRING), PartialNBTIngredient.of(nbt, Items.POTION), ItemRegistry.WARM_STRING.get(), "warm_string");
-
-        nbt = new CompoundTag();
-        nbt.putString("Potion", LegendarySurvivalOverhaul.MOD_ID + ":heat_resistance_long");
-        sewing(consumer, Ingredient.of(Items.STRING), PartialNBTIngredient.of(nbt, Items.POTION), ItemRegistry.WARM_STRING.get(), "warm_string");
+        sewing(consumer, Ingredient.of(Items.STRING), Ingredient.of(ItemRegistry.SUN_FERN.get()), ItemRegistry.WARM_STRING.get(), "warm_string");
 
         buildAllCoatingRecipes(consumer);
     }

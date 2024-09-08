@@ -104,6 +104,7 @@ public class LegendarySurvivalOverhaul
 		SoundRegistry.register(modBus);
 		TemperatureModifierRegistry.register(modBus);
 		BlockEntityRegistry.register(modBus);
+		FeatureRegistry.register(modBus);
 		CreativeTabRegistry.register(modBus);
 
 		forgeBus.addListener(CommandRegistry::registerCommandsEvent);

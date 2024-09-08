@@ -41,8 +41,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         canteenItem(ItemRegistry.LARGE_CANTEEN);
 
         simpleItem(ItemRegistry.PURIFIED_WATER_BOTTLE);
-        simpleItem(ItemRegistry.ICE_FERN_SEEDS);
         simpleItem(ItemRegistry.HEART_FRUIT);
+        simpleItem(ItemRegistry.ICE_FERN);
+        simpleItem(ItemRegistry.ICE_FERN_SEEDS);
+        simpleItem(ItemRegistry.SUN_FERN);
         simpleItem(ItemRegistry.SUN_FERN_SEEDS);
         simpleItem(ItemRegistry.WATER_PLANT_BAG);
         simpleItem(ItemRegistry.WATER_PLANT_SEEDS);

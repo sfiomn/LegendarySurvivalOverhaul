@@ -3,6 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.client.particles;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -13,16 +14,18 @@ public class BreathParticle extends TextureSheetParticle {
 
     public BreathParticle(SpriteSet animatedSprite, ClientLevel level, double x, double y, double z, double xd, double yd, double zd) {
         super(level, x, y, z, xd, yd, zd);
+        this.xd *= 0.1f;
+        this.yd *= 0.1f;
+        this.zd *= 0.1f;
 
         this.setSpriteFromAge(animatedSprite);
         this.animatedSprite = animatedSprite;
 
         this.lifetime = (int) (10.0D / (random.nextDouble() + 0.3D));
 
-        this.alpha = 0.4f;
-        this.gravity = 0.2f;
+        this.alpha = 0.25f;
         this.friction = 0.8F;
-        this.scale(0.25f);
+        this.hasPhysics = false;
     }
 
     @Override

@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -164,27 +165,18 @@ public class WaterPlantBlock extends CropBlock implements IPlantable {
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide) {
+            if (isUpperBlock(state)) {
+                if (level.getBlockState(pos.below()).is(this))
+                    level.removeBlock(pos.below(), false);
+            } else if (level.getBlockState(pos.above()).is(this))
+                level.removeBlock(pos.above(), false);
+
             if (player.isCreative()) {
-                preventCreativeDropFromBottomPart(level, pos, state, player);
-            } else {
-                dropResources(state, level, pos, null, player, player.getMainHandItem());
+                level.removeBlock(pos, false);
             }
         }
 
         super.playerWillDestroy(level, pos, state, player);
-    }
-
-    public static void preventCreativeDropFromBottomPart(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
-        DoubleBlockHalf doubleblockhalf = pState.getValue(HALF);
-        if (doubleblockhalf == DoubleBlockHalf.UPPER) {
-            BlockPos blockpos = pPos.below();
-            BlockState blockstate = pLevel.getBlockState(blockpos);
-            if (blockstate.is(pState.getBlock()) && blockstate.getValue(HALF) == DoubleBlockHalf.LOWER) {
-                BlockState blockstate1 = blockstate.getFluidState().is(Fluids.WATER) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
-                pLevel.setBlock(blockpos, blockstate1, 35);
-                pLevel.levelEvent(pPlayer, 2001, blockpos, Block.getId(blockstate));
-            }
-        }
     }
 
     @Override

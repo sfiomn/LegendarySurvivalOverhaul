@@ -53,11 +53,13 @@
 	"item.legendarysurvivaloverhaul.glistering_melon_juice": "闪烁西瓜汁",
 	"item.legendarysurvivaloverhaul.melon_juice": "西瓜汁",
 	"item.legendarysurvivaloverhaul.pumpkin_juice": "南瓜汁",
-	"item.legendarysurvivaloverhaul.water_plant_bag": "水袋果",
 
-	"item.legendarysurvivaloverhaul.sun_fern_seeds": "灸炎蕨",
-	"item.legendarysurvivaloverhaul.ice_fern_seeds": "寒冰蕨",
+	"item.legendarysurvivaloverhaul.water_plant_bag": "水袋果",
 	"item.legendarysurvivaloverhaul.water_plant_seeds": "水袋草",
+	"item.legendarysurvivaloverhaul.sun_fern": "灸炎蕨",
+	"item.legendarysurvivaloverhaul.sun_fern_seeds": "灸炎蕨",
+	"item.legendarysurvivaloverhaul.ice_fern": "寒冰蕨",
+	"item.legendarysurvivaloverhaul.ice_fern_seeds": "寒冰蕨",
 
 	"item.legendarysurvivaloverhaul.healing_herbs": "治愈草药",
 	"item.legendarysurvivaloverhaul.plaster": "创可贴",
