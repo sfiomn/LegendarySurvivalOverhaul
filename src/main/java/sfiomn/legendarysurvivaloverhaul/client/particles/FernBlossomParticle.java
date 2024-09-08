@@ -46,7 +46,8 @@ public class FernBlossomParticle extends SpriteTexturedParticle {
         }
         this.xd += Math.cos(this.angle) * 0.0005;
         this.zd += Math.sin(this.angle) * 0.0005;
-        this.setSpriteFromAge(this.animatedSprite);
+        if (!this.removed)
+            this.setSpriteFromAge(this.animatedSprite);
         fadeOut();
     }
 

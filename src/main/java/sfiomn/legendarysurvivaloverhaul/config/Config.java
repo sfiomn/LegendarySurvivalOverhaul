@@ -369,8 +369,8 @@ public class Config
 			builder.comment(" Default temperature added to the player, based on the dimension.")
 					.push("dimension-default");
 			overworldDefaultTemperature = builder.defineInRange( "Default Overworld Modifier", 20.0d, -1000, 1000);
-			netherDefaultTemperature = builder.defineInRange( "Default Nether Modifier", 30.0d, -1000, 1000);
-			endDefaultTemperature = builder.defineInRange( "Default The End Modifier", 5.0d, -1000, 1000);
+			netherDefaultTemperature = builder.defineInRange( "Default Nether Modifier", 28.0d, -1000, 1000);
+			endDefaultTemperature = builder.defineInRange( "Default The End Modifier", -15.0d, -1000, 1000);
 			builder.pop();
 			
 			builder.push("huddling");
@@ -425,22 +425,22 @@ public class Config
 					.push("coat");
 
 			builder.comment(" Add an adaptive heating effect on armors.").push("heating");
-			heatingCoat1Modifier = builder.defineInRange("Heating Coat I", 1.0d, 0, 1000.0d);
-			heatingCoat2Modifier = builder.defineInRange("Heating Coat II", 2.0d, 0, 1000.0d);
-			heatingCoat3Modifier = builder.defineInRange("Heating Coat III", 3.0d, 0, 1000.0d);
+			heatingCoat1Modifier = builder.defineInRange("Heating Coat I", 2.0d, 0, 1000.0d);
+			heatingCoat2Modifier = builder.defineInRange("Heating Coat II", 3.0d, 0, 1000.0d);
+			heatingCoat3Modifier = builder.defineInRange("Heating Coat III", 4.0d, 0, 1000.0d);
 			builder.pop();
 
 			builder.comment(" Add an adaptive cooling effect on armors.").push("cooling");
-			coolingCoat1Modifier = builder.defineInRange("Cooling Coat I", 1.0d, 0, 1000.0d);
-			coolingCoat2Modifier = builder.defineInRange("Cooling Coat II", 2.0d, 0, 1000.0d);
-			coolingCoat3Modifier = builder.defineInRange("Cooling Coat III", 3.0d, 0, 1000.0d);
+			coolingCoat1Modifier = builder.defineInRange("Cooling Coat I", 2.0d, 0, 1000.0d);
+			coolingCoat2Modifier = builder.defineInRange("Cooling Coat II", 3.0d, 0, 1000.0d);
+			coolingCoat3Modifier = builder.defineInRange("Cooling Coat III", 4.0d, 0, 1000.0d);
 			builder.pop();
 
 			builder.comment(" Add an adaptive temperature effect on armors that can both heat and cool the player.")
 					.push("thermal");
-			thermalCoat1Modifier = builder.defineInRange("Thermal Coat I", 1.0d, 0, 1000.0d);
-			thermalCoat2Modifier = builder.defineInRange("Thermal Coat II", 2.0d, 0, 1000.0d);
-			thermalCoat3Modifier = builder.defineInRange("Thermal Coat III", 3.0d, 0, 1000.0d);
+			thermalCoat1Modifier = builder.defineInRange("Thermal Coat I", 2.0d, 0, 1000.0d);
+			thermalCoat2Modifier = builder.defineInRange("Thermal Coat II", 3.0d, 0, 1000.0d);
+			thermalCoat3Modifier = builder.defineInRange("Thermal Coat III", 4.0d, 0, 1000.0d);
 			builder.pop();
 			builder.pop();
 			
@@ -726,7 +726,7 @@ public class Config
 					.defineInRange("Body Damage Multiplier", 1.0d, 0.0d, 1000.0d);
 			bodyHealthRatioRecoveredFromSleep = builder
 					.comment(" How much health ratio are recovered in all body parts from bed sleeping.")
-					.defineInRange("Body Part Health Ratio Recovered", 0.3d, 0.0d, 1.0d);
+					.defineInRange("Body Part Health Ratio Recovered", 1.0d, 0.0d, 1.0d);
 			healthRatioRecoveredFromSleep = builder
 					.comment(" How much health ratio are recovered from bed sleeping.")
 					.defineInRange("Health Ratio Recovered", 0.3d, 0.0d, 1.0d);
@@ -838,6 +838,7 @@ public class Config
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetY;
 		public final ForgeConfigSpec.BooleanValue breathingSoundEnabled;
+		public final ForgeConfigSpec.DoubleValue coldBreathEffectThreshold;
 		public final ForgeConfigSpec.BooleanValue foodSaturationDisplayed;
 		
 		public final ForgeConfigSpec.IntValue wetnessIndicatorOffsetX;
@@ -886,7 +887,11 @@ public class Config
 			temperatureDisplayOffsetY = builder
 					.defineInRange("Temperature Display Y Offset", 0, -1000, 1000);
 			breathingSoundEnabled = builder
-					.define(" If enabled, breathing sound can be heard while player faces harsh temperatures", true);
+					.comment(" If enabled, breathing sound can be heard while player faces harsh temperatures.")
+					.define("Breathing Sound Enabled", true);
+			coldBreathEffectThreshold = builder
+					.comment(" Temperature threshold below which a cold breath effect is rendered by the player. -1000 disable the feature.")
+					.defineInRange("Cold Breath Temperature Threshold", 10.0, -1000, 1000);
 			foodSaturationDisplayed = builder
 					.comment(" If enabled, the food saturation will be rendered on the Food Bar while the player suffers Cold Hunger Effect (secondary temperature effect).")
 					.define("Show Food Saturation Bar", true);
@@ -1162,6 +1167,7 @@ public class Config
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
 		public static boolean breathingSoundEnabled;
+		public static double coldBreathEffectThreshold;
 
 		public static int seasonCardsOffsetX;
 		public static int seasonCardsOffsetY;
@@ -1394,6 +1400,7 @@ public class Config
 				temperatureDisplayOffsetX = CLIENT.temperatureDisplayOffsetX.get();
 				temperatureDisplayOffsetY = CLIENT.temperatureDisplayOffsetY.get();
 				breathingSoundEnabled = CLIENT.breathingSoundEnabled.get();
+				coldBreathEffectThreshold = CLIENT.coldBreathEffectThreshold.get();
 				showVanillaAnimationOverlay = CLIENT.showVanillaAnimationOverlay.get();
 
 				seasonCardsOffsetX = CLIENT.seasonCardsOffsetX.get();
