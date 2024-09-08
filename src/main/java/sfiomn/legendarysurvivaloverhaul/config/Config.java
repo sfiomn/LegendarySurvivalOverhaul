@@ -70,11 +70,13 @@ public class Config
 		public final ForgeConfigSpec.DoubleValue minTemperatureModification;
 		public final ForgeConfigSpec.DoubleValue maxTemperatureModification;
 		public final ForgeConfigSpec.BooleanValue showPotionEffectParticles;
-		public final ForgeConfigSpec.BooleanValue dangerousTemperature;
+		public final ForgeConfigSpec.BooleanValue dangerousHeatTemperature;
+		public final ForgeConfigSpec.BooleanValue dangerousColdTemperature;
 		public final ForgeConfigSpec.BooleanValue temperatureResistanceOnDeathEnabled;
 		public final ForgeConfigSpec.IntValue temperatureResistanceOnDeathTime;
 
-		public final ForgeConfigSpec.BooleanValue temperatureSecondaryEffects;
+		public final ForgeConfigSpec.BooleanValue heatTemperatureSecondaryEffects;
+		public final ForgeConfigSpec.BooleanValue coldTemperatureSecondaryEffects;
 		public final ForgeConfigSpec.DoubleValue heatThirstEffectModifier;
 		public final ForgeConfigSpec.DoubleValue coldHungerEffectModifier;
 		
@@ -296,9 +298,12 @@ public class Config
 			builder.pop();
 			
 			builder.comment(" Options related to the temperature system").push("temperature");
-			dangerousTemperature = builder
-					.comment(" If enabled, players will take damage from the effects of temperature.")
-					.define("Dangerous Temperature Effects", true);
+			dangerousHeatTemperature = builder
+					.comment(" If enabled, players will take damage from the effects of high temperature.")
+					.define("Dangerous Heat Temperature Effects", true);
+			dangerousColdTemperature = builder
+					.comment(" If enabled, players will take damage from the effects of low temperature.")
+					.define("Dangerous Cold Temperature Effects", true);
 
 			builder.push("on-death");
 			temperatureResistanceOnDeathEnabled = builder
@@ -310,10 +315,14 @@ public class Config
 			builder.pop();
 
 			builder.push("secondary_effects");
-			temperatureSecondaryEffects = builder
+			heatTemperatureSecondaryEffects = builder
 					.comment(" If enabled, players will also receive other effects from their current temperature state.",
-							" If the player is too hot, hydration will deplete faster. If the player is too cold, hunger will deplete faster.")
-					.define("Secondary Temperature Effects", true);
+							" If the player is too hot, hydration will deplete faster.")
+					.define("Heat Temperature Secondary Effects", true);
+			coldTemperatureSecondaryEffects = builder
+					.comment(" If enabled, players will also receive other effects from their current temperature state.",
+							" If the player is too cold, hunger will deplete faster.")
+					.define("Cold Temperature Secondary Effects", true);
 			heatThirstEffectModifier = builder
 					.comment(" How much thirst exhaustion will be added every 50 ticks with no amplification effect.")
 					.defineInRange("Heat Thirst Effect Modifier", 0.1d, 0, 1000.0d);
@@ -641,7 +650,7 @@ public class Config
 					.define("Effect", LegendarySurvivalOverhaul.MOD_ID + ":thirst");
 			effectDurationWater = builder
 					.comment(" Duration in ticks of the possible effect given while drinking water.")
-					.defineInRange("Effect Duration", 600, 0, 100000);
+					.defineInRange("Effect Duration", 300, 0, 100000);
 			builder.pop();
 			builder.comment(" Amount recovered by potions with effects").push("potion");
 			hydrationPotion = builder
@@ -837,6 +846,8 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<String> temperatureDisplayMode;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetY;
+		public final ForgeConfigSpec.BooleanValue heatTemperatureOverlay;
+		public final ForgeConfigSpec.BooleanValue coldTemperatureOverlay;
 		public final ForgeConfigSpec.BooleanValue breathingSoundEnabled;
 		public final ForgeConfigSpec.DoubleValue coldBreathEffectThreshold;
 		public final ForgeConfigSpec.BooleanValue foodSaturationDisplayed;
@@ -886,6 +897,12 @@ public class Config
 					.defineInRange("Temperature Display X Offset", 0, -1000, 1000);
 			temperatureDisplayOffsetY = builder
 					.defineInRange("Temperature Display Y Offset", 0, -1000, 1000);
+			heatTemperatureOverlay = builder
+					.comment(" If enabled, player will see a foggy effect when the heat is high.")
+					.define("Heat Temperature Overlay", true);
+			coldTemperatureOverlay = builder
+					.comment(" If enabled, player will see a frost effect when the cold is low.")
+					.define("Cold Temperature Overlay", true);
 			breathingSoundEnabled = builder
 					.comment(" If enabled, breathing sound can be heard while player faces harsh temperatures.")
 					.define("Breathing Sound Enabled", true);
@@ -978,8 +995,10 @@ public class Config
 		public static boolean temperatureResistanceOnDeathEnabled;
 		public static int temperatureResistanceOnDeathTime;
 
-		public static boolean dangerousTemperature;
-		public static boolean temperatureSecondaryEffects;
+		public static boolean dangerousHeatTemperature;
+		public static boolean dangerousColdTemperature;
+		public static boolean heatTemperatureSecondaryEffects;
+		public static boolean coldTemperatureSecondaryEffects;
 		public static double heatThirstEffectModifier;
 		public static double coldHungerEffectModifier;
 		public static boolean foodSaturationDisplayed;
@@ -1166,6 +1185,8 @@ public class Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
+		public static boolean heatTemperatureOverlay;
+		public static boolean coldTemperatureOverlay;
 		public static boolean breathingSoundEnabled;
 		public static double coldBreathEffectThreshold;
 
@@ -1205,9 +1226,11 @@ public class Config
 
 				temperatureResistanceOnDeathEnabled = COMMON.temperatureResistanceOnDeathEnabled.get();
 				temperatureResistanceOnDeathTime = COMMON.temperatureResistanceOnDeathTime.get();
-				
-				dangerousTemperature = COMMON.dangerousTemperature.get();
-				temperatureSecondaryEffects = COMMON.temperatureSecondaryEffects.get();
+
+				dangerousHeatTemperature = COMMON.dangerousHeatTemperature.get();
+				dangerousColdTemperature = COMMON.dangerousColdTemperature.get();
+				heatTemperatureSecondaryEffects = COMMON.heatTemperatureSecondaryEffects.get();
+				coldTemperatureSecondaryEffects = COMMON.coldTemperatureSecondaryEffects.get();
 				heatThirstEffectModifier = COMMON.heatThirstEffectModifier.get();
 				coldHungerEffectModifier = COMMON.coldHungerEffectModifier.get();
 
@@ -1399,6 +1422,8 @@ public class Config
 				temperatureDisplayMode = TemperatureDisplayEnum.getDisplayFromString(CLIENT.temperatureDisplayMode.get());
 				temperatureDisplayOffsetX = CLIENT.temperatureDisplayOffsetX.get();
 				temperatureDisplayOffsetY = CLIENT.temperatureDisplayOffsetY.get();
+				heatTemperatureOverlay = CLIENT.heatTemperatureOverlay.get();
+				coldTemperatureOverlay = CLIENT.coldTemperatureOverlay.get();
 				breathingSoundEnabled = CLIENT.breathingSoundEnabled.get();
 				coldBreathEffectThreshold = CLIENT.coldBreathEffectThreshold.get();
 				showVanillaAnimationOverlay = CLIENT.showVanillaAnimationOverlay.get();

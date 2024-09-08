@@ -132,23 +132,21 @@ public class TemperatureCapability implements ITemperatureCapability
 			if (player.getItemBySlot(EquipmentSlotType.MAINHAND).getItem() == Items.DEBUG_STICK)
 				LegendarySurvivalOverhaul.LOGGER.info(tempEnum + ", " + getTemperatureLevel() + " -> " + destinationTemp);
 
-			if (Config.Baked.dangerousTemperature)
-				applyDangerousEffects(player, tempEnum);
+			applyDangerousEffects(player, tempEnum);
 
-			if (Config.Baked.temperatureSecondaryEffects && ThirstUtil.isThirstActive(player))
-				applySecondaryEffects(player, tempEnum);
+			applySecondaryEffects(player, tempEnum);
 		}
 	}
 
 	private void applyDangerousEffects(PlayerEntity player, TemperatureEnum tempEnum) {
-		if (tempEnum == TemperatureEnum.HEAT_STROKE) {
+		if (Config.Baked.dangerousHeatTemperature && ThirstUtil.isThirstActive(player) && tempEnum == TemperatureEnum.HEAT_STROKE) {
 			if (TemperatureEnum.HEAT_STROKE.getMiddle() <= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply hyperthermia
 				if (!player.hasEffect(EffectRegistry.HEAT_STROKE.get()))
 					player.addEffect(new EffectInstance(EffectRegistry.HEAT_STROKE.get(), 1000, 0, false, true));
 				return;
 			}
-		} else if (tempEnum == TemperatureEnum.FROSTBITE) {
+		} else if (Config.Baked.dangerousColdTemperature && tempEnum == TemperatureEnum.FROSTBITE) {
 			if (TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply hypothermia
 				if (!player.hasEffect(EffectRegistry.FROSTBITE.get()))
@@ -156,19 +154,21 @@ public class TemperatureCapability implements ITemperatureCapability
 				return;
 			}
 		}
-		player.removeEffect(EffectRegistry.HEAT_STROKE.get());
-		player.removeEffect(EffectRegistry.FROSTBITE.get());
+		if (player.hasEffect(EffectRegistry.HEAT_STROKE.get()))
+			player.removeEffect(EffectRegistry.HEAT_STROKE.get());
+		if (player.hasEffect(EffectRegistry.FROSTBITE.get()))
+			player.removeEffect(EffectRegistry.FROSTBITE.get());
 	}
 
 	private void applySecondaryEffects(PlayerEntity player, TemperatureEnum tempEnum) {
-		if (tempEnum == TemperatureEnum.HEAT_STROKE) {
+		if (Config.Baked.heatTemperatureSecondaryEffects && tempEnum == TemperatureEnum.HEAT_STROKE) {
 			if (!player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply secondary effect hyperthermia
 				player.removeEffect(EffectRegistry.COLD_HUNGER.get());
 				player.addEffect(new EffectInstance(EffectRegistry.HEAT_THIRST.get(), 300, 0, false, false));
 				return;
 			}
-		} else if (tempEnum == TemperatureEnum.FROSTBITE) {
+		} else if (Config.Baked.coldTemperatureSecondaryEffects && tempEnum == TemperatureEnum.FROSTBITE) {
 			if (!player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply secondary effect hypothermia
 				player.removeEffect(EffectRegistry.HEAT_THIRST.get());
@@ -176,8 +176,10 @@ public class TemperatureCapability implements ITemperatureCapability
 				return;
 			}
 		}
-		player.removeEffect(EffectRegistry.HEAT_THIRST.get());
-		player.removeEffect(EffectRegistry.COLD_HUNGER.get());
+		if (player.hasEffect(EffectRegistry.HEAT_THIRST.get()))
+			player.removeEffect(EffectRegistry.HEAT_THIRST.get());
+		if (player.hasEffect(EffectRegistry.COLD_HUNGER.get()))
+			player.removeEffect(EffectRegistry.COLD_HUNGER.get());
 	}
 	
 	private void tickTemperature(float currentTemp, float destination)

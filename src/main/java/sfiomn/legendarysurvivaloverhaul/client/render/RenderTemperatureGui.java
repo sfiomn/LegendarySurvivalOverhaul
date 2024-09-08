@@ -81,8 +81,7 @@ public class RenderTemperatureGui
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		if (Config.Baked.temperatureSecondaryEffects)
-			drawHungerSecondaryEffect(matrix, player, width, height);
+		drawHungerSecondaryEffect(matrix, player, width, height);
 
 		RenderSystem.disableBlend();
 		bind(AbstractGui.GUI_ICONS_LOCATION);

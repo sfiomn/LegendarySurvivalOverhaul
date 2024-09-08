@@ -17,6 +17,8 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThi
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonEffectParameter;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
+import sfiomn.legendarysurvivaloverhaul.common.blocks.IceFernBlock;
+import sfiomn.legendarysurvivaloverhaul.common.blocks.SunFernBlock;
 import sfiomn.legendarysurvivaloverhaul.common.integration.IntegrationController;
 import sfiomn.legendarysurvivaloverhaul.config.JsonFileName;
 import sfiomn.legendarysurvivaloverhaul.config.JsonTypeToken;
@@ -71,6 +73,9 @@ public class JsonConfigRegistration
 
 		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":cooler", 0.0f, new JsonPropertyValue("lit", "false"));
 		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":heater", 0.0f, new JsonPropertyValue("lit", "false"));
+
+		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":ice_fern_crop", -1.5f, new JsonPropertyValue(IceFernBlock.AGE.getName(), String.valueOf(IceFernBlock.MAX_AGE)));
+		JsonConfig.registerBlockFluidTemperature(LegendarySurvivalOverhaul.MOD_ID + ":sun_fern_crop", 1.5f, new JsonPropertyValue(SunFernBlock.AGE.getName(), String.valueOf(SunFernBlock.MAX_AGE)));
 
 		JsonConfig.registerBlockFluidTemperature("minecraft:magma_block", 12.0f);
 
@@ -163,15 +168,15 @@ public class JsonConfigRegistration
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":pumpkin_juice",7,4.0f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":purified_water_bottle", 6, 1.5f);
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":water_plant_bag", 3, 0.0f);
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":canteen", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 600, 0)}, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.NORMAL.getName()));
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":canteen", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 300, 0)}, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.NORMAL.getName()));
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":canteen", 6, 1.5f, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.PURIFIED.getName()));
-		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":large_canteen", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 600, 0)}, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.NORMAL.getName()));
+		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":large_canteen", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 300, 0)}, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.NORMAL.getName()));
 		JsonConfig.registerConsumableThirst(LegendarySurvivalOverhaul.MOD_ID + ":large_canteen", 6, 1.5f, new JsonPropertyValue(HYDRATION_ENUM_TAG, HydrationEnum.PURIFIED.getName()));
 
-		JsonConfig.registerConsumableThirst("minecraft:potion", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 600, 0)}, new JsonPropertyValue("Potion", "minecraft:water"));
-		JsonConfig.registerConsumableThirst("minecraft:potion", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 600, 0)}, new JsonPropertyValue("Potion", "minecraft:mundane"));
-		JsonConfig.registerConsumableThirst("minecraft:potion", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 600, 0)}, new JsonPropertyValue("Potion", "minecraft:thick"));
-		JsonConfig.registerConsumableThirst("minecraft:potion", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 600, 0)}, new JsonPropertyValue("Potion", "minecraft:awkward"));
+		JsonConfig.registerConsumableThirst("minecraft:potion", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 300, 0)}, new JsonPropertyValue("Potion", "minecraft:water"));
+		JsonConfig.registerConsumableThirst("minecraft:potion", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 300, 0)}, new JsonPropertyValue("Potion", "minecraft:mundane"));
+		JsonConfig.registerConsumableThirst("minecraft:potion", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 300, 0)}, new JsonPropertyValue("Potion", "minecraft:thick"));
+		JsonConfig.registerConsumableThirst("minecraft:potion", 3, 0.0f, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 300, 0)}, new JsonPropertyValue("Potion", "minecraft:awkward"));
 		JsonConfig.registerConsumableThirst("minecraft:potion", 0, 0.0f, new JsonEffectParameter[]{}, new JsonPropertyValue("Potion", "minecraft:empty"));
 		JsonConfig.registerConsumableThirst("minecraft:potion", 6, 1.5f, new JsonEffectParameter[]{});
 
