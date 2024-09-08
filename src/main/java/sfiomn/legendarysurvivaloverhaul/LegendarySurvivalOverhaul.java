@@ -202,9 +202,9 @@ public class LegendarySurvivalOverhaul
 			RenderTypeLookup.setRenderLayer(BlockRegistry.SEWING_TABLE.get(), RenderType.cutout());
 			RenderTypeLookup.setRenderLayer(BlockRegistry.COOLER.get(), RenderType.cutout());
 			RenderTypeLookup.setRenderLayer(BlockRegistry.HEATER.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(BlockRegistry.SUN_FERN.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(BlockRegistry.ICE_FERN.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(BlockRegistry.WATER_PLANT.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(BlockRegistry.SUN_FERN_CROP.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(BlockRegistry.ICE_FERN_CROP.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(BlockRegistry.WATER_PLANT_CROP.get(), RenderType.cutout());
 
 			ScreenManager.register(ContainerRegistry.COOLER_CONTAINER.get(), ThermalScreen::new);
 			ScreenManager.register(ContainerRegistry.HEATER_CONTAINER.get(), ThermalScreen::new);

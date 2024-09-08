@@ -5,7 +5,6 @@ import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.NoiseDependant;
 import net.minecraft.world.gen.placement.Placement;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
@@ -15,7 +14,7 @@ public class ModConfiguredFeatures {
 
     public static final ConfiguredFeature<?, ?> SUN_FERN_CONFIG = FeatureRegistry.FERN.get()
             .configured((new BlockClusterFeatureConfig.Builder(
-                    new SimpleBlockStateProvider(BlockRegistry.SUN_FERN.get().defaultBlockState()), SimpleBlockPlacer.INSTANCE))
+                    new SimpleBlockStateProvider(BlockRegistry.SUN_FERN_CROP.get().defaultBlockState()), SimpleBlockPlacer.INSTANCE))
                     .tries(1)
                     .canReplace()
                     .build())
@@ -24,7 +23,7 @@ public class ModConfiguredFeatures {
 
     public static final ConfiguredFeature<?, ?> ICE_FERN_CONFIG = FeatureRegistry.FERN.get()
             .configured((new BlockClusterFeatureConfig.Builder(
-                    new SimpleBlockStateProvider(BlockRegistry.ICE_FERN.get().defaultBlockState()), SimpleBlockPlacer.INSTANCE))
+                    new SimpleBlockStateProvider(BlockRegistry.ICE_FERN_CROP.get().defaultBlockState()), SimpleBlockPlacer.INSTANCE))
                     .tries(1)
                     .canReplace()
                     .build())
@@ -34,7 +33,7 @@ public class ModConfiguredFeatures {
 
     public static final ConfiguredFeature<?, ?> WATER_PLANT_CONFIG = FeatureRegistry.WATER_PLANT.get()
             .configured((new BlockClusterFeatureConfig.Builder(
-                    new SimpleBlockStateProvider(BlockRegistry.WATER_PLANT.get().defaultBlockState()), DoublePlantBlockPlacer.INSTANCE))
+                    new SimpleBlockStateProvider(BlockRegistry.WATER_PLANT_CROP.get().defaultBlockState()), DoublePlantBlockPlacer.INSTANCE))
                     .tries(1)
                     .canReplace()
                     .build())

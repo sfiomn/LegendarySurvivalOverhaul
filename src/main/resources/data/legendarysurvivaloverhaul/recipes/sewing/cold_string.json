@@ -4,10 +4,7 @@
 		"item": "minecraft:string"
 	},
 	"addition": {
-		"type": "forge:nbt",
-		"item": "minecraft:potion",
-		"count": 1,
-		"nbt": "{Potion:\"legendarysurvivaloverhaul:cold_resistance\"}"
+		"item": "legendarysurvivaloverhaul:ice_fern"
 	},
 	"result": {
 		"item": "legendarysurvivaloverhaul:cold_string"

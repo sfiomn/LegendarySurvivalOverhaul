@@ -1,12 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.registry;
 
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.potion.Effects;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -25,9 +21,9 @@ public class BlockRegistry
 	public static final RegistryObject<Block> HEATER_TOP = BLOCKS.register("heater_top", HeaterTopBlock::new);
 	public static final RegistryObject<Block> COOLER = registerBlock("cooler", () -> new CoolerBlock(ThermalTypeEnum.COOLING));
 	public static final RegistryObject<Block> SEWING_TABLE = registerBlock("sewing_table", SewingTableBlock::new);
-	public static final RegistryObject<Block> SUN_FERN = BLOCKS.register("sun_fern", () -> new SunFernBlock(Effects.WEAKNESS, 1, AbstractBlock.Properties.of(Material.REPLACEABLE_PLANT).noCollission().instabreak().sound(SoundType.GRASS)));
-	public static final RegistryObject<Block> ICE_FERN = BLOCKS.register("ice_fern", () -> new IceFernBlock(Effects.WEAKNESS, 1, AbstractBlock.Properties.of(Material.REPLACEABLE_PLANT).noCollission().instabreak().sound(SoundType.GRASS)));
-	public static final RegistryObject<Block> WATER_PLANT = registerBlock("water_plant", () -> new WaterPlantBlock(AbstractBlock.Properties.of(Material.REPLACEABLE_PLANT).noCollission().instabreak().sound(SoundType.GRASS)));
+	public static final RegistryObject<Block> SUN_FERN_CROP = BLOCKS.register("sun_fern_crop", SunFernBlock::new);
+	public static final RegistryObject<Block> ICE_FERN_CROP = BLOCKS.register("ice_fern_crop", () -> new IceFernBlock());
+	public static final RegistryObject<Block> WATER_PLANT_CROP = BLOCKS.register("water_plant_crop", WaterPlantBlock::new);
 
 	private static <T extends Block> RegistryObject<Block> registerBlock(String name, Supplier<T> block) {
 		RegistryObject<Block> newBlock = BLOCKS.register(name, block);

@@ -10,6 +10,7 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
 import net.minecraft.world.gen.feature.DefaultFlowersFeature;
+import sfiomn.legendarysurvivaloverhaul.common.blocks.WaterPlantBlock;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
 
 import java.util.Random;
@@ -21,7 +22,7 @@ public class WaterPlantFeature extends DefaultFlowersFeature {
 
     @Override
     public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, BlockClusterFeatureConfig config) {
-        BlockState blockstate = BlockRegistry.WATER_PLANT.get().defaultBlockState();
+        BlockState blockstate = BlockRegistry.WATER_PLANT_CROP.get().defaultBlockState().setValue(WaterPlantBlock.AGE, WaterPlantBlock.MAX_AGE);
         int i = 0;
 
         for (int j = 0; j < this.getCount(config); ++j) {
