@@ -46,14 +46,16 @@ public class SeasonalCalendarSeasonTypeProperty implements IItemPropertyGetter {
                     return 2.0f;
 
                 Biome biome = world.getBiome(new BlockPos(holder.position()));
-                int seasonType = SereneSeasonsUtil.getSeasonType(biome);
+                SereneSeasonsUtil.SeasonType seasonType = SereneSeasonsUtil.getSeasonType(biome);
 
-                if (seasonType == 2)
-                    return 2.0f;
-                else if (seasonType == 1 && Config.Baked.tropicalSeasonsEnabled)
-                    return 1.0f;
-                else
-                    return 0;
+                if (Config.Baked.tropicalSeasonsEnabled)
+                    return seasonType.propertyValue;
+                else {
+                    if (seasonType == SereneSeasonsUtil.SeasonType.NO_SEASON)
+                        return seasonType.propertyValue;
+                    else
+                        return SereneSeasonsUtil.SeasonType.NORMAL_SEASON.propertyValue;
+                }
             }
             catch (NullPointerException e)
             {

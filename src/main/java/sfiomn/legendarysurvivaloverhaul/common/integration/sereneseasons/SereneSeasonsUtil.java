@@ -32,14 +32,14 @@ public class SereneSeasonsUtil {
         if (!SeasonsConfig.isDimensionWhitelisted(world.dimension()))
             return new StringTextComponent(new TranslationTextComponent("message.legendarysurvivaloverhaul.sereneseasons.no_season_dimension").getString());
 
-        int seasonType = getSeasonType(world.getBiome(blockPos));
+        SeasonType seasonType = getSeasonType(world.getBiome(blockPos));
         int subSeasonDuration = (int) ((double) season.getSubSeasonDuration() / (double) season.getDayDuration());
 
         StringBuilder subSeasonName = new StringBuilder();
         TranslationTextComponent seasonTextTranslate;
-        if (seasonType == 2) {
+        if (seasonType == SeasonType.NO_SEASON) {
             return new StringTextComponent(new TranslationTextComponent("message.legendarysurvivaloverhaul.sereneseasons.no_season_info").getString());
-        } else if (seasonType == 1 && Config.Baked.tropicalSeasonsEnabled) {
+        } else if (seasonType == SeasonType.TROPICAL_SEASON && Config.Baked.tropicalSeasonsEnabled) {
             for(String word : season.getTropicalSeason().toString().split("_", 0)) {
                 subSeasonName.append(word.charAt(0)).append(word.substring(1).toLowerCase()).append(" ");
             }
@@ -59,8 +59,7 @@ public class SereneSeasonsUtil {
         return new StringTextComponent(seasonTextTranslate.getString());
     }
 
-    //  Season type 0 = normal, Season type 1 = tropical, Season type 2 = no season
-    public static int getSeasonType(Biome biome) {
+    public static SeasonType getSeasonType(Biome biome) {
         ResourceLocation biomeName = biome.getRegistryName();
         float temperature = biome.getBaseTemperature();
         boolean isBiomeTropical;
@@ -69,7 +68,7 @@ public class SereneSeasonsUtil {
         {
             SSBiomeIdentity identity = biomeIdentities.get(biome.getRegistryName().toString());
             if (!identity.seasonEffects)
-                return Config.Baked.defaultSeasonEnabled ? temperature > 0.8f ? 1 : 0 : 2;
+                return Config.Baked.defaultSeasonEnabled ? temperature > 0.8f ? SeasonType.TROPICAL_SEASON : SeasonType.NORMAL_SEASON : SeasonType.NO_SEASON;
             isBiomeTropical = identity.isTropical;
         }
         else
@@ -77,19 +76,16 @@ public class SereneSeasonsUtil {
             isBiomeTropical = temperature > 0.8f;
         }
         if (isBiomeTropical)
-            return 1;
-        return 0;
+            return SeasonType.TROPICAL_SEASON;
+        return SeasonType.NORMAL_SEASON;
     }
 
     public static boolean plantCanGrow(World world, BlockPos pos, Block plant)
     {
-        boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), world, pos);
+        boolean isFertile = ModFertility.isCropFertile(Objects.requireNonNull(plant.getRegistryName()).toString(), world, pos);
         if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(world, pos))
         {
-            if (FertilityConfig.outOfSeasonCropBehavior.get() == 1 || FertilityConfig.outOfSeasonCropBehavior.get() == 2)
-            {
-                return false;
-            }
+            return FertilityConfig.outOfSeasonCropBehavior.get() != 1 && FertilityConfig.outOfSeasonCropBehavior.get() != 2;
         }
         return true;
     }
@@ -130,6 +126,17 @@ public class SereneSeasonsUtil {
                 }
             }
             return null;
+        }
+    }
+
+    public enum SeasonType {
+        NO_SEASON(2.0f),
+        TROPICAL_SEASON(1.0f),
+        NORMAL_SEASON(0.0f);
+
+        public final float propertyValue;
+        SeasonType(float propertyValue) {
+            this.propertyValue = propertyValue;
         }
     }
 }

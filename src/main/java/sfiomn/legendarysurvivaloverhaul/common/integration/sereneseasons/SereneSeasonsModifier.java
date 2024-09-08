@@ -105,14 +105,14 @@ public class SereneSeasonsModifier extends ModifierBase
 		for (Vector3i offset : posOffsets)
 		{
 			Biome biome = world.getBiome(pos.offset(offset));
-			int seasonType = SereneSeasonsUtil.getSeasonType(biome);
+			SereneSeasonsUtil.SeasonType seasonType = SereneSeasonsUtil.getSeasonType(biome);
 
-			if (seasonType == 2) {
+			if (seasonType == SereneSeasonsUtil.SeasonType.NO_SEASON) {
 				validSpot -= 1;
 				continue;
 			}
 			
-			boolean useTropicalMods = seasonType == 1 && Config.Baked.tropicalSeasonsEnabled;
+			boolean useTropicalMods = seasonType == SereneSeasonsUtil.SeasonType.TROPICAL_SEASON && Config.Baked.tropicalSeasonsEnabled;
 
 			if (!useTropicalMods) {
 				int timeInSubSeason = seasonState.getSeasonCycleTicks() % seasonState.getSubSeasonDuration();
