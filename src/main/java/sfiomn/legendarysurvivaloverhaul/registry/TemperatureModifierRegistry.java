@@ -29,7 +29,7 @@ public class TemperatureModifierRegistry
 	public static final Supplier<IForgeRegistry<DynamicModifierBase>> DYNAMIC_MODIFIERS_REGISTRY = DYNAMIC_MODIFIERS.makeRegistry(RegistryBuilder::new);
 
 	// Base Modifiers
-	public static final RegistryObject<ModifierBase> DEFAULT = MODIFIERS.register("default", DimensionModifier::new);
+	public static final RegistryObject<ModifierBase> DIMENSION = MODIFIERS.register("dimension", DimensionModifier::new);
 	public static final RegistryObject<ModifierBase> BIOME = MODIFIERS.register("biome", BiomeModifier::new);
 	public static final RegistryObject<ModifierBase> TIME = MODIFIERS.register("time", TimeModifier::new);
 	public static final RegistryObject<ModifierBase> ALTITUDE = MODIFIERS.register("altitude", AltitudeModifier::new);
