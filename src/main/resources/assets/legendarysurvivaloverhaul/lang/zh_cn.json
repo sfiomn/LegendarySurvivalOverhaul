@@ -53,7 +53,13 @@
 	"item.legendarysurvivaloverhaul.glistering_melon_juice": "闪烁西瓜汁",
 	"item.legendarysurvivaloverhaul.melon_juice": "西瓜汁",
 	"item.legendarysurvivaloverhaul.pumpkin_juice": "南瓜汁",
+
 	"item.legendarysurvivaloverhaul.water_plant_bag": "水袋果",
+	"item.legendarysurvivaloverhaul.water_plant_seeds": "水袋草",
+	"item.legendarysurvivaloverhaul.sun_fern": "灸炎蕨",
+	"item.legendarysurvivaloverhaul.sun_fern_seeds": "灸炎蕨芽",
+	"item.legendarysurvivaloverhaul.ice_fern": "寒冰蕨",
+	"item.legendarysurvivaloverhaul.ice_fern_seeds": "寒冰蕨芽",
 
 	"item.legendarysurvivaloverhaul.healing_herbs": "治愈草药",
 	"item.legendarysurvivaloverhaul.plaster": "创可贴",
@@ -66,9 +72,9 @@
 	"block.legendarysurvivaloverhaul.heater_top":"加热炉",
 	"block.legendarysurvivaloverhaul.cooler":"冰桶",
 	"block.legendarysurvivaloverhaul.sewing_table":"缝纫机",
-	"block.legendarysurvivaloverhaul.sun_fern": "灸炎蕨",
-	"block.legendarysurvivaloverhaul.ice_fern": "寒冰蕨",
-	"block.legendarysurvivaloverhaul.water_plant": "水袋草",
+	"block.legendarysurvivaloverhaul.sun_fern_crop": "灸炎蕨",
+	"block.legendarysurvivaloverhaul.ice_fern_crop": "寒冰蕨",
+	"block.legendarysurvivaloverhaul.water_plant_crop": "水袋草",
 
 	"screen.legendarysurvivaloverhaul.body_health_screen": "身体健康值",
 
@@ -170,6 +176,8 @@
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.whole_body": "治愈所有肢体",
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value": "恢复 %s 肢体生命值并持续 %s 秒",
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.morphine": "暂时性阻断受伤肢体的所有负面效果",
+
+	"tooltip.legendarysurvivaloverhaul.potion_with_effectChance": "%s%% %s",
 
 	"sounds.legendarysurvivaloverhaul.heat_stroke_early": "热浪开始袭来",
 	"sounds.legendarysurvivaloverhaul.heat_stroke": "热浪袭来",

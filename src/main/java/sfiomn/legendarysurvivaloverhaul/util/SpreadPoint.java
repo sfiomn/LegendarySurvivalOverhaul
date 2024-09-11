@@ -1,5 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.util;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
@@ -7,21 +10,24 @@ import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 public class SpreadPoint {
     private final BlockPos pos;
-    private final Vector3i originalDirection;
+    private final Direction originDirection;
     private final double spreadCapacity;
     private final double influenceDistance;
     private final World world;
     private boolean canSeeSky;
+    private boolean isWater;
     private final double tempInfluenceOutsideDistMultiplier = Config.Baked.tempInfluenceOutsideDistMultiplier;
     private final double tempInfluenceUpDistMultiplier = Config.Baked.tempInfluenceUpDistMultiplier;
+    private final double tempInfluenceInWaterDistMultiplier = Config.Baked.tempInfluenceInWaterDistMultiplier;
 
-    public SpreadPoint(BlockPos pos, Vector3i normalDirection, double spreadCapacity, double influenceDistance, World world) {
+    public SpreadPoint(BlockPos pos, Direction originDirection, double spreadCapacity, double influenceDistance, World world) {
         this.pos = pos;
-        this.originalDirection = normalDirection;
+        this.originDirection = originDirection;
         this.spreadCapacity = spreadCapacity;
         this.influenceDistance = influenceDistance;
         this.world = world;
         this.canSeeSky = false;
+        this.isWater = false;
     }
 
     public double influenceDistance() {
@@ -32,67 +38,49 @@ public class SpreadPoint {
         return pos;
     }
 
-    public Vector3i originalDirection() {
-        return originalDirection;
+    public Direction originDirection() {
+        return originDirection;
     }
 
     public double spreadCapacity() {
         return spreadCapacity;
     }
 
-    public double distanceSq(BlockPos posTo) {
-        double d1 = pos.getX() - posTo.getX();
-        double d2 = pos.getY() - posTo.getY();
-        double d3 = pos.getZ() - posTo.getZ();
-        return d1 * d1 + d2 * d2 + d3 * d3;
+    public SpreadPoint spreadTo(BlockPos newBlockPos, Direction originDirection, float distance) {
+        return new SpreadPoint(newBlockPos, originDirection, this.spreadCapacity - (distance * consumptionMultiplier(originDirection)), this.influenceDistance + distance, world);
     }
 
-    private double calculateDistance(BlockPos posTo) {
-        return Math.sqrt(distanceSq(posTo));
-        //return distanceSq(posTo);
-    }
-
-    public BlockPos newSpreadPos(Vector3i normalDirection) {
-        return new BlockPos(pos.getX() + normalDirection.getX(), pos.getY() + normalDirection.getY(), pos.getZ() + normalDirection.getZ());
-    }
-
-    public double newSpreadCapacity(Vector3i normalDirection) {
-        BlockPos newBlockPos = newSpreadPos(normalDirection);
-        //SpreadPoint spreadPointParent = getBestParent(normalDirection);
-        SpreadPoint spreadPointParent = this;
-        double calculatedDistance = spreadPointParent.calculateDistance(newBlockPos);
-
-        return spreadPointParent.spreadCapacity - (calculatedDistance * consumptionMultiplier(spreadPointParent, newBlockPos));
-    }
-
-    public SpreadPoint spreadTo(Vector3i normalDirection) {
-        BlockPos newBlockPos = newSpreadPos(normalDirection);
-        SpreadPoint spreadPointParent = this;
-        double calculatedDistance = spreadPointParent.calculateDistance(newBlockPos);
-
-        return new SpreadPoint(newBlockPos, normalDirection, spreadPointParent.spreadCapacity - (calculatedDistance * consumptionMultiplier(spreadPointParent, newBlockPos)), spreadPointParent.influenceDistance + calculatedDistance, world);
-    }
-
-    public boolean isValidSpreadPoint() {
+    public boolean isValidSpreadPoint(Direction originDirection) {
         //  Check we can spread the temperature influence in the new position meaning either AIR or a block a player can pass through and is not liquid
         if (spreadCapacity <= 0) {
             return false;
         } else {
-            return (!world.getBlockState(pos).getMaterial().blocksMotion() && !world.getBlockState(pos).getMaterial().isLiquid());
+            BlockState blockState = world.getBlockState(pos);
+            if (blockState.isAir())
+                return true;
+            if (blockState.is(Blocks.WATER)) {
+                this.isWater = true;
+                return true;
+            }
+
+            return !blockState.isFaceSturdy(world, pos, originDirection.getOpposite());
         }
     }
 
     public void setCanSeeSky() {
-        this.canSeeSky = world.canSeeSky(pos);
+        this.canSeeSky = world.dimensionType().hasCeiling() || world.canSeeSky(pos);
     }
 
-    private double consumptionMultiplier(SpreadPoint parentSpreadPoint, BlockPos posTo) {
-        double deltaY = posTo.getY() - parentSpreadPoint.position().getY();
+    private double consumptionMultiplier(Direction originDirection) {
+        boolean upDirection = originDirection.getNormal().getY() > 0;
         double consumptionMultiplier = 1;
-        if (this.canSeeSky) {
+
+        if (this.isWater) {
+            consumptionMultiplier *= tempInfluenceInWaterDistMultiplier;
+        } else if (this.canSeeSky) {
             consumptionMultiplier *= tempInfluenceOutsideDistMultiplier;
         }
-        if (deltaY > 0) {
+        if (upDirection) {
             consumptionMultiplier *= tempInfluenceUpDistMultiplier;
         }
         return (1 / consumptionMultiplier);

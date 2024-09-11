@@ -46,6 +46,10 @@ public class JsonConfigRegistration
 	
 	public static void registerDefaults(File configDir)
 	{
+		JsonConfig.registerDimensionTemperature("minecraft:overworld", 20);
+		JsonConfig.registerDimensionTemperature("minecraft:the_end", -15);
+		JsonConfig.registerDimensionTemperature("minecraft:the_nether", 28);
+
 		JsonConfig.registerBlockFluidTemperature("minecraft:campfire", 10f, new JsonPropertyValue("lit", "true"));
 		JsonConfig.registerBlockFluidTemperature("minecraft:soul_campfire", -8f, new JsonPropertyValue("lit", "true"));
 		JsonConfig.registerBlockFluidTemperature("minecraft:campfire", 0.0f, new JsonPropertyValue("lit", "false"));

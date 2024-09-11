@@ -10,7 +10,9 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
+import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,10 +27,14 @@ public class ThermometerItem extends Item {
         if (world.isClientSide()) {
             TemperatureItemCapability tempCap = CapabilityUtil.getTempItemCapability(player.getMainHandItem());
 
-            if (tempCap.shouldUpdate(world.getGameTime())) {
-                tempCap.updateWorldTemperature(world, player, world.getGameTime());
+            float temperature = tempCap.getWorldTemperatureLevel();
+            StringTextComponent temperatureComponent;
+            if (Config.Baked.renderTemperatureInFahrenheit) {
+                temperatureComponent = new StringTextComponent(WorldUtil.toFahrenheit(temperature) + "\u00B0F");
+            } else {
+                temperatureComponent = new StringTextComponent(temperature + "\u00B0C");
             }
-            player.displayClientMessage(new StringTextComponent(tempCap.getWorldTemperatureLevel() + "\u00B0C"), (true));
+            player.displayClientMessage(temperatureComponent, (true));
         }
         return super.use(world, player, hand);
     }

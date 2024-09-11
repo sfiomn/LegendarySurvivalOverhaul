@@ -5,12 +5,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.*;
+import net.minecraft.world.GameRules;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.IWorldInfo;
+import net.minecraft.world.storage.ServerWorldInfo;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.SleepFinishedTimeEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -259,6 +264,15 @@ public class ModCommonEvents {
         if (Config.Baked.temperatureResistanceOnDeathEnabled) {
             player.addEffect(new EffectInstance(EffectRegistry.HEAT_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime, 0, false, false, true));
             player.addEffect(new EffectInstance(EffectRegistry.COLD_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime, 0, false, false, true));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLevelLoad(WorldEvent.Load event) {
+        if (!event.getWorld().isClientSide()) {
+            IWorldInfo levelData = event.getWorld().getLevelData();
+            if (levelData instanceof ServerWorldInfo && event.getWorld() instanceof ServerWorld)
+                levelData.getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION).set(Config.Baked.naturalRegenerationEnabled, ((ServerWorld) event.getWorld()).getServer());
         }
     }
 

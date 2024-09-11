@@ -283,7 +283,7 @@ public class RenderTemperatureGui
 
 				// Reassign texture offset for saturation
 				xTextureOffset = HUNGER_TEXTURE_WIDTH * 12;
-				if(saturationLevelInt > 0 && Config.Baked.thirstSaturationDisplayed)
+				if(saturationLevelInt > 0 && Config.Baked.foodSaturationDisplayed)
 				{
 					if (halfIcon < saturationLevelInt) { // Full saturation icon
 						RenderUtil.drawTexturedModelRect(m4f, x, y + yOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT, xTextureOffset, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);

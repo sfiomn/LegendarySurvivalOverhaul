@@ -62,6 +62,7 @@ public class Config
 		// public final ForgeConfigSpec.BooleanValue forceDisableFlightKick;
 		public final ForgeConfigSpec.IntValue routinePacketSync;
 		public final ForgeConfigSpec.BooleanValue hideInfoFromDebug;
+		public final ForgeConfigSpec.BooleanValue naturalRegenerationEnabled;
 		public final ForgeConfigSpec.DoubleValue baseFoodExhaustion;
 		
 		// Temperature
@@ -83,10 +84,6 @@ public class Config
 		public final ForgeConfigSpec.BooleanValue biomeEffectsEnabled;
 		public final ForgeConfigSpec.DoubleValue biomeDrynessMultiplier;
 		public final ForgeConfigSpec.DoubleValue biomeTemperatureMultiplier;
-
-		public final ForgeConfigSpec.DoubleValue overworldDefaultTemperature;
-		public final ForgeConfigSpec.DoubleValue netherDefaultTemperature;
-		public final ForgeConfigSpec.DoubleValue endDefaultTemperature;
 		
 		public final ForgeConfigSpec.DoubleValue timeModifier;
 		public final ForgeConfigSpec.DoubleValue biomeTimeMultiplier;
@@ -105,6 +102,7 @@ public class Config
 
 		public final ForgeConfigSpec.IntValue tempInfluenceMaximumDist;
 		public final ForgeConfigSpec.DoubleValue tempInfluenceUpDistMultiplier;
+		public final ForgeConfigSpec.DoubleValue tempInfluenceInWaterDistMultiplier;
 		public final ForgeConfigSpec.DoubleValue tempInfluenceOutsideDistMultiplier;
 
 		public final ForgeConfigSpec.DoubleValue rainTemperatureModifier;
@@ -281,6 +279,9 @@ public class Config
 			hideInfoFromDebug = builder
 					.comment(" If enabled, information like position and direction will be hidden from the debug screen (F3).")
 					.define("Hide Info From Debug", true);
+			naturalRegenerationEnabled = builder
+					.comment(" If enabled, the player can regenerate health naturally if their hunger is full enough (doesn't affect external healing, such as golden apples, the Regeneration effect, etc.)")
+					.define("Natural Regeneration Enabled", false);
 
 			builder.push("advanced");
 			routinePacketSync = builder
@@ -374,13 +375,6 @@ public class Config
 							" The defined value is for a full block of fluid, and goes up to 2 times this value when fully immerge.")
 					.defineInRange("Wetness In Fluid Increase", 10, 0, 1000);
 			builder.pop();
-
-			builder.comment(" Default temperature added to the player, based on the dimension.")
-					.push("dimension-default");
-			overworldDefaultTemperature = builder.defineInRange( "Default Overworld Modifier", 20.0d, -1000, 1000);
-			netherDefaultTemperature = builder.defineInRange( "Default Nether Modifier", 28.0d, -1000, 1000);
-			endDefaultTemperature = builder.defineInRange( "Default The End Modifier", -15.0d, -1000, 1000);
-			builder.pop();
 			
 			builder.push("huddling");
 			playerHuddlingModifier = builder
@@ -455,15 +449,20 @@ public class Config
 			
 			builder.push("advanced");
 			tempInfluenceMaximumDist = builder
-					.comment(" Maximum distance, in blocks, where thermal sources will have an effect on temperature.")
+					.comment(" Maximum influence distance, in blocks, where thermal sources will have an effect on temperature.")
 					.defineInRange("Temperature Influence Maximum Distance", 20, 1, 40);
 			tempInfluenceUpDistMultiplier = builder
-					.comment(" How strongly distance above the player is reduced where thermal sources will have an effect on temperature.")
+					.comment(" How strongly influence distance above the player is reduced for thermal sources to have an effect on temperature.")
 					.comment(" Example max dist is 10, up mult is 0.75 -> max distance is 10 * 0.75 = 7.5 blocks above the player.",
-							" Logic is as the heat goes up, the strength of the heat source above the player is decreased faster with distance.")
+							" Logic is that heat goes up, the strength of the heat source above the player is decreased faster with distance.")
 					.defineInRange("Temperature Influence Up Distance Multiplier", 0.75, 0.0, 1.0);
+			tempInfluenceInWaterDistMultiplier = builder
+					.comment(" How strongly influence distance in water is reduced for thermal sources to have an effect on temperature.",
+							"The under water maximum distance is defined as the maximum distance * this value")
+					.defineInRange("Temperature Influence Outside Distance Multiplier", 0.25, 0.0, 1.0);
+
 			tempInfluenceOutsideDistMultiplier = builder
-					.comment(" How strongly distance outside a structure is reduced where thermal sources will have an effect on temperature.",
+					.comment(" How strongly influence distance outside a structure is reduced for thermal sources to have an effect on temperature.",
 							" The outside maximum distance is defined as the maximum distance * this value")
 					.defineInRange("Temperature Influence Outside Distance Multiplier", 0.5, 0.0, 1.0);
 			builder
@@ -842,7 +841,9 @@ public class Config
 	
 	public static class Client
 	{
+		public final ForgeConfigSpec.BooleanValue foodSaturationDisplayed;
 		public final ForgeConfigSpec.BooleanValue showVanillaAnimationOverlay;
+
 		public final ForgeConfigSpec.ConfigValue<String> temperatureDisplayMode;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetY;
@@ -850,7 +851,7 @@ public class Config
 		public final ForgeConfigSpec.BooleanValue coldTemperatureOverlay;
 		public final ForgeConfigSpec.BooleanValue breathingSoundEnabled;
 		public final ForgeConfigSpec.DoubleValue coldBreathEffectThreshold;
-		public final ForgeConfigSpec.BooleanValue foodSaturationDisplayed;
+		public final ForgeConfigSpec.BooleanValue renderTemperatureInFahrenheit;
 		
 		public final ForgeConfigSpec.IntValue wetnessIndicatorOffsetX;
 		public final ForgeConfigSpec.IntValue wetnessIndicatorOffsetY;
@@ -879,6 +880,9 @@ public class Config
 					}).push("hud");
 			builder.push("general");
 
+			foodSaturationDisplayed = builder
+					.comment(" If enabled, the food saturation will be rendered on the Food Bar while the player suffers Cold Hunger Effect (secondary temperature effect).")
+					.define("Show Food Saturation Bar", true);
 			showVanillaAnimationOverlay = builder
 					.comment(" Whether the vanilla animation of the Food bar and Hydration bar is rendered. The bar shakes more the lower they are.",
 							" This mod render a new food bar as a secondary effect of a cold temperature.",
@@ -909,9 +913,9 @@ public class Config
 			coldBreathEffectThreshold = builder
 					.comment(" Temperature threshold below which a cold breath effect is rendered by the player. -1000 disable the feature.")
 					.defineInRange("Cold Breath Temperature Threshold", 10.0, -1000, 1000);
-			foodSaturationDisplayed = builder
-					.comment(" If enabled, the food saturation will be rendered on the Food Bar while the player suffers Cold Hunger Effect (secondary temperature effect).")
-					.define("Show Food Saturation Bar", true);
+			renderTemperatureInFahrenheit = builder
+					.comment(" If enabled, render the temperature values in Fahrenheit.")
+					.define("Temperature In Fahrenheit", false);
 			builder.push("wetness");
 			wetnessIndicatorOffsetX = builder
 					.comment(" The X and Y offset of the wetness indicator. Set both to 0 for no offset.")
@@ -984,6 +988,7 @@ public class Config
 		// Core
 		public static int routinePacketSync;
 		public static boolean hideInfoFromDebug;
+		public static boolean naturalRegenerationEnabled;
 		public static double baseFoodExhaustion;
 
 		// Temperature
@@ -1001,16 +1006,10 @@ public class Config
 		public static boolean coldTemperatureSecondaryEffects;
 		public static double heatThirstEffectModifier;
 		public static double coldHungerEffectModifier;
-		public static boolean foodSaturationDisplayed;
-		public static boolean showVanillaAnimationOverlay;
 		
 		public static boolean biomeEffectsEnabled;
 		public static double biomeDrynessMultiplier;
 		public static double biomeTemperatureMultiplier;
-
-		public static double overworldDefaultTemperature;
-		public static double netherDefaultTemperature;
-		public static double endDefaultTemperature;
 		
 		public static double rainTemperatureModifier;
 		public static double snowTemperatureModifier;
@@ -1022,6 +1021,7 @@ public class Config
 		public static double shadeTimeModifier;
 		public static int tempInfluenceMaximumDist;
 		public static double tempInfluenceUpDistMultiplier;
+		public static double tempInfluenceInWaterDistMultiplier;
 		public static double tempInfluenceOutsideDistMultiplier;
 		public static double sprintModifier;
 		public static double onFireModifier;
@@ -1189,6 +1189,10 @@ public class Config
 		public static boolean coldTemperatureOverlay;
 		public static boolean breathingSoundEnabled;
 		public static double coldBreathEffectThreshold;
+		public static boolean renderTemperatureInFahrenheit;
+
+		public static boolean foodSaturationDisplayed;
+		public static boolean showVanillaAnimationOverlay;
 
 		public static int seasonCardsOffsetX;
 		public static int seasonCardsOffsetY;
@@ -1215,13 +1219,14 @@ public class Config
 			try
 			{
 				hideInfoFromDebug = COMMON.hideInfoFromDebug.get();
-				tickRate = COMMON.tempTickTime.get();
-				minTemperatureModification = COMMON.minTemperatureModification.get();
-				maxTemperatureModification = COMMON.maxTemperatureModification.get();
 				routinePacketSync = COMMON.routinePacketSync.get();
+				naturalRegenerationEnabled = COMMON.naturalRegenerationEnabled.get();
 				baseFoodExhaustion = COMMON.baseFoodExhaustion.get();
 
 				temperatureEnabled = COMMON.temperatureEnabled.get();
+				tickRate = COMMON.tempTickTime.get();
+				minTemperatureModification = COMMON.minTemperatureModification.get();
+				maxTemperatureModification = COMMON.maxTemperatureModification.get();
 				showPotionEffectParticles = COMMON.showPotionEffectParticles.get();
 
 				temperatureResistanceOnDeathEnabled = COMMON.temperatureResistanceOnDeathEnabled.get();
@@ -1233,10 +1238,6 @@ public class Config
 				coldTemperatureSecondaryEffects = COMMON.coldTemperatureSecondaryEffects.get();
 				heatThirstEffectModifier = COMMON.heatThirstEffectModifier.get();
 				coldHungerEffectModifier = COMMON.coldHungerEffectModifier.get();
-
-				overworldDefaultTemperature = COMMON.overworldDefaultTemperature.get();
-				netherDefaultTemperature = COMMON.netherDefaultTemperature.get();
-				endDefaultTemperature = COMMON.endDefaultTemperature.get();
 
 				rainTemperatureModifier = COMMON.rainTemperatureModifier.get();
 				snowTemperatureModifier = COMMON.snowTemperatureModifier.get();
@@ -1251,6 +1252,7 @@ public class Config
 
 				tempInfluenceMaximumDist = COMMON.tempInfluenceMaximumDist.get();
 				tempInfluenceUpDistMultiplier = COMMON.tempInfluenceUpDistMultiplier.get();
+				tempInfluenceInWaterDistMultiplier = COMMON.tempInfluenceInWaterDistMultiplier.get();
 				tempInfluenceOutsideDistMultiplier = COMMON.tempInfluenceOutsideDistMultiplier.get();
 				
 				onFireModifier = COMMON.onFireModifier.get();
@@ -1426,6 +1428,9 @@ public class Config
 				coldTemperatureOverlay = CLIENT.coldTemperatureOverlay.get();
 				breathingSoundEnabled = CLIENT.breathingSoundEnabled.get();
 				coldBreathEffectThreshold = CLIENT.coldBreathEffectThreshold.get();
+				renderTemperatureInFahrenheit = CLIENT.renderTemperatureInFahrenheit.get();
+
+				foodSaturationDisplayed = CLIENT.foodSaturationDisplayed.get();
 				showVanillaAnimationOverlay = CLIENT.showVanillaAnimationOverlay.get();
 
 				seasonCardsOffsetX = CLIENT.seasonCardsOffsetX.get();
@@ -1442,7 +1447,6 @@ public class Config
 				bodyDamageIndicatorOffsetY = CLIENT.bodyDamageIndicatorOffsetY.get();
 				alwaysShowBodyDamageIndicator = CLIENT.alwaysShowBodyDamageIndicator.get();
 
-				foodSaturationDisplayed = CLIENT.foodSaturationDisplayed.get();
 				thirstSaturationDisplayed = CLIENT.thirstSaturationDisplayed.get();
 				showHydrationTooltip = CLIENT.showHydrationTooltip.get();
 				mergeHydrationAndSaturationTooltip = CLIENT.mergeHydrationAndSaturationTooltip.get();

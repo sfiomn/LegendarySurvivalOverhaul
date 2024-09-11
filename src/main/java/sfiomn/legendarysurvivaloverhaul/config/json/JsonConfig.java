@@ -17,16 +17,23 @@ import java.util.*;
 
 public class JsonConfig
 {
+	public static Map<String, JsonTemperature> dimensionTemperatures = Maps.newHashMap();
+	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
 	public static Map<String, JsonTemperature> itemTemperatures = Maps.newHashMap();
 	public static Map<String, List<JsonBlockFluidTemperature>> blockFluidTemperatures = Maps.newHashMap();
 	public static Map<String, JsonTemperature> entityTemperatures = Maps.newHashMap();
-	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
 	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = Maps.newHashMap();
 	public static Map<String, List<JsonConsumableThirst>> consumableThirst = Maps.newHashMap();
 	public static Map<String, JsonFuelItem> fuelItems = Maps.newHashMap();
 	public static Map<String, JsonConsumableHeal> consumableHeal = Maps.newHashMap();
 	public static Map<String, JsonBodyPartsDamageSource> damageSourceBodyParts = Maps.newHashMap();
-	
+
+	public static void registerDimensionTemperature(String registryName, float temperature)
+	{
+		if(!dimensionTemperatures.containsKey(registryName))
+			dimensionTemperatures.put(registryName, new JsonTemperature(temperature));
+	}
+
 	public static void registerBlockFluidTemperature(String registryName, float temperature, JsonPropertyValue... properties)
 	{
 		if (!blockFluidTemperatures.containsKey(registryName))
@@ -71,6 +78,7 @@ public class JsonConfig
 		}
 		alreadyDefinedConfig.add(newBlockFluidTemp);
 	}
+
 	public static void registerItemTemperature(String registryName, float temperature)
 	{
 		if(!itemTemperatures.containsKey(registryName))

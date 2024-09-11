@@ -80,7 +80,14 @@ public class ClientForgeEvents {
                     RenderFrame.render(minecraft, matrixStack, formatSeasonName(entity.blockPosition(), entity.level));
                 } else if (itemInFrame == ItemRegistry.THERMOMETER.get()) {
                     TemperatureItemCapability tempItemCap = CapabilityUtil.getTempItemCapability(((ItemFrameEntity) entity).getItem());
-                    RenderFrame.render(minecraft, matrixStack, new StringTextComponent(tempItemCap.getWorldTemperatureLevel() + "\u00B0C"));
+                    float temperature = tempItemCap.getWorldTemperatureLevel();
+                    StringTextComponent temperatureComponent;
+                    if (Config.Baked.renderTemperatureInFahrenheit) {
+                        temperatureComponent = new StringTextComponent(WorldUtil.toFahrenheit(temperature) + "\u00B0F");
+                    } else {
+                        temperatureComponent = new StringTextComponent(temperature + "\u00B0C");
+                    }
+                    RenderFrame.render(minecraft, matrixStack, temperatureComponent);
                 } else if (itemInFrame == Items.COMPASS) {
                     RenderFrame.render(minecraft, matrixStack, new StringTextComponent("XYZ: " + entity.blockPosition().getX() +
                             " / " + entity.blockPosition().getY() + " / " + entity.blockPosition().getZ()));

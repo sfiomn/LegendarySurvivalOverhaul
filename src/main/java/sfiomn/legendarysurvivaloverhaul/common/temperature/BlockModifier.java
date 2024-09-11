@@ -17,9 +17,6 @@ import sfiomn.legendarysurvivaloverhaul.util.SpreadPoint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-
-import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.getOppositeVector;
 
 public class BlockModifier extends ModifierBase
 {
@@ -75,35 +72,39 @@ public class BlockModifier extends ModifierBase
 	
 	private void doBlocksAndFluidsRoutine(World world, BlockPos pos)
 	{
-		HashMap<BlockPos, SpreadPoint> spreadBlockPos = new HashMap<>();
-		ArrayList<SpreadPoint> spreadPointToProcess = new ArrayList<>();
+		HashMap<BlockPos, SpreadPoint> listVisitedBlockPos = new HashMap<>();
+		ArrayList<SpreadPoint> spreadPointsToProcess = new ArrayList<>();
 
-		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, null, tempInfluenceMaximumDist + 1, 0, world);
-		spreadPointToProcess.add(spreadPointFeetPlayer);
-		spreadBlockPos.put(spreadPointFeetPlayer.position(), spreadPointFeetPlayer);
+		SpreadPoint spreadPointHeadPlayer = new SpreadPoint(pos.above(), Direction.UP, tempInfluenceMaximumDist, 0, world);
+		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, Direction.DOWN, tempInfluenceMaximumDist, 0, world);
+		spreadPointsToProcess.add(spreadPointHeadPlayer);
+		spreadPointsToProcess.add(spreadPointFeetPlayer);
+		listVisitedBlockPos.put(spreadPointHeadPlayer.position(), spreadPointHeadPlayer);
+		listVisitedBlockPos.put(spreadPointFeetPlayer.position(), spreadPointFeetPlayer);
 
-		while (!spreadPointToProcess.isEmpty()) {
-			SpreadPoint spreadPoint = spreadPointToProcess.remove(0);
+		while (!spreadPointsToProcess.isEmpty()) {
+			SpreadPoint spreadPoint = spreadPointsToProcess.remove(0);
 			spreadPoint.setCanSeeSky();
+			Direction oppositeDirection = spreadPoint.originDirection().getOpposite();
 
 			for (Direction direction : Direction.values()) {
-				Vector3i directionVector = direction.getNormal();
 				//  Avoid spreading to the direction we are coming from
-				if (spreadPoint.originalDirection() == null || !Objects.equals(directionVector, getOppositeVector(spreadPoint.originalDirection()))) {
-					boolean validSpreadPoint = this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector);
+				if (direction != oppositeDirection) {
+					Vector3i newPosVector = direction.getNormal();
+					boolean validSpreadPoint = this.processDirectionTo(spreadPointsToProcess, listVisitedBlockPos, spreadPoint, spreadPoint.position().offset(newPosVector), direction, 1.0f);
 
 					if (validSpreadPoint) {
 						for (Direction direction1 : Direction.values()) {
 							//  Check plan diagonal blocks
-							if (direction1.getAxis() != direction.getAxis()) {
-								Vector3i directionVector1 = direction.getNormal().relative(direction1, 1);
-								boolean validSpreadPoint1 = this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector1);
+							if (direction1.getAxis() != direction.getAxis() && direction1 != oppositeDirection) {
+								newPosVector = newPosVector.relative(direction1, 1);
+								boolean validSpreadPoint1 = this.processDirectionTo(spreadPointsToProcess, listVisitedBlockPos, spreadPoint, spreadPoint.position().offset(newPosVector), direction1, 1.414f);
 								if (validSpreadPoint1) {
 									for (Direction direction2 : Direction.values()) {
 										//  Check 3D diagonal blocks
-										if (direction2.getAxis() != direction1.getAxis() && direction2.getAxis() != direction.getAxis()) {
-											Vector3i directionVector2 = directionVector1.relative(direction2, 1);
-											this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector2);
+										if (direction2.getAxis() != direction1.getAxis() && direction2.getAxis() != direction.getAxis() && direction2 != oppositeDirection) {
+											newPosVector = newPosVector.relative(direction2, 1);
+											this.processDirectionTo(spreadPointsToProcess, listVisitedBlockPos, spreadPoint, spreadPoint.position().offset(newPosVector), direction2, 1.732f);
 										}
 									}
 								}
@@ -114,23 +115,21 @@ public class BlockModifier extends ModifierBase
 			}
 		}
 
-		for (SpreadPoint spreadPoint : spreadBlockPos.values()) {
+		for (SpreadPoint spreadPoint : listVisitedBlockPos.values()) {
 			processTemp(getTemperatureFromSpreadPoint(world, spreadPoint));
 		}
 	}
 
-	private boolean processDirectionFrom(ArrayList<SpreadPoint> spreadPointToProcess, HashMap<BlockPos, SpreadPoint> spreadBlockPos, SpreadPoint spreadPoint, Vector3i directionVector) {
-		BlockPos newBlockPos = spreadPoint.newSpreadPos(directionVector);
-
+	private boolean processDirectionTo(ArrayList<SpreadPoint> spreadPointsToProcess, HashMap<BlockPos, SpreadPoint> listVisitedBlockPos, SpreadPoint parentSpreadPoint, BlockPos newBlockPos, Direction originDirection, float distance) {
 		//  Check that the new spread location isn't an already processed location
-		if (!spreadBlockPos.containsKey(newBlockPos)) {
+		if (!listVisitedBlockPos.containsKey(newBlockPos)) {
 
-			SpreadPoint newSpreadPoint = spreadPoint.spreadTo(directionVector);
-			spreadBlockPos.put(newSpreadPoint.position(), newSpreadPoint);
+			SpreadPoint newSpreadPoint = parentSpreadPoint.spreadTo(newBlockPos, originDirection, distance);
+			listVisitedBlockPos.put(newSpreadPoint.position(), newSpreadPoint);
 
-			//  If it is a valid spreadPoint (= not colliding block), store the spreadPoint as to be processed
-			if (newSpreadPoint.isValidSpreadPoint()) {
-				spreadPointToProcess.add(newSpreadPoint);
+			//  If it is a valid spreadPoint (= the face from origin direction isn't sturdy), store the spreadPoint as to be processed
+			if (newSpreadPoint.isValidSpreadPoint(originDirection)) {
+				spreadPointsToProcess.add(newSpreadPoint);
 				return true;
 			}
 		} /*else {
