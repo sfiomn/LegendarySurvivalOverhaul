@@ -49,8 +49,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ItemRegistry.WATER_PLANT_BAG);
         simpleItem(ItemRegistry.WATER_PLANT_SEEDS);
         simpleItem(ItemRegistry.COLD_STRING);
-        simpleItem(ItemRegistry.HEART_FRUIT);
         simpleItem(ItemRegistry.WARM_STRING);
+        simpleItem(ItemRegistry.HEART_FRUIT);
+        simpleItem(ItemRegistry.NETHER_CHALICE);
 
         simpleCoatItem(ItemRegistry.COOLING_COAT_1);
         simpleCoatItem(ItemRegistry.COOLING_COAT_2);

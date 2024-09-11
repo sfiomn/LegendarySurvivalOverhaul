@@ -8,7 +8,6 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEn
 import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 
-import javax.json.Json;
 import java.util.Arrays;
 
 /**
@@ -19,7 +18,7 @@ import java.util.Arrays;
  */
 public final class IntegrationController
 {
-	public static void initCompat()
+	public static void initCompatibilities()
 	{
 		ModList mods = ModList.get();
 		

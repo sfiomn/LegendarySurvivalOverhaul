@@ -1,20 +1,13 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.IReverseTag;
-import net.minecraftforge.registries.tags.ITagManager;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
@@ -25,12 +18,13 @@ import sereneseasons.init.ModTags;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
-import java.util.Objects;
-
 import static sereneseasons.init.ModTags.Biomes.BLACKLISTED_BIOMES;
 import static sereneseasons.init.ModTags.Biomes.TROPICAL_BIOMES;
 
 public class SereneSeasonsUtil {
+    public static double averageSeasonTemperature;
+    public static double averageTropicalSeasonTemperature;
+
     public static Component seasonTooltip(BlockPos blockPos, Level level) {
         if (!LegendarySurvivalOverhaul.sereneSeasonsLoaded)
             return Component.translatable("message.legendarysurvivaloverhaul.sereneseasons.no_serene_season_loaded");
@@ -96,6 +90,30 @@ public class SereneSeasonsUtil {
         return true;
     }
 
+    public static void initAverageTemperatures() {
+        averageSeasonTemperature += Config.Baked.earlyAutumnModifier;
+        averageSeasonTemperature += Config.Baked.earlySpringModifier;
+        averageSeasonTemperature += Config.Baked.earlySummerModifier;
+        averageSeasonTemperature += Config.Baked.earlyWinterModifier;
+        averageSeasonTemperature += Config.Baked.midAutumnModifier;
+        averageSeasonTemperature += Config.Baked.midSpringModifier;
+        averageSeasonTemperature += Config.Baked.midSummerModifier;
+        averageSeasonTemperature += Config.Baked.midWinterModifier;
+        averageSeasonTemperature += Config.Baked.lateAutumnModifier;
+        averageSeasonTemperature += Config.Baked.lateSpringModifier;
+        averageSeasonTemperature += Config.Baked.lateSummerModifier;
+        averageSeasonTemperature += Config.Baked.lateWinterModifier;
+        averageSeasonTemperature /= 12;
+
+        averageTropicalSeasonTemperature += Config.Baked.earlyWetSeasonModifier;
+        averageTropicalSeasonTemperature += Config.Baked.earlyDrySeasonModifier;
+        averageTropicalSeasonTemperature += Config.Baked.midWetSeasonModifier;
+        averageTropicalSeasonTemperature += Config.Baked.midDrySeasonModifier;
+        averageTropicalSeasonTemperature += Config.Baked.lateWetSeasonModifier;
+        averageTropicalSeasonTemperature += Config.Baked.lateDrySeasonModifier;
+        averageTropicalSeasonTemperature /= 6;
+    }
+
     public enum TropicalSeason {
         DRY(Season.TropicalSeason.EARLY_DRY, Season.TropicalSeason.MID_DRY, Season.TropicalSeason.LATE_DRY),
         WET(Season.TropicalSeason.EARLY_WET, Season.TropicalSeason.MID_WET, Season.TropicalSeason.LATE_WET);
@@ -123,10 +141,13 @@ public class SereneSeasonsUtil {
     }
 
     public enum SeasonType {
-        NO_SEASON,
-        TROPICAL_SEASON,
-        NORMAL_SEASON;
+        NO_SEASON(0.2f),
+        TROPICAL_SEASON(0.1f),
+        NORMAL_SEASON(0.0f);
 
-        SeasonType() {}
+        public final float propertyValue;
+        SeasonType(float propertyValue) {
+            this.propertyValue = propertyValue;
+        }
     }
 }

@@ -43,12 +43,7 @@ public class SeasonalCalendarSeasonTypeProperty implements ClampedItemPropertyFu
 
                 SereneSeasonsUtil.SeasonType seasonType = SereneSeasonsUtil.getSeasonType(level.getBiome(holder.blockPosition()));
 
-                if (seasonType == SereneSeasonsUtil.SeasonType.NO_SEASON)
-                    return 0.2f;
-                else if (seasonType == SereneSeasonsUtil.SeasonType.TROPICAL_SEASON)
-                    return 0.1f;
-                else
-                    return 0;
+                return seasonType.propertyValue;
             }
             catch (NullPointerException e)
             {

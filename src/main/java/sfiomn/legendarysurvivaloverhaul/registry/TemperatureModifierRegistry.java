@@ -1,9 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.registry;
 
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
@@ -32,7 +29,7 @@ public class TemperatureModifierRegistry
 	public static final Supplier<IForgeRegistry<DynamicModifierBase>> DYNAMIC_MODIFIERS_REGISTRY = DYNAMIC_MODIFIERS.makeRegistry(RegistryBuilder::new);
 
 	// Base Modifiers
-	public static final RegistryObject<ModifierBase> DEFAULT = MODIFIERS.register("default", DefaultModifier::new);
+	public static final RegistryObject<ModifierBase> DEFAULT = MODIFIERS.register("default", DimensionModifier::new);
 	public static final RegistryObject<ModifierBase> BIOME = MODIFIERS.register("biome", BiomeModifier::new);
 	public static final RegistryObject<ModifierBase> TIME = MODIFIERS.register("time", TimeModifier::new);
 	public static final RegistryObject<ModifierBase> ALTITUDE = MODIFIERS.register("altitude", AltitudeModifier::new);

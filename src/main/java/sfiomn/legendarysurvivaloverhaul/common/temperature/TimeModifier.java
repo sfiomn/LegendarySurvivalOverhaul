@@ -35,6 +35,6 @@ public class TimeModifier extends ModifierBase
 		// float tempInfl = applyUndergroundEffect(timeTemperature, world, pos);
 		// LegendarySurvivalOverhaul.LOGGER.debug("Time temp influence after underground : " + tempInfl);
 
-		return timeTemperature;
+		return applyUndergroundEffect(timeTemperature, level, pos, 0);
 	}
 }

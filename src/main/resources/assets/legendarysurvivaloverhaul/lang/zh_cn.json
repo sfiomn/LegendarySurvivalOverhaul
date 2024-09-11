@@ -57,9 +57,9 @@
 	"item.legendarysurvivaloverhaul.water_plant_bag": "水袋果",
 	"item.legendarysurvivaloverhaul.water_plant_seeds": "水袋草",
 	"item.legendarysurvivaloverhaul.sun_fern": "灸炎蕨",
-	"item.legendarysurvivaloverhaul.sun_fern_seeds": "灸炎蕨",
+	"item.legendarysurvivaloverhaul.sun_fern_seeds": "灸炎蕨芽",
 	"item.legendarysurvivaloverhaul.ice_fern": "寒冰蕨",
-	"item.legendarysurvivaloverhaul.ice_fern_seeds": "寒冰蕨",
+	"item.legendarysurvivaloverhaul.ice_fern_seeds": "寒冰蕨芽",
 
 	"item.legendarysurvivaloverhaul.healing_herbs": "治愈草药",
 	"item.legendarysurvivaloverhaul.plaster": "创可贴",
@@ -176,6 +176,8 @@
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.whole_body": "治愈所有肢体",
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value": "恢复 %s 肢体生命值并持续 %s 秒",
 	"tooltip.legendarysurvivaloverhaul.body_heal_item.morphine": "暂时性阻断受伤肢体的所有负面效果",
+
+	"tooltip.legendarysurvivaloverhaul.potion_with_effectChance": "%s%% %s",
 
 	"sounds.legendarysurvivaloverhaul.heat_stroke_early": "热浪开始袭来",
 	"sounds.legendarysurvivaloverhaul.heat_stroke": "热浪袭来",

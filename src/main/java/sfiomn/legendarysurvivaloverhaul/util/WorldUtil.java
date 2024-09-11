@@ -78,6 +78,10 @@ public final class WorldUtil
 		return TemperatureUtil.getWorldTemperature(world, getSidedBlockPos(world, entity));
 	}
 
+	public static float toFahrenheit(float temperature) {
+		return 32 + (temperature * 1.8f);
+	}
+
 	public static Entity getEntityLookedAt(Player player, double finalDistance) {
 		Entity foundEntity = null;
 		double distanceFromEye;

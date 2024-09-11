@@ -12,12 +12,22 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.LevelData;
+import net.minecraft.world.level.storage.PrimaryLevelData;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,24 +46,25 @@ import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
+import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosUtil;
 import sfiomn.legendarysurvivaloverhaul.common.items.drink.DrinkItem;
 import sfiomn.legendarysurvivaloverhaul.common.items.heal.BodyHealingItem;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.network.packets.MessageDrinkWater;
+import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.PlayerModelUtil;
+import top.theillusivec4.curios.api.type.ISlotType;
 
 import java.util.*;
 
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonForgeEvents {
-
-
 
     @SubscribeEvent
     public static void onFoodEaten(LivingEntityUseItemEvent.Finish event)
@@ -149,31 +160,31 @@ public class CommonForgeEvents {
         }
     }
 
-    // Only Client side event
-    @SubscribeEvent
-    public static void onRightClickEmpty(PlayerInteractEvent.RightClickEmpty event) {
-        if (shouldApplyThirst(event.getEntity())) {
-            // Only run on main hand (otherwise it runs twice)
-            if(event.getHand() == InteractionHand.MAIN_HAND)
-            {
-                HydrationEnum water = playerGetHydrationEnum(event.getEntity());
-
-                if (water != null) {
-                    playerDrinkEffect(event.getEntity());
-                    MessageDrinkWater messageDrinkToServer = new MessageDrinkWater();
-                    NetworkHandler.INSTANCE.sendToServer(messageDrinkToServer);
-                }
-            }
-        }
-    }
-
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         if (shouldApplyThirst(event.getEntity())) {
             // Only run on main hand (otherwise it runs twice)
-            if(event.getHand()==InteractionHand.MAIN_HAND && event.getEntity().getMainHandItem().isEmpty())
+            if(event.getHand() == InteractionHand.MAIN_HAND && event.getEntity().getMainHandItem().isEmpty())
             {
-                HydrationEnum water = playerGetHydrationEnum(event.getEntity());
+                Player player = event.getEntity();
+                HydrationEnum water = playerGetHydrationEnum(player);
+
+                if (LegendarySurvivalOverhaul.curiosLoaded) {
+
+                    HitResult blockFluid = player.pick(player.getAttributeValue(ForgeMod.BLOCK_REACH.get()) / 2, 0.0F, true);
+
+                    if (blockFluid.getType() == HitResult.Type.BLOCK) {
+                        Fluid fluidState = player.level().getFluidState(((BlockHitResult) blockFluid).getBlockPos()).getType();
+                        if (CuriosUtil.isCurioItemEquippedInSlot(player, ItemRegistry.NETHER_CHALICE.get(), "belt") && (fluidState.isSame(Fluids.FLOWING_LAVA) || fluidState.isSame(Fluids.LAVA))) {
+                            if (event.getLevel().isClientSide)
+                                playerDrinkEffect(event.getEntity());
+                            else {
+                                ThirstUtil.takeDrink(event.getEntity(), Config.Baked.hydrationLava, (float) Config.Baked.saturationLava);
+                            }
+                            return;
+                        }
+                    }
+                }
 
                 if (water != null) {
                     if (event.getLevel().isClientSide)
@@ -279,6 +290,16 @@ public class CommonForgeEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onLevelLoad(LevelEvent.Load event) {
+        if (!event.getLevel().isClientSide()) {
+            LevelData levelData = event.getLevel().getLevelData();
+            if (levelData instanceof PrimaryLevelData primaryLevelData)
+                primaryLevelData.getGameRules().getRule(GameRules.RULE_NATURAL_REGENERATION).set(Config.Baked.naturalRegenerationEnabled, event.getLevel().getServer());
+        }
+    }
+
+
     private static boolean shouldApplyThirst(Player player)
     {
         return !player.isCreative() && !player.isSpectator() && Config.Baked.thirstEnabled && ThirstUtil.isThirstActive(player);
@@ -289,14 +310,14 @@ public class CommonForgeEvents {
         return !player.isCreative() && !player.isSpectator() && Config.Baked.localizedBodyDamageEnabled;
     }
 
-    private static void playerDrinkEffect(Player player)
+    public static void playerDrinkEffect(Player player)
     {
         //Play sound and swing arm
         player.swing(InteractionHand.MAIN_HAND);
         player.playSound(SoundEvents.GENERIC_DRINK, 1.0f, 1.0f);
     }
 
-    private static HydrationEnum playerGetHydrationEnum(Player player) {
+    public static HydrationEnum playerGetHydrationEnum(Player player) {
         HydrationEnum hydrationEnum = ThirstUtil.traceWater(player);
         if (hydrationEnum != null && player.getMainHandItem().isEmpty()) {
             ThirstCapability thirstCapability = CapabilityUtil.getThirstCapability(player);

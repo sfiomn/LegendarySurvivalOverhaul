@@ -2,9 +2,11 @@ package sfiomn.legendarysurvivaloverhaul.client.events;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
@@ -18,6 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import sereneseasons.api.SSItems;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons.RenderSeasonCards;
 import sfiomn.legendarysurvivaloverhaul.client.render.*;
@@ -25,11 +28,15 @@ import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.client.effects.TemperatureBreathEffect;
 import sfiomn.legendarysurvivaloverhaul.client.sounds.TemperatureBreathSound;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
+import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
+import sfiomn.legendarysurvivaloverhaul.network.packets.MessageDrinkWater;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.KeyMappingRegistry;
 
 import java.util.ListIterator;
 
+import static sfiomn.legendarysurvivaloverhaul.common.events.CommonForgeEvents.playerDrinkEffect;
+import static sfiomn.legendarysurvivaloverhaul.common.events.CommonForgeEvents.playerGetHydrationEnum;
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil.seasonTooltip;
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil.plantCanGrow;
 import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.timeInGame;
@@ -63,6 +70,23 @@ public class ClientForgeEvents {
 
         if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && !plantCanGrow(event.getLevel(), event.getPos(), plant)) {
             event.getEntity().displayClientMessage(Component.translatable("message." + LegendarySurvivalOverhaul.MOD_ID + ".bonemeal.not_correct_season"), true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRightClickEmpty(PlayerInteractEvent.RightClickEmpty event) {
+        if (shouldApplyThirst(event.getEntity())) {
+            // Only run on main hand (otherwise it runs twice)
+            if(event.getHand() == InteractionHand.MAIN_HAND)
+            {
+                HydrationEnum water = playerGetHydrationEnum(event.getEntity());
+
+                if (water != null) {
+                    playerDrinkEffect(event.getEntity());
+                    MessageDrinkWater messageDrinkToServer = new MessageDrinkWater();
+                    NetworkHandler.INSTANCE.sendToServer(messageDrinkToServer);
+                }
+            }
         }
     }
 

@@ -45,6 +45,10 @@ public class JsonConfigRegistration
 	
 	public static void registerDefaults(File configDir)
 	{
+		JsonConfig.registerDimensionTemperature("minecraft:overworld", 20);
+		JsonConfig.registerDimensionTemperature("minecraft:the_end", -15);
+		JsonConfig.registerDimensionTemperature("minecraft:the_nether", 28);
+
 		JsonConfig.registerBlockFluidTemperature("minecraft:campfire", 10f, new JsonPropertyValue("lit", "true"));
 		JsonConfig.registerBlockFluidTemperature("minecraft:soul_campfire", -10f, new JsonPropertyValue("lit", "true"));
 		JsonConfig.registerBlockFluidTemperature("minecraft:campfire", 0.0f, new JsonPropertyValue("lit", "false"));
@@ -93,6 +97,8 @@ public class JsonConfigRegistration
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_chestplate", -3.0f);
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_helmet", -1.5f);
 
+		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":nether_chalice", 2f);
+
 		JsonConfig.registerItemTemperature("minecraft:leather_boots", 1.0f);
 		JsonConfig.registerItemTemperature("minecraft:leather_leggings", 1.0f);
 		JsonConfig.registerItemTemperature("minecraft:leather_chestplate", 1.5f);
@@ -119,6 +125,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerItemTemperature("minecraft:netherite_helmet", 1.0f);
 
 		JsonConfig.registerItemTemperature("minecraft:torch", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:soul_torch", -1.0f);
 		JsonConfig.registerItemTemperature("minecraft:ice", -1.0f);
 		JsonConfig.registerItemTemperature("minecraft:packed_ice", -2.0f);
 		JsonConfig.registerItemTemperature("minecraft:blue_ice", -3.0f);
@@ -208,7 +215,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".hyperthermia", DamageDistributionEnum.NONE, Collections.emptyList());
 		JsonConfig.registerDamageSourceBodyParts(LegendarySurvivalOverhaul.MOD_ID + ".dehydration", DamageDistributionEnum.NONE, Collections.emptyList());
 
-		IntegrationController.initCompat();
+		IntegrationController.initCompatibilities();
 	}
 
 	public static void writeAllToJson(File jsonDir) {

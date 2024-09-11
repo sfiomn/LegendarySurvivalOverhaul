@@ -9,6 +9,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.data.integration.IntegrationDataGenerators;
 import sfiomn.legendarysurvivaloverhaul.data.providers.*;
 
 import java.util.concurrent.CompletableFuture;
@@ -36,5 +37,7 @@ public final class DataGenerators
 		ModBlockTagProvider blockTagProvider = gen.addProvider(event.includeServer(),
 				new ModBlockTagProvider(packOutput, lookupProvider, existingFileHelper));
 		gen.addProvider(event.includeServer(), new ModItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter(), existingFileHelper));
+
+		IntegrationDataGenerators.addIntegrationProviders(event, gen, packOutput, lookupProvider, existingFileHelper);
 	}
 }

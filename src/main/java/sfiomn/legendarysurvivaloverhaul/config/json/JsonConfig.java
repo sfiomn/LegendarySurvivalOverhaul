@@ -17,6 +17,7 @@ import java.util.*;
 
 public class JsonConfig
 {
+	public static Map<String, JsonTemperature> dimensionTemperatures = Maps.newHashMap();
 	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
 	public static Map<String, JsonTemperature> itemTemperatures = Maps.newHashMap();
 	public static Map<String, JsonTemperature> entityTemperatures = Maps.newHashMap();
@@ -27,6 +28,12 @@ public class JsonConfig
 	public static Map<String, JsonConsumableHeal> consumableHeal = Maps.newHashMap();
 	public static Map<String, JsonBodyPartsDamageSource> damageSourceBodyParts = Maps.newHashMap();
 
+
+	public static void registerDimensionTemperature(String registryName, float temperature)
+	{
+		if(!dimensionTemperatures.containsKey(registryName))
+			dimensionTemperatures.put(registryName, new JsonTemperature(temperature));
+	}
 
 	public static void registerBiomeOverride(String registryName, float temperature)
 	{

@@ -72,6 +72,7 @@ public class SereneSeasonsModifier extends ModifierBase
 		
 		float value = 0.0f;
 		int validSpot = posOffsets.length;
+		double targetUndergroundTemperature = 0;
 
 		for (Vec3i offset : posOffsets)
 		{
@@ -81,9 +82,9 @@ public class SereneSeasonsModifier extends ModifierBase
 				validSpot -= 1;
 				continue;
 			}
-
 			if (seasonType != SereneSeasonsUtil.SeasonType.TROPICAL_SEASON) {
 				int timeInSubSeason = seasonState.getSeasonCycleTicks() % seasonState.getSubSeasonDuration();
+				targetUndergroundTemperature = SereneSeasonsUtil.averageSeasonTemperature;
 				switch(seasonState.getSubSeason()) {
 					case EARLY_SPRING:
 						value += getSeasonModifier(Config.Baked.lateWinterModifier, Config.Baked.earlySpringModifier, Config.Baked.midSpringModifier, timeInSubSeason, seasonState.getSubSeasonDuration());
@@ -124,6 +125,7 @@ public class SereneSeasonsModifier extends ModifierBase
 				}
 			} else {
 				int timeInSubSeason = (seasonState.getSeasonCycleTicks() + seasonState.getSubSeasonDuration()) % (seasonState.getSubSeasonDuration() * 2);
+				targetUndergroundTemperature = SereneSeasonsUtil.averageTropicalSeasonTemperature;
 				switch (seasonState.getTropicalSeason()) {
 					case EARLY_DRY:
 						value += getSeasonModifier(Config.Baked.lateWetSeasonModifier, Config.Baked.earlyDrySeasonModifier, Config.Baked.midDrySeasonModifier, timeInSubSeason, seasonState.getSubSeasonDuration() * 2);
@@ -149,10 +151,7 @@ public class SereneSeasonsModifier extends ModifierBase
 
 		value = validSpot == 0 ? 0 : value / validSpot;
 
-		// LegendarySurvivalOverhaul.LOGGER.debug("Serene temp influence : " + value);
-		// float tempInfl = applyUndergroundEffect(value, world, pos);
-		// LegendarySurvivalOverhaul.LOGGER.debug("Serene temp influence after underground : " + tempInfl);
-		return value;
+		return applyUndergroundEffect(value, level, pos, (float) targetUndergroundTemperature);
 	}
 
 	private float getSeasonModifier(double previousSeasonModifier, double currentSeasonModifier, double nextSeasonModifier, int time, int subSeasonDuration) {

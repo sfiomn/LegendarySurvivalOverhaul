@@ -9,7 +9,6 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
-import sfiomn.legendarysurvivaloverhaul.common.integration.vampirism.VampirismUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
@@ -75,7 +74,7 @@ public class RenderThirstGui
 
 			// Shake based on hydration level and saturation level
 			int yOffset = 0;
-			if (Config.Baked.showVanillaAnimationOverlay && saturation <= 0.0f && player.tickCount % (hydration * 3 + 1) == 0)
+			if (Config.Baked.showVanillaBarAnimationOverlay && saturation <= 0.0f && player.tickCount % (hydration * 3 + 1) == 0)
 			{
 				yOffset = (rand.nextInt(3) - 1);
 			}

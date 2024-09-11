@@ -16,7 +16,7 @@ public class BiomeModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(Level world, BlockPos pos)
+	public float getWorldInfluence(Level level, BlockPos pos)
 	{
 		if (TerraFirmaCraftUtil.shouldUseTerraFirmaCraftTemp())
 			return 0.0f;
@@ -36,25 +36,27 @@ public class BiomeModifier extends ModifierBase
 		
 		float biomeAverage = 0f;
 		
-		long worldTime = world.getLevelData().getDayTime() % 24000;
+		long worldTime = level.getLevelData().getDayTime() % 24000;
 		double drynessTimeMultiplier = 1;
-		if (worldTime > 12000 && !world.dimensionType().hasCeiling() && Config.Baked.biomeDrynessMultiplier > 0)
+		if (worldTime > 12000 && !level.dimensionType().hasCeiling() && Config.Baked.biomeDrynessMultiplier > 0)
 			drynessTimeMultiplier = 1 + Math.sin(worldTime * Math.PI / 12000) * Config.Baked.biomeDrynessMultiplier;
 
 		for (Vec3i offset : posOffsets)
 		{
-			Biome biome = world.getBiome(pos.offset(offset)).get();
-			float humidity = getHumidityForBiome(world, biome);
-			float biomeTemperature = getNormalizedTempForBiome(world, biome);
+			Biome biome = level.getBiome(pos.offset(offset)).get();
+			float humidity = getHumidityForBiome(level, biome);
+			float biomeTemperature = getNormalizedTempForBiome(level, biome);
 			
 			if (drynessTimeMultiplier < 1 && humidity < 0.2f && biomeTemperature > 0.80f)
 			{
+				// calculate average temp between day and night and apply underground biome multiplier
+				double targetUndergroundTemperature = Config.Baked.undergroundBiomeTemperatureMultiplier * biomeTemperature * (1 + Config.Baked.biomeDrynessMultiplier) / 2;
 				// Deserts are cold at night since heat isn't kept by moisture in the air
-				biomeAverage += (float) (drynessTimeMultiplier * biomeTemperature);
+				biomeAverage += applyUndergroundEffect((float) (drynessTimeMultiplier * biomeTemperature), level, pos, (float) targetUndergroundTemperature);
 			}
 			else
 			{
-				biomeAverage += biomeTemperature;
+				biomeAverage += applyUndergroundEffect(biomeTemperature, level, pos, (float) Config.Baked.undergroundBiomeTemperatureMultiplier * biomeTemperature);
 			}
 		}
 		

@@ -16,6 +16,7 @@ public class JsonTypeToken
 	{
 		switch(jcfn)
 		{
+			case DIMENSION:			return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
 			case BIOME: 			return new TypeToken<Map<String, JsonBiomeIdentity>>(){}.getType();
 			case ITEM:				return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
 			case ENTITY: 			return new TypeToken<Map<String, JsonTemperature>>(){}.getType();

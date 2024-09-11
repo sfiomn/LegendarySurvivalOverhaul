@@ -15,6 +15,7 @@ import net.minecraftforge.common.ForgeMod;
 import sereneseasons.api.SSItems;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
@@ -52,7 +53,14 @@ public class RenderTooltipFrame {
                 render(forgeGui, guiGraphics, width, height, seasonTooltip(ENTITY_LOOKED_AT.blockPosition(), ENTITY_LOOKED_AT.level()));
             } else if (itemInFrame == ItemRegistry.THERMOMETER.get()) {
                 TemperatureItemCapability tempItemCap = CapabilityUtil.getTempItemCapability(((ItemFrame) ENTITY_LOOKED_AT).getItem());
-                render(forgeGui, guiGraphics, width, height, Component.literal(tempItemCap.getWorldTemperatureLevel() + "\u00B0C"));
+                float temperature = tempItemCap.getWorldTemperatureLevel();
+                Component temperatureComponent;
+                if (Config.Baked.renderTemperatureInFahrenheit) {
+                    temperatureComponent = Component.literal(WorldUtil.toFahrenheit(temperature) + "\u00B0F");
+                } else {
+                    temperatureComponent = Component.literal(temperature + "\u00B0C");
+                }
+                render(forgeGui, guiGraphics, width, height, temperatureComponent);
             } else if (itemInFrame == Items.COMPASS) {
                 render(forgeGui, guiGraphics, width, height, Component.literal("XYZ: " + ENTITY_LOOKED_AT.blockPosition().getX() +
                         " / " + ENTITY_LOOKED_AT.blockPosition().getY() + " / " + ENTITY_LOOKED_AT.blockPosition().getZ()));

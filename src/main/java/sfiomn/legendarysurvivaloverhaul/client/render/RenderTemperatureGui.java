@@ -252,7 +252,7 @@ public class RenderTemperatureGui
 
 			// Shake based on thirst level and saturation level
 			int yOffset = 0;
-			if (Config.Baked.showVanillaAnimationOverlay && player.getFoodData().getSaturationLevel() <= 0.0f && player.tickCount % (player.getFoodData().getFoodLevel() * 3 + 1) == 0)
+			if (Config.Baked.showVanillaBarAnimationOverlay && player.getFoodData().getSaturationLevel() <= 0.0f && player.tickCount % (player.getFoodData().getFoodLevel() * 3 + 1) == 0)
 			{
 				yOffset = (rand.nextInt(3) - 1);
 			}
@@ -274,7 +274,7 @@ public class RenderTemperatureGui
 
 			// Reassign texture offset for saturation
 			xTextureOffset = HUNGER_TEXTURE_WIDTH * 12;
-			if(saturationLevelInt > 0 && Config.Baked.thirstSaturationDisplayed)
+			if(saturationLevelInt > 0 && Config.Baked.foodSaturationDisplayed)
 			{
 				if (halfIcon < saturationLevelInt) { // Full saturation icon
 					gui.blit(ICONS, x, y + yOffset, xTextureOffset, yTextureOffset, HUNGER_TEXTURE_WIDTH, HUNGER_TEXTURE_HEIGHT);

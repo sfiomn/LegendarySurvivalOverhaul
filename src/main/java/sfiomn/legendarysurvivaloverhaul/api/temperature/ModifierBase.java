@@ -1,16 +1,14 @@
 package sfiomn.legendarysurvivaloverhaul.api.temperature;
 
-import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
+import net.minecraft.world.level.levelgen.Heightmap;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
@@ -90,6 +88,26 @@ public abstract class ModifierBase {
 		// LegendarySurvivalOverhaul.LOGGER.debug("Biome base temp for " + name + " is " + biome.getBaseTemperature());
 		
 		return clampNormalizeTemperature(biome.getBaseTemperature());
+	}
+
+	protected float applyUndergroundEffect(float temperature, Level level, BlockPos pos, float undergroundTemperature) {
+		// If we're in a dimension that has a ceiling,
+		// then just return the default value.
+		if(level.dimensionType().hasCeiling()) {
+			return temperature;
+		}
+
+		int surfaceDistance = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos).getY() - pos.getY();
+
+		if (surfaceDistance < Config.Baked.undergroundEffectStartDistanceToWS) {
+			return temperature;
+		}
+
+		if (surfaceDistance >= Config.Baked.undergroundEffectEndDistanceToWS) {
+			return undergroundTemperature;
+		}
+
+		return Mth.lerp((surfaceDistance - Config.Baked.undergroundEffectStartDistanceToWS) / (float) (Config.Baked.undergroundEffectEndDistanceToWS - Config.Baked.undergroundEffectStartDistanceToWS), temperature, undergroundTemperature);
 	}
 
 	protected float getHumidityForBiome(Level world, Biome biome)

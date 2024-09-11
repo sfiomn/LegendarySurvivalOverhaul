@@ -60,8 +60,8 @@ public class RenderSeasonCards {
         Level level = player.level();
         if (lastDimension == null || lastDimension != level.dimension()) {
             delayTimer = Config.Baked.seasonCardsSpawnDimensionDelayInTicks;
-            isDimensionSeasonal = ServerConfig.isDimensionWhitelisted(level.dimension());
             lastDimension = level.dimension();
+            isDimensionSeasonal = ServerConfig.isDimensionWhitelisted(lastDimension);
         }
 
         if (!isDimensionSeasonal) {

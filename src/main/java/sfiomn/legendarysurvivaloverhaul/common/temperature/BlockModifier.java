@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBlockFluidTemperature;
@@ -76,35 +75,39 @@ public class BlockModifier extends ModifierBase
 	
 	private void doBlocksAndFluidsRoutine(Level level, BlockPos pos)
 	{
-		HashMap<BlockPos, SpreadPoint> spreadBlockPos = new HashMap<>();
-		ArrayList<SpreadPoint> spreadPointToProcess = new ArrayList<>();
+		HashMap<BlockPos, SpreadPoint> listVisitedBlockPos = new HashMap<>();
+		ArrayList<SpreadPoint> spreadPointsToProcess = new ArrayList<>();
 
-		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, null, tempInfluenceMaximumDist() + 1, 0, level);
-		spreadPointToProcess.add(spreadPointFeetPlayer);
-		spreadBlockPos.put(spreadPointFeetPlayer.position(), spreadPointFeetPlayer);
+		SpreadPoint spreadPointHeadPlayer = new SpreadPoint(pos.above(), Direction.UP, tempInfluenceMaximumDist(), 0, level);
+		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, Direction.DOWN, tempInfluenceMaximumDist(), 0, level);
+		spreadPointsToProcess.add(spreadPointHeadPlayer);
+		spreadPointsToProcess.add(spreadPointFeetPlayer);
+		listVisitedBlockPos.put(spreadPointHeadPlayer.position(), spreadPointHeadPlayer);
+		listVisitedBlockPos.put(spreadPointFeetPlayer.position(), spreadPointFeetPlayer);
 
-		while (!spreadPointToProcess.isEmpty()) {
-			SpreadPoint spreadPoint = spreadPointToProcess.remove(0);
+		while (!spreadPointsToProcess.isEmpty()) {
+			SpreadPoint spreadPoint = spreadPointsToProcess.remove(0);
 			spreadPoint.setCanSeeSky();
+			Direction oppositeDirection = spreadPoint.originalDirection().getOpposite();
 
 			for (Direction direction : Direction.values()) {
-				Vec3i directionVector = direction.getNormal();
 				//  Avoid spreading to the direction we are coming from
-				if (spreadPoint.originalDirection() == null || !Objects.equals(directionVector, getOppositeVector(spreadPoint.originalDirection()))) {
-					boolean validSpreadPoint = this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector);
+				if (direction != oppositeDirection) {
+					Vec3i newPosVector = direction.getNormal();
+					boolean validSpreadPoint = this.processDirectionTo(spreadPointsToProcess, listVisitedBlockPos, spreadPoint, spreadPoint.position().offset(newPosVector), direction, 1.0f);
 
 					if (validSpreadPoint) {
 						for (Direction direction1 : Direction.values()) {
 							//  Check plan diagonal blocks
-							if (direction1.getAxis() != direction.getAxis()) {
-								Vec3i directionVector1 = direction.getNormal().relative(direction1, 1);
-								boolean validSpreadPoint1 = this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector1);
+							if (direction1.getAxis() != direction.getAxis() && direction1 != oppositeDirection) {
+								newPosVector = newPosVector.relative(direction1, 1);
+								boolean validSpreadPoint1 = this.processDirectionTo(spreadPointsToProcess, listVisitedBlockPos, spreadPoint, spreadPoint.position().offset(newPosVector), direction1, 1.414f);
 								if (validSpreadPoint1) {
 									for (Direction direction2 : Direction.values()) {
 										//  Check 3D diagonal blocks
-										if (direction2.getAxis() != direction1.getAxis() && direction2.getAxis() != direction.getAxis()) {
-											Vec3i directionVector2 = directionVector1.relative(direction2, 1);
-											this.processDirectionFrom(spreadPointToProcess, spreadBlockPos, spreadPoint, directionVector2);
+										if (direction2.getAxis() != direction1.getAxis() && direction2.getAxis() != direction.getAxis() && direction2 != oppositeDirection) {
+											newPosVector = newPosVector.relative(direction2, 1);
+											this.processDirectionTo(spreadPointsToProcess, listVisitedBlockPos, spreadPoint, spreadPoint.position().offset(newPosVector), direction2, 1.732f);
 										}
 									}
 								}
@@ -115,23 +118,21 @@ public class BlockModifier extends ModifierBase
 			}
 		}
 
-		for (SpreadPoint spreadPoint : spreadBlockPos.values()) {
+		for (SpreadPoint spreadPoint : listVisitedBlockPos.values()) {
 			processTemp(getTemperatureFromSpreadPoint(level, spreadPoint));
 		}
 	}
 
-	private boolean processDirectionFrom(ArrayList<SpreadPoint> spreadPointToProcess, HashMap<BlockPos, SpreadPoint> spreadBlockPos, SpreadPoint spreadPoint, Vec3i directionVector) {
-		BlockPos newBlockPos = spreadPoint.newSpreadPos(directionVector);
-
+	private boolean processDirectionTo(ArrayList<SpreadPoint> spreadPointsToProcess, HashMap<BlockPos, SpreadPoint> listVisitedBlockPos, SpreadPoint parentSpreadPoint, BlockPos newBlockPos, Direction originDirection, float distance) {
 		//  Check that the new spread location isn't an already processed location
-		if (!spreadBlockPos.containsKey(newBlockPos)) {
+		if (!listVisitedBlockPos.containsKey(newBlockPos)) {
 
-			SpreadPoint newSpreadPoint = spreadPoint.spreadTo(directionVector);
-			spreadBlockPos.put(newSpreadPoint.position(), newSpreadPoint);
+			SpreadPoint newSpreadPoint = parentSpreadPoint.spreadTo(newBlockPos, originDirection, distance);
+			listVisitedBlockPos.put(newSpreadPoint.position(), newSpreadPoint);
 
 			//  If it is a valid spreadPoint (= not colliding block), store the spreadPoint as to be processed
-			if (newSpreadPoint.isValidSpreadPoint()) {
-				spreadPointToProcess.add(newSpreadPoint);
+			if (newSpreadPoint.isValidSpreadPoint(originDirection)) {
+				spreadPointsToProcess.add(newSpreadPoint);
 				return true;
 			}
 		} /*else {
@@ -195,7 +196,7 @@ public class BlockModifier extends ModifierBase
 			return 0.0f;
 		}
 
-		//  List of combination of a temperature and a list of properties a block must have in order to generate this temperature
+		// List of combination of a temperature and a list of properties a block must have in order to generate this temperature
 		List<JsonBlockFluidTemperature> tempPropertyList = JsonConfig.blockFluidTemperatures.get(registryName.toString());
 
 		if (tempPropertyList == null) {

@@ -84,7 +84,7 @@ public class ModCapabilities
 			Level level = player.level();
 
 			if (shouldSkipTick(player)) return;
-			
+
 			if (Config.Baked.temperatureEnabled) {
 				TemperatureCapability tempCap = CapabilityUtil.getTempCapability(player);
 				

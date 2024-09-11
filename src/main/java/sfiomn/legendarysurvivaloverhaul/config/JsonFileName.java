@@ -2,6 +2,7 @@ package sfiomn.legendarysurvivaloverhaul.config;
 
 public enum JsonFileName
 {
+	DIMENSION("dimensionTemperatures.json"),
 	BIOME("biomeOverrides.json"),
 	ITEM("itemTemperatures.json"),
 	ENTITY("entityTemperatures.json"),
