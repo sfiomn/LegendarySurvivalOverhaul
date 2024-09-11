@@ -17,7 +17,7 @@ public class TemperatureModifierRegistry
 	public static final DeferredRegister<DynamicModifierBase> DYNAMIC_MODIFIERS = DeferredRegister.create(DynamicModifierBase.class, LegendarySurvivalOverhaul.MOD_ID);
 	
 	// Base Modifiers
-	public static final RegistryObject<ModifierBase> DIMENSION = MODIFIERS.register("default", DimensionModifier::new);
+	public static final RegistryObject<ModifierBase> DIMENSION = MODIFIERS.register("dimension", DimensionModifier::new);
 	public static final RegistryObject<ModifierBase> BIOME = MODIFIERS.register("biome", BiomeModifier::new);
 	public static final RegistryObject<ModifierBase> TIME = MODIFIERS.register("time", TimeModifier::new);
 	public static final RegistryObject<ModifierBase> ALTITUDE = MODIFIERS.register("altitude", AltitudeModifier::new);
