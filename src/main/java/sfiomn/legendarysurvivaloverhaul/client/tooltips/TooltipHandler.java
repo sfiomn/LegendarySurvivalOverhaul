@@ -245,12 +245,6 @@ public class TooltipHandler
 					hydrationEffectComponents.add(getHydrationEffectTooltip(effect.chance, effect.name, effect.amplifier, effect.duration));
 				}
 			}
-		} else {
-			HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
-			if (hydrationEnum != null) {
-				hydrationTooltip = new HydrationTooltip(hydrationEnum);
-				hydrationEffectComponents.add(getHydrationEffectTooltip(hydrationEnum));
-			}
 		}
 
 		if (hydrationTooltip == null) {
@@ -269,10 +263,6 @@ public class TooltipHandler
 			if (hydrationEffectComponent != null)
 				tooltip.add(hydrationEffectComponent);
 		}
-	}
-
-	private static IFormattableTextComponent getHydrationEffectTooltip(HydrationEnum hydrationEnum) {
-		return getHydrationEffectTooltip(hydrationEnum.getEffectChance(), hydrationEnum.getEffectName(), 0, hydrationEnum.getEffectDuration());
 	}
 
 	private static IFormattableTextComponent getHydrationEffectTooltip(double effectChance, String effectName, int amplifier, int duration) {

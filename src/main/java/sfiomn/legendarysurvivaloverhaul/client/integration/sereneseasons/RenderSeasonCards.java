@@ -147,6 +147,9 @@ public class RenderSeasonCards {
     }
 
     public static void init() {
+        seasonCard = null;
+        lastSeason = null;
+        lastTropicalSeason = null;
         lastDimension = null;
     }
 

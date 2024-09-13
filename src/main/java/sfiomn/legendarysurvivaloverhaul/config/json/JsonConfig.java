@@ -9,6 +9,7 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonBodyPartsDamageSource;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumableHeal;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonBlockFluidThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonEffectParameter;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
@@ -23,8 +24,9 @@ public class JsonConfig
 	public static Map<String, List<JsonBlockFluidTemperature>> blockFluidTemperatures = Maps.newHashMap();
 	public static Map<String, JsonTemperature> entityTemperatures = Maps.newHashMap();
 	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = Maps.newHashMap();
-	public static Map<String, List<JsonConsumableThirst>> consumableThirst = Maps.newHashMap();
 	public static Map<String, JsonFuelItem> fuelItems = Maps.newHashMap();
+	public static Map<String, List<JsonBlockFluidThirst>> blockFluidThirst = Maps.newHashMap();
+	public static Map<String, List<JsonConsumableThirst>> consumableThirst = Maps.newHashMap();
 	public static Map<String, JsonConsumableHeal> consumableHeal = Maps.newHashMap();
 	public static Map<String, JsonBodyPartsDamageSource> damageSourceBodyParts = Maps.newHashMap();
 
@@ -117,6 +119,45 @@ public class JsonConfig
 
 		currentList.add(jsonConsumableTemperature);
     }
+
+	public static void registerBlockFluidThirst(String registryName, int hydration, float saturation) {
+		registerBlockFluidThirst(registryName, hydration, saturation, new JsonPropertyValue[]{});
+	}
+
+	public static void registerBlockFluidThirst(String registryName, int hydration, float saturation, JsonPropertyValue... properties) {
+		registerBlockFluidThirst(registryName, hydration, saturation, new JsonEffectParameter[]{}, properties);
+	}
+
+	public static void registerBlockFluidThirst(String registryName, int hydration, float saturation, JsonEffectParameter[] effects, JsonPropertyValue... properties) {
+		if (!blockFluidThirst.containsKey(registryName))
+			blockFluidThirst.put(registryName, new ArrayList<>());
+
+		final List<JsonBlockFluidThirst> alreadyDefinedConfig = blockFluidThirst.get(registryName);
+
+		JsonBlockFluidThirst newBlockFluidThirst = new JsonBlockFluidThirst(hydration, saturation, effects, properties);
+
+		if (properties.length > 0) {
+			//  If the same set of nbt already exists, replace it
+			for (int i = 0; i < alreadyDefinedConfig.size(); i++) {
+				JsonBlockFluidThirst jpt = alreadyDefinedConfig.get(i);
+				if (jpt.matchesProperties(properties)) {
+					alreadyDefinedConfig.set(i, newBlockFluidThirst);
+					return;
+				}
+			}
+		}
+		else  {
+			// Replace empty config if it already exists
+			for (int i = 0; i < alreadyDefinedConfig.size(); i++) {
+				JsonBlockFluidThirst jpt = alreadyDefinedConfig.get(i);
+				if (jpt.properties.keySet().isEmpty()) {
+					alreadyDefinedConfig.set(i, newBlockFluidThirst);
+					return;
+				}
+			}
+		}
+		alreadyDefinedConfig.add(newBlockFluidThirst);
+	}
 
 	public static void registerConsumableThirst(String registryName, int hydration, float saturation) {
 		registerConsumableThirst(registryName, hydration, saturation, new JsonPropertyValue[]{});

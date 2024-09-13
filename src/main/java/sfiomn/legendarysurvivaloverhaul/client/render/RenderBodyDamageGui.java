@@ -46,7 +46,7 @@ public class RenderBodyDamageGui
 	
 	public static void drawBodyDamage(MatrixStack matrix, BodyDamageCapability cap, int width, int height) {
 		int x = width / 2 + 92 + Config.Baked.bodyDamageIndicatorOffsetX;
-		int y = height - 34 + Config.Baked.bodyDamageIndicatorOffsetY;
+		int y = height - 33 + Config.Baked.bodyDamageIndicatorOffsetY;
 		
 		Matrix4f m4f = matrix.last().pose();
 

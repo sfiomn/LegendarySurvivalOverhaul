@@ -1,39 +1,35 @@
 package sfiomn.legendarysurvivaloverhaul.util.internal;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonBlockFluidThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonEffectParameter;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
+import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
-
-import javax.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import static net.minecraft.block.CauldronBlock.LEVEL;
 
 public class ThirstUtilInternal implements IThirstUtil {
 
@@ -122,25 +118,6 @@ public class ThirstUtilInternal implements IThirstUtil {
         }
     }
 
-    // API
-    // Returns a HydrationEnum based on what is being looked at
-    @Nullable
-    @Override
-    public HydrationEnum traceWater(PlayerEntity player) {
-        HydrationEnum hydrationEnum = getHydrationEnumLookedAt(player, player.getAttributeValue(ForgeMod.REACH_DISTANCE.get()) / 2);
-
-        if(hydrationEnum == HydrationEnum.RAIN && !Config.Baked.drinkFromRain)
-        {
-            return null;
-        }
-        else if(hydrationEnum == HydrationEnum.NORMAL && !Config.Baked.drinkFromWater)
-        {
-            return null;
-        }
-
-        return hydrationEnum;
-    }
-
     @Override
     public void takeDrink(PlayerEntity player, int hydration, float saturation, List<JsonEffectParameter> effects) {
         if(!Config.Baked.thirstEnabled)
@@ -174,39 +151,83 @@ public class ThirstUtilInternal implements IThirstUtil {
     }
 
     @Override
-    public void takeDrink(PlayerEntity player, HydrationEnum type) {
-        takeDrink(player, type.getHydration(), (float) type.getSaturation(), Collections.singletonList(new JsonEffectParameter(type.getEffectName(), (float) type.getEffectChance(), type.getEffectDuration(), 0)));
-    }
-
-    @Override
     public void addExhaustion(PlayerEntity player, float exhaustion) {
         ThirstCapability thirstCap = CapabilityUtil.getThirstCapability(player);
         thirstCap.addThirstExhaustion(exhaustion);
     }
 
     @Override
-    public HydrationEnum getHydrationEnumLookedAt(PlayerEntity player, double finalDistance) {
+    public JsonBlockFluidThirst getJsonBlockFluidThirstLookedAt(PlayerEntity player, double finalDistance) {
 
         // Check if player is looking up, if it's raining, if they can see sky, and if drinkFromRain is enabled
-        if(player.getViewXRot(1.0f) < -60.0f && player.level.isRainingAt(new BlockPos(player.position()).above()) && Config.Baked.drinkFromRain)
-        {
+        if(player.getViewXRot(1.0f) < -60.0f && player.level.isRainingAt(player.blockPosition().above()) &&
+                JsonConfig.blockFluidThirst.containsKey("minecraft:rain")) {
             //Drinking rain
-            return HydrationEnum.RAIN;
+            List<JsonBlockFluidThirst> thirstPropertyList = JsonConfig.blockFluidThirst.get("minecraft:rain");
+
+            if (thirstPropertyList == null || thirstPropertyList.isEmpty()) {
+                return null;
+            }
+
+            return JsonConfig.blockFluidThirst.get("minecraft:rain").get(0);
         }
 
         RayTraceResult positionLookedAt = player.pick(finalDistance, 0.0F, true);
 
         if (positionLookedAt.getType() == RayTraceResult.Type.BLOCK) {
-            BlockState blockState = player.level.getBlockState(((BlockRayTraceResult) positionLookedAt).getBlockPos());
-            Fluid fluidState = player.level.getFluidState(((BlockRayTraceResult) positionLookedAt).getBlockPos()).getType();
-            if (blockState.getBlock() == Blocks.CAULDRON) {
-                int level = blockState.getValue(LEVEL);
-                if(level > 0) {
-                    return HydrationEnum.NORMAL;
+
+            FluidState fluidState = player.level.getFluidState(((BlockRayTraceResult) positionLookedAt).getBlockPos());
+            ResourceLocation fluidRegistryName = ForgeRegistries.FLUIDS.getKey(fluidState.getType());
+            JsonBlockFluidThirst defaultJsonBlockFluidThirst = null;
+
+            if (fluidRegistryName != null && !fluidState.isEmpty()) {
+
+                if (LegendarySurvivalOverhaul.curiosLoaded) {
+                    if (CuriosUtil.isCurioItemEquipped(player, ItemRegistry.NETHER_CHALICE.get()) && (fluidState.getType() == Fluids.FLOWING_LAVA || fluidState.getType() == Fluids.LAVA))
+                        return new JsonBlockFluidThirst(Config.Baked.hydrationLava, (float) Config.Baked.saturationLava, new JsonEffectParameter[]{});
                 }
+
+                List<JsonBlockFluidThirst> jsonBlockFluidThirsts = JsonConfig.blockFluidThirst.get(fluidRegistryName.toString());
+
+                if (jsonBlockFluidThirsts == null)
+                    return null;
+
+                for (JsonBlockFluidThirst thirstInfo : jsonBlockFluidThirsts) {
+                    if (thirstInfo == null)
+                        continue;
+
+                    if (thirstInfo.isDefault())
+                        defaultJsonBlockFluidThirst = thirstInfo;
+
+                    if (thirstInfo.matchesState(fluidState)) {
+                        return thirstInfo;
+                    }
+                }
+                return defaultJsonBlockFluidThirst;
+
             } else {
-                if (fluidState == Fluids.WATER || fluidState == Fluids.FLOWING_WATER) {
-                    return HydrationEnum.NORMAL;
+                BlockState blockState = player.level.getBlockState(((BlockRayTraceResult) positionLookedAt).getBlockPos());
+                ResourceLocation blockRegistryName = ForgeRegistries.BLOCKS.getKey(blockState.getBlock());
+
+                if (blockRegistryName != null) {
+                    List<JsonBlockFluidThirst> jsonBlockFluidThirsts = JsonConfig.blockFluidThirst.get(blockRegistryName.toString());
+
+                    if (jsonBlockFluidThirsts == null)
+                        return null;
+
+                    for (JsonBlockFluidThirst thirstInfo : jsonBlockFluidThirsts) {
+                        if (thirstInfo == null)
+                            continue;
+
+                        if (thirstInfo.isDefault())
+                            defaultJsonBlockFluidThirst = thirstInfo;
+
+                        if (thirstInfo.matchesState(blockState)) {
+                            return thirstInfo;
+                        }
+                    }
+
+                    return defaultJsonBlockFluidThirst;
                 }
             }
         }

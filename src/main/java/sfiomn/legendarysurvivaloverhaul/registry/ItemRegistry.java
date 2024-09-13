@@ -30,6 +30,8 @@ public class ItemRegistry
 	public static final RegistryObject<Item> THERMOMETER = ITEMS.register("thermometer", () -> new ThermometerItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
 	public static final RegistryObject<Item> SEASONAL_CALENDAR = ITEMS.register("seasonal_calendar", () -> new SeasonalCalendarItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
 
+	public static final RegistryObject<Item> NETHER_CHALICE = ITEMS.register("nether_chalice", () -> new NetherChalice(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
+
 	public static final RegistryObject<Item> CLOTH_HELMET = ITEMS.register("snow_helmet", () -> new SnowArmorItem(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.HEAD));
 	public static final RegistryObject<Item> CLOTH_CHEST = ITEMS.register("snow_chestplate", () -> new SnowArmorItem(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.CHEST));
 	public static final RegistryObject<Item> CLOTH_LEGGINGS = ITEMS.register("snow_leggings", () -> new SnowArmorItem(CLOTH_ARMOR_MATERIAL, EquipmentSlotType.LEGS));

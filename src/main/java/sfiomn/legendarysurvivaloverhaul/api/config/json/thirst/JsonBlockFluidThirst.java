@@ -1,70 +1,72 @@
-package sfiomn.legendarysurvivaloverhaul.api.config.json.temperature;
+package sfiomn.legendarysurvivaloverhaul.api.config.json.thirst;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.Property;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-/**
- * Code taken and adapted from Charles445's SimpleDifficulty mod
- * @see <a href="https://github.com/Charles445/SimpleDifficulty/tree/master/src/main/java/com/charles445/simpledifficulty/api/config/json">Github Link</a>
- * @author Charles445
- * @author Icey
- */
-
-public class JsonBlockFluidTemperature
+public class JsonBlockFluidThirst
 {
+	@SerializedName("hydration")
+	public int hydration;
+	@SerializedName("saturation")
+	public float saturation;
+	@SerializedName("effects")
+	public List<JsonEffectParameter> effects;
 	@SerializedName("properties")
 	public Map<String,String> properties;
-	
-	@SerializedName("temperature")
-	public float temperature;
-	
-	public JsonBlockFluidTemperature(float temperature, JsonPropertyValue... props)
-	{
-		this.temperature = temperature;
+
+	public JsonBlockFluidThirst(int hydration, float saturation, JsonEffectParameter[] effects, JsonPropertyValue... properties) {
+		this.hydration = hydration;
+		this.saturation = saturation;
+
+		this.effects = new ArrayList<>();
+        this.effects.addAll(Arrays.asList(effects));
 
 		this.properties = new HashMap<>();
-		for (JsonPropertyValue prop : props)
+		for (JsonPropertyValue prop : properties)
 		{
-			properties.put(prop.name, prop.value);
+			this.properties.put(prop.name, prop.value);
 		}
 	}
-	
-	public JsonPropertyValue[] getPropertyArray()
-	{
+
+	public JsonPropertyValue[] getPropertyArray() {
 		List<JsonPropertyValue> jpvList = new ArrayList<>();
-		for(Map.Entry<String, String> entry : properties.entrySet())
+		for(Map.Entry<String, String> entry : this.properties.entrySet())
 		{
 			jpvList.add(new JsonPropertyValue(entry.getKey(), entry.getValue()));
 		}
-		
+
 		return jpvList.toArray(new JsonPropertyValue[0]);
 	}
-	
-	public boolean matchesState(BlockState blockState)
-	{
+
+	public boolean isDefault() {
+		return this.properties.isEmpty();
+	}
+
+	public boolean matchesState(BlockState blockState) {
 		for(Property<?> property : blockState.getProperties())
 		{
 			String name = property.getName();
-			
+
 			if(properties.containsKey(name))
 			{
 				String stateValue = blockState.getValue(property).toString();
-				
+
 				if(!properties.get(name).equalsIgnoreCase(stateValue))
 				{
 					return false;
 				}
+			} else {
+				return false;
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -82,34 +84,33 @@ public class JsonBlockFluidTemperature
 				{
 					return false;
 				}
+			} else {
+				return false;
 			}
 		}
 
 		return true;
 	}
-	
-	public boolean matchesDescribedProperties(JsonPropertyValue... props)
+
+	public boolean matchesProperties(JsonPropertyValue... props)
 	{
-		if(props.length != properties.keySet().size())
+		if(props.length != this.properties.keySet().size())
 		{
 			return false;
 		}
-		
+
 		for(JsonPropertyValue prop : props)
 		{
-			if(!properties.containsKey(prop.name))
+			if(!this.properties.containsKey(prop.name))
 			{
 				return false;
 			}
-			else
+			else if(!prop.value.equals(this.properties.get(prop.name)))
 			{
-				if(!prop.value.equalsIgnoreCase(properties.get(prop.name)))
-				{
-					return false;
-				}
+				return false;
 			}
 		}
-		
+
 		return true;
 	}
 }

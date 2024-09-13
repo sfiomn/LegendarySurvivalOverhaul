@@ -14,11 +14,14 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
+import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
+import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 import sfiomn.legendarysurvivaloverhaul.util.RenderUtil;
+import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
 import java.util.Random;
 
@@ -33,6 +36,16 @@ public class RenderTemperatureGui
 	private static final int TEMPERATURE_TEXTURE_POS_Y = 48;
 	private static final int TEMPERATURE_TEXTURE_WIDTH = 16;
 	private static final int TEMPERATURE_TEXTURE_HEIGHT = 16;
+
+	private static final int BODY_TEMPERATURE_ICON_TEXTURE_POS_X = 22;
+	private static final int BODY_TEMPERATURE_ICON_TEXTURE_POS_Y = 202;
+	private static final int BODY_TEMPERATURE_ICON_TEXTURE_WIDTH = 10;
+	private static final int BODY_TEMPERATURE_ICON_TEXTURE_HEIGHT = 22;
+	private static final int BODY_TEMPERATURE_FRAME_TEXTURE_POS_Y = 211;
+	private static final int BODY_TEMPERATURE_FRAME_TEXTURE_WIDTH = 23;
+	private static final int BODY_TEMPERATURE_FRAME_TEXTURE_HEIGHT = 13;
+	private static final int BODY_TEMPERATURE_NUMBER_TEXTURE_WIDTH = 3;
+	private static final int BODY_TEMPERATURE_NUMBER_TEXTURE_HEIGHT = 5;
 	
 	private static final int WETNESS_TEXTURE_POS_Y = 96;
 	
@@ -72,6 +85,10 @@ public class RenderTemperatureGui
 		
 		if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
 			drawWetness(matrix, wetCap, width, height);
+
+		if (LegendarySurvivalOverhaul.curiosLoaded && (CuriosUtil.isThermometerEquipped || CuriosUtil.isCurioItemEquipped(player, ItemRegistry.THERMOMETER.get()))) {
+			drawBodyTemperature(matrix, tempCap, width, height);
+		}
 
 		RenderSystem.disableBlend();
 		bind(AbstractGui.GUI_ICONS_LOCATION);
@@ -238,6 +255,80 @@ public class RenderTemperatureGui
 		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, WETNESS_TEXTURE_WIDTH, WETNESS_TEXTURE_HEIGHT, texPosX, texPosY, WETNESS_TEXTURE_WIDTH, WETNESS_TEXTURE_HEIGHT);
 	}
 
+	public static void drawBodyTemperature(MatrixStack matrix, TemperatureCapability cap, int width, int height) {
+		Matrix4f m4f = matrix.last().pose();
+		int x = width / 2 - 92 - 32 + Config.Baked.bodyTemperatureDisplayOffsetX;
+		int y = height - 14 + Config.Baked.bodyTemperatureDisplayOffsetY;
+
+		float bodyTemperature = cap.getTemperatureLevel();
+		float tempRatio = (bodyTemperature - TemperatureEnum.FROSTBITE.getLowerBound()) / (TemperatureEnum.HEAT_STROKE.getUpperBound() - TemperatureEnum.FROSTBITE.getLowerBound());
+
+		bind(ICONS);
+
+		// Temperature Frame rendering
+		RenderUtil.drawTexturedModelRect(m4f, x, y,
+				BODY_TEMPERATURE_FRAME_TEXTURE_WIDTH,
+				BODY_TEMPERATURE_FRAME_TEXTURE_HEIGHT,
+				0,
+				BODY_TEMPERATURE_FRAME_TEXTURE_POS_Y,
+				BODY_TEMPERATURE_FRAME_TEXTURE_WIDTH,
+				BODY_TEMPERATURE_FRAME_TEXTURE_HEIGHT);
+
+		if (Config.Baked.renderTemperatureInFahrenheit) {
+			bodyTemperature = WorldUtil.toFahrenheit(bodyTemperature);
+		}
+		String bodyTemperatureString = Float.toString(MathUtil.round(bodyTemperature, 1));
+
+		BodyTemperatureNumber number1 = BodyTemperatureNumber.get('0');
+		if (bodyTemperatureString.length() == 4) {
+			number1 = BodyTemperatureNumber.get(bodyTemperatureString.charAt(0));
+		}
+		RenderUtil.drawTexturedModelRect(m4f, x + 5, y + 4,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_WIDTH,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_HEIGHT,
+				number1.iconIndexX,
+				number1.iconIndexY,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_WIDTH,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_HEIGHT);
+
+		BodyTemperatureNumber number2 = BodyTemperatureNumber.get(bodyTemperatureString.charAt(bodyTemperatureString.length() - 3));
+		RenderUtil.drawTexturedModelRect(m4f, x + 9, y + 4,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_WIDTH,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_HEIGHT,
+				number2.iconIndexX,
+				number2.iconIndexY,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_WIDTH,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_HEIGHT);
+
+		BodyTemperatureNumber number3 = BodyTemperatureNumber.get(bodyTemperatureString.charAt(bodyTemperatureString.length() - 1));
+		RenderUtil.drawTexturedModelRect(m4f, x + 15, y + 4,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_WIDTH,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_HEIGHT,
+				number3.iconIndexX,
+				number3.iconIndexY,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_WIDTH,
+				BODY_TEMPERATURE_NUMBER_TEXTURE_HEIGHT);
+
+		// Thermometer rendering
+		RenderUtil.drawTexturedModelRect(m4f, x + 22, y - 10,
+				BODY_TEMPERATURE_ICON_TEXTURE_WIDTH,
+				BODY_TEMPERATURE_ICON_TEXTURE_HEIGHT,
+				BODY_TEMPERATURE_ICON_TEXTURE_POS_X + BODY_TEMPERATURE_ICON_TEXTURE_WIDTH * BodyTemperatureIcon.EMPTY.iconIndexX,
+				BODY_TEMPERATURE_ICON_TEXTURE_POS_Y,
+				BODY_TEMPERATURE_ICON_TEXTURE_WIDTH,
+				BODY_TEMPERATURE_ICON_TEXTURE_HEIGHT);
+
+		int thermometerActualHeight = (int) (tempRatio * 17);
+
+		RenderUtil.drawTexturedModelRect(m4f, x + 22, y - 10 + 17 - thermometerActualHeight,
+				BODY_TEMPERATURE_ICON_TEXTURE_WIDTH,
+				thermometerActualHeight + 5,
+				BODY_TEMPERATURE_ICON_TEXTURE_POS_X + BODY_TEMPERATURE_ICON_TEXTURE_WIDTH * BodyTemperatureIcon.get(tempRatio).iconIndexX,
+				BODY_TEMPERATURE_ICON_TEXTURE_POS_Y + 17 - thermometerActualHeight,
+				BODY_TEMPERATURE_ICON_TEXTURE_WIDTH,
+				thermometerActualHeight + 5);
+	}
+
 	public static void drawHungerSecondaryEffect(MatrixStack matrix, PlayerEntity player, int width, int height) {
 		if (player.hasEffect(EffectRegistry.COLD_HUNGER.get())) {
 
@@ -367,6 +458,55 @@ public class RenderTemperatureGui
 			default:
 				return this;
 			}
+		}
+	}
+
+	private enum BodyTemperatureIcon {
+		EMPTY(0),
+		COLD_0(1),
+		COLD_1(2),
+		COLD_2(3),
+		TEMPERATE_0(4),
+		TEMPERATE_1(5),
+		TEMPERATE_2(6),
+		HOT_0(7),
+		HOT_1(8),
+		HOT_2(9);
+
+		public final int iconIndexX;
+
+		BodyTemperatureIcon(int iconIndexX) {
+			this.iconIndexX = iconIndexX;
+		}
+
+		public static BodyTemperatureIcon get(float tempRatio) {
+			return BodyTemperatureIcon.values()[1 + (int)(tempRatio * 9)];
+		}
+	}
+
+	private enum BodyTemperatureNumber {
+		ZERO(17, 231),
+		ONE(1, 225),
+		TWO(5, 225),
+		THREE(9, 225),
+		FOUR(13, 225),
+		FIVE(17, 225),
+		SIX(1, 231),
+		SEVEN(5, 231),
+		HEIGHT(9, 231),
+		NINE(13, 231);
+
+		public final int iconIndexX;
+
+		public final int iconIndexY;
+
+		BodyTemperatureNumber(int iconIndexX, int iconIndexY) {
+			this.iconIndexX = iconIndexX;
+			this.iconIndexY = iconIndexY;
+		}
+
+		public static BodyTemperatureNumber get(char charNum) {
+			return BodyTemperatureNumber.values()[Character.getNumericValue(charNum)];
 		}
 	}
 }

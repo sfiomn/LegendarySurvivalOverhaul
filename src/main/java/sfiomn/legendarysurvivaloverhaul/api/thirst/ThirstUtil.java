@@ -3,6 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.api.thirst;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonBlockFluidThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonEffectParameter;
 
@@ -12,20 +13,6 @@ import java.util.List;
 public class ThirstUtil
 {
 	public static IThirstUtil internal;
-
-	/**
-	 * Ray traces the block a player is looking at and returns it as a ThirstEnumBlockPos
-	 * <br>
-	 * Returns null if there is no trace result
-	 * @param player
-	 * @return ThirstEnumBlockPos trace result
-	 *
-	 */
-	@Nullable
-	public static HydrationEnum traceWater(PlayerEntity player)
-	{
-		return internal.traceWater(player);
-	}
 
 	/**
 	 * Player takes a drink with the specified values and a list of possible effects
@@ -51,16 +38,6 @@ public class ThirstUtil
 	}
 
 	/**
-	 * Player takes a drink with the values of the HydrationEnum
-	 * @param player
-	 * @param hydrationEnum
-	 */
-	public static void takeDrink(PlayerEntity player, HydrationEnum hydrationEnum)
-	{
-		internal.takeDrink(player, hydrationEnum);
-	}
-
-	/**
 	 * Add thirst exhaustion responsible for the thirst depletion
 	 * @param player
 	 * @param exhaustion
@@ -76,8 +53,8 @@ public class ThirstUtil
 	 * @param finalDistance
 	 */
 
-	public HydrationEnum getHydrationEnumLookedAt(PlayerEntity player, double finalDistance) {
-		return internal.getHydrationEnumLookedAt(player, finalDistance);
+	public static JsonBlockFluidThirst getJsonBlockFluidThirstLookedAt(PlayerEntity player, double finalDistance) {
+		return internal.getJsonBlockFluidThirstLookedAt(player, finalDistance);
 	}
 
 	/**

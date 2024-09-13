@@ -17,11 +17,13 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -52,6 +54,7 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.Temperat
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstStorage;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
+import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosEvents;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier;
 import sfiomn.legendarysurvivaloverhaul.common.integration.vampirism.VampirismEvents;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -61,6 +64,9 @@ import sfiomn.legendarysurvivaloverhaul.registry.*;
 import sfiomn.legendarysurvivaloverhaul.util.internal.BodyDamageUtilInternal;
 import sfiomn.legendarysurvivaloverhaul.util.internal.TemperatureUtilInternal;
 import sfiomn.legendarysurvivaloverhaul.util.internal.ThirstUtilInternal;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotTypeMessage;
+import top.theillusivec4.curios.api.SlotTypePreset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -116,6 +122,7 @@ public class LegendarySurvivalOverhaul
 		modBus.addListener(this::onModConfigEvent);
 		modBus.addListener(this::buildRegistries);
 		modBus.addListener(this::clientEvents);
+		modBus.addListener(this::enqueueIMC);
 
 		BlockRegistry.register(modBus);
 		ContainerRegistry.register(modBus);
@@ -155,6 +162,7 @@ public class LegendarySurvivalOverhaul
 			LOGGER.debug("Serene Seasons is loaded, enabling compatibility");
 		if (curiosLoaded)
 			LOGGER.debug("Curios is loaded, enabling compatibility");
+			forgeBus.register(CuriosEvents.class);
 		if (vampirismLoaded) {
 			LOGGER.debug("Vampirism is loaded, enabling compatibility");
 			forgeBus.register(VampirismEvents.class);
@@ -301,5 +309,13 @@ public class LegendarySurvivalOverhaul
 		dynamicModifierBuilder.setName(new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "dynamic_modifiers"));
 		dynamicModifierBuilder.setType(DynamicModifierBase.class);
 		DYNAMIC_MODIFIERS = (ForgeRegistry<DynamicModifierBase>) dynamicModifierBuilder.create();
+	}
+
+	private void enqueueIMC(final InterModEnqueueEvent event)
+	{
+		event.enqueueWork(() ->
+		{   InterModComms.sendTo(LegendarySurvivalOverhaul.MOD_ID, CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE,
+				() -> SlotTypePreset.BELT.getMessageBuilder().build());
+		});
 	}
 }

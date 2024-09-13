@@ -14,6 +14,7 @@ public class SpreadPoint {
     private final double spreadCapacity;
     private final double influenceDistance;
     private final World world;
+    private final BlockState blockState;
     private boolean canSeeSky;
     private boolean isWater;
     private final double tempInfluenceOutsideDistMultiplier = Config.Baked.tempInfluenceOutsideDistMultiplier;
@@ -26,6 +27,7 @@ public class SpreadPoint {
         this.spreadCapacity = spreadCapacity;
         this.influenceDistance = influenceDistance;
         this.world = world;
+        this.blockState = world.getBlockState(pos);
         this.canSeeSky = false;
         this.isWater = false;
     }
@@ -55,7 +57,6 @@ public class SpreadPoint {
         if (spreadCapacity <= 0) {
             return false;
         } else {
-            BlockState blockState = world.getBlockState(pos);
             if (blockState.isAir())
                 return true;
             if (blockState.is(Blocks.WATER)) {
@@ -65,6 +66,10 @@ public class SpreadPoint {
 
             return !blockState.isFaceSturdy(world, pos, originDirection.getOpposite());
         }
+    }
+
+    public boolean isValidSpreadDirection(Direction direction) {
+        return !blockState.isFaceSturdy(world, pos, direction);
     }
 
     public void setCanSeeSky() {

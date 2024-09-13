@@ -44,10 +44,6 @@ public class HydrationTooltip {
         }
     }
 
-    public HydrationTooltip(HydrationEnum hydrationEnum) {
-        this(hydrationEnum.getHydration(), (float) hydrationEnum.getSaturation());
-    }
-
     public String getPlaceholderTooltip() {
         if (placeholderTooltip != null)
         {

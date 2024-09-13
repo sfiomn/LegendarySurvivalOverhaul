@@ -13,6 +13,7 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.JsonPropertyValue;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonBodyPartsDamageSource;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumableHeal;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.*;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonBlockFluidThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonEffectParameter;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemporaryModifierGroupEnum;
@@ -153,6 +154,12 @@ public class JsonConfigRegistration
 		JsonConfig.registerFuelItems("minecraft:blue_ice", ThermalTypeEnum.COOLING, 30);
 		JsonConfig.registerFuelItems("minecraft:packed_ice", ThermalTypeEnum.COOLING, 30);
 
+		JsonConfig.registerBlockFluidThirst("minecraft:rain", 1, 0);
+		JsonConfig.registerBlockFluidThirst("minecraft:flowing_water", 3, 0, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 300, 0)});
+		JsonConfig.registerBlockFluidThirst("minecraft:water", 3, 0, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 300, 0)});
+		JsonConfig.registerBlockFluidThirst("minecraft:cauldron", 3, 0, new JsonEffectParameter[]{new JsonEffectParameter(LegendarySurvivalOverhaul.MOD_ID + ":thirst", 0.75f, 300, 0)});
+		JsonConfig.registerBlockFluidThirst("minecraft:cauldron", 0, 0, new JsonEffectParameter[]{}, new JsonPropertyValue("level", "0"));
+
 		JsonConfig.registerConsumableThirst("minecraft:melon_slice", 2, 1.0f);
 		JsonConfig.registerConsumableThirst("minecraft:apple", 2, 0.5f);
 		JsonConfig.registerConsumableThirst("minecraft:beetroot_soup", 4, 2.0f);
@@ -218,21 +225,25 @@ public class JsonConfigRegistration
 	
 	public static void clearContainers()
 	{
+		JsonConfig.dimensionTemperatures.clear();
 		JsonConfig.itemTemperatures.clear();
 		JsonConfig.blockFluidTemperatures.clear();
 		JsonConfig.biomeOverrides.clear();
 		JsonConfig.consumableTemperature.clear();
 		JsonConfig.fuelItems.clear();
+		JsonConfig.blockFluidThirst.clear();
 		JsonConfig.consumableThirst.clear();
 		JsonConfig.damageSourceBodyParts.clear();
 	}
 
 	public static void writeAllToJson(File jsonDir) {
-		manuallyWriteToJson(JsonFileName.ITEM, JsonConfig.itemTemperatures, jsonDir);
-		manuallyWriteToJson(JsonFileName.BLOCK, JsonConfig.blockFluidTemperatures, jsonDir);
-		manuallyWriteToJson(JsonFileName.BIOME, JsonConfig.biomeOverrides, jsonDir);
+		manuallyWriteToJson(JsonFileName.DIMENSION_TEMP, JsonConfig.dimensionTemperatures, jsonDir);
+		manuallyWriteToJson(JsonFileName.ITEM_TEMP, JsonConfig.itemTemperatures, jsonDir);
+		manuallyWriteToJson(JsonFileName.BLOCK_TEMP, JsonConfig.blockFluidTemperatures, jsonDir);
+		manuallyWriteToJson(JsonFileName.BIOME_TEMP, JsonConfig.biomeOverrides, jsonDir);
 		manuallyWriteToJson(JsonFileName.CONSUMABLE_TEMP, JsonConfig.consumableTemperature, jsonDir);
 		manuallyWriteToJson(JsonFileName.FUEL, JsonConfig.fuelItems, jsonDir);
+		manuallyWriteToJson(JsonFileName.BLOCK_THIRST, JsonConfig.blockFluidThirst, jsonDir);
 		manuallyWriteToJson(JsonFileName.CONSUMABLE_THIRST, JsonConfig.consumableThirst, jsonDir);
 		manuallyWriteToJson(JsonFileName.DAMAGE_SOURCE_BODY_PARTS, JsonConfig.damageSourceBodyParts, jsonDir);
 	}
@@ -240,7 +251,7 @@ public class JsonConfigRegistration
 	public static void processAllJson(File jsonDir)
 	{
 		// Temperature
-		Map<String, JsonTemperature> jsonItemTemperatures = processJson(JsonFileName.ITEM, jsonDir);
+		Map<String, JsonTemperature> jsonItemTemperatures = processJson(JsonFileName.ITEM_TEMP, jsonDir);
 
 		if (jsonItemTemperatures != null)
 		{
@@ -253,7 +264,7 @@ public class JsonConfigRegistration
 			}
 		}
 		
-		Map<String, List<JsonBlockFluidTemperature>> jsonBlockTemperatures = processJson(JsonFileName.BLOCK, jsonDir);
+		Map<String, List<JsonBlockFluidTemperature>> jsonBlockTemperatures = processJson(JsonFileName.BLOCK_TEMP, jsonDir);
 		
 		if (jsonBlockTemperatures != null)
 		{
@@ -264,12 +275,12 @@ public class JsonConfigRegistration
 			{
 				for (JsonBlockFluidTemperature propTemp : entry.getValue())
 				{
-					JsonConfig.registerBlockFluidTemperature(entry.getKey(), propTemp.temperature, propTemp.getAsPropertyArray());
+					JsonConfig.registerBlockFluidTemperature(entry.getKey(), propTemp.temperature, propTemp.getPropertyArray());
 				}
 			}
 		}
 
-		Map<String, JsonTemperature> jsonEntityTemperatures = processJson(JsonFileName.ENTITY, jsonDir);
+		Map<String, JsonTemperature> jsonEntityTemperatures = processJson(JsonFileName.ENTITY_TEMP, jsonDir);
 
 		if (jsonEntityTemperatures != null)
 		{
@@ -282,7 +293,7 @@ public class JsonConfigRegistration
 			}
 		}
 		
-		Map<String, JsonBiomeIdentity> jsonBiomeIdentities = processJson(JsonFileName.BIOME, jsonDir);
+		Map<String, JsonBiomeIdentity> jsonBiomeIdentities = processJson(JsonFileName.BIOME_TEMP, jsonDir);
 		
 		if (jsonBiomeIdentities != null)
 		{
@@ -324,6 +335,23 @@ public class JsonConfigRegistration
 		}
 
 		// Thirst
+
+		Map<String, List<JsonBlockFluidThirst>> jsonBlockFluidThirsts = processJson(JsonFileName.BLOCK_THIRST, jsonDir);
+
+		if (jsonBlockFluidThirsts != null)
+		{
+			// remove default block config
+			JsonConfig.blockFluidThirst.clear();
+			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonBlockFluidThirsts.size() + " block/fluid thirst values from JSON");
+			for (Map.Entry<String, List<JsonBlockFluidThirst>> entry : jsonBlockFluidThirsts.entrySet())
+			{
+				for (JsonBlockFluidThirst propThirst : entry.getValue())
+				{
+					JsonConfig.registerBlockFluidThirst(entry.getKey(), propThirst.hydration, propThirst.saturation, propThirst.effects.toArray(new JsonEffectParameter[0]), propThirst.getPropertyArray());
+				}
+			}
+		}
+
 		Map<String, List<JsonConsumableThirst>> jsonConsumableThirsts = processJson(JsonFileName.CONSUMABLE_THIRST, jsonDir);
 
 		if (jsonConsumableThirsts != null)

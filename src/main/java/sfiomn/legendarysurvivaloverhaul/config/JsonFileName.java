@@ -2,13 +2,14 @@ package sfiomn.legendarysurvivaloverhaul.config;
 
 public enum JsonFileName
 {
-	DIMENSION("dimensionTemperatures.json"),
-	ITEM("itemTemperatures.json"),
-	BLOCK("blockTemperatures.json"),
-	ENTITY("entityTemperatures.json"),
-	BIOME("biomeOverrides.json"),
+	DIMENSION_TEMP("dimensionTemperatures.json"),
+	ITEM_TEMP("itemTemperatures.json"),
+	BLOCK_TEMP("blockTemperatures.json"),
+	ENTITY_TEMP("entityTemperatures.json"),
+	BIOME_TEMP("biomeOverrides.json"),
 	CONSUMABLE_TEMP("temperatureConsumables.json"),
 	FUEL("fuelItems.json"),
+	BLOCK_THIRST("blockThirst.json"),
 	CONSUMABLE_THIRST("thirstConsumables.json"),
 	CONSUMABLE_HEAL("healingConsumables.json"),
 	DAMAGE_SOURCE_BODY_PARTS("damageSourceBodyParts.json");;
