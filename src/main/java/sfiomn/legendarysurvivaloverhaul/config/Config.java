@@ -171,28 +171,6 @@ public class Config
 		public final ForgeConfigSpec.BooleanValue allowOverridePurifiedWater;
 		public final ForgeConfigSpec.IntValue hydrationLava;
 		public final ForgeConfigSpec.DoubleValue saturationLava;
-		public final ForgeConfigSpec.BooleanValue drinkFromRain;
-		public final ForgeConfigSpec.IntValue hydrationRain;
-		public final ForgeConfigSpec.DoubleValue saturationRain;
-		public final ForgeConfigSpec.DoubleValue effectChanceRain;
-		public final ForgeConfigSpec.ConfigValue<String> effectRain;
-		public final ForgeConfigSpec.IntValue effectDurationRain;
-		public final ForgeConfigSpec.BooleanValue drinkFromWater;
-		public final ForgeConfigSpec.IntValue hydrationWater;
-		public final ForgeConfigSpec.DoubleValue saturationWater;
-		public final ForgeConfigSpec.DoubleValue effectChanceWater;
-		public final ForgeConfigSpec.ConfigValue<String> effectWater;
-		public final ForgeConfigSpec.IntValue effectDurationWater;
-		public final ForgeConfigSpec.IntValue hydrationPotion;
-		public final ForgeConfigSpec.DoubleValue saturationPotion;
-		public final ForgeConfigSpec.DoubleValue effectChancePotion;
-		public final ForgeConfigSpec.ConfigValue<String> effectPotion;
-		public final ForgeConfigSpec.IntValue effectDurationPotion;
-		public final ForgeConfigSpec.IntValue hydrationPurified;
-		public final ForgeConfigSpec.DoubleValue saturationPurified;
-		public final ForgeConfigSpec.DoubleValue effectChancePurified;
-		public final ForgeConfigSpec.ConfigValue<String> effectPurified;
-		public final ForgeConfigSpec.IntValue effectDurationPurified;
 		public final ForgeConfigSpec.BooleanValue glassBottleLootAfterDrink;
 		public final ForgeConfigSpec.BooleanValue thirstEnabledIfVampire;
 
@@ -396,11 +374,11 @@ public class Config
 			undergroundEffectStartDistanceToWS = builder
 					.comment(" Distance to the World Surface where underground effect will start to be applied.",
 							" Smaller distance, no underground effect are applied.")
-					.defineInRange("Start Distance To World Surface For Underground Effect", 10, 0, 256);
+					.defineInRange("Start Distance To World Surface For Underground Effect", 10, 0, 400);
 			undergroundEffectEndDistanceToWS = builder
 					.comment(" Distance to the World Surface where underground effect will be maximal.",
 							" Bigger distance, the underground effect is maximal. Between the Start and End Distance, the increase of underground effect is linear.")
-					.defineInRange("End Distance To World Surface For Underground Effect", 16, 0, 256);
+					.defineInRange("End Distance To World Surface For Underground Effect", 16, 0, 400);
 			builder.pop();
 
 			builder.push("weather");
@@ -608,80 +586,6 @@ public class Config
 					.comment(" Amount of saturation recovered when drinking from lava.")
 					.defineInRange("Saturation", 4.0, 0, 20);
 			builder.pop();
-			builder.push("rain");
-			drinkFromRain = builder
-					.comment(" Whether players can drink from rain or not.")
-					.define("Drink From Rain", true);
-			hydrationRain = builder
-					.comment(" Amount of hydration recovered when drinking from the rain.")
-					.defineInRange("Hydration", 1, 0, 20);
-			saturationRain = builder
-					.comment(" Amount of saturation recovered when drinking from the rain.")
-					.defineInRange("Saturation", 0, 0, 20.0d);
-			effectChanceRain = builder
-					.comment(" Chance of getting an effect while drinking from the rain.")
-					.defineInRange("Effect Chance", 0, 0, 1.0d);
-			effectRain = builder
-					.comment(" Possible effect given while drinking from the rain.")
-					.define("Effect", "");
-			effectDurationRain = builder
-					.comment(" Duration in ticks of the possible effect given while drinking from the rain.")
-					.defineInRange("Effect Duration", 0, 0, 100000);
-			builder.pop();
-			builder.push("water");
-			drinkFromWater = builder
-					.comment(" Whether players can drink from water (or flowing water) block or not.")
-					.define("Drink From Water", true);
-			hydrationWater = builder
-					.comment(" Amount of hydration recovered while drinking water.")
-					.defineInRange("Hydration", 3, 0, 20);
-			saturationWater = builder
-					.comment(" Amount of saturation recovered while drinking water.")
-					.defineInRange("Saturation", 0, 0, 20.0d);
-			effectChanceWater = builder
-					.comment(" Chance of getting an effect while drinking water.")
-					.defineInRange("Effect Chance", 0.75d, 0, 1.0d);
-			effectWater = builder
-					.comment(" Possible effect given while drinking water.")
-					.define("Effect", LegendarySurvivalOverhaul.MOD_ID + ":thirst");
-			effectDurationWater = builder
-					.comment(" Duration in ticks of the possible effect given while drinking water.")
-					.defineInRange("Effect Duration", 300, 0, 100000);
-			builder.pop();
-			builder.comment(" Amount recovered by potions with effects").push("potion");
-			hydrationPotion = builder
-					.comment(" Amount of hydration recovered while drinking a potion.")
-					.defineInRange("Hydration", 3, 0, 20);
-			saturationPotion = builder
-					.comment(" Amount of saturation recovered while drinking a potion.")
-					.defineInRange("Saturation", 0.3d, 0, 20.0d);
-			effectChancePotion = builder
-					.comment(" Chance of getting an effect while drinking a potion.")
-					.defineInRange("Effect Chance", 0, 0, 1.0d);
-			effectPotion = builder
-					.comment(" Possible effect given while drinking a potion.")
-					.define("Effect", "");
-			effectDurationPotion = builder
-					.comment(" Duration in ticks of the possible effect given while drinking a potion.")
-					.defineInRange("Effect Duration", 0, 0, 100000);
-			builder.pop();
-			builder.comment(" Default value for purified water").push("purified-water");
-			hydrationPurified = builder
-					.comment(" Amount of hydration recovered while drinking purified water.")
-					.defineInRange("Hydration", 6, 0, 20);
-			saturationPurified = builder
-					.comment(" Amount of saturation recovered while drinking purified water.")
-					.defineInRange("Saturation", 1.5d, 0, 20.0d);
-			effectChancePurified = builder
-					.comment(" Chance of getting an effect while drinking purified water.")
-					.defineInRange("Effect Chance", 0, 0, 1.0d);
-			effectPurified = builder
-					.comment(" Possible effect given while drinking purified water.")
-					.define("Effect", "");
-			effectDurationPurified = builder
-					.comment(" Duration in ticks of the possible effect given while drinking purified water.")
-					.defineInRange("Effect Duration", 0, 0, 100000);
-			builder.pop();
 			builder.push("juices");
 			glassBottleLootAfterDrink = builder
 					.comment(" Whether the player retrieves a glass bottle after drinking a juice.")
@@ -847,6 +751,8 @@ public class Config
 		public final ForgeConfigSpec.EnumValue<TemperatureDisplayEnum> temperatureDisplayMode;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetX;
 		public final ForgeConfigSpec.IntValue temperatureDisplayOffsetY;
+		public final ForgeConfigSpec.IntValue bodyTemperatureDisplayOffsetX;
+		public final ForgeConfigSpec.IntValue bodyTemperatureDisplayOffsetY;
 		public final ForgeConfigSpec.BooleanValue heatTemperatureOverlay;
 		public final ForgeConfigSpec.BooleanValue coldTemperatureOverlay;
 		public final ForgeConfigSpec.BooleanValue breathingSoundEnabled;
@@ -860,8 +766,8 @@ public class Config
 		public final ForgeConfigSpec.IntValue bodyDamageIndicatorOffsetY;
 		public final ForgeConfigSpec.BooleanValue alwaysShowBodyDamageIndicator;
 
-		public final ForgeConfigSpec.IntValue seasonCardsOffsetX;
-		public final ForgeConfigSpec.IntValue seasonCardsOffsetY;
+		public final ForgeConfigSpec.IntValue seasonCardsDisplayOffsetX;
+		public final ForgeConfigSpec.IntValue seasonCardsDisplayOffsetY;
 		public final ForgeConfigSpec.IntValue seasonCardsSpawnDimensionDelayInTicks;
 		public final ForgeConfigSpec.IntValue seasonCardsDisplayTimeInTicks;
 		public final ForgeConfigSpec.IntValue seasonCardsFadeInInTicks;
@@ -902,6 +808,12 @@ public class Config
 					.defineInRange("Temperature Display X Offset", 0, -10000, 10000);
 			temperatureDisplayOffsetY = builder
 					.defineInRange("Temperature Display Y Offset", 0, -10000, 10000);
+			bodyTemperatureDisplayOffsetX = builder
+					.comment(" The X and Y offset of the body temperature, shown when thermometer is equipped as a bauble (needs the curios mod).",
+							" Set both to 0 for no offset.")
+					.defineInRange("Body Temperature Display X Offset", 0, -10000, 10000);
+			bodyTemperatureDisplayOffsetY = builder
+					.defineInRange("Body Temperature Display Y Offset", 0, -10000, 10000);
 			heatTemperatureOverlay = builder
 					.comment(" If enabled, player will see a foggy effect when the heat is high.")
 					.define("Heat Temperature Overlay", true);
@@ -939,11 +851,11 @@ public class Config
 			builder.pop();
 
 			builder.push("season-cards");
-			seasonCardsOffsetX = builder
+			seasonCardsDisplayOffsetX = builder
 					.comment(" The X and Y offset of the season cards. Set both to 0 for no offset.", " By default, render first top quarter vertically and centered horizontally.")
-					.defineInRange("Season Cards X Offset", 0, -10000, 10000);
-			seasonCardsOffsetY = builder
-					.defineInRange("Season Cards Y Offset", 0, -10000, 10000);
+					.defineInRange("Season Cards Display X Offset", 0, -10000, 10000);
+			seasonCardsDisplayOffsetY = builder
+					.defineInRange("Season Cards Display Y Offset", 0, -10000, 10000);
 			seasonCardsSpawnDimensionDelayInTicks = builder
 					.comment(" The delay before rendering the season card at first player spawn or player dimension change.")
 					.defineInRange("Season Cards Delay In Ticks", 80, 0, Integer.MAX_VALUE);
@@ -1097,28 +1009,6 @@ public class Config
 		public static boolean allowOverridePurifiedWater;
 		public static int hydrationLava;
 		public static double saturationLava;
-		public static boolean drinkFromRain;
-		public static int hydrationRain;
-		public static double saturationRain;
-		public static double effectChanceRain;
-		public static String effectRain;
-		public static int effectDurationRain;
-		public static boolean drinkFromWater;
-		public static int hydrationWater;
-		public static double saturationWater;
-		public static double effectChanceWater;
-		public static String effectWater;
-		public static int effectDurationWater;
-		public static int hydrationPotion;
-		public static double saturationPotion;
-		public static double effectChancePotion;
-		public static String effectPotion;
-		public static int effectDurationPotion;
-		public static int hydrationPurified;
-		public static double saturationPurified;
-		public static double effectChancePurified;
-		public static String effectPurified;
-		public static int effectDurationPurified;
 		public static boolean glassBottleLootAfterDrink;
 		public static boolean thirstEnabledIfVampire;
 
@@ -1182,6 +1072,8 @@ public class Config
 		public static TemperatureDisplayEnum temperatureDisplayMode;
 		public static int temperatureDisplayOffsetX;
 		public static int temperatureDisplayOffsetY;
+		public static int bodyTemperatureDisplayOffsetX;
+		public static int bodyTemperatureDisplayOffsetY;
 		public static boolean heatTemperatureOverlay;
 		public static boolean coldTemperatureOverlay;
 		public static boolean breathingSoundEnabled;
@@ -1191,8 +1083,8 @@ public class Config
 		public static boolean foodSaturationDisplayed;
 		public static boolean showVanillaBarAnimationOverlay;
 
-		public static int seasonCardsOffsetX;
-		public static int seasonCardsOffsetY;
+		public static int seasonCardsDisplayOffsetX;
+		public static int seasonCardsDisplayOffsetY;
 		public static int seasonCardsSpawnDimensionDelayInTicks;
 		public static int seasonCardsDisplayTimeInTicks;
 		public static int seasonCardsFadeInInTicks;
@@ -1329,28 +1221,6 @@ public class Config
 				hydrationLava = COMMON.hydrationLava.get();
 				saturationLava = COMMON.saturationLava.get();
 
-				drinkFromRain = COMMON.drinkFromRain.get();
-				hydrationRain = COMMON.hydrationRain.get();
-				saturationRain = COMMON.saturationRain.get();
-				effectChanceRain = COMMON.effectChanceRain.get();
-				effectRain = COMMON.effectRain.get();
-				effectDurationRain = COMMON.effectDurationRain.get();
-				drinkFromWater = COMMON.drinkFromWater.get();
-				hydrationWater = COMMON.hydrationWater.get();
-				saturationWater = COMMON.saturationWater.get();
-				effectChanceWater = COMMON.effectChanceWater.get();
-				effectWater = COMMON.effectWater.get();
-				effectDurationWater = COMMON.effectDurationWater.get();
-				hydrationPotion = COMMON.hydrationPotion.get();
-				saturationPotion = COMMON.saturationPotion.get();
-				effectChancePotion = COMMON.effectChancePotion.get();
-				effectPotion = COMMON.effectPotion.get();
-				effectDurationPotion = COMMON.effectDurationPotion.get();
-				hydrationPurified = COMMON.hydrationPurified.get();
-				saturationPurified = COMMON.saturationPurified.get();
-				effectChancePurified = COMMON.effectChancePurified.get();
-				effectPurified = COMMON.effectPurified.get();
-				effectDurationPurified = COMMON.effectDurationPurified.get();
 				glassBottleLootAfterDrink = COMMON.glassBottleLootAfterDrink.get();
 
 				thirstEnabledIfVampire = COMMON.thirstEnabledIfVampire.get();
@@ -1420,6 +1290,8 @@ public class Config
 				temperatureDisplayMode = CLIENT.temperatureDisplayMode.get();
 				temperatureDisplayOffsetX = CLIENT.temperatureDisplayOffsetX.get();
 				temperatureDisplayOffsetY = CLIENT.temperatureDisplayOffsetY.get();
+				bodyTemperatureDisplayOffsetX = CLIENT.bodyTemperatureDisplayOffsetX.get();
+				bodyTemperatureDisplayOffsetY = CLIENT.bodyTemperatureDisplayOffsetY.get();
 				heatTemperatureOverlay = CLIENT.heatTemperatureOverlay.get();
 				coldTemperatureOverlay = CLIENT.coldTemperatureOverlay.get();
 				breathingSoundEnabled = CLIENT.breathingSoundEnabled.get();
@@ -1429,8 +1301,8 @@ public class Config
 				foodSaturationDisplayed = CLIENT.foodSaturationDisplayed.get();
 				showVanillaBarAnimationOverlay = CLIENT.showVanillaBarAnimationOverlay.get();
 
-				seasonCardsOffsetX = CLIENT.seasonCardsOffsetX.get();
-				seasonCardsOffsetY = CLIENT.seasonCardsOffsetY.get();
+				seasonCardsDisplayOffsetX = CLIENT.seasonCardsDisplayOffsetX.get();
+				seasonCardsDisplayOffsetY = CLIENT.seasonCardsDisplayOffsetY.get();
 				seasonCardsSpawnDimensionDelayInTicks = CLIENT.seasonCardsSpawnDimensionDelayInTicks.get();
 				seasonCardsDisplayTimeInTicks = CLIENT.seasonCardsDisplayTimeInTicks.get();
 				seasonCardsFadeInInTicks = CLIENT.seasonCardsFadeInInTicks.get();

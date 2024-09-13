@@ -2,31 +2,33 @@ package sfiomn.legendarysurvivaloverhaul.network.packets;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonBlockFluidThirst;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 
 import java.util.function.Supplier;
 
-public class MessageDrinkWater
+public class MessageDrinkBlockFluid
 {
     // SERVER side message
 
-    public MessageDrinkWater()
+    public MessageDrinkBlockFluid()
     {
     }
 
-    public static MessageDrinkWater decode(FriendlyByteBuf buffer)
+    public static MessageDrinkBlockFluid decode(FriendlyByteBuf buffer)
     {
-        return new MessageDrinkWater();
+        return new MessageDrinkBlockFluid();
     }
 
-    public static void encode(MessageDrinkWater message, FriendlyByteBuf buffer)
+    public static void encode(MessageDrinkBlockFluid message, FriendlyByteBuf buffer)
     {
     }
 
-    public static void handle(MessageDrinkWater message, Supplier<NetworkEvent.Context> supplier)
+    public static void handle(MessageDrinkBlockFluid message, Supplier<NetworkEvent.Context> supplier)
     {
         final NetworkEvent.Context context = supplier.get();
         if (context.getDirection() == NetworkDirection.PLAY_TO_SERVER) {
@@ -39,11 +41,11 @@ public class MessageDrinkWater
     }
 
     public static void DrinkWaterOnServer(ServerPlayer player) {
-        HydrationEnum traceWater = ThirstUtil.traceWater(player);
+        JsonBlockFluidThirst jsonBlockFluidThirst = ThirstUtil.getJsonBlockFluidThirstLookedAt(player, player.getAttributeValue(ForgeMod.BLOCK_REACH.get()) / 2);
 
-        if (traceWater == null)
+        if (jsonBlockFluidThirst == null)
             return;
 
-        ThirstUtil.takeDrink(player, traceWater);
+        ThirstUtil.takeDrink(player, jsonBlockFluidThirst.hydration, jsonBlockFluidThirst.saturation, jsonBlockFluidThirst.effects);
     }
 }

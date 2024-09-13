@@ -52,7 +52,7 @@ public class RenderBodyDamageGui
 	
 	public static void drawBodyDamage(GuiGraphics gui, BodyDamageCapability cap, int width, int height) {
 		int x = width / 2 + 92 + Config.Baked.bodyDamageIndicatorOffsetX;
-		int y = height - 34 + Config.Baked.bodyDamageIndicatorOffsetY;
+		int y = height - 33 + Config.Baked.bodyDamageIndicatorOffsetY;
 
 		for (BodyPartEnum bodyPart: BodyPartEnum.values()) {
 

@@ -27,7 +27,8 @@ public class TimeModifier extends ModifierBase
 
 		// Add + - timeModifier temperature value based on time of the day
 		float timeTemperature = (float) Math.sin ((time * Math.PI) / 12000.0f) * (float) Config.Baked.timeModifier;
-		
+
+		// Biome Multiplier will increase the diff between noon and midnight based on extremity of biome temp
 		float biomeMultiplier = 1.0f + (Math.abs(normalizeToPositiveNegative(getNormalizedTempForBiome(level, level.getBiome(pos).get()))) * ((float)Config.Baked.biomeTimeMultiplier - 1.0f));
 		timeTemperature *= biomeMultiplier;
 

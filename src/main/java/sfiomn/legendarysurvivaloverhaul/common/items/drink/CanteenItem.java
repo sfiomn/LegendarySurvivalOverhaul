@@ -11,9 +11,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonBlockFluidThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
@@ -53,10 +61,24 @@ public class CanteenItem extends DrinkItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        HydrationEnum hydrationEnum = ThirstUtil.traceWater(player);
+        HitResult positionLookedAt = player.pick(player.getAttributeValue(ForgeMod.BLOCK_REACH.get()) / 2, 0.0F, true);
+        FluidState fluidState = null;
+        BlockState blockState = null;
+        if (positionLookedAt.getType() == HitResult.Type.BLOCK) {
+            fluidState = level.getFluidState(((BlockHitResult) positionLookedAt).getBlockPos());
+            blockState = level.getBlockState(((BlockHitResult) positionLookedAt).getBlockPos());
+        }
+
         ItemStack itemstack = player.getItemInHand(hand);
-        if (canFill(itemstack) && hydrationEnum == HydrationEnum.NORMAL) {
-            level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
+        boolean isWater = false;
+        if (fluidState != null && (fluidState.is(Fluids.FLOWING_WATER) || fluidState.is(Fluids.WATER)))
+            isWater = true;
+        else if (blockState != null && blockState.is(Blocks.WATER_CAULDRON))
+            isWater = true;
+
+        if (canFill(itemstack) && isWater) {
+            player.swing(InteractionHand.MAIN_HAND);
+            player.playSound(SoundEvents.BOTTLE_FILL, 1.0f, 1.0f);
             this.fill(itemstack);
             return InteractionResultHolder.success(itemstack);
         }
@@ -76,15 +98,10 @@ public class CanteenItem extends DrinkItem {
             // Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over
             ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(this);
             if (registryName != null)
-                jsonConsumableThirst = ThirstUtil.getThirstJsonConfig(registryName, stack);
+                jsonConsumableThirst = ThirstUtil.getConsumableThirstJsonConfig(registryName, stack);
 
             if (jsonConsumableThirst != null)
                 ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effects);
-            else {
-                HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
-                if (hydrationEnum != null)
-                    ThirstUtil.takeDrink(player, hydrationEnum);
-            }
 
             runSecondaryEffect(player, stack);
         }

@@ -212,7 +212,7 @@ public class TooltipHandler
 
 		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
 		assert itemRegistryName != null;
-		JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getThirstJsonConfig(itemRegistryName, stack);
+		JsonConsumableThirst jsonConsumableThirst = ThirstUtil.getConsumableThirstJsonConfig(itemRegistryName, stack);
 
 		HydrationTooltipComponent hydrationTooltipComponent = null;
 		List<MutableComponent> hydrationEffectComponents = new ArrayList<>();
@@ -224,12 +224,6 @@ public class TooltipHandler
 					hydrationEffectComponents.add(getHydrationEffectTooltip(effect.chance, effect.name, effect.amplifier, effect.duration));
 				}
 			}
-		} else {
-			HydrationEnum hydrationEnum = ThirstUtil.getHydrationEnumTag(stack);
-			if (hydrationEnum != null) {
-				hydrationTooltipComponent = new HydrationTooltipComponent(hydrationEnum);
-				hydrationEffectComponents.add(getHydrationEffectTooltip(hydrationEnum));
-			}
 		}
 
 		if (hydrationTooltipComponent != null) {
@@ -240,10 +234,6 @@ public class TooltipHandler
 			if (hydrationEffectComponent != null)
 				tooltips.add(Either.left(hydrationEffectComponent));
 		}
-	}
-
-	private static MutableComponent getHydrationEffectTooltip(HydrationEnum hydrationEnum) {
-		return getHydrationEffectTooltip(hydrationEnum.getEffectChance(), hydrationEnum.getEffectName(), 0, hydrationEnum.getEffectDuration());
 	}
 
 	private static MutableComponent getHydrationEffectTooltip(double effectChance, String effectName, int amplifier, int duration) {

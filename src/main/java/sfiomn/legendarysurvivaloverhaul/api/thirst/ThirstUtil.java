@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonBlockFluidThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonEffectParameter;
 
@@ -12,20 +13,6 @@ import java.util.List;
 public class ThirstUtil
 {
 	public static IThirstUtil internal;
-
-	/**
-	 * Ray traces the block a player is looking at and returns it as a ThirstEnumBlockPos
-	 * <br>
-	 * Returns null if there is no trace result
-	 * @param player
-	 * @return ThirstEnumBlockPos trace result
-	 *
-	 */
-	@Nullable
-	public static HydrationEnum traceWater(Player player)
-	{
-		return internal.traceWater(player);
-	}
 
 	/**
 	 * Player takes a drink with the specified values and a list of possible effects
@@ -51,16 +38,6 @@ public class ThirstUtil
 	}
 
 	/**
-	 * Player takes a drink with the values of the HydrationEnum
-	 * @param player
-	 * @param hydrationEnum
-	 */
-	public static void takeDrink(Player player, HydrationEnum hydrationEnum)
-	{
-		internal.takeDrink(player, hydrationEnum);
-	}
-
-	/**
 	 * Add thirst exhaustion responsible for the thirst depletion
 	 * @param player
 	 * @param exhaustion
@@ -71,13 +48,12 @@ public class ThirstUtil
 	}
 
 	/**
-	 * Get hydration enum the player is looking at, with the given maximum distance
+	 * Get block or fluid json config that the player is looking at, with the given maximum distance
 	 * @param player
 	 * @param finalDistance
 	 */
-
-	public HydrationEnum getHydrationEnumLookedAt(Player player, double finalDistance) {
-		return internal.getHydrationEnumLookedAt(player, finalDistance);
+	public static JsonBlockFluidThirst getJsonBlockFluidThirstLookedAt(Player player, double finalDistance) {
+		return internal.getJsonBlockFluidThirstLookedAt(player, finalDistance);
 	}
 
 	/**
@@ -145,8 +121,8 @@ public class ThirstUtil
      * @param itemRegistryName Item stack registry name
      * @param itemStack        Item stack
      */
-    public static JsonConsumableThirst getThirstJsonConfig(ResourceLocation itemRegistryName, ItemStack itemStack) {
-        return internal.getThirstJsonConfig(itemRegistryName, itemStack);
+    public static JsonConsumableThirst getConsumableThirstJsonConfig(ResourceLocation itemRegistryName, ItemStack itemStack) {
+        return internal.getConsumableThirstJsonConfig(itemRegistryName, itemStack);
     }
 
 	/**

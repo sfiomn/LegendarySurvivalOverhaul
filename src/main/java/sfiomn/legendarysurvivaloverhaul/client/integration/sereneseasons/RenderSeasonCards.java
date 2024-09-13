@@ -48,7 +48,7 @@ public class RenderSeasonCards {
 
             Minecraft.getInstance().getProfiler().push("season_card");
             RenderSystem.setShaderTexture(0, seasonCard);
-            RenderUtil.drawTexturedModelRectWithAlpha(guiGraphics.pose().last().pose(), x + Config.Baked.seasonCardsOffsetX, y + Config.Baked.seasonCardsOffsetY, 128, 128, 0, 0, 256, 256, fadeLevel);
+            RenderUtil.drawTexturedModelRectWithAlpha(guiGraphics.pose().last().pose(), x + Config.Baked.seasonCardsDisplayOffsetX, y + Config.Baked.seasonCardsDisplayOffsetY, 128, 128, 0, 0, 256, 256, fadeLevel);
             Minecraft.getInstance().getProfiler().pop();
         }
     };
@@ -138,6 +138,9 @@ public class RenderSeasonCards {
     }
 
     public static void init() {
+        seasonCard = null;
+        lastSeason = null;
+        lastTropicalSeason = null;
         lastDimension = null;
     }
 }

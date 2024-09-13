@@ -2,11 +2,9 @@ package sfiomn.legendarysurvivaloverhaul.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 public class SpreadPoint {
@@ -14,16 +12,18 @@ public class SpreadPoint {
     private final Direction originDirection;
     private final double spreadCapacity;
     private final double influenceDistance;
-    private final Level world;
+    private final Level level;
+    private final BlockState blockState;
     private boolean canSeeSky;
     private boolean isWater;
 
-    public SpreadPoint(BlockPos pos, Direction originDirection, double spreadCapacity, double influenceDistance, Level world) {
+    public SpreadPoint(BlockPos pos, Direction originDirection, double spreadCapacity, double influenceDistance, Level level) {
         this.pos = pos;
         this.originDirection = originDirection;
         this.spreadCapacity = spreadCapacity;
         this.influenceDistance = influenceDistance;
-        this.world = world;
+        this.level = level;
+        this.blockState = level.getBlockState(pos);
         this.canSeeSky = false;
         this.isWater = false;
     }
@@ -45,7 +45,7 @@ public class SpreadPoint {
     }
 
     public SpreadPoint spreadTo(BlockPos newBlockPos, Direction originDirection, float distance) {
-        return new SpreadPoint(newBlockPos, originDirection, this.spreadCapacity - (distance * consumptionMultiplier(originDirection)), this.influenceDistance + distance, world);
+        return new SpreadPoint(newBlockPos, originDirection, this.spreadCapacity - (distance * consumptionMultiplier(originDirection)), this.influenceDistance + distance, level);
     }
 
     public boolean isValidSpreadPoint(Direction originDirection) {
@@ -53,7 +53,6 @@ public class SpreadPoint {
         if (spreadCapacity <= 0) {
             return false;
         } else {
-            BlockState blockState = world.getBlockState(pos);
             if (blockState.isAir())
                 return true;
             if (blockState.is(Blocks.WATER)) {
@@ -61,12 +60,16 @@ public class SpreadPoint {
                 return true;
             }
 
-            return !blockState.isFaceSturdy(world, pos, originDirection.getOpposite());
+            return !blockState.isFaceSturdy(level, pos, originDirection.getOpposite());
         }
     }
 
+    public boolean isValidSpreadDirection(Direction direction) {
+        return !blockState.isFaceSturdy(level, pos, direction);
+    }
+
     public void setCanSeeSky() {
-        this.canSeeSky = world.dimensionType().hasCeiling() || world.canSeeSky(pos);
+        this.canSeeSky = level.dimensionType().hasCeiling() || level.canSeeSky(pos);
     }
 
     private double consumptionMultiplier(Direction originDirection) {

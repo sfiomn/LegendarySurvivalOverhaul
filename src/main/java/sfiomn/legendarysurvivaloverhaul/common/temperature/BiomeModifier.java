@@ -4,6 +4,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.common.integration.terrafirmacraft.TerraFirmaCraftUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -35,36 +36,46 @@ public class BiomeModifier extends ModifierBase
 			};
 		
 		float biomeAverage = 0f;
+		float undergroundAverage = 0f;
 		
 		long worldTime = level.getLevelData().getDayTime() % 24000;
 		double drynessTimeMultiplier = 1;
-		if (worldTime > 12000 && !level.dimensionType().hasCeiling() && Config.Baked.biomeDrynessMultiplier > 0)
+		double drynessAverageMultiplier = 1;
+		if (worldTime > 12000 && !level.dimensionType().hasCeiling() && Config.Baked.biomeDrynessMultiplier > 0) {
 			drynessTimeMultiplier = 1 + Math.sin(worldTime * Math.PI / 12000) * Config.Baked.biomeDrynessMultiplier;
+			drynessAverageMultiplier = (1 + Config.Baked.biomeDrynessMultiplier) / 2.0f;
+		}
 
 		for (Vec3i offset : posOffsets)
 		{
 			Biome biome = level.getBiome(pos.offset(offset)).get();
 			float humidity = getHumidityForBiome(level, biome);
 			float biomeTemperature = getNormalizedTempForBiome(level, biome);
-			
+
 			if (drynessTimeMultiplier < 1 && humidity < 0.2f && biomeTemperature > 0.80f)
 			{
-				// calculate average temp between day and night and apply underground biome multiplier
-				double targetUndergroundTemperature = Config.Baked.undergroundBiomeTemperatureMultiplier * biomeTemperature * (1 + Config.Baked.biomeDrynessMultiplier) / 2;
+				// calculated average temp between day and night with the dryness effect (makes nights colder)
+				undergroundAverage += (float) (drynessAverageMultiplier * biomeTemperature);
 				// Deserts are cold at night since heat isn't kept by moisture in the air
-				biomeAverage += applyUndergroundEffect((float) (drynessTimeMultiplier * biomeTemperature), level, pos, (float) targetUndergroundTemperature);
+				biomeAverage += (float) (drynessTimeMultiplier * biomeTemperature);
 			}
 			else
 			{
-				biomeAverage += applyUndergroundEffect(biomeTemperature, level, pos, (float) Config.Baked.undergroundBiomeTemperatureMultiplier * biomeTemperature);
+				undergroundAverage += biomeTemperature;
+				biomeAverage += biomeTemperature;
 			}
 		}
 		
 		biomeAverage /= (float)(posOffsets.length);
+		undergroundAverage /= (float)(posOffsets.length);
 
 		// LegendarySurvivalOverhaul.LOGGER.debug("Biome temp influence : " + normalizeToPositiveNegative(biomeAverage) * ((float) Config.Baked.biomeTemperatureMultiplier));
 		// float tempInfl = applyUndergroundEffect(normalizeToPositiveNegative(biomeAverage) * ((float) Config.Baked.biomeTemperatureMultiplier), world, pos);
 		// LegendarySurvivalOverhaul.LOGGER.debug("Biome temp influence after underground : " + tempInfl);
-		return normalizeToPositiveNegative(biomeAverage) * ((float) Config.Baked.biomeTemperatureMultiplier);
+		return applyUndergroundEffect(
+				(float) (normalizeToPositiveNegative(biomeAverage) * Config.Baked.biomeTemperatureMultiplier),
+				level,
+				pos,
+                (float) (normalizeToPositiveNegative(undergroundAverage) * Config.Baked.biomeTemperatureMultiplier * Config.Baked.undergroundBiomeTemperatureMultiplier));
 	}
 }

@@ -6,9 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.Heightmap;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
-import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
 
@@ -97,17 +95,7 @@ public abstract class ModifierBase {
 			return temperature;
 		}
 
-		int surfaceDistance = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos).getY() - pos.getY();
-
-		if (surfaceDistance < Config.Baked.undergroundEffectStartDistanceToWS) {
-			return temperature;
-		}
-
-		if (surfaceDistance >= Config.Baked.undergroundEffectEndDistanceToWS) {
-			return undergroundTemperature;
-		}
-
-		return Mth.lerp((surfaceDistance - Config.Baked.undergroundEffectStartDistanceToWS) / (float) (Config.Baked.undergroundEffectEndDistanceToWS - Config.Baked.undergroundEffectStartDistanceToWS), temperature, undergroundTemperature);
+		return Mth.lerp(WorldUtil.getUndergroundEffectAtPos(level, pos), temperature, undergroundTemperature);
 	}
 
 	protected float getHumidityForBiome(Level world, Biome biome)

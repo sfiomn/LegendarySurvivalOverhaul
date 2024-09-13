@@ -32,7 +32,6 @@ public class TemperatureCapability implements ITemperatureCapability
 	private float targetTemp;
 	private boolean manualDirty;
 	private int packetTimer;
-	private int soundTriggerTick;
 	
 	public TemperatureCapability() 
 	{
@@ -48,7 +47,6 @@ public class TemperatureCapability implements ITemperatureCapability
 		this.targetTemp = 0;
 		this.manualDirty = false;
 		this.packetTimer = 0;
-		this.soundTriggerTick = 0;
 	}
 	
 	@Override
@@ -114,9 +112,6 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 
 		addTemperatureTickTimer(1);
-
-		if (this.soundTriggerTick > 0)
-			this.soundTriggerTick--;
 		
 		if (getTemperatureTickTimer() >= Config.Baked.tempTickTime) {
 			setTemperatureTickTimer(0);

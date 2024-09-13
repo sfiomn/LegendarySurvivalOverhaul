@@ -16,13 +16,19 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public final class WorldUtil
 {
+	private static Pair<BlockPos, Float> undergroundEffect = new ImmutablePair<>(new BlockPos(0, 0, 0), 0f);
+
 	private WorldUtil() {}
 	
 	public static BlockPos getSidedBlockPos(Level world, Entity entity)
@@ -80,6 +86,41 @@ public final class WorldUtil
 
 	public static float toFahrenheit(float temperature) {
 		return 32 + (temperature * 1.8f);
+	}
+
+	public static float getUndergroundEffectAtPos(Level level, BlockPos pos) {
+		if (!WorldUtil.undergroundEffect.getKey().toShortString().equals(pos.toShortString())) {
+			float averageDepthUnderground = 0;
+			Vec3i[] posOffsets =
+					{
+							new Vec3i(0, 0, 0),
+							new Vec3i(10, 0, 0),
+							new Vec3i(-10, 0, 0),
+							new Vec3i(0, 0, 10),
+							new Vec3i(0, 0, -10),
+							new Vec3i(7, 0, 7),
+							new Vec3i(7, 0, -7),
+							new Vec3i(-7, 0, 7),
+							new Vec3i(-7, 0, -7)
+					};
+
+			for (Vec3i offset: posOffsets) {
+				BlockPos posOffset = pos.offset(offset);
+				int surfaceDistance = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, posOffset).getY() - posOffset.getY();
+
+				if (surfaceDistance < Config.Baked.undergroundEffectStartDistanceToWS) {
+					continue;
+				}
+
+				if (surfaceDistance >= Config.Baked.undergroundEffectEndDistanceToWS) {
+					averageDepthUnderground += 1;
+				} else {
+					averageDepthUnderground += (surfaceDistance - Config.Baked.undergroundEffectStartDistanceToWS) / (float) (Config.Baked.undergroundEffectEndDistanceToWS - Config.Baked.undergroundEffectStartDistanceToWS);
+				}
+			}
+			WorldUtil.undergroundEffect = new ImmutablePair<>(pos, averageDepthUnderground / posOffsets.length);
+		}
+		return WorldUtil.undergroundEffect.getValue();
 	}
 
 	public static Entity getEntityLookedAt(Player player, double finalDistance) {
