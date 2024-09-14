@@ -16,6 +16,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class CuriosItemTagProvider extends ItemTagsProvider {
     public static final TagKey<Item> BELT_TAG = TagKey.create(Registries.ITEM, new ResourceLocation("curios", "belt"));
+    public static final TagKey<Item> NECKLACE_TAG = TagKey.create(Registries.ITEM, new ResourceLocation("curios", "necklace"));
 
     public CuriosItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> p_275322_, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, p_275322_, "curios", existingFileHelper);
@@ -24,7 +25,8 @@ public class CuriosItemTagProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(BELT_TAG)
-                .add(ItemRegistry.THERMOMETER.get())
+                .add(ItemRegistry.THERMOMETER.get());
+        this.tag(NECKLACE_TAG)
                 .add(ItemRegistry.NETHER_CHALICE.get());
     }
 }

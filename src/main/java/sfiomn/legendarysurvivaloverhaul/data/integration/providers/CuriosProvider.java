@@ -17,7 +17,9 @@ public class CuriosProvider extends CuriosDataProvider {
     @Override
     public void generate(HolderLookup.Provider provider, ExistingFileHelper existingFileHelper) {
         String beltSlotId = "belt";
+        String necklaceSlotId = "necklace";
         this.createSlot(beltSlotId).icon(new ResourceLocation("curios:slot/empty_belt_slot"));
-        this.createEntities("player").addPlayer().addSlots(beltSlotId);
+        this.createSlot(necklaceSlotId).icon(new ResourceLocation("curios:slot/empty_necklace_slot"));
+        this.createEntities("player").addPlayer().addSlots(beltSlotId, necklaceSlotId);
     }
 }

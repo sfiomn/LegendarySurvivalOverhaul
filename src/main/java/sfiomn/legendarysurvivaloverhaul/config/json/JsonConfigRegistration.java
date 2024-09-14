@@ -99,6 +99,7 @@ public class JsonConfigRegistration
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_helmet", -1.5f);
 
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":nether_chalice", 2f);
+		JsonConfig.registerItemTemperature("minecraft:lava_bucket", 6f);
 
 		JsonConfig.registerItemTemperature("minecraft:leather_boots", 1.0f);
 		JsonConfig.registerItemTemperature("minecraft:leather_leggings", 1.0f);

@@ -266,7 +266,7 @@ public class RenderTemperatureGui
 				BODY_TEMPERATURE_FRAME_TEXTURE_HEIGHT);
 
 		if (Config.Baked.renderTemperatureInFahrenheit) {
-			bodyTemperature = WorldUtil.toFahrenheit(bodyTemperature);
+			bodyTemperature = Math.min(WorldUtil.toFahrenheit(bodyTemperature), 99.9f);
 		}
 		String bodyTemperatureString = Float.toString(MathUtil.round(bodyTemperature, 1));
 
