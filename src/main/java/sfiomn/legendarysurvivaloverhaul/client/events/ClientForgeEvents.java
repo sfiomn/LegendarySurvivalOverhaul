@@ -245,8 +245,7 @@ public class ClientForgeEvents {
         }
     }
 
-    private static boolean shouldApplyThirst(PlayerEntity player)
-    {
+    private static boolean shouldApplyThirst(PlayerEntity player) {
         return Config.Baked.thirstEnabled && ThirstUtil.isThirstActive(player);
     }
 }

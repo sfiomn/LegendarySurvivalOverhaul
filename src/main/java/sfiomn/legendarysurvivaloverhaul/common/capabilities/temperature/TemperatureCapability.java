@@ -118,7 +118,7 @@ public class TemperatureCapability implements ITemperatureCapability
 		if (this.soundTriggerTick > 0)
 			this.soundTriggerTick--;
 		
-		if (getTemperatureTickTimer() >= Config.Baked.tickRate) {
+		if (getTemperatureTickTimer() >= Config.Baked.tempTickTime) {
 			setTemperatureTickTimer(0);
 
 			float destinationTemp = targetTemp;

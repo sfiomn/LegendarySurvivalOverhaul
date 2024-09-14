@@ -160,9 +160,10 @@ public class LegendarySurvivalOverhaul
 		
 		if (sereneSeasonsLoaded)
 			LOGGER.debug("Serene Seasons is loaded, enabling compatibility");
-		if (curiosLoaded)
+		if (curiosLoaded) {
 			LOGGER.debug("Curios is loaded, enabling compatibility");
 			forgeBus.register(CuriosEvents.class);
+		}
 		if (vampirismLoaded) {
 			LOGGER.debug("Vampirism is loaded, enabling compatibility");
 			forgeBus.register(VampirismEvents.class);
@@ -313,9 +314,11 @@ public class LegendarySurvivalOverhaul
 
 	private void enqueueIMC(final InterModEnqueueEvent event)
 	{
-		event.enqueueWork(() ->
-		{   InterModComms.sendTo(LegendarySurvivalOverhaul.MOD_ID, CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE,
+		event.enqueueWork(() -> {
+			InterModComms.sendTo(LegendarySurvivalOverhaul.MOD_ID, CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE,
 				() -> SlotTypePreset.BELT.getMessageBuilder().build());
+			InterModComms.sendTo(LegendarySurvivalOverhaul.MOD_ID, CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE,
+					() -> SlotTypePreset.NECKLACE.getMessageBuilder().build());
 		});
 	}
 }

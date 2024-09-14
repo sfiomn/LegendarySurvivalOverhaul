@@ -451,11 +451,11 @@ public class Config
 					.push("temperature-modification");
 			tempTickTime = builder
 					.comment(" Amount of time in ticks between 2 player temperature modification. The bigger, the slower the temperature adjustments will occur.")
-					.defineInRange("Temperature Tick Time", 10, 5, Integer.MAX_VALUE);
+					.defineInRange("Temperature Tick Time", 20, 5, Integer.MAX_VALUE);
 			maxTemperatureModification = builder
 					.comment(" Maximum amount of temperature the player's temperature can be modified at each temperature tick time.",
 							" Correspond to the amount of temperature given when temperature difference is maximum.")
-					.defineInRange("Maximum Temperature Modification", 2, 0.1, Integer.MAX_VALUE);
+					.defineInRange("Maximum Temperature Modification", 1, 0.1, Integer.MAX_VALUE);
 			minTemperatureModification = builder
 					.comment(" Minimum amount of temperature the player's temperature can be modified at each temperature tick time.",
 							" Correspond to the amount of temperature given when there is no temperature difference")
@@ -915,7 +915,7 @@ public class Config
 
 		// Temperature
 		public static boolean temperatureEnabled;
-		public static int tickRate;
+		public static int tempTickTime;
 		public static double minTemperatureModification;
 		public static double maxTemperatureModification;
 		public static boolean showPotionEffectParticles;
@@ -1128,7 +1128,7 @@ public class Config
 				baseFoodExhaustion = COMMON.baseFoodExhaustion.get();
 
 				temperatureEnabled = COMMON.temperatureEnabled.get();
-				tickRate = COMMON.tempTickTime.get();
+				tempTickTime = COMMON.tempTickTime.get();
 				minTemperatureModification = COMMON.minTemperatureModification.get();
 				maxTemperatureModification = COMMON.maxTemperatureModification.get();
 				showPotionEffectParticles = COMMON.showPotionEffectParticles.get();
