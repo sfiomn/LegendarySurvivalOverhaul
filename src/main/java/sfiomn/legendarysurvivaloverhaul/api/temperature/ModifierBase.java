@@ -47,11 +47,9 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 	/**
 	 * Default temperature of the world. 
 	 */
-	protected final float defaultTemperature;
 	
 	public ModifierBase()
 	{
-		this.defaultTemperature = (TemperatureEnum.NORMAL.getUpperBound() + (float) TemperatureEnum.COLD.getUpperBound()) / 2;
 	}
 	
 	/**
@@ -115,7 +113,7 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 		{
 			JsonBiomeIdentity identity = JsonConfig.biomeOverrides.get(name.toString());
 
-			return identity.temperature;
+			return clampNormalizeTemperature(identity.temperature);
 		}
 
 		// LegendarySurvivalOverhaul.LOGGER.debug("Biome base temp for " + name + " is " + biome.getBaseTemperature());

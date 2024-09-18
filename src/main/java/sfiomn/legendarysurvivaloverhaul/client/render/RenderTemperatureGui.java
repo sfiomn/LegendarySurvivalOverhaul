@@ -6,11 +6,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
@@ -87,7 +89,7 @@ public class RenderTemperatureGui
 			drawWetness(matrix, wetCap, width, height);
 
 		if (LegendarySurvivalOverhaul.curiosLoaded && (CuriosUtil.isThermometerEquipped || CuriosUtil.isCurioItemEquipped(player, ItemRegistry.THERMOMETER.get()))) {
-			drawBodyTemperature(matrix, tempCap, width, height);
+			drawBodyTemperature(matrix, player, tempCap, width, height);
 		}
 
 		RenderSystem.disableBlend();
@@ -255,12 +257,15 @@ public class RenderTemperatureGui
 		RenderUtil.drawTexturedModelRect(m4f, x + xOffset, y + yOffset, WETNESS_TEXTURE_WIDTH, WETNESS_TEXTURE_HEIGHT, texPosX, texPosY, WETNESS_TEXTURE_WIDTH, WETNESS_TEXTURE_HEIGHT);
 	}
 
-	public static void drawBodyTemperature(MatrixStack matrix, TemperatureCapability cap, int width, int height) {
+	public static void drawBodyTemperature(MatrixStack matrix, PlayerEntity player, TemperatureCapability cap, int width, int height) {
 		Matrix4f m4f = matrix.last().pose();
 		int x = width / 2 - 92 - 32 + Config.Baked.bodyTemperatureDisplayOffsetX;
 		int y = height - 14 + Config.Baked.bodyTemperatureDisplayOffsetY;
 
-		float bodyTemperature = cap.getTemperatureLevel();
+		if (!player.getOffhandItem().isEmpty() && player.getMainArm() == HandSide.RIGHT && Config.Baked.bodyDamageIndicatorOffsetX == 0 && Config.Baked.bodyTemperatureDisplayOffsetY == 0)
+			x -= 31;
+
+		float bodyTemperature = TemperatureUtil.clampTemperature(cap.getTemperatureLevel());
 		float tempRatio = (bodyTemperature - TemperatureEnum.FROSTBITE.getLowerBound()) / (TemperatureEnum.HEAT_STROKE.getUpperBound() - TemperatureEnum.FROSTBITE.getLowerBound());
 
 		bind(ICONS);

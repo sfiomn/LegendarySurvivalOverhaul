@@ -5,11 +5,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
-import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
@@ -38,15 +38,18 @@ public class RenderBodyDamageGui
 		BodyDamageCapability bodyDamageCap = CapabilityUtil.getBodyDamageCapability(player);
 
 		if (Config.Baked.alwaysShowBodyDamageIndicator || bodyDamageCap.isWounded())
-			drawBodyDamage(matrix, bodyDamageCap, width, height);
+			drawBodyDamage(matrix, player, bodyDamageCap, width, height);
 
 		RenderSystem.disableBlend();
 		bind(AbstractGui.GUI_ICONS_LOCATION);
 	}
 	
-	public static void drawBodyDamage(MatrixStack matrix, BodyDamageCapability cap, int width, int height) {
+	public static void drawBodyDamage(MatrixStack matrix, PlayerEntity player, BodyDamageCapability cap, int width, int height) {
 		int x = width / 2 + 92 + Config.Baked.bodyDamageIndicatorOffsetX;
 		int y = height - 33 + Config.Baked.bodyDamageIndicatorOffsetY;
+
+		if (!player.getOffhandItem().isEmpty() && player.getMainArm() == HandSide.LEFT && Config.Baked.bodyDamageIndicatorOffsetX == 0 && Config.Baked.bodyDamageIndicatorOffsetY == 0)
+			x += 31;
 		
 		Matrix4f m4f = matrix.last().pose();
 
