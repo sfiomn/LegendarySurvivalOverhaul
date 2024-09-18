@@ -4,12 +4,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureDisplayEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
@@ -252,10 +254,17 @@ public class RenderTemperatureGui
 	}
 
 	public static void drawBodyTemperature(GuiGraphics gui, Player player, int width, int height) {
+
+		if (TEMPERATURE_CAP == null || player.tickCount % 20 == 0)
+			TEMPERATURE_CAP = CapabilityUtil.getTempCapability(player);
+
 		int x = width / 2 - 92 - 32 + Config.Baked.bodyTemperatureDisplayOffsetX;
 		int y = height - 14 + Config.Baked.bodyTemperatureDisplayOffsetY;
 
-		float bodyTemperature = CapabilityUtil.getTempCapability(player).getTemperatureLevel();
+		if (!player.getOffhandItem().isEmpty() && player.getMainArm() == HumanoidArm.RIGHT && Config.Baked.bodyDamageIndicatorOffsetX == 0 && Config.Baked.bodyTemperatureDisplayOffsetY == 0)
+			x -= 31;
+
+		float bodyTemperature = TemperatureUtil.clampTemperature(TEMPERATURE_CAP.getTemperatureLevel());
 		float tempRatio = (bodyTemperature - TemperatureEnum.FROSTBITE.getLowerBound()) / (TemperatureEnum.HEAT_STROKE.getUpperBound() - TemperatureEnum.FROSTBITE.getLowerBound());
 
 		// Temperature Frame rendering

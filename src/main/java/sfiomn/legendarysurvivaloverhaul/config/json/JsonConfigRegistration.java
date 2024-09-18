@@ -147,6 +147,8 @@ public class JsonConfigRegistration
 		JsonConfig.registerBiomeOverride("minecraft:nether_wastes", 1.0f, false);
 		JsonConfig.registerBiomeOverride("minecraft:soul_sand_valley", 1.0f, false);
 		JsonConfig.registerBiomeOverride("minecraft:basalt_deltas", 1.45f, false);
+		JsonConfig.registerBiomeOverride("minecraft:frozen_ocean", -0.5f, false);
+		JsonConfig.registerBiomeOverride("minecraft:deep_frozen_ocean", -0.5f, false);
 
 		JsonConfig.registerFuelItems("minecraft:coal", ThermalTypeEnum.HEATING, 30);
 		JsonConfig.registerFuelItems("minecraft:charcoal", ThermalTypeEnum.HEATING, 30);

@@ -5,9 +5,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
-
-import java.util.Objects;
 
 public class AdaptiveCoatModifier extends DynamicModifierBase
 {
@@ -20,37 +19,39 @@ public class AdaptiveCoatModifier extends DynamicModifierBase
 	public float applyDynamicPlayerInfluence(Player player, float currentTemperature)
 	{
 		float value = 0.0f;
+		float diffToAverage = currentTemperature - TemperatureEnum.NORMAL.getMiddle();
 		
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.HEAD), currentTemperature);
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.CHEST), currentTemperature);
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.LEGS), currentTemperature);
-		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.FEET), currentTemperature);
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.HEAD), diffToAverage + value);
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.CHEST), diffToAverage + value);
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.LEGS), diffToAverage + value);
+		value += checkArmorSlot(player.getItemBySlot(EquipmentSlot.FEET), diffToAverage + value);
 		
 		return value;
 	}
 	
-	private float checkArmorSlot(ItemStack stack, float currentTemperature)
+	private float checkArmorSlot(ItemStack stack, float remainingDiffToAverage)
 	{
 		if (stack.isEmpty())
-				return 0.0f;
+			return 0.0f;
 
-		float sum = 0.0f;
+		if (remainingDiffToAverage == 0)
+			return 0.0f;
 
 		String coatId = TemperatureUtil.getArmorCoatTag(stack);
 		CoatEnum coat = CoatEnum.getFromId(coatId);
 		if (coat == null) {
-			return sum;
+			return 0.0f;
 		}
 
-		int diff = (int) (currentTemperature - middleTemperature);
+		float sum = 0.0f;
 
-		if (diff > 0) {
+		if (remainingDiffToAverage > 0) {
 			if (coat.type().equals("cooling") || coat.type().equals("thermal")) {
-				sum -= (float) Math.min(coat.modifier(), Math.abs(diff));
+				sum -= (float) Math.min(coat.modifier(), Math.abs(remainingDiffToAverage));
 			}
-		} else if (diff < 0) {
+		} else if (remainingDiffToAverage < 0) {
 			if (coat.type().equals("heating") || coat.type().equals("thermal")) {
-				sum += (float) Math.min(coat.modifier(), Math.abs(diff));
+				sum += (float) Math.min(coat.modifier(), Math.abs(remainingDiffToAverage));
 			}
 		}
 		return sum;

@@ -3,6 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.client.render;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
@@ -43,16 +44,19 @@ public class RenderBodyDamageGui
 
 				if (Config.Baked.alwaysShowBodyDamageIndicator || BODY_DAMAGE_CAP.isWounded()) {
 					Minecraft.getInstance().getProfiler().push("body_damage_gui");
-					drawBodyDamage(guiGraphics, BODY_DAMAGE_CAP, width, height);
+					drawBodyDamage(guiGraphics, player, BODY_DAMAGE_CAP, width, height);
 					Minecraft.getInstance().getProfiler().pop();
 				}
 			}
 		}
 	};
 	
-	public static void drawBodyDamage(GuiGraphics gui, BodyDamageCapability cap, int width, int height) {
+	public static void drawBodyDamage(GuiGraphics gui, Player player, BodyDamageCapability cap, int width, int height) {
 		int x = width / 2 + 92 + Config.Baked.bodyDamageIndicatorOffsetX;
 		int y = height - 33 + Config.Baked.bodyDamageIndicatorOffsetY;
+
+		if (!player.getOffhandItem().isEmpty() && player.getMainArm() == HumanoidArm.LEFT && Config.Baked.bodyDamageIndicatorOffsetX == 0 && Config.Baked.bodyDamageIndicatorOffsetY == 0)
+			x += 31;
 
 		for (BodyPartEnum bodyPart: BodyPartEnum.values()) {
 
