@@ -292,10 +292,12 @@ public class LegendarySurvivalOverhaul
 	private void onModConfigEvent(final ModConfig.ModConfigEvent event)
 	{
 		final ModConfig config = event.getConfig();
-		
-		// Since client config is not shared, we want it to update instantly whenever it's saved
+
 		if (config.getSpec() == Config.CLIENT_SPEC)
 			Config.Baked.bakeClient();
+
+		if (config.getSpec() == Config.COMMON_SPEC)
+			Config.Baked.bakeCommon();
 	}
 	
 	// Create registries for modifiers and dynamic modifiers
