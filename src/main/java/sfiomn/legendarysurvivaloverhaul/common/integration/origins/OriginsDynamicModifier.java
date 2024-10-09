@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperatureResistance;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
@@ -17,6 +18,10 @@ public class OriginsDynamicModifier extends DynamicModifierBase {
 
     @Override
     public float applyDynamicPlayerInfluence(Player player, float currentTemperature, float currentResistance) {
+
+        if (!LegendarySurvivalOverhaul.originsLoaded)
+            return 0.0f;
+
         float temp = 0.0f;
         float diffToAverage = currentTemperature - TemperatureEnum.NORMAL.getMiddle();
 
