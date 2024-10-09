@@ -1,19 +1,13 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration.terrafirmacraft;
 
 import net.dries007.tfc.util.climate.Climate;
-import net.dries007.tfc.util.climate.OverworldClimateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import sereneseasons.api.season.ISeasonState;
-import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.ServerConfig;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
-import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 
 public class TerraFirmaCraftModifier extends ModifierBase
