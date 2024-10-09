@@ -29,7 +29,7 @@ public class OriginsDynamicModifier extends DynamicModifierBase {
                     if (diffToAverage > 0) {
                         return Mth.clamp(-config.heatResistance - config.thermalResistance, -diffToAverage - currentResistance, -currentResistance);
                     } else if (diffToAverage < 0) {
-                        return Mth.clamp(config.coldResistance + config.thermalResistance, -currentResistance, diffToAverage - currentResistance);
+                        return Mth.clamp(config.coldResistance + config.thermalResistance, diffToAverage - currentResistance, -currentResistance);
                     } else
                         return 0.0f;
                 }
