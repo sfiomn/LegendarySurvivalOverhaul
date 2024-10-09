@@ -65,7 +65,7 @@ public class ModCapabilities
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event)
 	{
-		if (event.player.level().isClientSide)
+		if (event.side.isClient())
 		{
 			// Client Side
 			Player player = event.player;
@@ -74,7 +74,8 @@ public class ModCapabilities
 
 			if (Config.Baked.temperatureEnabled) {
 				TemperatureCapability tempCap = CapabilityUtil.getTempCapability(player);
-				tempCap.shakePlayer(player);
+
+				tempCap.tickClient(player, event.phase);
 			}
 		}
 		else
@@ -97,7 +98,7 @@ public class ModCapabilities
 				}
 			}
 			
-			if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC) {
+			if (Config.Baked.wetnessEnabled) {
 				WetnessCapability wetCap = CapabilityUtil.getWetnessCapability(player);
 				
 				wetCap.tickUpdate(player, level, event.phase);
@@ -121,7 +122,7 @@ public class ModCapabilities
 
 				thirstCap.tickUpdate(player, level, event.phase);
 
-				if(event.phase == Phase.START && (thirstCap.isDirty() || thirstCap.getPacketTimer() % Config.Baked.routinePacketSync == 0))
+				if (event.phase == Phase.START && (thirstCap.isDirty() || thirstCap.getPacketTimer() % Config.Baked.routinePacketSync == 0))
 				{
 					thirstCap.setClean();
 					sendThirstUpdate(player);
@@ -184,7 +185,7 @@ public class ModCapabilities
 				sendTemperatureUpdate(player);
 			}
 
-			if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
+			if (Config.Baked.wetnessEnabled)
 			{
 				WetnessCapability oldCap = CapabilityUtil.getWetnessCapability(orig);
 				WetnessCapability newCap = CapabilityUtil.getWetnessCapability(player);
@@ -275,7 +276,7 @@ public class ModCapabilities
 		Player player = event.getEntity();
 		if (Config.Baked.temperatureEnabled)
 			sendTemperatureUpdate(player);
-		if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
+		if (Config.Baked.wetnessEnabled)
 			sendWetnessUpdate(player);
 		if (Config.Baked.thirstEnabled)
 			sendThirstUpdate(player);
@@ -291,7 +292,7 @@ public class ModCapabilities
 		Player player = event.getEntity();
 		if (Config.Baked.temperatureEnabled)
 			sendTemperatureUpdate(player);
-		if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
+		if (Config.Baked.wetnessEnabled)
 			sendWetnessUpdate(player);
 		if (Config.Baked.thirstEnabled)
 			sendThirstUpdate(player);

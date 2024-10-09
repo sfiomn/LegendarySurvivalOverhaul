@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "healing",
+  "key": {
+    "b": {
+      "item": "minecraft:glass_bottle"
+    },
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "h": {
+      "item": "legendarysurvivaloverhaul:healing_herbs"
+    }
+  },
+  "pattern": [
+    " h ",
+    "gbg",
+    " g "
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:tonic"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,42 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_coat": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "legendarysurvivaloverhaul:ice_fern"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_sewing_table": {
+      "conditions": {
+        "block": "legendarysurvivaloverhaul:sewing_table"
+      },
+      "trigger": "minecraft:enter_block"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "legendarysurvivaloverhaul:cold_string_from_sewing_string_ice_fern"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_coat",
+      "has_sewing_table",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "legendarysurvivaloverhaul:cold_string_from_sewing_string_ice_fern"
+    ]
+  },
+  "sends_telemetry_event": true
+}

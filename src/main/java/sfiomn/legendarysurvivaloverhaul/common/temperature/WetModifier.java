@@ -28,71 +28,18 @@ public class WetModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(Level level, BlockPos pos) {
-		if (Config.Baked.wetnessMode != WetnessMode.SIMPLE)
-			return 0.0f;
-
-		FluidState state = level.getFluidState(pos);
-		Fluid fluid = state.getType();
-
-		if (!state.isEmpty()) {
-			ResourceLocation fluidRegistryName = ForgeRegistries.FLUID_TYPES.get().getKey(fluid.getFluidType());
-			if (fluidRegistryName != null) {
-				List<JsonBlockFluidTemperature> tempPropertyList = JsonConfig.blockFluidTemperatures.get(fluidRegistryName.toString());
-
-				if (tempPropertyList == null) {
-					return 0.0f;
-				}
-
-				for (JsonBlockFluidTemperature tempInfo : tempPropertyList) {
-					if (tempInfo == null)
-						continue;
-
-					if (tempInfo.matchesState(state)) {
-						return tempInfo.temperature;
-					}
-				}
-			}
-		}
-
-		if (fluid.isSame(Fluids.WATER) || fluid.isSame(Fluids.FLOWING_WATER)) {
-			return (float) Config.Baked.wetMultiplier;
-		} else if (level.isRainingAt(pos)) {
-			return (float) Config.Baked.wetMultiplier;
-		} else {
-			return 0.0f;
-		}
-	}
-	
-	@Override
 	public float getPlayerInfluence(Player player)
 	{
-		switch (Config.Baked.wetnessMode)
+		if (Config.Baked.wetnessEnabled)
 		{
-			case SIMPLE:
-				float worldInfluence = this.getWorldInfluence(player.level(), player.blockPosition());
-				
-				if (player.getVehicle() != null && worldInfluence != 0)
-				{
-					// If the player is in a boat, cancel out the effect
-					
-					if (player.getVehicle() instanceof Boat)
-					{
-						return (float) -worldInfluence;
-					}
-				}
-				break;
-			case DYNAMIC:
-				WetnessCapability wetCap = CapabilityUtil.getWetnessCapability(player);
-				if (wetCap.getWetness() == 0) {
-					// LegendarySurvivalOverhaul.LOGGER.debug("Wet player temp influence : " + 0.0f);
-					return 0.0f;
-				} else {
-					// LegendarySurvivalOverhaul.LOGGER.debug("Wet player temp influence : " + (float) (Config.Baked.wetMultiplier * MathUtil.invLerp(0, WetnessCapability.WETNESS_LIMIT, wetCap.getWetness())));
-					return (float) (Config.Baked.wetMultiplier * MathUtil.invLerp(0, WetnessCapability.WETNESS_LIMIT, wetCap.getWetness()));
-				}
-			default:
-				break;
+			WetnessCapability wetCap = CapabilityUtil.getWetnessCapability(player);
+			if (wetCap.getWetness() == 0) {
+				// LegendarySurvivalOverhaul.LOGGER.debug("Wet player temp influence : " + 0.0f);
+				return 0.0f;
+			} else {
+				// LegendarySurvivalOverhaul.LOGGER.debug("Wet player temp influence : " + (float) (Config.Baked.wetMultiplier * MathUtil.invLerp(0, WetnessCapability.WETNESS_LIMIT, wetCap.getWetness())));
+				return (float) (Config.Baked.wetMultiplier * MathUtil.invLerp(0, WetnessCapability.WETNESS_LIMIT, wetCap.getWetness()));
+			}
 		}
 		return 0.0f;
 	}

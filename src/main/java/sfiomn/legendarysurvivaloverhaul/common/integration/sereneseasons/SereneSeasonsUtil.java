@@ -6,13 +6,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.FertilityConfig;
-import sereneseasons.config.ServerConfig;
+import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModFertility;
 import sereneseasons.init.ModTags;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
@@ -30,7 +29,7 @@ public class SereneSeasonsUtil {
             return Component.translatable("message.legendarysurvivaloverhaul.sereneseasons.no_serene_season_loaded");
 
 
-        if (!ServerConfig.isDimensionWhitelisted(level.dimension()))
+        if (!ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
             return Component.translatable("message.legendarysurvivaloverhaul.sereneseasons.no_season_dimension");
 
         SeasonType seasonType = getSeasonType(level.getBiome(blockPos));
@@ -79,12 +78,12 @@ public class SereneSeasonsUtil {
         return false;
     }
 
-    public static boolean plantCanGrow(Level world, BlockPos pos, Block plant) {
-        ResourceLocation resourceLocation = ForgeRegistries.BLOCKS.getKey(plant);
+    public static boolean plantCanGrow(Level level, BlockPos pos, BlockState plant) {
+        ResourceLocation resourceLocation = ForgeRegistries.BLOCKS.getKey(plant.getBlock());
         if (resourceLocation != null) {
-            boolean isFertile = ModFertility.isCropFertile(resourceLocation.getPath(), world, pos);
-            if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(world, pos)) {
-                return FertilityConfig.outOfSeasonCropBehavior.get() != 1 && FertilityConfig.outOfSeasonCropBehavior.get() != 2;
+            boolean isFertile = ModFertility.isCropFertile(resourceLocation.getPath(), level, pos);
+            if (ModConfig.fertility.seasonalCrops && ModFertility.isCrop(plant) && !isFertile && !isGlassAboveBlock(level, pos)) {
+                return ModConfig.fertility.outOfSeasonCropBehavior != 1 && ModConfig.fertility.outOfSeasonCropBehavior != 2;
             }
         }
         return true;

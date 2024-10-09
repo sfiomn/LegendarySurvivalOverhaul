@@ -1,12 +1,11 @@
 package sfiomn.legendarysurvivaloverhaul.client.tooltips;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -17,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -24,21 +24,19 @@ import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumableHeal;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonEffectParameter;
 import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
-import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
-import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
+import sfiomn.legendarysurvivaloverhaul.registry.AttributeRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
-import sfiomn.legendarysurvivaloverhaul.registry.KeyMappingRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.FORGE)
@@ -46,7 +44,7 @@ public class TooltipHandler
 {
 	
 	@SuppressWarnings("unused")
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onTooltip(ItemTooltipEvent event)
 	{
 		ItemStack stack = event.getItemStack();
@@ -57,14 +55,25 @@ public class TooltipHandler
 		{
 			List<Component> tooltips = event.getToolTip();
 
+			for (Component component: tooltips) {
+				if (component instanceof MutableComponent mutableComponent) {
+					if (componentHasOneOfKeys(component,
+							AttributeRegistry.HEATING_TEMPERATURE.get().getDescriptionId(),
+							AttributeRegistry.HEAT_RESISTANCE.get().getDescriptionId()))
+						mutableComponent.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16420407)));
+					if (componentHasOneOfKeys(component,
+							AttributeRegistry.COOLING_TEMPERATURE.get().getDescriptionId(),
+							AttributeRegistry.COLD_RESISTANCE.get().getDescriptionId()))
+						mutableComponent.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(6466303)));
+					if (componentHasOneOfKeys(component, AttributeRegistry.THERMAL_RESISTANCE.get().getDescriptionId()))
+						mutableComponent.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(10040319)));
+				}
+			}
+
 			if (Config.Baked.temperatureEnabled) {
-				addItemBaseTemperatureText(itemRegistryName, tooltips);
 
 				if (stack.getItem() instanceof ArmorItem) {
-					addCoatTemperatureText(stack, tooltips);
-
-				} else if (stack.getItem() instanceof CoatItem coatItem) {
-					addCoatItemDescText(coatItem, tooltips);
+					addCoatTemperatureOnArmorText(stack, tooltips);
 				}
 
 				addFoodEffectText(stack, tooltips);
@@ -90,39 +99,24 @@ public class TooltipHandler
 			addHydrationTooltip(event.getItemStack(), event.getTooltipElements());
 	}
 
-	private static void addItemBaseTemperatureText(ResourceLocation itemRegistryName, List<Component> tooltips) {
-		float temperature = 0.0f;
-
-		JsonTemperature jsonTemperature = JsonConfig.itemTemperatures.get(itemRegistryName.toString());
-
-		if (jsonTemperature != null)
-		{
-			temperature = jsonTemperature.temperature;
-		}
-
-		Component text;
-		TextColor formattingColor;
-
-		if (temperature > 0.0f) {
-			text = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.heating");
-			formattingColor = TextColor.fromRgb(16420407);
-		} else if (temperature < 0.0f) {
-			text = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.cooling");
-			formattingColor = TextColor.fromRgb(6466303);
-		} else
-			return;
-
-		String tempTxt = (temperature % 1.0f == 0f ? (int) Math.abs(temperature) : Math.abs(temperature)) + " ";
-
-		text = Component.literal("+")
-				.withStyle(Style.EMPTY.withColor(formattingColor))
-				.append(tempTxt)
-				.append(text);
-
-		tooltips.add(text);
+	private static boolean componentHasOneOfKeys(Component component, String... keys) {
+		if (component.getContents() instanceof TranslatableContents translatableContents) {
+            return Arrays.stream(translatableContents.getArgs()).anyMatch(s -> {
+				if (s instanceof MutableComponent mutableComponent &&
+						mutableComponent.getContents() instanceof TranslatableContents translatableContents1) {
+					for (String key: keys) {
+						if (translatableContents1.getKey().equals(key))
+							return true;
+					}
+					return false;
+				} else
+					return false;
+			});
+        }
+		return false;
 	}
 
-	private static void addCoatTemperatureText(ItemStack stack, List<Component> tooltips) {
+	private static void addCoatTemperatureOnArmorText(ItemStack stack, List<Component> tooltips) {
 		String coatId = TemperatureUtil.getArmorCoatTag(stack);
 		CoatEnum coat = CoatEnum.getFromId(coatId);
 
@@ -137,30 +131,6 @@ public class TooltipHandler
 		text = Component.literal("")
 				.withStyle(ChatFormatting.BLUE)
 				.append(text);
-
-		tooltips.add(text);
-	}
-
-	private static void addCoatItemDescText(CoatItem coatItem, List<Component> tooltips) {
-
-		CoatEnum coat = coatItem.coat;
-
-		Component text;
-
-		if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), KeyMappingRegistry.showAddedDesc.getKey().getValue())) {
-			if (coat != null) {
-				text = Component.translatable("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".coat_item." + coat.type() + ".desc")
-						.append(" " + coat.modifier() + "\u00B0C");
-			} else {
-				return;
-			}
-
-			text = Component.literal("")
-					.withStyle(ChatFormatting.DARK_GRAY)
-					.append(text);
-		} else {
-			text = Component.literal(ChatFormatting.GRAY + I18n.get("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".added_desc.activate", ChatFormatting.LIGHT_PURPLE, I18n.get(KeyMappingRegistry.showAddedDesc.getTranslatedKeyMessage().getString()), ChatFormatting.GRAY));
-		}
 
 		tooltips.add(text);
 	}

@@ -4,7 +4,6 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.spongepowered.mixin' version '0.7.+'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
 version = minecraft_version + '-' + mod_version
@@ -174,8 +173,12 @@ dependencies {
     runtimeOnly(fg.deobf("curse.maven:appleskin-248787:4770828"))
 
     // These are REQUIRED for the mod to compile correctly and should not be removed.
-    implementation fg.deobf("curse.maven:serene-seasons-291874:4761604")
+    implementation fg.deobf("curse.maven:serene-seasons-291874:5790653")
+    implementation fg.deobf("curse.maven:glitchcore-955399:5787839")
     implementation fg.deobf("curse.maven:spark-361579:4738952")
+    implementation fg.deobf("curse.maven:origins-474438:5314209")
+    implementation fg.deobf("curse.maven:caelus-308989:5281700")
+    implementation(fg.deobf("curse.maven:chimneys-634005:5060722"))
     implementation fg.deobf("curse.maven:quark-243121:5594847")
     implementation fg.deobf("curse.maven:zeta-968868:5597406")
 

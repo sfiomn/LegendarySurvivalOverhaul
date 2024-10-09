@@ -16,18 +16,20 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+import sfiomn.legendarysurvivaloverhaul.api.wetness.IWetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
-public class WetnessCapability
+public class WetnessCapability implements IWetnessCapability
 {
 	public static final int WETNESS_LIMIT = 400;
 	
 	private int wetness;
+	private int wetnessTickTimer; //Update immediately first time around
+
 	private int packetTimer;
-	private int updateTimer; //Update immediately first time around
-	
 	private int oldWetness;
+	private boolean dirty = false;
 	
 	public WetnessCapability()
 	{
@@ -37,46 +39,67 @@ public class WetnessCapability
 	public void init()
 	{
 		this.wetness = 0;
+		this.wetnessTickTimer = 0;
+
 		this.packetTimer = 0;
-		this.updateTimer = 0;
-		
 		this.oldWetness = this.wetness;
+		this.dirty = false;
 	}
-	
+
+	@Override
 	public int getWetness()
 	{
 		return this.wetness;
 	}
-	
+
+	@Override
+	public int getWetnessTickTimer() {
+		return this.wetnessTickTimer;
+	}
+
+	@Override
 	public void setWetness(int wetness)
 	{
 		this.wetness = Mth.clamp(wetness, 0, WETNESS_LIMIT);
 	}
-	
+
+	@Override
+	public void setWetnessTickTimer(int tickTimer) {
+		this.wetnessTickTimer = tickTimer;
+	}
+
+	@Override
 	public void addWetness(int wetness)
 	{
 		this.setWetness(this.wetness + wetness);
 	}
-	
+
+	@Override
+	public void addWetnessTickTimer(int tickTimer) {
+		this.setWetnessTickTimer(this.getWetnessTickTimer() + tickTimer);
+	}
+
 	/**
 	 * This probably isn't too terribly performance friendly but it's something at least<br>
 	 * <br>
 	 * TODO: optimization!!
 	 */
+	@Override
 	public void tickUpdate(Player player, Level level, Phase phase)
 	{
+		if (getWetnessTickTimer() == -1)
+			return;
+
 		if(phase == TickEvent.Phase.START)
 		{
 			packetTimer++;
 			return;
 		}
 
-		updateTimer++;
-		if(updateTimer < 4)
-		{
+		this.addWetnessTickTimer(1);
+		if (this.getWetnessTickTimer() < 10)
 			return;
-		}
-		updateTimer = 0;
+		this.setWetnessTickTimer(0);
 
 		if (this.wetness > 0 && player.getRemainingFireTicks() > 0 && !player.fireImmune())
 			this.addWetness(-10);
@@ -159,17 +182,25 @@ public class WetnessCapability
 		if (particleSpawnRate == 0 || level.getLevelData().getGameTime() % particleSpawnRate == 0)
 			((ServerLevel) level).sendParticles(ParticleTypes.FALLING_WATER, pos.x, pos.y + (box.getYsize()/2), pos.z, 1, box.getXsize()/3, box.getYsize()/4,box.getZsize()/3, 0);
 	}
-	
+
+	@Override
 	public boolean isDirty()
 	{
-		return this.wetness != this.oldWetness;
+		return this.wetness != this.oldWetness || this.dirty;
 	}
-	
+
+	@Override
 	public void setClean()
 	{
 		this.oldWetness = this.wetness;
 	}
-	
+
+	@Override
+	public void setDirty() {
+		this.dirty = true;
+	}
+
+	@Override
 	public int getPacketTimer()
 	{
 		return this.packetTimer;
@@ -179,7 +210,8 @@ public class WetnessCapability
 	{
 		CompoundTag compound = new CompoundTag();
 		
-		compound.putInt("wetness", this.wetness);
+		compound.putInt("wetness", this.getWetness());
+		compound.putInt("wetnessTickTimer", this.getWetnessTickTimer());
 		
 		return compound;
 	}
@@ -189,6 +221,8 @@ public class WetnessCapability
 		this.init();
 		
 		if (compound.contains("wetness"))
-			this.wetness = compound.getInt("wetness");
+			this.setWetness(compound.getInt("wetness"));
+		if (compound.contains("wetnessTickTimer"))
+			this.setWetnessTickTimer(compound.getInt("wetnessTickTimer"));
 	}
 }

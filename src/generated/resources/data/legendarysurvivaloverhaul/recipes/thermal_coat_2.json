@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "thermal_coat",
+  "key": {
+    "b": {
+      "item": "minecraft:blaze_rod"
+    },
+    "c": {
+      "item": "legendarysurvivaloverhaul:cooling_coat_2"
+    },
+    "h": {
+      "item": "legendarysurvivaloverhaul:heating_coat_2"
+    }
+  },
+  "pattern": [
+    " cb",
+    " bh",
+    "   "
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:thermal_coat_2"
+  },
+  "show_notification": true
+}

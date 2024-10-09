@@ -1,0 +1,48 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cooling_coat_3": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "legendarysurvivaloverhaul:cooling_coat_3"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_heating_coat_3": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "legendarysurvivaloverhaul:heating_coat_3"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "legendarysurvivaloverhaul:thermal_coat_3"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_cooling_coat_3",
+      "has_heating_coat_3",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "legendarysurvivaloverhaul:thermal_coat_3"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.effects;
 
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.player.Player;
@@ -7,11 +8,11 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapabil
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
-public class ThirstEffect extends GenericEffect
+public class ThirstEffect extends MobEffect
 {
 	public ThirstEffect()
 	{
-		super(10870382, MobEffectCategory.HARMFUL);
+		super(MobEffectCategory.HARMFUL, 10870382);
 		// TODO Auto-generated constructor stub
 	}
 	

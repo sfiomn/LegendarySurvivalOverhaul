@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_glistering_melon_slice": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:glistering_melon_slice"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "legendarysurvivaloverhaul:glistering_melon_juice"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_glistering_melon_slice",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "legendarysurvivaloverhaul:glistering_melon_juice"
+    ]
+  },
+  "sends_telemetry_event": false
+}

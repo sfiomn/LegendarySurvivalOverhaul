@@ -4,12 +4,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 
+import java.util.List;
+
 public interface ITemperatureCapability
 {
 	public float getTemperatureLevel();
 	public float getTargetTemperatureLevel();
 	public int getTemperatureTickTimer();
 	public TemperatureEnum getTemperatureEnum();
+	public List<Integer> getTemperatureImmunities();
 	
 	public void setTemperatureLevel(float temperature);
 	public void setTargetTemperatureLevel(float targetTemperature);
@@ -17,6 +20,8 @@ public interface ITemperatureCapability
 	
 	public void addTemperatureLevel(float temperature);
 	public void addTemperatureTickTimer(int tickTimer);
+	public void addTemperatureImmunityId(int immunityId);
+	public void removeTemperatureImmunityId(int immunityId);
 	
 	/**
 	 * (Don't use this!) <br>
@@ -26,6 +31,14 @@ public interface ITemperatureCapability
 	 * @param phase
 	 */
 	public void tickUpdate(Player player, Level world, TickEvent.Phase phase);
+
+	/**
+	 * (Don't use this!) <br>
+	 * Runs a tick on client side for the player's temperature capability
+	 * @param player
+	 * @param phase
+	 */
+	public void tickClient(Player player, TickEvent.Phase phase);
 	
 	/**
 	 * (Don't use this!) <br>

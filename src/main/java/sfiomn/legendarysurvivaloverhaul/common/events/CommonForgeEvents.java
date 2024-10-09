@@ -38,6 +38,7 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumabl
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonBlockFluidThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
@@ -55,6 +56,28 @@ import java.util.*;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonForgeEvents {
+
+    /*
+    @SubscribeEvent
+    public static void onFoodTick(LivingEntityUseItemEvent.Tick event) {
+        LegendarySurvivalOverhaul.LOGGER.debug("use tick for " + event.getItem() + ", tick : " + event.getDuration());
+        if (event.getDuration() > 1)
+            return;
+
+        ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(event.getItem().getItem());
+
+        if (Config.Baked.localizedBodyDamageEnabled && !(event.getItem().getItem() instanceof BodyHealingItem)) {
+            JsonConsumableHeal jsonConsumableHeal = null;
+            if (itemRegistryName != null)
+                jsonConsumableHeal = JsonConfig.consumableHeal.get(itemRegistryName.toString());
+
+            if (jsonConsumableHeal != null) {
+                if (jsonConsumableHeal.healingCharges > 0) {
+                    LegendarySurvivalOverhaul.LOGGER.debug("cancel tick");
+                }
+            }
+        }
+    }*/
 
     @SubscribeEvent
     public static void onFoodEaten(LivingEntityUseItemEvent.Finish event)
@@ -110,12 +133,10 @@ public class CommonForgeEvents {
 
     @SubscribeEvent
     public static void onAttributeModifier(ItemAttributeModifierEvent event) {
-        ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(event.getItemStack().getItem());
-        if (itemRegistryName != null && JsonConfig.itemTemperatures.containsKey(itemRegistryName.toString())) {
-            //LegendarySurvivalOverhaul.LOGGER.debug("item attribute change for " + itemRegistryName);
-            //toRemove.forEach(event::removeModifier);
-            //toAdd.forEach(event::addModifier);
-        }
+        if (!Config.Baked.temperatureEnabled)
+            return;
+
+        TemperatureUtil.applyItemAttributeModifiers(event);
     }
 
     @SubscribeEvent
@@ -257,8 +278,7 @@ public class CommonForgeEvents {
 
         Player player = event.getEntity();
         if (Config.Baked.temperatureResistanceOnDeathEnabled) {
-            player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime, 0, false, false, true));
-            player.addEffect(new MobEffectInstance(MobEffectRegistry.COLD_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime, 0, false, false, true));
+            player.addEffect(new MobEffectInstance(MobEffectRegistry.TEMPERATURE_IMMUNITY.get(), Config.Baked.temperatureImmunityOnDeathTime, 0, false, false, true));
         }
     }
 

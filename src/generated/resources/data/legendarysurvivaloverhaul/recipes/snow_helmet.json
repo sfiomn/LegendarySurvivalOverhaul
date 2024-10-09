@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "snow_Armor",
+  "key": {
+    "#": {
+      "item": "minecraft:leather"
+    },
+    "w": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "w#w",
+    "w w"
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:snow_helmet"
+  },
+  "show_notification": true
+}

@@ -5,19 +5,17 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
-import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 import sfiomn.legendarysurvivaloverhaul.data.recipes.PurificationRecipeBuilder;
 import sfiomn.legendarysurvivaloverhaul.data.recipes.SewingRecipeBuilder;
 import sfiomn.legendarysurvivaloverhaul.registry.BlockRegistry;
@@ -371,11 +369,11 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         purification_blasting(consumer, PartialNBTIngredient.of(nbt, ItemRegistry.CANTEEN.get()), ItemRegistry.CANTEEN.get(), 1.0f, 80, "purified_canteen");
         purification_blasting(consumer, PartialNBTIngredient.of(nbt, ItemRegistry.LARGE_CANTEEN.get()), ItemRegistry.LARGE_CANTEEN.get(), 1.0f, 80, "purified_large_canteen");
 
-        sewing(consumer, Ingredient.of(Items.STRING), Ingredient.of(ItemRegistry.ICE_FERN.get()), ItemRegistry.COLD_STRING.get(), "cold_string");
+        sewing(consumer, Ingredient.of(Items.STRING), Ingredient.of(ItemRegistry.ICE_FERN.get()), new ItemStack(ItemRegistry.COLD_STRING.get()), "cold_string");
 
-        sewing(consumer, Ingredient.of(Items.STRING), Ingredient.of(ItemRegistry.SUN_FERN.get()), ItemRegistry.WARM_STRING.get(), "warm_string");
+        sewing(consumer, Ingredient.of(Items.STRING), Ingredient.of(ItemRegistry.SUN_FERN.get()), new ItemStack(ItemRegistry.WARM_STRING.get()), "warm_string");
 
-        buildAllCoatingRecipes(consumer);
+        //buildAllCoatingRecipes(consumer);
     }
 
     protected static void smelting(@NotNull Consumer<FinishedRecipe> consumer, Ingredient input, ItemLike result, float experience, int cookingTime, String recipeName) {
@@ -408,7 +406,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(consumer, LegendarySurvivalOverhaul.MOD_ID + ":" + recipeName + "_from_purification_blasting_" + getItemName(input.getItems()[0].getItem()));
     }
 
-    protected static void sewing(@NotNull Consumer<FinishedRecipe> consumer, Ingredient input, Ingredient addition, ItemLike result, String recipeName) {
+    protected static void sewing(@NotNull Consumer<FinishedRecipe> consumer, Ingredient input, Ingredient addition, ItemStack result, String recipeName) {
         String additionName = "";
         if (addition instanceof PartialNBTIngredient) {
             String nbt = ((JsonObject) addition.toJson()).get("nbt").getAsString();
@@ -422,7 +420,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
 
         SewingRecipeBuilder
-                .sewingRecipe(input, addition, result.asItem(), RecipeCategory.MISC)
+                .sewingRecipe(input, addition, result, RecipeCategory.MISC)
                 .unlockedBy("has_coat", has(addition.getItems()[0].getItem()))
                 .unlockedBy(getHasName(BlockRegistry.SEWING_TABLE.get().asItem()), insideOf(BlockRegistry.SEWING_TABLE.get()))
                 .save(consumer, LegendarySurvivalOverhaul.MOD_ID + ":" + recipeName + "_from_sewing_" + getItemName(input.getItems()[0].getItem()) + "_" + additionName);
@@ -436,22 +434,5 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .group("drink")
                 .unlockedBy(getHasName(fruit), has(fruit))
                 .save(consumer);
-    }
-
-    protected static void buildAllCoatingRecipes(Consumer<FinishedRecipe> consumer) {
-        Collection<Item> items = ForgeRegistries.ITEMS.getValues();
-        for (Item itemArmor : items) {
-            if (itemArmor instanceof ArmorItem) {
-                for (Item itemCoat : items) {
-                    if (itemCoat instanceof CoatItem) {
-                        try {
-                            sewing(consumer, Ingredient.of(itemArmor), Ingredient.of(itemCoat), itemArmor, "coated_" + getItemName(itemArmor));
-                        } catch (RuntimeException e) {
-                            LegendarySurvivalOverhaul.LOGGER.error("Failed to register armor coat recipe for ingredient: {}", getItemName(itemArmor), e);
-                        }
-                    }
-                }
-            }
-        }
     }
 }

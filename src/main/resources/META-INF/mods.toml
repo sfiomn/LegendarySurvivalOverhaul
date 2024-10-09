@@ -75,13 +75,13 @@ Making survival harder. Highly configurable so you can play the way you want.
 [[dependencies.${mod_id}]]
     modId="sereneseasons"
     mandatory=false
-    versionRange="[1.20.1-9.0.0.0,)"
+    versionRange="[1.20.1-9.1.0.0,)"
     ordering="BEFORE"
     side="BOTH"
     
 [[dependencies.${mod_id}]]
     modId="curios"
     mandatory=false
-    versionRange="[1.20.1-5.9.0,)"
+    versionRange="[5.9.0+1.20.1,)"
     ordering="BEFORE"
     side="BOTH"

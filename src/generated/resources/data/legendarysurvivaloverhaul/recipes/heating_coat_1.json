@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "heating_coat",
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    },
+    "w": {
+      "item": "legendarysurvivaloverhaul:warm_string"
+    }
+  },
+  "pattern": [
+    " is",
+    "isw",
+    "sww"
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:heating_coat_1"
+  },
+  "show_notification": true
+}

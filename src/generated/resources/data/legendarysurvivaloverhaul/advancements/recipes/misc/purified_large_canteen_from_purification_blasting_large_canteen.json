@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_large_canteen": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "legendarysurvivaloverhaul:large_canteen"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "legendarysurvivaloverhaul:purified_large_canteen_from_purification_blasting_large_canteen"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_large_canteen",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "legendarysurvivaloverhaul:purified_large_canteen_from_purification_blasting_large_canteen"
+    ]
+  },
+  "sends_telemetry_event": false
+}

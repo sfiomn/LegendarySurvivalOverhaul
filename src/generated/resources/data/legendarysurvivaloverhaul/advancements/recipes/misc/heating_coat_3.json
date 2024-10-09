@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "legendarysurvivaloverhaul:heating_coat_3"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_warm_string": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "legendarysurvivaloverhaul:warm_string"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_warm_string",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "legendarysurvivaloverhaul:heating_coat_3"
+    ]
+  },
+  "sends_telemetry_event": false
+}

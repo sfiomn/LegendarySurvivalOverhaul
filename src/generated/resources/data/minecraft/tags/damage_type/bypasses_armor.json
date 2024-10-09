@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "legendarysurvivaloverhaul:hypothermia",
+      "required": false
+    },
+    {
+      "id": "legendarysurvivaloverhaul:hyperthermia",
+      "required": false
+    },
+    {
+      "id": "legendarysurvivaloverhaul:dehydration",
+      "required": false
+    }
+  ]
+}

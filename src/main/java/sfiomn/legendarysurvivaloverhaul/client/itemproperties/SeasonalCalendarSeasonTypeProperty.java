@@ -6,14 +6,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import sereneseasons.config.ServerConfig;
+import sereneseasons.init.ModConfig;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil;
-import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 
 public class SeasonalCalendarSeasonTypeProperty implements ClampedItemPropertyFunction {
@@ -38,7 +36,7 @@ public class SeasonalCalendarSeasonTypeProperty implements ClampedItemPropertyFu
         {
             try
             {
-                if (!ServerConfig.isDimensionWhitelisted(level.dimension()))
+                if (!ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
                     return 0.2f;
 
                 SereneSeasonsUtil.SeasonType seasonType = SereneSeasonsUtil.getSeasonType(level.getBiome(holder.blockPosition()));

@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "healing",
+  "key": {
+    "b": {
+      "item": "legendarysurvivaloverhaul:bandage"
+    },
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "s": {
+      "item": "minecraft:string"
+    },
+    "w": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "sis",
+    "gbg",
+    "www"
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:medikit"
+  },
+  "show_notification": true
+}

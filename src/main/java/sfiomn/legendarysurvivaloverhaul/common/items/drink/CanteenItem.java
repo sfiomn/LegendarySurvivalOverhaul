@@ -92,7 +92,11 @@ public class CanteenItem extends DrinkItem {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, net.minecraft.world.level.Level world, LivingEntity entity) {
         if (entity instanceof Player player && canDrink(stack) && !world.isClientSide) {
-            ThirstUtil.setCapacityTag(stack, ThirstUtil.getCapacityTag(stack) - 1);
+            int newCapacity = ThirstUtil.getCapacityTag(stack) - 1;
+            ThirstUtil.setCapacityTag(stack, newCapacity);
+
+            if (newCapacity == 0)
+                ThirstUtil.removeHydrationEnumTag(stack);
 
             JsonConsumableThirst jsonConsumableThirst = null;
             // Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over

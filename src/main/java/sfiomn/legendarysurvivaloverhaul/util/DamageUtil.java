@@ -3,9 +3,6 @@ package sfiomn.legendarysurvivaloverhaul.util;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
-
-import java.util.*;
 
 public final class DamageUtil
 {

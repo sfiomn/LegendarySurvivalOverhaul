@@ -1,0 +1,13 @@
+{
+  "type": "legendarysurvivaloverhaul:purification_blasting",
+  "category": "misc",
+  "cookingtime": 80,
+  "experience": 1.0,
+  "group": "purification",
+  "ingredient": {
+    "type": "forge:partial_nbt",
+    "item": "legendarysurvivaloverhaul:canteen",
+    "nbt": "{\"legendarysurvivaloverhaul:HydrationPurity\":\"normal\"}"
+  },
+  "result": "legendarysurvivaloverhaul:canteen"
+}

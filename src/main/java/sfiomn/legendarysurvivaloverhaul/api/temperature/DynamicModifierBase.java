@@ -12,12 +12,12 @@ public class DynamicModifierBase
 	{
 	}
 	
-	public float applyDynamicPlayerInfluence(Player player, float currentTemperature)
+	public float applyDynamicPlayerInfluence(Player player, float currentTemperature, float currentResistance)
 	{
 		return 0.0f;
 	}
 	
-	public float applyDynamicWorldInfluence(Level world, BlockPos pos, float currentTemperature)
+	public float applyDynamicWorldInfluence(Player player, Level world, BlockPos pos, float currentTemperature, float currentResistance)
 	{
 		return 0.0f;
 	}

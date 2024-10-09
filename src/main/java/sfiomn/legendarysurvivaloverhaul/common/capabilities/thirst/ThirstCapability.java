@@ -18,7 +18,8 @@ public class ThirstCapability implements IThirstCapability
 	private float exhaustion = 0.0f;
 	private int thirst;
 	private float thirstSaturation;
-	private int tickTimer;
+	private int thirstTickTimer;
+	private int damageTickTimer; // Update immediately first time around
 	private int damageCounter;
 
 	//Unsaved data
@@ -27,7 +28,6 @@ public class ThirstCapability implements IThirstCapability
 	private boolean wasSprinting;
 	private Vec3 oldPos;
 	private boolean dirty;
-	private int updateTimer; // Update immediately first time around
 	private int packetTimer;
 
 	public ThirstCapability()
@@ -39,7 +39,7 @@ public class ThirstCapability implements IThirstCapability
 	{
 		this.thirst = 20;
 		this.thirstSaturation = 5.0f;
-		this.tickTimer = 0;
+		this.thirstTickTimer = 0;
 		this.damageCounter = 0;
 
 		this.oldThirst = 0;
@@ -47,13 +47,16 @@ public class ThirstCapability implements IThirstCapability
 		this.wasSprinting = false;
 		this.oldPos = null;
 		this.dirty = false;
-		this.updateTimer = 0;
+		this.damageTickTimer = 0;
 		this.packetTimer = 0;
 	}
 
 	@Override
 	public void tickUpdate(Player player, Level level, TickEvent.Phase phase)
 	{
+		if (getThirstTickTimer() == -1)
+			return;
+
 		if(phase == TickEvent.Phase.START)
 		{
 			packetTimer++;
@@ -63,13 +66,10 @@ public class ThirstCapability implements IThirstCapability
 		if (oldPos == null)
 			oldPos = player.position();
 
-		if (getThirstTickTimer() == -1)
-			return;
-
-		updateTimer++;
-		if(updateTimer >= 10)
+		this.addThirstTickTimer(1);
+		if(getThirstTickTimer() >= 10)
 		{
-			updateTimer = 0;
+			this.setThirstTickTimer(0);
 
 			// if player has moved at least 1 block, trigger the thirst exhaust, allowing afk player not dying from thirst
 			if (oldPos.distanceTo(player.position()) > 1) {
@@ -108,12 +108,12 @@ public class ThirstCapability implements IThirstCapability
 		// Hurt ticking
 		if(this.getHydrationLevel() <= 0 )
 		{
-			this.addThirstTickTimer(1);
+			this.addThirstDamageTickTimer(1);
 
 			// Hurt player every 4s, similar as hunger hurting
-			if(this.getThirstTickTimer() >= 80)
+			if(this.getThirstDamageTickTimer() > 80)
 			{
-				this.setThirstTickTimer(0);
+				this.setThirstDamageTickTimer(0);
 
 				if(DamageUtil.isModDangerous(level) &&
 						DamageUtil.healthAboveDifficulty(level, player) &&
@@ -127,7 +127,7 @@ public class ThirstCapability implements IThirstCapability
 		else
 		{
 			//Reset the timer if not dying of thirst
-			this.setThirstTickTimer(0);
+			this.setThirstDamageTickTimer(0);
 			this.setThirstDamageCounter(0);
 		}
 	}
@@ -181,7 +181,13 @@ public class ThirstCapability implements IThirstCapability
 	@Override
 	public int getThirstTickTimer()
 	{
-		return tickTimer;
+		return thirstTickTimer;
+	}
+
+	@Override
+	public int getThirstDamageTickTimer()
+	{
+		return damageTickTimer;
 	}
 
 	@Override
@@ -218,13 +224,19 @@ public class ThirstCapability implements IThirstCapability
 	@Override
 	public void setThirstTickTimer(int ticktimer)
 	{
-		this.tickTimer = ticktimer;
+		this.thirstTickTimer = ticktimer;
 	}
 
 	@Override
-	public void setThirstDamageCounter(int damagecounter)
+	public void setThirstDamageTickTimer(int damageTickTimer)
 	{
-		this.damageCounter = damagecounter;
+		this.damageTickTimer = damageTickTimer;
+	}
+
+	@Override
+	public void setThirstDamageCounter(int damageCounter)
+	{
+		this.damageCounter = damageCounter;
 	}
 
 	@Override
@@ -253,9 +265,15 @@ public class ThirstCapability implements IThirstCapability
 	}
 
 	@Override
-	public void addThirstDamageCounter(int damagecounter)
+	public void addThirstDamageTickTimer(int damageTickTimer)
 	{
-		this.setThirstDamageCounter(this.getThirstDamageCounter() + damagecounter);
+		this.setThirstDamageCounter(this.getThirstDamageTickTimer() + damageTickTimer);
+	}
+
+	@Override
+	public void addThirstDamageCounter(int damageCounter)
+	{
+		this.setThirstDamageCounter(this.getThirstDamageCounter() + damageCounter);
 	}
 
 	@Override
@@ -277,6 +295,7 @@ public class ThirstCapability implements IThirstCapability
 		compound.putInt("thirstLevel", this.getHydrationLevel());
 		compound.putFloat("thirstSaturation", this.getSaturationLevel());
 		compound.putInt("thirstTickTimer", this.getThirstTickTimer());
+		compound.putInt("thirstDamageTickTimer", this.getThirstDamageTickTimer());
 		compound.putInt("thirstDamageCounter", this.getThirstDamageCounter());
 		return compound;
 	}
@@ -292,6 +311,8 @@ public class ThirstCapability implements IThirstCapability
 			this.setThirstSaturation(nbt.getFloat("thirstSaturation"));
 		if(nbt.contains("thirstTickTimer"))
 			this.setThirstTickTimer(nbt.getInt("thirstTickTimer"));
+		if(nbt.contains("thirstDamageTickTimer"))
+			this.setThirstDamageTickTimer(nbt.getInt("thirstDamageTickTimer"));
 		if(nbt.contains("thirstDamageCounter"))
 			this.setThirstDamageCounter(nbt.getInt("thirstDamageCounter"));
 	}

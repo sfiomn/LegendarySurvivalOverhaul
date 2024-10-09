@@ -1,94 +1,48 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration.curios;
 
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
-import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
-import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
-import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
+import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperatureResistance;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
+import sfiomn.legendarysurvivaloverhaul.registry.AttributeRegistry;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
+import top.theillusivec4.curios.api.event.CurioAttributeModifierEvent;
+import top.theillusivec4.curios.api.type.ISlotType;
 
-import java.util.Map;
-import java.util.Objects;
+import java.util.UUID;
 
-public class CuriosModifier extends ModifierBase
+public class CuriosModifier
 {
-	public CuriosModifier()
-	{
-		super();
-	}
-	
-	@Override
-	public float getPlayerInfluence(Player player)
-	{
+	public static final CurioAttributeBuilder HEATING_TEMPERATURE = new CurioAttributeBuilder(AttributeRegistry.HEATING_TEMPERATURE.get(), "attribute." + LegendarySurvivalOverhaul.MOD_ID + ".heating_temperature");
+	public static final CurioAttributeBuilder COOLING_TEMPERATURE = new CurioAttributeBuilder(AttributeRegistry.COOLING_TEMPERATURE.get(), "attribute." + LegendarySurvivalOverhaul.MOD_ID + ".cooling_temperature");
+	public static final CurioAttributeBuilder HEAT_RESISTANCE = new CurioAttributeBuilder(AttributeRegistry.HEAT_RESISTANCE.get(), "attribute." + LegendarySurvivalOverhaul.MOD_ID + ".heat_resistance");
+	public static final CurioAttributeBuilder COLD_RESISTANCE = new CurioAttributeBuilder(AttributeRegistry.COLD_RESISTANCE.get(), "attribute." + LegendarySurvivalOverhaul.MOD_ID + ".cold_resistance");
+	public static final CurioAttributeBuilder THERMAL_RESISTANCE = new CurioAttributeBuilder(AttributeRegistry.THERMAL_RESISTANCE.get(), "attribute." + LegendarySurvivalOverhaul.MOD_ID + ".thermal_resistance");
+
+	public CuriosModifier() {}
+
+	public static void addAttribute(CurioAttributeModifierEvent event) {
 		if (!LegendarySurvivalOverhaul.curiosLoaded)
-			return 0.0f;
-		
-		try
-		{
-			return getUncaughtPlayerInfluence(player);
-		}
-		catch (Exception e)
-		{
-			LegendarySurvivalOverhaul.LOGGER.error("An error has occured with Curios compatability, disabling modifier", e);
-			LegendarySurvivalOverhaul.curiosLoaded = false;
-			
-			return 0.0f;
-		}
-	}
-	
-	public float getUncaughtPlayerInfluence(Player player)
-	{
-		LazyOptional<ICuriosItemHandler> curiosInventory = CuriosApi.getCuriosInventory(player);
+			return;
 
-		if (curiosInventory.isPresent() && curiosInventory.resolve().isPresent())
-		{
-			float sum = 0.0f;
+		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(event.getItemStack().getItem());
 
-			for (ICurioStacksHandler slotInventory: curiosInventory.resolve().get().getCurios().values()) {
-				for (int i = 0; i < slotInventory.getStacks().getSlots(); i++) {
-					ItemStack stack = slotInventory.getStacks().getStackInSlot(i);
-					if (!stack.isEmpty()) {
-						sum += processStackJson(stack);
-						String coatId = TemperatureUtil.getArmorCoatTag(stack);
-						CoatEnum coat = CoatEnum.getFromId(coatId);
-						if (coat == null)
-							continue;
-						if (coat.type().equals("cooling")) {
-							sum -= (float) coat.modifier();
-						} else if (coat.type().equals("heating")) {
-							sum += (float) coat.modifier();
-						}
-					}
+		if (itemRegistryName != null && JsonConfig.itemTemperatures.containsKey(itemRegistryName.toString())) {
+			JsonTemperatureResistance tempConfig = JsonConfig.itemTemperatures.get(itemRegistryName.toString());
+
+			for (ISlotType slot : CuriosApi.getItemStackSlots(event.getItemStack(), FMLLoader.getDist() == Dist.CLIENT).values()) {
+				if (slot.getIdentifier().equals(event.getSlotContext().identifier())) {
+					UUID itemUuid = UUID.nameUUIDFromBytes(itemRegistryName.toString().getBytes());
+					HEATING_TEMPERATURE.addModifier(event, itemUuid, Math.max(tempConfig.temperature, 0));
+					COOLING_TEMPERATURE.addModifier(event, itemUuid, Math.min(tempConfig.temperature, 0));
+					HEAT_RESISTANCE.addModifier(event, itemUuid, tempConfig.heatResistance);
+					COLD_RESISTANCE.addModifier(event, itemUuid, tempConfig.coldResistance);
+					THERMAL_RESISTANCE.addModifier(event, itemUuid, tempConfig.thermalResistance);
 				}
 			}
-
-			return sum;
-		} else {
-			return 0.0f;
 		}
-	}
-	
-	private float processStackJson(ItemStack stack)
-	{
-		ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
-		JsonTemperature jsonTemperature = null;
-		if (itemRegistryName != null)
-			jsonTemperature = JsonConfig.itemTemperatures.get(itemRegistryName.toString());
-		
-		if (jsonTemperature != null)
-		{
-			return jsonTemperature.temperature;
-		}
-		
-		return 0.0f;
 	}
 }

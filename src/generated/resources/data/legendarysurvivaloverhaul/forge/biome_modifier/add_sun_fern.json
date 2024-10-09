@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#forge:is_hot/overworld",
+  "features": "legendarysurvivaloverhaul:sun_fern_placed",
+  "step": "vegetal_decoration"
+}

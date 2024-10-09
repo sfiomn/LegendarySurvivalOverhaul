@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.client.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
@@ -42,10 +43,15 @@ public class RenderThirstGui
 
 				rand.setSeed(player.tickCount * 445L);
 				forgeGui.setupOverlayRenderState(true, false);
+				RenderSystem.disableDepthTest();
+				RenderSystem.depthMask(false);
 
 				Minecraft.getInstance().getProfiler().push("thirst_gui");
 				drawHydrationBar(forgeGui, guiGraphics, player, width, height);
 				Minecraft.getInstance().getProfiler().pop();
+
+				RenderSystem.depthMask(true);
+				RenderSystem.enableDepthTest();
 
 				forgeGui.rightHeight += 10;
 			}

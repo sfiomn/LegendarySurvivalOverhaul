@@ -1,19 +1,14 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons;
 
-import com.google.common.collect.Maps;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.ServerConfig;
+import sereneseasons.init.ModConfig;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
-import sfiomn.legendarysurvivaloverhaul.common.integration.terrafirmacraft.TerraFirmaCraftUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
 
@@ -26,7 +21,7 @@ public class SereneSeasonsModifier extends ModifierBase
 	}
 
 	@Override
-	public float getWorldInfluence(Level level, BlockPos pos)
+	public float getWorldInfluence(Player player, Level level, BlockPos pos)
 	{
 		if (!LegendarySurvivalOverhaul.sereneSeasonsLoaded)
 			return 0.0f;
@@ -55,7 +50,7 @@ public class SereneSeasonsModifier extends ModifierBase
 	{
 		ISeasonState seasonState = SeasonHelper.getSeasonState(level);
 		
-		if (seasonState == null || !ServerConfig.isDimensionWhitelisted(level.dimension()))
+		if (seasonState == null || !ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
 			return 0.0f;
 
 		Vec3i[] posOffsets;

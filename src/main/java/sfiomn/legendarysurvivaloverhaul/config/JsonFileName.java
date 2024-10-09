@@ -7,12 +7,13 @@ public enum JsonFileName
 	ITEM_TEMP("itemTemperatures.json"),
 	ENTITY_TEMP("entityTemperatures.json"),
 	BLOCK_TEMP("blockTemperatures.json"),
+	ORIGINS_TEMP("originsTemperatures.json"),
 	FUEL("fuelItems.json"),
 	CONSUMABLE_TEMP("temperatureConsumables.json"),
 	BLOCK_THIRST("blockThirst.json"),
 	CONSUMABLE_THIRST("thirstConsumables.json"),
 	CONSUMABLE_HEAL("healingConsumables.json"),
-	DAMAGE_SOURCE_BODY_PARTS("damageSourceBodyParts.json");;
+	DAMAGE_SOURCE_BODY_PARTS("damageSourceBodyParts.json");
 	
 	private String fileName;
 	

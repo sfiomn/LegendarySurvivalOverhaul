@@ -10,18 +10,21 @@ public interface IThirstCapability
 	public int getHydrationLevel();
 	public float getSaturationLevel();
 	public int getThirstTickTimer();
+	public int getThirstDamageTickTimer();
 	public int getThirstDamageCounter();
 
 	public void setThirstExhaustion(float exhaustion);
 	public void setHydrationLevel(int thirst);
 	public void setThirstSaturation(float saturation);
 	public void setThirstTickTimer(int ticktimer);
+	public void setThirstDamageTickTimer(int ticktimer);
 	public void setThirstDamageCounter(int damagecounter);
 
 	public void addThirstExhaustion(float exhaustion);
 	public void addHydrationLevel(int thirst);
 	public void addSaturationLevel(float saturation);
 	public void addThirstTickTimer(int ticktimer);
+	public void addThirstDamageTickTimer(int ticktimer);
 	public void addThirstDamageCounter(int damagecounter);
 
 	/**

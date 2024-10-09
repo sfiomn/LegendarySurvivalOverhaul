@@ -21,6 +21,7 @@ import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosUtil;
+import sfiomn.legendarysurvivaloverhaul.common.integration.origins.OriginsUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
@@ -191,8 +192,15 @@ public class ThirstUtilInternal implements IThirstUtil {
             if (fluidRegistryName != null && !fluidState.isEmpty()) {
 
                 if (LegendarySurvivalOverhaul.curiosLoaded) {
-                    if (CuriosUtil.isCurioItemEquipped(player, ItemRegistry.NETHER_CHALICE.get()) && (fluidState.is(Fluids.FLOWING_LAVA) || fluidState.is(Fluids.LAVA)))
+                    if (CuriosUtil.isCurioItemEquipped(player, ItemRegistry.NETHER_CHALICE.get()) &&
+                            (fluidState.is(Fluids.FLOWING_LAVA) || fluidState.is(Fluids.LAVA)))
                         return new JsonBlockFluidThirst(Config.Baked.hydrationLava, (float) Config.Baked.saturationLava, new JsonEffectParameter[]{});
+                }
+
+                if (LegendarySurvivalOverhaul.originsLoaded) {
+                    if (OriginsUtil.isOrigin(player, OriginsUtil.BLAZEBORN) &&
+                            (fluidState.is(Fluids.FLOWING_LAVA) || fluidState.is(Fluids.LAVA)))
+                        return new JsonBlockFluidThirst(Config.Baked.hydrationLavaBlazeborn, (float) Config.Baked.saturationLavaBlazeborn, new JsonEffectParameter[]{});
                 }
 
                 List<JsonBlockFluidThirst> jsonBlockFluidThirsts = JsonConfig.blockFluidThirst.get(fluidRegistryName.toString());

@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.ServerConfig;
+import sereneseasons.init.ModConfig;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -61,7 +61,7 @@ public class RenderSeasonCards {
         if (lastDimension == null || lastDimension != level.dimension()) {
             delayTimer = Config.Baked.seasonCardsSpawnDimensionDelayInTicks;
             lastDimension = level.dimension();
-            isDimensionSeasonal = ServerConfig.isDimensionWhitelisted(lastDimension);
+            isDimensionSeasonal = ModConfig.seasons.isDimensionWhitelisted(lastDimension);
         }
 
         if (!isDimensionSeasonal) {

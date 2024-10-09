@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "cooling_coat",
+  "key": {
+    "c": {
+      "item": "legendarysurvivaloverhaul:cold_string"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    " is",
+    "isc",
+    "scc"
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:cooling_coat_1"
+  },
+  "show_notification": true
+}

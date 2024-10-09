@@ -2,8 +2,10 @@ package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import org.jetbrains.annotations.Nullable;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.common.integration.terrafirmacraft.TerraFirmaCraftUtil;
@@ -17,7 +19,7 @@ public class BiomeModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(Level level, BlockPos pos)
+	public float getWorldInfluence(@Nullable Player player, Level level, BlockPos pos)
 	{
 		if (TerraFirmaCraftUtil.shouldUseTerraFirmaCraftTemp())
 			return 0.0f;

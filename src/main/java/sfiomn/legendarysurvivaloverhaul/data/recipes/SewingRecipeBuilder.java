@@ -9,7 +9,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -23,11 +23,11 @@ public class SewingRecipeBuilder {
     private final RecipeCategory category;
     private final Ingredient base;
     private final Ingredient addition;
-    private final Item result;
+    private final ItemStack result;
     private final Advancement.Builder advancement = Advancement.Builder.advancement();
     private final RecipeSerializer<?> type;
 
-    public SewingRecipeBuilder(RecipeSerializer<?> type, RecipeCategory category, Ingredient base, Ingredient addition, Item result) {
+    public SewingRecipeBuilder(RecipeSerializer<?> type, RecipeCategory category, Ingredient base, Ingredient addition, ItemStack result) {
         this.category = category;
         this.type = type;
         this.base = base;
@@ -35,7 +35,7 @@ public class SewingRecipeBuilder {
         this.result = result;
     }
 
-    public static SewingRecipeBuilder sewingRecipe(Ingredient base, Ingredient addition, Item result, RecipeCategory category) {
+    public static SewingRecipeBuilder sewingRecipe(Ingredient base, Ingredient addition, ItemStack result, RecipeCategory category) {
         return new SewingRecipeBuilder(RecipeRegistry.SEWING_SERIALIZER.get(), category, base, addition, result);
     }
 
@@ -60,16 +60,20 @@ public class SewingRecipeBuilder {
         }
     }
 
-    public record Result(ResourceLocation id, RecipeSerializer<?> type, Ingredient base, Ingredient addition, Item result, Advancement.Builder advancement, ResourceLocation advancementId) implements FinishedRecipe {
+    public record Result(ResourceLocation id, RecipeSerializer<?> type, Ingredient base, Ingredient addition, ItemStack result, Advancement.Builder advancement, ResourceLocation advancementId) implements FinishedRecipe {
 
         public void serializeRecipeData(@NotNull JsonObject json) {
             json.add("base", this.base.toJson());
             json.add("addition", this.addition.toJson());
 
-            ResourceLocation resultRegistryName = ForgeRegistries.ITEMS.getKey(this.result);
+            ResourceLocation resultRegistryName = ForgeRegistries.ITEMS.getKey(this.result.getItem());
             if (resultRegistryName != null) {
                 JsonObject jsonobject = new JsonObject();
                 jsonobject.addProperty("item", resultRegistryName.toString());
+                if (this.result.hasTag() && this.result.getTag() != null) {
+                    jsonobject.addProperty("type", "forge:partial_nbt");
+                    jsonobject.addProperty("nbt", this.result.getTag().toString());
+                }
                 json.add("result", jsonobject);
             }
         }

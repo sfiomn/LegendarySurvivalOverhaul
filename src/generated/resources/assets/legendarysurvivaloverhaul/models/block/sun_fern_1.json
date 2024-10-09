@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/crop",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "crop": "legendarysurvivaloverhaul:block/sun_fern_1",
+    "particle": "legendarysurvivaloverhaul:block/sun_fern_1"
+  }
+}

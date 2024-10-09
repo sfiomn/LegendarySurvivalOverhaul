@@ -1,27 +1,29 @@
 package sfiomn.legendarysurvivaloverhaul.common.effects;
 
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import sfiomn.legendarysurvivaloverhaul.api.ModDamageTypes;
 import sfiomn.legendarysurvivaloverhaul.registry.MobEffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.DamageSourceUtil;
 import sfiomn.legendarysurvivaloverhaul.util.DamageUtil;
 import net.minecraft.world.entity.player.Player;
 
-public class HeatStrokeEffect extends GenericEffect
+public class HeatStrokeEffect extends MobEffect
 {
 
 	public HeatStrokeEffect()
 	{
-		super(16756041, MobEffectCategory.HARMFUL);
+		super(MobEffectCategory.HARMFUL, 16756041);
 	}
 	
 	@Override
-	public void applyEffectTick(LivingEntity entity, int amplifier)
+	public void applyEffectTick(@NotNull LivingEntity entity, int amplifier)
 	{
-		if(entity instanceof Player player && !entity.hasEffect(MobEffectRegistry.HEAT_RESISTANCE.get()))
+		if(entity instanceof Player player && !entity.hasEffect(MobEffectRegistry.HEAT_IMMUNITY.get()))
 		{
 			Level level = entity.getCommandSenderWorld();
 
@@ -41,6 +43,6 @@ public class HeatStrokeEffect extends GenericEffect
 
 	public static boolean playerIsImmuneToHeat(Player player)
 	{
-		return player.hasEffect(MobEffectRegistry.HEAT_RESISTANCE.get()) || player.hasEffect(MobEffects.FIRE_RESISTANCE);
+		return player.hasEffect(MobEffectRegistry.HEAT_IMMUNITY.get()) || player.hasEffect(MobEffectRegistry.TEMPERATURE_IMMUNITY.get());
 	}
 }

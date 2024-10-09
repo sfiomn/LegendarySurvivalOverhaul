@@ -1,7 +1,9 @@
 package sfiomn.legendarysurvivaloverhaul.registry;
 
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -30,17 +32,20 @@ public class MobEffectRegistry {
 	public static final RegistryObject<MobEffect> COLD_HUNGER = EFFECTS.register("cold_hunger", ColdHungerEffect::new);
 	public static final RegistryObject<MobEffect> HEAT_STROKE = EFFECTS.register("heat_stroke", HeatStrokeEffect::new);
 	public static final RegistryObject<MobEffect> HEAT_THIRST = EFFECTS.register("heat_thirst", HeatThirstEffect::new);
-	public static final RegistryObject<MobEffect> COLD_RESISTANCE = EFFECTS.register("cold_resist", ColdResistanceEffect::new);
-	public static final RegistryObject<MobEffect> HEAT_RESISTANCE = EFFECTS.register("heat_resist", HeatResistanceEffect::new);
-	public static final RegistryObject<Potion> HEAT_RESISTANCE_POTION = POTIONS.register("heat_resistance", () -> new Potion("heat_resistance", new MobEffectInstance(HEAT_RESISTANCE.get(), 1800, 0, false, true, true)));
-	public static final RegistryObject<Potion> HEAT_RESISTANCE_POTION_LONG = POTIONS.register("heat_resistance_long", () -> new Potion("heat_resistance_long", new MobEffectInstance(HEAT_RESISTANCE.get(), 2400, 0, false, true, true)));
-	public static final RegistryObject<Potion> COLD_RESISTANCE_POTION = POTIONS.register("cold_resistance", () -> new Potion("cold_resistance", new MobEffectInstance(COLD_RESISTANCE.get(), 1800, 0, false, true, true)));
-	public static final RegistryObject<Potion> COLD_RESISTANCE_POTION_LONG = POTIONS.register("cold_resistance_long", () -> new Potion("cold_resistance_long", new MobEffectInstance(COLD_RESISTANCE.get(), 2400, 0, false, true, true)));
+	public static final RegistryObject<MobEffect> COLD_IMMUNITY = EFFECTS.register("cold_immunity", ColdImmunityEffect::new);
+	public static final RegistryObject<MobEffect> HEAT_IMMUNITY = EFFECTS.register("heat_immunity", HeatImmunityEffect::new);
+	public static final RegistryObject<MobEffect> TEMPERATURE_IMMUNITY = EFFECTS.register("temperature_immunity", HeatImmunityEffect::new);
+	public static final RegistryObject<Potion> HEAT_IMMUNITY_POTION = POTIONS.register("heat_immunity", () -> new Potion("heat_immunity", new MobEffectInstance(HEAT_IMMUNITY.get(), 1800, 0, false, true, true)));
+	public static final RegistryObject<Potion> HEAT_IMMUNITY_POTION_LONG = POTIONS.register("heat_resistance_long", () -> new Potion("heat_immunity_long", new MobEffectInstance(HEAT_IMMUNITY.get(), 2400, 0, false, true, true)));
+	public static final RegistryObject<Potion> COLD_IMMUNITY_POTION = POTIONS.register("cold_immunity", () -> new Potion("cold_immunity", new MobEffectInstance(COLD_IMMUNITY.get(), 1800, 0, false, true, true)));
+	public static final RegistryObject<Potion> COLD_IMMUNITY_POTION_LONG = POTIONS.register("cold_immunity_long", () -> new Potion("cold_immunity_long", new MobEffectInstance(COLD_IMMUNITY.get(), 2400, 0, false, true, true)));
+	public static final RegistryObject<Potion> TEMPERATURE_IMMUNITY_POTION = POTIONS.register("temperature_immunity", () -> new Potion("temperature_immunity", new MobEffectInstance(TEMPERATURE_IMMUNITY.get(), 1800, 0, false, true, true)));
+	public static final RegistryObject<Potion> TEMPERATURE_IMMUNITY_POTION_LONG = POTIONS.register("temperature_immunity_long", () -> new Potion("temperature_immunity_long", new MobEffectInstance(TEMPERATURE_IMMUNITY.get(), 2400, 0, false, true, true)));
 
-	public static final RegistryObject<MobEffect> HOT_FOOD = EFFECTS.register("hot_food", HotFoodEffect::new);
-	public static final RegistryObject<MobEffect> HOT_DRINk = EFFECTS.register("hot_drink", HotDrinkEffect::new);
-	public static final RegistryObject<MobEffect> COLD_FOOD = EFFECTS.register("cold_food", ColdFoodEffect::new);
-	public static final RegistryObject<MobEffect> COLD_DRINK = EFFECTS.register("cold_drink", ColdDrinkEffect::new);
+	public static final RegistryObject<MobEffect> HOT_FOOD = EFFECTS.register("hot_food", () -> new SimpleAttributeEffect(MobEffectCategory.BENEFICIAL, 16714764, 1).addAttributeModifier(AttributeRegistry.HEATING_TEMPERATURE.get(), SimpleAttributeEffect.HOT_FOOD_ATTRIBUTE_UUID, 1.0, AttributeModifier.Operation.ADDITION));
+	public static final RegistryObject<MobEffect> HOT_DRINk = EFFECTS.register("hot_drink", () -> new SimpleAttributeEffect(MobEffectCategory.BENEFICIAL, 16714764, 1).addAttributeModifier(AttributeRegistry.HEATING_TEMPERATURE.get(), SimpleAttributeEffect.HOT_DRINK_ATTRIBUTE_UUID, 1.0, AttributeModifier.Operation.ADDITION));
+	public static final RegistryObject<MobEffect> COLD_FOOD = EFFECTS.register("cold_food", () -> new SimpleAttributeEffect(MobEffectCategory.BENEFICIAL, 1166574, 1).addAttributeModifier(AttributeRegistry.COOLING_TEMPERATURE.get(), SimpleAttributeEffect.COLD_FOOD_ATTRIBUTE_UUID, 1.0, AttributeModifier.Operation.ADDITION));
+	public static final RegistryObject<MobEffect> COLD_DRINK = EFFECTS.register("cold_drink", () -> new SimpleAttributeEffect(MobEffectCategory.BENEFICIAL, 1166574, 1).addAttributeModifier(AttributeRegistry.COOLING_TEMPERATURE.get(), SimpleAttributeEffect.COLD_DRINK_ATTRIBUTE_UUID, 1.0, AttributeModifier.Operation.ADDITION));
 
 	public static final RegistryObject<MobEffect> PAINKILLER = EFFECTS.register("painkiller", PainKillerEffect::new);
 
@@ -50,11 +55,11 @@ public class MobEffectRegistry {
 
 	public static void registerBrewingRecipes()
 	{
-		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.SUN_FERN.get(), HEAT_RESISTANCE_POTION.get());
-		addBrewingRecipe(HEAT_RESISTANCE_POTION.get(), Items.REDSTONE, HEAT_RESISTANCE_POTION_LONG.get());
+		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.SUN_FERN.get(), HEAT_IMMUNITY_POTION.get());
+		addBrewingRecipe(HEAT_IMMUNITY_POTION.get(), Items.REDSTONE, HEAT_IMMUNITY_POTION_LONG.get());
 
-		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.ICE_FERN.get(), COLD_RESISTANCE_POTION.get());
-		addBrewingRecipe(COLD_RESISTANCE_POTION.get(), Items.REDSTONE, COLD_RESISTANCE_POTION_LONG.get());
+		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.ICE_FERN.get(), COLD_IMMUNITY_POTION.get());
+		addBrewingRecipe(COLD_IMMUNITY_POTION.get(), Items.REDSTONE, COLD_IMMUNITY_POTION_LONG.get());
 	}
 
 	private static void addBrewingRecipe(Potion potionInput, Item ingredient, Potion potionResult)

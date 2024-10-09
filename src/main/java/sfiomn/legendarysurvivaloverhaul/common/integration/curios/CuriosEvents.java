@@ -2,9 +2,11 @@ package sfiomn.legendarysurvivaloverhaul.common.integration.curios;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
+import top.theillusivec4.curios.api.event.CurioAttributeModifierEvent;
 import top.theillusivec4.curios.api.event.CurioDropsEvent;
 import top.theillusivec4.curios.api.event.CurioEquipEvent;
 import top.theillusivec4.curios.api.event.CurioUnequipEvent;
+
 
 public class CuriosEvents {
 
@@ -24,5 +26,10 @@ public class CuriosEvents {
     public static void onDropCurio(CurioDropsEvent event) {
         if (CuriosUtil.isThermometerEquipped)
             CuriosUtil.isThermometerEquipped = false;
+    }
+
+    @SubscribeEvent
+    public static void onCurioAttributeModifierEvent(CurioAttributeModifierEvent event) {
+        CuriosModifier.addAttribute(event);
     }
 }

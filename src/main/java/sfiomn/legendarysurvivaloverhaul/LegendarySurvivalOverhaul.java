@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul;
 
+import io.github.mortuusars.sootychimneys.setup.ModTags;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +23,7 @@ import org.apache.logging.log4j.Logger;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
+import sfiomn.legendarysurvivaloverhaul.api.wetness.WetnessUtil;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.CanteenProperty;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.SeasonalCalendarTimeProperty;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.SeasonalCalendarSeasonTypeProperty;
@@ -36,17 +38,23 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.Temperat
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosEvents;
+import sfiomn.legendarysurvivaloverhaul.common.integration.json.JsonIntegrationConfigRegistration;
+import sfiomn.legendarysurvivaloverhaul.common.integration.origins.OriginsEvents;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil;
 import sfiomn.legendarysurvivaloverhaul.common.integration.vampirism.VampirismEvents;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
+import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
+import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.registry.*;
 import sfiomn.legendarysurvivaloverhaul.util.internal.BodyDamageUtilInternal;
 import sfiomn.legendarysurvivaloverhaul.util.internal.TemperatureUtilInternal;
 import sfiomn.legendarysurvivaloverhaul.util.internal.ThirstUtilInternal;
+import sfiomn.legendarysurvivaloverhaul.util.internal.WetnessInternal;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 @Mod(LegendarySurvivalOverhaul.MOD_ID)
@@ -80,10 +88,12 @@ public class LegendarySurvivalOverhaul
 	public static boolean curiosLoaded = false;
 
 	public static boolean vampirismLoaded = false;
+	public static boolean originsLoaded = false;
 	
 	public static Path configPath = FMLPaths.CONFIGDIR.get();
 	public static Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "legendarysurvivaloverhaul");
 	public static Path modConfigJsons = Paths.get(modConfigPath.toString(), "json");
+	public static Path modIntegrationConfigJsons = Paths.get(modConfigJsons.toString(), "integration");
 	
 	public LegendarySurvivalOverhaul()
 	{
@@ -97,6 +107,7 @@ public class LegendarySurvivalOverhaul
 
 		Config.register();
 
+		AttributeRegistry.register(modBus);
 		ItemRegistry.register(modBus);
 		BlockRegistry.register(modBus);
 		ContainerRegistry.register(modBus);
@@ -124,6 +135,7 @@ public class LegendarySurvivalOverhaul
 		surviveLoaded = ModList.get().isLoaded("survive");
 		terraFirmaCraftLoaded = ModList.get().isLoaded("tfc");
 		vampirismLoaded = ModList.get().isLoaded("vampirism");
+		originsLoaded = ModList.get().isLoaded("origins");
 
 		if (sereneSeasonsLoaded)
 			LOGGER.debug("Serene Seasons is loaded, enabling compatibility");
@@ -137,8 +149,13 @@ public class LegendarySurvivalOverhaul
 			LOGGER.debug("Vampirism is loaded, enabling compatibility");
 			forgeBus.register(VampirismEvents.class);
 		}
+		if (originsLoaded) {
+			forgeBus.register(OriginsEvents.class);
+		}
 		if (surviveLoaded)
 			LOGGER.debug("Survive is loaded, I hope you know what you're doing");
+
+		JsonIntegrationConfigRegistration.init(LegendarySurvivalOverhaul.modIntegrationConfigJsons.toFile());
 	}
 	
 	private void commonSetup(final FMLCommonSetupEvent event)
@@ -149,6 +166,7 @@ public class LegendarySurvivalOverhaul
 			TemperatureUtil.internal = new TemperatureUtilInternal();
 			ThirstUtil.internal = new ThirstUtilInternal();
 			BodyDamageUtil.internal = new BodyDamageUtilInternal();
+			WetnessUtil.internal = new WetnessInternal();
 		});
 	}
 

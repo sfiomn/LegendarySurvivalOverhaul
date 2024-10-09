@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.item.CoatEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 
@@ -51,15 +52,9 @@ public class SewingRecipe implements Recipe<SimpleContainer> {
     public @NotNull ItemStack assemble(@NotNull SimpleContainer simpleContainer, @NotNull RegistryAccess registryAccess) {
         ItemStack itemstack = this.result.copy();
 
-        if (itemstack.getItem() instanceof ArmorItem && simpleContainer.getItem(1).getItem() instanceof CoatItem coatItem) {
-            if (simpleContainer.getItem(0).getItem() instanceof ArmorItem) {
-                CompoundTag CompoundTag = simpleContainer.getItem(0).getTag();
-                if (CompoundTag != null) {
-                    itemstack.setTag(CompoundTag.copy());
-                }
-            }
-
-            TemperatureUtil.setArmorCoatTag(itemstack, coatItem.coat.id());
+        CompoundTag compoundTag = simpleContainer.getItem(0).getTag();
+        if (compoundTag != null) {
+            itemstack.setTag(compoundTag.copy());
         }
 
         return itemstack;
@@ -74,16 +69,6 @@ public class SewingRecipe implements Recipe<SimpleContainer> {
     public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
         ItemStack itemstack = result.copy();
 
-        // For JEI integration purpose
-        if (itemstack.getItem() instanceof ArmorItem && this.addition.getItems()[0].getItem() instanceof CoatItem coatItem) {
-            if (this.base.getItems()[0].getItem() instanceof ArmorItem) {
-                CompoundTag CompoundTag = this.base.getItems()[0].getTag();
-                if (CompoundTag != null) {
-                    itemstack.setTag(CompoundTag.copy());
-                }
-            }
-            TemperatureUtil.setArmorCoatTag(itemstack, coatItem.coat.id());
-        }
         return itemstack;
     }
 
@@ -134,7 +119,7 @@ public class SewingRecipe implements Recipe<SimpleContainer> {
         public void toNetwork(FriendlyByteBuf friendlyByteBuf, SewingRecipe sewingRecipe) {
             sewingRecipe.base.toNetwork(friendlyByteBuf);
             sewingRecipe.addition.toNetwork(friendlyByteBuf);
-            friendlyByteBuf.writeItemStack(sewingRecipe.getResultItem(null), false);
+            friendlyByteBuf.writeItem(sewingRecipe.result);
         }
     }
 }

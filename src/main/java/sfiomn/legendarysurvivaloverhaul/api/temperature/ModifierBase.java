@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBiomeIdentity;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.util.WorldUtil;
@@ -62,8 +63,10 @@ public abstract class ModifierBase {
 	/*
 	 * Returns temperature based on environmental factors, such as the biome at the given position,
 	 * proximity to hot/cold blocks, altitude, time, weather, etc.
+	 * The provided player can be used to check temperature immunities for example.
+	 * Careful that the provided player is null to calculate the world temperature influence from the temperature util
 	 */
-	public float getWorldInfluence(Level world, BlockPos pos) { return 0.0f; }
+	public float getWorldInfluence(@Nullable Player player, Level world, BlockPos pos) { return 0.0f; }
 	
 	
 	protected float getNormalizedTempForBiome(Level world, Biome biome)
@@ -77,12 +80,9 @@ public abstract class ModifierBase {
 		if (name != null && JsonConfig.biomeOverrides.containsKey(name.toString()))
 		{
 			JsonBiomeIdentity identity = JsonConfig.biomeOverrides.get(name.toString());
-
 			return clampNormalizeTemperature(identity.temperature);
 		}
 
-		// LegendarySurvivalOverhaul.LOGGER.debug("Biome base temp for " + name + " is " + biome.getBaseTemperature());
-		
 		return clampNormalizeTemperature(biome.getBaseTemperature());
 	}
 

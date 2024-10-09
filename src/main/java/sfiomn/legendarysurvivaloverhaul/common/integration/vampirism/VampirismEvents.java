@@ -1,10 +1,8 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration.vampirism;
 
 import de.teamlapen.vampirism.api.event.PlayerFactionEvent;
-import de.teamlapen.vampirism.config.BalanceBuilder;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -31,7 +29,7 @@ public class VampirismEvents {
     }
 
     @SubscribeEvent
-    public static void onPlayerLogin(PlayerEvent.PlayerLoggedOutEvent event) {
+    public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         if (!ThirstUtil.isThirstActive(event.getEntity()))
             ThirstUtil.activateThirst(event.getEntity());
     }

@@ -1,0 +1,12 @@
+{
+  "type": "legendarysurvivaloverhaul:sewing",
+  "addition": {
+    "item": "legendarysurvivaloverhaul:sun_fern"
+  },
+  "base": {
+    "item": "minecraft:string"
+  },
+  "result": {
+    "item": "legendarysurvivaloverhaul:warm_string"
+  }
+}

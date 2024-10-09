@@ -34,6 +34,7 @@
 
 	"item.legendarysurvivaloverhaul.thermometer": "温度计",
 	"item.legendarysurvivaloverhaul.seasonal_calendar": "季节日历",
+	"item.legendarysurvivaloverhaul.nether_chalice": "下界圣杯",
 	"item.legendarysurvivaloverhaul.heart_fruit": "杈杷果",
 
 	"item.legendarysurvivaloverhaul.canteen_empty": "空水壶",
@@ -55,7 +56,7 @@
 	"item.legendarysurvivaloverhaul.pumpkin_juice": "南瓜汁",
 
 	"item.legendarysurvivaloverhaul.water_plant_bag": "水袋果",
-	"item.legendarysurvivaloverhaul.water_plant_seeds": "水袋草",
+	"item.legendarysurvivaloverhaul.water_plant_seeds": "水袋草种子",
 	"item.legendarysurvivaloverhaul.sun_fern": "灸炎蕨",
 	"item.legendarysurvivaloverhaul.sun_fern_seeds": "灸炎蕨芽",
 	"item.legendarysurvivaloverhaul.ice_fern": "寒冰蕨",

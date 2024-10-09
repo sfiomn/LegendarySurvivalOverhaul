@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "healing",
+  "key": {
+    "s": {
+      "item": "minecraft:string"
+    },
+    "w": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "ss ",
+    "ww ",
+    "   "
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:bandage"
+  },
+  "show_notification": true
+}

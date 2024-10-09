@@ -2,9 +2,8 @@ package sfiomn.legendarysurvivaloverhaul.api.item;
 
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
-import java.util.Objects;
-
 public enum CoatEnum {
+
     THERMAL_1("thermal1", "thermal"),
     THERMAL_2("thermal2", "thermal"),
     THERMAL_3("thermal3", "thermal"),
@@ -17,6 +16,7 @@ public enum CoatEnum {
 
     private final String coatId;
     private final String coatType;
+
     CoatEnum(String coatId, String coatType) {
         this.coatId = coatId;
         this.coatType = coatType;

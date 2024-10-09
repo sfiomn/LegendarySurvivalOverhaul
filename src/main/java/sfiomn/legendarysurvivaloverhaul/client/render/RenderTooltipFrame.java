@@ -49,7 +49,7 @@ public class RenderTooltipFrame {
         if (ENTITY_LOOKED_AT instanceof ItemFrame && !((ItemFrame) ENTITY_LOOKED_AT).getItem().isEmpty()) {
             Item itemInFrame = ((ItemFrame) ENTITY_LOOKED_AT).getItem().getItem();
 
-            if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && (itemInFrame == SSItems.CALENDAR.get() || itemInFrame == ItemRegistry.SEASONAL_CALENDAR.get())) {
+            if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && (itemInFrame == SSItems.CALENDAR || itemInFrame == ItemRegistry.SEASONAL_CALENDAR.get())) {
                 render(forgeGui, guiGraphics, width, height, seasonTooltip(ENTITY_LOOKED_AT.blockPosition(), ENTITY_LOOKED_AT.level()));
             } else if (itemInFrame == ItemRegistry.THERMOMETER.get()) {
                 TemperatureItemCapability tempItemCap = CapabilityUtil.getTempItemCapability(((ItemFrame) ENTITY_LOOKED_AT).getItem());

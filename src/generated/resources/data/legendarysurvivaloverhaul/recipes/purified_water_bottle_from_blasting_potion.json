@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 60,
+  "experience": 1.0,
+  "ingredient": {
+    "type": "forge:partial_nbt",
+    "item": "minecraft:potion",
+    "nbt": "{Potion:\"minecraft:water\"}"
+  },
+  "result": "legendarysurvivaloverhaul:purified_water_bottle"
+}

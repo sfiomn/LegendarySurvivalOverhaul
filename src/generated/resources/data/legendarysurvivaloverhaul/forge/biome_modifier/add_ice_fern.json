@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#forge:is_cold/overworld",
+  "features": "legendarysurvivaloverhaul:ice_fern_placed",
+  "step": "vegetal_decoration"
+}

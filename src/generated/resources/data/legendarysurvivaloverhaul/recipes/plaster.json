@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "healing",
+  "key": {
+    "s": {
+      "item": "minecraft:string"
+    },
+    "w": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "  s",
+    " w ",
+    "s  "
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:plaster"
+  },
+  "show_notification": true
+}

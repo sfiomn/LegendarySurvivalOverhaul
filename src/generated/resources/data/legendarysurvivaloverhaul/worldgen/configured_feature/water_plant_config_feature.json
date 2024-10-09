@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:random_patch",
+  "config": {
+    "feature": {
+      "feature": {
+        "type": "legendarysurvivaloverhaul:double_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+              "Name": "legendarysurvivaloverhaul:water_plant_crop",
+              "Properties": {
+                "age": "7",
+                "half": "lower"
+              }
+            }
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:replaceable"
+          }
+        }
+      ]
+    },
+    "tries": 10,
+    "xz_spread": 5,
+    "y_spread": 3
+  }
+}

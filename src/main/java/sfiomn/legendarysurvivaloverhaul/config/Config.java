@@ -8,12 +8,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureDisplayEnum;
-import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,16 +38,16 @@ public class Config
 
 	public static void register()
 	{
-		try
-		{
-			Files.createDirectory(LegendarySurvivalOverhaul.modConfigPath);
-			Files.createDirectory(LegendarySurvivalOverhaul.modConfigJsons);
-		}
-		catch (FileAlreadyExistsException ignored) {}
-		catch (IOException e)
-		{
-			LegendarySurvivalOverhaul.LOGGER.error("Failed to create Legendary Survival Overhaul config directories");
-			e.printStackTrace();
+		for (Path configPath: new Path[]{LegendarySurvivalOverhaul.modConfigPath,
+				LegendarySurvivalOverhaul.modConfigPath,
+				LegendarySurvivalOverhaul.modIntegrationConfigJsons}) {
+			try {
+				Files.createDirectory(configPath);
+			} catch (FileAlreadyExistsException ignored) {
+			} catch (IOException e) {
+				LegendarySurvivalOverhaul.LOGGER.error("Failed to create Legendary Survival Overhaul config directory " + configPath);
+				e.printStackTrace();
+			}
 		}
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_SPEC, LegendarySurvivalOverhaul.MOD_ID + "/" + LegendarySurvivalOverhaul.MOD_ID +"-client.toml");
@@ -72,7 +72,7 @@ public class Config
 		public final ForgeConfigSpec.BooleanValue dangerousHeatTemperature;
 		public final ForgeConfigSpec.BooleanValue dangerousColdTemperature;
 		public final ForgeConfigSpec.BooleanValue temperatureResistanceOnDeathEnabled;
-		public final ForgeConfigSpec.IntValue temperatureResistanceOnDeathTime;
+		public final ForgeConfigSpec.IntValue temperatureImmunityOnDeathTime;
 
 		public final ForgeConfigSpec.BooleanValue heatTemperatureSecondaryEffects;
 		public final ForgeConfigSpec.BooleanValue coldTemperatureSecondaryEffects;
@@ -91,7 +91,7 @@ public class Config
 		public final ForgeConfigSpec.DoubleValue sprintModifier;
 		public final ForgeConfigSpec.DoubleValue onFireModifier;
 
-		public final ForgeConfigSpec.ConfigValue<String> wetnessMode;
+		public final ForgeConfigSpec.BooleanValue wetnessEnabled;
 		public final ForgeConfigSpec.DoubleValue wetMultiplier;
 		public final ForgeConfigSpec.IntValue wetnessDecrease;
 		public final ForgeConfigSpec.IntValue wetnessRainIncrease;
@@ -172,6 +172,10 @@ public class Config
 		public final ForgeConfigSpec.IntValue hydrationLava;
 		public final ForgeConfigSpec.DoubleValue saturationLava;
 		public final ForgeConfigSpec.BooleanValue glassBottleLootAfterDrink;
+		public final ForgeConfigSpec.IntValue hydrationLavaBlazeborn;
+		public final ForgeConfigSpec.DoubleValue saturationLavaBlazeborn;
+		public final ForgeConfigSpec.DoubleValue extraThirstExhaustionShulk;
+		public final ForgeConfigSpec.DoubleValue extraThirstExhaustionPhantom;
 		public final ForgeConfigSpec.BooleanValue thirstEnabledIfVampire;
 
 		// Heart Fruits
@@ -284,9 +288,9 @@ public class Config
 			temperatureResistanceOnDeathEnabled = builder
 					.comment(" If enabled, players will be immune to temperature effects after death.")
 					.define("Temperature Resistance Enabled", true);
-			temperatureResistanceOnDeathTime = builder
-					.comment(" Temperature resistance period in ticks while the player is immune to temperature effects.")
-					.defineInRange("Temperature Resistance Time", 1800, 0, 100000);
+			temperatureImmunityOnDeathTime = builder
+					.comment(" Temperature immunity period in ticks while the player is immune to temperature effects.")
+					.defineInRange("Temperature Immunity Time", 1800, 0, 100000);
 			builder.pop();
 
 			builder.push("secondary_effects");
@@ -319,13 +323,9 @@ public class Config
 					.defineInRange("Altitude Modifier", -5.0, -1000, 1000);
 
 			builder.push("wetness");
-			wetnessMode = builder
-					.comment(" How a player's \"wetness\" is determined. Accepted values are as follows:",
-							"   DISABLE - Disable wetness and any effects on temperature it might have.",
-							"   SIMPLE - Wetness is only based on whether you're in water/rain or not. Slightly better in terms of performance.",
-							"   DYNAMIC - Wetness can change dynamically based on various conditions, and does not instantly go away when moving out of water.",
-							" Any other value will default to DISABLE.")
-					.define("Wetness Mode", "DYNAMIC");
+			wetnessEnabled = builder
+					.comment(" Enable the wetness mechanic.")
+					.define("Wetness Enabled", true);
 
 			wetMultiplier = builder
 					.comment(" How much being wet influences the player's temperature.")
@@ -549,16 +549,16 @@ public class Config
 					.defineInRange("Base Thirst Exhaustion", 0.03d, 0, 1000.0d);
 			sprintingThirstExhaustion = builder
 					.comment(" Thirst exhausted when sprinting, replacing the base thirst exhausted.")
-					.defineInRange("Sprinting Thirst Exhaustion", 0.15d, 0, 1000.0d);
+					.defineInRange("Sprinting Thirst Exhaustion", 0.1d, 0, 1000.0d);
 			onJumpThirstExhaustion = builder
 					.comment(" Thirst exhausted on every jump.")
-					.defineInRange("On Jump Thirst Exhaustion", 0.3d, 0, 1000.0d);
+					.defineInRange("On Jump Thirst Exhaustion", 0.15d, 0, 1000.0d);
 			onBlockBreakThirstExhaustion = builder
 					.comment(" Thirst exhausted on every block break.")
-					.defineInRange("On Block Break Thirst Exhaustion", 0.1d, 0, 1000.0d);
+					.defineInRange("On Block Break Thirst Exhaustion", 0.07d, 0, 1000.0d);
 			onAttackThirstExhaustion = builder
 					.comment(" Thirst exhausted on every attack.")
-					.defineInRange("On Attack Thirst Exhaustion", 0.5d, 0, 1000.0d);
+					.defineInRange("On Attack Thirst Exhaustion", 0.3d, 0, 1000.0d);
 			builder.pop();
 			dehydrationDamageScaling = builder
 					.comment(" Scaling of the damages dealt when completely dehydrated. Each tick damage will be increased by this value.")
@@ -581,10 +581,10 @@ public class Config
 			builder.comment(" Allows drinking from lava. Can be used as bauble.").push("nether_chalice");
 			hydrationLava = builder
 					.comment(" Amount of hydration recovered when drinking from lava.")
-					.defineInRange("Hydration", 6, 0, 20);
+					.defineInRange("Lava Hydration", 6, 0, 20);
 			saturationLava = builder
 					.comment(" Amount of saturation recovered when drinking from lava.")
-					.defineInRange("Saturation", 4.0, 0, 20);
+					.defineInRange("Lava Saturation", 4.0, 0, 20);
 			builder.pop();
 			builder.push("juices");
 			glassBottleLootAfterDrink = builder
@@ -593,6 +593,43 @@ public class Config
 			builder.pop();
 
 			builder.push("integration");
+			builder.push("origins");
+
+			builder.comment(" Temperature won't increase will on fire",
+					" Immune to wetness",
+					"Can drink lava")
+					.push("blazeborn");
+			hydrationLavaBlazeborn = builder
+					.comment(" Amount of hydration recovered when drinking from lava.")
+					.defineInRange("Lava Hydration For Blazeborn", 3, 0, 20);
+			saturationLavaBlazeborn = builder
+					.comment(" Amount of saturation recovered when drinking from lava.")
+					.defineInRange("Lava Saturation For Blazeborn", 1.0, 0, 20);
+			builder.pop();
+
+			builder.comment(" Immune to wetness",
+					"Immune to Thirst Effect").push("merling");
+			builder.pop();
+
+			builder.comment(" Immune to high altitude coldness").push("elytrian");
+			builder.pop();
+
+			builder.comment(" Immune to high altitude coldness").push("avian");
+			builder.pop();
+
+			builder.comment(" Thirst depletes slightly faster").push("shulk");
+			extraThirstExhaustionShulk = builder
+					.comment(" Amount of thirst exhaustion added every 20 ticks.")
+					.defineInRange("Extra Thirst Exhaustion For Shulk", 0.1, 0, 1000);
+			builder.pop();
+
+			builder.comment(" Thirst depletes slightly faster").push("phantom");
+			extraThirstExhaustionPhantom = builder
+					.comment(" Amount of thirst exhaustion added every 20 ticks.")
+					.defineInRange("Extra Thirst Exhaustion For Phantom", 0.1, 0, 1000);
+			builder.pop();
+
+			builder.pop();
 
 			builder.push("vampirism");
 			thirstEnabledIfVampire = builder
@@ -664,14 +701,14 @@ public class Config
 							" Any other value will default to SIMPLE.")
 					.define("Body Part Health Mode", "DYNAMIC");
 
-			headPartHealth = builder.defineInRange("Head Part Health", 0.2d, 0.0d, 1000.0d);
+			headPartHealth = builder.defineInRange("Head Part Health", 0.4d, 0.0d, 1000.0d);
 			armsPartHealth = builder.comment(" Both arms will have this health.")
-					.defineInRange("Arms Part Health", 0.2d, 0.0d, 1000.0d);;
-			chestPartHealth = builder.defineInRange("Chest Part Health", 0.3d, 0.0d, 1000.0d);;
+					.defineInRange("Arms Part Health", 0.4d, 0.0d, 1000.0d);;
+			chestPartHealth = builder.defineInRange("Chest Part Health", 0.6d, 0.0d, 1000.0d);;
 			legsPartHealth = builder.comment(" Both legs will have this health.")
-					.defineInRange("Legs Part Health", 0.3d, 0.0d, 1000.0d);;
+					.defineInRange("Legs Part Health", 0.6d, 0.0d, 1000.0d);;
 			feetPartHealth = builder.comment(" Both feet will have this health.")
-					.defineInRange("Feet Part Health", 0.2d, 0.0d, 1000.0d);;
+					.defineInRange("Feet Part Health", 0.4d, 0.0d, 1000.0d);;
 			builder.pop();
 
 			builder.push("body-parts-effects");
@@ -909,7 +946,7 @@ public class Config
 		public static double minTemperatureModification;
 		public static double maxTemperatureModification;
 		public static boolean temperatureResistanceOnDeathEnabled;
-		public static int temperatureResistanceOnDeathTime;
+		public static int temperatureImmunityOnDeathTime;
 
 		public static boolean dangerousHeatTemperature;
 		public static boolean dangerousColdTemperature;
@@ -944,7 +981,7 @@ public class Config
 		public static double playerHuddlingModifier;
 		public static int playerHuddlingRadius;
 
-		public static WetnessMode wetnessMode;
+		public static boolean wetnessEnabled;
 		public static double wetMultiplier;
 		public static int wetnessDecrease;
 		public static int wetnessRainIncrease;
@@ -1010,6 +1047,10 @@ public class Config
 		public static int hydrationLava;
 		public static double saturationLava;
 		public static boolean glassBottleLootAfterDrink;
+		public static int hydrationLavaBlazeborn;
+		public static double saturationLavaBlazeborn;
+		public static double extraThirstExhaustionShulk;
+		public static double extraThirstExhaustionPhantom;
 		public static boolean thirstEnabledIfVampire;
 
 		// Heart fruit
@@ -1118,7 +1159,7 @@ public class Config
 				maxTemperatureModification = COMMON.maxTemperatureModification.get();
 
 				temperatureResistanceOnDeathEnabled = COMMON.temperatureResistanceOnDeathEnabled.get();
-				temperatureResistanceOnDeathTime = COMMON.temperatureResistanceOnDeathTime.get();
+				temperatureImmunityOnDeathTime = COMMON.temperatureImmunityOnDeathTime.get();
 
 				dangerousHeatTemperature = COMMON.dangerousHeatTemperature.get();
 				dangerousColdTemperature = COMMON.dangerousColdTemperature.get();
@@ -1150,7 +1191,7 @@ public class Config
 				onFireModifier = COMMON.onFireModifier.get();
 				sprintModifier = COMMON.sprintModifier.get();
 
-				wetnessMode = WetnessMode.getDisplayFromString(COMMON.wetnessMode.get());
+				wetnessEnabled = COMMON.wetnessEnabled.get();
 				wetMultiplier = COMMON.wetMultiplier.get();
 				wetnessDecrease = COMMON.wetnessDecrease.get();
 				wetnessRainIncrease = COMMON.wetnessRainIncrease.get();
@@ -1223,6 +1264,10 @@ public class Config
 
 				glassBottleLootAfterDrink = COMMON.glassBottleLootAfterDrink.get();
 
+				hydrationLavaBlazeborn = COMMON.hydrationLavaBlazeborn.get();
+				saturationLavaBlazeborn = COMMON.saturationLavaBlazeborn.get();
+				extraThirstExhaustionShulk = COMMON.extraThirstExhaustionShulk.get();
+				extraThirstExhaustionPhantom = COMMON.extraThirstExhaustionPhantom.get();
 				thirstEnabledIfVampire = COMMON.thirstEnabledIfVampire.get();
 
 				heartFruitsEnabled = COMMON.heartFruitsEnabled.get();

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "c": {
+      "item": "minecraft:clock"
+    },
+    "p": {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "pcp",
+    "ppp"
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:seasonal_calendar"
+  },
+  "show_notification": true
+}

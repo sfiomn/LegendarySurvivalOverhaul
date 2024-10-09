@@ -4,9 +4,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBlockFluidTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -35,7 +37,7 @@ public class BlockModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(Level level, BlockPos pos)
+	public float getWorldInfluence(@Nullable Player player, Level level, BlockPos pos)
 	{
 		coldestValue = 0.0f;
 		hottestValue = 0.0f;

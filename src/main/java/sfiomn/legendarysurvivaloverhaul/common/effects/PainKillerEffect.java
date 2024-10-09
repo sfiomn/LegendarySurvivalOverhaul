@@ -1,14 +1,14 @@
 package sfiomn.legendarysurvivaloverhaul.common.effects;
 
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 
-public class PainKillerEffect extends GenericEffect
+public class PainKillerEffect extends MobEffect
 {
 
 	public PainKillerEffect()
 	{
-		super(1166574, MobEffectCategory.BENEFICIAL);
-		// TODO Auto-generated constructor stub
+		super(MobEffectCategory.BENEFICIAL, 1166574);
 	}
 
 }

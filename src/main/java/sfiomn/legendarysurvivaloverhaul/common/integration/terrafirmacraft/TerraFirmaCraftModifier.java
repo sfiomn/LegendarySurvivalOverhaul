@@ -4,6 +4,7 @@ import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.OverworldClimateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.SeasonHelper;
@@ -23,7 +24,7 @@ public class TerraFirmaCraftModifier extends ModifierBase
 	}
 
 	@Override
-	public float getWorldInfluence(Level level, BlockPos pos)
+	public float getWorldInfluence(Player player, Level level, BlockPos pos)
 	{
 		if (!LegendarySurvivalOverhaul.terraFirmaCraftLoaded)
 			return 0.0f;

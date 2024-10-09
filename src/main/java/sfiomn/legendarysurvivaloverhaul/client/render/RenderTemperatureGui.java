@@ -78,16 +78,19 @@ public class RenderTemperatureGui
                 if (Objects.requireNonNull(Config.Baked.temperatureDisplayMode) == TemperatureDisplayEnum.SYMBOL) {
 					Minecraft.getInstance().getProfiler().push("temperature_gui");
                     drawTemperatureAsSymbol(guiGraphics, player, width, height);
+					Minecraft.getInstance().getProfiler().pop();
                 }
 
-				if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC) {
+				if (Config.Baked.wetnessEnabled) {
 					Minecraft.getInstance().getProfiler().push("wetness_gui");
 					drawWetness(guiGraphics, player, width, height);
+					Minecraft.getInstance().getProfiler().pop();
 				}
 
 				if (LegendarySurvivalOverhaul.curiosLoaded && CuriosUtil.isThermometerEquipped) {
 					Minecraft.getInstance().getProfiler().push("body_temperature_gui");
 					drawBodyTemperature(guiGraphics, player, width, height);
+					Minecraft.getInstance().getProfiler().pop();
 				}
 			}
 		}
@@ -456,7 +459,7 @@ public class RenderTemperatureGui
 		}
 
 		public static BodyTemperatureIcon get(float tempRatio) {
-			return BodyTemperatureIcon.values()[1 + (int)(tempRatio * 9)];
+			return BodyTemperatureIcon.values()[Math.min(1 + (int)(tempRatio * 9), 9)];
 		}
 	}
 

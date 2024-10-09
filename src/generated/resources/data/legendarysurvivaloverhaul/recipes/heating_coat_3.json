@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "heating_coat",
+  "key": {
+    "#": {
+      "item": "legendarysurvivaloverhaul:heating_coat_2"
+    },
+    "e": {
+      "item": "minecraft:end_rod"
+    },
+    "n": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "pattern": [
+    " ne",
+    "ne#",
+    "e##"
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:heating_coat_3"
+  },
+  "show_notification": true
+}

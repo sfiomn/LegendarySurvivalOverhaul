@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 public class BodyDamageUtilInternal implements IBodyDamageUtil {
     private static final Map<MalusBodyPartEnum, Map<Float, Pair<MobEffect, Integer>>> bodyPartMalusEffects = new HashMap<>();
 
-
     public BodyDamageUtilInternal() {}
 
     public static void initMalusConfig() {

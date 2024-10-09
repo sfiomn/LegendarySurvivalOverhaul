@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "drink",
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "l": {
+      "item": "minecraft:leather"
+    }
+  },
+  "pattern": [
+    " i ",
+    "l l",
+    "lll"
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:canteen"
+  },
+  "show_notification": true
+}

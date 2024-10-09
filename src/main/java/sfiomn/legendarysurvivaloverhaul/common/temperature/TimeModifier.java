@@ -1,6 +1,7 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.common.integration.terrafirmacraft.TerraFirmaCraftUtil;
@@ -15,7 +16,7 @@ public class TimeModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(Level level, BlockPos pos)
+	public float getWorldInfluence(Player player, Level level, BlockPos pos)
 	{
 		// This effect should only be provided in surface worlds
 		if(level.dimensionType().hasCeiling() || TerraFirmaCraftUtil.shouldUseTerraFirmaCraftTemp())

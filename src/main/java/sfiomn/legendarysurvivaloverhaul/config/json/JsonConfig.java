@@ -20,7 +20,7 @@ public class JsonConfig
 {
 	public static Map<String, JsonTemperature> dimensionTemperatures = Maps.newHashMap();
 	public static Map<String, JsonBiomeIdentity> biomeOverrides = Maps.newHashMap();
-	public static Map<String, JsonTemperature> itemTemperatures = Maps.newHashMap();
+	public static Map<String, JsonTemperatureResistance> itemTemperatures = Maps.newHashMap();
 	public static Map<String, JsonTemperature> entityTemperatures = Maps.newHashMap();
 	public static Map<String, List<JsonBlockFluidTemperature>> blockFluidTemperatures = Maps.newHashMap();
 	public static Map<String, JsonFuelItem> fuelItems = Maps.newHashMap();
@@ -93,7 +93,12 @@ public class JsonConfig
 
 	public static void registerItemTemperature(String registryName, float temperature) {
 		if(!itemTemperatures.containsKey(registryName))
-			itemTemperatures.put(registryName, new JsonTemperature(temperature));
+			itemTemperatures.put(registryName, new JsonTemperatureResistance(temperature));
+	}
+
+	public static void registerItemTemperature(String registryName, float temperature, float heatResistance, float coldResistance, float thermalResistance) {
+		if(!itemTemperatures.containsKey(registryName))
+			itemTemperatures.put(registryName, new JsonTemperatureResistance(temperature, heatResistance, coldResistance, thermalResistance));
 	}
 
 	public static void registerEntityTemperature(String registryName, float temperature) {

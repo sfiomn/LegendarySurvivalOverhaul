@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:stone"
+    },
+    "l": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "q": {
+      "item": "minecraft:quartz"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "lql",
+    "lql",
+    "#r#"
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:cooler"
+  },
+  "show_notification": true
+}

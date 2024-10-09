@@ -52,7 +52,7 @@ public class ClientForgeEvents {
         if (player == null) {
             return;
         }
-        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && event.getItemStack().getItem() == SSItems.CALENDAR.get()) {
+        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && event.getItemStack().getItem() == SSItems.CALENDAR) {
             player.displayClientMessage(seasonTooltip(player.blockPosition(), player.level()), true);
         } else if (event.getItemStack().getItem() == Items.CLOCK) {
             player.displayClientMessage(Component.literal(timeInGame(Minecraft.getInstance())), true);
@@ -70,7 +70,7 @@ public class ClientForgeEvents {
             return;
         }
 
-        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && !plantCanGrow(event.getLevel(), event.getPos(), plant)) {
+        if (LegendarySurvivalOverhaul.sereneSeasonsLoaded && !plantCanGrow(event.getLevel(), event.getPos(), event.getBlock())) {
             event.getEntity().displayClientMessage(Component.translatable("message." + LegendarySurvivalOverhaul.MOD_ID + ".bonemeal.not_correct_season"), true);
         }
     }
