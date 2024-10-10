@@ -17,11 +17,10 @@ import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 public class BodyDamageCommand extends CommandBase
 {
-	//.executes(src -> new TemperatureCommand().execute(src.getSource())));
 	public BodyDamageCommand() {
 		super(Commands.literal("bodydamage")
 				.requires((p_198521_0_) -> p_198521_0_.hasPermission(2))
-				.then(Commands.argument("target", EntityArgument.entity()))
+				.then(Commands.argument("target", EntityArgument.entity())
 				.then(Commands.literal("set")
 					.then(Commands.argument("BodyPart", EnumArgument.enumArgument(BodyPartEnum.class))
 						.then(Commands.argument("Health", FloatArgumentType.floatArg(0))
@@ -29,7 +28,7 @@ public class BodyDamageCommand extends CommandBase
 				.then(Commands.literal("get")
 						.then(Commands.argument("BodyPart", EnumArgument.enumArgument(BodyPartEnum.class))
 								.executes(src -> new BodyDamageCommand().get(src.getSource(), EntityArgument.getEntity(src, "target"), src.getArgument("BodyPart", BodyPartEnum.class)))))
-				);
+				));
 	}
 
 	public int get(CommandSourceStack source, Entity entity, BodyPartEnum bodyPart) {
