@@ -14,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 
 public class HeatStrokeEffect extends MobEffect
 {
-
 	public HeatStrokeEffect()
 	{
 		super(MobEffectCategory.HARMFUL, 16756041);

@@ -5,7 +5,6 @@ import net.minecraft.world.effect.MobEffectCategory;
 
 public class HardFallingEffect extends MobEffect
 {
-
 	public HardFallingEffect()
 	{
 		super(MobEffectCategory.HARMFUL, 1166574);

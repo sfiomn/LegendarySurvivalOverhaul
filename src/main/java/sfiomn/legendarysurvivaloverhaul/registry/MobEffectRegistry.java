@@ -34,7 +34,7 @@ public class MobEffectRegistry {
 	public static final RegistryObject<MobEffect> HEAT_THIRST = EFFECTS.register("heat_thirst", HeatThirstEffect::new);
 	public static final RegistryObject<MobEffect> COLD_IMMUNITY = EFFECTS.register("cold_immunity", ColdImmunityEffect::new);
 	public static final RegistryObject<MobEffect> HEAT_IMMUNITY = EFFECTS.register("heat_immunity", HeatImmunityEffect::new);
-	public static final RegistryObject<MobEffect> TEMPERATURE_IMMUNITY = EFFECTS.register("temperature_immunity", HeatImmunityEffect::new);
+	public static final RegistryObject<MobEffect> TEMPERATURE_IMMUNITY = EFFECTS.register("temperature_immunity", TemperatureImmunityEffect::new);
 	public static final RegistryObject<Potion> HEAT_IMMUNITY_POTION = POTIONS.register("heat_immunity", () -> new Potion("heat_immunity", new MobEffectInstance(HEAT_IMMUNITY.get(), 1800, 0, false, true, true)));
 	public static final RegistryObject<Potion> HEAT_IMMUNITY_POTION_LONG = POTIONS.register("heat_resistance_long", () -> new Potion("heat_immunity_long", new MobEffectInstance(HEAT_IMMUNITY.get(), 2400, 0, false, true, true)));
 	public static final RegistryObject<Potion> COLD_IMMUNITY_POTION = POTIONS.register("cold_immunity", () -> new Potion("cold_immunity", new MobEffectInstance(COLD_IMMUNITY.get(), 1800, 0, false, true, true)));
