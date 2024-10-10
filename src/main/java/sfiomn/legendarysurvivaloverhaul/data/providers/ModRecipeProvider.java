@@ -431,6 +431,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .requires(ItemRegistry.PURIFIED_WATER_BOTTLE.get())
                 .requires(Items.SUGAR)
                 .requires(fruit)
+                .requires(fruit)
+                .requires(fruit)
                 .group("drink")
                 .unlockedBy(getHasName(fruit), has(fruit))
                 .save(consumer);

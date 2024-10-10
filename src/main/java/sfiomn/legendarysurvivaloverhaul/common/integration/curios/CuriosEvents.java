@@ -1,6 +1,7 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration.curios;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 import top.theillusivec4.curios.api.event.CurioAttributeModifierEvent;
 import top.theillusivec4.curios.api.event.CurioDropsEvent;
@@ -12,19 +13,19 @@ public class CuriosEvents {
 
     @SubscribeEvent
     public static void onEquipCurio(CurioEquipEvent event) {
-        if (event.getStack().is(ItemRegistry.THERMOMETER.get()) && !CuriosUtil.isThermometerEquipped)
+        if (event.getStack().is(ItemRegistry.THERMOMETER.get()))
             CuriosUtil.isThermometerEquipped = true;
     }
 
     @SubscribeEvent
     public static void onUnequipCurio(CurioUnequipEvent event) {
-        if (event.getStack().is(ItemRegistry.THERMOMETER.get()) && CuriosUtil.isThermometerEquipped)
+        if (event.getStack().is(ItemRegistry.THERMOMETER.get()))
             CuriosUtil.isThermometerEquipped = false;
     }
 
     @SubscribeEvent
     public static void onDropCurio(CurioDropsEvent event) {
-        if (CuriosUtil.isThermometerEquipped)
+        if (event.getDrops().stream().anyMatch(itemEntity -> itemEntity.getItem().is(ItemRegistry.THERMOMETER.get())))
             CuriosUtil.isThermometerEquipped = false;
     }
 

@@ -10,7 +10,7 @@ import sfiomn.legendarysurvivaloverhaul.config.Config;
 public abstract class BottledDrinkItem extends DrinkItem {
 
     public BottledDrinkItem(Properties properties) {
-        super(properties.stacksTo(16));
+        super(properties.stacksTo(64));
     }
 
     @Override
