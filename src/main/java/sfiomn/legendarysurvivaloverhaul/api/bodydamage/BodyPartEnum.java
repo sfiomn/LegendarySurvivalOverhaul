@@ -1,7 +1,5 @@
 package sfiomn.legendarysurvivaloverhaul.api.bodydamage;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.Arrays;
 import java.util.List;
 

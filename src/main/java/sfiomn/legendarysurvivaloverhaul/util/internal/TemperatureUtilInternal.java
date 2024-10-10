@@ -56,7 +56,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 			float worldInfluence = modifier.getWorldInfluence(player, world, pos);
 			float playerInfluence = modifier.getPlayerInfluence(player);
 			if (player.getMainHandItem().is(Items.DEBUG_STICK)) {
-				LegendarySurvivalOverhaul.LOGGER.debug(MODIFIERS_REGISTRY.get().getKey(modifier) + " : world influence=" + worldInfluence + ", player influence=" + playerInfluence);
+				LegendarySurvivalOverhaul.LOGGER.info(MODIFIERS_REGISTRY.get().getKey(modifier) + " : world influence=" + worldInfluence + ", player influence=" + playerInfluence);
 			}
 
 			sum += worldInfluence + playerInfluence;
@@ -68,7 +68,7 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 			float worldInfluence = dynamicModifier.applyDynamicWorldInfluence(player, world, pos, sum, dynamicModification);
 			float playerInfluence = dynamicModifier.applyDynamicPlayerInfluence(player, sum, dynamicModification);
 			if (player.getMainHandItem().is(Items.DEBUG_STICK)) {
-				LegendarySurvivalOverhaul.LOGGER.debug(DYNAMIC_MODIFIERS_REGISTRY.get().getKey(dynamicModifier) + " : world influence=" + worldInfluence + ", player influence=" + playerInfluence);
+				LegendarySurvivalOverhaul.LOGGER.info(DYNAMIC_MODIFIERS_REGISTRY.get().getKey(dynamicModifier) + " : world influence=" + worldInfluence + ", player influence=" + playerInfluence);
 			}
 
 			dynamicModification += worldInfluence + playerInfluence;

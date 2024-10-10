@@ -54,14 +54,13 @@ public class RenderTemperatureGui
 
 	private static final int HUNGER_TEXTURE_WIDTH = 9;
 	private static final int HUNGER_TEXTURE_HEIGHT = 9;
+
 	private static int frameCounter = -1;
 	private static int delay = 0;
 	private static boolean risingTemperature = false;
 	private static boolean startAnimation = false;
-	
 	private static int lastWetnessSymbol = 0;
 	private static int flashCounter = -1;
-
 	private static boolean shakeSide = false;
 	
 	public static IGuiOverlay TEMPERATURE_GUI = (forgeGui, guiGraphics, partialTicks, width, height) -> {
