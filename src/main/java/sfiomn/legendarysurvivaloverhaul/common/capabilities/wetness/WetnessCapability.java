@@ -9,8 +9,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CauldronBlock;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.LavaFluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -99,7 +105,7 @@ public class WetnessCapability implements IWetnessCapability
 		}
 
 		this.addWetnessTickTimer(1);
-		if (this.getWetnessTickTimer() < 7)
+		if (this.getWetnessTickTimer() < 5)
 			return;
 		this.setWetnessTickTimer(0);
 
@@ -121,20 +127,29 @@ public class WetnessCapability implements IWetnessCapability
 		}
 
 		FluidState fluidState = level.getFluidState(pos);
+		BlockState blockState = level.getBlockState(pos);
 		FluidState fluidStateUp = level.getFluidState(pos.above());
 
 		// If no fluid on the pos of the player (or above if in a boat)
 		// only check for raining on pos above player (to avoid issue with half blocks)
-		if (fluidState.isEmpty()) {
+		if (fluidState.isEmpty() && !blockState.is(Blocks.WATER_CAULDRON)) {
 			if (wetness < WETNESS_LIMIT && level.isRainingAt(player.blockPosition().above()))
 				this.addWetness(Config.Baked.wetnessRainIncrease);
 			else if (this.wetness > 0)
 				this.addWetness(Config.Baked.wetnessDecrease);
 		}
-		else if (!fluidState.isEmpty()) {
-			Fluid fluid = fluidState.getType();
-			
-			float fractionalLevel = MathUtil.invLerp(1, 8, fluidState.getAmount());
+		else {
+			Fluid fluid = Fluids.EMPTY;
+			float fractionalLevel = 0.0f;
+
+			if (!fluidState.isEmpty()) {
+				fluid = fluidState.getType();
+				fractionalLevel = MathUtil.invLerp(1, 8, fluidState.getAmount());
+			} else if (blockState.is(Blocks.WATER_CAULDRON)) {
+				fluid = Fluids.WATER;
+				if (blockState.hasProperty(LayeredCauldronBlock.LEVEL))
+					fractionalLevel = MathUtil.invLerp(1, 3, blockState.getValue(LayeredCauldronBlock.LEVEL));
+			}
 
 			// if player is out of water
 			if (((float) player.position().y()) > ((float) pos.getY()) + fractionalLevel + 0.0625f)
