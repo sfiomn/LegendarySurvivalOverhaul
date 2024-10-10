@@ -143,7 +143,7 @@ public class ThirstUtilInternal implements IThirstUtil {
                 MobEffect mobEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effect.name));
                 if (mobEffect != null) {
                     int effectDuration = effect.duration;
-                    if (mobEffect == MobEffectRegistry.THIRST.get() && player.getEffect(MobEffectRegistry.THIRST.get()) != null) {
+                    if (Config.Baked.cumulativeThirstEffectDuration && mobEffect == MobEffectRegistry.THIRST.get() && player.getEffect(MobEffectRegistry.THIRST.get()) != null) {
                         effectDuration += Objects.requireNonNull(player.getEffect(MobEffectRegistry.THIRST.get())).getDuration();
                     }
                     player.addEffect(new MobEffectInstance(mobEffect, effectDuration, effect.amplifier, false, true, true));

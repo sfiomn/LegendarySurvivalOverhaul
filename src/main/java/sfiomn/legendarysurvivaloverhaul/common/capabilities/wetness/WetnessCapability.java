@@ -3,6 +3,7 @@ package sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.BlockPos;
@@ -16,6 +17,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.wetness.IWetnessCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.MathUtil;
@@ -97,7 +99,7 @@ public class WetnessCapability implements IWetnessCapability
 		}
 
 		this.addWetnessTickTimer(1);
-		if (this.getWetnessTickTimer() < 10)
+		if (this.getWetnessTickTimer() < 7)
 			return;
 		this.setWetnessTickTimer(0);
 
@@ -106,9 +108,9 @@ public class WetnessCapability implements IWetnessCapability
 		
 		BlockPos pos = player.blockPosition();
 		
-		// If the player is in a boat, shift the position used for calculations up by one block
+		// If the player is not riding a living entity, shift the position used for calculations up by one block
 		// This way, sitting in a boat that's floating on the water won't increase a player's wetness
-		if (player.getVehicle() instanceof Boat && !player.getVehicle().hasImpulse)
+		if (player.getVehicle() != null && !(player.getVehicle() instanceof LivingEntity) && !player.getVehicle().hasImpulse)
 		{
 			pos = pos.above();
 			if (this.wetness > 0 && level.getFluidState(pos).isEmpty())

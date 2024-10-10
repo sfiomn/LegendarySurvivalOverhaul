@@ -63,9 +63,8 @@ public class SewingRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
-        ItemStack itemstack = result.copy();
 
-        return itemstack;
+        return result.copy();
     }
 
     @Override

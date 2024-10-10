@@ -1,6 +1,5 @@
 package sfiomn.legendarysurvivaloverhaul;
 
-import io.github.mortuusars.sootychimneys.setup.ModTags;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -43,8 +42,6 @@ import sfiomn.legendarysurvivaloverhaul.common.integration.origins.OriginsEvents
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil;
 import sfiomn.legendarysurvivaloverhaul.common.integration.vampirism.VampirismEvents;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
-import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
-import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.registry.*;
 import sfiomn.legendarysurvivaloverhaul.util.internal.BodyDamageUtilInternal;
@@ -150,6 +147,7 @@ public class LegendarySurvivalOverhaul
 			forgeBus.register(VampirismEvents.class);
 		}
 		if (originsLoaded) {
+			LOGGER.debug("Origins is loaded, enabling compatibility");
 			forgeBus.register(OriginsEvents.class);
 		}
 		if (surviveLoaded)

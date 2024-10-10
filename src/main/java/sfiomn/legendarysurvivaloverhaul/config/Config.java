@@ -159,6 +159,7 @@ public class Config
 		// Thirst
 		public final ForgeConfigSpec.BooleanValue thirstEnabled;
 		public final ForgeConfigSpec.BooleanValue dangerousDehydration;
+		public final ForgeConfigSpec.BooleanValue cumulativeThirstEffectDuration;
 		public final ForgeConfigSpec.DoubleValue dehydrationDamageScaling;
 		public final ForgeConfigSpec.DoubleValue thirstEffectModifier;
 		public final ForgeConfigSpec.DoubleValue baseThirstExhaustion;
@@ -543,6 +544,9 @@ public class Config
 			dangerousDehydration = builder
 					.comment(" If enabled, players will take damage from the complete dehydration.")
 					.define("Dangerous Dehydration", true);
+			cumulativeThirstEffectDuration = builder
+					.comment(" If enabled, each time the player receives a thirst effect, its duration will be added to the thirst effect duration if already on the player.")
+					.define("Cumulative Thirst Effect Duration", true);
 			builder.push("exhaustion");
 			baseThirstExhaustion = builder
 					.comment(" Thirst exhausted every 10 ticks.")
@@ -1034,6 +1038,7 @@ public class Config
 		// Thirst
 		public static boolean thirstEnabled;
 		public static boolean dangerousDehydration;
+		public static boolean cumulativeThirstEffectDuration;
 		public static double dehydrationDamageScaling;
 		public static double thirstEffectModifier;
 		public static double baseThirstExhaustion;
@@ -1246,6 +1251,7 @@ public class Config
 
 				thirstEnabled = COMMON.thirstEnabled.get();
 				dangerousDehydration = COMMON.dangerousDehydration.get();
+				cumulativeThirstEffectDuration = COMMON.cumulativeThirstEffectDuration.get();
 				dehydrationDamageScaling = COMMON.dehydrationDamageScaling.get();
 				thirstEffectModifier = COMMON.thirstEffectModifier.get();
 
