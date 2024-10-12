@@ -29,7 +29,7 @@ public class SereneSeasonsUtil {
             return Component.translatable("message.legendarysurvivaloverhaul.sereneseasons.no_serene_season_loaded");
 
 
-        if (!ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
+        if (!hasSeasons(level))
             return Component.translatable("message.legendarysurvivaloverhaul.sereneseasons.no_season_dimension");
 
         SeasonType seasonType = getSeasonType(level.getBiome(blockPos));
@@ -87,6 +87,10 @@ public class SereneSeasonsUtil {
             }
         }
         return true;
+    }
+
+    public static boolean hasSeasons(Level level) {
+        return ModConfig.seasons.isDimensionWhitelisted(level.dimension());
     }
 
     public static void initAverageTemperatures() {

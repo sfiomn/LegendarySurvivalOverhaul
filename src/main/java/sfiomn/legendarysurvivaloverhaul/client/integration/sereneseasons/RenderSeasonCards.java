@@ -61,7 +61,7 @@ public class RenderSeasonCards {
         if (lastDimension == null || lastDimension != level.dimension()) {
             delayTimer = Config.Baked.seasonCardsSpawnDimensionDelayInTicks;
             lastDimension = level.dimension();
-            isDimensionSeasonal = ModConfig.seasons.isDimensionWhitelisted(lastDimension);
+            isDimensionSeasonal = SereneSeasonsUtil.hasSeasons(level);
         }
 
         if (!isDimensionSeasonal) {

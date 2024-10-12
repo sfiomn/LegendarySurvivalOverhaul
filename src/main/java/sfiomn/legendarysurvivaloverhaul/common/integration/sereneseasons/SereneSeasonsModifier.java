@@ -50,7 +50,7 @@ public class SereneSeasonsModifier extends ModifierBase
 	{
 		ISeasonState seasonState = SeasonHelper.getSeasonState(level);
 		
-		if (seasonState == null || !ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
+		if (seasonState == null || !SereneSeasonsUtil.hasSeasons(level))
 			return 0.0f;
 
 		Vec3i[] posOffsets;

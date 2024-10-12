@@ -147,11 +147,20 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 			}
 
 			UUID modifierUuid = equipmentSlotUuid.get(event.getSlotType());
-			HEATING_TEMPERATURE.addModifier(event, modifierUuid, Math.max(config.temperature, 0));
-			COOLING_TEMPERATURE.addModifier(event, modifierUuid, Math.min(config.temperature, 0));
-			HEAT_RESISTANCE.addModifier(event, modifierUuid, config.heatResistance);
-			COLD_RESISTANCE.addModifier(event, modifierUuid, config.coldResistance);
-			THERMAL_RESISTANCE.addModifier(event, modifierUuid, config.thermalResistance);
+
+			if (config.temperature != 0) {
+				HEATING_TEMPERATURE.addModifier(event, modifierUuid, Math.max(config.temperature, 0));
+				COOLING_TEMPERATURE.addModifier(event, modifierUuid, Math.min(config.temperature, 0));
+			}
+
+			if (config.heatResistance != 0)
+				HEAT_RESISTANCE.addModifier(event, modifierUuid, config.heatResistance);
+
+			if (config.coldResistance != 0)
+				COLD_RESISTANCE.addModifier(event, modifierUuid, config.coldResistance);
+
+			if (config.thermalResistance != 0)
+				THERMAL_RESISTANCE.addModifier(event, modifierUuid, config.thermalResistance);
 		}
 	}
 
