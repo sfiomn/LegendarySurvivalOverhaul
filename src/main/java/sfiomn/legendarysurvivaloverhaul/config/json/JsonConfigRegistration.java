@@ -241,6 +241,19 @@ public class JsonConfigRegistration
 	public static void processAllJson(File jsonDir)
 	{
 		// Temperature
+		Map<String, JsonTemperature> jsonDimensionTemperatures = processJson(JsonFileName.DIMENSION_TEMP, jsonDir);
+
+		if (jsonDimensionTemperatures != null)
+		{
+			// remove default biome config
+			JsonConfig.dimensionTemperatures.clear();
+			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonDimensionTemperatures.size() + " dimension temperature overrides from JSON");
+			for (Map.Entry<String, JsonTemperature> entry : jsonDimensionTemperatures.entrySet())
+			{
+				JsonConfig.registerDimensionTemperature(entry.getKey(), entry.getValue().temperature);
+			}
+		}
+
 		Map<String, JsonBiomeIdentity> jsonBiomeIdentities = processJson(JsonFileName.BIOME_TEMP, jsonDir);
 
 		if (jsonBiomeIdentities != null)

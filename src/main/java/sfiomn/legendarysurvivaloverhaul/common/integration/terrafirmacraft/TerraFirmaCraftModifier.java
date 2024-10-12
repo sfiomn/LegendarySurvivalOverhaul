@@ -14,7 +14,7 @@ public class TerraFirmaCraftModifier extends ModifierBase
 {
 	public TerraFirmaCraftModifier()
 	{
-		super();
+
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class TerraFirmaCraftModifier extends ModifierBase
 		if (!LegendarySurvivalOverhaul.terraFirmaCraftLoaded)
 			return 0.0f;
 
-		if (!Config.Baked.tfcTemperatureOverride)
+		if (Config.Baked.tfcTemperatureMultiplier == 0)
 			return 0.0f;
 		
 		try
@@ -35,7 +35,7 @@ public class TerraFirmaCraftModifier extends ModifierBase
 		catch (Exception e)
 		{
 			// If an error somehow occurs, disable compatibility 
-			LegendarySurvivalOverhaul.LOGGER.error("An error has occurred with TerraFirmaCraft compatibility, disabling modifier", e);
+			LegendarySurvivalOverhaul.LOGGER.error("An error has occurred with TerraFirmaCraft compatibility, disabling integration", e);
 			LegendarySurvivalOverhaul.terraFirmaCraftLoaded = false;
 			
 			return 0.0f;

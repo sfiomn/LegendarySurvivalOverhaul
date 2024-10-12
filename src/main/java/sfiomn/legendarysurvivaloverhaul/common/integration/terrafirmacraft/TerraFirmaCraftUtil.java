@@ -6,6 +6,6 @@ import sfiomn.legendarysurvivaloverhaul.config.Config;
 public class TerraFirmaCraftUtil {
 
     public static boolean shouldUseTerraFirmaCraftTemp() {
-        return LegendarySurvivalOverhaul.terraFirmaCraftLoaded && Config.Baked.tfcTemperatureOverride;
+        return LegendarySurvivalOverhaul.terraFirmaCraftLoaded && Config.Baked.tfcTemperatureMultiplier != 0;
     }
 }

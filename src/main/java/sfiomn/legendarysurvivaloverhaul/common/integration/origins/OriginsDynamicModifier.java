@@ -12,6 +12,7 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperat
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.common.integration.json.JsonIntegrationConfig;
+import sfiomn.legendarysurvivaloverhaul.registry.AttributeRegistry;
 
 public class OriginsDynamicModifier extends DynamicModifierBase {
     public OriginsDynamicModifier() {}
@@ -22,7 +23,7 @@ public class OriginsDynamicModifier extends DynamicModifierBase {
         if (!LegendarySurvivalOverhaul.originsLoaded)
             return 0.0f;
 
-        float temp = 0.0f;
+        float effectiveResistance = 0.0f;
         float diffToAverage = currentTemperature - TemperatureEnum.NORMAL.getMiddle();
 
         LazyOptional<IOriginContainer> optionalOrigin = player.getCapability(OriginsAPI.ORIGIN_CONTAINER);
@@ -31,16 +32,24 @@ public class OriginsDynamicModifier extends DynamicModifierBase {
             for (ResourceKey<Origin> origin : origins.getOrigins().values()) {
                 if (JsonIntegrationConfig.originsTemperatures.containsKey(origin.location().toString())) {
                     JsonTemperatureResistance config = JsonIntegrationConfig.originsTemperatures.get(origin.location().toString());
+
+                    double maxResistance = config.thermalResistance;
+
                     if (diffToAverage > 0) {
-                        return Mth.clamp(-config.heatResistance - config.thermalResistance, -diffToAverage - currentResistance, -currentResistance);
+                        maxResistance += config.heatResistance;
+                        effectiveResistance = (float) Mth.clamp(maxResistance, currentResistance, diffToAverage + currentResistance);
+                        effectiveResistance = -effectiveResistance;
                     } else if (diffToAverage < 0) {
-                        return Mth.clamp(config.coldResistance + config.thermalResistance, diffToAverage - currentResistance, -currentResistance);
-                    } else
-                        return 0.0f;
+                        maxResistance += config.coldResistance;
+                        diffToAverage = -diffToAverage;
+                        currentResistance = -currentResistance;
+                        effectiveResistance = (float) Mth.clamp(maxResistance, currentResistance, diffToAverage + currentResistance);
+                    }
+
                 }
             }
         }
 
-        return temp;
+        return effectiveResistance;
     }
 }

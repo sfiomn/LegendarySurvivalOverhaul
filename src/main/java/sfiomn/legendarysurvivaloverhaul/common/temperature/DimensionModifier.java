@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;

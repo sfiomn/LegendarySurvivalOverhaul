@@ -1,7 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration.curios;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 import top.theillusivec4.curios.api.event.CurioAttributeModifierEvent;
 import top.theillusivec4.curios.api.event.CurioDropsEvent;

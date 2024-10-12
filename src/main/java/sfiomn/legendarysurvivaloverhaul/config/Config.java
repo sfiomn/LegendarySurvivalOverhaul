@@ -124,7 +124,7 @@ public class Config
 		public final ForgeConfigSpec.DoubleValue thermalCoat2Modifier;
 		public final ForgeConfigSpec.DoubleValue thermalCoat3Modifier;
 
-		public final ForgeConfigSpec.BooleanValue tfcTemperatureOverride;
+		public final ForgeConfigSpec.DoubleValue tfcItemHeatMultiplier;
 		public final ForgeConfigSpec.DoubleValue tfcTemperatureMultiplier;
 
 		public final ForgeConfigSpec.BooleanValue seasonTemperatureEffects;
@@ -468,13 +468,13 @@ public class Config
 
 			builder.push("integration");
 
-			builder.push("terrafirmacraft");
-			tfcTemperatureOverride = builder
-					.comment(" If TerraFirmaCraft is installed, then biome, time, season (if serene seasons installed) and altitude modifiers will be disabled, and TerraFirmaCraft calculation used instead.",
-							" All other modifiers remain to calculate Player temperature.")
-					.define("TerraFirmaCraft Temperature Override Enabled", true);
+			builder.comment(" If TerraFirmaCraft is installed, then biome, time, season (if serene seasons installed) and altitude modifiers will be disabled, and TerraFirmaCraft calculation used instead.",
+							" All other modifiers remain to calculate Player temperature.").push("terrafirmacraft");
+			tfcItemHeatMultiplier = builder
+					.comment(" How much the heat of the item provided by TerraFirmaCraft is multiplied. 0 deactivates the impact on temperature.")
+					.defineInRange("TerraFirmaCraft Item Heat Multiplier", 0.01d, 0, 1000);
 			tfcTemperatureMultiplier = builder
-					.comment(" How much the temperature given from TerraFirmaCraft is multiplied, to adjust with the other temperature effects.")
+					.comment(" How much the temperature given from TerraFirmaCraft is multiplied. 0 deactivates the impact on temperature.")
 					.defineInRange("TerraFirmaCraft Temperature Multiplier", 1.0d, 0, 1000);
 			builder.pop();
 
@@ -569,7 +569,7 @@ public class Config
 					.defineInRange("Dehydration Damage Scaling", 0.3d, 0, 1000.0d);
 			thirstEffectModifier = builder
 					.comment(" How many thirst exhaustion will be added every 50 ticks when the player suffers from not amplified Thirst Effect.",
-							" The player will suffer Thirst Effect from dirty water by example.")
+							" The player will suffer Thirst Effect from dirty water for example.")
 					.defineInRange("Thirst Effect Modifier", 0.25d, 0, 1000);
 			builder.push("canteen");
 			canteenCapacity = builder
@@ -834,7 +834,7 @@ public class Config
 			showVanillaBarAnimationOverlay = builder
 					.comment(" Whether the vanilla animation of the Food bar and Hydration bar is rendered. The bar shakes more the lower they are.",
 							" This mod render a new food bar as a secondary effect of a cold temperature.",
-							" Disable this animation if the temperature secondary effect is enabled to allow a compatibility with other mods rendering the food bar (by example Appleskin).")
+							" Disable this animation if the temperature secondary effect is enabled to allow a compatibility with other mods rendering the food bar (for example Appleskin).")
 					.define("Show Vanilla Bar Animation Overlay", true);
 			builder.pop();
 
@@ -1003,7 +1003,7 @@ public class Config
 		public static double thermalCoat2Modifier;
 		public static double thermalCoat3Modifier;
 
-		public static boolean tfcTemperatureOverride;
+		public static double tfcItemHeatMultiplier;
 		public static double tfcTemperatureMultiplier;
 
 		public static boolean seasonTemperatureEffects;
@@ -1217,7 +1217,7 @@ public class Config
 				thermalCoat2Modifier = COMMON.thermalCoat2Modifier.get();
 				thermalCoat3Modifier = COMMON.thermalCoat3Modifier.get();
 
-				tfcTemperatureOverride = COMMON.tfcTemperatureOverride.get();
+				tfcItemHeatMultiplier = COMMON.tfcItemHeatMultiplier.get();
 				tfcTemperatureMultiplier = COMMON.tfcTemperatureMultiplier.get();
 
 				seasonTemperatureEffects = COMMON.seasonTemperatureEffects.get();

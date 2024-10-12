@@ -12,6 +12,7 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.common.integration.origins.OriginsDynamicModifier;
 import sfiomn.legendarysurvivaloverhaul.common.integration.origins.OriginsModifier;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier;
+import sfiomn.legendarysurvivaloverhaul.common.integration.terrafirmacraft.TerraFirmaCraftHeatItemModifier;
 import sfiomn.legendarysurvivaloverhaul.common.integration.terrafirmacraft.TerraFirmaCraftModifier;
 import sfiomn.legendarysurvivaloverhaul.common.temperature.*;
 import sfiomn.legendarysurvivaloverhaul.common.temperature.attribute.CoatModifier;
@@ -48,17 +49,21 @@ public class TemperatureModifierRegistry
 	public static final RegistryObject<ModifierBase> PLAYER_HUDDLING = MODIFIERS.register("player_huddling", PlayerHuddlingModifier::new);
 	public static final RegistryObject<ModifierBase> WETNESS = MODIFIERS.register("wetness", WetModifier::new);
 	public static final RegistryObject<ModifierBase> TEMPERATURE_ATTRIBUTE = MODIFIERS.register("temperature_attribute", TemperatureAttributeModifier::new);
-	
-	// Mod Compat
-	public static final RegistryObject<ModifierBase> SERENE_SEASONS = MODIFIERS.register("integration/serene_seasons", SereneSeasonsModifier::new);
-	public static final RegistryObject<ModifierBase> TERRA_FIRMA_CRAFT = MODIFIERS.register("integration/terra_firma_craft", TerraFirmaCraftModifier::new);
-	public static final RegistryObject<ModifierBase> ORIGINS = MODIFIERS.register("integration/origins", OriginsModifier::new);
-
-	public static final RegistryObject<DynamicModifierBase> RESISTANCE_ATTRIBUTE = DYNAMIC_MODIFIERS.register("resistance_attribute", ResistanceAttributeModifier::new);
-	public static final RegistryObject<DynamicModifierBase> ORIGINS_RESISTANCE = DYNAMIC_MODIFIERS.register("integration/origins_resistance", OriginsDynamicModifier::new);
 
 	public static final RegistryObject<AttributeModifierBase> ITEM = ITEM_ATTRIBUTE_MODIFIERS.register("item", ItemModifier::new);
 	public static final RegistryObject<AttributeModifierBase> COAT = ITEM_ATTRIBUTE_MODIFIERS.register("coat", CoatModifier::new);
+
+	public static final RegistryObject<DynamicModifierBase> RESISTANCE_ATTRIBUTE = DYNAMIC_MODIFIERS.register("resistance_attribute", ResistanceAttributeModifier::new);
+
+	// Mod Compat
+	public static final RegistryObject<ModifierBase> SERENE_SEASONS = MODIFIERS.register("integration/serene_seasons", SereneSeasonsModifier::new);
+
+	public static final RegistryObject<ModifierBase> WORLD_TEMPERATURE_TERRA_FIRMA_CRAFT = MODIFIERS.register("integration/world_temp_tfc", TerraFirmaCraftModifier::new);
+	public static final RegistryObject<AttributeModifierBase> ITEM_TEMPERATURE_TERRA_FIRMA_CRAFT = ITEM_ATTRIBUTE_MODIFIERS.register("integration/item_temp_tfc", TerraFirmaCraftHeatItemModifier::new);
+
+	public static final RegistryObject<ModifierBase> ORIGINS = MODIFIERS.register("integration/origins", OriginsModifier::new);
+	public static final RegistryObject<DynamicModifierBase> ORIGINS_RESISTANCE = DYNAMIC_MODIFIERS.register("integration/origins_resistance", OriginsDynamicModifier::new);
+
 
 	public static void register(IEventBus eventBus){
 		MODIFIERS.register(eventBus);

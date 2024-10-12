@@ -568,5 +568,16 @@ public final class IntegrationController
 	}
 
 	private static void initTerraFirmaCraft() {
+		JsonConfig.registerBlockFluidTemperature("tfc:firepit", 8.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("tfc:firepit", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("tfc:pot", 8.0f, new JsonPropertyValue("lit", "true"));
+		JsonConfig.registerBlockFluidTemperature("tfc:pot", 0.0f, new JsonPropertyValue("lit", "false"));
+		JsonConfig.registerBlockFluidTemperature("tfc:charcoal_forge", 15.0f, new JsonPropertyValue("heat_level", "6"));
+		JsonConfig.registerBlockFluidTemperature("tfc:charcoal_forge", 13.0f, new JsonPropertyValue("heat_level", "5"));
+		JsonConfig.registerBlockFluidTemperature("tfc:charcoal_forge", 11.0f, new JsonPropertyValue("heat_level", "4"));
+		JsonConfig.registerBlockFluidTemperature("tfc:charcoal_forge", 9.0f, new JsonPropertyValue("heat_level", "3"));
+		JsonConfig.registerBlockFluidTemperature("tfc:charcoal_forge", 6.0f, new JsonPropertyValue("heat_level", "2"));
+		JsonConfig.registerBlockFluidTemperature("tfc:charcoal_forge", 3.0f, new JsonPropertyValue("heat_level", "1"));
+		JsonConfig.registerBlockFluidTemperature("tfc:charcoal_forge", 0.0f, new JsonPropertyValue("heat_level", "0"));
 	}
 }
