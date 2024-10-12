@@ -111,7 +111,7 @@ public class ThirstCapability implements IThirstCapability
 			this.addThirstDamageTickTimer(1);
 
 			// Hurt player every 4s, similar as hunger hurting
-			if(this.getThirstDamageTickTimer() > 80)
+			if (this.getThirstDamageTickTimer() > 80)
 			{
 				this.setThirstDamageTickTimer(0);
 
@@ -267,7 +267,7 @@ public class ThirstCapability implements IThirstCapability
 	@Override
 	public void addThirstDamageTickTimer(int damageTickTimer)
 	{
-		this.setThirstDamageCounter(this.getThirstDamageTickTimer() + damageTickTimer);
+		this.setThirstDamageTickTimer(this.getThirstDamageTickTimer() + damageTickTimer);
 	}
 
 	@Override
