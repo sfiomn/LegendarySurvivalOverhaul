@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonBlockFluidTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -77,15 +78,19 @@ public class BlockModifier extends ModifierBase
 	
 	private void doBlocksAndFluidsRoutine(Level level, BlockPos pos)
 	{
-		HashMap<BlockPos, SpreadPoint> listVisitedBlockPos = new HashMap<>();
+		HashSet<BlockPos> visitedBlockPos = new HashSet<>();
+		ArrayList<SpreadPoint> visitedSpreadPoints = new ArrayList<>();
 		ArrayList<SpreadPoint> spreadPointsToProcess = new ArrayList<>();
 
 		SpreadPoint spreadPointHeadPlayer = new SpreadPoint(pos.above(), Direction.UP, tempInfluenceMaximumDist(), 0, level);
 		SpreadPoint spreadPointFeetPlayer = new SpreadPoint(pos, Direction.DOWN, tempInfluenceMaximumDist(), 0, level);
 		spreadPointsToProcess.add(spreadPointHeadPlayer);
 		spreadPointsToProcess.add(spreadPointFeetPlayer);
-		listVisitedBlockPos.put(spreadPointHeadPlayer.position(), spreadPointHeadPlayer);
-		listVisitedBlockPos.put(spreadPointFeetPlayer.position(), spreadPointFeetPlayer);
+
+		visitedBlockPos.add(spreadPointHeadPlayer.position());
+		visitedBlockPos.add(spreadPointFeetPlayer.position());
+		visitedSpreadPoints.add(spreadPointHeadPlayer);
+		visitedSpreadPoints.add(spreadPointFeetPlayer);
 
 		while (!spreadPointsToProcess.isEmpty()) {
 			SpreadPoint spreadPoint = spreadPointsToProcess.remove(0);
@@ -98,7 +103,7 @@ public class BlockModifier extends ModifierBase
 					if (!spreadPoint.isValidSpreadDirection(direction))
 						continue;
 					Vec3i newPosVector = direction.getNormal();
-					SpreadPoint spreadPoint1 = this.processDirectionTo(spreadPointsToProcess, listVisitedBlockPos, spreadPoint, spreadPoint.position().offset(newPosVector), direction, 1.0f);
+					SpreadPoint spreadPoint1 = this.processDirectionTo(spreadPointsToProcess, visitedBlockPos, visitedSpreadPoints, spreadPoint, spreadPoint.position().offset(newPosVector), direction, 1.0f);
 
 					if (spreadPoint1 != null) {
 						for (Direction direction1 : Direction.values()) {
@@ -107,7 +112,7 @@ public class BlockModifier extends ModifierBase
 								if (!spreadPoint1.isValidSpreadDirection(direction))
 									continue;
 								newPosVector = newPosVector.relative(direction1, 1);
-								SpreadPoint spreadPoint2 = this.processDirectionTo(spreadPointsToProcess, listVisitedBlockPos, spreadPoint, spreadPoint.position().offset(newPosVector), direction1, 1.414f);
+								SpreadPoint spreadPoint2 = this.processDirectionTo(spreadPointsToProcess, visitedBlockPos, visitedSpreadPoints, spreadPoint, spreadPoint.position().offset(newPosVector), direction1, 1.414f);
 
 								if (spreadPoint2 != null) {
 									for (Direction direction2 : Direction.values()) {
@@ -116,7 +121,7 @@ public class BlockModifier extends ModifierBase
 											if (!spreadPoint2.isValidSpreadDirection(direction))
 												continue;
 											newPosVector = newPosVector.relative(direction2, 1);
-											this.processDirectionTo(spreadPointsToProcess, listVisitedBlockPos, spreadPoint, spreadPoint.position().offset(newPosVector), direction2, 1.732f);
+											this.processDirectionTo(spreadPointsToProcess, visitedBlockPos, visitedSpreadPoints, spreadPoint, spreadPoint.position().offset(newPosVector), direction2, 1.732f);
 										}
 									}
 								}
@@ -127,17 +132,18 @@ public class BlockModifier extends ModifierBase
 			}
 		}
 
-		for (SpreadPoint spreadPoint : listVisitedBlockPos.values()) {
+		for (SpreadPoint spreadPoint : visitedSpreadPoints) {
 			processTemp(getTemperatureFromSpreadPoint(level, spreadPoint));
 		}
 	}
 
-	private SpreadPoint processDirectionTo(ArrayList<SpreadPoint> spreadPointsToProcess, HashMap<BlockPos, SpreadPoint> listVisitedBlockPos, SpreadPoint parentSpreadPoint, BlockPos newBlockPos, Direction originDirection, float distance) {
+	private SpreadPoint processDirectionTo(ArrayList<SpreadPoint> spreadPointsToProcess, HashSet<BlockPos> visitedBlockPos, ArrayList<SpreadPoint> visitedSpreadPoints, SpreadPoint parentSpreadPoint, BlockPos newBlockPos, Direction originDirection, float distance) {
 		//  Check that the new spread location isn't an already processed location
-		if (!listVisitedBlockPos.containsKey(newBlockPos)) {
+		if (!visitedBlockPos.contains(newBlockPos)) {
 
 			SpreadPoint newSpreadPoint = parentSpreadPoint.spreadTo(newBlockPos, originDirection, distance);
-			listVisitedBlockPos.put(newSpreadPoint.position(), newSpreadPoint);
+			visitedBlockPos.add(newSpreadPoint.position());
+			visitedSpreadPoints.add(newSpreadPoint);
 
 			//  If it is a valid spreadPoint (= not colliding block), store the spreadPoint as to be processed
 			if (newSpreadPoint.isValidSpreadPoint(originDirection)) {

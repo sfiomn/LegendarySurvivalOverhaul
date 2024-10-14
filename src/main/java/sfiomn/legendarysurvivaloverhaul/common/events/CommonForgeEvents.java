@@ -276,9 +276,16 @@ public class CommonForgeEvents {
         if (event.isEndConquered())
             return;
 
-        Player player = event.getEntity();
-        if (Config.Baked.temperatureResistanceOnDeathEnabled) {
-            player.addEffect(new MobEffectInstance(MobEffectRegistry.TEMPERATURE_IMMUNITY.get(), Config.Baked.temperatureImmunityOnDeathTime, 0, false, false, true));
+        if (Config.Baked.temperatureImmunityOnDeathEnabled) {
+            event.getEntity().addEffect(new MobEffectInstance(MobEffectRegistry.TEMPERATURE_IMMUNITY.get(), Config.Baked.temperatureImmunityOnDeathTime, 0, false, false, true));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (Config.Baked.temperatureImmunityOnFirstSpawnEnabled && !event.getEntity().getPersistentData().getBoolean("tempImmuneOnSpawn")) {
+            event.getEntity().getPersistentData().putBoolean("tempImmuneOnSpawn", true);
+            event.getEntity().addEffect(new MobEffectInstance(MobEffectRegistry.TEMPERATURE_IMMUNITY.get(), Config.Baked.temperatureImmunityOnFirstSpawnTime, 0, false, false, true));
         }
     }
 

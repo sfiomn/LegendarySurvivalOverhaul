@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.integration.curios;
 
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 import top.theillusivec4.curios.api.event.CurioAttributeModifierEvent;
@@ -31,5 +32,10 @@ public class CuriosEvents {
     @SubscribeEvent
     public static void onCurioAttributeModifierEvent(CurioAttributeModifierEvent event) {
         CuriosModifier.addAttribute(event);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        CuriosUtil.isThermometerEquipped = CuriosUtil.isCurioItemEquipped(event.getEntity(), ItemRegistry.THERMOMETER.get());
     }
 }

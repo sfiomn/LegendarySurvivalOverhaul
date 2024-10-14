@@ -71,8 +71,10 @@ public class Config
 		public final ForgeConfigSpec.DoubleValue maxTemperatureModification;
 		public final ForgeConfigSpec.BooleanValue dangerousHeatTemperature;
 		public final ForgeConfigSpec.BooleanValue dangerousColdTemperature;
-		public final ForgeConfigSpec.BooleanValue temperatureResistanceOnDeathEnabled;
+		public final ForgeConfigSpec.BooleanValue temperatureImmunityOnDeathEnabled;
 		public final ForgeConfigSpec.IntValue temperatureImmunityOnDeathTime;
+		public final ForgeConfigSpec.BooleanValue temperatureImmunityOnFirstSpawnEnabled;
+		public final ForgeConfigSpec.IntValue temperatureImmunityOnFirstSpawnTime;
 
 		public final ForgeConfigSpec.BooleanValue heatTemperatureSecondaryEffects;
 		public final ForgeConfigSpec.BooleanValue coldTemperatureSecondaryEffects;
@@ -285,13 +287,19 @@ public class Config
 					.comment(" If enabled, players will take damage from the effects of low temperature.")
 					.define("Dangerous Cold Temperature Effects", true);
 
-			builder.push("on-death");
-			temperatureResistanceOnDeathEnabled = builder
+			builder.push("temperature-immunity");
+			temperatureImmunityOnDeathEnabled = builder
 					.comment(" If enabled, players will be immune to temperature effects after death.")
-					.define("Temperature Resistance Enabled", true);
+					.define("Temperature Immunity On Death Enabled", true);
 			temperatureImmunityOnDeathTime = builder
-					.comment(" Temperature immunity period in ticks while the player is immune to temperature effects.")
-					.defineInRange("Temperature Immunity Time", 1800, 0, 100000);
+					.comment(" Temperature immunity period in ticks while the player is immune to temperature effects after death.")
+					.defineInRange("Temperature Immunity On Death Time", 1800, 0, 100000);
+			temperatureImmunityOnFirstSpawnEnabled = builder
+					.comment(" If enabled, players will be immune to temperature effects on first spawn in a world.")
+					.define("Temperature Immunity On First Spawn Enabled", true);
+			temperatureImmunityOnFirstSpawnTime = builder
+					.comment(" Temperature immunity period in ticks while the player is immune to temperature effects on first spawn.")
+					.defineInRange("Temperature Immunity On First Spawn Time", 1800, 0, 100000);
 			builder.pop();
 
 			builder.push("secondary_effects");
@@ -679,7 +687,7 @@ public class Config
 					.defineInRange("Body Part Health Ratio Recovered", 1.0d, 0.0d, 1.0d);
 			healthRatioRecoveredFromSleep = builder
 					.comment(" How much health ratio are recovered from bed sleeping.")
-					.defineInRange("Health Ratio Recovered", 0.3d, 0.0d, 1.0d);
+					.defineInRange("Health Ratio Recovered", 1.0d, 0.0d, 1.0d);
 
 			builder.push("healing-items");
 			healingHerbsUseTime = builder
@@ -949,8 +957,10 @@ public class Config
 		public static int tempTickTime;
 		public static double minTemperatureModification;
 		public static double maxTemperatureModification;
-		public static boolean temperatureResistanceOnDeathEnabled;
+		public static boolean temperatureImmunityOnDeathEnabled;
 		public static int temperatureImmunityOnDeathTime;
+		public static boolean temperatureImmunityOnFirstSpawnEnabled;
+		public static int temperatureImmunityOnFirstSpawnTime;
 
 		public static boolean dangerousHeatTemperature;
 		public static boolean dangerousColdTemperature;
@@ -1163,8 +1173,10 @@ public class Config
 				minTemperatureModification = COMMON.minTemperatureModification.get();
 				maxTemperatureModification = COMMON.maxTemperatureModification.get();
 
-				temperatureResistanceOnDeathEnabled = COMMON.temperatureResistanceOnDeathEnabled.get();
+				temperatureImmunityOnDeathEnabled = COMMON.temperatureImmunityOnDeathEnabled.get();
 				temperatureImmunityOnDeathTime = COMMON.temperatureImmunityOnDeathTime.get();
+				temperatureImmunityOnFirstSpawnEnabled = COMMON.temperatureImmunityOnFirstSpawnEnabled.get();
+				temperatureImmunityOnFirstSpawnTime = COMMON.temperatureImmunityOnFirstSpawnTime.get();
 
 				dangerousHeatTemperature = COMMON.dangerousHeatTemperature.get();
 				dangerousColdTemperature = COMMON.dangerousColdTemperature.get();
