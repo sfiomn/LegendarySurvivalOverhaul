@@ -86,6 +86,11 @@ public class ModCapabilities
 
 			if (shouldSkipTick(player)) return;
 
+			if (!Config.Baked.vanillaFreezeEnabled) {
+				if (player.getTicksFrozen() > 0)
+					player.setTicksFrozen(0);
+			}
+
 			if (Config.Baked.temperatureEnabled) {
 				TemperatureCapability tempCap = CapabilityUtil.getTempCapability(player);
 				

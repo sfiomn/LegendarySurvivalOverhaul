@@ -47,6 +47,7 @@ public class TemperatureModifierRegistry
 	public static final RegistryObject<ModifierBase> ON_FIRE = MODIFIERS.register("on_fire", OnFireModifier::new);
 	public static final RegistryObject<ModifierBase> WEATHER = MODIFIERS.register("weather", WeatherModifier::new);
 	public static final RegistryObject<ModifierBase> PLAYER_HUDDLING = MODIFIERS.register("player_huddling", PlayerHuddlingModifier::new);
+	public static final RegistryObject<ModifierBase> FREEZE = MODIFIERS.register("freeze", FreezeModifier::new);
 	public static final RegistryObject<ModifierBase> WETNESS = MODIFIERS.register("wetness", WetModifier::new);
 	public static final RegistryObject<ModifierBase> TEMPERATURE_ATTRIBUTE = MODIFIERS.register("temperature_attribute", TemperatureAttributeModifier::new);
 

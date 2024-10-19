@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature;
 
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -11,7 +12,6 @@ import net.minecraftforge.event.TickEvent.Phase;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ITemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
-import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureImmunityEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
@@ -30,8 +30,9 @@ import java.util.Set;
 public class TemperatureCapability implements ITemperatureCapability
 {
 	private float temperature;
-	private int temperatureTickTimer;
 	private Set<Integer> temperatureImmunities;
+	private int temperatureTickTimer;
+	private int freezeTickTimer;
 	
 	//Unsaved data
 	private float oldTemperature;
@@ -47,8 +48,9 @@ public class TemperatureCapability implements ITemperatureCapability
 	public void init()
 	{
 		this.temperature = TemperatureEnum.NORMAL.getMiddle();
-		this.temperatureTickTimer = 0;
 		this.temperatureImmunities = new HashSet<>();
+		this.temperatureTickTimer = 0;
+		this.freezeTickTimer = 0;
 		
 		this.oldTemperature = 0;
 		this.targetTemp = 0;
@@ -75,6 +77,12 @@ public class TemperatureCapability implements ITemperatureCapability
 	}
 
 	@Override
+	public int getFreezeTickTimer()
+	{
+		return freezeTickTimer;
+	}
+
+	@Override
 	public void setTemperatureLevel(float temperature)
 	{
 		this.temperature = temperature;
@@ -92,6 +100,12 @@ public class TemperatureCapability implements ITemperatureCapability
 	}
 
 	@Override
+	public void setFreezeTickTimer(int tickTimer)
+	{
+		this.freezeTickTimer = tickTimer;
+	}
+
+	@Override
 	public void addTemperatureLevel(float temperature)
 	{
 		this.setTemperatureLevel(getTemperatureLevel() + temperature);
@@ -100,7 +114,13 @@ public class TemperatureCapability implements ITemperatureCapability
 	@Override
 	public void addTemperatureTickTimer(int tickTimer)
 	{
-		this.setTemperatureTickTimer(this.temperatureTickTimer + tickTimer);
+		this.setTemperatureTickTimer(this.getTemperatureTickTimer() + tickTimer);
+	}
+
+	@Override
+	public void addFreezeTickTimer(int tickTimer)
+	{
+		this.setFreezeTickTimer(Mth.clamp(this.getFreezeTickTimer() + tickTimer, 0, Config.Baked.maxFreezeEffectTick));
 	}
 
 	@Override
@@ -123,6 +143,11 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 
 		addTemperatureTickTimer(1);
+
+		if (player.isFreezing())
+			addFreezeTickTimer(1);
+		else if (getFreezeTickTimer() > 0)
+			addFreezeTickTimer(-1);
 		
 		if (getTemperatureTickTimer() >= Config.Baked.tempTickTime) {
 			setTemperatureTickTimer(0);
@@ -255,9 +280,10 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		CompoundTag compound = new CompoundTag();
 		
-		compound.putFloat("temperature", this.temperature);
-		compound.putFloat("targettemperature", this.targetTemp);
-		compound.putInt("ticktimer", this.temperatureTickTimer);
+		compound.putFloat("temperature", this.getTemperatureLevel());
+		compound.putFloat("targettemperature", this.getTargetTemperatureLevel());
+		compound.putInt("ticktimer", this.getTemperatureTickTimer());
+		compound.putInt("freezeticktimer", this.getFreezeTickTimer());
 		compound.putIntArray("immunities", this.getTemperatureImmunities());
 		
 		return compound;
@@ -272,6 +298,8 @@ public class TemperatureCapability implements ITemperatureCapability
 			this.setTargetTemperatureLevel(compound.getFloat("targettemperature"));
 		if (compound.contains("tickTimer"))
 			this.setTemperatureTickTimer(compound.getInt("tickTimer"));
+		if (compound.contains("freezeticktimer"))
+			this.setFreezeTickTimer(compound.getInt("freezeticktimer"));
 		if (compound.contains("immunities"))
 			for (int immunityId: compound.getIntArray("immunities"))
 				this.addTemperatureImmunityId(immunityId);

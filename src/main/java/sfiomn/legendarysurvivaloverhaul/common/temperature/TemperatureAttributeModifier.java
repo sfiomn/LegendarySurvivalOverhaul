@@ -1,7 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
 import net.minecraft.world.entity.player.Player;
-import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.registry.AttributeRegistry;
 

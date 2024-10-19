@@ -3,8 +3,6 @@ package sfiomn.legendarysurvivaloverhaul.data.providers;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
-import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
@@ -19,6 +17,6 @@ public class ModEntityTypesTagProvider extends EntityTypeTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(new EntityType[]{EntityType.PLAYER});
+
     }
 }

@@ -62,6 +62,7 @@ public class Config
 		public final ForgeConfigSpec.IntValue routinePacketSync;
 		public final ForgeConfigSpec.BooleanValue hideInfoFromDebug;
 		public final ForgeConfigSpec.BooleanValue naturalRegenerationEnabled;
+		public final ForgeConfigSpec.BooleanValue vanillaFreezeEnabled;
 		public final ForgeConfigSpec.DoubleValue baseFoodExhaustion;
 
 		// Temperature
@@ -110,6 +111,9 @@ public class Config
 
 		public final ForgeConfigSpec.DoubleValue rainTemperatureModifier;
 		public final ForgeConfigSpec.DoubleValue snowTemperatureModifier;
+
+		public final ForgeConfigSpec.DoubleValue maxFreezeTemperatureModifier;
+		public final ForgeConfigSpec.IntValue maxFreezeEffectTick;
 
 		public final ForgeConfigSpec.DoubleValue playerHuddlingModifier;
 		public final ForgeConfigSpec.IntValue playerHuddlingRadius;
@@ -263,6 +267,9 @@ public class Config
 			naturalRegenerationEnabled = builder
 					.comment(" If enabled, the player can regenerate health naturally if their hunger is full enough (doesn't affect external healing, such as golden apples, the Regeneration effect, etc.)")
 					.define("Natural Regeneration Enabled", false);
+			vanillaFreezeEnabled = builder
+					.comment(" If enabled, the player suffers vanilla freeze when inside powder snow.")
+					.define("Vanilla Freeze Enabled", false);
 
 			builder.push("advanced");
 			routinePacketSync = builder
@@ -397,6 +404,15 @@ public class Config
 			snowTemperatureModifier = builder
 					.comment(" How much of an effect snow has on temperature.")
 					.defineInRange("Snow Temperature Modifier", -6.0, -1000, 1000);
+			builder.pop();
+
+			builder.comment(" Freeze effect increases while inside snow powder.").push("freeze");
+			maxFreezeTemperatureModifier = builder
+					.comment(" How much of an effect freeze has on temperature when reaching maximum tick time. Starts at 0 and increases linearly.")
+					.defineInRange("Max Freeze Temperature Modifier", -10.0, -1000, 1000);
+			maxFreezeEffectTick = builder
+					.comment(" How long in tick before freeze modifier reaches its maximum effect.")
+					.defineInRange("Max Freeze Effect Tick", 400, 0, 100000);
 			builder.pop();
 
 			builder.push("time");
@@ -950,6 +966,7 @@ public class Config
 		public static int routinePacketSync;
 		public static boolean hideInfoFromDebug;
 		public static boolean naturalRegenerationEnabled;
+		public static boolean vanillaFreezeEnabled;
 		public static double baseFoodExhaustion;
 
 		// Temperature
@@ -979,6 +996,9 @@ public class Config
 
 		public static double rainTemperatureModifier;
 		public static double snowTemperatureModifier;
+
+		public static double maxFreezeTemperatureModifier;
+		public static int maxFreezeEffectTick;
 
 		public static double altitudeModifier;
 
@@ -1166,6 +1186,7 @@ public class Config
 				hideInfoFromDebug = COMMON.hideInfoFromDebug.get();
 				naturalRegenerationEnabled = COMMON.naturalRegenerationEnabled.get();
 				routinePacketSync = COMMON.routinePacketSync.get();
+				vanillaFreezeEnabled = COMMON.vanillaFreezeEnabled.get();
 				baseFoodExhaustion = COMMON.baseFoodExhaustion.get();
 
 				temperatureEnabled = COMMON.temperatureEnabled.get();
@@ -1187,6 +1208,9 @@ public class Config
 
 				rainTemperatureModifier = COMMON.rainTemperatureModifier.get();
 				snowTemperatureModifier = COMMON.snowTemperatureModifier.get();
+
+				maxFreezeTemperatureModifier = COMMON.maxFreezeTemperatureModifier.get();
+				maxFreezeEffectTick = COMMON.maxFreezeEffectTick.get();
 
 				undergroundBiomeTemperatureMultiplier = COMMON.undergroundBiomeTemperatureMultiplier.get();
 				undergroundEffectStartDistanceToWS = COMMON.undergroundEffectStartDistanceToWS.get();

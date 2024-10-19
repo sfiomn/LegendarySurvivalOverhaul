@@ -11,15 +11,18 @@ public interface ITemperatureCapability
 	public float getTemperatureLevel();
 	public float getTargetTemperatureLevel();
 	public int getTemperatureTickTimer();
+	public int getFreezeTickTimer();
 	public TemperatureEnum getTemperatureEnum();
 	public List<Integer> getTemperatureImmunities();
 	
 	public void setTemperatureLevel(float temperature);
 	public void setTargetTemperatureLevel(float targetTemperature);
 	public void setTemperatureTickTimer(int tickTimer);
+	public void setFreezeTickTimer(int tickTimer);
 	
 	public void addTemperatureLevel(float temperature);
 	public void addTemperatureTickTimer(int tickTimer);
+	public void addFreezeTickTimer(int tickTimer);
 	public void addTemperatureImmunityId(int immunityId);
 	public void removeTemperatureImmunityId(int immunityId);
 	
