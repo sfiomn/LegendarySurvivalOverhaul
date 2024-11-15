@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
@@ -55,7 +56,7 @@ public class SereneSeasonsModifier extends ModifierBase
 	}
 
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(PlayerEntity player, World world, BlockPos pos)
 	{
 		if (!LegendarySurvivalOverhaul.sereneSeasonsLoaded)
 			return 0.0f;

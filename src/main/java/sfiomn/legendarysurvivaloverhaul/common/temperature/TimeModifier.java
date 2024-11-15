@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
@@ -14,7 +15,7 @@ public class TimeModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(PlayerEntity player, World world, BlockPos pos)
 	{
 		// This effect should only be provided in surface worlds
 		if(world.dimensionType().hasCeiling())

@@ -44,16 +44,9 @@ public class SewingRecipe implements ISewingRecipe {
     public ItemStack assemble(IInventory inventory) {
         ItemStack itemstack = this.result.copy();
 
-        if (itemstack.getItem() instanceof ArmorItem && inventory.getItem(1).getItem() instanceof CoatItem) {
-            if (inventory.getItem(0).getItem() instanceof ArmorItem) {
-                CompoundNBT compoundnbt = inventory.getItem(0).getTag();
-                if (compoundnbt != null) {
-                    itemstack.setTag(compoundnbt.copy());
-                }
-            }
-
-            CoatItem coatItem = (CoatItem) inventory.getItem(1).getItem();
-            TemperatureUtil.setArmorCoatTag(itemstack, coatItem.coat.id());
+        CompoundNBT compoundTag = inventory.getItem(0).getTag();
+        if (compoundTag != null) {
+            itemstack.setTag(compoundTag.copy());
         }
 
         return itemstack;
@@ -67,19 +60,7 @@ public class SewingRecipe implements ISewingRecipe {
     @Override
     public ItemStack getResultItem() {
 
-        ItemStack itemstack = result.copy();
-
-        if (itemstack.getItem() instanceof ArmorItem && this.addition.getItems()[0].getItem() instanceof CoatItem) {
-            if (this.base.getItems()[0].getItem() instanceof ArmorItem) {
-                CompoundNBT compoundnbt = this.base.getItems()[0].getTag();
-                if (compoundnbt != null) {
-                    itemstack.setTag(compoundnbt.copy());
-                }
-            }
-            CoatItem coatItem = (CoatItem) this.addition.getItems()[0].getItem();
-            TemperatureUtil.setArmorCoatTag(itemstack, coatItem.coat.id());
-        }
-        return itemstack;
+        return result.copy();
     }
 
     @Override

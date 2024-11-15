@@ -5,6 +5,8 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.server.command.EnumArgument;
@@ -13,45 +15,134 @@ import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageCapability;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
+import java.util.Collection;
+
 public class BodyDamageCommand extends CommandBase
 {
 	//.executes(src -> new TemperatureCommand().execute(src.getSource())));
 	public BodyDamageCommand() {
 		super(Commands.literal("bodydamage")
 				.requires((p_198521_0_) -> p_198521_0_.hasPermission(2))
+				.then(Commands.argument("target", EntityArgument.entities())
 				.then(Commands.literal("set")
-					.then(Commands.argument("BodyPart", EnumArgument.enumArgument(BodyPartEnum.class))
-						.then(Commands.argument("Health", FloatArgumentType.floatArg(0))
-							.executes(src -> new BodyDamageCommand().set(src.getSource(), src.getArgument("BodyPart", BodyPartEnum.class), FloatArgumentType.getFloat(src, "Health"))))))
+						.then(Commands.argument("BodyPart", EnumArgument.enumArgument(BodyPartEnum.class))
+								.then(Commands.argument("Health", FloatArgumentType.floatArg(0))
+										.executes(src -> new BodyDamageCommand().set(src.getSource(), EntityArgument.getEntities(src, "target"), src.getArgument("BodyPart", BodyPartEnum.class), FloatArgumentType.getFloat(src, "Health")))))
+						.then(Commands.literal("ALL")
+								.then(Commands.argument("Health", FloatArgumentType.floatArg(0))
+										.executes(src -> new BodyDamageCommand().setAll(src.getSource(), EntityArgument.getEntities(src, "target"), FloatArgumentType.getFloat(src, "Health"))))))
+				.then(Commands.literal("heal")
+						.then(Commands.argument("BodyPart", EnumArgument.enumArgument(BodyPartEnum.class))
+								.then(Commands.argument("Health", FloatArgumentType.floatArg(0))
+										.executes(src -> new BodyDamageCommand().heal(src.getSource(), EntityArgument.getEntities(src, "target"), src.getArgument("BodyPart", BodyPartEnum.class), FloatArgumentType.getFloat(src, "Health")))))
+						.then(Commands.literal("ALL")
+								.then(Commands.argument("Health", FloatArgumentType.floatArg(0))
+										.executes(src -> new BodyDamageCommand().healAll(src.getSource(), EntityArgument.getEntities(src, "target"), FloatArgumentType.getFloat(src, "Health"))))))
 				.then(Commands.literal("get")
 						.then(Commands.argument("BodyPart", EnumArgument.enumArgument(BodyPartEnum.class))
-								.executes(src -> new BodyDamageCommand().get(src.getSource(), src.getArgument("BodyPart", BodyPartEnum.class)))))
-				);
+								.executes(src -> new BodyDamageCommand().get(src.getSource(), EntityArgument.getEntities(src, "target"), src.getArgument("BodyPart", BodyPartEnum.class))))
+						.then(Commands.literal("ALL")
+								.executes(src -> new BodyDamageCommand().getAll(src.getSource(), EntityArgument.getEntities(src, "target")))))
+		));
 	}
 
-	public int get(CommandSource source, BodyPartEnum bodyPart) {
+	public int get(CommandSource source, Collection<? extends Entity> entities, BodyPartEnum bodyPart) {
 		try {
-			if (source.getEntity() instanceof PlayerEntity) {
-				PlayerEntity player = (PlayerEntity) source.getEntity();
-				BodyDamageCapability cap = CapabilityUtil.getBodyDamageCapability(player);
-				float bodyPartMaxHealth = cap.getBodyPartMaxHealth(bodyPart);
-				float bodyPartHealth = bodyPartMaxHealth - cap.getBodyPartDamage(bodyPart);
+			StringBuilder reply = new StringBuilder();
+			for (Entity entity: entities) {
+				if (entity instanceof PlayerEntity && source.getEntity() instanceof PlayerEntity) {
+					BodyDamageCapability cap = CapabilityUtil.getBodyDamageCapability((PlayerEntity) entity);
+					float bodyPartMaxHealth = cap.getBodyPartMaxHealth(bodyPart);
+					float bodyPartHealth = bodyPartMaxHealth - cap.getBodyPartDamage(bodyPart);
 
-				String reply = "Body Limb " + bodyPart.name() + " Health : " +  bodyPartHealth + "/" + bodyPartMaxHealth;
-
-				source.getPlayerOrException().sendMessage(new StringTextComponent(reply), source.getEntity().getUUID());
+					reply.append("Player ").append(entity.getName().getString()).append("\n")
+							.append("Body Limb ").append(bodyPart.name())
+							.append(" Health : ").append(bodyPartHealth)
+							.append("/").append(bodyPartMaxHealth)
+							.append("\n");
+					source.sendSuccess(new StringTextComponent(reply.toString()), false);
+				}
 			}
 		}
-		catch(Exception e) 
+		catch(Exception e)
 		{
 			LegendarySurvivalOverhaul.LOGGER.error(e.getMessage());
 		}
 		return Command.SINGLE_SUCCESS;
 	}
 
-	private int set(CommandSource src, BodyPartEnum bodyPart, float healthValue) throws CommandSyntaxException {
-		BodyDamageCapability cap = CapabilityUtil.getBodyDamageCapability(src.getPlayerOrException());
-		cap.setBodyPartDamage(bodyPart, cap.getBodyPartMaxHealth(bodyPart) -  healthValue);
+	public int getAll(CommandSource source, Collection<? extends Entity> entities) {
+		try {
+			StringBuilder reply = new StringBuilder();
+			for (Entity entity: entities) {
+				if (entity instanceof PlayerEntity && source.getEntity() instanceof PlayerEntity) {
+					BodyDamageCapability cap = CapabilityUtil.getBodyDamageCapability((PlayerEntity) entity);
+					reply.append("Player ").append(entity.getName().getString()).append("\n");
+					for (BodyPartEnum bodyPart : BodyPartEnum.values()) {
+						float bodyPartMaxHealth = cap.getBodyPartMaxHealth(bodyPart);
+						float bodyPartHealth = bodyPartMaxHealth - cap.getBodyPartDamage(bodyPart);
+
+						reply
+								.append("Body Limb ").append(bodyPart.name())
+								.append(" Health : ").append(bodyPartHealth)
+								.append("/").append(bodyPartMaxHealth)
+								.append("\n");
+					}
+
+					source.sendSuccess(new StringTextComponent(reply.toString()), false);
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			LegendarySurvivalOverhaul.LOGGER.error(e.getMessage());
+		}
+		return Command.SINGLE_SUCCESS;
+	}
+
+	private int set(CommandSource src, Collection<? extends Entity> entities, BodyPartEnum bodyPart, float healthValue) throws CommandSyntaxException {
+
+		for (Entity entity: entities) {
+			if (entity instanceof PlayerEntity) {
+				BodyDamageCapability cap = CapabilityUtil.getBodyDamageCapability((PlayerEntity) entity);
+				cap.setBodyPartDamage(bodyPart, cap.getBodyPartMaxHealth(bodyPart) - healthValue);
+			}
+		}
+		return Command.SINGLE_SUCCESS;
+	}
+
+	private int setAll(CommandSource src, Collection<? extends Entity> entities, float healthValue) throws CommandSyntaxException {
+
+		for (Entity entity: entities) {
+			if (entity instanceof PlayerEntity) {
+				BodyDamageCapability cap = CapabilityUtil.getBodyDamageCapability((PlayerEntity) entity);
+				for (BodyPartEnum bodyPart : BodyPartEnum.values())
+					cap.setBodyPartDamage(bodyPart, cap.getBodyPartMaxHealth(bodyPart) - healthValue);
+			}
+		}
+		return Command.SINGLE_SUCCESS;
+	}
+
+	private int heal(CommandSource src, Collection<? extends Entity> entities, BodyPartEnum bodyPart, float healthValue) throws CommandSyntaxException {
+
+		for (Entity entity: entities) {
+			if (entity instanceof PlayerEntity) {
+				BodyDamageCapability cap = CapabilityUtil.getBodyDamageCapability((PlayerEntity) entity);
+				cap.setBodyPartDamage(bodyPart, cap.getBodyPartDamage(bodyPart) - healthValue);
+			}
+		}
+		return Command.SINGLE_SUCCESS;
+	}
+
+	private int healAll(CommandSource src, Collection<? extends Entity> entities, float healthValue) throws CommandSyntaxException {
+
+		for (Entity entity: entities) {
+			if (entity instanceof PlayerEntity) {
+				BodyDamageCapability cap = CapabilityUtil.getBodyDamageCapability((PlayerEntity) entity);
+				for (BodyPartEnum bodyPart : BodyPartEnum.values())
+					cap.setBodyPartDamage(bodyPart, cap.getBodyPartDamage(bodyPart) - healthValue);
+			}
+		}
 		return Command.SINGLE_SUCCESS;
 	}
 }

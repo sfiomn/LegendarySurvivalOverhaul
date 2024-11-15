@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.items;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -11,11 +12,17 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
+import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class NetherChalice extends Item {
     public NetherChalice(Item.Properties pProperties) {
@@ -44,5 +51,12 @@ public class NetherChalice extends Item {
         }
 
         return ActionResult.fail(itemstack);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltips, ITooltipFlag isAdvanced) {
+        super.appendHoverText(stack, world, tooltips, isAdvanced);
+
+        tooltips.add(new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".nether_chalice.description"));
     }
 }

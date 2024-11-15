@@ -32,10 +32,12 @@ import net.minecraftforge.registries.RegistryBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyDamageUtil;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.AttributeModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.DynamicModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.ModifierBase;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
+import sfiomn.legendarysurvivaloverhaul.api.wetness.WetnessUtil;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.CanteenProperty;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.SeasonalCalendarTimeProperty;
 import sfiomn.legendarysurvivaloverhaul.client.itemproperties.SeasonalCalendarSeasonTypeProperty;
@@ -54,7 +56,10 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.Temperat
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstStorage;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessStorage;
 import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosEvents;
+import sfiomn.legendarysurvivaloverhaul.common.integration.json.JsonIntegrationConfigRegistration;
+import sfiomn.legendarysurvivaloverhaul.common.integration.origins.OriginsEvents;
 import sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsModifier;
 import sfiomn.legendarysurvivaloverhaul.common.integration.vampirism.VampirismEvents;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -64,6 +69,7 @@ import sfiomn.legendarysurvivaloverhaul.registry.*;
 import sfiomn.legendarysurvivaloverhaul.util.internal.BodyDamageUtilInternal;
 import sfiomn.legendarysurvivaloverhaul.util.internal.TemperatureUtilInternal;
 import sfiomn.legendarysurvivaloverhaul.util.internal.ThirstUtilInternal;
+import sfiomn.legendarysurvivaloverhaul.util.internal.WetnessUtilInternal;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
@@ -103,14 +109,17 @@ public class LegendarySurvivalOverhaul
 	public static boolean toughAsNailsLoaded = false;
 
 	public static boolean vampirismLoaded = false;
+	public static boolean originsLoaded = false;
 	
 	public static Path configPath = FMLPaths.CONFIGDIR.get();
 	public static Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "legendarysurvivaloverhaul");
 	public static Path modConfigJsons = Paths.get(modConfigPath.toString(), "json");
+	public static Path modIntegrationConfigJsons = Paths.get(modConfigJsons.toString(), "integration");
 	public static Path ssConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "sereneseasons");
 	
 	public static ForgeRegistry<ModifierBase> MODIFIERS;
 	public static ForgeRegistry<DynamicModifierBase> DYNAMIC_MODIFIERS;
+	public static ForgeRegistry<AttributeModifierBase> ATTRIBUTE_MODIFIERS;
 
 	
 	public LegendarySurvivalOverhaul()
@@ -124,6 +133,7 @@ public class LegendarySurvivalOverhaul
 		modBus.addListener(this::clientEvents);
 		modBus.addListener(this::enqueueIMC);
 
+		AttributeRegistry.register(modBus);
 		BlockRegistry.register(modBus);
 		ContainerRegistry.register(modBus);
 		EffectRegistry.register(modBus);
@@ -146,9 +156,11 @@ public class LegendarySurvivalOverhaul
 		Config.Baked.bakeCommon();
 		
 		TemperatureUtil.internal = new TemperatureUtilInternal();
+		WetnessUtil.internal = new WetnessUtilInternal();
 		ThirstUtil.internal = new ThirstUtilInternal();
 		BodyDamageUtil.internal = new BodyDamageUtilInternal();
 		modIntegration(forgeBus);
+		JsonIntegrationConfigRegistration.init(LegendarySurvivalOverhaul.modIntegrationConfigJsons.toFile());
 	}
 	
 	private void modIntegration(IEventBus forgeBus)
@@ -157,6 +169,7 @@ public class LegendarySurvivalOverhaul
 		curiosLoaded = ModList.get().isLoaded("curios");
 		surviveLoaded = ModList.get().isLoaded("survive");
 		vampirismLoaded = ModList.get().isLoaded("vampirism");
+		originsLoaded = ModList.get().isLoaded("origins");
 		
 		if (sereneSeasonsLoaded)
 			LOGGER.debug("Serene Seasons is loaded, enabling compatibility");
@@ -167,6 +180,10 @@ public class LegendarySurvivalOverhaul
 		if (vampirismLoaded) {
 			LOGGER.debug("Vampirism is loaded, enabling compatibility");
 			forgeBus.register(VampirismEvents.class);
+		}
+		if (originsLoaded) {
+			LOGGER.debug("Origins is loaded, enabling compatibility");
+			forgeBus.register(OriginsEvents.class);
 		}
 		if (surviveLoaded)
 			LOGGER.debug("Survive is loaded, I hope you know what you're doing");
@@ -190,7 +207,7 @@ public class LegendarySurvivalOverhaul
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		CapabilityManager.INSTANCE.register(TemperatureCapability.class, new TemperatureStorage(), TemperatureCapability::new);
-		CapabilityManager.INSTANCE.register(WetnessCapability.class, new WetnessCapability.Storage(), WetnessCapability::new);
+		CapabilityManager.INSTANCE.register(WetnessCapability.class, new WetnessStorage(), WetnessCapability::new);
 		CapabilityManager.INSTANCE.register(ThirstCapability.class, new ThirstStorage(), ThirstCapability::new);
 		CapabilityManager.INSTANCE.register(HeartModifierCapability.class, new HeartModifierStorage(), HeartModifierCapability::new);
 		CapabilityManager.INSTANCE.register(TemperatureItemCapability.class, new TemperatureItemCapability.Storage(), TemperatureItemCapability::new);
@@ -312,6 +329,11 @@ public class LegendarySurvivalOverhaul
 		dynamicModifierBuilder.setName(new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "dynamic_modifiers"));
 		dynamicModifierBuilder.setType(DynamicModifierBase.class);
 		DYNAMIC_MODIFIERS = (ForgeRegistry<DynamicModifierBase>) dynamicModifierBuilder.create();
+
+		RegistryBuilder<AttributeModifierBase> attributeModifierBuilder = new RegistryBuilder<>();
+		attributeModifierBuilder.setName(new ResourceLocation(LegendarySurvivalOverhaul.MOD_ID, "attribute_modifiers"));
+		attributeModifierBuilder.setType(AttributeModifierBase.class);
+		ATTRIBUTE_MODIFIERS = (ForgeRegistry<AttributeModifierBase>) attributeModifierBuilder.create();
 	}
 
 	private void enqueueIMC(final InterModEnqueueEvent event)

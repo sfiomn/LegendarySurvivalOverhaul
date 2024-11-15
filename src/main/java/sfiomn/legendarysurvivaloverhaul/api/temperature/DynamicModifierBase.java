@@ -12,12 +12,12 @@ public class DynamicModifierBase extends ForgeRegistryEntry<DynamicModifierBase>
 	{
 	}
 	
-	public float applyDynamicPlayerInfluence(PlayerEntity player, float currentTemperature)
+	public float applyDynamicPlayerInfluence(PlayerEntity player, float currentTemperature, float currentResistance)
 	{
 		return 0.0f;
 	}
 	
-	public float applyDynamicWorldInfluence(World world, BlockPos pos, float currentTemperature)
+	public float applyDynamicWorldInfluence(PlayerEntity player, World world, BlockPos pos, float currentTemperature, float currentResistance)
 	{
 		return 0.0f;
 	}

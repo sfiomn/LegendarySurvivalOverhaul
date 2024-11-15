@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -18,8 +17,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.network.PacketDistributor;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
-import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPart;
-import sfiomn.legendarysurvivaloverhaul.api.bodydamage.BodyPartEnum;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.bodydamage.BodyDamageProvider;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.food.FoodCapability;
@@ -31,11 +28,10 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.Temperat
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstProvider;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
-import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
+import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessProvider;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.network.packets.*;
-import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, bus = EventBusSubscriber.Bus.FORGE)
@@ -56,7 +52,7 @@ public class ModCapabilities
 			if (event.getObject() instanceof PlayerEntity)
 			{
 				event.addCapability(TEMPERATURE_RES, new TemperatureProvider());
-				event.addCapability(WETNESS_RES, new WetnessCapability.Provider());
+				event.addCapability(WETNESS_RES, new WetnessProvider());
 				event.addCapability(THIRST_RES, new ThirstProvider());
 				event.addCapability(HEART_MOD_RES, new HeartModifierProvider());
 				event.addCapability(FOOD_RES, new FoodProvider());
@@ -71,6 +67,15 @@ public class ModCapabilities
 		if (event.player.level.isClientSide)
 		{
 			// Client Side
+			PlayerEntity player = event.player;
+
+			if (shouldSkipTick(player)) return;
+
+			if (Config.Baked.temperatureEnabled) {
+				TemperatureCapability tempCap = CapabilityUtil.getTempCapability(player);
+
+				tempCap.tickClient(player, event.phase);
+			}
 		}
 		else
 		{
@@ -92,7 +97,7 @@ public class ModCapabilities
 				}
 			}
 			
-			if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC) {
+			if (Config.Baked.wetnessEnabled) {
 				WetnessCapability wetCap = CapabilityUtil.getWetnessCapability(player);
 				
 				wetCap.tickUpdate(player, world, event.phase);
@@ -179,7 +184,7 @@ public class ModCapabilities
 				sendTemperatureUpdate(player);
 			}
 
-			if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
+			if (Config.Baked.wetnessEnabled)
 			{
 				WetnessCapability oldCap = CapabilityUtil.getWetnessCapability(orig);
 				WetnessCapability newCap = CapabilityUtil.getWetnessCapability(player);
@@ -270,7 +275,7 @@ public class ModCapabilities
 		PlayerEntity player = event.getPlayer();
 		if (Config.Baked.temperatureEnabled)
 			sendTemperatureUpdate(player);
-		if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
+		if (Config.Baked.wetnessEnabled)
 			sendWetnessUpdate(player);
 		if (Config.Baked.thirstEnabled)
 			sendThirstUpdate(player);
@@ -286,7 +291,7 @@ public class ModCapabilities
 		PlayerEntity player = event.getPlayer();
 		if (Config.Baked.temperatureEnabled)
 			sendTemperatureUpdate(player);
-		if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
+		if (Config.Baked.wetnessEnabled)
 			sendWetnessUpdate(player);
 		if (Config.Baked.thirstEnabled)
 			sendThirstUpdate(player);

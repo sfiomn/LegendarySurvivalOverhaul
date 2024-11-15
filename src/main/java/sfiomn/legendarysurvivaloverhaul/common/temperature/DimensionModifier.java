@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonTemperature;
@@ -15,7 +16,7 @@ public class DimensionModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(PlayerEntity player, World world, BlockPos pos)
 	{
 		JsonTemperature dimensionTemperature = JsonConfig.dimensionTemperatures.get(world.dimension().location().toString());
 		if (dimensionTemperature == null)

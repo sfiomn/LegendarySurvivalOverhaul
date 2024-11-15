@@ -8,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -60,7 +59,7 @@ public class RenderSeasonCards {
             bind(seasonCard);
             float x = width / 2.0f - CARD_WIDTH / 2.0f;
             float y = height / 4.0f - CARD_HEIGHT / 2.0f;
-            RenderUtil.drawTexturedModelRectWithAlpha(m4f, x + Config.Baked.seasonCardsOffsetX, y + Config.Baked.seasonCardsOffsetY, CARD_WIDTH, CARD_HEIGHT, 0, 0, CARD_TEXT_WIDTH, CARD_TEXT_HEIGHT, fadeLevel);
+            RenderUtil.drawTexturedModelRectWithAlpha(m4f, x + Config.Baked.seasonCardsDisplayOffsetX, y + Config.Baked.seasonCardsDisplayOffsetY, CARD_WIDTH, CARD_HEIGHT, 0, 0, CARD_TEXT_WIDTH, CARD_TEXT_HEIGHT, fadeLevel);
         }
     }
 

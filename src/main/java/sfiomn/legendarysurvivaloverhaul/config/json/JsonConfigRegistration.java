@@ -39,7 +39,6 @@ public class JsonConfigRegistration
 	{
 		registerDefaults(configDir);
 
-		migrateThirstConsumablesJson(configDir);
 		processAllJson(configDir);
 
 		writeAllToJson(configDir);
@@ -89,43 +88,44 @@ public class JsonConfigRegistration
 		JsonConfig.registerBlockFluidTemperature("minecraft:lava", 12.5f);
 		JsonConfig.registerBlockFluidTemperature("minecraft:flowing_lava", 12.5f);
 
-		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_boots", 0.5f);
-		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_leggings", 2.5f);
-		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_chestplate", 3.0f);
-		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_helmet", 1.5f);
+		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_boots", 0, 0, 0.5f, 0);
+		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_leggings", 0, 0, 2.5f, 0);
+		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_chestplate", 0, 0, 3.0f, 0);
+		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":snow_helmet", 0, 0, 1.5f, 0);
 
-		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_boots", -0.5f);
-		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_leggings", -2.5f);
-		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_chestplate", -3.0f);
-		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_helmet", -1.5f);
+		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_boots", 0, 0.5f, 0, 0);
+		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_leggings", 0, 2.5f, 0, 0);
+		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_chestplate", 0, 3.0f, 0, 0);
+		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":desert_helmet", 0, 1.5f, 0, 0);
 
 		JsonConfig.registerItemTemperature(LegendarySurvivalOverhaul.MOD_ID + ":nether_chalice", 2f);
 		JsonConfig.registerItemTemperature("minecraft:lava_bucket", 6f);
+		JsonConfig.registerItemTemperature("minecraft:magma_block", 6f);
 
-		JsonConfig.registerItemTemperature("minecraft:leather_boots", 1.0f);
-		JsonConfig.registerItemTemperature("minecraft:leather_leggings", 1.0f);
-		JsonConfig.registerItemTemperature("minecraft:leather_chestplate", 1.5f);
-		JsonConfig.registerItemTemperature("minecraft:leather_helmet", 0.5f);
+		JsonConfig.registerItemTemperature("minecraft:leather_boots", 0, 0, 1.0f, 0);
+		JsonConfig.registerItemTemperature("minecraft:leather_leggings", 0, 0, 1.0f, 0);
+		JsonConfig.registerItemTemperature("minecraft:leather_chestplate", 0, 0, 1.5f, 0);
+		JsonConfig.registerItemTemperature("minecraft:leather_helmet", 0, 0, 0.5f, 0);
 
-		JsonConfig.registerItemTemperature("minecraft:golden_boots", 0.5f);
-		JsonConfig.registerItemTemperature("minecraft:golden_leggings", 1.0f);
-		JsonConfig.registerItemTemperature("minecraft:golden_chestplate", 1.0f);
-		JsonConfig.registerItemTemperature("minecraft:golden_helmet", 0.5f);
+		JsonConfig.registerItemTemperature("minecraft:golden_boots", 0, 0, 0.5f, 0);
+		JsonConfig.registerItemTemperature("minecraft:golden_leggings", 0, 0, 1.0f, 0);
+		JsonConfig.registerItemTemperature("minecraft:golden_chestplate", 0, 0, 1.0f, 0);
+		JsonConfig.registerItemTemperature("minecraft:golden_helmet", 0, 0, 0.5f, 0);
 
-		JsonConfig.registerItemTemperature("minecraft:iron_boots", -0.5f);
-		JsonConfig.registerItemTemperature("minecraft:iron_leggings", -1.0f);
-		JsonConfig.registerItemTemperature("minecraft:iron_chestplate", -1.0f);
-		JsonConfig.registerItemTemperature("minecraft:iron_helmet", -0.5f);
+		JsonConfig.registerItemTemperature("minecraft:iron_boots", 0, 0.5f, 0, 0);
+		JsonConfig.registerItemTemperature("minecraft:iron_leggings", 0, 1.0f, 0, 0);
+		JsonConfig.registerItemTemperature("minecraft:iron_chestplate", 0, 1.0f, 0, 0);
+		JsonConfig.registerItemTemperature("minecraft:iron_helmet", 0, 0.5f, 0, 0);
 
-		JsonConfig.registerItemTemperature("minecraft:diamond_boots", -1.0f);
-		JsonConfig.registerItemTemperature("minecraft:diamond_leggings", -1.0f);
-		JsonConfig.registerItemTemperature("minecraft:diamond_chestplate", -1.5f);
-		JsonConfig.registerItemTemperature("minecraft:diamond_helmet", -0.5f);
+		JsonConfig.registerItemTemperature("minecraft:diamond_boots", 0, 1.0f, 0, 0);
+		JsonConfig.registerItemTemperature("minecraft:diamond_leggings", 0, 1.0f, 0, 0);
+		JsonConfig.registerItemTemperature("minecraft:diamond_chestplate", 0, 1.5f, 0, 0);
+		JsonConfig.registerItemTemperature("minecraft:diamond_helmet", 0, 0.5f, 0, 0);
 
-		JsonConfig.registerItemTemperature("minecraft:netherite_boots", 1.5f);
-		JsonConfig.registerItemTemperature("minecraft:netherite_leggings", 1.5f);
-		JsonConfig.registerItemTemperature("minecraft:netherite_chestplate", 2.0f);
-		JsonConfig.registerItemTemperature("minecraft:netherite_helmet", 1.0f);
+		JsonConfig.registerItemTemperature("minecraft:netherite_boots", 0, 0, 1.5f, 0);
+		JsonConfig.registerItemTemperature("minecraft:netherite_leggings", 0, 0, 1.5f, 0);
+		JsonConfig.registerItemTemperature("minecraft:netherite_chestplate", 0, 0, 2.0f, 0);
+		JsonConfig.registerItemTemperature("minecraft:netherite_helmet", 0, 0, 1.0f, 0);
 
 		JsonConfig.registerItemTemperature("minecraft:torch", 1.0f);
 		JsonConfig.registerItemTemperature("minecraft:ice", -1.0f);
@@ -256,16 +256,16 @@ public class JsonConfigRegistration
 	public static void processAllJson(File jsonDir)
 	{
 		// Temperature
-		Map<String, JsonTemperature> jsonItemTemperatures = processJson(JsonFileName.ITEM_TEMP, jsonDir);
+		Map<String, JsonTemperatureResistance> jsonItemTemperatures = processJson(JsonFileName.ITEM_TEMP, jsonDir);
 
 		if (jsonItemTemperatures != null)
 		{
 			// remove default armor config
 			JsonConfig.itemTemperatures.clear();
-			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonItemTemperatures.size() + " armor temperature values from JSON");
-			for (Map.Entry<String, JsonTemperature> entry : jsonItemTemperatures.entrySet())
+			LegendarySurvivalOverhaul.LOGGER.debug("Loaded " + jsonItemTemperatures.size() + " item temperature values from JSON");
+			for (Map.Entry<String, JsonTemperatureResistance> entry : jsonItemTemperatures.entrySet())
 			{
-				JsonConfig.registerItemTemperature(entry.getKey(), entry.getValue().temperature);
+				JsonConfig.registerItemTemperature(entry.getKey(), entry.getValue().temperature, entry.getValue().heatResistance, entry.getValue().coldResistance, entry.getValue().thermalResistance);
 			}
 		}
 		
@@ -431,8 +431,8 @@ public class JsonConfigRegistration
 		}
 		return null;
 	}
-	
-	private static <T> void manuallyWriteToJson(JsonFileName jfn, final T container, File jsonDir)
+
+	public static <T> void manuallyWriteToJson(JsonFileName jfn, final T container, File jsonDir)
 	{
 		try {
 			manuallyWriteToJson(jfn, container, jsonDir, false);
@@ -463,84 +463,5 @@ public class JsonConfigRegistration
 	private static Gson buildNewGson()
 	{
 		return new GsonBuilder().setPrettyPrinting().excludeFieldsWithModifiers(Modifier.PRIVATE).create();
-	}
-
-	private static void migrateThirstConsumablesJson(File jsonDir) {
-
-		String jsonFileName = JsonFileName.CONSUMABLE_THIRST.get();
-		Type type = new TypeToken<Map<String, List<OldConsumableThirst>>>(){}.getType();
-
-		File jsonFile = new File(jsonDir, jsonFileName);
-
-		Map<String, List<OldConsumableThirst>> oldJsonConsumableThirsts = new HashMap<>();
-		Map<String, List<JsonConsumableThirst>> newJsonConsumableThirsts = new HashMap<>();
-		if (jsonFile.exists())
-		{
-			Gson gson = buildNewGson();
-			try {
-				newJsonConsumableThirsts = processJson(JsonFileName.CONSUMABLE_THIRST, jsonDir);
-				if (newJsonConsumableThirsts != null && !newJsonConsumableThirsts.isEmpty()) {
-					Map.Entry<String,List<JsonConsumableThirst>> entry1 = newJsonConsumableThirsts.entrySet().iterator().next();
-					if (!entry1.getValue().isEmpty() && entry1.getValue().get(0).effects == null)
-						oldJsonConsumableThirsts = gson.fromJson(new FileReader(jsonFile), type);
-				}
-			} catch (Exception e) {
-				return;
-			}
-		}
-		if (!oldJsonConsumableThirsts.isEmpty()) {
-			LegendarySurvivalOverhaul.LOGGER.debug("migrate " + oldJsonConsumableThirsts.size() + " consumable thirst values to new JSON");
-			for (Map.Entry<String, List<OldConsumableThirst>> entry : oldJsonConsumableThirsts.entrySet()) {
-				for (OldConsumableThirst ojct : entry.getValue()) {
-					List<JsonEffectParameter> effects = new ArrayList<>();
-					effects.add(new JsonEffectParameter(ojct.effect, ojct.effectChance, 600, 0));
-					JsonConfig.registerConsumableThirst(entry.getKey(), ojct.hydration, ojct.saturation, effects.toArray(new JsonEffectParameter[0]), ojct.getNbtArray());
-				}
-			}
-			try {
-				manuallyWriteToJson(JsonFileName.CONSUMABLE_THIRST, JsonConfig.consumableThirst, jsonDir, true);
-			} catch (Exception e) {
-				LegendarySurvivalOverhaul.LOGGER.debug("Exception while writing new json file during migration of jsonThirstConsumables : " + e);
-			}
-		}
-	}
-
-	class OldConsumableThirst {
-
-		@SerializedName("hydration")
-		public int hydration;
-		@SerializedName("saturation")
-		public float saturation;
-		@SerializedName("effectChance")
-		public float effectChance;
-		@SerializedName("effect")
-		public String effect;
-		@SerializedName("nbt")
-		public Map<String,String> nbt;
-
-		public OldConsumableThirst(int hydration, float saturation, float effectChance, String effect, JsonPropertyValue... nbt) {
-			this.hydration = hydration;
-			this.saturation = saturation;
-
-			this.effectChance = effectChance;
-			this.effect = effect;
-
-			this.nbt = new HashMap<>();
-			for (JsonPropertyValue prop : nbt)
-			{
-				this.nbt.put(prop.name, prop.value);
-			}
-		}
-
-		public JsonPropertyValue[] getNbtArray()
-		{
-			List<JsonPropertyValue> jpvList = new ArrayList<>();
-			for(Map.Entry<String, String> entry : this.nbt.entrySet())
-			{
-				jpvList.add(new JsonPropertyValue(entry.getKey(), entry.getValue()));
-			}
-
-			return jpvList.toArray(new JsonPropertyValue[0]);
-		}
 	}
 }

@@ -15,7 +15,6 @@ import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureEnum;
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureCapability;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessCapability;
-import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
 import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
@@ -85,7 +84,7 @@ public class RenderTemperatureGui
 			break;
 		}
 		
-		if (Config.Baked.wetnessMode == WetnessMode.DYNAMIC)
+		if (Config.Baked.wetnessEnabled)
 			drawWetness(matrix, wetCap, width, height);
 
 		if (LegendarySurvivalOverhaul.curiosLoaded && (CuriosUtil.isThermometerEquipped || CuriosUtil.isCurioItemEquipped(player, ItemRegistry.THERMOMETER.get()))) {
@@ -485,7 +484,7 @@ public class RenderTemperatureGui
 		}
 
 		public static BodyTemperatureIcon get(float tempRatio) {
-			return BodyTemperatureIcon.values()[1 + (int)(tempRatio * 9)];
+			return BodyTemperatureIcon.values()[Math.min(1 + (int)(tempRatio * 9), 9)];
 		}
 	}
 

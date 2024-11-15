@@ -14,10 +14,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.client.screens.SewingTableScreen;
+import sfiomn.legendarysurvivaloverhaul.common.items.CoatItem;
 import sfiomn.legendarysurvivaloverhaul.common.items.drink.CanteenItem;
 import sfiomn.legendarysurvivaloverhaul.data.recipes.CanteenBlastingRecipe;
 import sfiomn.legendarysurvivaloverhaul.data.recipes.CanteenFurnaceRecipe;
@@ -67,7 +70,7 @@ public class JeiIntegration implements IModPlugin {
                     .filter(r -> r instanceof CanteenBlastingRecipe).collect(Collectors.toList())), VanillaRecipeCategoryUid.BLASTING);
 
 
-            registration.addRecipes(customSewingRecipes(), SewingRecipeCategory.UID);
+            registration.addRecipes(sewingCoatRecipes(), SewingRecipeCategory.UID);
         }
     }
 
@@ -76,32 +79,38 @@ public class JeiIntegration implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(BlockRegistry.SEWING_TABLE.get()), SewingRecipeCategory.UID);
     }
 
-    private ArrayList<SewingRecipe> customSewingRecipes() {
+    private ArrayList<SewingRecipe> sewingCoatRecipes() {
         ArrayList<SewingRecipe> sewingRecipes = new ArrayList<>();
 
         for (Item item: ForgeRegistries.ITEMS) {
-            if (item instanceof ArmorItem && item.getRegistryName() != null) {
-                sewingRecipes.add(getCoatRecipe("_cooling_coat_1", item, ItemRegistry.COOLING_COAT_1.get()));
-                sewingRecipes.add(getCoatRecipe("_cooling_coat_2", item, ItemRegistry.COOLING_COAT_2.get()));
-                sewingRecipes.add(getCoatRecipe("_cooling_coat_3", item, ItemRegistry.COOLING_COAT_3.get()));
-                sewingRecipes.add(getCoatRecipe("_heating_coat_1", item, ItemRegistry.HEATING_COAT_1.get()));
-                sewingRecipes.add(getCoatRecipe("_heating_coat_2", item, ItemRegistry.HEATING_COAT_2.get()));
-                sewingRecipes.add(getCoatRecipe("_heating_coat_3", item, ItemRegistry.HEATING_COAT_3.get()));
-                sewingRecipes.add(getCoatRecipe("_thermal_coat_1", item, ItemRegistry.THERMAL_COAT_1.get()));
-                sewingRecipes.add(getCoatRecipe("_thermal_coat_2", item, ItemRegistry.THERMAL_COAT_2.get()));
-                sewingRecipes.add(getCoatRecipe("_thermal_coat_3", item, ItemRegistry.THERMAL_COAT_3.get()));
+            if (item instanceof ArmorItem && ForgeRegistries.ITEMS.getKey(item) != null) {
+                ResourceLocation itemArmorRegistryName = ForgeRegistries.ITEMS.getKey(item);
+                for (RegistryObject<Item> modItem : ItemRegistry.ITEMS.getEntries()) {
+                    if (modItem.get() instanceof CoatItem && itemArmorRegistryName != null) {
+                        ItemStack result = new ItemStack(item);
+                        TemperatureUtil.setArmorCoatTag(result, ((CoatItem) modItem.get()).coat.id());
+                        sewingRecipes.add(
+                                getCoatRecipe(
+                                        "sewing_" + itemArmorRegistryName.getPath() + "_" + modItem.getId().getPath(),
+                                        item,
+                                        modItem.get(),
+                                        result
+                                ));
+                    }
+                }
             }
         }
 
         return sewingRecipes;
     }
 
-    private SewingRecipe getCoatRecipe(String id, Item base, Item addition) {
+    private SewingRecipe getCoatRecipe(String id, Item base, Item addition, ItemStack result) {
         return new SewingRecipe(
-                new ResourceLocation(base.getRegistryName().getPath() + id),
+                new ResourceLocation(id),
                 Ingredient.of(base),
                 Ingredient.of(addition),
-                new ItemStack(base)
+                result
+
         );
     }
 

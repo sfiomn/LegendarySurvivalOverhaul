@@ -18,21 +18,22 @@ import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 
+import java.util.*;
+
 // Code adapted from 
 // https://github.com/Charles445/SimpleDifficulty/blob/v0.3.4/src/main/java/com/charles445/simpledifficulty/capability/TemperatureCapability.java
 
 public class TemperatureCapability implements ITemperatureCapability
 {
 	private float temperature;
+	private Set<Integer> temperatureImmunities;
 	private int temperatureTickTimer;
 	
 	//Unsaved data
 	private float oldTemperature;
-	private int updateTimer; //Update immediately first time around
 	private float targetTemp;
 	private boolean manualDirty;
 	private int packetTimer;
-	private int soundTriggerTick;
 	
 	public TemperatureCapability() 
 	{
@@ -42,13 +43,13 @@ public class TemperatureCapability implements ITemperatureCapability
 	public void init()
 	{
 		this.temperature = TemperatureEnum.NORMAL.getMiddle();
+		this.temperatureImmunities = new HashSet<>();
 		this.temperatureTickTimer = 0;
 		
 		this.oldTemperature = 0;
 		this.targetTemp = 0;
 		this.manualDirty = false;
 		this.packetTimer = 0;
-		this.soundTriggerTick = 0;
 	}
 	
 	@Override
@@ -97,7 +98,17 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		this.setTemperatureTickTimer(this.temperatureTickTimer + tickTimer);
 	}
-	
+
+	@Override
+	public void addTemperatureImmunityId(int immunityId) {
+		this.temperatureImmunities.add(immunityId);
+	}
+
+	@Override
+	public void removeTemperatureImmunityId(int immunityId) {
+		this.temperatureImmunities.remove(immunityId);
+	}
+
 	@Override
 	public void tickUpdate(PlayerEntity player, World world, Phase phase)
 	{
@@ -107,30 +118,21 @@ public class TemperatureCapability implements ITemperatureCapability
 			return;
 		}
 
-		if(updateTimer++ >= 10)
-		{
-			updateTimer = 0;
-			targetTemp = TemperatureUtil.getPlayerTargetTemperature(player);
-		}
-
 		addTemperatureTickTimer(1);
-
-		if (this.soundTriggerTick > 0)
-			this.soundTriggerTick--;
 		
 		if (getTemperatureTickTimer() >= Config.Baked.tempTickTime) {
 			setTemperatureTickTimer(0);
 
-			float destinationTemp = targetTemp;
+			targetTemp = TemperatureUtil.getPlayerTargetTemperature(player);
 
-			if (getTemperatureLevel() != destinationTemp) {
-				tickTemperature(getTemperatureLevel(), destinationTemp);
+			if (getTemperatureLevel() != targetTemp) {
+				tickTemperature(getTemperatureLevel(), targetTemp);
 			}
 
 			TemperatureEnum tempEnum = getTemperatureEnum();
 
 			if (player.getItemBySlot(EquipmentSlotType.MAINHAND).getItem() == Items.DEBUG_STICK)
-				LegendarySurvivalOverhaul.LOGGER.info(tempEnum + ", " + getTemperatureLevel() + " -> " + destinationTemp);
+				LegendarySurvivalOverhaul.LOGGER.info(tempEnum + ", " + getTemperatureLevel() + " -> " + targetTemp);
 
 			applyDangerousEffects(player, tempEnum);
 
@@ -138,16 +140,26 @@ public class TemperatureCapability implements ITemperatureCapability
 		}
 	}
 
+	@Override
+	public void tickClient(PlayerEntity player, Phase phase) {
+		if(phase == TickEvent.Phase.START) {
+			return;
+		}
+
+		if (getTemperatureEnum() == TemperatureEnum.FROSTBITE && !FrostbiteEffect.playerIsImmuneToFrost(player))
+			shakePlayer(player);
+	}
+
 	private void applyDangerousEffects(PlayerEntity player, TemperatureEnum tempEnum) {
 		if (Config.Baked.dangerousHeatTemperature && ThirstUtil.isThirstActive(player) && tempEnum == TemperatureEnum.HEAT_STROKE) {
-			if (TemperatureEnum.HEAT_STROKE.getMiddle() <= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
+			if (TemperatureEnum.HEAT_STROKE.getMiddle() <= getTemperatureLevel() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply hyperthermia
 				if (!player.hasEffect(EffectRegistry.HEAT_STROKE.get()))
 					player.addEffect(new EffectInstance(EffectRegistry.HEAT_STROKE.get(), 1000, 0, false, true));
 				return;
 			}
 		} else if (Config.Baked.dangerousColdTemperature && tempEnum == TemperatureEnum.FROSTBITE) {
-			if (TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
+			if (TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply hypothermia
 				if (!player.hasEffect(EffectRegistry.FROSTBITE.get()))
 					player.addEffect(new EffectInstance(EffectRegistry.FROSTBITE.get(), 1000, 0, false, true));
@@ -162,14 +174,14 @@ public class TemperatureCapability implements ITemperatureCapability
 
 	private void applySecondaryEffects(PlayerEntity player, TemperatureEnum tempEnum) {
 		if (Config.Baked.heatTemperatureSecondaryEffects && tempEnum == TemperatureEnum.HEAT_STROKE) {
-			if (!player.isSpectator() && !player.isCreative() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
+			if (!HeatStrokeEffect.playerIsImmuneToHeat(player)) {
 				// Apply secondary effect hyperthermia
 				player.removeEffect(EffectRegistry.COLD_HUNGER.get());
 				player.addEffect(new EffectInstance(EffectRegistry.HEAT_THIRST.get(), 300, 0, false, false));
 				return;
 			}
 		} else if (Config.Baked.coldTemperatureSecondaryEffects && tempEnum == TemperatureEnum.FROSTBITE) {
-			if (!player.isSpectator() && !player.isCreative() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
+			if (!FrostbiteEffect.playerIsImmuneToFrost(player)) {
 				// Apply secondary effect hypothermia
 				player.removeEffect(EffectRegistry.HEAT_THIRST.get());
 				player.addEffect(new EffectInstance(EffectRegistry.COLD_HUNGER.get(), 300, 0, false, false));
@@ -180,6 +192,10 @@ public class TemperatureCapability implements ITemperatureCapability
 			player.removeEffect(EffectRegistry.HEAT_THIRST.get());
 		if (player.hasEffect(EffectRegistry.COLD_HUNGER.get()))
 			player.removeEffect(EffectRegistry.COLD_HUNGER.get());
+	}
+
+	private void shakePlayer(PlayerEntity player) {
+		player.setYBodyRot(player.yBodyRot + (float) (Math.cos((double) player.tickCount * 3.25D) * Math.PI * (double) 0.4F));
 	}
 	
 	private void tickTemperature(float currentTemp, float destination)
@@ -224,7 +240,12 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		return TemperatureEnum.get(temperature);
 	}
-	
+
+	@Override
+	public List<Integer> getTemperatureImmunities() {
+		return new ArrayList<>(this.temperatureImmunities);
+	}
+
 	public CompoundNBT writeNBT() 
 	{
 		CompoundNBT compound = new CompoundNBT();
@@ -232,6 +253,7 @@ public class TemperatureCapability implements ITemperatureCapability
 		compound.putFloat("temperature", this.temperature);
 		compound.putFloat("targettemperature", this.targetTemp);
 		compound.putInt("ticktimer", this.temperatureTickTimer);
+		compound.putIntArray("immunities", this.getTemperatureImmunities());
 		
 		return compound;
 	}
@@ -245,5 +267,8 @@ public class TemperatureCapability implements ITemperatureCapability
 			this.setTargetTemperatureLevel(compound.getFloat("targettemperature"));
 		if (compound.contains("tickTimer"))
 			this.setTemperatureTickTimer(compound.getInt("tickTimer"));
+		if (compound.contains("immunities"))
+			for (int immunityId: compound.getIntArray("immunities"))
+				this.addTemperatureImmunityId(immunityId);
 	}
 }

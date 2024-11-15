@@ -83,7 +83,7 @@ minecraft {
         }
 
         client {
-            args '--username', 'Armkath', '--userType', 'microsoft', '--accessToken', 'eyJraWQiOiJhYzg0YSIsImFsZyI6IkhTMjU2In0.eyJ4dWlkIjoiMjUzNTQxMjExMTgwMTc2NiIsImFnZyI6IkFkdWx0Iiwic3ViIjoiNTkzZmNlNDctN2IxOS00MjI3LWFjM2ItMThjZmQzODNjNWFjIiwiYXV0aCI6IlhCT1giLCJucyI6ImRlZmF1bHQiLCJyb2xlcyI6W10sImlzcyI6ImF1dGhlbnRpY2F0aW9uIiwiZmxhZ3MiOlsidHdvZmFjdG9yYXV0aCIsIm1pbmVjcmFmdF9uZXQiLCJtc2FtaWdyYXRpb25fc3RhZ2U0Iiwib3JkZXJzXzIwMjIiLCJtdWx0aXBsYXllciJdLCJwcm9maWxlcyI6eyJtYyI6IjVmNTU4NWFhLTUzNGEtNDU4OS05ZThlLWQ2YWUyMGUzNWEzOSJ9LCJwbGF0Zm9ybSI6IlVOS05PV04iLCJ5dWlkIjoiZWU5MmU4NTY2M2VkNTZlNTQ2NjRmMGRlYmI1YTYzYTYiLCJuYmYiOjE3MjMzODcxNjUsImV4cCI6MTcyMzQ3MzU2NSwiaWF0IjoxNzIzMzg3MTY1fQ.jvQJNXXMAjfoPvGFVkVp1_ah6xtmHh4JxYia3Q5nuv8'
+            args '--username', 'Armkath', '--userType', 'microsoft', '--accessToken', 'eyJraWQiOiJhYzg0YSIsImFsZyI6IkhTMjU2In0.eyJ4dWlkIjoiMjUzNTQxMjExMTgwMTc2NiIsImFnZyI6IkFkdWx0Iiwic3ViIjoiNTkzZmNlNDctN2IxOS00MjI3LWFjM2ItMThjZmQzODNjNWFjIiwiYXV0aCI6IlhCT1giLCJucyI6ImRlZmF1bHQiLCJyb2xlcyI6W10sImlzcyI6ImF1dGhlbnRpY2F0aW9uIiwiZmxhZ3MiOlsidHdvZmFjdG9yYXV0aCIsIm1pbmVjcmFmdF9uZXQiLCJtc2FtaWdyYXRpb25fc3RhZ2U0Iiwib3JkZXJzXzIwMjIiLCJtdWx0aXBsYXllciJdLCJwcm9maWxlcyI6eyJtYyI6IjVmNTU4NWFhLTUzNGEtNDU4OS05ZThlLWQ2YWUyMGUzNWEzOSJ9LCJwbGF0Zm9ybSI6IlVOS05PV04iLCJ5dWlkIjoiZWU5MmU4NTY2M2VkNTZlNTQ2NjRmMGRlYmI1YTYzYTYiLCJuYmYiOjE3Mjc2NjA5MzEsImV4cCI6MTcyNzc0NzMzMSwiaWF0IjoxNzI3NjYwOTMxfQ.CO7t_libnYURsDqdVMd2ifAxHxpVuwsGpQr5ugOMhtA'
             // this block needs to be here for runClient to exist
         }
 
@@ -152,12 +152,14 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api"))
     compileOnly(fg.deobf("curse.maven:vampirism-233029:4799953"))
+    compileOnly fg.deobf("curse.maven:origins-474438:3426062")
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}"))
 
     // These are REQUIRED for the mod to compile correctly and should not be removed.
     implementation fg.deobf("curse.maven:curios-309927:4419403")
     implementation fg.deobf("curse.maven:serene-seasons-291874:4537666")
+
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html

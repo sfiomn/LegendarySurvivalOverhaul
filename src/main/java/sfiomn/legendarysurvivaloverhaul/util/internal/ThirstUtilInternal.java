@@ -21,6 +21,7 @@ import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.IThirstUtil;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosUtil;
+import sfiomn.legendarysurvivaloverhaul.common.integration.origins.OriginsUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
@@ -135,7 +136,7 @@ public class ThirstUtilInternal implements IThirstUtil {
                 Effect mobEffect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effect.name));
                 if (mobEffect != null) {
                     int effectDuration = effect.duration;
-                    if (mobEffect == EffectRegistry.THIRST.get() && player.getEffect(EffectRegistry.THIRST.get()) != null) {
+                    if (Config.Baked.cumulativeThirstEffectDuration && mobEffect == EffectRegistry.THIRST.get() && player.getEffect(EffectRegistry.THIRST.get()) != null) {
                         effectDuration += Objects.requireNonNull(player.getEffect(EffectRegistry.THIRST.get())).getDuration();
                     }
                     player.addEffect(new EffectInstance(mobEffect, effectDuration, effect.amplifier, false, true, true));
@@ -185,6 +186,12 @@ public class ThirstUtilInternal implements IThirstUtil {
                 if (LegendarySurvivalOverhaul.curiosLoaded) {
                     if (CuriosUtil.isCurioItemEquipped(player, ItemRegistry.NETHER_CHALICE.get()) && (fluidState.getType() == Fluids.FLOWING_LAVA || fluidState.getType() == Fluids.LAVA))
                         return new JsonBlockFluidThirst(Config.Baked.hydrationLava, (float) Config.Baked.saturationLava, new JsonEffectParameter[]{});
+                }
+
+                if (LegendarySurvivalOverhaul.originsLoaded) {
+                    if (OriginsUtil.isOrigin(player, OriginsUtil.BLAZEBORN) &&
+                            (fluidState.getType() == Fluids.FLOWING_LAVA || fluidState.getType() == Fluids.LAVA))
+                        return new JsonBlockFluidThirst(Config.Baked.hydrationLavaBlazeborn, (float) Config.Baked.saturationLavaBlazeborn, new JsonEffectParameter[]{});
                 }
 
                 List<JsonBlockFluidThirst> jsonBlockFluidThirsts = JsonConfig.blockFluidThirst.get(fluidRegistryName.toString());

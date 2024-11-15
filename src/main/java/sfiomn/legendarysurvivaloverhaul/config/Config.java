@@ -6,7 +6,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.client.render.TemperatureDisplayEnum;
-import sfiomn.legendarysurvivaloverhaul.common.capabilities.wetness.WetnessMode;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
 
 import java.io.IOException;
@@ -73,8 +72,10 @@ public class Config
 		public final ForgeConfigSpec.BooleanValue showPotionEffectParticles;
 		public final ForgeConfigSpec.BooleanValue dangerousHeatTemperature;
 		public final ForgeConfigSpec.BooleanValue dangerousColdTemperature;
-		public final ForgeConfigSpec.BooleanValue temperatureResistanceOnDeathEnabled;
-		public final ForgeConfigSpec.IntValue temperatureResistanceOnDeathTime;
+		public final ForgeConfigSpec.BooleanValue temperatureImmunityOnDeathEnabled;
+		public final ForgeConfigSpec.IntValue temperatureImmunityOnDeathTime;
+		public final ForgeConfigSpec.BooleanValue temperatureImmunityOnFirstSpawnEnabled;
+		public final ForgeConfigSpec.IntValue temperatureImmunityOnFirstSpawnTime;
 
 		public final ForgeConfigSpec.BooleanValue heatTemperatureSecondaryEffects;
 		public final ForgeConfigSpec.BooleanValue coldTemperatureSecondaryEffects;
@@ -92,9 +93,8 @@ public class Config
 		public final ForgeConfigSpec.DoubleValue altitudeModifier;
 		public final ForgeConfigSpec.DoubleValue sprintModifier;
 		public final ForgeConfigSpec.DoubleValue onFireModifier;
-		public final ForgeConfigSpec.DoubleValue enchantmentMultiplier;
 		
-		public final ForgeConfigSpec.ConfigValue<String> wetnessMode;
+		public final ForgeConfigSpec.BooleanValue wetnessEnabled;
 		public final ForgeConfigSpec.DoubleValue wetMultiplier;
 		public final ForgeConfigSpec.IntValue wetnessDecrease;
 		public final ForgeConfigSpec.IntValue wetnessRainIncrease;
@@ -165,6 +165,7 @@ public class Config
 		// Thirst
 		public final ForgeConfigSpec.BooleanValue thirstEnabled;
 		public final ForgeConfigSpec.BooleanValue dangerousDehydration;
+		public final ForgeConfigSpec.BooleanValue cumulativeThirstEffectDuration;
 		public final ForgeConfigSpec.DoubleValue dehydrationDamageScaling;
 		public final ForgeConfigSpec.DoubleValue thirstEffectModifier;
 		public final ForgeConfigSpec.DoubleValue baseThirstExhaustion;
@@ -178,6 +179,12 @@ public class Config
 		public final ForgeConfigSpec.IntValue hydrationLava;
 		public final ForgeConfigSpec.DoubleValue saturationLava;
 		public final ForgeConfigSpec.BooleanValue glassBottleLootAfterDrink;
+
+		// > Integration
+		public final ForgeConfigSpec.IntValue hydrationLavaBlazeborn;
+		public final ForgeConfigSpec.DoubleValue saturationLavaBlazeborn;
+		public final ForgeConfigSpec.DoubleValue extraThirstExhaustionShulk;
+		public final ForgeConfigSpec.DoubleValue extraThirstExhaustionPhantom;
 		public final ForgeConfigSpec.BooleanValue thirstEnabledIfVampire;
 
 		// Heart Fruits
@@ -287,12 +294,18 @@ public class Config
 					.define("Dangerous Cold Temperature Effects", true);
 
 			builder.push("on-death");
-			temperatureResistanceOnDeathEnabled = builder
+			temperatureImmunityOnDeathEnabled = builder
 					.comment(" If enabled, players will be immune to temperature effects after death.")
-					.define("Temperature Resistance Enabled", true);
-			temperatureResistanceOnDeathTime = builder
-					.comment(" Temperature resistance period in ticks while the player is immune to temperature effects.")
-					.defineInRange("Temperature Resistance Time", 1800, 0, 100000);
+					.define("Temperature Immunity On Death Enabled", true);
+			temperatureImmunityOnDeathTime = builder
+					.comment(" Temperature immunity period in ticks while the player is immune to temperature effects after death.")
+					.defineInRange("Temperature Immunity On Death Time", 1800, 0, 100000);
+			temperatureImmunityOnFirstSpawnEnabled = builder
+					.comment(" If enabled, players will be immune to temperature effects on first spawn in a world.")
+					.define("Temperature Immunity On First Spawn Enabled", true);
+			temperatureImmunityOnFirstSpawnTime = builder
+					.comment(" Temperature immunity period in ticks while the player is immune to temperature effects on first spawn.")
+					.defineInRange("Temperature Immunity On First Spawn Time", 1800, 0, 100000);
 			builder.pop();
 
 			builder.push("secondary_effects");
@@ -305,10 +318,10 @@ public class Config
 							" If the player is too cold, hunger will deplete faster.")
 					.define("Cold Temperature Secondary Effects", true);
 			heatThirstEffectModifier = builder
-					.comment(" How much thirst exhaustion will be added every 50 ticks with no amplification effect.")
+					.comment(" How much thirst exhaustion will be added every 50 ticks with no amplification effect, when the player suffers from heat.")
 					.defineInRange("Heat Thirst Effect Modifier", 0.1d, 0, 1000.0d);
 			coldHungerEffectModifier = builder
-					.comment(" How much food exhaustion will be added every 50 ticks with no amplification effect.",
+					.comment(" How much food exhaustion will be added every 50 ticks with no amplification effect, when the player suffers from frostbite.",
 							" As reference, the hunger effect add 0.025 food exhaustion every 50 ticks.")
 					.defineInRange("Cold Hunger Modifier", 0.05d, 0, 1000.0d);
 			builder.pop();
@@ -323,22 +336,15 @@ public class Config
 					.comment(" How much the effects of the player's altitude on temperature are multiplied starting at Y 64.",
 							" Each 64 blocks further from Y 64 will reduce player's temperature by this value.")
 					.defineInRange("Altitude Modifier", -3.0d, -1000, 1000);
-			enchantmentMultiplier = builder
-					.comment(" Increases/decreases the effect that cooling/heating enchantments have on a player's temperature.")
-					.defineInRange("Enchantment Modifier", 1.0d, -1000, 1000);
 			showPotionEffectParticles = builder
 					.comment(" If enabled, players will see particles on them when temperature resistance effect active.",
 							" If disabled, players won't see particles but the potion color will turn black due to forge weird behavior.")
 					.define("Show Temperature Potion Effect Particles", true);
 			
 			builder.push("wetness");
-			wetnessMode = builder
-					.comment(" How a player's \"wetness\" is determined. Accepted values are as follows:",
-							"   DISABLE - Disable wetness and any effects on temperature it might have.",
-							"   SIMPLE - Wetness is only based on whether you're in water/rain or not. Slightly better in terms of performance.",
-							"   DYNAMIC - Wetness can change dynamically based on various conditions, and does not instantly go away when moving out of water.",
-							" Any other value will default to DISABLE.")
-					.define("Wetness Mode", "DYNAMIC");
+			wetnessEnabled = builder
+					.comment(" Enable the wetness mechanic.")
+					.define("Wetness Enabled", true);
 			
 			wetMultiplier = builder
 					.comment(" How much being wet influences the player's temperature.")
@@ -556,29 +562,32 @@ public class Config
 			dangerousDehydration = builder
 					.comment(" If enabled, players will take damage from the complete dehydration.")
 					.define("Dangerous Dehydration", true);
+			cumulativeThirstEffectDuration = builder
+					.comment(" If enabled, each time the player receives a thirst effect, its duration will be added to the thirst effect duration if already on the player.")
+					.define("Cumulative Thirst Effect Duration", true);
 			builder.push("exhaustion");
 			baseThirstExhaustion = builder
 					.comment(" Thirst exhausted every 10 ticks.")
 					.defineInRange("Base Thirst Exhaustion", 0.03d, 0, 1000.0d);
 			sprintingThirstExhaustion = builder
 					.comment(" Thirst exhausted when sprinting, replacing the base thirst exhausted.")
-					.defineInRange("Sprinting Thirst Exhaustion", 0.15d, 0, 1000.0d);
+					.defineInRange("Sprinting Thirst Exhaustion", 0.1d, 0, 1000.0d);
 			onJumpThirstExhaustion = builder
 					.comment(" Thirst exhausted on every jump.")
-					.defineInRange("On Jump Thirst Exhaustion", 0.3d, 0, 1000.0d);
+					.defineInRange("On Jump Thirst Exhaustion", 0.15d, 0, 1000.0d);
 			onBlockBreakThirstExhaustion = builder
 					.comment(" Thirst exhausted on every block break.")
-					.defineInRange("On Block Break Thirst Exhaustion", 0.1d, 0, 1000.0d);
+					.defineInRange("On Block Break Thirst Exhaustion", 0.07d, 0, 1000.0d);
 			onAttackThirstExhaustion = builder
 					.comment(" Thirst exhausted on every attack.")
-					.defineInRange("On Attack Thirst Exhaustion", 0.5d, 0, 1000.0d);
+					.defineInRange("On Attack Thirst Exhaustion", 0.3d, 0, 1000.0d);
 			builder.pop();
 			dehydrationDamageScaling = builder
 					.comment(" Scaling of the damages dealt when completely dehydrated. Each tick damage will be increased by this value.")
 					.defineInRange("Dehydration Damage Scaling", 0.3d, 0, 1000.0d);
 			thirstEffectModifier = builder
 					.comment(" How many thirst exhaustion will be added every 50 ticks when the player suffers from not amplified Thirst Effect.",
-							" The player will suffer Thirst Effect from dirty water by example.")
+							" The player will suffer Thirst Effect from dirty water for example.")
 					.defineInRange("Thirst Effect Modifier", 0.25d, 0, 1000);
 			builder.push("canteen");
 			canteenCapacity = builder
@@ -606,6 +615,42 @@ public class Config
 			builder.pop();
 
 			builder.push("integration");
+			builder.push("origins");
+
+			builder.comment(" Temperature won't increase will on fire",
+							" Immune to wetness",
+							"Can drink lava")
+					.push("blazeborn");
+			hydrationLavaBlazeborn = builder
+					.comment(" Amount of hydration recovered when drinking from lava.")
+					.defineInRange("Lava Hydration For Blazeborn", 3, 0, 20);
+			saturationLavaBlazeborn = builder
+					.comment(" Amount of saturation recovered when drinking from lava.")
+					.defineInRange("Lava Saturation For Blazeborn", 1.0, 0, 20);
+			builder.pop();
+
+			builder.comment(" Immune to wetness",
+					"Immune to Thirst Effect").push("merling");
+			builder.pop();
+
+			builder.comment(" Immune to high altitude coldness").push("elytrian");
+			builder.pop();
+
+			builder.comment(" Immune to high altitude coldness").push("avian");
+			builder.pop();
+
+			builder.comment(" Thirst depletes slightly faster").push("shulk");
+			extraThirstExhaustionShulk = builder
+					.comment(" Amount of thirst exhaustion added every 20 ticks.")
+					.defineInRange("Extra Thirst Exhaustion For Shulk", 0.1, 0, 1000);
+			builder.pop();
+
+			builder.comment(" Thirst depletes slightly faster").push("phantom");
+			extraThirstExhaustionPhantom = builder
+					.comment(" Amount of thirst exhaustion added every 20 ticks.")
+					.defineInRange("Extra Thirst Exhaustion For Phantom", 0.1, 0, 1000);
+			builder.pop();
+
 
 			builder.push("vampirism");
 			thirstEnabledIfVampire = builder
@@ -651,7 +696,7 @@ public class Config
 					.defineInRange("Body Part Health Ratio Recovered", 1.0d, 0.0d, 1.0d);
 			healthRatioRecoveredFromSleep = builder
 					.comment(" How much health ratio are recovered from bed sleeping.")
-					.defineInRange("Health Ratio Recovered", 0.3d, 0.0d, 1.0d);
+					.defineInRange("Health Ratio Recovered", 1.0d, 0.0d, 1.0d);
 
 			builder.push("healing-items");
 
@@ -689,14 +734,14 @@ public class Config
 							" Any other value will default to SIMPLE.")
 					.define("Body Part Health Mode", "DYNAMIC");
 
-			headPartHealth = builder.defineInRange("Head Part Health", 0.2d, 0.0d, 1000.0d);
+			headPartHealth = builder.defineInRange("Head Part Health", 0.4d, 0.0d, 1000.0d);
 			armsPartHealth = builder.comment(" Both arms will have this health.")
-					.defineInRange("Arms Part Health", 0.2d, 0.0d, 1000.0d);;
-			chestPartHealth = builder.defineInRange("Chest Part Health", 0.3d, 0.0d, 1000.0d);;
+					.defineInRange("Arms Part Health", 0.4d, 0.0d, 1000.0d);;
+			chestPartHealth = builder.defineInRange("Chest Part Health", 0.6d, 0.0d, 1000.0d);;
 			legsPartHealth = builder.comment(" Both legs will have this health.")
-					.defineInRange("Legs Part Health", 0.3d, 0.0d, 1000.0d);;
+					.defineInRange("Legs Part Health", 0.6d, 0.0d, 1000.0d);;
 			feetPartHealth = builder.comment(" Both feet will have this health.")
-					.defineInRange("Feet Part Health", 0.2d, 0.0d, 1000.0d);;
+					.defineInRange("Feet Part Health", 0.4d, 0.0d, 1000.0d);;
 			builder.pop();
 
 			builder.push("body-parts-effects");
@@ -776,8 +821,8 @@ public class Config
 		public final ForgeConfigSpec.IntValue bodyDamageIndicatorOffsetY;
 		public final ForgeConfigSpec.BooleanValue alwaysShowBodyDamageIndicator;
 
-		public final ForgeConfigSpec.IntValue seasonCardsOffsetX;
-		public final ForgeConfigSpec.IntValue seasonCardsOffsetY;
+		public final ForgeConfigSpec.IntValue seasonCardsDisplayOffsetX;
+		public final ForgeConfigSpec.IntValue seasonCardsDisplayOffsetY;
 		public final ForgeConfigSpec.IntValue seasonCardsSpawnDimensionDelayInTicks;
 		public final ForgeConfigSpec.IntValue seasonCardsDisplayTimeInTicks;
 		public final ForgeConfigSpec.IntValue seasonCardsFadeInInTicks;
@@ -802,7 +847,7 @@ public class Config
 			showVanillaAnimationOverlay = builder
 					.comment(" Whether the vanilla animation of the Food bar and Hydration bar is rendered. The bar shakes more the lower they are.",
 							" This mod render a new food bar as a secondary effect of a cold temperature.",
-							" Disable this animation if the temperature secondary effect is enabled to allow a compatibility with other mods rendering the food bar (by example Appleskin).")
+							" Disable this animation if the temperature secondary effect is enabled to allow a compatibility with other mods rendering the food bar (for example Appleskin).")
 					.define("Show Vanilla Animation Overlay", true);
 			builder.pop();
 			
@@ -861,10 +906,10 @@ public class Config
 			builder.pop();
 
 			builder.push("season-cards");
-			seasonCardsOffsetX = builder
+			seasonCardsDisplayOffsetX = builder
 					.comment(" The X and Y offset of the season cards. Set both to 0 for no offset.", " By default, render first top quarter vertically and centered horizontally.")
 					.defineInRange("Season Cards X Offset", 0, -1000, 1000);
-			seasonCardsOffsetY = builder
+			seasonCardsDisplayOffsetY = builder
 					.defineInRange("Season Cards Y Offset", 0, -1000, 1000);
 			seasonCardsSpawnDimensionDelayInTicks = builder
 					.comment(" The delay before rendering the season card at first player spawn or player dimension change.")
@@ -920,7 +965,9 @@ public class Config
 		public static double maxTemperatureModification;
 		public static boolean showPotionEffectParticles;
 		public static boolean temperatureResistanceOnDeathEnabled;
-		public static int temperatureResistanceOnDeathTime;
+		public static int temperatureImmunityOnDeathTime;
+		public static boolean temperatureImmunityOnFirstSpawnEnabled;
+		public static int temperatureImmunityOnFirstSpawnTime;
 
 		public static boolean dangerousHeatTemperature;
 		public static boolean dangerousColdTemperature;
@@ -950,8 +997,8 @@ public class Config
 		
 		public static double playerHuddlingModifier;
 		public static int playerHuddlingRadius;
-		
-		public static WetnessMode wetnessMode;
+
+		public static boolean wetnessEnabled;
 		public static double wetMultiplier;
 		public static int wetnessDecrease;
 		public static int wetnessRainIncrease;
@@ -1012,6 +1059,7 @@ public class Config
 		// Thirst
 		public static boolean thirstEnabled;
 		public static boolean dangerousDehydration;
+		public static boolean cumulativeThirstEffectDuration;
 		public static double dehydrationDamageScaling;
 		public static double thirstEffectModifier;
 		public static double baseThirstExhaustion;
@@ -1025,6 +1073,10 @@ public class Config
 		public static int hydrationLava;
 		public static double saturationLava;
 		public static boolean glassBottleLootAfterDrink;
+		public static int hydrationLavaBlazeborn;
+		public static double saturationLavaBlazeborn;
+		public static double extraThirstExhaustionShulk;
+		public static double extraThirstExhaustionPhantom;
 		public static boolean thirstEnabledIfVampire;
 
 		// Heart fruit
@@ -1098,8 +1150,8 @@ public class Config
 		public static boolean foodSaturationDisplayed;
 		public static boolean showVanillaAnimationOverlay;
 
-		public static int seasonCardsOffsetX;
-		public static int seasonCardsOffsetY;
+		public static int seasonCardsDisplayOffsetX;
+		public static int seasonCardsDisplayOffsetY;
 		public static int seasonCardsSpawnDimensionDelayInTicks;
 		public static int seasonCardsDisplayTimeInTicks;
 		public static int seasonCardsFadeInInTicks;
@@ -1133,8 +1185,10 @@ public class Config
 				maxTemperatureModification = COMMON.maxTemperatureModification.get();
 				showPotionEffectParticles = COMMON.showPotionEffectParticles.get();
 
-				temperatureResistanceOnDeathEnabled = COMMON.temperatureResistanceOnDeathEnabled.get();
-				temperatureResistanceOnDeathTime = COMMON.temperatureResistanceOnDeathTime.get();
+				temperatureResistanceOnDeathEnabled = COMMON.temperatureImmunityOnDeathEnabled.get();
+				temperatureImmunityOnDeathTime = COMMON.temperatureImmunityOnDeathTime.get();
+				temperatureImmunityOnFirstSpawnEnabled = COMMON.temperatureImmunityOnFirstSpawnEnabled.get();
+				temperatureImmunityOnFirstSpawnTime = COMMON.temperatureImmunityOnFirstSpawnTime.get();
 
 				dangerousHeatTemperature = COMMON.dangerousHeatTemperature.get();
 				dangerousColdTemperature = COMMON.dangerousColdTemperature.get();
@@ -1161,8 +1215,8 @@ public class Config
 				
 				onFireModifier = COMMON.onFireModifier.get();
 				sprintModifier = COMMON.sprintModifier.get();
-				
-				wetnessMode = WetnessMode.getDisplayFromString(COMMON.wetnessMode.get());
+
+				wetnessEnabled = COMMON.wetnessEnabled.get();
 				wetMultiplier = COMMON.wetMultiplier.get();
 				wetnessDecrease = COMMON.wetnessDecrease.get();
 				wetnessRainIncrease = COMMON.wetnessRainIncrease.get();
@@ -1224,6 +1278,7 @@ public class Config
 
 				thirstEnabled = COMMON.thirstEnabled.get();
 				dangerousDehydration = COMMON.dangerousDehydration.get();
+				cumulativeThirstEffectDuration = COMMON.cumulativeThirstEffectDuration.get();
 				dehydrationDamageScaling = COMMON.dehydrationDamageScaling.get();
 				thirstEffectModifier = COMMON.thirstEffectModifier.get();
 
@@ -1239,6 +1294,11 @@ public class Config
 
 				hydrationLava = COMMON.hydrationLava.get();
 				saturationLava = COMMON.saturationLava.get();
+
+				hydrationLavaBlazeborn = COMMON.hydrationLavaBlazeborn.get();
+				saturationLavaBlazeborn = COMMON.saturationLavaBlazeborn.get();
+				extraThirstExhaustionShulk = COMMON.extraThirstExhaustionShulk.get();
+				extraThirstExhaustionPhantom = COMMON.extraThirstExhaustionPhantom.get();
 
 				glassBottleLootAfterDrink = COMMON.glassBottleLootAfterDrink.get();
 
@@ -1320,8 +1380,8 @@ public class Config
 				foodSaturationDisplayed = CLIENT.foodSaturationDisplayed.get();
 				showVanillaAnimationOverlay = CLIENT.showVanillaAnimationOverlay.get();
 
-				seasonCardsOffsetX = CLIENT.seasonCardsOffsetX.get();
-				seasonCardsOffsetY = CLIENT.seasonCardsOffsetY.get();
+				seasonCardsDisplayOffsetX = CLIENT.seasonCardsDisplayOffsetX.get();
+				seasonCardsDisplayOffsetY = CLIENT.seasonCardsDisplayOffsetY.get();
 				seasonCardsSpawnDimensionDelayInTicks = CLIENT.seasonCardsSpawnDimensionDelayInTicks.get();
 				seasonCardsDisplayTimeInTicks = CLIENT.seasonCardsDisplayTimeInTicks.get();
 				seasonCardsFadeInInTicks = CLIENT.seasonCardsFadeInInTicks.get();

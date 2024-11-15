@@ -7,6 +7,7 @@ public enum JsonFileName
 	BLOCK_TEMP("blockTemperatures.json"),
 	ENTITY_TEMP("entityTemperatures.json"),
 	BIOME_TEMP("biomeOverrides.json"),
+	ORIGINS_TEMP("originsTemperatures.json"),
 	CONSUMABLE_TEMP("temperatureConsumables.json"),
 	FUEL("fuelItems.json"),
 	BLOCK_THIRST("blockThirst.json"),

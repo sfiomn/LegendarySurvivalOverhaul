@@ -72,7 +72,7 @@ public class SewingTableScreen extends ContainerScreen<SewingTableContainer> {
                     !this.menu.getSlot(2).hasItem()) {
 
                 List<ITextComponent> list = Lists.newArrayList();
-                TranslationTextComponent tooltipText = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".sewing_table_disabled");
+                TranslationTextComponent tooltipText = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".sewing_table.disabled");
                 IFormattableTextComponent iformattabletextcomponent = (new StringTextComponent("")).append(tooltipText);
                 list.add(iformattabletextcomponent);
 

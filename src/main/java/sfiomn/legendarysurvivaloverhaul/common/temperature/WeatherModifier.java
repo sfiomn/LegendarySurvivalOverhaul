@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -14,10 +15,9 @@ public class WeatherModifier extends ModifierBase
 	{
 		super();
 	}
-	
-	// TODO: Try and get this also working with serene seasons
+
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(PlayerEntity player, World world, BlockPos pos)
 	{
 		// Apply shade effect in hot biomes if the player is either "hidden from sky" or time is raining
 		// Shade effect depends on Time, no shade effect at sunrise and sunset, max effect at noon
@@ -31,8 +31,8 @@ public class WeatherModifier extends ModifierBase
 
 		if(Config.Baked.shadeTimeModifier != 0 && time <= 12000)
 		{
-			if ((TemperatureModifierRegistry.BIOME.get().getWorldInfluence(world, pos) +
-					TemperatureModifierRegistry.SERENE_SEASONS.get().getWorldInfluence(world, pos)) > 15) {
+			if ((TemperatureModifierRegistry.BIOME.get().getWorldInfluence(player, world, pos) +
+					TemperatureModifierRegistry.SERENE_SEASONS.get().getWorldInfluence(player, world, pos)) > 15) {
 				float shadeTemperature = (float) Config.Baked.shadeTimeModifier * (float) Math.sin((time * Math.PI) / 12000.0f);
 				weatherTemperature += applyUndergroundEffect(shadeTemperature, world, pos);
 				// LegendarySurvivalOverhaul.LOGGER.debug("Shade temp influence : " + weatherTemperature + "biome temp : " + TemperatureModifierRegistry.BIOME.get().getWorldInfluence(world, pos) +

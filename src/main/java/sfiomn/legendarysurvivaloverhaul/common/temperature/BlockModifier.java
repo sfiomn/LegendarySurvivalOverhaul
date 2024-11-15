@@ -2,6 +2,7 @@ package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -32,7 +33,7 @@ public class BlockModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(PlayerEntity player, World world, BlockPos pos)
 	{
 		coldestValue = 0.0f;
 		hottestValue = 0.0f;

@@ -1,0 +1,67 @@
+{
+  "legendarysurvivaloverhaul:heating_temperature": {
+    "display": {
+      "mainhand": "flat",
+      "offhand": "flat",
+      "feet": "flat",
+      "legs": "flat",
+      "chest": "flat",
+      "head": "flat",
+      "potion": "flat"
+    },
+    "texture": "legendarysurvivaloverhaul:attribute/heating_temperature",
+    "compare": "no_compare"
+  },
+  "legendarysurvivaloverhaul:cooling_temperature": {
+    "display": {
+      "mainhand": "flat",
+      "offhand": "flat",
+      "feet": "flat",
+      "legs": "flat",
+      "chest": "flat",
+      "head": "flat",
+      "potion": "flat"
+    },
+    "texture": "legendarysurvivaloverhaul:attribute/cooling_temperature",
+    "compare": "no_compare"
+  },
+  "legendarysurvivaloverhaul:heat_resistance": {
+    "display": {
+      "mainhand": "flat",
+      "offhand": "flat",
+      "feet": "flat",
+      "legs": "flat",
+      "chest": "flat",
+      "head": "flat",
+      "potion": "flat"
+    },
+    "texture": "legendarysurvivaloverhaul:attribute/heat_resistance",
+    "compare": "higher_better"
+  },
+  "legendarysurvivaloverhaul:cold_resistance": {
+    "display": {
+      "mainhand": "flat",
+      "offhand": "flat",
+      "feet": "flat",
+      "legs": "flat",
+      "chest": "flat",
+      "head": "flat",
+      "potion": "flat"
+    },
+    "texture": "legendarysurvivaloverhaul:attribute/cold_resistance",
+    "compare": "higher_better"
+  },
+  "legendarysurvivaloverhaul:thermal_resistance": {
+    "display": {
+      "mainhand": "flat",
+      "offhand": "flat",
+      "feet": "flat",
+      "legs": "flat",
+      "chest": "flat",
+      "head": "flat",
+      "potion": "flat"
+    },
+    "texture": "legendarysurvivaloverhaul:attribute/thermal_resistance",
+    "compare": "higher_better"
+  }
+}

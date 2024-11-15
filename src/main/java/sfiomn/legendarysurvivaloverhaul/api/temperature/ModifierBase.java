@@ -66,7 +66,7 @@ public abstract class ModifierBase extends ForgeRegistryEntry<ModifierBase>
 	 * Returns temperature based on environmental factors, such as the biome at the given position,
 	 * proximity to hot/cold blocks, altitude, time, weather, etc.
 	 */
-	public float getWorldInfluence(World world, BlockPos pos) { return 0.0f; }
+	public float getWorldInfluence(PlayerEntity player, World world, BlockPos pos) { return 0.0f; }
 	
 	protected float applyUndergroundEffect(float temperature, World world, BlockPos pos)
 	{

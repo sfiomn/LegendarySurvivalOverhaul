@@ -2,16 +2,17 @@ package sfiomn.legendarysurvivaloverhaul.common.effects;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 
-public class ThirstEffect extends GenericEffect
+public class ThirstEffect extends Effect
 {
 	public ThirstEffect()
 	{
-		super(10870382, EffectType.HARMFUL);
+		super(EffectType.HARMFUL, 10870382);
 		// TODO Auto-generated constructor stub
 	}
 	

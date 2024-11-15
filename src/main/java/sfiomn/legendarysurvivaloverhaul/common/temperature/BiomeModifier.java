@@ -1,5 +1,6 @@
 package sfiomn.legendarysurvivaloverhaul.common.temperature;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
@@ -15,7 +16,7 @@ public class BiomeModifier extends ModifierBase
 	}
 	
 	@Override
-	public float getWorldInfluence(World world, BlockPos pos)
+	public float getWorldInfluence(PlayerEntity player, World world, BlockPos pos)
 	{
 		Vector3i[] posOffsets = 
 			{

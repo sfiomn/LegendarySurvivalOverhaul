@@ -10,7 +10,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.IWorldInfo;
 import net.minecraft.world.storage.ServerWorldInfo;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -31,12 +31,10 @@ import sfiomn.legendarysurvivaloverhaul.api.config.json.bodydamage.JsonConsumabl
 import sfiomn.legendarysurvivaloverhaul.api.config.json.temperature.JsonConsumableTemperature;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonBlockFluidThirst;
 import sfiomn.legendarysurvivaloverhaul.api.config.json.thirst.JsonConsumableThirst;
-import sfiomn.legendarysurvivaloverhaul.api.thirst.HydrationEnum;
+import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 import sfiomn.legendarysurvivaloverhaul.api.thirst.ThirstUtil;
-import sfiomn.legendarysurvivaloverhaul.client.integration.sereneseasons.RenderSeasonCards;
 import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.thirst.ThirstCapability;
-import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosUtil;
 import sfiomn.legendarysurvivaloverhaul.common.items.drink.DrinkItem;
 import sfiomn.legendarysurvivaloverhaul.common.items.heal.BodyHealingItem;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
@@ -44,7 +42,6 @@ import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfig;
 import sfiomn.legendarysurvivaloverhaul.network.NetworkHandler;
 import sfiomn.legendarysurvivaloverhaul.network.packets.MessageDrinkBlockFluid;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
-import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.SoundRegistry;
 import sfiomn.legendarysurvivaloverhaul.util.CapabilityUtil;
 import sfiomn.legendarysurvivaloverhaul.util.PlayerModelUtil;
@@ -52,7 +49,7 @@ import sfiomn.legendarysurvivaloverhaul.util.PlayerModelUtil;
 import java.util.*;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ModCommonEvents {
+public class CommonForgeEvents {
 
     @SubscribeEvent
     public static void onFoodEaten(LivingEntityUseItemEvent.Finish event)
@@ -105,6 +102,14 @@ public class ModCommonEvents {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onAttributeModifier(ItemAttributeModifierEvent event) {
+        if (!Config.Baked.temperatureEnabled)
+            return;
+
+        TemperatureUtil.applyItemAttributeModifiers(event);
     }
 
     @SubscribeEvent
@@ -268,8 +273,15 @@ public class ModCommonEvents {
 
         PlayerEntity player = event.getPlayer();
         if (Config.Baked.temperatureResistanceOnDeathEnabled) {
-            player.addEffect(new EffectInstance(EffectRegistry.HEAT_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime, 0, false, false, true));
-            player.addEffect(new EffectInstance(EffectRegistry.COLD_RESISTANCE.get(), Config.Baked.temperatureResistanceOnDeathTime, 0, false, false, true));
+            player.addEffect(new EffectInstance(EffectRegistry.TEMPERATURE_IMMUNITY.get(), Config.Baked.temperatureImmunityOnDeathTime, 0, false, false, true));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (Config.Baked.temperatureImmunityOnFirstSpawnEnabled && !event.getEntity().getPersistentData().getBoolean("tempImmuneOnSpawn")) {
+            event.getPlayer().getPersistentData().putBoolean("tempImmuneOnSpawn", true);
+            event.getPlayer().addEffect(new EffectInstance(EffectRegistry.TEMPERATURE_IMMUNITY.get(), Config.Baked.temperatureImmunityOnFirstSpawnTime, 0, false, false, true));
         }
     }
 

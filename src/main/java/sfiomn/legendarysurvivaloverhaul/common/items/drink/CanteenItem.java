@@ -87,10 +87,9 @@ public class CanteenItem extends DrinkItem {
     public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity) {
         if (entity instanceof PlayerEntity && canDrink(stack) && !world.isClientSide) {
             PlayerEntity player = (PlayerEntity) entity;
-            ThirstUtil.setCapacityTag(stack, ThirstUtil.getCapacityTag(stack) - 1);
 
             JsonConsumableThirst jsonConsumableThirst = null;
-            // Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over
+
             ResourceLocation registryName = stack.getItem().getRegistryName();
             if (registryName != null)
                 jsonConsumableThirst = ThirstUtil.getThirstJsonConfig(registryName, stack);
@@ -99,6 +98,12 @@ public class CanteenItem extends DrinkItem {
                 ThirstUtil.takeDrink(player, jsonConsumableThirst.hydration, jsonConsumableThirst.saturation, jsonConsumableThirst.effects);
 
             runSecondaryEffect(player, stack);
+
+            int newCapacity = ThirstUtil.getCapacityTag(stack) - 1;
+            ThirstUtil.setCapacityTag(stack, newCapacity);
+
+            if (newCapacity == 0)
+                ThirstUtil.removeHydrationEnumTag(stack);
         }
         return stack;
     }
