@@ -1,10 +1,12 @@
 package sfiomn.legendarysurvivaloverhaul.util;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosUtil;
+import sfiomn.legendarysurvivaloverhaul.config.Config;
 
 public class ItemUtil {
 
@@ -36,5 +38,23 @@ public class ItemUtil {
         }
 
         return EquipmentSlotType.MAINHAND;
+    }
+
+    public static String compassLocation(Entity entity) {
+        switch (Config.Baked.compassInfoMode) {
+            case FULL:
+                return "XYZ: " + entity.blockPosition().getX() +
+                    " / " + entity.blockPosition().getY() + " / " + entity.blockPosition().getZ();
+            case HORIZONTAL:
+                return "XZ: " + entity.blockPosition().getX() + " / " + entity.blockPosition().getZ();
+            default:
+                return "";
+        }
+    }
+
+    public enum CompassInfo {
+        FULL,
+        HORIZONTAL,
+        NONE
     }
 }

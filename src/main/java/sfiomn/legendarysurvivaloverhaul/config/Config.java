@@ -7,6 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
 import sfiomn.legendarysurvivaloverhaul.client.render.TemperatureDisplayEnum;
 import sfiomn.legendarysurvivaloverhaul.config.json.JsonConfigRegistration;
+import sfiomn.legendarysurvivaloverhaul.util.ItemUtil;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -63,6 +64,7 @@ public class Config
 		public final ForgeConfigSpec.BooleanValue hideInfoFromDebug;
 		public final ForgeConfigSpec.BooleanValue naturalRegenerationEnabled;
 		public final ForgeConfigSpec.DoubleValue baseFoodExhaustion;
+		public final ForgeConfigSpec.EnumValue<ItemUtil.CompassInfo> compassInfoMode;
 		
 		// Temperature
 		public final ForgeConfigSpec.BooleanValue temperatureEnabled;
@@ -275,6 +277,13 @@ public class Config
 					.comment(" How often player temperature is regularly synced between the client and server, in ticks.",
 							" Lower values will increase accuracy at the cost of performance")
 					.defineInRange("Routine Packet Sync", 30, 1, Integer.MAX_VALUE);
+
+			builder.pop();
+
+			builder.push("misc");
+			compassInfoMode = builder
+					.comment(" What information the compass returns when player is using it or in an item frame.")
+					.defineEnum("Compass Info Mode", ItemUtil.CompassInfo.FULL);
 
 			builder.pop();
 			builder.pop();
@@ -957,6 +966,7 @@ public class Config
 		public static boolean hideInfoFromDebug;
 		public static boolean naturalRegenerationEnabled;
 		public static double baseFoodExhaustion;
+		public static ItemUtil.CompassInfo compassInfoMode;
 
 		// Temperature
 		public static boolean temperatureEnabled;
@@ -1178,6 +1188,7 @@ public class Config
 				routinePacketSync = COMMON.routinePacketSync.get();
 				naturalRegenerationEnabled = COMMON.naturalRegenerationEnabled.get();
 				baseFoodExhaustion = COMMON.baseFoodExhaustion.get();
+				compassInfoMode = COMMON.compassInfoMode.get();
 
 				temperatureEnabled = COMMON.temperatureEnabled.get();
 				tempTickTime = COMMON.tempTickTime.get();

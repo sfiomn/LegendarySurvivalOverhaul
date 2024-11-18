@@ -12,6 +12,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import sfiomn.legendarysurvivaloverhaul.LegendarySurvivalOverhaul;
+import sfiomn.legendarysurvivaloverhaul.common.effects.HydrationFillEffect;
 import sfiomn.legendarysurvivaloverhaul.common.effects.*;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 
@@ -23,6 +24,9 @@ public class EffectRegistry
 	public static final RegistryObject<Effect> THIRST = EFFECTS.register("thirst", ThirstEffect::new);
 	public static final RegistryObject<Potion> THIRST_POTION = POTIONS.register("thirst", () -> new Potion("thirst", new EffectInstance(THIRST.get(), 3600, 0, false, true, false)));
 	public static final RegistryObject<Potion> THIRST_POTION_LONG = POTIONS.register("thirst_long", () -> new Potion("thirst_long", new EffectInstance(THIRST.get(), 9600, 0, false, true, false)));
+	public static final RegistryObject<Effect> HYDRATION_FILL = EFFECTS.register("hydration_fill", HydrationFillEffect::new);
+	public static final RegistryObject<Potion> HYDRATION_FILL_POTION = POTIONS.register("hydration_fill", () -> new Potion("hydration_fill", new EffectInstance(HYDRATION_FILL.get(), 3600, 0, false, true, true)));
+	public static final RegistryObject<Potion> HYDRATION_FILL_POTION_LONG = POTIONS.register("hydration_fill_long", () -> new Potion("hydration_fill_long", new EffectInstance(HYDRATION_FILL.get(), 9600, 0, false, true, true)));
 
 	public static final RegistryObject<Effect> FROSTBITE = EFFECTS.register("frostbite", FrostbiteEffect::new);
 	public static final RegistryObject<Effect> COLD_HUNGER = EFFECTS.register("cold_hunger", ColdHungerEffect::new);

@@ -42,6 +42,7 @@ import java.util.ListIterator;
 
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil.formatSeasonName;
 import static sfiomn.legendarysurvivaloverhaul.common.integration.sereneseasons.SereneSeasonsUtil.plantCanGrow;
+import static sfiomn.legendarysurvivaloverhaul.util.ItemUtil.compassLocation;
 import static sfiomn.legendarysurvivaloverhaul.util.WorldUtil.timeInGame;
 
 @Mod.EventBusSubscriber(modid = LegendarySurvivalOverhaul.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -59,8 +60,9 @@ public class ClientForgeEvents {
         } else if (event.getItemStack().getItem() == Items.CLOCK) {
             player.displayClientMessage(new StringTextComponent(timeInGame(Minecraft.getInstance())), true);
         } else if (event.getItemStack().getItem() == Items.COMPASS) {
-            player.displayClientMessage(new StringTextComponent("XYZ: " + player.blockPosition().getX() +
-                    " / " + player.blockPosition().getY() + " / " + player.blockPosition().getZ()), true);
+            String compassLocation = compassLocation(player);
+            if (!compassLocation.isEmpty())
+                player.displayClientMessage(new StringTextComponent(compassLocation), true);
         }
     }
 
@@ -89,8 +91,9 @@ public class ClientForgeEvents {
                     }
                     RenderFrame.render(minecraft, matrixStack, temperatureComponent);
                 } else if (itemInFrame == Items.COMPASS) {
-                    RenderFrame.render(minecraft, matrixStack, new StringTextComponent("XYZ: " + entity.blockPosition().getX() +
-                            " / " + entity.blockPosition().getY() + " / " + entity.blockPosition().getZ()));
+                    String compassLocation = compassLocation(entity);
+                    if (!compassLocation.isEmpty())
+                        RenderFrame.render(minecraft, matrixStack, new StringTextComponent(compassLocation));
                 } else if (itemInFrame == Items.CLOCK) {
                     RenderFrame.render(minecraft, matrixStack, new StringTextComponent(timeInGame(minecraft)));
                 }
