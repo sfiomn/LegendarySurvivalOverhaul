@@ -4,7 +4,7 @@
 		"item": "minecraft:string"
 	},
 	"addition": {
-		"item": "legendarysurvivaloverhaul:ice_fern"
+		"item": "legendarysurvivaloverhaul:ice_fern_leaf"
 	},
 	"result": {
 		"item": "legendarysurvivaloverhaul:cold_string"

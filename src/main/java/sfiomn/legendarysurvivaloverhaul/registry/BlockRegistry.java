@@ -22,7 +22,9 @@ public class BlockRegistry
 	public static final RegistryObject<Block> COOLER = registerBlock("cooler", () -> new CoolerBlock(ThermalTypeEnum.COOLING));
 	public static final RegistryObject<Block> SEWING_TABLE = registerBlock("sewing_table", SewingTableBlock::new);
 	public static final RegistryObject<Block> SUN_FERN_CROP = BLOCKS.register("sun_fern_crop", SunFernBlock::new);
-	public static final RegistryObject<Block> ICE_FERN_CROP = BLOCKS.register("ice_fern_crop", () -> new IceFernBlock());
+	public static final RegistryObject<Block> SUN_FERN_GOLD = registerBlock("sun_fern_gold", SunFernGoldBlock::new);
+	public static final RegistryObject<Block> ICE_FERN_CROP = BLOCKS.register("ice_fern_crop", IceFernBlock::new);
+	public static final RegistryObject<Block> ICE_FERN_GOLD = registerBlock("ice_fern_gold", IceFernGoldBlock::new);
 	public static final RegistryObject<Block> WATER_PLANT_CROP = BLOCKS.register("water_plant_crop", WaterPlantBlock::new);
 
 	private static <T extends Block> RegistryObject<Block> registerBlock(String name, Supplier<T> block) {

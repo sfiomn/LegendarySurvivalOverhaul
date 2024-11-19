@@ -55,10 +55,12 @@ public class ItemRegistry
 	public static final RegistryObject<Item> COLD_STRING = ITEMS.register("cold_string", () -> new Item(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> WARM_STRING = ITEMS.register("warm_string", () -> new Item(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP).rarity(Rarity.COMMON)));
 
-	public static final RegistryObject<Item> SUN_FERN = ITEMS.register("sun_fern", () -> new Item(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
+	public static final RegistryObject<Item> SUN_FERN = ITEMS.register("sun_fern_leaf", () -> new Item(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
 	public static final RegistryObject<Item> SUN_FERN_SEEDS = ITEMS.register("sun_fern_seeds", () -> new BlockNamedItem(BlockRegistry.SUN_FERN_CROP.get(), new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
-	public static final RegistryObject<Item> ICE_FERN = ITEMS.register("ice_fern", () -> new Item(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
+	public static final RegistryObject<Item> SUN_FERN_GOLD = ITEMS.register("sun_fern_gold_leaf", () -> new Item(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
+	public static final RegistryObject<Item> ICE_FERN = ITEMS.register("ice_fern_leaf", () -> new Item(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
 	public static final RegistryObject<Item> ICE_FERN_SEEDS = ITEMS.register("ice_fern_seeds", () -> new BlockNamedItem(BlockRegistry.ICE_FERN_CROP.get(), new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
+	public static final RegistryObject<Item> ICE_FERN_GOLD = ITEMS.register("ice_fern_gold_leaf", () -> new Item(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP)));
 
 	// Thirst
 	public static final RegistryObject<Item> CANTEEN = ITEMS.register("canteen", () -> new CanteenItem(new Item.Properties().tab(ModItemGroup.LEGENDARY_SURVIVAL_OVERHAUL_GROUP).rarity(Rarity.COMMON)));

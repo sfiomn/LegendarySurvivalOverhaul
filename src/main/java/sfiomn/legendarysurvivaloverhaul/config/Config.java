@@ -74,6 +74,7 @@ public class Config
 		public final ForgeConfigSpec.BooleanValue showPotionEffectParticles;
 		public final ForgeConfigSpec.BooleanValue dangerousHeatTemperature;
 		public final ForgeConfigSpec.BooleanValue dangerousColdTemperature;
+		public final ForgeConfigSpec.DoubleValue goldFernChance;
 		public final ForgeConfigSpec.BooleanValue temperatureImmunityOnDeathEnabled;
 		public final ForgeConfigSpec.IntValue temperatureImmunityOnDeathTime;
 		public final ForgeConfigSpec.BooleanValue temperatureImmunityOnFirstSpawnEnabled;
@@ -301,6 +302,9 @@ public class Config
 			dangerousColdTemperature = builder
 					.comment(" If enabled, players will take damage from the effects of low temperature.")
 					.define("Dangerous Cold Temperature Effects", true);
+			goldFernChance = builder
+					.comment(" Chance of the ferns to become a gold fern when grow mature.")
+					.defineInRange("Gold Fern Chance", 0.01, 0, 1);
 
 			builder.push("on-death");
 			temperatureImmunityOnDeathEnabled = builder
@@ -974,13 +978,16 @@ public class Config
 		public static double minTemperatureModification;
 		public static double maxTemperatureModification;
 		public static boolean showPotionEffectParticles;
+
+		public static boolean dangerousHeatTemperature;
+		public static boolean dangerousColdTemperature;
+		public static double goldFernChance;
+
 		public static boolean temperatureResistanceOnDeathEnabled;
 		public static int temperatureImmunityOnDeathTime;
 		public static boolean temperatureImmunityOnFirstSpawnEnabled;
 		public static int temperatureImmunityOnFirstSpawnTime;
 
-		public static boolean dangerousHeatTemperature;
-		public static boolean dangerousColdTemperature;
 		public static boolean heatTemperatureSecondaryEffects;
 		public static boolean coldTemperatureSecondaryEffects;
 		public static double heatThirstEffectModifier;
@@ -1196,13 +1203,15 @@ public class Config
 				maxTemperatureModification = COMMON.maxTemperatureModification.get();
 				showPotionEffectParticles = COMMON.showPotionEffectParticles.get();
 
+				dangerousHeatTemperature = COMMON.dangerousHeatTemperature.get();
+				dangerousColdTemperature = COMMON.dangerousColdTemperature.get();
+				goldFernChance = COMMON.goldFernChance.get();
+
 				temperatureResistanceOnDeathEnabled = COMMON.temperatureImmunityOnDeathEnabled.get();
 				temperatureImmunityOnDeathTime = COMMON.temperatureImmunityOnDeathTime.get();
 				temperatureImmunityOnFirstSpawnEnabled = COMMON.temperatureImmunityOnFirstSpawnEnabled.get();
 				temperatureImmunityOnFirstSpawnTime = COMMON.temperatureImmunityOnFirstSpawnTime.get();
 
-				dangerousHeatTemperature = COMMON.dangerousHeatTemperature.get();
-				dangerousColdTemperature = COMMON.dangerousColdTemperature.get();
 				heatTemperatureSecondaryEffects = COMMON.heatTemperatureSecondaryEffects.get();
 				coldTemperatureSecondaryEffects = COMMON.coldTemperatureSecondaryEffects.get();
 				heatThirstEffectModifier = COMMON.heatThirstEffectModifier.get();

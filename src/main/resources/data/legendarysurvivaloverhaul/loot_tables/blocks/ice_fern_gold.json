@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "legendarysurvivaloverhaul:ice_fern_gold_leaf"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "legendarysurvivaloverhaul:ice_fern_seeds"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "legendarysurvivaloverhaul:blocks/ice_fern_gold"
+}

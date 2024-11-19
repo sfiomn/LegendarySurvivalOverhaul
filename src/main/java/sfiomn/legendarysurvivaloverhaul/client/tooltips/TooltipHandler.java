@@ -50,8 +50,6 @@ public class TooltipHandler
 		{
 			List<ITextComponent> tooltips = event.getToolTip();
 
-			LegendarySurvivalOverhaul.LOGGER.debug("heating resistance desc id : " + AttributeRegistry.HEATING_TEMPERATURE.get().getDescriptionId());
-
 			for (ITextComponent component: tooltips) {
 				if (component instanceof TextComponent) {
 					if (componentHasOneOfKeys((TextComponent) component,
