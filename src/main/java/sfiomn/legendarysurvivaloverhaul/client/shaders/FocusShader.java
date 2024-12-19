@@ -28,7 +28,7 @@ public class FocusShader {
                     !currentEffect.getName().equals("minecraft:shaders/post/blobs2.json")) {
                 try {
                     Minecraft.getInstance().gameRenderer.loadEffect(BLUR_SHADER);
-                } catch (NullPointerException e) {
+                } catch (Exception e) {
                     return;
                 }
             }

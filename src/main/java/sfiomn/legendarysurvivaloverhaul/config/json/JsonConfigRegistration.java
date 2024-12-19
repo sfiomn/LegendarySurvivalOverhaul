@@ -102,10 +102,10 @@ public class JsonConfigRegistration
 		JsonConfig.registerItemTemperature("minecraft:lava_bucket", 6f);
 		JsonConfig.registerItemTemperature("minecraft:magma_block", 6f);
 
-		JsonConfig.registerItemTemperature("minecraft:leather_boots", 0, 0, 1.0f, 0);
+		JsonConfig.registerItemTemperature("minecraft:leather_boots", 0, 0, 0.5f, 0);
 		JsonConfig.registerItemTemperature("minecraft:leather_leggings", 0, 0, 1.0f, 0);
 		JsonConfig.registerItemTemperature("minecraft:leather_chestplate", 0, 0, 1.5f, 0);
-		JsonConfig.registerItemTemperature("minecraft:leather_helmet", 0, 0, 0.5f, 0);
+		JsonConfig.registerItemTemperature("minecraft:leather_helmet", 0, 0, 1.0f, 0);
 
 		JsonConfig.registerItemTemperature("minecraft:golden_boots", 0, 0, 0.5f, 0);
 		JsonConfig.registerItemTemperature("minecraft:golden_leggings", 0, 0, 1.0f, 0);
