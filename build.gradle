@@ -159,8 +159,6 @@ dependencies {
     // These are REQUIRED for the mod to compile correctly and should not be removed.
     implementation fg.deobf("curse.maven:curios-309927:4419403")
     implementation fg.deobf("curse.maven:serene-seasons-291874:4537666")
-    implementation fg.deobf("curse.maven:playerrevive-266890:3419960")
-    implementation fg.deobf("curse.maven:creativecore-257814:3419983")
 
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
