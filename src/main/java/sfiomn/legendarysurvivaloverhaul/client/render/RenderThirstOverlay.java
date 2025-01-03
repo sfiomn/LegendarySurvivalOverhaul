@@ -26,13 +26,14 @@ public class RenderThirstOverlay {
 
     public static void render()
     {
-        if (focusShader == null)
-            return;
-
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        if (!(Minecraft.getInstance().screen instanceof DeathScreen)) {
+        if (shaderIntensity == 0) {
+            stopRender();
+        } else if (shaderIntensity > 0 && !(Minecraft.getInstance().screen instanceof DeathScreen)) {
+            if (focusShader == null)
+                focusShader = new FocusShader();
             focusShader.render(shaderIntensity);
         }
 
@@ -49,10 +50,6 @@ public class RenderThirstOverlay {
     }
 
     public static void updateThirstEffect(@Nullable PlayerEntity player) {
-        if (focusShader == null) {
-            focusShader = new FocusShader();
-        }
-
         float targetShaderIntensity = DEFAULT_SHADER_INTENSITY;
         if (player != null && player.isAlive()) {
 

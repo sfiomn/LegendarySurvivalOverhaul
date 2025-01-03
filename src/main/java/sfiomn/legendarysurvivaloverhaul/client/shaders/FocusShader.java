@@ -33,10 +33,7 @@ public class FocusShader {
                 }
             }
             updateIntensity(intensity);
-        } else if (intensity == 0) {
-            stopRender();
         }
-
     }
 
     public void stopRender() {
