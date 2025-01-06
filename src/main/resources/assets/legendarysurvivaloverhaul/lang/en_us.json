@@ -214,6 +214,9 @@
 
 	"tooltip.legendarysurvivaloverhaul.armor.heating": "Heating",
 	"tooltip.legendarysurvivaloverhaul.armor.cooling": "Cooling",
+	"tooltip.legendarysurvivaloverhaul.armor.heat_resistance": "Heart Resistance",
+	"tooltip.legendarysurvivaloverhaul.armor.cold_resistance": "Cold Resistance",
+	"tooltip.legendarysurvivaloverhaul.armor.thermal_resistance": "Thermal Resistance",
 	"tooltip.legendarysurvivaloverhaul.armor.insulation": "Insulation",
 
 	"tooltip.legendarysurvivaloverhaul.armor_coat.heating1": "Adaptive Heating I",

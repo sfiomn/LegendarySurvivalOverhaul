@@ -134,34 +134,87 @@ public class TooltipHandler
 
 	private static void addCurioItemTemperatureText(ResourceLocation itemRegistryName, List<ITextComponent> tooltip) {
 		float temperature = 0.0f;
+		float heat_resistance = 0.0f;
+		float cold_resistance = 0.0f;
+		float thermal_resistance = 0.0f;
 
 		JsonTemperatureResistance jsonTemperatureResistance = JsonConfig.itemTemperatures.get(itemRegistryName.toString());
 
 		if (jsonTemperatureResistance != null)
 		{
 			temperature = jsonTemperatureResistance.temperature;
+			heat_resistance = jsonTemperatureResistance.heatResistance;
+			cold_resistance = jsonTemperatureResistance.coldResistance;
+			thermal_resistance = jsonTemperatureResistance.thermalResistance;
 		}
 
-		ITextComponent text;
-		Color formattingColor;
+		if (temperature != 0) {
+			ITextComponent text;
+			Color formattingColor;
+			if (temperature > 0.0f) {
+				text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.heating");
+				formattingColor = Color.fromRgb(16420407);
+			} else {
+				text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.cooling");
+				formattingColor = Color.fromRgb(6466303);
+			}
 
-		if (temperature > 0.0f) {
-			text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.heating");
-			formattingColor = Color.fromRgb(16420407);
-		} else if (temperature < 0.0f) {
-			text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.cooling");
-			formattingColor = Color.fromRgb(6466303);
-		} else
-			return;
+			tooltip.add(new StringTextComponent("+")
+					.withStyle(Style.EMPTY.withColor(formattingColor))
+					.append((temperature % 1.0f == 0f ? (int) Math.abs(temperature) : Math.abs(temperature)) + " ")
+					.append(text));
+		}
 
-		String tempTxt = (temperature % 1.0f == 0f ? (int) Math.abs(temperature) : Math.abs(temperature)) + " ";
+		if (heat_resistance != 0) {
+			ITextComponent text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.heat_resistance");
+			Color formattingColor = Color.fromRgb(16420407);
+			String symbol;
 
-		text = new StringTextComponent("+")
-				.withStyle(Style.EMPTY.withColor(formattingColor))
-				.append(tempTxt)
-				.append(text);
+			if (heat_resistance > 0) {
+				symbol = "+";
+			} else {
+				symbol = "-";
+			}
 
-		tooltip.add(text);
+			tooltip.add(new StringTextComponent(symbol)
+					.withStyle(Style.EMPTY.withColor(formattingColor))
+					.append(heat_resistance + " ")
+					.append(text));
+		}
+
+		if (cold_resistance != 0) {
+			ITextComponent text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.cold_resistance");
+			Color formattingColor = Color.fromRgb(16420407);
+			String symbol;
+
+			if (cold_resistance > 0) {
+				symbol = "+";
+			} else {
+				symbol = "-";
+			}
+
+			tooltip.add(new StringTextComponent(symbol)
+					.withStyle(Style.EMPTY.withColor(formattingColor))
+					.append(cold_resistance + " ")
+					.append(text));
+		}
+
+		if (thermal_resistance != 0) {
+			ITextComponent text = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".armor.thermal_resistance");
+			Color formattingColor = Color.fromRgb(10040319);
+			String symbol;
+
+			if (thermal_resistance > 0) {
+				symbol = "+";
+			} else {
+				symbol = "-";
+			}
+
+			tooltip.add(new StringTextComponent(symbol)
+					.withStyle(Style.EMPTY.withColor(formattingColor))
+					.append(thermal_resistance + " ")
+					.append(text));
+		}
 	}
 
 	private static void addCoatTemperatureText(ItemStack stack, List<ITextComponent> tooltip) {

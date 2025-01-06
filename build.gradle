@@ -148,17 +148,22 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // External libraries.
+
+    // These are REQUIRED for the mod to compile correctly and should not be removed.
+    implementation fg.deobf("curse.maven:curios-309927:4419403")
+    implementation fg.deobf("curse.maven:serene-seasons-291874:4537666")
+
     // compile against the JEI API but do not include it at runtime
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api"))
     compileOnly(fg.deobf("curse.maven:vampirism-233029:4799953"))
     compileOnly fg.deobf("curse.maven:origins-474438:3426062")
+
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}"))
 
-    // These are REQUIRED for the mod to compile correctly and should not be removed.
-    implementation fg.deobf("curse.maven:curios-309927:4419403")
-    implementation fg.deobf("curse.maven:serene-seasons-291874:4537666")
+    //runtimeOnly(fg.deobf("curse.maven:artifacts-312353:3665636"))
+    //runtimeOnly(fg.deobf("curse.maven:expandability-465066:3277762"))
 
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

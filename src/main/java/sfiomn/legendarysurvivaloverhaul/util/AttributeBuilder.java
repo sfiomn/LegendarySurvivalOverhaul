@@ -26,7 +26,7 @@ public class AttributeBuilder {
     public void addModifier(PlayerEntity player, UUID uuid, double value) {
         ModifiableAttributeInstance instance = player.getAttribute(attribute.get());
         if (instance != null) {
-            instance.removePermanentModifier(uuid);
+            instance.removeModifier(uuid);
             instance.addPermanentModifier(new AttributeModifier(uuid, descriptionId, value, AttributeModifier.Operation.ADDITION));
         }
     }
@@ -34,7 +34,7 @@ public class AttributeBuilder {
     public void removeModifier(PlayerEntity player, UUID uuid) {
         ModifiableAttributeInstance instance = player.getAttribute(attribute.get());
         if (instance != null) {
-            instance.removePermanentModifier(uuid);
+            instance.removeModifier(uuid);
         }
     }
 }

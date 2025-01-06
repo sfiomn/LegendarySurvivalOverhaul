@@ -15,7 +15,7 @@ public class CuriosUtil {
 
     public static boolean isCuriosItem(ItemStack stack) {
         if (LegendarySurvivalOverhaul.curiosLoaded) {
-            return stack.getItem() instanceof ICurioItem;
+            return stack.getItem() instanceof ICurioItem || !CuriosApi.getCuriosHelper().getCurioTags(stack.getItem()).isEmpty();
         }
         return false;
     }
