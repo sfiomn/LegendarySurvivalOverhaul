@@ -37,11 +37,7 @@ public class CoatItem extends Item {
         ITextComponent text;
         if (InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), KeybindingRegistry.showAddedDesc.getKey().getValue())) {
             IFormattableTextComponent effectComponent = new TranslationTextComponent("tooltip." + LegendarySurvivalOverhaul.MOD_ID + ".coat_item." + this.coat.type() + ".effect").withStyle(Style.EMPTY.withColor(Color.fromRgb(6466303)));
-            IFormattableTextComponent temperatureComponent;
-            if (Config.Baked.renderTemperatureInFahrenheit)
-                temperatureComponent = new StringTextComponent(" " + MathUtil.round(WorldUtil.toFahrenheit((float) this.coat.modifier()) - 32, 1) + "\u00B0F");
-            else
-                temperatureComponent = new StringTextComponent(" " + this.coat.modifier() + "\u00B0C");
+            IFormattableTextComponent temperatureComponent = new StringTextComponent(" " + this.coat.modifier());
 
             if (Objects.equals(coat.type(), "cooling")) {
                 temperatureComponent = temperatureComponent.withStyle(Style.EMPTY.withColor(Color.fromRgb(6466303)));

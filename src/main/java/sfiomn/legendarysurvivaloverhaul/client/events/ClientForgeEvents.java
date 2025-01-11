@@ -31,6 +31,7 @@ import sfiomn.legendarysurvivaloverhaul.client.screens.ClientHooks;
 import sfiomn.legendarysurvivaloverhaul.client.effects.TemperatureBreathEffect;
 import sfiomn.legendarysurvivaloverhaul.client.sounds.TemperatureBreathSound;
 import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.TemperatureItemCapability;
+import sfiomn.legendarysurvivaloverhaul.common.integration.curios.CuriosUtil;
 import sfiomn.legendarysurvivaloverhaul.config.Config;
 import sfiomn.legendarysurvivaloverhaul.registry.EffectRegistry;
 import sfiomn.legendarysurvivaloverhaul.registry.ItemRegistry;
@@ -229,6 +230,8 @@ public class ClientForgeEvents {
                 if (Config.Baked.localizedBodyDamageEnabled) {
                     RenderBodyDamageGui.updateTimer();
                 }
+                if (LegendarySurvivalOverhaul.curiosLoaded && minecraft.player.tickCount % 10 == 0)
+                    CuriosUtil.isThermometerEquipped = CuriosUtil.isCurioItemEquipped(minecraft.player, ItemRegistry.THERMOMETER.get());
             }
         }
     }

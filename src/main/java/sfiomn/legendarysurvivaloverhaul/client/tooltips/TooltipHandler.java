@@ -275,11 +275,11 @@ public class TooltipHandler
 
 		if (jsonConsumableHeal != null) {
 			if (jsonConsumableHeal.healingCharges > 0) {
-				tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.body_part", jsonConsumableHeal.healingCharges));
+				tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.body_part", jsonConsumableHeal.healingCharges).withStyle(Style.EMPTY.withColor(TextFormatting.BLUE)));
 			} else if (jsonConsumableHeal.healingCharges == 0) {
-				tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.whole_body"));
+				tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.whole_body").withStyle(Style.EMPTY.withColor(TextFormatting.BLUE)));
 			}
-			tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value", jsonConsumableHeal.healingValue, MathUtil.round(jsonConsumableHeal.healingTime / 20.0f, 1)));
+			tooltips.add(new TranslationTextComponent("tooltip.legendarysurvivaloverhaul.body_heal_item.healing_value", jsonConsumableHeal.healingValue, MathUtil.round(jsonConsumableHeal.healingTime / 20.0f, 1)).withStyle(Style.EMPTY.withColor(TextFormatting.BLUE)));
 		}
 	}
 
