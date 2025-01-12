@@ -99,6 +99,7 @@ public class Config
 		
 		public final ForgeConfigSpec.BooleanValue wetnessEnabled;
 		public final ForgeConfigSpec.DoubleValue wetMultiplier;
+		public final ForgeConfigSpec.IntValue wetnessTickTimer;
 		public final ForgeConfigSpec.IntValue wetnessDecrease;
 		public final ForgeConfigSpec.IntValue wetnessRainIncrease;
 		public final ForgeConfigSpec.IntValue wetnessFluidIncrease;
@@ -205,6 +206,24 @@ public class Config
 		public final ForgeConfigSpec.DoubleValue bodyDamageMultiplier;
 		public final ForgeConfigSpec.DoubleValue bodyHealthRatioRecoveredFromSleep;
 		public final ForgeConfigSpec.DoubleValue healthRatioRecoveredFromSleep;
+		public final ForgeConfigSpec.DoubleValue bodyHealingFoodExhaustion;
+		public final ForgeConfigSpec.IntValue minFoodOnBodyHealing;
+
+		public final ForgeConfigSpec.IntValue healingHerbsUseTime;
+		public final ForgeConfigSpec.IntValue healingHerbsRegenerationAmplifier;
+		public final ForgeConfigSpec.IntValue healingHerbsRegenerationTickDuration;
+		public final ForgeConfigSpec.IntValue plasterUseTime;
+		public final ForgeConfigSpec.IntValue plasterRegenerationAmplifier;
+		public final ForgeConfigSpec.IntValue plasterRegenerationTickDuration;
+		public final ForgeConfigSpec.IntValue bandageUseTime;
+		public final ForgeConfigSpec.IntValue bandageRegenerationAmplifier;
+		public final ForgeConfigSpec.IntValue bandageRegenerationTickDuration;
+		public final ForgeConfigSpec.IntValue tonicUseTime;
+		public final ForgeConfigSpec.IntValue tonicRegenerationAmplifier;
+		public final ForgeConfigSpec.IntValue tonicRegenerationTickDuration;
+		public final ForgeConfigSpec.IntValue medikitUseTime;
+		public final ForgeConfigSpec.IntValue medikitRegenerationAmplifier;
+		public final ForgeConfigSpec.IntValue medikitRegenerationTickDuration;
 
 		public final ForgeConfigSpec.ConfigValue<String> bodyPartHealthMode;
 		public final ForgeConfigSpec.DoubleValue headPartHealth;
@@ -241,12 +260,6 @@ public class Config
 		public final ForgeConfigSpec.ConfigValue<List<String>> bothFeetPartEffects;
 		public final ForgeConfigSpec.ConfigValue<List<Integer>> bothFeetPartEffectAmplifiers;
 		public final ForgeConfigSpec.ConfigValue<List<Float>> bothFeetPartEffectThresholds;
-
-		public final ForgeConfigSpec.IntValue healingHerbsUseTime;
-		public final ForgeConfigSpec.IntValue plasterUseTime;
-		public final ForgeConfigSpec.IntValue bandageUseTime;
-		public final ForgeConfigSpec.IntValue tonicUseTime;
-		public final ForgeConfigSpec.IntValue medikitUseTime;
 		
 		Common(ForgeConfigSpec.Builder builder)
 		{
@@ -363,9 +376,14 @@ public class Config
 					.comment(" How much being wet influences the player's temperature.")
 					.defineInRange("Wetness Modifier", -10.0d, -1000, 1000);
 
+			wetnessTickTimer = builder
+					.comment(" How frequently the wetness is modified.",
+							" By default, every 10 ticks, the wetness will either increase or decrease, based on the conditions.")
+					.defineInRange("Wetness Tick Timer", 10, 1, 100000);
+
 			wetnessDecrease = builder
 					.comment(" How much the wetness decrease when out of water, in case of dynamic wetness.")
-					.defineInRange("Wetness Decrease", -5, -1000, 0);
+					.defineInRange("Wetness Decrease", -2, -1000, 0);
 			wetnessRainIncrease = builder
 					.comment(" How much the wetness increase when under rain, in case of dynamic wetness.")
 					.defineInRange("Wetness Under Rain Increase", 5, 0, 1000);
@@ -699,7 +717,7 @@ public class Config
 					" The damageSourceBodyParts.json allows you to define for specific damage source, the damage spread across specified body parts.",
 					" The damage distribution can either be ONE_OF or ALL. ALL means the damage are equally divided across all body parts.").push("body-damage");
 			headCriticalShotMultiplier = builder
-					.comment(" Multiply the damage taken by the player when shot in the head.")
+					.comment(" Multiply the damage taken by the player when shot in the head without helmet.")
 					.defineInRange("Headshot Multiplier", 2.0d, 1.0d, 1000.0d);
 			bodyDamageMultiplier = builder
 					.comment(" How much of the hurt player's damage is assigned to the body parts.")
@@ -711,30 +729,75 @@ public class Config
 					.comment(" How much health ratio are recovered from bed sleeping.")
 					.defineInRange("Health Ratio Recovered", 1.0d, 0.0d, 1.0d);
 
-			builder.push("healing-items");
+			bodyHealingFoodExhaustion = builder
+					.comment(" How much food is exhausted when a limb regenerates based on the amount of health regenerated.",
+							" Each 1 health regenerated, the food is exhausted by this value.")
+					.defineInRange("Body Healing Food Exhaustion", 0.1d, 0, 1000.0D);
 
+			minFoodOnBodyHealing = builder
+					.comment(" The hunger bar won't drop below this value while body is healing.",
+							" Each hunger icon has a value of 2 in the hunger bar.")
+					.defineInRange("Minimum Food On Body Healing", 0, 0, 1000);
+
+			builder.push("healing-items");
 			builder.push("healing-herbs");
 			healingHerbsUseTime = builder
-					.comment(" Item use time is ticks.")
+					.comment(" Item use time in ticks.")
 					.defineInRange("Healing Herbs Use Time", 20, 0, 1000);
-			builder.pop();
-			builder.push("plaster");
-			plasterUseTime = builder
-					.defineInRange("Plaster Use Time", 20, 0, 1000);
-			builder.pop();
-			builder.push("bandage");
-			bandageUseTime = builder
-					.defineInRange("Bandage Use Time", 30, 0, 1000);
-			builder.pop();
-			builder.comment(" Tonic heals all body parts.").push("tonic");
-			tonicUseTime = builder
-					.defineInRange("Tonic Use Time", 50, 0, 1000);
-			builder.pop();
-			builder.comment(" Medikit heals all body parts.").push("medikit");
-			medikitUseTime = builder
-					.defineInRange("Medikit Use Time", 50, 0, 1000);
+			healingHerbsRegenerationAmplifier = builder
+					.comment(" Regeneration effect amplifier.")
+					.defineInRange("Healing Herbs Regeneration Amplifier", 0, 0, 10);
+			healingHerbsRegenerationTickDuration = builder
+					.comment(" Regeneration effect duration in ticks.")
+					.defineInRange("Healing Herbs Regeneration Duration", 60, 0, 10000);
 			builder.pop();
 
+			builder.push("plaster");
+			plasterUseTime = builder
+					.comment(" Item use time in ticks.")
+					.defineInRange("Plaster Use Time", 20, 0, 1000);
+			plasterRegenerationAmplifier = builder
+					.comment(" Regeneration effect amplifier.")
+					.defineInRange("Plaster Regeneration Amplifier", 0, 0, 10);
+			plasterRegenerationTickDuration = builder
+					.comment(" Regeneration effect duration in ticks.")
+					.defineInRange("Plaster Regeneration Duration", 120, 0, 10000);
+			builder.pop();
+
+			builder.push("bandage");
+			bandageUseTime = builder
+					.comment(" Item use time in ticks.")
+					.defineInRange("Bandage Use Time", 30, 0, 1000);
+			bandageRegenerationAmplifier = builder
+					.comment(" Regeneration effect amplifier.")
+					.defineInRange("Bandage Regeneration Amplifier", 1, 0, 10);
+			bandageRegenerationTickDuration = builder
+					.comment(" Regeneration effect duration in ticks.")
+					.defineInRange("Bandage Regeneration Duration", 120, 0, 10000);
+			builder.pop();
+
+			builder.push("tonic");
+			tonicUseTime = builder
+					.comment(" Item use time in ticks.")
+					.defineInRange("Tonic Use Time", 50, 0, 1000);
+			tonicRegenerationAmplifier = builder
+					.comment(" Regeneration effect amplifier.")
+					.defineInRange("Tonic Regeneration Amplifier", 1, 0, 10);
+			tonicRegenerationTickDuration = builder
+					.comment(" Regeneration effect duration in ticks.")
+					.defineInRange("Tonic Regeneration Duration", 140, 0, 10000);
+			builder.pop();
+
+			builder.push("medikit");
+			medikitUseTime = builder
+					.comment(" Item use time in ticks.")
+					.defineInRange("Medikit Use Time", 50, 0, 1000);
+			medikitRegenerationAmplifier = builder
+					.defineInRange("Medikit Regeneration Amplifier", 2, 0, 10);
+			medikitRegenerationTickDuration = builder
+					.comment(" Regeneration effect duration in ticks.")
+					.defineInRange("Medikit Regeneration Duration", 140, 0, 10000);
+			builder.pop();
 			builder.pop();
 
 			builder.push("body-parts-health");
@@ -832,7 +895,7 @@ public class Config
 
 		public final ForgeConfigSpec.IntValue bodyDamageIndicatorOffsetX;
 		public final ForgeConfigSpec.IntValue bodyDamageIndicatorOffsetY;
-		public final ForgeConfigSpec.BooleanValue alwaysShowBodyDamageIndicator;
+		public final ForgeConfigSpec.DoubleValue bodyDamageIndicatorRenderHealthLimit;
 
 		public final ForgeConfigSpec.IntValue seasonCardsDisplayOffsetX;
 		public final ForgeConfigSpec.IntValue seasonCardsDisplayOffsetY;
@@ -913,9 +976,9 @@ public class Config
 					.defineInRange("Body Damage Indicator X Offset", 0, -1000, 1000);
 			bodyDamageIndicatorOffsetY = builder
 					.defineInRange("Body Damage Indicator Y Offset", 0, -1000, 1000);
-			alwaysShowBodyDamageIndicator = builder
-					.comment(" If true, the body damage indicator will always be rendered", " By default, the body damage indicator disappears when no wounded body limbs.")
-					.define("Body Damage indicator Always Rendered", false);
+			bodyDamageIndicatorRenderHealthLimit = builder
+					.comment(" Limb health threshold below which the body damage indicator is rendered.", " If set to 1.1, the body damage indicator is always rendered.", " If set to 1.0, the body damage indicator is rendered as soon as a limb is wounded.")
+					.defineInRange("Body Damage Indicator Limb Health Threshold", 1.0, 0.0, 1.1);
 			builder.pop();
 
 			builder.push("season-cards");
@@ -1017,6 +1080,7 @@ public class Config
 
 		public static boolean wetnessEnabled;
 		public static double wetMultiplier;
+		public static int wetnessTickTimer;
 		public static int wetnessDecrease;
 		public static int wetnessRainIncrease;
 		public static int wetnessFluidIncrease;
@@ -1109,6 +1173,24 @@ public class Config
 		public static double bodyDamageMultiplier;
 		public static double bodyHealthRatioRecoveredFromSleep;
 		public static double healthRatioRecoveredFromSleep;
+		public static double bodyHealingFoodExhaustion;
+		public static int minFoodOnBodyHealing;
+
+		public static int healingHerbsUseTime;
+		public static int healingHerbsRegenerationAmplifier;
+		public static int healingHerbsRegenerationTickDuration;
+		public static int plasterUseTime;
+		public static int plasterRegenerationAmplifier;
+		public static int plasterRegenerationTickDuration;
+		public static int bandageUseTime;
+		public static int bandageRegenerationAmplifier;
+		public static int bandageRegenerationTickDuration;
+		public static int tonicUseTime;
+		public static int tonicRegenerationAmplifier;
+		public static int tonicRegenerationTickDuration;
+		public static int medikitUseTime;
+		public static int medikitRegenerationAmplifier;
+		public static int medikitRegenerationTickDuration;
 
 		public static String bodyPartHealthMode;
 		public static double headPartHealth;
@@ -1116,12 +1198,6 @@ public class Config
 		public static double chestPartHealth;
 		public static double legsPartHealth;
 		public static double feetPartHealth;
-
-		public static int healingHerbsUseTime;
-		public static int plasterUseTime;
-		public static int bandageUseTime;
-		public static int tonicUseTime;
-		public static int medikitUseTime;
 
 		public static List<String> headPartEffects;
 		public static List<Integer> headPartEffectAmplifiers;
@@ -1179,7 +1255,7 @@ public class Config
 
 		public static int bodyDamageIndicatorOffsetX;
 		public static int bodyDamageIndicatorOffsetY;
-		public static boolean alwaysShowBodyDamageIndicator;
+		public static double bodyDamageIndicatorRenderHealthLimit;
 
 		public static boolean showHydrationTooltip;
 		public static boolean mergeHydrationAndSaturationTooltip;
@@ -1238,6 +1314,7 @@ public class Config
 
 				wetnessEnabled = COMMON.wetnessEnabled.get();
 				wetMultiplier = COMMON.wetMultiplier.get();
+				wetnessTickTimer = COMMON.wetnessTickTimer.get();
 				wetnessDecrease = COMMON.wetnessDecrease.get();
 				wetnessRainIncrease = COMMON.wetnessRainIncrease.get();
 				wetnessFluidIncrease = COMMON.wetnessFluidIncrease.get();
@@ -1335,6 +1412,24 @@ public class Config
 				bodyDamageMultiplier = COMMON.bodyDamageMultiplier.get();
 				bodyHealthRatioRecoveredFromSleep = COMMON.bodyHealthRatioRecoveredFromSleep.get();
 				healthRatioRecoveredFromSleep = COMMON.healthRatioRecoveredFromSleep.get();
+				bodyHealingFoodExhaustion = COMMON.bodyHealingFoodExhaustion.get();
+				minFoodOnBodyHealing = COMMON.minFoodOnBodyHealing.get();
+
+				healingHerbsUseTime = COMMON.healingHerbsUseTime.get();
+				healingHerbsRegenerationAmplifier = COMMON.healingHerbsRegenerationAmplifier.get();
+				healingHerbsRegenerationTickDuration = COMMON.healingHerbsRegenerationTickDuration.get();
+				plasterUseTime = COMMON.plasterUseTime.get();
+				plasterRegenerationAmplifier = COMMON.plasterRegenerationAmplifier.get();
+				plasterRegenerationTickDuration = COMMON.plasterRegenerationTickDuration.get();
+				bandageUseTime = COMMON.bandageUseTime.get();
+				bandageRegenerationAmplifier = COMMON.bandageRegenerationAmplifier.get();
+				bandageRegenerationTickDuration = COMMON.bandageRegenerationTickDuration.get();
+				tonicUseTime = COMMON.tonicUseTime.get();
+				tonicRegenerationAmplifier = COMMON.tonicRegenerationAmplifier.get();
+				tonicRegenerationTickDuration = COMMON.tonicRegenerationTickDuration.get();
+				medikitUseTime = COMMON.medikitUseTime.get();
+				medikitRegenerationAmplifier = COMMON.medikitRegenerationAmplifier.get();
+				medikitRegenerationTickDuration = COMMON.medikitRegenerationTickDuration.get();
 
 				bodyPartHealthMode = COMMON.bodyPartHealthMode.get();
 				headPartHealth = COMMON.headPartHealth.get();
@@ -1342,12 +1437,6 @@ public class Config
 				armsPartHealth = COMMON.armsPartHealth.get();
 				legsPartHealth = COMMON.legsPartHealth.get();
 				feetPartHealth = COMMON.feetPartHealth.get();
-
-				healingHerbsUseTime = COMMON.healingHerbsUseTime.get();
-				plasterUseTime = COMMON.plasterUseTime.get();
-				bandageUseTime = COMMON.bandageUseTime.get();
-				tonicUseTime = COMMON.tonicUseTime.get();
-				medikitUseTime = COMMON.medikitUseTime.get();
 
 				headPartEffects = COMMON.headPartEffects.get();
 				headPartEffectAmplifiers = COMMON.headPartEffectAmplifiers.get();
@@ -1412,7 +1501,7 @@ public class Config
 
 				bodyDamageIndicatorOffsetX = CLIENT.bodyDamageIndicatorOffsetX.get();
 				bodyDamageIndicatorOffsetY = CLIENT.bodyDamageIndicatorOffsetY.get();
-				alwaysShowBodyDamageIndicator = CLIENT.alwaysShowBodyDamageIndicator.get();
+				bodyDamageIndicatorRenderHealthLimit = CLIENT.bodyDamageIndicatorRenderHealthLimit.get();
 
 				thirstSaturationDisplayed = CLIENT.thirstSaturationDisplayed.get();
 				showHydrationTooltip = CLIENT.showHydrationTooltip.get();

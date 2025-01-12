@@ -2,15 +2,15 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         "  /",
-        " S ",
+        " t ",
         "G  "
     ],
     "key": {
         "/": {
             "item": "minecraft:iron_nugget"
         },
-        "S": {
-            "item": "legendarysurvivaloverhaul:plaster"
+        "t": {
+            "item": "legendarysurvivaloverhaul:tonic"
         },
         "G": {
             "item": "minecraft:glass"

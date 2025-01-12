@@ -98,7 +98,7 @@ public class WetnessCapability implements IWetnessCapability
 		}
 
 		this.addWetnessTickTimer(1);
-		if (this.getWetnessTickTimer() < 5)
+		if (this.getWetnessTickTimer() < Config.Baked.wetnessTickTimer)
 			return;
 		this.setWetnessTickTimer(0);
 

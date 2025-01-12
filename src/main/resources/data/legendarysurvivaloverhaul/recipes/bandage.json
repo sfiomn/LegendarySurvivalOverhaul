@@ -1,15 +1,16 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "##",
-        "WW"
+        "  p",
+        " h ",
+        "p  "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:string"
+        "h": {
+            "item": "legendarysurvivaloverhaul:healing_herbs"
         },
-        "W": {
-            "tag": "minecraft:wool"
+        "p": {
+            "item": "legendarysurvivaloverhaul:plaster"
         }
     },
     "result": {

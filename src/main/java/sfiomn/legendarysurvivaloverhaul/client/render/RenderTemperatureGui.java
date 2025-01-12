@@ -261,7 +261,7 @@ public class RenderTemperatureGui
 		int x = width / 2 - 92 - 32 + Config.Baked.bodyTemperatureDisplayOffsetX;
 		int y = height - 14 + Config.Baked.bodyTemperatureDisplayOffsetY;
 
-		if (!player.getOffhandItem().isEmpty() && player.getMainArm() == HandSide.RIGHT && Config.Baked.bodyDamageIndicatorOffsetX == 0 && Config.Baked.bodyTemperatureDisplayOffsetY == 0)
+		if (!player.getOffhandItem().isEmpty() && player.getMainArm() == HandSide.RIGHT && Config.Baked.bodyTemperatureDisplayOffsetX == 0 && Config.Baked.bodyTemperatureDisplayOffsetY == 0)
 			x -= 31;
 
 		float bodyTemperature = TemperatureUtil.clampTemperature(cap.getTemperatureLevel());

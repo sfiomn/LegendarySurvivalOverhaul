@@ -37,7 +37,7 @@ public class RenderBodyDamageGui
 		
 		BodyDamageCapability bodyDamageCap = CapabilityUtil.getBodyDamageCapability(player);
 
-		if (Config.Baked.alwaysShowBodyDamageIndicator || bodyDamageCap.isWounded())
+		if (bodyDamageCap.isWoundedBelow((float) Config.Baked.bodyDamageIndicatorRenderHealthLimit))
 			drawBodyDamage(matrix, player, bodyDamageCap, width, height);
 
 		RenderSystem.disableBlend();

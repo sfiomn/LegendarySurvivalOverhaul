@@ -21,7 +21,7 @@ public class TonicItem extends BodyHealingItem {
 
     @Override
     public void runSecondaryEffect(PlayerEntity player, ItemStack stack) {
-        player.addEffect(new EffectInstance(Effects.REGENERATION, 400, 1));
+        player.addEffect(new EffectInstance(Effects.REGENERATION, Config.Baked.tonicRegenerationTickDuration, Config.Baked.tonicRegenerationAmplifier));
         super.runSecondaryEffect(player, stack);
     }
 
@@ -38,6 +38,6 @@ public class TonicItem extends BodyHealingItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltips, ITooltipFlag isAdvanced) {
         super.appendHoverText(stack, world, tooltips, isAdvanced);
-        addSecondaryEffectTooltip(tooltips, new EffectInstance(Effects.REGENERATION, 400, 1));
+        addSecondaryEffectTooltip(tooltips, new EffectInstance(Effects.REGENERATION, Config.Baked.tonicRegenerationTickDuration, Config.Baked.tonicRegenerationAmplifier));
     }
 }

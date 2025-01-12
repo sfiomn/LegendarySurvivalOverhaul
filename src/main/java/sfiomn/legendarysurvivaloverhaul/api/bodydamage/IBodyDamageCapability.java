@@ -22,15 +22,16 @@ public interface IBodyDamageCapability
 
 	public void applyHealingTime(BodyPartEnum part, int healingTicks, float healingPerTick);
 
-	public float getRemainingHealingTicks(BodyPartEnum part);
+	public int getRemainingHealingTicks(BodyPartEnum part);
 
 	public float getHealingPerTicks(BodyPartEnum part);
 
 	/**
-	 * Check if at least one body part is wounded
+	 * Check if at least one body part has health below provided health percent
+	 * @param healthPercent health percent of the limb
 	 * @return isWounded or not
 	 */
-	public boolean isWounded();
+	public boolean isWoundedBelow(float healthPercent);
 
 	/**
 	 * Get the body part ratio related to the malus body part

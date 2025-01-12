@@ -1,32 +1,24 @@
 {
-	"type": "minecraft:crafting_shaped",
-	"pattern":
-	[
-		"LqL",
-		"LqL",
-		"#R#"
-	],
-	"key": 
-	{
-		"#":
-		{
-			"item": "minecraft:stone"
-		},
-		"q":
-		{
-			"item": "minecraft:quartz"
-		},
-		"L":
-		{
-			"item": "minecraft:lapis_lazuli"
-		},
-		"R":
-		{
-			"item": "minecraft:redstone"
-		}
-	},
-	"result":
-	{
-		"item": "legendarysurvivaloverhaul:cooler"
-	}
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "p": {
+      "tag": "minecraft:planks"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "s": {
+      "item": "minecraft:snow_block"
+    }
+  },
+  "pattern": [
+    "psp",
+    "prp",
+    "ppp"
+  ],
+  "result": {
+    "item": "legendarysurvivaloverhaul:cooler"
+  },
+  "show_notification": true
 }

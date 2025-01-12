@@ -73,12 +73,12 @@ public class BodyHealingItem extends Item {
             // 0 healing charge = heal all body parts => only allow healing if one wounded limb is not yet healing
             if (jsonConsumableHeal.healingCharges == 0) {
                 for (BodyPartEnum bodyPart : BodyPartEnum.values()) {
-                    if (capability.getBodyPartDamage(bodyPart) > 0 && capability.getRemainingHealingTicks(bodyPart) == 0) {
+                    if (capability.getBodyPartDamage(bodyPart) > 0 || player.getHealth() < player.getMaxHealth()) {
                         player.startUsingItem(hand);
                         return ActionResult.success(stack);
                     }
                 }
-            } else if (jsonConsumableHeal.healingCharges > 0 && capability.isWounded()) {
+            } else if (jsonConsumableHeal.healingCharges > 0) {
                 player.startUsingItem(hand);
                 return ActionResult.success(stack);
             }

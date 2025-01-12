@@ -142,8 +142,8 @@ public class BodyHealthScreen extends Screen {
         // Update button health ratio
         bodyPartButton.setHealthRatio(healthRatio);
 
-        // Define button inactive if healing
-        if (totalRemainingHealing > 0.0f || healthRatio >= 1 || bodyPartButton.isPressed || this.hand == null) {
+        // Define button inactive if full health, or pressed, or no healing items used
+        if (healthRatio >= 1 || bodyPartButton.isPressed || this.hand == null) {
             if (bodyPartButton.active) {
                 bodyPartButton.active = false;
             }

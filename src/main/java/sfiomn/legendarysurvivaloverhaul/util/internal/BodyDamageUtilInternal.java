@@ -71,11 +71,14 @@ public class BodyDamageUtilInternal implements IBodyDamageUtil {
         if(!Config.Baked.localizedBodyDamageEnabled || bodyPartEnum == null)
             return;
 
-        float healingValuePerTick = healingValue / (float) healingTime;
-
         IBodyDamageCapability capability = CapabilityUtil.getBodyDamageCapability(player);
 
-        capability.applyHealingTime(bodyPartEnum, healingTime, healingValuePerTick);
+        int remainingHealingTicks = capability.getRemainingHealingTicks(bodyPartEnum);
+        float healingPerTicks = capability.getHealingPerTicks(bodyPartEnum);
+
+        float healingValuePerTick = (healingValue + remainingHealingTicks * healingPerTicks) / (float) (healingTime + remainingHealingTicks);
+
+        capability.applyHealingTime(bodyPartEnum, healingTime + remainingHealingTicks, healingValuePerTick);
     }
 
     @Override
