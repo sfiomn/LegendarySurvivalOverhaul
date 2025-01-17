@@ -62,17 +62,11 @@ public class EffectRegistry
 
 	public static void registerBrewingRecipes()
 	{
-		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.SUN_FERN.get(), HEAT_RESISTANCE_POTION.get());
-		addBrewingRecipe(HEAT_RESISTANCE_POTION.get(), Items.REDSTONE, HEAT_RESISTANCE_POTION_LONG.get());
-
 		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.ICE_FERN.get(), COLD_RESISTANCE_POTION.get());
 		addBrewingRecipe(COLD_RESISTANCE_POTION.get(), Items.REDSTONE, COLD_RESISTANCE_POTION_LONG.get());
 
 		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.SUN_FERN.get(), HEAT_RESISTANCE_POTION.get());
 		addBrewingRecipe(HEAT_RESISTANCE_POTION.get(), Items.REDSTONE, HEAT_RESISTANCE_POTION_LONG.get());
-
-		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.ICE_FERN.get(), COLD_RESISTANCE_POTION.get());
-		addBrewingRecipe(COLD_RESISTANCE_POTION.get(), Items.REDSTONE, COLD_RESISTANCE_POTION_LONG.get());
 
 		addBrewingRecipe(Potions.AWKWARD, ItemRegistry.SUN_FERN_GOLD.get(), HEAT_IMMUNITY_POTION.get());
 		addBrewingRecipe(HEAT_IMMUNITY_POTION.get(), Items.REDSTONE, HEAT_IMMUNITY_POTION_LONG.get());
@@ -85,6 +79,7 @@ public class EffectRegistry
 
 		addBrewingRecipe(COLD_IMMUNITY_POTION.get(), ItemRegistry.SUN_FERN_GOLD.get(), TEMPERATURE_IMMUNITY_POTION.get());
 		addBrewingRecipe(COLD_IMMUNITY_POTION_LONG.get(), ItemRegistry.SUN_FERN_GOLD.get(), TEMPERATURE_IMMUNITY_POTION_LONG.get());
+		addBrewingRecipe(TEMPERATURE_IMMUNITY_POTION.get(), Items.REDSTONE, TEMPERATURE_IMMUNITY_POTION_LONG.get());
 	}
 
 	private static void addBrewingRecipe(Potion potionInput, Item ingredient, Potion potionResult)
