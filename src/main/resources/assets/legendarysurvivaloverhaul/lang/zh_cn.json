@@ -41,11 +41,11 @@
 	"tooltip.legendarysurvivaloverhaul.thermometer.bauble_description": "当作为饰品佩戴时可在物品栏左边显示你的体温",
 	"tooltip.legendarysurvivaloverhaul.nether_chalice.description": "佩戴时可以使岩浆可饮用",
 
-	"attribute.legendarysurvivaloverhaul.heating_temperature": "御寒",
-	"attribute.legendarysurvivaloverhaul.cooling_temperature": "抗暑",
-	"attribute.legendarysurvivaloverhaul.heat_resistance": "抗暑",
-	"attribute.legendarysurvivaloverhaul.cold_resistance": "御寒",
-	"attribute.legendarysurvivaloverhaul.thermal_resistance": "恒温",
+	"attribute.name.legendarysurvivaloverhaul.heating_temperature": "御寒",
+	"attribute.name.legendarysurvivaloverhaul.cooling_temperature": "抗暑",
+	"attribute.name.legendarysurvivaloverhaul.heat_resistance": "抗暑",
+	"attribute.name.legendarysurvivaloverhaul.cold_resistance": "御寒",
+	"attribute.name.legendarysurvivaloverhaul.thermal_resistance": "恒温",
 
 	"item.legendarysurvivaloverhaul.canteen_empty": "空水壶",
 	"item.legendarysurvivaloverhaul.canteen": "水壶",
