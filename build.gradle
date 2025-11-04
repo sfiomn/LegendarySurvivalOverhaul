@@ -146,6 +146,10 @@ repositories {
         name = "CurseForge"
         url = "https://minecraft.curseforge.com/api/maven/"
     }
+
+    // Flat dir for local jars
+    // Required to use Connector-transformed Origins within the project with remapped vanilla references
+    flatDir { dir "${rootProject.rootDir}/libs/" }
 }
 
 dependencies {
@@ -171,7 +175,6 @@ dependencies {
     compileOnly(fg.deobf("curse.maven:serene-seasons-291874:5790653"))
     compileOnly(fg.deobf("curse.maven:glitchcore-955399:5787839"))
     compileOnly(fg.deobf("curse.maven:terrafirmacraft-302973:6187491"))
-    compileOnly(fg.deobf("curse.maven:origins-474438:5314209"))
     compileOnly(fg.deobf("curse.maven:mutantmonsters-852665:5107399"))
     compileOnly(fg.deobf("curse.maven:vampirism-233029:5990073"))
     compileOnly(fg.deobf("curse.maven:supplementaries-412082:6463022"))
@@ -181,6 +184,16 @@ dependencies {
     compileOnly(fg.deobf("curse.maven:artifacts-312353:6399828"))
     compileOnly(fg.deobf("curse.maven:overflowingbars-852662:5763974"))
     compileOnly(fg.deobf("curse.maven:puzzlelib-495476:6387081"))
+
+
+    // Origins Fabric connector-transformed jars, in root project dir `/libs/`
+    // The Origins jar is modified to have Reach Entity Attributes removed -
+    // You could also exclude reach entity attributes here using gradle
+    compileOnly ("io.github:Origins-1.10.2+mc.1.20.x_mapped_srg_1.20.1")
+    compileOnly ("io.github:Origins-1.10.2+mc.1.20.x\$apoli-2.9.2+mc.1.20.x_mapped_srg_1.20.1")
+    compileOnly ("io.github:Origins-1.10.2+mc.1.20.x\$apoli-2.9.2+mc.1.20.x\$calio-1.11.2+mc.1.20.x_mapped_srg_1.20.1")
+    compileOnly ("io.github:Origins-1.10.2+mc.1.20.x\$apoli-2.9.2+mc.1.20.x\$cardinal-components-base-5.2.1_mapped_srg_1.20.1")
+    compileOnly ("io.github:Origins-1.10.2+mc.1.20.x\$apoli-2.9.2+mc.1.20.x\$cardinal-components-entity-5.2.1_mapped_srg_1.20.1")
 
     //implementation(fg.deobf("curse.maven:weather2-237746:5244118"))
     //implementation(fg.deobf("curse.maven:coroutil-237749:5096038"))
