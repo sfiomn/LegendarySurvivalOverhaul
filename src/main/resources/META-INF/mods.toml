@@ -106,3 +106,11 @@ Making survival harder. Highly configurable so you can play the way you want.
     versionRange="[0.11.2.1.1,)"
     ordering="BEFORE"
     side="BOTH"
+
+
+[[dependencies.${mod_id}]]
+    modId="origins"
+    mandatory=false
+    versionRange="[1.10.2,)"
+    ordering="BEFORE"
+    side="BOTH"

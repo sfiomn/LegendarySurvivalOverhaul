@@ -213,7 +213,7 @@ public class ThirstUtilInternal implements IThirstUtil {
                 }
 
                 if (LegendarySurvivalOverhaul.originsLoaded) {
-                    if (OriginsUtil.isOrigin(player, OriginsUtil.BLAZEBORN) &&
+                    if (OriginsUtil.canDrinkLava(player) &&
                             (fluidState.is(Fluids.FLOWING_LAVA) || fluidState.is(Fluids.LAVA)))
                         return new JsonThirstBlock(Config.Baked.hydrationLavaBlazeborn, (float) Config.Baked.saturationLavaBlazeborn, new ArrayList<>(), new HashMap<>());
                 }
