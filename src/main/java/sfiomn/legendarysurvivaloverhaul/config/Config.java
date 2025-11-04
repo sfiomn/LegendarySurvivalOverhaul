@@ -142,6 +142,11 @@ public class Config
 
 		public final ForgeConfigSpec.DoubleValue tfcItemHeatMultiplier;
 		public final ForgeConfigSpec.DoubleValue tfcTemperatureMultiplier;
+		
+		// > Temperature Origins Integration
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> originsWithWetnessImmunity;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> originsWithHighAltitudeImmunity;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> originsWithOnFireImmunity;
 
 		public final ForgeConfigSpec.BooleanValue sereneSeasonsEnabled;
 		public final ForgeConfigSpec.BooleanValue ssTropicalSeasonsEnabled;
@@ -198,11 +203,13 @@ public class Config
 		public final ForgeConfigSpec.DoubleValue saturationLava;
 		public final ForgeConfigSpec.BooleanValue glassBottleLootAfterDrink;
 
-		// > Integration
+		// > Thirst Integration
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> originsWithThirstEffectImmunity;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> originsWithExtraThirstExhaustion;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> originsWithLavaDrinking;
 		public final ForgeConfigSpec.IntValue hydrationLavaBlazeborn;
 		public final ForgeConfigSpec.DoubleValue saturationLavaBlazeborn;
-		public final ForgeConfigSpec.DoubleValue extraThirstExhaustionShulk;
-		public final ForgeConfigSpec.DoubleValue extraThirstExhaustionPhantom;
+		public final ForgeConfigSpec.DoubleValue originsExtraThirstExhaustionValue;
 		public final ForgeConfigSpec.BooleanValue thirstEnabledIfVampire;
 
 		// Health Overhaul
@@ -670,6 +677,28 @@ public class Config
 			builder.pop();
 			builder.pop();
 
+			builder.comment(" Origins mod integration for temperature system.")
+					.push("origins");
+			originsWithWetnessImmunity = builder
+					.comment(" Origins that are immune to wetness effects.",
+							" Format: 'modid:origin_name' (e.g., 'origins:merling')")
+					.defineListAllowEmpty("Origins With Wetness Immunity",
+							List.of("origins:merling", "origins:blazeborn"),
+							Config::validateResourceLocationString);
+			originsWithHighAltitudeImmunity = builder
+					.comment(" Origins that are immune to high altitude coldness.",
+							" Format: 'modid:origin_name' (e.g., 'origins:avian')")
+					.defineListAllowEmpty("Origins With High Altitude Immunity",
+							List.of("origins:avian", "origins:elytrian"),
+							Config::validateResourceLocationString);
+			originsWithOnFireImmunity = builder
+					.comment(" Origins that are immune to on fire temperature effects.",
+							" Format: 'modid:origin_name' (e.g., 'origins:blazeborn')")
+					.defineListAllowEmpty("Origins With On Fire Immunity",
+							List.of("origins:blazeborn"),
+							Config::validateResourceLocationString);
+			builder.pop();
+
 			builder.pop();
 			builder.pop();
 
@@ -738,42 +767,42 @@ public class Config
 			builder.pop();
 
 			builder.push("integration");
-			builder.push("origins");
-
-			builder.comment(" Temperature won't increase while on fire",
-					" Immune to wetness",
-					" Can drink lava")
-					.push("blazeborn");
+			builder.comment(" Origins mod integration for thirst system.")
+					.push("origins");
+			originsWithThirstEffectImmunity = builder
+					.comment(" Origins that are immune to thirst effects (e.g., from dirty water).",
+							" Format: 'modid:origin_name' (e.g., 'origins:merling')")
+					.defineListAllowEmpty("Origins With Thirst Effect Immunity",
+							List.of("origins:merling"),
+							Config::validateResourceLocationString);
+			
+			originsWithExtraThirstExhaustion = builder
+					.comment(" Origins that have extra thirst exhaustion added every 20 ticks.",
+							" The exhaustion amount is defined in 'Extra Thirst Exhaustion' config below.",
+							" Format: 'modid:origin_name' (e.g., 'origins:shulk')")
+					.defineListAllowEmpty("Origins With Extra Thirst Exhaustion",
+							List.of("origins:shulk", "origins:phantom"),
+							Config::validateResourceLocationString);
+			
+			originsWithLavaDrinking = builder
+					.comment(" Origins that can drink lava for hydration.",
+							" The hydration and saturation amounts are defined in 'Lava Hydration' and 'Lava Saturation' configs below.",
+							" Format: 'modid:origin_name' (e.g., 'origins:blazeborn')")
+					.defineListAllowEmpty("Origins With Lava Drinking",
+							List.of("origins:blazeborn"),
+							Config::validateResourceLocationString);
+			
 			hydrationLavaBlazeborn = builder
-					.comment(" Amount of hydration recovered when drinking from lava.")
-					.defineInRange("Lava Hydration For Blazeborn", 3, 0, 20);
+					.comment(" Amount of hydration recovered when origins in 'Origins With Lava Drinking' drink from lava.")
+					.defineInRange("Lava Hydration", 3, 0, 20);
 			saturationLavaBlazeborn = builder
-					.comment(" Amount of saturation recovered when drinking from lava.")
-					.defineInRange("Lava Saturation For Blazeborn", 1.0, 0, 20);
-			builder.pop();
-
-			builder.comment(" Immune to wetness",
-					"Immune to Thirst Effect").push("merling");
-			builder.pop();
-
-			builder.comment(" Immune to high altitude coldness").push("elytrian");
-			builder.pop();
-
-			builder.comment(" Immune to high altitude coldness").push("avian");
-			builder.pop();
-
-			builder.comment(" Thirst depletes slightly faster").push("shulk");
-			extraThirstExhaustionShulk = builder
-					.comment(" Amount of thirst exhaustion added every 20 ticks.")
-					.defineInRange("Extra Thirst Exhaustion For Shulk", 0.1, 0, 1000);
-			builder.pop();
-
-			builder.comment(" Thirst depletes slightly faster").push("phantom");
-			extraThirstExhaustionPhantom = builder
-					.comment(" Amount of thirst exhaustion added every 20 ticks.")
-					.defineInRange("Extra Thirst Exhaustion For Phantom", 0.1, 0, 1000);
-			builder.pop();
-
+					.comment(" Amount of saturation recovered when origins in 'Origins With Lava Drinking' drink from lava.")
+					.defineInRange("Lava Saturation", 1.0, 0, 20);
+			
+			originsExtraThirstExhaustionValue = builder
+					.comment(" Amount of thirst exhaustion added every 20 ticks for origins in 'Origins With Extra Thirst Exhaustion'.")
+					.defineInRange("Extra Thirst Exhaustion", 0.1, 0, 1000);
+			
 			builder.pop();
 
 			builder.push("vampirism");
@@ -1059,6 +1088,14 @@ public class Config
 		return obj instanceof final String entityName && ForgeRegistries.ENTITY_TYPES.containsKey(new ResourceLocation(entityName));
 	}
 
+	private static boolean validateResourceLocationString(final Object obj)
+	{
+		if (!(obj instanceof String str)) {
+			return false;
+		}
+		return ResourceLocation.tryParse(str) != null;
+	}
+
 	public static class Client
 	{
 		public final ForgeConfigSpec.BooleanValue foodSaturationDisplayed;
@@ -1335,6 +1372,10 @@ public class Config
 
 		public static double tfcItemHeatMultiplier;
 		public static double tfcTemperatureMultiplier;
+		
+		public static List<? extends String> originsWithWetnessImmunity;
+		public static List<? extends String> originsWithHighAltitudeImmunity;
+		public static List<? extends String> originsWithOnFireImmunity;
 
 		public static boolean sereneSeasonsEnabled;
 		public static boolean ssTropicalSeasonsEnabled;
@@ -1390,10 +1431,14 @@ public class Config
 		public static int hydrationLava;
 		public static double saturationLava;
 		public static boolean glassBottleLootAfterDrink;
+		
+		public static List<? extends String> originsWithThirstEffectImmunity;
+		public static List<? extends String> originsWithExtraThirstExhaustion;
+		public static List<? extends String> originsWithLavaDrinking;
 		public static int hydrationLavaBlazeborn;
 		public static double saturationLavaBlazeborn;
-		public static double extraThirstExhaustionShulk;
-		public static double extraThirstExhaustionPhantom;
+		public static double originsExtraThirstExhaustionValue;
+		
 		public static boolean thirstEnabledIfVampire;
 
 		// Health Overhaul
@@ -1608,6 +1653,10 @@ public class Config
 
 				tfcItemHeatMultiplier = COMMON.tfcItemHeatMultiplier.get();
 				tfcTemperatureMultiplier = COMMON.tfcTemperatureMultiplier.get();
+				
+				originsWithWetnessImmunity = COMMON.originsWithWetnessImmunity.get();
+				originsWithHighAltitudeImmunity = COMMON.originsWithHighAltitudeImmunity.get();
+				originsWithOnFireImmunity = COMMON.originsWithOnFireImmunity.get();
 
 				sereneSeasonsEnabled = COMMON.sereneSeasonsEnabled.get();
 				ssTropicalSeasonsEnabled = COMMON.ssTropicalSeasonsEnabled.get();
@@ -1667,10 +1716,13 @@ public class Config
 
 				glassBottleLootAfterDrink = COMMON.glassBottleLootAfterDrink.get();
 
+				originsWithThirstEffectImmunity = COMMON.originsWithThirstEffectImmunity.get();
+				originsWithExtraThirstExhaustion = COMMON.originsWithExtraThirstExhaustion.get();
+				originsWithLavaDrinking = COMMON.originsWithLavaDrinking.get();
 				hydrationLavaBlazeborn = COMMON.hydrationLavaBlazeborn.get();
 				saturationLavaBlazeborn = COMMON.saturationLavaBlazeborn.get();
-				extraThirstExhaustionShulk = COMMON.extraThirstExhaustionShulk.get();
-				extraThirstExhaustionPhantom = COMMON.extraThirstExhaustionPhantom.get();
+				originsExtraThirstExhaustionValue = COMMON.originsExtraThirstExhaustionValue.get();
+				
 				thirstEnabledIfVampire = COMMON.thirstEnabledIfVampire.get();
 
 				healthOverhaulEnabled = COMMON.healthOverhaulEnabled.get();
